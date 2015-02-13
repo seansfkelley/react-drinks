@@ -1,5 +1,4 @@
 express             = require 'express'
-jade                = require 'jade'
 connectCoffeescript = require 'connect-coffee-script'
 
 routes = require './routes'
@@ -8,7 +7,8 @@ routes = require './routes'
 app = express()
 
 # Templating.
-app.set 'view engine', 'jade'
+app.set 'view engine', 'cjsx'
+app.engine 'cjsx', require('express-coffee-react-views').createEngine()
 app.set 'views', __dirname + '/templates'
 
 # Routes.
