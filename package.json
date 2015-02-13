@@ -8,16 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seansfkelley/drinks3.git"
+    "url": "https://github.com/seansfkelley/react-drinks.git"
   },
   "author": "seansfkelley@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/seansfkelley/drinks3/issues"
+    "url": "https://github.com/seansfkelley/react-drinks/issues"
   },
-  "homepage": "https://github.com/seansfkelley/drinks3",
+  "homepage": "https://github.com/seansfkelley/react-drinks",
   "dependencies": {
     "coffee-script": "^1.9.0",
+    "connect-coffee-script": "^0.2.0",
     "express": "^4.11.2",
     "jade": "^1.9.2",
     "lodash": "^3.2.0"

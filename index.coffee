@@ -1,5 +1,6 @@
-express = require 'express'
-jade    = require 'jade'
+express             = require 'express'
+jade                = require 'jade'
+connectCoffeescript = require 'connect-coffee-script'
 
 routes = require './routes'
 
@@ -11,6 +12,14 @@ app.set 'view engine', 'jade'
 app.set 'views', __dirname + '/templates'
 
 # Routes.
+app.use '/', connectCoffeescript {
+  src       : __dirname + '/frontend'
+  dest      : __dirname + '/.compiler-cache'
+  force     : true
+  sourceMap : true
+}
+app.use '/', express.static(__dirname + '/.compiler-cache')
+
 app.use '/lib', express.static(__dirname + '/frontend-lib')
 
 for { method, route, handler } in routes
