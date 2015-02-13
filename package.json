@@ -2,8 +2,8 @@
   "name": "react-drinks",
   "version": "0.0.1",
   "description": "",
-  "main": "index.coffee",
   "scripts": {
+    "start": "./node_modules/.bin/nodemon index.coffee",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/seansfkelley/drinks3/issues"
   },
-  "homepage": "https://github.com/seansfkelley/drinks3"
+  "homepage": "https://github.com/seansfkelley/drinks3",
+  "dependencies": {
+    "coffee-script": "^1.9.0",
+    "express": "^4.11.2",
+    "jade": "^1.9.2",
+    "lodash": "^3.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.3.7"
+  }
 }
