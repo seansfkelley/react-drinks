@@ -8,9 +8,18 @@ Ingredient = React.createClass {
 }
 
 IngredientList = React.createClass {
+  getInitialState : -> { ingredients : [] }
+
+  componentDidMount : ->
+    Promise.resolve $.get(@props.url)
+    .then (ingredients) =>
+      @setState { ingredients }
+    .catch (e) =>
+      console.error @props.url, e
+
   render : ->
-    ingredientNodes = @props.ingredients.map (ingredient) ->
-      return <Ingredient name={ingredient.name} key={ingredient.name}/>
+    ingredientNodes = @state.ingredients.map (ingredient) ->
+      return <Ingredient name={ingredient.display} key={ingredient.tag}/>
 
     <div className='ingredient-list'>
       {ingredientNodes}
@@ -25,4 +34,4 @@ ingredients = [
   name : 'c'
 ]
 
-React.render <IngredientList ingredients={ingredients} />, $('body')[0]
+React.render <IngredientList url='/ingredients' />, $('body')[0]

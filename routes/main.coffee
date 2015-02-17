@@ -1,6 +1,5 @@
-method  = 'get'
-route   = '/'
-handler = (req, res) ->
-  res.render 'main'
-
-module.exports = { method, route, handler }
+module.exports = {
+  method  : 'get'
+  route   : '/'
+  handler : (req, res) -> res.render 'main'
+}

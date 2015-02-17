@@ -1,0 +1,247 @@
+ [
+  {
+    "display" : "Absinthe"
+  },
+  {
+    "display" : "Agave Nectar"
+  },
+  {
+    "display" : "Amaretto"
+  },
+  {
+    "display" : "Angostura Bitters",
+    "generic" : "bitters"
+  },
+  {
+    "display" : "Applejack"
+  },
+  {
+    "display" : "Baileys",
+    "generic" : "irish cream"
+  },
+  {
+    "display" : "B\u00E9n\u00E9dictine",
+    "tag"     : "benedictine"
+  },
+  {
+    "display" : "Bourbon",
+    "generic" : "whiskey"
+  },
+  {
+    "display" : "Cacha\u00e7a",
+    "tag"     : "cachaca"
+  },
+  {
+    "display" : "Coffee Liqueur"
+  },
+  {
+    "display" : "Cointreau",
+    "generic" : "triple sec"
+  },
+  {
+    "display" : "Cola"
+  },
+  {
+    "display" : "Cognac"
+  },
+  {
+    "display" : "Cynar"
+  },
+  {
+    "display" : "Rum (dark)",
+    "tag"     : "dark rum",
+    "generic" : "rum"
+  },
+  {
+    "display" : "Vermouth (dry)",
+    "tag"     : "dry vermouth"
+  },
+  {
+    "display" : "Egg White"
+  },
+  {
+    "display" : "Elderflower Liqueur"
+  },
+  {
+    "display" : "Genever"
+  },
+  {
+    "display" : "Gin"
+  },
+  {
+    "display" : "Ginger Beer"
+  },
+  {
+    "display" : "Ginger Liqueur"
+  },
+  {
+    "display" : "Grand Marnier",
+    "generic" : "triple sec"
+  },
+  {
+    "display" : "Chartreuse (green)",
+    "tag"     : "green chartreuse",
+    "generic" : "chartreuse"
+  },
+  {
+    "display" : "Chartreuse (yellow)",
+    "tag"     : "yellow chartreuse",
+    "generic" : "chartreuse"
+  },
+  {
+    "display" : "Grenadine"
+  },
+  {
+    "display" : "Honey Syrup"
+  },
+  {
+    "display" : "Honey Whiskey",
+    "generic" : "whiskey"
+  },
+  {
+    "display" : "Kahl\u00FAa",
+    "tag"     : "kahlua",
+    "generic" : "coffee liqueur"
+  },
+  {
+    "display" : "Lemon Juice"
+  },
+  {
+    "display" : "Lillet"
+  },
+  {
+    "display" : "Lime"
+  },
+  {
+    "display" : "Lime Juice"
+  },
+  {
+    "display" : "Maraschino Liqueur"
+  },
+  {
+    "display" : "Mezcal (blanco)",
+    "tag"     : "blanco mezcal",
+    "generic" : "mezcal"
+  },
+  {
+    "display" : "Mezcal (reposado)",
+    "tag"     : "reposado mezcal",
+    "generic" : "mezcal"
+  },
+  {
+    "display" : "Mezcal (a\u00f1ejo)",
+    "tag"     : "anejo mezcal",
+    "generic" : "mezcal"
+  },
+  {
+    "display" : "Milk"
+  },
+  {
+    "display" : "Mint"
+  },
+  {
+    "display" : "Noisette"
+  },
+  {
+    "display" : "Rye Whiskey",
+    "generic" : "whiskey"
+  },
+  {
+    "display" : "Simple Syrup"
+  },
+  {
+    "display" : "Sparkling Wine"
+  },
+  {
+    "display" : "Rum (spiced)",
+    "tag"     : "spiced rum",
+    "generic" : "rum"
+  },
+  {
+    "display" : "Sugar"
+  },
+  {
+    "display" : "Vermouth (sweet)",
+    "tag"     : "sweet vermouth"
+  },
+  {
+    "display" : "Tequila (blanco)",
+    "tag"     : "blanco tequila",
+    "generic" : "tequila"
+  },
+  {
+    "display" : "Tequila (reposado)",
+    "tag"     : "reposado tequila",
+    "generic" : "tequila"
+  },
+  {
+    "display" : "Tequila (a\u00f1ejo)",
+    "tag"     : "anejo tequila",
+    "generic" : "tequila"
+  },
+  {
+    "display" : "Tonic"
+  },
+  {
+    "display" : "Triple Sec"
+  },
+  {
+    "display" : "Vodka"
+  },
+  {
+    "display" : "Irish Whiskey",
+    "generic" : "whiskey"
+  },
+  {
+    "display" : "Rum (white)",
+    "tag"     : "white rum",
+    "generic" : "rum"
+  },
+  {
+    "display" : "Vermouth (white)",
+    "tag"     : "white vermouth"
+  },
+  {
+    "display" : "Club Soda"
+  },
+  {
+    "display" : "Scotch",
+    "generic" : "whiskey"
+  },
+  {
+    "display" : "Orange Juice"
+  },
+  {
+    "display" : "Pimm's No. 1",
+    "tag"     : "pimms"
+  },
+  {
+    "display" : "Rosemary"
+  },
+  {
+    "display" : "Basil"
+  },
+  {
+    "display" : "Shiso"
+  },
+  {
+    "display" : "Cucumber"
+  },
+  {
+    "display" : "Thyme"
+  },
+  {
+    "display" : "Lemon"
+  },
+  {
+    "display" : "Drambuie",
+    "generic" : "honey whiskey"
+  },
+  {
+    "display" : "Tennessee Whiskey",
+    "generic" : "whiskey"
+  },
+  {
+    "display" : "Peach"
+  }
+]
