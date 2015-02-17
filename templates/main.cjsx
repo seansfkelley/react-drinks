@@ -26,12 +26,4 @@ IngredientList = React.createClass {
     </div>
 }
 
-ingredients = [
-  name : 'a'
-,
-  name : 'b'
-,
-  name : 'c'
-]
-
 React.render <IngredientList url='/ingredients' />, $('body')[0]

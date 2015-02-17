@@ -1,4 +1,5 @@
 express             = require 'express'
+stylus              = require 'stylus'
 connectCoffeescript = require 'connect-coffee-script'
 connectCoffeeReact  = require './middleware/cjsx'
 
@@ -28,7 +29,14 @@ app.use '/', connectCoffeeReact {
 }
 app.use '/', express.static(__dirname + '/.compiler-cache/templates')
 
-app.use '/lib', express.static(__dirname + '/frontend-lib')
+app.use '/', stylus.middleware {
+  src       : __dirname + '/styles'
+  dest      : __dirname + '/.compiler-cache/styles'
+  serve     : false
+  force     : true
+  sourcemap : true
+}
+app.use '/', express.static(__dirname + '/.compiler-cache/styles')
 
 for { method, route, handler } in routes
   app[method ? 'get'](route, handler)
