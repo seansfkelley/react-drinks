@@ -17,11 +17,15 @@
   },
   "homepage": "https://github.com/seansfkelley/react-drinks",
   "dependencies": {
+    "coffee-react-transform": "^2.4.0",
     "coffee-script": "^1.9.0",
     "connect-coffee-script": "^0.2.0",
+    "debug": "^2.1.1",
     "express": "^4.11.2",
     "express-coffee-react-views": "^0.6.4",
+    "jade": "^1.9.2",
     "lodash": "^3.2.0",
+    "mkdirp": "^0.5.0",
     "react": "^0.12.2"
   },
   "devDependencies": {
