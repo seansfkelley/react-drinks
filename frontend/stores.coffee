@@ -1,4 +1,6 @@
-class window.FluxStore
+AppDispatcher = require './AppDispatcher.coffee'
+
+class FluxStore
   MicroEvent.mixin @::
 
   constructor : ->
@@ -11,7 +13,7 @@ class window.FluxStore
 
       return true
 
-window.IngredientStore = new class extends FluxStore
+IngredientStore = new class extends FluxStore
   fields : ->
     allIngredients         : []
     filteredIngredients    : []
@@ -44,3 +46,7 @@ Promise.resolve $.get('/ingredients')
   }
 .catch (e) =>
   console.error e
+
+module.exports = {
+  IngredientStore
+}

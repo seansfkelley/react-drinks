@@ -5,7 +5,7 @@ stylus     = require 'gulp-stylus'
 sourcemaps = require 'gulp-sourcemaps'
 
 paths =
-  root    : './frontend/test.cjsx'
+  root    : './frontend/app.cjsx'
   scripts : [ 'frontend/**/*.coffee', 'frontend/**/*.cjsx' ]
   styles  : [ 'styles/**/*.styl' ]
 

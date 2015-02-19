@@ -1,5 +1,11 @@
 # @cjsx React.DOM
 
+React = require 'react'
+
+FluxMixin           = require './FluxMixin.coffee'
+AppDispatcher       = require './AppDispatcher.coffee'
+{ IngredientStore } = require './stores.coffee'
+
 Ingredient = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'selectedIngredientTags'

@@ -1,4 +1,4 @@
-window.FluxMixin = (store, fields...) ->
+FluxMixin = (store, fields...) ->
   fields = _.flatten fields
   return {
     getInitialState : ->
@@ -13,3 +13,5 @@ window.FluxMixin = (store, fields...) ->
     _onStoreChange : ->
       @setState _.pick(store, fields)
   }
+
+module.exports = FluxMixin
