@@ -20,7 +20,7 @@ window.IngredientStore = new class extends FluxStore
 
   _filter : ->
     @filteredIngredients = _.filter @allIngredients, (i) =>
-      return _.contains i.display.toLowerCase(), @filterTerm
+      return _.contains i.display.toLowerCase(), @filterTerm.toLowerCase()
 
   'set-all-ingredients' : ({ ingredients }) ->
     @allIngredients = ingredients
