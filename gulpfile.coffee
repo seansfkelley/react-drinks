@@ -9,7 +9,7 @@ buffer     = require 'vinyl-buffer'
 source     = require 'vinyl-source-stream'
 
 paths =
-  root    : './frontend/app.cjsx'
+  root    : [ './frontend/app.cjsx', './frontend/global.coffee' ]
   scripts : [ 'frontend/**/*.coffee', 'frontend/**/*.cjsx' ]
   styles  : [ 'styles/**/*.styl' ]
 

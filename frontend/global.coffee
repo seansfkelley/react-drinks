@@ -1,3 +1,2 @@
-React = require 'react'
-
-React.initializeTouchEvents true
+require('react').initializeTouchEvents true
+require('react-tap-event-plugin')()

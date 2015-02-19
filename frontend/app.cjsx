@@ -16,7 +16,7 @@ Ingredient = React.createClass {
     if @state.selectedIngredientTags[@props.tag]
       className += ' is-selected'
 
-    <div className={className} onClick={@_toggleIngredient}>
+    <div className={className} onTouchTap={@_toggleIngredient}>
       <div className='name'>{@props.name}</div>
     </div>
 

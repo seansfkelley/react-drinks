@@ -1,7 +1,9 @@
 livereload = require 'livereload'
 
-livereload.createServer({
-  exts  : [ 'js', 'css' ]
+server = livereload.createServer({
+  exts  : [ 'js', 'css', 'jade' ]
   debug : true
 })
-.watch __dirname + '/.dist'
+
+server.watch __dirname + '/.dist'
+server.watch __dirname + '/views'
