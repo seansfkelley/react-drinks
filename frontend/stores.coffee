@@ -13,9 +13,10 @@ class window.FluxStore
 
 window.IngredientStore = new class extends FluxStore
   fields : ->
-    allIngredients      : []
-    filteredIngredients : []
-    filterTerm          : ''
+    allIngredients         : []
+    filteredIngredients    : []
+    selectedIngredientTags : {}
+    filterTerm             : ''
 
   _filter : ->
     @filteredIngredients = _.filter @allIngredients, (i) =>
@@ -28,6 +29,12 @@ window.IngredientStore = new class extends FluxStore
   'set-filter-term' : ({ filterTerm }) ->
     @filterTerm = filterTerm
     @_filter()
+
+  'toggle-ingredient' : ({ tag }) ->
+    if @selectedIngredientTags[tag]?
+      delete @selectedIngredientTags[tag]
+    else
+      @selectedIngredientTags[tag] = true
 
 Promise.resolve $.get('/ingredients')
 .then (ingredients) =>

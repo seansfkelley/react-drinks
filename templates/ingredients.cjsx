@@ -1,10 +1,24 @@
 # @cjsx React.DOM
 
 Ingredient = React.createClass {
+  mixins : [
+    FluxMixin IngredientStore, 'selectedIngredientTags'
+  ]
+
   render : ->
-    <div className='ingredient'>
+    className = 'ingredient'
+    if @state.selectedIngredientTags[@props.tag]
+      className += ' is-selected'
+
+    <div className={className} onClick={@_toggleIngredient}>
       <div className='name'>{@props.name}</div>
     </div>
+
+  _toggleIngredient : ->
+    AppDispatcher.dispatch {
+      type : 'toggle-ingredient'
+      tag  : @props.tag
+    }
 }
 
 IngredientSearch = React.createClass {
@@ -31,7 +45,7 @@ IngredientList = React.createClass {
 
   render : ->
     ingredientNodes = @state.filteredIngredients.map (ingredient) ->
-      return <Ingredient name={ingredient.display} key={ingredient.tag}/>
+      return <Ingredient name={ingredient.display} tag={ingredient.tag} key={ingredient.tag}/>
 
     <div className='searchable-list'>
       <IngredientSearch/>

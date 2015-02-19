@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "./node_modules/.bin/nodemon index.coffee",
+    "start": "./node_modules/.bin/nodemon --ignore frontend/ --ignore templates/ index.coffee",
     "livereload": "./node_modules/.bin/coffee livereload.coffee"
   },
   "repository": {
