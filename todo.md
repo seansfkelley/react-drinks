@@ -1,0 +1,2 @@
+- https://www.npmjs.com/package/react-tap-event-plugin
+- Bower? for other frontend stuff
