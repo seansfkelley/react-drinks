@@ -2,9 +2,9 @@
 
 React = require 'react'
 
-FluxMixin           = require './FluxMixin.coffee'
-AppDispatcher       = require './AppDispatcher.coffee'
-{ IngredientStore } = require './stores.coffee'
+FluxMixin           = require './FluxMixin'
+AppDispatcher       = require './AppDispatcher'
+{ IngredientStore } = require './stores'
 
 Ingredient = React.createClass {
   mixins : [

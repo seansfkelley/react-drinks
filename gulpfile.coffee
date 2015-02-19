@@ -1,22 +1,37 @@
 gulp       = require 'gulp'
-browserify = require 'gulp-browserify'
+gutil      = require 'gulp-util'
 rename     = require 'gulp-rename'
 stylus     = require 'gulp-stylus'
 sourcemaps = require 'gulp-sourcemaps'
+browserify = require 'browserify'
+watchify   = require 'watchify'
+buffer     = require 'vinyl-buffer'
+source     = require 'vinyl-source-stream'
 
 paths =
   root    : './frontend/app.cjsx'
   scripts : [ 'frontend/**/*.coffee', 'frontend/**/*.cjsx' ]
   styles  : [ 'styles/**/*.styl' ]
 
-gulp.task 'scripts', ->
-  gulp.src paths.root, { read : false }
-    .pipe browserify {
-      transform : [ require 'coffee-reactify' ]
-      debug     : true
-    }
-    .pipe rename 'all-scripts.js'
-    .pipe gulp.dest './.dist/'
+bundler = watchify browserify paths.root, {
+  extensions : [ '.coffee', '.cjsx' ]
+  debug      : true
+}
+# https://github.com/substack/node-browserify/issues/1124
+bundler.transform require 'coffee-reactify'
+
+bundle = ->
+  return bundler.bundle()
+    .on 'error', gutil.log.bind(gutil, 'Browserify Error')
+    .pipe source 'all-scripts.js'
+    .pipe buffer()
+    .pipe sourcemaps.init { loadMaps : true }
+    .pipe sourcemaps.write './'
+    .pipe gulp.dest './.dist'
+
+bundler.on 'update', bundle
+# TODO: This standalone should not be watchified cause it's really annoying.
+gulp.task 'scripts', bundle
 
 gulp.task 'styles', ->
   gulp.src paths.styles
@@ -27,7 +42,7 @@ gulp.task 'styles', ->
     .pipe gulp.dest './.dist'
 
 gulp.task 'watch', ->
-  gulp.watch paths.scripts, [ 'scripts' ]
+  bundle()
   gulp.watch paths.styles,  [ 'styles' ]
 
-gulp.task 'default', [ 'scripts', 'styles', 'watch' ]
+gulp.task 'default', [ 'styles', 'watch' ]

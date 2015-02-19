@@ -1,4 +1,4 @@
-AppDispatcher = require './AppDispatcher.coffee'
+AppDispatcher = require './AppDispatcher'
 
 class FluxStore
   MicroEvent.mixin @::
