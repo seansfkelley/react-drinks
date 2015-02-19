@@ -4,7 +4,7 @@ React = require 'react'
 
 Test = React.createClass {
   render : ->
-    <div>Hello, world!</div>
+    <div>Hello, world.</div>
 }
 
 module.exports = Test

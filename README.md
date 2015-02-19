@@ -1,12 +1,9 @@
-To run:
+`npm install`, then run all of the following:
 
 ```
-npm install
+gulp
 npm start
-```
-
-In another tab:
-
-```
 npm run livereload
 ```
+
+todo: should probably combine these or at least consistently name them
