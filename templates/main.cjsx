@@ -1,5 +1,41 @@
 # @cjsx React.DOM
 
+AppDispatcher = new Flux.Dispatcher
+
+IngredientStore =
+  allIngredients      : []
+  filteredIngredients : []
+  filterTerm          : ''
+
+  _filter : ->
+    @filteredIngredients = _.filter @allIngredients, (i) =>
+      return _.contains i.display.toLowerCase(), @filterTerm
+
+MicroEvent.mixin IngredientStore
+
+IngredientStore.dispatchToken = AppDispatcher.register (payload) ->
+  switch payload.type
+  when 'set-all-ingredients'
+    IngredientStore.allIngredients = payload.ingredients
+    IngredientStore._filter()
+  when 'set-filter-term'
+    IngredientStore.filterTerm = payload.filterTerm
+    IngredientStore._filter()
+  else
+    return true
+
+  IngredientStore.trigger 'change'
+  return true
+
+Promise.resolve $.get(@props.url)
+.then (ingredients) =>
+  AppDispatcher.dispatch {
+    type : 'set-all-ingredients'
+    ingredients
+  }
+.catch (e) =>
+  console.error @props.url, e
+
 Ingredient = React.createClass {
   render : ->
     <div className='ingredient'>
@@ -8,51 +44,53 @@ Ingredient = React.createClass {
 }
 
 IngredientSearch = React.createClass {
-  getInitialState : -> { searchTerm : '' }
+  getInitialState : ->
+    return _.pick IngredientStore, 'filterTerm'
+
+  componentDidMount : ->
+    IngredientStore.bind 'change', @_onChange
+
+  componentWillUnmount : ->
+    IngredientStore.unbind 'change', @_onChange
+
+  _onChange : ->
+    @setState _.pick(IngredientStore, 'filterTerm')
 
   render : ->
     <div className='list-filter'>
-      <input type='text' placeholder={@props.placeholder} value={@state.searchTerm} onChange={@_onChange}/>
+      <input type='text' placeholder={@props.placeholder} value={@state.filterTerm} onChange={@_setFilterTerm}/>
     </div>
 
-  _onChange : (e) ->
-    @setState { searchTerm : e.target.value }
-    @props.onSearchChange?(e.target.value)
+  _setFilterTerm : (e) ->
+    AppDispatcher.dispatch {
+      type       : 'set-filter-term'
+      filterTerm : e.target.value
+    }
 }
 
 IngredientList = React.createClass {
   getInitialState : ->
-    return {
-      filteredIngredients : []
-      allIngredients      : []
-    }
+    return _.pick IngredientStore, 'filteredIngredients'
 
   componentDidMount : ->
-    Promise.resolve $.get(@props.url)
-    .then (ingredients) =>
-      @setState {
-        filteredIngredients : ingredients
-        allIngredients      : ingredients
-      }
-    .catch (e) =>
-      console.error @props.url, e
+    IngredientStore.bind 'change', @_onChange
+
+  componentWillUnmount : ->
+    IngredientStore.unbind 'change', @_onChange
+
+  _onChange : ->
+    @setState _.pick(IngredientStore, 'filteredIngredients')
 
   render : ->
     ingredientNodes = @state.filteredIngredients.map (ingredient) ->
       return <Ingredient name={ingredient.display} key={ingredient.tag}/>
 
     <div className='searchable-list'>
-      <IngredientSearch onSearchChange={@_onSearchChange}/>
+      <IngredientSearch/>
       <div className='list-items'>
         {ingredientNodes}
       </div>
     </div>
-
-  _onSearchChange : (searchTerm) ->
-    searchTerm = searchTerm.toLowerCase()
-    filteredIngredients = _.filter @state.allIngredients, (i) ->
-      return _.contains i.display.toLowerCase(), searchTerm
-    @setState { filteredIngredients }
 }
 
-React.render <IngredientList url='/ingredients' />, $('body')[0]
+React.render <IngredientList/>, $('body')[0]
