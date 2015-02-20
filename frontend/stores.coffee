@@ -13,11 +13,13 @@ class FluxStore
 
       return true
 
+INGREDIENTS_KEY = 'drinks-app-ingredients'
+
 IngredientStore = new class extends FluxStore
   fields : ->
     allIngredients         : []
     filteredIngredients    : []
-    selectedIngredientTags : {}
+    selectedIngredientTags : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
     filterTerm             : ''
 
   _filter : ->
@@ -37,6 +39,7 @@ IngredientStore = new class extends FluxStore
       delete @selectedIngredientTags[tag]
     else
       @selectedIngredientTags[tag] = true
+    localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
 
 Promise.resolve $.get('/ingredients')
 .then (ingredients) =>
