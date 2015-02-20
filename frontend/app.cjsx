@@ -13,10 +13,18 @@ Ingredient = React.createClass {
 
   render : ->
     className = 'ingredient'
-    if @state.selectedIngredientTags[@props.tag]
+    iconClassName = 'ingredient-icon fa'
+    selected = @state.selectedIngredientTags[@props.tag]
+
+    if selected
       className += ' is-selected'
+      # This icon is pretty shit, but at least it has an accompanying empty form.
+      iconClassName += ' fa-check-circle-o'
+    else
+      iconClassName += ' fa-circle-o'
 
     <div className={className} onTouchTap={@_toggleIngredient}>
+      <i className={iconClassName}/>
       <div className='name'>{@props.name}</div>
     </div>
 
