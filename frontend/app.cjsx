@@ -27,6 +27,11 @@ Ingredient = React.createClass {
     }
 }
 
+ListHeader = React.createClass {
+  render : ->
+    <div className='sticky-list-header'>{@props.title}</div>
+}
+
 IngredientSearch = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'filterTerm'
@@ -50,15 +55,30 @@ IngredientList = React.createClass {
   ]
 
   render : ->
-    ingredientNodes = @state.filteredIngredients.map (ingredient) ->
-      return <Ingredient name={ingredient.display} tag={ingredient.tag} key={ingredient.tag}/>
+    lastTitle = null
+    ingredientNodes = _.chain @state.filteredIngredients
+      .map (ingredient) ->
+        firstLetter = ingredient.display[0].toUpperCase()
+        if firstLetter != lastTitle
+          elements = [ <ListHeader title={firstLetter}/> ]
+          lastTitle = firstLetter
+        else
+          elements = []
 
-    <div className='searchable-list'>
+        return elements.concat [
+          <Ingredient name={ingredient.display} tag={ingredient.tag} key={ingredient.tag}/>
+        ]
+      .flatten()
+      .value()
+
+    <div className='ingredient-list' onScroll={@_onScroll}>
       <IngredientSearch/>
       <div className='list-items'>
         {ingredientNodes}
       </div>
     </div>
+
+  _onScroll : console.log.bind(console)
 }
 
 React.render <IngredientList/>, $('body')[0]

@@ -1,6 +1,6 @@
 _ = require 'lodash'
 
-ingredients = _.clone require('../data/ingredients')
+ingredients = _.sortBy require('../data/ingredients'), (i) -> i.display.toLowerCase()
 
 for i in ingredients
   i.tag ?= i.display.toLowerCase()
