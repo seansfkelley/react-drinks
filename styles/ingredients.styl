@@ -21,9 +21,25 @@ html, body
     text-align center
     font-size 24px
 
+.segmented-bar
+  font-size 24px
+  text-align center
+
+  .segment-title, .segment-control
+    display inline-block
+
+  .segment-control
+    margin-left 6px
+    margin-right 6px
+
+    &.hidden
+      display none
+
 .list-header
   font-size 16px
   margin 2px 5px
+
+  background-color #fafafa
 
 .ingredient
   font-size 24px
@@ -36,4 +52,4 @@ html, body
     display inline-block
 
   &.is-selected
-    background-color #eeeeee
+    background-color #eee
