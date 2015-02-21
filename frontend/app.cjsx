@@ -35,19 +35,51 @@ Ingredient = React.createClass {
     }
 }
 
+TabBar = React.createClass {
+  render : ->
+    tabs = @props.tabs.map (t) =>
+      tabClass = 'tab'
+      if @props.active == t
+        tabClass += ' active'
+      <div className={tabClass} onClick={_.partial @props.onTabSelect, t}>
+        <i className={'fa fa-' + t.icon}/>
+        {t.title}
+      </div>
+
+    <div className='tab-container'>
+      {tabs}
+    </div>
+}
+
+TabbedView = React.createClass {
+  getInitialState : ->
+    return {
+      active : @props.tabs[0]
+    }
+
+  render : ->
+    <div className='tabbed-view'>
+      <TabBar tabs={@props.tabs} active={@state.active} onTabSelect={@_onTabSelect}/>
+      {@state.active.content}
+    </div>
+
+  _onTabSelect : (active) ->
+    @setState { active }
+}
+
 ListHeader = React.createClass {
   render : ->
     <div className='sticky-list-header'>{@props.title}</div>
 }
 
-IngredientList = React.createClass {
+AlphabeticalIngredientList = React.createClass {
   mixins : [
-    FluxMixin IngredientStore, 'allIngredients'
+    FluxMixin IngredientStore, 'alphabeticalIngredients'
   ]
 
   render : ->
     lastTitle = null
-    ingredientNodes = _.chain @state.allIngredients
+    ingredientNodes = _.chain @state.alphabeticalIngredients
       .map (ingredient) ->
         firstLetter = ingredient.display[0].toUpperCase()
         if firstLetter != lastTitle
@@ -62,11 +94,41 @@ IngredientList = React.createClass {
       .flatten()
       .value()
 
-    <div className='ingredient-list' onScroll={@_onScroll}>
+    <div className='ingredient-list alphabetical'>
+      {ingredientNodes}
+    </div>
+}
+
+GroupedIngredientList = React.createClass {
+  mixins : [
+    FluxMixin IngredientStore, 'groupedIngredients'
+  ]
+
+  render : ->
+    ingredientNodes = _.chain @state.groupedIngredients
+      .map (ingredients, group) ->
+        return [
+          <ListHeader title={group}/>
+          _.map ingredients, (ingredient) ->
+            <Ingredient name={ingredient.display} tag={ingredient.tag} key={ingredient.tag}/>
+        ]
+      .flatten()
+      .value()
+
+    <div className='ingredient-list grouped'>
       {ingredientNodes}
     </div>
 
-  _onScroll : console.log.bind(console)
 }
 
-React.render <IngredientList/>, $('body')[0]
+tabs = [
+  icon    : 'glass'
+  title   : 'By Name'
+  content : <AlphabeticalIngredientList/>
+,
+  icon    : 'glass'
+  title   : 'By Group'
+  content : <GroupedIngredientList/>
+]
+
+React.render <TabbedView tabs={tabs}/>, document.body

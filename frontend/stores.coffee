@@ -17,11 +17,13 @@ INGREDIENTS_KEY = 'drinks-app-ingredients'
 
 IngredientStore = new class extends FluxStore
   fields : ->
-    allIngredients         : []
-    selectedIngredientTags : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
+    alphabeticalIngredients : []
+    groupedIngredients      : {}
+    selectedIngredientTags  : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
 
-  'set-all-ingredients' : ({ ingredients }) ->
-    @allIngredients = ingredients
+  'set-ingredients' : ({ alphabetical, grouped }) ->
+    @alphabeticalIngredients = alphabetical
+    @groupedIngredients      = grouped
 
   'toggle-ingredient' : ({ tag }) ->
     if @selectedIngredientTags[tag]?
@@ -31,10 +33,11 @@ IngredientStore = new class extends FluxStore
     localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
 
 Promise.resolve $.get('/ingredients')
-.then (ingredients) =>
+.then ({ alphabetical, grouped }) =>
   AppDispatcher.dispatch {
-    type : 'set-all-ingredients'
-    ingredients
+    type : 'set-ingredients'
+    alphabetical
+    grouped
   }
 .catch (e) =>
   console.error e
@@ -42,3 +45,5 @@ Promise.resolve $.get('/ingredients')
 module.exports = {
   IngredientStore
 }
+
+_.extend (window.debug ?= {}), module.exports
