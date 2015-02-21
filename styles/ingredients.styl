@@ -19,21 +19,27 @@ html, body
     display flexbox
     flex-grow 1
     text-align center
-    font-size 24px
+    font-size 20px
 
 .segmented-bar
-  font-size 24px
-  text-align center
 
   .segment-title, .segment-control
     display inline-block
 
-  .segment-control
-    margin-left 6px
-    margin-right 6px
+  .segment-title
+    text-align center
+    width 34%
+    font-size 20px
 
-    &.hidden
-      display none
+  .segment-control
+    width 33%
+    font-size 16px
+
+    &.left
+      text-align left
+
+    &.right
+      text-align right
 
 .list-header
   font-size 16px

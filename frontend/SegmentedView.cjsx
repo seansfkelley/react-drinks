@@ -4,22 +4,28 @@ React = require 'react'
 
 SegmentedViewHeader = React.createClass {
   render : ->
-    leftControlClasses = 'segment-control left'
-    if @props.index == 0
-      leftControlClasses += ' hidden'
+    if @props.index > 0
+      leftControl =
+        <div className='segment-control left' onClick={@_onControlClick.bind(this, 'left')}>
+          <i className='fa fa-chevron-left'/>
+          <span className='label'>{@props.segments[@props.index - 1].title}</span>
+        </div>
+    else
+      leftControl = <div className='segment-control left'/>
 
-    rightControlClasses = 'segment-control right'
-    if @props.index == @props.segments.length - 1
-      rightControlClasses += ' hidden'
+    if @props.index < @props.segments.length - 1
+      rightControl =
+        <div className='segment-control right' onClick={@_onControlClick.bind(this, 'right')}>
+          <span className='label'>{@props.segments[@props.index + 1].title}</span>
+          <i className='fa fa-chevron-right'/>
+        </div>
+    else
+      rightControl = <div className='segment-control right'/>
 
     <div className='segmented-bar'>
-      <div className={leftControlClasses} onClick={@_onControlClick.bind(this, 'left')}>
-        <i className='fa fa-chevron-left'/>
-      </div>
+      {leftControl}
       <div className='segment-title'>{@props.segments[@props.index].title}</div>
-      <div className={rightControlClasses} onClick={@_onControlClick.bind(this, 'right')}>
-        <i className='fa fa-chevron-right'/>
-      </div>
+      {rightControl}
     </div>
 
   _onControlClick : (direction) ->
