@@ -18,21 +18,10 @@ INGREDIENTS_KEY = 'drinks-app-ingredients'
 IngredientStore = new class extends FluxStore
   fields : ->
     allIngredients         : []
-    filteredIngredients    : []
     selectedIngredientTags : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
-    filterTerm             : ''
-
-  _filter : ->
-    @filteredIngredients = _.filter @allIngredients, (i) =>
-      return _.contains i.display.toLowerCase(), @filterTerm.toLowerCase()
 
   'set-all-ingredients' : ({ ingredients }) ->
     @allIngredients = ingredients
-    @_filter()
-
-  'set-filter-term' : ({ filterTerm }) ->
-    @filterTerm = filterTerm
-    @_filter()
 
   'toggle-ingredient' : ({ tag }) ->
     if @selectedIngredientTags[tag]?

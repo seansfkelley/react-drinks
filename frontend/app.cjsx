@@ -40,31 +40,14 @@ ListHeader = React.createClass {
     <div className='sticky-list-header'>{@props.title}</div>
 }
 
-IngredientSearch = React.createClass {
-  mixins : [
-    FluxMixin IngredientStore, 'filterTerm'
-  ]
-
-  render : ->
-    <div className='list-filter'>
-      <input type='text' placeholder={@props.placeholder} value={@state.filterTerm} onChange={@_setFilterTerm}/>
-    </div>
-
-  _setFilterTerm : (e) ->
-    AppDispatcher.dispatch {
-      type       : 'set-filter-term'
-      filterTerm : e.target.value
-    }
-}
-
 IngredientList = React.createClass {
   mixins : [
-    FluxMixin IngredientStore, 'filteredIngredients'
+    FluxMixin IngredientStore, 'allIngredients'
   ]
 
   render : ->
     lastTitle = null
-    ingredientNodes = _.chain @state.filteredIngredients
+    ingredientNodes = _.chain @state.allIngredients
       .map (ingredient) ->
         firstLetter = ingredient.display[0].toUpperCase()
         if firstLetter != lastTitle
@@ -80,10 +63,7 @@ IngredientList = React.createClass {
       .value()
 
     <div className='ingredient-list' onScroll={@_onScroll}>
-      <IngredientSearch/>
-      <div className='list-items'>
-        {ingredientNodes}
-      </div>
+      {ingredientNodes}
     </div>
 
   _onScroll : console.log.bind(console)
