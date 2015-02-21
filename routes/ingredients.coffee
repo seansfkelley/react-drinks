@@ -1,11 +1,22 @@
-_ = require 'lodash'
+_           = require 'lodash'
+ingredients = require '../data/ingredients'
+groups      = require '../data/groups'
 
-alphabetical = _.sortBy require('../data/ingredients'), (i) -> i.display.toLowerCase()
+alphabetical = _.sortBy ingredients, (i) -> i.display.toLowerCase()
 
 for i in alphabetical
   i.tag ?= i.display.toLowerCase()
 
-grouped = _.groupBy alphabetical, 'group'
+grouped = _.chain alphabetical
+  .groupBy 'group'
+  .map (ingredients, groupTag) ->
+    name = groups[groupTag].join ' > '
+    return {
+      name
+      ingredients
+    }
+  .sortBy 'name'
+  .value()
 
 module.exports = {
   method  : 'get'

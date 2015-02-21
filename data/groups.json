@@ -1,0 +1,22 @@
+{
+  "bitters"         : [ "Mixers", "Bitters" ],
+  "brandy"          : [ "Spirits", "Brandy" ],
+  "fruit"           : [ "Fruits & Vegetables", "Fruits" ],
+  "gin"             : [ "Spirits", "Gin" ],
+  "herb"            : [ "Other", "Herbs" ],
+  "liqueur-fruit"   : [ "Liqueur", "Fruit" ],
+  "liqueur-herbal"  : [ "Liqueur", "Herbal" ],
+  "liqueur-other"   : [ "Liqueur", "Other" ],
+  "mixer-juice"     : [ "Mixers", "Juice" ],
+  "mixer-soda"      : [ "Mixers", "Soda" ],
+  "mixer-other"     : [ "Mixers", "Other" ],
+  "other"           : [ "Other" ],
+  "rum"             : [ "Spirits", "Rum" ],
+  "spirit-other"    : [ "Spirits", "Other" ],
+  "syrup"           : [ "Mixers", "Syrups" ],
+  "tequila"         : [ "Spirits", "Tequila" ],
+  "vegetable"       : [ "Fruits & Vegetables", "Vegetables" ],
+  "vodka"           : [ "Spirits", "Vodka" ],
+  "whiskey"         : [ "Spirits", "Whiskey" ],
+  "wine"            : [ "Spirits", "Wine" ]
+}

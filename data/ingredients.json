@@ -51,7 +51,7 @@
   },
   {
     "display" : "Cola",
-    "group"   : "mixer"
+    "group"   : "mixer-soda"
   },
   {
     "display" : "Cognac",
@@ -90,7 +90,7 @@
   },
   {
     "display" : "Ginger Beer",
-    "group"   : "mixer"
+    "group"   : "mixer-soda"
   },
   {
     "display" : "Ginger Liqueur",
@@ -134,7 +134,7 @@
   },
   {
     "display" : "Lemon Juice",
-    "group"   : "mixer"
+    "group"   : "mixer-juice"
   },
   {
     "display" : "Lillet",
@@ -142,11 +142,11 @@
   },
   {
     "display" : "Lime",
-    "group"   : "fruit-vegetable"
+    "group"   : "fruit"
   },
   {
     "display" : "Lime Juice",
-    "group"   : "mixer"
+    "group"   : "mixer-juice"
   },
   {
     "display" : "Maraschino Liqueur",
@@ -230,7 +230,7 @@
   },
   {
     "display" : "Tonic",
-    "group"   : "mixer"
+    "group"   : "mixer-soda"
   },
   {
     "display" : "Triple Sec",
@@ -258,7 +258,7 @@
   },
   {
     "display" : "Club Soda",
-    "group"   : "mixer"
+    "group"   : "mixer-soda"
   },
   {
     "display" : "Scotch",
@@ -267,7 +267,7 @@
   },
   {
     "display" : "Orange Juice",
-    "group"   : "juice"
+    "group"   : "mixer-juice"
   },
   {
     "display" : "Pimm's No. 1",
@@ -288,7 +288,7 @@
   },
   {
     "display" : "Cucumber",
-    "group"   : "fruit-vegetable"
+    "group"   : "vegetable"
   },
   {
     "display" : "Thyme",
@@ -296,7 +296,7 @@
   },
   {
     "display" : "Lemon",
-    "group"   : "fruit-vegetable"
+    "group"   : "fruit"
   },
   {
     "display" : "Drambuie",
@@ -310,6 +310,6 @@
   },
   {
     "display" : "Peach",
-    "group"   : "fruit-vegetable"
+    "group"   : "fruit"
   }
 ]

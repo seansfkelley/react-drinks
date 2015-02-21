@@ -46,7 +46,7 @@ TabBar = React.createClass {
         {t.title}
       </div>
 
-    <div className='tab-container'>
+    <div className='tab-bar'>
       {tabs}
     </div>
 }
@@ -69,7 +69,7 @@ TabbedView = React.createClass {
 
 ListHeader = React.createClass {
   render : ->
-    <div className='sticky-list-header'>{@props.title}</div>
+    <div className='list-header'>{@props.title}</div>
 }
 
 AlphabeticalIngredientList = React.createClass {
@@ -106,9 +106,9 @@ GroupedIngredientList = React.createClass {
 
   render : ->
     ingredientNodes = _.chain @state.groupedIngredients
-      .map (ingredients, group) ->
+      .map ({ name, ingredients }) ->
         return [
-          <ListHeader title={group}/>
+          <ListHeader title={name}/>
           _.map ingredients, (ingredient) ->
             <Ingredient name={ingredient.display} tag={ingredient.tag} key={ingredient.tag}/>
         ]
@@ -118,7 +118,6 @@ GroupedIngredientList = React.createClass {
     <div className='ingredient-list grouped'>
       {ingredientNodes}
     </div>
-
 }
 
 tabs = [
