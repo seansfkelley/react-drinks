@@ -2,10 +2,10 @@
 
 React = require 'react'
 
-SegmentedView  = require './SegmentedView'
+PaginatedView  = require './PaginatedView'
 IngredientPage = require './IngredientPage'
 
-segments = [
+page = [
   title : 'Ingredients'
   content : <IngredientPage/>
 ,
@@ -13,6 +13,6 @@ segments = [
   content : <div/>
 ]
 
-segmentedView = <SegmentedView segments={segments}/>
+paginatedView = <PaginatedView pages={page}/>
 
-React.render segmentedView, document.body
+React.render paginatedView, document.body
