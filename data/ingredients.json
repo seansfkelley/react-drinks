@@ -1,247 +1,315 @@
  [
   {
-    "display" : "Absinthe"
+    "display" : "Absinthe",
+    "group"   : "spirit-other"
   },
   {
-    "display" : "Agave Nectar"
+    "display" : "Agave Nectar",
+    "group"   : "syrup"
   },
   {
-    "display" : "Amaretto"
+    "display" : "Amaretto",
+    "group"   : "liqueur-other"
   },
   {
     "display" : "Angostura Bitters",
-    "generic" : "bitters"
+    "generic" : "bitters",
+    "group"   : "bitters"
   },
   {
-    "display" : "Applejack"
+    "display" : "Applejack",
+    "group"   : "spirit-other"
   },
   {
     "display" : "Baileys",
-    "generic" : "irish cream"
+    "generic" : "irish cream",
+    "group"   : "liqueur-other"
   },
   {
     "display" : "B\u00E9n\u00E9dictine",
-    "tag"     : "benedictine"
+    "tag"     : "benedictine",
+    "group"   : "liqueur-herbal"
   },
   {
     "display" : "Bourbon",
-    "generic" : "whiskey"
+    "generic" : "whiskey",
+    "group"   : "whiskey"
   },
   {
     "display" : "Cacha\u00e7a",
-    "tag"     : "cachaca"
+    "tag"     : "cachaca",
+    "group"   : "rum"
   },
   {
-    "display" : "Coffee Liqueur"
+    "display" : "Coffee Liqueur",
+    "group"   : "liqueur-other"
   },
   {
     "display" : "Cointreau",
-    "generic" : "triple sec"
+    "generic" : "triple sec",
+    "group"   : "liqueur-fruit"
   },
   {
-    "display" : "Cola"
+    "display" : "Cola",
+    "group"   : "mixer"
   },
   {
-    "display" : "Cognac"
+    "display" : "Cognac",
+    "group"   : "brandy"
   },
   {
-    "display" : "Cynar"
+    "display" : "Cynar",
+    "group"   : "liqueur-herbal"
   },
   {
     "display" : "Rum (dark)",
     "tag"     : "dark rum",
-    "generic" : "rum"
+    "generic" : "rum",
+    "group"   : "rum"
   },
   {
     "display" : "Vermouth (dry)",
-    "tag"     : "dry vermouth"
+    "tag"     : "dry vermouth",
+    "group"   : "wine"
   },
   {
-    "display" : "Egg White"
+    "display" : "Egg White",
+    "group"   : "other"
   },
   {
-    "display" : "Elderflower Liqueur"
+    "display" : "Elderflower Liqueur",
+    "group"   : "liqueur-herbal"
   },
   {
-    "display" : "Genever"
+    "display" : "Genever",
+    "group"   : "gin"
   },
   {
-    "display" : "Gin"
+    "display" : "Gin",
+    "group"   : "gin"
   },
   {
-    "display" : "Ginger Beer"
+    "display" : "Ginger Beer",
+    "group"   : "mixer"
   },
   {
-    "display" : "Ginger Liqueur"
+    "display" : "Ginger Liqueur",
+    "group"   : "liqueur-herbal"
   },
   {
     "display" : "Grand Marnier",
-    "generic" : "triple sec"
+    "generic" : "triple sec",
+    "group"   : "liqueur-fruit"
   },
   {
     "display" : "Chartreuse (green)",
     "tag"     : "green chartreuse",
-    "generic" : "chartreuse"
+    "generic" : "chartreuse",
+    "group"   : "liqueur-herbal"
   },
   {
     "display" : "Chartreuse (yellow)",
     "tag"     : "yellow chartreuse",
-    "generic" : "chartreuse"
+    "generic" : "chartreuse",
+    "group"   : "liqueur-herbal"
   },
   {
-    "display" : "Grenadine"
+    "display" : "Grenadine",
+    "group"   : "syrup"
   },
   {
-    "display" : "Honey Syrup"
+    "display" : "Honey Syrup",
+    "group"   : "syrup"
   },
   {
     "display" : "Honey Whiskey",
-    "generic" : "whiskey"
+    "generic" : "whiskey",
+    "group"   : "whiskey"
   },
   {
     "display" : "Kahl\u00FAa",
     "tag"     : "kahlua",
-    "generic" : "coffee liqueur"
+    "generic" : "coffee liqueur",
+    "group"   : "liqueur-other"
   },
   {
-    "display" : "Lemon Juice"
+    "display" : "Lemon Juice",
+    "group"   : "mixer"
   },
   {
-    "display" : "Lillet"
+    "display" : "Lillet",
+    "group"   : "wine"
   },
   {
-    "display" : "Lime"
+    "display" : "Lime",
+    "group"   : "fruit-vegetable"
   },
   {
-    "display" : "Lime Juice"
+    "display" : "Lime Juice",
+    "group"   : "mixer"
   },
   {
-    "display" : "Maraschino Liqueur"
+    "display" : "Maraschino Liqueur",
+    "group"   : "liqueur-fruit"
   },
   {
     "display" : "Mezcal (blanco)",
     "tag"     : "blanco mezcal",
-    "generic" : "mezcal"
+    "generic" : "mezcal",
+    "group"   : "tequila"
   },
   {
     "display" : "Mezcal (reposado)",
     "tag"     : "reposado mezcal",
-    "generic" : "mezcal"
+    "generic" : "mezcal",
+    "group"   : "tequila"
   },
   {
     "display" : "Mezcal (a\u00f1ejo)",
     "tag"     : "anejo mezcal",
-    "generic" : "mezcal"
+    "generic" : "mezcal",
+    "group"   : "tequila"
   },
   {
-    "display" : "Milk"
+    "display" : "Milk",
+    "group"   : "other"
   },
   {
-    "display" : "Mint"
+    "display" : "Mint",
+    "group"   : "herb"
   },
   {
-    "display" : "Noisette"
+    "display" : "Noisette",
+    "group"   : "liqueur-herbal"
   },
   {
     "display" : "Rye Whiskey",
-    "generic" : "whiskey"
+    "generic" : "whiskey",
+    "group"   : "whiskey"
   },
   {
-    "display" : "Simple Syrup"
+    "display" : "Simple Syrup",
+    "group"   : "syrup"
   },
   {
-    "display" : "Sparkling Wine"
+    "display" : "Sparkling Wine",
+    "group"   : "wine"
   },
   {
     "display" : "Rum (spiced)",
     "tag"     : "spiced rum",
-    "generic" : "rum"
+    "generic" : "rum",
+    "group"   : "rum"
   },
   {
-    "display" : "Sugar"
+    "display" : "Sugar",
+    "group"   : "other"
   },
   {
     "display" : "Vermouth (sweet)",
-    "tag"     : "sweet vermouth"
+    "tag"     : "sweet vermouth",
+    "group"   : "wine"
   },
   {
     "display" : "Tequila (blanco)",
     "tag"     : "blanco tequila",
-    "generic" : "tequila"
+    "generic" : "tequila",
+    "group"   : "tequila"
   },
   {
     "display" : "Tequila (reposado)",
     "tag"     : "reposado tequila",
-    "generic" : "tequila"
+    "generic" : "tequila",
+    "group"   : "tequila"
   },
   {
     "display" : "Tequila (a\u00f1ejo)",
     "tag"     : "anejo tequila",
-    "generic" : "tequila"
+    "generic" : "tequila",
+    "group"   : "tequila"
   },
   {
-    "display" : "Tonic"
+    "display" : "Tonic",
+    "group"   : "mixer"
   },
   {
-    "display" : "Triple Sec"
+    "display" : "Triple Sec",
+    "group"   : "liqueur-herbal"
   },
   {
-    "display" : "Vodka"
+    "display" : "Vodka",
+    "group"   : "vodka"
   },
   {
     "display" : "Irish Whiskey",
-    "generic" : "whiskey"
+    "generic" : "whiskey",
+    "group"   : "whiskey"
   },
   {
     "display" : "Rum (white)",
     "tag"     : "white rum",
-    "generic" : "rum"
+    "generic" : "rum",
+    "group"   : "rum"
   },
   {
     "display" : "Vermouth (white)",
-    "tag"     : "white vermouth"
+    "tag"     : "white vermouth",
+    "group"   : "wine"
   },
   {
-    "display" : "Club Soda"
+    "display" : "Club Soda",
+    "group"   : "mixer"
   },
   {
     "display" : "Scotch",
-    "generic" : "whiskey"
+    "generic" : "whiskey",
+    "group"   : "whiskey"
   },
   {
-    "display" : "Orange Juice"
+    "display" : "Orange Juice",
+    "group"   : "juice"
   },
   {
     "display" : "Pimm's No. 1",
-    "tag"     : "pimms"
+    "tag"     : "pimms",
+    "group"   : "liqueur-other"
   },
   {
-    "display" : "Rosemary"
+    "display" : "Rosemary",
+    "group"   : "herb"
   },
   {
-    "display" : "Basil"
+    "display" : "Basil",
+    "group"   : "herb"
   },
   {
-    "display" : "Shiso"
+    "display" : "Shiso",
+    "group"   : "herb"
   },
   {
-    "display" : "Cucumber"
+    "display" : "Cucumber",
+    "group"   : "fruit-vegetable"
   },
   {
-    "display" : "Thyme"
+    "display" : "Thyme",
+    "group"   : "herb"
   },
   {
-    "display" : "Lemon"
+    "display" : "Lemon",
+    "group"   : "fruit-vegetable"
   },
   {
     "display" : "Drambuie",
-    "generic" : "honey whiskey"
+    "generic" : "honey whiskey",
+    "group"   : "whiskey"
   },
   {
     "display" : "Tennessee Whiskey",
-    "generic" : "whiskey"
+    "generic" : "whiskey",
+    "group"   : "whiskey"
   },
   {
-    "display" : "Peach"
+    "display" : "Peach",
+    "group"   : "fruit-vegetable"
   }
 ]
