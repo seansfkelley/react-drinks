@@ -13,7 +13,7 @@ TabBar = React.createClass {
         {t.title}
       </div>
 
-    <div className='tab-bar'>
+    <div className='tab-bar sticky-header-bar'>
       {tabs}
     </div>
 }
@@ -25,9 +25,11 @@ TabbedView = React.createClass {
     }
 
   render : ->
-    <div className='tabbed-view'>
+    <div className='tabbed-view sticky-header-container'>
       <TabBar tabs={@props.tabs} active={@state.active} onTabSelect={@_onTabSelect}/>
-      {@state.active.content}
+      <div className='sticky-header-content-pane'>
+        {@state.active.content}
+      </div>
     </div>
 
   _onTabSelect : (active) ->

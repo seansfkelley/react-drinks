@@ -8,6 +8,19 @@ html, body
 
   -webkit-user-select none
 
+sticky-header-container(height)
+  height 100%
+
+  .sticky-header-bar
+    height height
+
+  .sticky-header-content-pane
+    height "calc(100% - %s)" % height
+    overflow-y scroll
+
+.tabbed-view
+  sticky-header-container 24px
+
 .tab-bar
   display flex
   width 100%
@@ -20,16 +33,6 @@ html, body
     flex-grow 1
     text-align center
     font-size 20px
-
-sticky-header-container(height)
-  height 100%
-
-  .sticky-header-bar
-    height height
-
-  .sticky-header-content-pane
-    height "calc(100% - %s)" % height
-    overflow-y scroll
 
 .paginated-view
   sticky-header-container 24px
