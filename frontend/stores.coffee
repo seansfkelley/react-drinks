@@ -40,14 +40,22 @@ RecipeStore = new class extends FluxStore
     alphabeticalRecipes   : []
     groupedMixableRecipes : []
 
+  'set-ingredients' : ({ alphabetical, grouped }) ->
+    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
+    @_createRecipeSearch()
+    @_updateMixableRecipes()
+
   'set-recipes' : ({ recipes }) ->
     @alphabeticalRecipes = recipes
-    @_recipeSearch = new RecipeSearch @alphabeticalRecipes
+    @_createRecipeSearch()
     @_updateMixableRecipes()
 
   'toggle-ingredient' : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     @_updateMixableRecipes()
+
+  _createRecipeSearch : ->
+    @_recipeSearch = new RecipeSearch IngredientStore.alphabeticalIngredients, @alphabeticalRecipes
 
   _updateMixableRecipes : ->
     selectedTags = _.keys IngredientStore.selectedIngredientTags
