@@ -18,7 +18,7 @@ INGREDIENTS_KEY = 'drinks-app-ingredients'
 IngredientStore = new class extends FluxStore
   fields : ->
     alphabeticalIngredients : []
-    groupedIngredients      : {}
+    groupedIngredients      : []
     selectedIngredientTags  : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
@@ -32,6 +32,25 @@ IngredientStore = new class extends FluxStore
       @selectedIngredientTags[tag] = true
     localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
 
+RecipeStore = new class extends FluxStore
+  fields : ->
+    allRecipes            : []
+    groupedMixableRecipes : []
+
+  'set-recipes' : ({ recipes }) ->
+    @allRecipes = recipes
+    @_updateMixableRecipes()
+
+  'toggle-ingredient' : ->
+    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
+    @_updateMixableRecipes()
+
+  _updateMixableRecipes : ->
+    @groupedMixableRecipes = [
+      name    : 'group 1'
+      recipes : @allRecipes
+    ]
+
 Promise.resolve $.get('/ingredients')
 .then ({ alphabetical, grouped }) =>
   AppDispatcher.dispatch {
@@ -39,11 +58,17 @@ Promise.resolve $.get('/ingredients')
     alphabetical
     grouped
   }
-.catch (e) =>
-  console.error e
+
+Promise.resolve $.get('/recipes')
+.then (recipes) =>
+  AppDispatcher.dispatch {
+    type : 'set-recipes'
+    recipes
+  }
 
 module.exports = {
   IngredientStore
+  RecipeStore
 }
 
 _.extend (window.debug ?= {}), module.exports

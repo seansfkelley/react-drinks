@@ -8,7 +8,7 @@ AppDispatcher       = require './AppDispatcher'
 
 TabbedView = require './TabbedView'
 
-Ingredient = React.createClass {
+IngredientListItem = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'selectedIngredientTags'
   ]
@@ -16,9 +16,8 @@ Ingredient = React.createClass {
   render : ->
     className = 'ingredient'
     iconClassName = 'ingredient-icon fa'
-    selected = @state.selectedIngredientTags[@props.tag]
 
-    if selected
+    if @state.selectedIngredientTags[@props.ingredient.tag]
       className += ' is-selected'
       # This icon is pretty shit, but at least it has an accompanying empty form.
       iconClassName += ' fa-check-circle-o'
@@ -27,13 +26,13 @@ Ingredient = React.createClass {
 
     <div className={className} onTouchTap={@_toggleIngredient}>
       <i className={iconClassName}/>
-      <div className='name'>{@props.name}</div>
+      <div className='name'>{@props.ingredient.display}</div>
     </div>
 
   _toggleIngredient : ->
     AppDispatcher.dispatch {
       type : 'toggle-ingredient'
-      tag  : @props.tag
+      tag  : @props.ingredient.tag
     }
 }
 
@@ -59,7 +58,7 @@ AlphabeticalIngredientList = React.createClass {
           elements = []
 
         return elements.concat [
-          <Ingredient name={ingredient.display} tag={ingredient.tag} key={ingredient.tag}/>
+          <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
         ]
       .flatten()
       .value()
@@ -80,7 +79,7 @@ GroupedIngredientList = React.createClass {
         return [
           <ListHeader title={name}/>
           _.map ingredients, (ingredient) ->
-            <Ingredient name={ingredient.display} tag={ingredient.tag} key={ingredient.tag}/>
+            <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
         ]
       .flatten()
       .value()

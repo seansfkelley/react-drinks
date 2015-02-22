@@ -1,8 +1,8 @@
 _           = require 'lodash'
-ingredients = require '../data/ingredients'
+ingredients = _.cloneDeep require('../data/ingredients')
 groups      = require '../data/groups'
 
-alphabetical = _.sortBy ingredients, (i) -> i.display.toLowerCase()
+alphabetical = _.sortBy _.cloneDeep(ingredients), (i) -> i.display.toLowerCase()
 
 for i in alphabetical
   i.tag ?= i.display.toLowerCase()
