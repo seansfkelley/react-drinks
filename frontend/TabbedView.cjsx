@@ -9,7 +9,7 @@ TabBar = React.createClass {
       tabClass = 'tab'
       if @props.active == t
         tabClass += ' active'
-      <div className={tabClass} onClick={_.partial @props.onTabSelect, t}>
+      <div className={tabClass} onClick={_.partial @props.onTabSelect, t} key={t.title}>
         <i className={'fa fa-' + t.icon}/>
         {t.title}
       </div>

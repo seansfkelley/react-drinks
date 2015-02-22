@@ -16,10 +16,9 @@ RecipeListItem = React.createClass {
     </div>
 
   _openRecipe : ->
-    console.log 'here'
     AppDispatcher.dispatch {
-      type           : 'open-recipe'
-      normalizedName : @props.recipe.normalizedName
+      type   : 'open-recipe'
+      recipe : @props.recipe
     }
 }
 
@@ -39,7 +38,7 @@ AlphabeticalRecipeList = React.createClass {
       .map (recipe) ->
         firstLetter = recipe.name[0].toUpperCase()
         if firstLetter != lastTitle
-          elements = [ <ListHeader title={firstLetter}/> ]
+          elements = [ <ListHeader title={firstLetter} key={'header-' + firstLetter}/> ]
           lastTitle = firstLetter
         else
           elements = []
@@ -65,7 +64,7 @@ GroupedRecipeList = React.createClass {
     recipeNodes = _.chain @state.groupedMixableRecipes
       .map ({ name, recipes }) ->
         return [
-          <ListHeader title={name}/>
+          <ListHeader title={name} key={'header-' + name}/>
           _.map recipes, (recipe) ->
             <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
         ]

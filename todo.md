@@ -1,2 +1,1 @@
-- https://www.npmjs.com/package/react-tap-event-plugin
-- Bower? for other frontend stuff
+- react router for permalinking to recipes?

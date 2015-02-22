@@ -53,7 +53,7 @@ AlphabeticalIngredientList = React.createClass {
       .map (ingredient) ->
         firstLetter = ingredient.display[0].toUpperCase()
         if firstLetter != lastTitle
-          elements = [ <ListHeader title={firstLetter}/> ]
+          elements = [ <ListHeader title={firstLetter} key={'header-' + firstLetter}/> ]
           lastTitle = firstLetter
         else
           elements = []
@@ -78,7 +78,7 @@ GroupedIngredientList = React.createClass {
     ingredientNodes = _.chain @state.groupedIngredients
       .map ({ name, ingredients }) ->
         return [
-          <ListHeader title={name}/>
+          <ListHeader title={name} key={'header-' + name}/>
           _.map ingredients, (ingredient) ->
             <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
         ]
