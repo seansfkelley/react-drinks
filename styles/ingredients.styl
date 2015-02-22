@@ -21,8 +21,20 @@ html, body
     text-align center
     font-size 20px
 
-.paginated-bar
+sticky-header-container(height)
+  height 100%
 
+  .sticky-header-bar
+    height height
+
+  .sticky-header-content-pane
+    height "calc(100% - %s)" % height
+    overflow-y scroll
+
+.paginated-view
+  sticky-header-container 24px
+
+.paginated-bar
   .paginated-title, .paginated-control
     display inline-block
 

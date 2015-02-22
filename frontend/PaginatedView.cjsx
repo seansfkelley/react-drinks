@@ -22,7 +22,7 @@ PaginatedViewHeader = React.createClass {
     else
       rightControl = <div className='paginated-control right'/>
 
-    <div className='paginated-bar'>
+    <div className='paginated-bar sticky-header-bar'>
       {leftControl}
       <div className='paginated-title'>{@props.pages[@props.index].title}</div>
       {rightControl}
@@ -42,9 +42,11 @@ PaginatedView = React.createClass {
     }
 
   render : ->
-    <div className='paginated-view'>
+    <div className='paginated-view sticky-header-container'>
       <PaginatedViewHeader setIndex={@_setIndex} index={@state.index} pages={@props.pages}/>
-      {@props.pages[@state.index].content}
+      <div className='paginated-view-content sticky-header-content-pane'>
+        {@props.pages[@state.index].content}
+      </div>
     </div>
 
   _setIndex : (index) ->
