@@ -1,4 +1,5 @@
 AppDispatcher = require './AppDispatcher'
+RecipeSearch   = require './RecipeSearch'
 
 class FluxStore
   MicroEvent.mixin @::
@@ -32,6 +33,8 @@ IngredientStore = new class extends FluxStore
       @selectedIngredientTags[tag] = true
     localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
 
+FUZZY_MATCH = 2
+
 RecipeStore = new class extends FluxStore
   fields : ->
     alphabeticalRecipes   : []
@@ -39,6 +42,7 @@ RecipeStore = new class extends FluxStore
 
   'set-recipes' : ({ recipes }) ->
     @alphabeticalRecipes = recipes
+    @_recipeSearch = new RecipeSearch @alphabeticalRecipes
     @_updateMixableRecipes()
 
   'toggle-ingredient' : ->
@@ -46,10 +50,14 @@ RecipeStore = new class extends FluxStore
     @_updateMixableRecipes()
 
   _updateMixableRecipes : ->
-    @groupedMixableRecipes = [
-      name    : 'group 1'
-      recipes : @alphabeticalRecipes
-    ]
+    selectedTags = _.keys IngredientStore.selectedIngredientTags
+    @groupedMixableRecipes = _.map @_recipeSearch.computeMixableRecipes(selectedTags, FUZZY_MATCH), (recipes, missingCount) ->
+      name = switch +missingCount
+        when 0 then 'Mixable Drinks'
+        when 1 then 'With 1 More Ingredient'
+        else "With #{missingCount} More Ingredients"
+      recipes = _.sortBy recipes, 'name'
+      return { name, recipes }
 
 Promise.resolve $.get('/ingredients')
 .then ({ alphabetical, grouped }) =>
