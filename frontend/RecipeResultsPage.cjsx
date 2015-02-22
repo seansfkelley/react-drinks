@@ -85,9 +85,9 @@ tabs = [
   content : <GroupedRecipeList/>
 ]
 
-RecipePage = React.createClass {
+RecipeResultsPage = React.createClass {
   render : ->
     <TabbedView tabs={tabs}/>
 }
 
-module.exports = RecipePage
+module.exports = RecipeResultsPage

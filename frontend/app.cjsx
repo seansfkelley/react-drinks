@@ -2,16 +2,16 @@
 
 React = require 'react'
 
-PaginatedView  = require './PaginatedView'
-IngredientPage = require './IngredientPage'
-RecipePage     = require './RecipePage'
+PaginatedView           = require './PaginatedView'
+IngredientSelectionPage = require './IngredientSelectionPage'
+RecipeResultsPage       = require './RecipeResultsPage'
 
 page = [
   title : 'Ingredients'
-  content : <IngredientPage/>
+  content : <IngredientSelectionPage/>
 ,
   title : 'Recipes'
-  content : <RecipePage/>
+  content : <RecipeResultsPage/>
 ]
 
 paginatedView = <PaginatedView pages={page}/>

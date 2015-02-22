@@ -99,9 +99,9 @@ tabs = [
   content : <GroupedIngredientList/>
 ]
 
-IngredientPage = React.createClass {
+IngredientSelectionPage = React.createClass {
   render : ->
     <TabbedView tabs={tabs}/>
 }
 
-module.exports = IngredientPage
+module.exports = IngredientSelectionPage
