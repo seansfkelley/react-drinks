@@ -6,6 +6,8 @@ FluxMixin       = require './FluxMixin'
 AppDispatcher   = require './AppDispatcher'
 { RecipeStore } = require './stores'
 
+TabbedView = require './TabbedView'
+
 RecipeListItem = React.createClass {
   render : ->
     <div className='recipe' onTouchTap={@_openRecipe}>
@@ -19,11 +21,38 @@ RecipeListItem = React.createClass {
     }
 }
 
-
 ListHeader = React.createClass {
   render : ->
     <div className='list-header'>{@props.title}</div>
 }
+
+AlphabeticalRecipeList = React.createClass {
+  mixins : [
+    FluxMixin RecipeStore, 'alphabeticalRecipes'
+  ]
+
+  render : ->
+    lastTitle = null
+    recipeNames = _.chain @state.alphabeticalRecipes
+      .map (recipe) ->
+        firstLetter = recipe.name[0].toUpperCase()
+        if firstLetter != lastTitle
+          elements = [ <ListHeader title={firstLetter}/> ]
+          lastTitle = firstLetter
+        else
+          elements = []
+
+        return elements.concat [
+          <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+        ]
+      .flatten()
+      .value()
+
+    <div className='recipes-list alphabetical'>
+      {recipeNames}
+    </div>
+}
+
 
 GroupedRecipeList = React.createClass {
   mixins : [
@@ -46,9 +75,19 @@ GroupedRecipeList = React.createClass {
     </div>
 }
 
+tabs = [
+  icon    : 'glass'
+  title   : 'Browse All'
+  content : <AlphabeticalRecipeList/>
+,
+  icon    : 'glass'
+  title   : 'Mixable'
+  content : <GroupedRecipeList/>
+]
+
 RecipePage = React.createClass {
   render : ->
-    <GroupedRecipeList/>
+    <TabbedView tabs={tabs}/>
 }
 
 module.exports = RecipePage

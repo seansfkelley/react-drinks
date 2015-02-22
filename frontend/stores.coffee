@@ -34,11 +34,11 @@ IngredientStore = new class extends FluxStore
 
 RecipeStore = new class extends FluxStore
   fields : ->
-    allRecipes            : []
+    alphabeticalRecipes   : []
     groupedMixableRecipes : []
 
   'set-recipes' : ({ recipes }) ->
-    @allRecipes = recipes
+    @alphabeticalRecipes = recipes
     @_updateMixableRecipes()
 
   'toggle-ingredient' : ->
@@ -48,7 +48,7 @@ RecipeStore = new class extends FluxStore
   _updateMixableRecipes : ->
     @groupedMixableRecipes = [
       name    : 'group 1'
-      recipes : @allRecipes
+      recipes : @alphabeticalRecipes
     ]
 
 Promise.resolve $.get('/ingredients')
