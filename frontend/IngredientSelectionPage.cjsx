@@ -14,7 +14,7 @@ IngredientListItem = React.createClass {
   ]
 
   render : ->
-    className = 'ingredient'
+    className = 'ingredient-list-item'
     iconClassName = 'ingredient-icon fa'
 
     if @state.selectedIngredientTags[@props.ingredient.tag]
