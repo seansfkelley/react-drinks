@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 _countSubset = (small, large) ->
   missed = 0
   for s in small

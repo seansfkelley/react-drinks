@@ -1,5 +1,6 @@
 # @cjsx React.DOM
 
+_     = require 'lodash'
 React = require 'react'
 
 FluxMixin       = require './FluxMixin'
@@ -15,6 +16,7 @@ RecipeListItem = React.createClass {
     </div>
 
   _openRecipe : ->
+    console.log 'here'
     AppDispatcher.dispatch {
       type           : 'open-recipe'
       normalizedName : @props.recipe.normalizedName

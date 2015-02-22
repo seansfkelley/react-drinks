@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 FluxMixin = (store, fields...) ->
   fields = _.flatten fields
   return {

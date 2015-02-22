@@ -1,8 +1,13 @@
+_          = require 'lodash'
+$          = require 'jquery'
+MicroEvent = require 'microevent'
+Promise    = require 'bluebird'
+
 AppDispatcher = require './AppDispatcher'
 RecipeSearch   = require './RecipeSearch'
 
 class FluxStore
-  MicroEvent.mixin @::
+  MicroEvent.mixin this
 
   constructor : ->
     _.extend @, _.result(@, 'fields')

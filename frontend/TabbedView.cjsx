@@ -1,5 +1,6 @@
 # @cjsx React.DOM
 
+_     = require 'lodash'
 React = require 'react'
 
 TabBar = React.createClass {
