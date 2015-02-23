@@ -11,7 +11,7 @@ TabBar = React.createClass {
         tabClass += ' active'
       <div className={tabClass} onClick={_.partial @props.onTabSelect, t} key={t.title}>
         <i className={'fa fa-' + t.icon}/>
-        {t.title}
+        <span className='tab-title'>{t.title}</span>
       </div>
 
     <div className='tab-bar sticky-header-bar'>

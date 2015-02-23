@@ -8,7 +8,7 @@ PaginatedViewHeader = React.createClass {
       leftControl =
         <div className='paginated-control left' onClick={@_onControlClick.bind(this, 'left')}>
           <i className='fa fa-chevron-left'/>
-          <span className='label'>{@props.pages[@props.index - 1].title}</span>
+          <span className='page-title'>{@props.pages[@props.index - 1].title}</span>
         </div>
     else
       leftControl = <div className='paginated-control left'/>
@@ -16,7 +16,7 @@ PaginatedViewHeader = React.createClass {
     if @props.index < @props.pages.length - 1
       rightControl =
         <div className='paginated-control right' onClick={@_onControlClick.bind(this, 'right')}>
-          <span className='label'>{@props.pages[@props.index + 1].title}</span>
+          <span className='page-title'>{@props.pages[@props.index + 1].title}</span>
           <i className='fa fa-chevron-right'/>
         </div>
     else

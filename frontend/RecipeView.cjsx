@@ -50,9 +50,28 @@ RecipeView = React.createClass {
       ].concat _.map @props.recipe.ingredients, (i) ->
         <IngredientView category={IngredientCategory.available} measuredIngredient={i} key={i.tag}/>
 
-    <div className='recipe-view' onTouchTap={@_closeRecipe}>
-      <div className='name'>{@props.recipe.name}</div>
-      {ingredientNodes}
+    if @props.recipe.notes?
+      recipeNotes =
+        <div className='recipe-notes'>
+          <div className='header'>Notes</div>
+          <div className='text'>{@props.recipe.instructions}</div>
+        </div>
+
+    <div className='recipe-view sticky-header-container'>
+      <div className='recipe-title sticky-header-bar'>
+        <span className='name'>{@props.recipe.name}</span>
+        <i className='fa fa-times' onTouchTap={@_closeRecipe}/>
+      </div>
+      <div className='recipe-description sticky-header-content-pane'>
+        <div className='recipe-ingredients'>
+          {ingredientNodes}
+        </div>
+        <div className='recipe-instructions'>
+          <div className='header'>Instructions</div>
+          <div className='text'>{@props.recipe.instructions}</div>
+        </div>
+        {recipeNotes}
+      </div>
     </div>
 
   _closeRecipe : ->
