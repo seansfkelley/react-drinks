@@ -8,9 +8,9 @@ _countSubset = (small, large) ->
   return missed
 
 _generateSearchResult = (recipe, availableTags) ->
-  missing     = []
-  available   = []
-  substitutes = []
+  missing    = []
+  available  = []
+  substitute = []
 
   for ingredient in recipe.ingredients
     if not ingredient.tag? # Things like 'water' are untagged.
@@ -18,11 +18,11 @@ _generateSearchResult = (recipe, availableTags) ->
     else if ingredient.tag in availableTags
       available.push ingredient
     else if ingredient.genericTag in availableTags
-      substitutes.push ingredient
+      substitute.push ingredient
     else
       missing.push ingredient
 
-  return _.defaults { missing, available, substitutes }, recipe
+  return _.defaults { missing, available, substitute }, recipe
 
 class RecipeSearch
   constructor : (ingredients, @_recipes) ->
