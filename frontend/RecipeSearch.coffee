@@ -54,12 +54,13 @@ class RecipeSearch
       while current = @_ingredientForTag[current.generic]
         withGenerics.push current
 
-    return withGenerics
+    return _.uniq withGenerics
 
   _toMostGenericTags : (ingredients) ->
     return _.chain @_includeAllGenerics(ingredients)
       .reject 'generic'
       .pluck 'tag'
+      .uniq()
       .value()
 
   computeMixableRecipes : (ingredientTags, fuzzyMatchThreshold = 0) ->

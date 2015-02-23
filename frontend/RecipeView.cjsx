@@ -23,9 +23,9 @@ IngredientCategory =
   AVAILABLE  : 'available'
 
 HUMAN_READABLE_CATEGORY_TITLE =
-  missing    : 'Missing Ingredients'
-  substitute : 'Substituted Ingredients'
-  available  : 'Ingredients'
+  missing    : 'You\'re Missing'
+  substitute : 'You Can Substitute'
+  available  : 'You Have'
 
 RecipeView = React.createClass {
   render : ->
@@ -33,8 +33,8 @@ RecipeView = React.createClass {
       ingredientNodes = _.chain IngredientCategory
         .invert()
         .mapValues (_, key) => @props.recipe[key]
+        # TODO: The order these sections end up in is arbitrary; we should enforce it.
         .map (measuredIngredients, category) =>
-          this
           if measuredIngredients.length == 0
             return []
           else
@@ -46,7 +46,7 @@ RecipeView = React.createClass {
         .value()
     else
       ingredientNodes = [
-        <SectionHeader text={HUMAN_READABLE_CATEGORY_TITLE.available} key={'header-' + IngredientCategory.available}/>
+        <SectionHeader text='Ingredients' key={'header-' + IngredientCategory.available}/>
       ].concat _.map @props.recipe.ingredients, (i) ->
         <IngredientView category={IngredientCategory.available} measuredIngredient={i} key={i.tag}/>
 
@@ -74,10 +74,13 @@ RecipeView = React.createClass {
       </div>
     </div>
 
-  _closeRecipe : ->
-    AppDispatcher.dispatch {
-      type : 'close-recipe'
-    }
+  _closeRecipe : (e) ->
+    # TODO: Deferring fixes the issue where we replace the body and the event is then handled by the
+    # new view that ends up there, which it should not be.
+    _.defer ->
+      AppDispatcher.dispatch {
+        type : 'close-recipe'
+      }
 }
 
 module.exports = RecipeView
