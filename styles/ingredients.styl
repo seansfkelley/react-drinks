@@ -1,3 +1,5 @@
+@require 'mixins'
+
 html, body
   font-family Lucida Grande
 
@@ -6,19 +8,8 @@ html, body
   margin 0
   padding 0
 
-  -webkit-user-select none
+  user-select none
   -webkit-tap-highlight-color rgba(0, 0, 0, 0)
-
-sticky-header-container(height)
-  height 100%
-
-  .sticky-header-bar
-    height height
-
-  .sticky-header-content-pane
-    height "calc(100% - %s)" % height
-    overflow-y scroll
-    -webkit-overflow-scrolling touch
 
 .tabbed-view
   sticky-header-container 24px

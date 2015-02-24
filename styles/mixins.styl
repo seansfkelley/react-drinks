@@ -1,0 +1,10 @@
+sticky-header-container(height)
+  height 100%
+
+  .sticky-header-bar
+    height height
+
+  .sticky-header-content-pane
+    height "calc(100% - %s)" % height
+    overflow-y scroll
+    -webkit-overflow-scrolling touch

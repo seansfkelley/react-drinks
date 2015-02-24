@@ -26,6 +26,7 @@
     "flux": "^2.0.1",
     "gulp": "^3.8.11",
     "gulp-cjsx": "^2.0.0",
+    "gulp-concat": "^2.5.2",
     "gulp-jade": "^1.0.0",
     "gulp-postcss": "^4.0.3",
     "gulp-rename": "^1.2.0",
