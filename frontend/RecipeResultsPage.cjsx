@@ -11,7 +11,7 @@ TabbedView = require './TabbedView'
 
 RecipeListItem = React.createClass {
   render : ->
-    <div className='recipe-list-item' onTouchTap={@_openRecipe}>
+    <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipe.name}</div>
     </div>
 

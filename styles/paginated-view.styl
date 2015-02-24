@@ -1,0 +1,27 @@
+@require 'mixins'
+
+.paginated-view
+  sticky-header-container 24px
+
+.paginated-bar
+  display flex
+
+  .paginated-title
+    display flex
+    flex-basis 0
+    flex-grow 1
+
+    font-size 20px
+
+  .paginated-control
+    display flex
+    flex-basis 0
+    flex-grow 1
+
+    font-size 16px
+
+    &.left
+      justify-content flex-start
+
+    &.right
+      justify-content flex-end
