@@ -8,6 +8,7 @@ AppDispatcher       = require './AppDispatcher'
 { IngredientStore } = require './stores'
 
 TabbedView = require './TabbedView'
+ListHeader = require './ListHeader'
 
 IngredientListItem = React.createClass {
   mixins : [
@@ -35,11 +36,6 @@ IngredientListItem = React.createClass {
       type : 'toggle-ingredient'
       tag  : @props.ingredient.tag
     }
-}
-
-ListHeader = React.createClass {
-  render : ->
-    <div className='list-header'>{@props.title}</div>
 }
 
 AlphabeticalIngredientList = React.createClass {

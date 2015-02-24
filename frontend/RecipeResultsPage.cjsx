@@ -8,6 +8,7 @@ AppDispatcher   = require './AppDispatcher'
 { RecipeStore } = require './stores'
 
 TabbedView = require './TabbedView'
+ListHeader = require './ListHeader'
 
 RecipeListItem = React.createClass {
   render : ->
@@ -20,11 +21,6 @@ RecipeListItem = React.createClass {
       type   : 'open-recipe'
       recipe : @props.recipe
     }
-}
-
-ListHeader = React.createClass {
-  render : ->
-    <div className='list-header'>{@props.title}</div>
 }
 
 AlphabeticalRecipeList = React.createClass {
