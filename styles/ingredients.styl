@@ -39,24 +39,27 @@ sticky-header-container(height)
   sticky-header-container 24px
 
 .paginated-bar
-  .paginated-title, .paginated-control
-    display inline-block
+  display flex
 
   .paginated-title
-    text-align center
-    // There's got to be a better way to do this with flexbox or something.
-    width 34%
+    display flex
+    flex-basis 0
+    flex-grow 1
+
     font-size 20px
 
   .paginated-control
-    width 33%
+    display flex
+    flex-basis 0
+    flex-grow 1
+
     font-size 16px
 
     &.left
-      text-align left
+      justify-content flex-start
 
     &.right
-      text-align right
+      justify-content flex-end
 
 .list-header
   font-size 16px
