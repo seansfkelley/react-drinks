@@ -1,12 +1,14 @@
-gulp       = require 'gulp'
-gutil      = require 'gulp-util'
-rename     = require 'gulp-rename'
-stylus     = require 'gulp-stylus'
-sourcemaps = require 'gulp-sourcemaps'
-browserify = require 'browserify'
-watchify   = require 'watchify'
-buffer     = require 'vinyl-buffer'
-source     = require 'vinyl-source-stream'
+gulp         = require 'gulp'
+gutil        = require 'gulp-util'
+rename       = require 'gulp-rename'
+stylus       = require 'gulp-stylus'
+postcss      = require 'gulp-postcss'
+sourcemaps   = require 'gulp-sourcemaps'
+browserify   = require 'browserify'
+watchify     = require 'watchify'
+buffer       = require 'vinyl-buffer'
+source       = require 'vinyl-source-stream'
+autoprefixer = require 'autoprefixer-core'
 
 paths =
   root    : [ './frontend/app.cjsx', './frontend/global.coffee' ]
@@ -37,6 +39,7 @@ gulp.task 'styles', ->
   gulp.src paths.styles
     .pipe sourcemaps.init()
     .pipe stylus()
+    .pipe postcss [ autoprefixer() ]
     .pipe sourcemaps.write()
     .pipe rename 'all-styles.css'
     .pipe gulp.dest './.dist'
