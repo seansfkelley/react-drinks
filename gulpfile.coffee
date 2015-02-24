@@ -35,9 +35,7 @@ generateBundlingFunction = (bundler) ->
       .pipe sourcemaps.write './'
       .pipe gulp.dest './.dist'
 
-gulp.task 'scripts', generateBundlingFunction(makeBundler())
-
-gulp.task 'styles', ->
+buildStyles = ->
   gulp.src paths.styles
     .pipe sourcemaps.init()
     .pipe stylus {
@@ -50,10 +48,20 @@ gulp.task 'styles', ->
     .pipe concat 'all-styles.css'
     .pipe gulp.dest './.dist'
 
-gulp.task 'watch', ->
-  watchingBundler = watchify makeBundler()
-  generateBundlingFunction(watchingBundler)()
-  watchingBundler.on 'update', generateBundlingFunction(watchingBundler)
-  gulp.watch paths.styles,  [ 'styles' ]
+buildScripts = ->
+  generateBundlingFunction(makeBundler())()
 
-gulp.task 'default', [ 'styles', 'watch' ]
+buildAndWatchScripts = ->
+  watchingBundler = watchify makeBundler()
+  bundlingFunction = generateBundlingFunction(watchingBundler)
+  bundlingFunction()
+  watchingBundler.on 'update', bundlingFunction
+
+gulp.task 'scripts', buildScripts
+gulp.task 'styles', buildStyles
+gulp.task 'watch', ->
+  buildAndWatchScripts()
+  buildStyles()
+  gulp.watch paths.styles,  [ 'styles' ]
+gulp.task 'dist', [ 'scripts', 'styles' ]
+gulp.task 'default', [ 'watch' ]

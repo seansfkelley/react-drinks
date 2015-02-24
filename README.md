@@ -1,9 +1,23 @@
-`npm install`, then run all of the following:
+First:
 
 ```
-gulp
+npm install
+npm install -g gulp
+```
+
+Then, for "production":
+
+```
+gulp dist
+npm start
+```
+
+Or, for development, run each in a separate terminal session:
+
+```
+gulp watch
 npm start
 npm run livereload
 ```
 
-todo: should probably combine these or at least consistently name them
+Install the LiveReload browser extension to get live reloading behavior.
