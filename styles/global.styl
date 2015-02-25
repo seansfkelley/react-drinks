@@ -1,10 +1,29 @@
-html, body
-  font-family Lucida Grande
+@require 'colors'
 
+html
+  font-family Lucida Grande
+  color text-color
+  background-color white1
+
+  user-select none
+  -webkit-tap-highlight-color rgba(0, 0, 0, 0)
+
+html, body
   width 100%
   height 100%
   margin 0
   padding 0
 
-  user-select none
-  -webkit-tap-highlight-color rgba(0, 0, 0, 0)
+body #iphone-status-bar-spacer
+  display none
+
+iphone-status-bar-height = 20px
+
+body[standalone]
+  height "calc(100% - %s)" % iphone-status-bar-height
+
+  #iphone-status-bar-spacer
+    display block
+    height iphone-status-bar-height
+    width 100%
+    background-color theme-color2

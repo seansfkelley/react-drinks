@@ -1,4 +1,5 @@
 @require 'mixins'
+@require 'colors'
 
 .tabbed-view
   fixed-header-container 24px
@@ -6,6 +7,9 @@
 .tab-bar
   display flex
   width 100%
+
+  color header-text-color
+  background-color theme-color2
 
   i.fa
     margin-right 6px

@@ -18,13 +18,15 @@ page = [
 
 paginatedView = <PaginatedView pages={page}/>
 
-React.render paginatedView, document.body
+appRootElement = document.querySelector '#app-root'
+
+React.render paginatedView, appRootElement
 
 AppDispatcher.register (payload) ->
   switch payload.type
     when 'open-recipe'
-      React.render <RecipeView recipe={payload.recipe}/>, document.body
+      React.render <RecipeView recipe={payload.recipe}/>, appRootElement
     when 'close-recipe'
-      React.render paginatedView, document.body
+      React.render paginatedView, appRootElement
 
   return true

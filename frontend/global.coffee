@@ -1,3 +1,6 @@
+if window.navigator.standalone
+  document.body.setAttribute 'standalone', true
+
 require('react').initializeTouchEvents true
 require('react-tap-event-plugin')()
 
