@@ -21,3 +21,7 @@ npm run livereload
 ```
 
 Install the LiveReload browser extension to get live reloading behavior.
+
+Then, visit [port 8080](http://localhost:8080/).
+
+On an iPhone, you can save the page as a Web Clip from Safari and access it from the home screen (it removes the browser chrome).
