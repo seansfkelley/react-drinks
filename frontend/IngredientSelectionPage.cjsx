@@ -7,8 +7,8 @@ FluxMixin           = require './FluxMixin'
 AppDispatcher       = require './AppDispatcher'
 { IngredientStore } = require './stores'
 
-TabbedView = require './TabbedView'
-ListHeader = require './ListHeader'
+TabbedView        = require './TabbedView'
+StickyHeaderMixin = require './StickyHeaderMixin'
 
 IngredientListItem = React.createClass {
   mixins : [
@@ -41,80 +41,37 @@ IngredientListItem = React.createClass {
 AlphabeticalIngredientList = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'alphabeticalIngredients'
+    StickyHeaderMixin
   ]
 
   render : ->
-    lastTitle = null
-    ingredientNodes = _.chain @state.alphabeticalIngredients
-      .map (ingredient) ->
-        firstLetter = ingredient.display[0].toUpperCase()
-        if firstLetter != lastTitle
-          elements = [ <ListHeader title={firstLetter} key={'header-' + firstLetter} ref={'header-' + firstLetter}/> ]
-          lastTitle = firstLetter
-        else
-          elements = []
-
-        return elements.concat [
-          <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
-        ]
-      .flatten()
-      .value()
-
-    <div className='sticky-header-container'>
-      {if @state.stickyHeaderTitle?
-        <div className='sticky-header-wrapper' style={{ marginTop : @state.stickyHeaderOffset }}>
-          <ListHeader title={@state.stickyHeaderTitle}/>
-        </div>}
-      <div className='ingredient-list alphabetical' onScroll={@_onScroll}>
-        {ingredientNodes}
-      </div>
-    </div>
-
-  _onScroll : (e) ->
-    scrollTop = @getDOMNode().getBoundingClientRect().top
-    refTopPairs = _.chain(@refs)
-      .filter (_, refName) -> refName[...7] == 'header-'
-      .map (ref) -> [ ref, ref.getDOMNode().getBoundingClientRect().top - scrollTop ]
-      .sortBy ([ ref, top ]) -> top
-      .value()
-
-    for [ ref, top ], i in refTopPairs
-      if top > 0
-        previous = refTopPairs[i - 1]
-        current  = refTopPairs[i]
-        break
-
-    if previous? and current?
-      @setState {
-        stickyHeaderTitle  : previous[0].props.title
-        stickyHeaderOffset : Math.min (current[1] - current[0].getDOMNode().getBoundingClientRect().height), 0
-      }
-    else
-      @setState {
-        stickyHeaderTitle  : null
-        stickyHeaderOffset : 0
-      }
+    return @generateList {
+      data        : @state.alphabeticalIngredients
+      getTitle    : (ingredient) -> ingredient.display[0].toUpperCase()
+      createChild : (ingredient) -> <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
+      classNames  : 'ingredient-list alphabetical'
+    }
 }
 
 GroupedIngredientList = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'groupedIngredients'
+    StickyHeaderMixin
   ]
 
   render : ->
-    ingredientNodes = _.chain @state.groupedIngredients
+    data = _.chain @state.groupedIngredients
       .map ({ name, ingredients }) ->
-        return [
-          <ListHeader title={name} key={'header-' + name}/>
-          _.map ingredients, (ingredient) ->
-            <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
-        ]
+        _.map ingredients, (i) -> [ name, i ]
       .flatten()
       .value()
 
-    <div className='ingredient-list grouped'>
-      {ingredientNodes}
-    </div>
+    return @generateList {
+      data        : data
+      getTitle    : ([ name, ingredient ]) -> name
+      createChild : ([ name, ingredient ]) -> <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
+      classNames  : 'ingredient-list grouped'
+    }
 }
 
 tabs = [

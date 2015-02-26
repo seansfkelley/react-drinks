@@ -7,8 +7,8 @@ FluxMixin       = require './FluxMixin'
 AppDispatcher   = require './AppDispatcher'
 { RecipeStore } = require './stores'
 
-TabbedView = require './TabbedView'
-ListHeader = require './ListHeader'
+TabbedView        = require './TabbedView'
+StickyHeaderMixin = require './StickyHeaderMixin'
 
 RecipeListItem = React.createClass {
   render : ->
@@ -26,50 +26,38 @@ RecipeListItem = React.createClass {
 AlphabeticalRecipeList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'alphabeticalRecipes'
+    StickyHeaderMixin
   ]
 
   render : ->
-    lastTitle = null
-    recipeNames = _.chain @state.alphabeticalRecipes
-      .map (recipe) ->
-        firstLetter = recipe.name[0].toUpperCase()
-        if firstLetter != lastTitle
-          elements = [ <ListHeader title={firstLetter} key={'header-' + firstLetter}/> ]
-          lastTitle = firstLetter
-        else
-          elements = []
-
-        return elements.concat [
-          <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
-        ]
-      .flatten()
-      .value()
-
-    <div className='recipes-list alphabetical'>
-      {recipeNames}
-    </div>
+    return @generateList {
+      data        : @state.alphabeticalRecipes
+      getTitle    : (recipe) -> recipe.name[0].toUpperCase()
+      createChild : (recipe) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+      classNames  : 'recipe-list alphabetical'
+    }
 }
 
 
 GroupedRecipeList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'groupedMixableRecipes'
+    StickyHeaderMixin
   ]
 
   render : ->
-    recipeNodes = _.chain @state.groupedMixableRecipes
+    data = _.chain @state.groupedMixableRecipes
       .map ({ name, recipes }) ->
-        return [
-          <ListHeader title={name} key={'header-' + name}/>
-          _.map recipes, (recipe) ->
-            <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
-        ]
+        _.map recipes, (r) -> [ name, r ]
       .flatten()
       .value()
 
-    <div className='recipe-list grouped'>
-      {recipeNodes}
-    </div>
+    return @generateList {
+      data        : data
+      getTitle    : ([ name, recipe ]) -> name
+      createChild : ([ name, recipe ]) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+      classNames  : 'recipe-list grouped'
+    }
 }
 
 tabs = [
