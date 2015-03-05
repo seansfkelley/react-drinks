@@ -54,7 +54,7 @@ RecipeView = React.createClass {
       recipeNotes =
         <div className='recipe-notes'>
           <div className='header'>Notes</div>
-          <div className='text'>{@props.recipe.instructions}</div>
+          <div className='text'>{@props.recipe.notes}</div>
         </div>
 
     <div className='recipe-view fixed-header-container'>
