@@ -1,0 +1,875 @@
+---
+  -
+    name: "Caipirinha"
+    ingredients:
+      -
+        tag: "cachaca"
+        displayMeasure: "2 oz"
+        displayIngredient: "cachaça"
+      -
+        tag: "lime"
+        displayMeasure: "1"
+        displayIngredient: "lime, cut into eighths"
+      -
+        tag: "sugar"
+        displayMeasure: "1 tsp"
+        displayIngredient: "sugar"
+    instructions: "Muddle lime and sugar in a lowball glass until the lime is juiced. Fill to brim with crushed ice and add cachaça. Garnish with sugar cane."
+    notes: "Proper Brazilian Caipirinhas are unmeasured. The glass is simply filled with cachaça after the ice is added."
+  -
+    name: "Gin and Tonic"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "1.5 oz"
+        displayIngredient: "gin"
+      -
+        tag: "tonic"
+        displayMeasure: "3 oz"
+        displayIngredient: "tonic water"
+    instructions: "Mix ingredients highball glass filled with ice. Garnish with a wedge of lime."
+  -
+    name: "The Last Word"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "gin"
+      -
+        tag: "green chartreuse"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "green Chartreuse"
+      -
+        tag: "maraschino liqueur"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "maraschino liqueur"
+      -
+        tag: "lime juice"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "lime juice"
+    instructions: "Shake vigorously with ice. Strain into a cocktail glass and garnish with a twist of lime."
+    source: "Saveur"
+    url: "http://www.saveur.com/article/Recipes/The-Last-Word-Cocktail"
+  -
+    name: "Ivy"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "1.5 oz"
+        displayIngredient: "dry gin"
+      -
+        tag: "dry vermouth"
+        displayMeasure: "0.5 oz"
+        displayIngredient: "dry vermouth"
+      -
+        tag: "green chartreuse"
+        displayMeasure: "0.5 oz"
+        displayIngredient: "green Chartreuse"
+      -
+        tag: "absinthe"
+        displayMeasure: "1 tsp"
+        displayIngredient: "absinthe"
+      -
+        displayMeasure: "1-2 dashes"
+        displayIngredient: "orange bitters"
+    instructions: "Shake with ice for a long time. Strain into a chilled cocktail glass."
+    source: "The Clover Club, NY"
+  -
+    name: "Rum & Coke"
+    ingredients:
+      -
+        tag: "white rum"
+        displayMeasure: "2 oz"
+        displayIngredient: "white rum"
+      -
+        tag: "cola"
+        displayMeasure: "4 oz"
+        displayIngredient: "cola"
+    instructions: "Build ingredients in a lowball glass filled with ice."
+  -
+    name: "Dark & Stormy"
+    ingredients:
+      -
+        tag: "dark rum"
+        displayMeasure: "1.5 oz"
+        displayIngredient: "dark rum"
+      -
+        tag: "ginger beer"
+        displayMeasure: "3 oz"
+        displayIngredient: "ginger beer"
+    instructions: "Pour ginger beer into a highball glass filled with ice. Top off with rum."
+  -
+    name: "Long Island Iced Tea"
+    ingredients:
+      -
+        tag: "vodka"
+        displayMeasure: "1 part"
+        displayIngredient: "vodka"
+      -
+        tag: "tequila"
+        displayMeasure: "1 part"
+        displayIngredient: "tequila"
+      -
+        tag: "gin"
+        displayMeasure: "1 part"
+        displayIngredient: "gin"
+      -
+        tag: "white rum"
+        displayMeasure: "1 part"
+        displayIngredient: "white rum"
+      -
+        tag: "triple sec"
+        displayMeasure: "1 part"
+        displayIngredient: "triple sec"
+      -
+        tag: "lemon juice"
+        displayMeasure: "2 parts"
+        displayIngredient: "lemon juice"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1 part"
+        displayIngredient: "simple syrup"
+      -
+        tag: "cola"
+        displayIngredient: "splash of cola"
+    instructions: "Mix ingredients in a highball glass over ice."
+  -
+    name: "Chateau Romani"
+    ingredients:
+      -
+        tag: "honey whiskey"
+        displayMeasure: "1 part"
+        displayIngredient: "honey whiskey"
+      -
+        tag: "amaretto"
+        displayMeasure: "1 part"
+        displayIngredient: "amaretto"
+      -
+        tag: "noisette"
+        displayMeasure: "1 part"
+        displayIngredient: "Frangelico"
+      -
+        tag: "milk"
+        displayIngredient: "milk"
+    instructions: "Pour alcohol in a shaker with ice and shake vigorously. Strain into a small glass and fill with milk."
+    source: "The Drunken Moogle"
+    url: "http://www.thedrunkenmoogle.com/post/28337609182/expbaronline-chateau-romani-the-legend-of-zelda"
+  -
+    name: "Brinstar"
+    ingredients:
+      -
+        tag: "cachaca"
+        displayMeasure: "1 part"
+        displayIngredient: "cachaça"
+      -
+        tag: "absinthe"
+        displayMeasure: "1 part"
+        displayIngredient: "absinthe"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1 part"
+        displayIngredient: "simple syrup"
+      -
+        tag: "lime"
+        displayMeasure: "1/2"
+        displayIngredient: "lime, cut into quarters"
+      -
+        displayIngredient: "sprig of mint"
+    instructions: "Muddle the lime, simple syrup, and mint together in a shaker. Add ice and the alcohol and shake well. Pour the mixture into a lowball glass."
+    notes: "Brinstar is a zone overgrown with vegetation. Having very recently been introduced to a lime-y cocktail known as a caipirinha, I decided to try combining it with another leafy drink - namely, a mojito. The resulting combination, plus a little extra, wound up being a tasty creation that I’m rather proud of."
+    source: "The Drunken Moogle"
+    url: "http://www.thedrunkenmoogle.com/post/36070643600/drinks-brinstar"
+  -
+    name: "Vesper Martini"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "3 parts"
+        displayIngredient: "gin"
+      -
+        tag: "vodka"
+        displayMeasure: "1 part"
+        displayIngredient: "vodka"
+      -
+        tag: "lillet"
+        displayMeasure: "1/2 part"
+        displayIngredient: "Lillet"
+      -
+        displayIngredient: "thin slice of lemon peel"
+    instructions: "Shake over ice until well chilled, then strain into a deep goblet and garnish with lemon peel."
+    notes: "This is what James Bond used to drink before he switched to vodka martinis."
+  -
+    name: "Corpse Reviver #2"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "gin"
+      -
+        tag: "lemon juice"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "lemon juice"
+      -
+        tag: "cointreau"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "Cointreau"
+      -
+        tag: "lillet"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "Lillet"
+      -
+        tag: "absinthe"
+        displayMeasure: "a dash"
+        displayIngredient: "absinthe"
+    instructions: "Shake ingredients together in a mixer with ice. Strain into chilled cocktail glass."
+  -
+    name: "Improved Whiskey Cocktail"
+    ingredients:
+      -
+        tag: "bourbon"
+        displayMeasure: "2 oz"
+        displayIngredient: "bourbon"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1 tsp"
+        displayIngredient: "simple syrup"
+      -
+        tag: "maraschino liqueur"
+        displayMeasure: "1/2 tsp"
+        displayIngredient: "maraschino liqueur"
+      -
+        displayMeasure: "2 dashes"
+        displayIngredient: "Angostura bitters"
+      -
+        tag: "absinthe"
+        displayMeasure: "1 dash"
+        displayIngredient: "absinthe"
+    instructions: "Combine liquid ingredients in an ice-filled mixing glass and stir until cold. Strain into a chilled cocktail glass. Cut a thin slice of lemon zest over the surface of the drink and drop it into the glass."
+    source: "Cocktailia"
+    url: "http://www.cocktailia.com/cocktail-recipes/improved-whiskey-cocktail"
+  -
+    name: "Mudslide"
+    ingredients:
+      -
+        tag: "baileys"
+        displayMeasure: "1 part"
+        displayIngredient: "Baileys"
+      -
+        tag: "kahlua"
+        displayMeasure: "1 part"
+        displayIngredient: "Kahlúa"
+      -
+        tag: "vodka"
+        displayMeasure: "1 part"
+        displayIngredient: "vodka"
+      -
+        tag: "milk"
+        displayMeasure: "1 part"
+        displayIngredient: "milk"
+    instructions: "Shake all ingredients with ice and pour over ice in a cocktail glass. Garnish with a little chocolate syrup on the inside of the glass."
+  -
+    name: "Lumière"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "1.5 oz"
+        displayIngredient: "gin"
+      -
+        tag: "elderflower liqueur"
+        displayMeasure: "1 oz"
+        displayIngredient: "St. Germain"
+      -
+        tag: "lime juice"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "fresh lime juice"
+      -
+        tag: "green chartreuse"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "green Chartreuse"
+      -
+        displayMeasure: "1 dash"
+        displayIngredient: "orange bitters"
+    instructions: "Combine all ingredients in a large glass filled with ice. Stir thoroughly and strain the mixture into a coupe. Garnish with a lime twist."
+    source: "Saveur"
+    url: "http://www.saveur.com/article/Recipes/The-Lumiere"
+  -
+    name: "Margarita"
+    ingredients:
+      -
+        tag: "blanco tequila"
+        displayMeasure: "1 part"
+        displayIngredient: "blanco tequila"
+      -
+        tag: "triple sec"
+        displayMeasure: "1 part"
+        displayIngredient: "triple sec"
+      -
+        tag: "lime juice"
+        displayMeasure: "1 part"
+        displayIngredient: "lime juice"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1/2 part"
+        displayIngredient: "simple syrup"
+      -
+        displayIngredient: "salt"
+    instructions: "Rim a margarita glass with salt. Shake all ingredients with ice and strain into the glass. Garnish with a wheel of lime."
+  -
+    name: "Bee's Knees"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "1 1/2 oz"
+        displayIngredient: "gin"
+      -
+        tag: "lemon juice"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "lemon juice"
+      -
+        tag: "honey syrup"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "honey syrup"
+    instructions: "Shake ingredients well with ice. Strain into a chilled cocktail glass and garnish with a wedge of lemon."
+  -
+    name: "Death in the Afternoon"
+    ingredients:
+      -
+        tag: "absinthe"
+        displayMeasure: "1 shot"
+        displayIngredient: "absinthe"
+      -
+        tag: "sparkling wine"
+        displayIngredient: "Champagne"
+    instructions: "Pour one jigger absinthe into a Champagne glass. Add iced Champagne until it attains the proper opalescent milkiness. Drink three to five of these slowly."
+  -
+    name: "Angostura Sour"
+    ingredients:
+      -
+        tag: "egg white"
+        displayMeasure: "1"
+        displayIngredient: "egg white"
+      -
+        tag: "angostura bitters"
+        displayMeasure: "1 1/2 oz"
+        displayIngredient: "Angostura bitters"
+      -
+        tag: "lime juice"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "lime juice"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1 oz"
+        displayIngredient: "simple syrup"
+    instructions: "Pour the egg white and lime juice into a cocktail shaker and shake for 30 seconds. Add the bitters and syrup, fill with ice and shake hard for another 30 seconds. Strain into a chilled cocktail glass."
+    source: "NY Times"
+    url: "http://www.nytimes.com/2010/12/01/dining/01partiesrex3.html"
+  -
+    name: "Manhattan"
+    ingredients:
+      -
+        tag: "whiskey"
+        displayMeasure: "2 1/2 oz"
+        displayIngredient: "whiskey"
+      -
+        tag: "sweet vermouth"
+        displayMeasure: "1 oz"
+        displayIngredient: "sweet vermouth"
+      -
+        displayMeasure: "1 dash"
+        displayIngredient: "Angostura bitters"
+    instructions: "Stir gently over ice. Strain into a chilled cocktail glass and garnish with a Maraschino cherry."
+  -
+    name: "Brooklyn"
+    ingredients:
+      -
+        tag: "whiskey"
+        displayMeasure: "2 oz"
+        displayIngredient: "whiskey"
+      -
+        tag: "dry vermouth"
+        displayMeasure: "1 oz"
+        displayIngredient: "dry vermouth"
+      -
+        tag: "maraschino liqueur"
+        displayMeasure: "1/4 oz"
+        displayIngredient: "Maraschino liqueur"
+      -
+        displayMeasure: "2-3 dashes"
+        displayIngredient: "Angostura bitters"
+    instructions: "Stir gently over ice. Strain into a chilled cocktail glass."
+    notes: "The bitters may be replaced with 1/4oz Amer Picon, a French version of Italy's Amaro."
+  -
+    name: "White Lady"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "2 oz"
+        displayIngredient: "London dry gin"
+      -
+        tag: "cointreau"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "Cointreau"
+      -
+        tag: "lemon juice"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "lemon juice"
+      -
+        tag: "egg white"
+        displayMeasure: "1"
+        displayIngredient: "egg white"
+    instructions: "Shake well with cracked ice, then strain into a chilled cocktail glass."
+  -
+    name: "B-52"
+    ingredients:
+      -
+        tag: "coffee liqueur"
+        displayMeasure: "1 part"
+        displayIngredient: "Kahlúa"
+      -
+        tag: "baileys"
+        displayMeasure: "1 part"
+        displayIngredient: "Baileys"
+      -
+        tag: "triple sec"
+        displayMeasure: "1 part"
+        displayIngredient: "Grand Marnier"
+    instructions: "Layer ingredients into a shot glass (Kahlúa, then Baileys, then Grand Marnier)."
+  -
+    name: "La Palabra"
+    ingredients:
+      -
+        tag: "mezcal"
+        displayMeasure: "1 oz"
+        displayIngredient: "mezcal"
+      -
+        tag: "green chartreuse"
+        displayMeasure: "1 1/4 oz"
+        displayIngredient: "green Chartreuse"
+      -
+        tag: "triple sec"
+        displayMeasure: "1 oz"
+        displayIngredient: "Combier"
+      -
+        tag: "lime juice"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "lime juice"
+    instructions: "Shake ingredients with ice, then strain into a cocktail glass."
+    notes: "A variant on the Last Word."
+    source: "Serious Eats"
+    url: "http://www.seriouseats.com/recipes/2011/07/la-palabra-no-9-park-cocktail-recipe.html"
+  -
+    name: "Revolver"
+    ingredients:
+      -
+        tag: "bourbon"
+        displayMeasure: "2 oz"
+        displayIngredient: "Bourbon"
+      -
+        tag: "coffee liqueur"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "coffee liqueur"
+      -
+        displayMeasure: "2 dashes"
+        displayIngredient: "orange bitters"
+    instructions: "Combine bourbon, coffee liqueur, and orange bitters in a mixing glass and fill with ice. Stir well until chilled, about 30 seconds. Strain into chilled cocktail glass. Twist orange peel to express oils over drink and use as garnish."
+    notes: "A rye-heavy bourbon such as Bulleit, Buffalo Trace or Basil Hayden is recommended."
+    source: "Serious Eats"
+    url: "http://www.seriouseats.com/recipes/2011/03/time-for-a-drink-the-revolver-bourbon-cocktail-tia-maria-kahlua-orange.html"
+  -
+    name: "Geek Squad"
+    ingredients:
+      -
+        tag: "mezcal"
+        displayMeasure: "4 parts"
+        displayIngredient: "mezcal"
+      -
+        tag: "green chartreuse"
+        displayMeasure: "2 parts"
+        displayIngredient: "green Chartreuse"
+      -
+        tag: "lime juice"
+        displayMeasure: "4 parts"
+        displayIngredient: "lime juice"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1 part"
+        displayIngredient: "simple syrup"
+      -
+        tag: "cynar"
+        displayMeasure: "? part"
+        displayIngredient: "Cynar"
+    notes: "Work in progress."
+    instructions: ""
+    source: "The Clover Club, NY"
+  -
+    name: "Chrysanthemum"
+    ingredients:
+      -
+        tag: "dry vermouth"
+        displayMeasure: "2 oz"
+        displayIngredient: "dry vermouth"
+      -
+        tag: "benedictine"
+        displayMeasure: "1 oz"
+        displayIngredient: "Bénédictine"
+      -
+        tag: "absinthe"
+        displayMeasure: "3 dashes"
+        displayIngredient: "absinthe"
+    instructions: "Stir ingredients with ice until well chilled, then strain into a chilled cocktail glass and garnish with an orange peel."
+  -
+    name: "El Presidente"
+    ingredients:
+      -
+        tag: "white rum"
+        displayMeasure: "1 1/2 oz"
+        displayIngredient: "white rum"
+      -
+        tag: "white vermouth"
+        displayMeasure: "1 oz"
+        displayIngredient: "white vermouth"
+      -
+        tag: "triple sec"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "orange curaçao"
+      -
+        tag: "grenadine"
+        displayMeasure: "1 barspoon"
+        displayIngredient: "grenadine"
+      -
+        displayMeasure: "1 dash"
+        displayIngredient: "orange bitters"
+    instructions: "Combine ingredients in an ice-filled mixing glass and stir until cold. Strain into a chilled cocktail glass. Optionally garnish with an orange zest and piece of pineapple."
+    notes: "Dry vermouth also works. When using dry vermouth, the drink benefits from increasing the amount of rum by 1/4 ounce or so, but it works well either way."
+    source: "Cocktailia"
+    url: "http://www.cocktailia.com/cocktail-recipes/el-presidente"
+  -
+    name: "Derby"
+    ingredients:
+      -
+        tag: "bourbon"
+        displayMeasure: "1 oz"
+        displayIngredient: "bourbon"
+      -
+        tag: "lime juice"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "lime juice"
+      -
+        tag: "sweet vermouth"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "sweet vermouth"
+      -
+        tag: "grand marnier"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "Grand Marnier"
+    instructions: "Shake ingredients over ice and strain into a chilled cocktail glass. Garnish with lime wedge or mint leaf."
+    source: "Serious Eats"
+    url: "http://www.seriouseats.com/recipes/2011/10/derby-cocktail-bourbon-vermouth-grand-marnier-lime-recipe.html"
+  -
+    name: "Ginger Gold Rush"
+    ingredients:
+      -
+        tag: "bourbon"
+        displayMeasure: "3 parts"
+        displayIngredient: "bourbon"
+      -
+        tag: "ginger liqueur"
+        displayMeasure: "2 parts"
+        displayIngredient: "Domaine de Canton"
+      -
+        tag: "lemon juice"
+        displayMeasure: "1 part"
+        displayIngredient: "lemon juice"
+    instructions: "Put a brandied cherry in the bottom of a martini glass. Combine all ingredients in a cocktail shaker filled with ice. Shake vigorously and strain over the cherry into the glass."
+    notes: "The original recipe has the reverse proportions for the ginger and bourbon, which makes for a significantly sweeter drink."
+    source: "Saveur"
+    url: "http://www.saveur.com/article/Recipes/Ginger-Gold-Rush-Cocktail"
+  -
+    name: "Alamagoozlum"
+    ingredients:
+      -
+        tag: "genever"
+        displayMeasure: "1 oz"
+        displayIngredient: "genever"
+      -
+        displayMeasure: "1 oz"
+        displayIngredient: "water"
+      -
+        tag: "rum"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "Jamacian rum"
+      -
+        tag: "chartreuse"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "yellow/green Chartreuse"
+      -
+        tag: "simple syrup"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "simple syrup"
+      -
+        tag: "triple sec"
+        displayMeasure: "1/4 oz"
+        displayIngredient: "orange curaçao"
+      -
+        tag: "angostura bitters"
+        displayMeasure: "1/4 oz"
+        displayIngredient: "Angostura bitters"
+      -
+        tag: "egg white"
+        displayMeasure: "1/4"
+        displayIngredient: "egg white"
+    instructions: "Shake very hard over ice and strain into a chilled cocktail glass."
+    source: "Sloshed!"
+    url: "http://sloshed.hyperkinetic.org/2009/10/23/alamagoozlum-cocktail/"
+  -
+    name: "Martinez"
+    ingredients:
+      -
+        tag: "gin"
+        displayMeasure: "2 oz"
+        displayIngredient: "Old Tom gin"
+      -
+        tag: "sweet vermouth"
+        displayMeasure: "1 oz"
+        displayIngredient: "sweet vermouth"
+      -
+        tag: "maraschino liqueur"
+        displayMeasure: "1 teaspoon"
+        displayIngredient: "Maraschino liqueur"
+      -
+        displayMeasure: "2 dashes"
+        displayIngredient: "orange bitters"
+    instructions: "Stir with ice until very cold and strain into a chilled cocktail glass. Garnish with a twist of lemon."
+    notes: "Predecessor to the Martini."
+  -
+    name: "Chartreuse Smash"
+    ingredients:
+      -
+        tag: "mint"
+        displayMeasure: "10"
+        displayIngredient: "mint leaves"
+      -
+        tag: "lemon juice"
+        displayMeasure: "1 oz"
+        displayIngredient: "lemon juice"
+      -
+        tag: "sugar"
+        displayMeasure: "2 tsp."
+        displayIngredient: "turbinado sugar"
+      -
+        tag: "green chartreuse"
+        displayMeasure: "2 oz"
+        displayIngredient: "green Chartreuse"
+    instructions: "Place mint, lemon and sugar in a cocktail shaker and muddle. Add Chartreuse and fill with ice. Shake thoroughly, and strain into a glass filled with crushed ice. Garnish with mint sprig."
+    source: "Saveur"
+    url: "http://www.saveur.com/article/Recipes/Chartreuse-Smash"
+  -
+    name: "Perfect Margarita"
+    ingredients:
+      -
+        tag: "reposado tequila"
+        displayMeasure: "1 part"
+        displayIngredient: "reposado tequila"
+      -
+        tag: "tequila"
+        displayMeasure: "1 part"
+        displayIngredient: "jalapeño tequila"
+      -
+        tag: "mezcal"
+        displayMeasure: "1 part"
+        displayIngredient: "mezcal"
+      -
+        tag: "grand marnier"
+        displayMeasure: "3 parts"
+        displayIngredient: "Grand Marnier"
+      -
+        tag: "lime juice"
+        displayMeasure: "3 parts"
+        displayIngredient: "fresh squeezed lime juice"
+      -
+        tag: "agave nectar"
+        displayMeasure: "1 part"
+        displayIngredient: "agave nectar"
+      -
+        displayIngredient: "high-quality salt"
+    instructions: "Rim a margarita glass with salt. Briefly shake all ingredients with ice and strain with a fine mesh strainer into the glass. Garnish with lime or a slice of jalapeño."
+  -
+    name: "Improved Holland Gin Cocktail"
+    ingredients:
+      -
+        tag: "genever"
+        displayMeasure: "2 oz"
+        displayIngredient: "genever"
+      -
+        tag: "absinthe"
+        displayMeasure: "1/8 tsp"
+        displayIngredient: "absinthe"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1/4 oz"
+        displayIngredient: "simple syrup"
+      -
+        tag: "maraschino liqueur"
+        displayMeasure: "1/4 oz"
+        displayIngredient: "maraschino liqueur"
+      -
+        displayMeasure: "2 dashes"
+        displayIngredient: "Angostura bitters"
+    instructions: "Combine ingredients in bar glass, add good solid ice and stir until well chilled. Strain the mixture over a 2\" square ice cube in a frosted old fashioned glass. Garnish with fresh lemon peel."
+    source: "Loungerati"
+    url: "http://loungerati.blogspot.com/2010/10/what-were-drinking-do-dutch-with-bols.html"
+  -
+    name: "Diamondback"
+    ingredients:
+      -
+        tag: "rye whiskey"
+        displayMeasure: "2 parts"
+        displayIngredient: "rye whiskey"
+      -
+        tag: "applejack"
+        displayMeasure: "1 part"
+        displayIngredient: "applejack"
+      -
+        tag: "chartreuse"
+        displayMeasure: "1 part"
+        displayIngredient: "yellow/green Chartreuse"
+    instructions: "Add all ingredients to a mixing glass filled with ice. Stir well, strain into a chilled cocktail glass and serve."
+    source: "Sloshed!"
+    url: "http://sloshed.hyperkinetic.org/2011/10/21/diamondback/"
+  -
+    name: "Vieux Carré"
+    ingredients:
+      -
+        tag: "benedictine"
+        displayMeasure: "1/2 tsp"
+        displayIngredient: "Bénédictine"
+      -
+        tag: "rye whiskey"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "rye whiskey"
+      -
+        tag: "cognac"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "cognac"
+      -
+        tag: "sweet vermouth"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "sweet vermouth"
+      -
+        displayMeasure: "1 dash"
+        displayIngredient: "Peychaud’s Bitters"
+      -
+        displayMeasure: "1 dash"
+        displayIngredient: "Angostura Bitters"
+    instructions: "Combine all ingredients in a mixing glass and fill with ice; stir well for 20 seconds and strain into an ice-filled old fashioned glass. Garnish with a cherry."
+    source: "Serious Eats"
+    url: "http://www.seriouseats.com/recipes/2008/07/vieux-carre-recipe.html"
+  -
+    name: "Sazerac"
+    ingredients:
+      -
+        tag: "rye whiskey"
+        displayMeasure: "1 1/2 oz"
+        displayIngredient: "rye whiskey"
+      -
+        displayMeasure: "2-3 dashes"
+        displayIngredient: "Peychaud's bitters"
+      -
+        tag: "sugar"
+        displayIngredient: "sugar cube"
+      -
+        tag: "absinthe"
+        displayIngredient: "absinthe"
+    instructions: "Fill an Old Fashioned glass with ice and water and set aside. In another old Fashioned glass, muddle sugar cube with bitters and then add the rye. Pour out the ice from the first glass, swirl absinthe around it and toss the extra. Pour the rye mixture in and serve."
+    notes: "Along with the Old Fashioned, the Sazerac is one of the earliest cocktails, and one of few that adheres to the classic definition of \"cocktail\": spirits, bitters, sugar and water."
+  -
+    name: "Rubicon"
+    ingredients:
+      -
+        tag: "green chartreuse"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "green Chartreuse"
+      -
+        tag: "gin"
+        displayMeasure: "1 1/2 oz"
+        displayIngredient: "Plymouth gin"
+      -
+        tag: "maraschino liqueur"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "Maraschino liqueur"
+      -
+        tag: "lemon juice"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "lemon juice"
+      -
+        tag: "rosemary"
+        displayMeasure: "1"
+        displayIngredient: "sprig rosemary"
+    instructions: "Arrange rosemary into a wreath at the bottom of a rocks glass and add Chartreuse. Shake remaining ingredients with ice. Flame misted Chartreuse into the glass and \"cook\" the rosemary slightly. Pour the shaker over the rosemary to douse the flames and top with crushed ice. Garnish with a sprig of rosemary."
+    source: "Small Screen"
+    url: "http://www.smallscreennetwork.com/video/499/raising_the_bar_rubicon"
+  -
+    name: "Lemon Basil Blossom"
+    ingredients:
+      -
+        tag: "basil"
+        displayMeasure: "3-4"
+        displayIngredient: "lemon basil leaves"
+      -
+        tag: "lemon"
+        displayMeasure: "1"
+        displayIngredient: "lemon, zested"
+      -
+        tag: "lemon juice"
+        displayMeasure: "1 oz"
+        displayIngredient: "lemon juice"
+      -
+        tag: "white rum"
+        displayMeasure: "1 1/2 oz"
+        displayIngredient: "white rum"
+      -
+        tag: "simple syrup"
+        displayMeasure: "1/2 oz"
+        displayIngredient: "lemon basil simple syrup"
+    instructions: "In a Collins glass, muddle the lemon zest and basil. Fill with crushed ice. In an ice-filled cocktail shaker, shake together rum, lemon juice, and simple syrup. Strain into Collins glass and garnish with a sliver of lemon."
+    notes: "To make the lemon basil simple syrup, use 4 parts sugar and 4 parts water to 1 part (loosely packed) basil leaves."
+    source: "Saveur"
+    url: "http://www.saveur.com/article/Recipes/Lemon-Basil-Blossom-Cocktail"
+  -
+    name: "Rusty Nail"
+    ingredients:
+      -
+        tag: "drambuie"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "Drambuie"
+      -
+        tag: "scotch"
+        displayMeasure: "2 oz"
+        displayIngredient: "blended scotch whiskey"
+    instructions: "Stir ingredients together with ice. Strain into ice-filled glass."
+  -
+    name: "Peach Julep"
+    ingredients:
+      -
+        tag: "peach"
+        displayMeasure: "1/4"
+        displayIngredient: "overripe peach, sliced"
+      -
+        tag: "simple syrup"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "rooibos simple syrup"
+      -
+        tag: "lemon juice"
+        displayMeasure: "3/4 oz"
+        displayIngredient: "fresh lemon juice"
+      -
+        tag: "cognac"
+        displayMeasure: "1 oz"
+        displayIngredient: "cognac"
+      -
+        tag: "lillet"
+        displayMeasure: "1 oz"
+        displayIngredient: "Lillet"
+    instructions: "In a mixing glass, muddle peach slices, rooibos syrup and lemon juice into a rough pulp. Add cognac and Lillet blanc, stir to mix. Pour unstrained into serving glass. Fill serving glass with crushed ice, garnish with large bunch of mint."
+    source: "Serious Eats"
+    url: "http://www.seriouseats.com/recipes/2012/08/eastern-standard-peach-julep-cocktail-cognac-lillet-blanc-mint-recipe.html"

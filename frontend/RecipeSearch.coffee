@@ -39,11 +39,6 @@ class RecipeSearch
           display : "[inferred] #{i.generic}"
         }
 
-    # @_recipesForIngredientTags = {}
-    # for r in recipes
-    #   for tag in r.searchableIngredients
-    #     (@_recipesForIngredientTags[tag] ?= []).push r
-
     return # for loop
 
   _includeAllGenerics : (ingredients) ->
