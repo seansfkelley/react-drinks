@@ -1,5 +1,15 @@
+_       = require 'lodash'
 express = require 'express'
 routes  = require './routes'
+
+# Global setup.
+_.extend require('revalidator').validate.defaults, {
+  validateFormats          : true
+  validateFormatsStrict    : true
+  validateFormatExtensions : true
+  additionalProperties     : false
+  cast                     : false
+}
 
 # Express.
 app = express()
