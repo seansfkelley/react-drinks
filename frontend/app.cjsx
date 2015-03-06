@@ -8,6 +8,14 @@ IngredientSelectionPage = require './IngredientSelectionPage'
 RecipeResultsPage       = require './RecipeResultsPage'
 RecipeView              = require './RecipeView'
 
+NewRecipePage = require './NewRecipePage'
+
+appRootElement = document.querySelector '#app-root'
+
+React.render <NewRecipePage/>, appRootElement
+
+return
+
 page = [
   title : 'Ingredients'
   content : <IngredientSelectionPage/>
@@ -17,8 +25,6 @@ page = [
 ]
 
 paginatedView = <PaginatedView pages={page}/>
-
-appRootElement = document.querySelector '#app-root'
 
 React.render paginatedView, appRootElement
 

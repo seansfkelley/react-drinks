@@ -1,3 +1,57 @@
+@require 'mixins'
+@require 'sizes'
+
+header-height = 44px
+
+.recipe-page
+  fixed-header-footer-container header-height, 24px
+
+  .recipe-header
+    font-size header-size
+
+    height 100%
+
+    text-align center
+
+    > *
+      line-height header-height
+
+    .fa.left
+      float left
+      margin-left 10px
+
+    .fa.right
+      float right
+      margin-right 10px
+
+    position relative
+
+    .search-bar-wrapper
+      position absolute
+
+      top 6px
+      right 36px
+      bottom 6px
+
+      overflow hidden
+
+      input
+        height 100%
+        width 100%
+        outline none
+        font-size 16px
+
+      &.hidden
+        width 0
+        opacity 0
+        transition opacity 0s ease 0.5s, width 0.5s
+
+      &.visible
+        width calc(100% - 42px) // 6px + 36px
+        opacity 1
+        transition opacity 0s, width 0.5s
+
+
 .recipe-list
   height 100%
   overflow scroll

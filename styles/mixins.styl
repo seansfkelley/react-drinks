@@ -8,3 +8,17 @@ fixed-header-container(height)
     height "calc(100% - %s)" % height
     overflow-y scroll
     -webkit-overflow-scrolling touch
+
+fixed-header-footer-container(header, footer)
+  height 100%
+
+  .fixed-header-bar
+    height header
+
+  .fixed-content-pane
+    height "calc(100% - %s)" % (header + footer)
+    overflow-y scroll
+    -webkit-overflow-scrolling touch
+
+  .fixed-footer-bar
+    height footer
