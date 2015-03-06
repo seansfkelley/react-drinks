@@ -44,7 +44,7 @@ PaginatedView = React.createClass {
   render : ->
     <div className='paginated-view fixed-header-container'>
       <PaginatedViewHeader setIndex={@_setIndex} index={@state.index} pages={@props.pages}/>
-      <div className='paginated-view-content fixed-header-content-pane'>
+      <div className='paginated-view-content fixed-content-pane'>
         {@props.pages[@state.index].content}
       </div>
     </div>

@@ -62,7 +62,7 @@ RecipeView = React.createClass {
         <span className='name'>{@props.recipe.name}</span>
         <i className='fa fa-times' onTouchTap={@_closeRecipe}/>
       </div>
-      <div className='recipe-description fixed-header-content-pane'>
+      <div className='recipe-description fixed-content-pane'>
         <div className='recipe-ingredients'>
           {ingredientNodes}
         </div>

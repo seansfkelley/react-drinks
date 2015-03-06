@@ -28,7 +28,7 @@ TabbedView = React.createClass {
   render : ->
     <div className='tabbed-view fixed-header-container'>
       <TabBar tabs={@props.tabs} active={@state.active} onTabSelect={@_onTabSelect}/>
-      <div className='fixed-header-content-pane'>
+      <div className='fixed-content-pane'>
         {@state.active.content}
       </div>
     </div>
