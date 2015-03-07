@@ -7,58 +7,40 @@ AppDispatcher = require './AppDispatcher'
 
 OverlayView = React.createClass {
   render : ->
-    <div className='overlay'>
+    <div className={@props.className}>
       {@props.children}
     </div>
 }
 
-FlyupView = React.createClass {
-  render : ->
-    <div className='flyup'>
-      {@props.children}
-    </div>
-}
-
-flyupRoot = document.querySelector '#flyup-root'
-overlayRoot = document.querySelector '#overlay-root'
+MODAL_TYPES = [ 'modal', 'flyup' ]
+DOM_ELEMENT = document.querySelector '#overlay-root'
 
 attachOverlayViews = ->
-  showOverlay = (component) ->
-    React.render <OverlayView>{component}</OverlayView>, overlayRoot
-
-  hideOverlay = ->
-    # React.unmountComponentAtNode overlayRoot
-
-  shouldHide = false
-
-  showFlyup = (component) ->
+  _.each MODAL_TYPES, (type) ->
     shouldHide = false
-    React.render <FlyupView>{component}</FlyupView>, flyupRoot
-    _.defer ->
-      flyupRoot.classList.add 'visible'
 
-  hideFlyup = ->
-    flyupRoot.classList.remove 'visible'
-    # TODO: Fix this implementation.
-    # TODO: Why is this implementation so divergent from overlay? Shouldn't they be basically the same with different styling?
-    shouldHide = true
-    _.delay (->
-      if shouldHide
-        React.unmountComponentAtNode flyupRoot
-    ), 1000
+    show = (component) ->
+      shouldHide = false
+      React.render <OverlayView className={type}>{component}</OverlayView>, DOM_ELEMENT
+      _.defer ->
+        DOM_ELEMENT.classList.add 'visible'
 
-  AppDispatcher.register (payload) ->
-    switch payload.type
-      when 'show-overlay'
-        hideOverlay()
-        showOverlay payload.component
-      when 'hide-overlay'
-        hideOverlay()
-      when 'show-flyup'
-        showFlyup payload.component
-      when 'hide-flyup'
-        hideFlyup()
+    hide = ->
+      DOM_ELEMENT.classList.remove 'visible'
+      # TODO: Fix this implementation; shouldHide is a hack.
+      shouldHide = true
+      _.delay (->
+        if shouldHide
+          React.unmountComponentAtNode DOM_ELEMENT
+      ), 1000
 
-    return true
+    AppDispatcher.register (payload) ->
+      switch payload.type
+        when 'show-' + type
+          show payload.component
+        when 'hide-' + type
+          hide()
+
+      return true
 
 module.exports = { attachOverlayViews }

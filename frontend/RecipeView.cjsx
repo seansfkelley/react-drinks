@@ -100,7 +100,7 @@ RecipeView = React.createClass {
 
   _hideRecipe : ->
     AppDispatcher.dispatch {
-      type : 'hide-flyup'
+      type : 'hide-modal'
     }
 }
 

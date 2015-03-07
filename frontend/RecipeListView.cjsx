@@ -92,7 +92,7 @@ RecipeListItem = React.createClass {
 
   _openRecipe : ->
     AppDispatcher.dispatch {
-      type      : 'show-flyup'
+      type      : 'show-modal'
       component : <RecipeView recipe={@props.recipe}/>
     }
 }

@@ -1,25 +1,39 @@
-.overlay, .flyup
-  position absolute
+#overlay-root
+  // This is an awkward interaction between transitions and the js cleanup steps that happen when
+  // these views are hidden: we clean them up after 1 second to allow the CSS transitions to make
+  // it happen in a pretty way, but while it's invisible it's still in the way. So we have to do
+  // this pointer-events thing so interactions work.
+  pointer-events none
 
-  top 0
-  left 0
-  right 0
-  bottom 0
+#overlay-root.visible
+  pointer-events auto
 
-  z-index 2
+#overlay-root
+  .modal, .flyup
+    position absolute
 
-.overlay
-  background-color rgba(0, 0, 0, 0.5)
+    top 0
+    left 0
+    right 0
+    bottom 0
 
+    z-index 2
 
-.flyup
-  top 568px
-  bottom -568px
+  .modal
+    background-color rgba(0, 0, 0, 0.5)
 
-  transition top 0.33s, bottom 0.33s
+    opacity 0
+    transition opacity 0.33s
 
-#flyup-root.visible .flyup
-  top 0
-  bottom 0
+  .flyup
+    transform translate(0, 100%)
+    transition transform 0.33s
 
-  transition top 0.33s, bottom 0.33s
+  &.visible
+    .modal
+      opacity 1
+      transition opacity 0.33s
+
+    .flyup
+      transform none
+      transition transform 0.33s
