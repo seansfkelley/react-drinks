@@ -14,10 +14,11 @@ OverlayView = React.createClass {
 overlayRoot = document.querySelector '#overlay-root'
 
 attachOverlayView = ->
-  hide = ->
-    React.unmountComponentAtNode overlayRoot
   show = (component) ->
     React.render <OverlayView>{component}</OverlayView>, overlayRoot
+
+  hide = ->
+    React.unmountComponentAtNode overlayRoot
 
   AppDispatcher.register (payload) ->
     switch payload.type
