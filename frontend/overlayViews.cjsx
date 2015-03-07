@@ -16,9 +16,9 @@ MODAL_TYPES = [ 'modal', 'flyup' ]
 DOM_ELEMENT = document.querySelector '#overlay-root'
 
 attachOverlayViews = ->
-  _.each MODAL_TYPES, (type) ->
-    shouldHide = false
+  shouldHide = false
 
+  _.each MODAL_TYPES, (type) ->
     show = (component) ->
       shouldHide = false
       React.render <OverlayView className={type}>{component}</OverlayView>, DOM_ELEMENT
