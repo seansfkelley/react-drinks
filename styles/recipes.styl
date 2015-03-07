@@ -3,7 +3,26 @@
 
 header-height = 44px
 
-// .search-bar // style up the clear button
+.search-bar
+  height 100%
+  width 100%
+
+  input
+    font-size 16px
+    height 100%
+    width 100%
+    outline none
+
+  position relative
+
+  i.fa
+    font-size 20px
+    line-height 0
+
+    position absolute
+    right 0
+
+    padding 16px 6px 16px
 
 .recipe-page
   fixed-header-container header-height
@@ -35,12 +54,6 @@ header-height = 44px
     bottom 6px
 
     overflow hidden
-
-    input
-      height 100%
-      width 100%
-      outline none
-      font-size 16px
 
     &.hidden
       width 0

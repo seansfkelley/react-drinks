@@ -10,6 +10,11 @@ AppDispatcher   = require './AppDispatcher'
 StickyHeaderMixin = require './StickyHeaderMixin'
 
 SearchBar = React.createClass {
+  getInitialState : ->
+    return {
+      value : ''
+    }
+
   render : ->
     <div className='search-bar'>
       <input className='search-input' type='text' ref='input' onChange={@_onChange}/>
@@ -17,9 +22,18 @@ SearchBar = React.createClass {
     </div>
 
   clearAndFocus : ->
+    @clear()
+    @focus()
+
+  clear : ->
     input = @refs.input.getDOMNode()
     input.value = ''
+    @props.onChange ''
+
+  focus : ->
+    input = @refs.input.getDOMNode()
     input.focus()
+    @props.onChange ''
 
   _onChange : (event) ->
     @props.onChange event.target.value
@@ -35,24 +49,28 @@ Header = React.createClass {
     <div className='recipe-header'>
       <i className='fa fa-list-ul left' onClick={-> console.log 'list click'}/>
       <span className='header-title'>Drinks</span>
-      <i className='fa fa-search right' onClick={@_openSearch}/>
+      <i className='fa fa-search right' onClick={@_toggleSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
       </div>
     </div>
 
-  _openSearch : ->
+  _toggleSearch : ->
     searchBarVisible = not @state.searchBarVisible
     @setState { searchBarVisible }
-    @_setSearchTerm ''
     if searchBarVisible
       # This defer is a hack because we haven't rerendered but we can't focus hidden things.
       _.defer =>
         @refs.searchBar.clearAndFocus()
+    else
+      @refs.searchBar.clear()
 
+  # In the future, this should pop up a loader and then throttle the number of filters performed.
   _setSearchTerm : (searchTerm) ->
-    console.log searchTerm
-
+    AppDispatcher.dispatch {
+      type : 'search-recipes'
+      searchTerm
+    }
 }
 
 Footer = React.createClass {
@@ -75,13 +93,13 @@ RecipeListItem = React.createClass {
 
 AlphabeticalRecipeList = React.createClass {
   mixins : [
-    FluxMixin RecipeStore, 'alphabeticalRecipes'
+    FluxMixin RecipeStore, 'searchedAlphabeticalRecipes'
     StickyHeaderMixin
   ]
 
   render : ->
     return @generateList {
-      data        : @state.alphabeticalRecipes
+      data        : @state.searchedAlphabeticalRecipes
       getTitle    : (recipe) -> recipe.name[0].toUpperCase()
       createChild : (recipe) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
       classNames  : 'recipe-list alphabetical'

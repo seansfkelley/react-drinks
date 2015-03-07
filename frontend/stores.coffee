@@ -42,25 +42,35 @@ FUZZY_MATCH = 2
 
 RecipeStore = new class extends FluxStore
   fields : ->
-    alphabeticalRecipes   : []
-    groupedMixableRecipes : []
+    searchTerm                  : ''
+    alphabeticalRecipes         : []
+    groupedMixableRecipes       : []
+    searchedAlphabeticalRecipes : []
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     @_createRecipeSearch()
-    @_updateMixableRecipes()
+    @_updateDerivedRecipeLists()
 
   'set-recipes' : ({ recipes }) ->
     @alphabeticalRecipes = recipes
     @_createRecipeSearch()
-    @_updateMixableRecipes()
+    @_updateDerivedRecipeLists()
 
   'toggle-ingredient' : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
-    @_updateMixableRecipes()
+    @_updateDerivedRecipeLists()
+
+  'search-recipes' : ({ searchTerm }) ->
+    @searchTerm = searchTerm.toLowerCase()
+    @_updateSearchedRecipes()
 
   _createRecipeSearch : ->
     @_recipeSearch = new RecipeSearch IngredientStore.alphabeticalIngredients, @alphabeticalRecipes
+
+  _updateDerivedRecipeLists : ->
+    @_updateMixableRecipes()
+    @_updateSearchedRecipes()
 
   _updateMixableRecipes : ->
     selectedTags = _.keys IngredientStore.selectedIngredientTags
@@ -71,6 +81,13 @@ RecipeStore = new class extends FluxStore
         else "With #{missingCount} More Ingredients"
       recipes = _.sortBy recipes, 'name'
       return { name, recipes }
+
+  _updateSearchedRecipes : ->
+    if @searchTerm == ''
+      @searchedAlphabeticalRecipes = @alphabeticalRecipes
+    else
+      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, (r) =>
+        return r.name.toLowerCase().indexOf(@searchTerm) != -1
 
 Promise.resolve $.get('/ingredients')
 .then ({ alphabetical, grouped }) =>
