@@ -54,8 +54,18 @@ RecipeView = React.createClass {
     if @props.recipe.notes?
       recipeNotes =
         <div className='recipe-notes'>
-          <SectionHeader='Notes'/>
-          <div className='text'>{@props.recipe.notes}</div>
+          <SectionHeader text='Notes'/>
+          <div className='text'>
+            {@props.recipe.notes}
+          </div>
+        </div>
+
+    if @props.recipe.instructions?
+      instructionLines = _.map @props.recipe.instructions.split('\n'), (l) -> <div className='text-line'>{l}</div>
+      recipeInstructions =
+        <div className='recipe-instructions'>
+          <SectionHeader text='Instructions'/>
+          <div className='text'>{instructionLines}</div>
         </div>
 
     <div className='recipe-view'>
@@ -66,10 +76,7 @@ RecipeView = React.createClass {
         <div className='recipe-ingredients'>
           {ingredientNodes}
         </div>
-        <div className='recipe-instructions'>
-          <SectionHeader text='Instructions'/>
-          <div className='text'>{@props.recipe.instructions}</div>
-        </div>
+        {recipeInstructions}
         {recipeNotes}
       </div>
       <div className='recipe-controls fixed-footer-bar'>

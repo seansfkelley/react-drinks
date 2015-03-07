@@ -14,7 +14,10 @@
         tag: "sugar"
         displayMeasure: "1 tsp"
         displayIngredient: "sugar"
-    instructions: "Muddle lime and sugar in a lowball glass until the lime is juiced. Fill to brim with crushed ice and add cachaça. Garnish with sugar cane."
+    instructions: |
+      Muddle lime and sugar in a lowball glass until the lime is juiced.
+      Fill to brim with crushed ice and add cachaça.
+      Garnish with sugar cane.
     notes: "Proper Brazilian Caipirinhas are unmeasured. The glass is simply filled with cachaça after the ice is added."
   -
     name: "Gin and Tonic"
