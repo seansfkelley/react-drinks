@@ -42,15 +42,24 @@ SearchBar = React.createClass {
 }
 
 Header = React.createClass {
+  mixins : [
+    FluxMixin UiStore, 'useIngredients'
+  ]
+
   getInitialState : ->
     return {
       searchBarVisible : false
     }
 
   render : ->
+    if @state.useIngredients
+      title = 'Mixable Drinks'
+    else
+      title = 'All Drinks'
+
     <div className='recipe-header'>
       <i className='fa fa-list-ul float-left' onClick={-> console.log 'list click'}/>
-      <span className='header-title'>Drinks</span>
+      <span className='header-title'>{title}</span>
       <i className='fa fa-search float-right' onClick={@_toggleSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
@@ -135,6 +144,7 @@ RecipeListView = React.createClass {
       list = <GroupedRecipeList/>
     else
       list = <AlphabeticalRecipeList/>
+
     <div className='recipe-list-view'>
       <div className='fixed-header-bar'>
         <Header/>
