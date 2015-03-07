@@ -1,6 +1,8 @@
+@require 'mixins'
 @require 'colors'
 @require 'sizes'
 
+// TODO: Why the shit is this here?
 .sticky-header-container
   position relative
 
@@ -42,16 +44,23 @@
   .fa.float-right
     border-left 1px solid grey7
 
-.ingredient-list
-  height 100%
-  overflow scroll
+.ingredient-list-view
+  fixed-header-footer-container header-footer-size, 0
 
-.ingredient-list-item
-  .ingredient-icon
-    margin 0 5px
+  background-color grey7
 
-  .name
-    display inline-block
+  .ingredient-header
+    color grey0
 
-  &.is-selected
-    background-color blue
+    .search-bar-wrapper
+      color grey7
+
+  .ingredient-list-item
+    .ingredient-icon
+      padding 0 5px
+
+    .name
+      display inline-block
+
+    &.is-selected
+      background-color blue
