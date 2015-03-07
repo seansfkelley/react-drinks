@@ -77,6 +77,7 @@
         displayMeasure: "1 tsp"
         displayIngredient: "absinthe"
       -
+        tag: "orange bitters"
         displayMeasure: "1-2 dashes"
         displayIngredient: "orange bitters"
     instructions: |
@@ -258,6 +259,7 @@
         displayMeasure: "1/2 tsp"
         displayIngredient: "maraschino liqueur"
       -
+        tag: "angostura bitters"
         displayMeasure: "2 dashes"
         displayIngredient: "Angostura bitters"
       -
@@ -312,6 +314,7 @@
         displayMeasure: "3/4 oz"
         displayIngredient: "green Chartreuse"
       -
+        tag: "orange bitters"
         displayMeasure: "1 dash"
         displayIngredient: "orange bitters"
     instructions: |
@@ -414,6 +417,7 @@
         displayMeasure: "1 oz"
         displayIngredient: "sweet vermouth"
       -
+        tag: "angostura bitters"
         displayMeasure: "1 dash"
         displayIngredient: "Angostura bitters"
     instructions:
@@ -435,6 +439,7 @@
         displayMeasure: "1/4 oz"
         displayIngredient: "Maraschino liqueur"
       -
+        tag: "angostura bitters"
         displayMeasure: "2-3 dashes"
         displayIngredient: "Angostura bitters"
     instructions: |
@@ -512,6 +517,7 @@
         displayMeasure: "1/2 oz"
         displayIngredient: "coffee liqueur"
       -
+        tag: "orange bitters"
         displayMeasure: "2 dashes"
         displayIngredient: "orange bitters"
     instructions: |
@@ -584,6 +590,7 @@
         displayMeasure: "1 barspoon"
         displayIngredient: "grenadine"
       -
+        tag: "orange bitters"
         displayMeasure: "1 dash"
         displayIngredient: "orange bitters"
     instructions: |
@@ -692,6 +699,7 @@
         displayMeasure: "1 teaspoon"
         displayIngredient: "Maraschino liqueur"
       -
+        tag: "orange bitters"
         displayMeasure: "2 dashes"
         displayIngredient: "orange bitters"
     instructions: |
@@ -776,6 +784,7 @@
         displayMeasure: "1/4 oz"
         displayIngredient: "maraschino liqueur"
       -
+        tag: "angostura bitters"
         displayMeasure: "2 dashes"
         displayIngredient: "Angostura bitters"
     instructions: |
@@ -824,9 +833,11 @@
         displayMeasure: "3/4 oz"
         displayIngredient: "sweet vermouth"
       -
+        tag: "peychauds bitters"
         displayMeasure: "1 dash"
         displayIngredient: "Peychaud’s Bitters"
       -
+        tag: "angostura bitters"
         displayMeasure: "1 dash"
         displayIngredient: "Angostura Bitters"
     instructions: |
@@ -843,6 +854,7 @@
         displayMeasure: "1 1/2 oz"
         displayIngredient: "rye whiskey"
       -
+        tag: "peychauds bitters"
         displayMeasure: "2-3 dashes"
         displayIngredient: "Peychaud's bitters"
       -

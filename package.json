@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/seansfkelley/react-drinks",
   "dependencies": {
+    "MD5": "^1.2.1",
     "autoprefixer-core": "^5.1.7",
     "bluebird": "^2.9.12",
     "browserify": "^8.1.3",

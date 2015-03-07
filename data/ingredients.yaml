@@ -13,6 +13,15 @@
     generic    : bitters
     group      : bitters
   -
+    display    : Peychaud's Bitters
+    tag        : peychauds bitters
+    generic    : bitters
+    group      : bitters
+  -
+    display    : Orange Bitters
+    generic    : bitters
+    group      : bitters
+  -
     display    : Applejack
     group      : spirit-other
   -

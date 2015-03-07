@@ -1,6 +1,7 @@
 # @cjsx React.DOM
 
 _     = require 'lodash'
+md5   = require 'MD5'
 React = require 'react'
 
 AppDispatcher = require './AppDispatcher'
@@ -41,15 +42,15 @@ RecipeView = React.createClass {
           else
             return [
               <SectionHeader text={HUMAN_READABLE_CATEGORY_TITLE[category]} key={'header-' + category}/>
-              _.map measuredIngredients, (i) -> <IngredientView measuredIngredient={i} key={i.tag}/>
+              _.map measuredIngredients, (i) -> <IngredientView measuredIngredient={i} key={i.tag ? i.displayIngredient}/>
             ]
         .flatten()
         .value()
     else
       ingredientNodes = [
-        <SectionHeader text='Ingredients' key={'header-' + IngredientCategory.available}/>
+        <SectionHeader text='Ingredients' key={'header-' + IngredientCategory.AVAILABLE}/>
       ].concat _.map @props.recipe.ingredients, (i) ->
-        <IngredientView category={IngredientCategory.available} measuredIngredient={i} key={i.tag}/>
+        <IngredientView category={IngredientCategory.AVAILABLE} measuredIngredient={i} key={i.tag ? i.displayIngredient}/>
 
     if @props.recipe.notes?
       recipeNotes =
@@ -60,7 +61,11 @@ RecipeView = React.createClass {
           </div>
         </div>
 
-    instructionLines = _.map @props.recipe.instructions.split('\n'), (l) -> <div className='text-line'>{l}</div>
+    instructionLines = _.map @props.recipe.instructions.split('\n'), (l, i) ->
+      # The only reason I'm bothering to do this is in the interest of no warnings. I think React
+      # only warns you of each error once, and I want to ensure this one doesn't crop up somewhere
+      # more damaging.
+      return <div className='text-line' key={md5(l)}>{l}</div>
     recipeInstructions =
       <div className='recipe-instructions'>
         <SectionHeader text='Instructions'/>
