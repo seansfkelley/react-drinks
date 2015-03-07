@@ -57,10 +57,9 @@ RecipeView = React.createClass {
           <div className='text'>{@props.recipe.notes}</div>
         </div>
 
-    <div className='recipe-view fixed-header-container'>
+    <div className='recipe-view'>
       <div className='recipe-title fixed-header-bar'>
-        <span className='name'>{@props.recipe.name}</span>
-        <i className='fa fa-times' onTouchTap={@_closeRecipe}/>
+        {@props.recipe.name}
       </div>
       <div className='recipe-description fixed-content-pane'>
         <div className='recipe-ingredients'>
@@ -72,15 +71,25 @@ RecipeView = React.createClass {
         </div>
         {recipeNotes}
       </div>
+      <div className='recipe-controls fixed-footer-bar'>
+        <div className='save-to-button' onClick={@_saveTo}>
+          <i className='fa fa-list-ul'/>
+          <span>Save To</span>
+        </div>
+        <div className='close-button' onClick={@_hideRecipe}>
+          <span>Close</span>
+          <i className='fa fa-times'/>
+        </div>
+      </div>
     </div>
 
-  _closeRecipe : (e) ->
-    # TODO: Deferring fixes the issue where we replace the body and the event is then handled by the
-    # new view that ends up there, which it should not be.
-    _.defer ->
-      AppDispatcher.dispatch {
-        type : 'close-recipe'
-      }
+  _saveTo : ->
+    console.log 'save to'
+
+  _hideRecipe : ->
+    AppDispatcher.dispatch {
+      type : 'hide-overlay'
+    }
 }
 
 module.exports = RecipeView

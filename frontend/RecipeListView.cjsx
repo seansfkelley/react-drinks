@@ -8,6 +8,7 @@ AppDispatcher   = require './AppDispatcher'
 
 { RecipeStore, UiStore } = require './stores'
 
+RecipeView        = require './RecipeView'
 StickyHeaderMixin = require './StickyHeaderMixin'
 
 SearchBar = React.createClass {
@@ -82,8 +83,8 @@ RecipeListItem = React.createClass {
 
   _openRecipe : ->
     AppDispatcher.dispatch {
-      type   : 'open-recipe'
-      recipe : @props.recipe
+      type      : 'show-overlay'
+      component : <RecipeView recipe={@props.recipe}/>
     }
 }
 
