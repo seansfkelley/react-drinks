@@ -7,7 +7,6 @@ FluxMixin           = require './FluxMixin'
 AppDispatcher       = require './AppDispatcher'
 { IngredientStore } = require './stores'
 
-TabbedView        = require './TabbedView'
 StickyHeaderMixin = require './StickyHeaderMixin'
 
 IngredientListItem = React.createClass {
@@ -38,21 +37,6 @@ IngredientListItem = React.createClass {
     }
 }
 
-AlphabeticalIngredientList = React.createClass {
-  mixins : [
-    FluxMixin IngredientStore, 'alphabeticalIngredients'
-    StickyHeaderMixin
-  ]
-
-  render : ->
-    return @generateList {
-      data        : @state.alphabeticalIngredients
-      getTitle    : (ingredient) -> ingredient.display[0].toUpperCase()
-      createChild : (ingredient) -> <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
-      classNames  : 'ingredient-list alphabetical'
-    }
-}
-
 GroupedIngredientList = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'groupedIngredients'
@@ -74,19 +58,11 @@ GroupedIngredientList = React.createClass {
     }
 }
 
-tabs = [
-  icon    : 'glass'
-  title   : 'By Name'
-  content : <AlphabeticalIngredientList/>
-,
-  icon    : 'glass'
-  title   : 'By Group'
-  content : <GroupedIngredientList/>
-]
-
-IngredientSelectionPage = React.createClass {
+IngredientSelectionView = React.createClass {
   render : ->
-    <TabbedView tabs={tabs}/>
+    <div className=''>
+      <GroupedIngredientList/>
+    </div>
 }
 
-module.exports = IngredientSelectionPage
+module.exports = IngredientSelectionView
