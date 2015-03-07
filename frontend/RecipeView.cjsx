@@ -7,13 +7,14 @@ AppDispatcher = require './AppDispatcher'
 
 SectionHeader = React.createClass {
   render : ->
-    <div className='ingredient-section-header'>{@props.text}</div>
+    <div className='recipe-section-header'>{@props.text}</div>
 }
 
 IngredientView = React.createClass {
   render : ->
-    <div className={'measured-ingredient ' + @props.category}>
-      <div className='name'>{@props.measuredIngredient.displayMeasure} {@props.measuredIngredient.displayIngredient}</div>
+    <div className='measured-ingredient'>
+      <span className='measure'>{@props.measuredIngredient.displayMeasure}</span>
+      <span className='ingredient'>{@props.measuredIngredient.displayIngredient}</span>
     </div>
 }
 
@@ -40,7 +41,7 @@ RecipeView = React.createClass {
           else
             return [
               <SectionHeader text={HUMAN_READABLE_CATEGORY_TITLE[category]} key={'header-' + category}/>
-              _.map measuredIngredients, (i) -> <IngredientView category={category} measuredIngredient={i} key={i.tag}/>
+              _.map measuredIngredients, (i) -> <IngredientView measuredIngredient={i} key={i.tag}/>
             ]
         .flatten()
         .value()
@@ -53,7 +54,7 @@ RecipeView = React.createClass {
     if @props.recipe.notes?
       recipeNotes =
         <div className='recipe-notes'>
-          <div className='header'>Notes</div>
+          <SectionHeader='Notes'/>
           <div className='text'>{@props.recipe.notes}</div>
         </div>
 
@@ -66,7 +67,7 @@ RecipeView = React.createClass {
           {ingredientNodes}
         </div>
         <div className='recipe-instructions'>
-          <div className='header'>Instructions</div>
+          <SectionHeader text='Instructions'/>
           <div className='text'>{@props.recipe.instructions}</div>
         </div>
         {recipeNotes}
