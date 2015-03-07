@@ -2,8 +2,19 @@
 
 React = require 'react'
 
-NewRecipePage = require './NewRecipePage'
+RecipeListView    = require './RecipeListView'
+IngredientsFooter = require './IngredientsFooter'
 
-appRootElement = document.querySelector '#app-root'
+App = React.createClass {
+  render : ->
+    <div className='drinks-app'>
+      <div className='fixed-content-pane'>
+        <RecipeListView/>
+      </div>
+      <div className='fixed-footer-bar'>
+        <IngredientsFooter/>
+      </div>
+    </div>
+}
 
-React.render <NewRecipePage/>, appRootElement
+React.render <App/>, document.querySelector('#app-root')

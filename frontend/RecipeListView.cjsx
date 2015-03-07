@@ -101,8 +101,28 @@ AlphabeticalRecipeList = React.createClass {
     }
 }
 
+# GroupedRecipeList = React.createClass {
+#   mixins : [
+#     FluxMixin RecipeStore, 'groupedMixableRecipes'
+#     StickyHeaderMixin
+#   ]
 
-RecipePage = React.createClass {
+#   render : ->
+#     data = _.chain @state.groupedMixableRecipes
+#       .map ({ name, recipes }) ->
+#         _.map recipes, (r) -> [ name, r ]
+#       .flatten()
+#       .value()
+
+#     return @generateList {
+#       data        : data
+#       getTitle    : ([ name, recipe ]) -> name
+#       createChild : ([ name, recipe ]) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+#       classNames  : 'recipe-list grouped'
+#     }
+# }
+
+RecipeListView = React.createClass {
   render : ->
     # There's no way rewrapping these elements in divs that give them the fixed classes is best practices.
     <div className='recipe-page'>
@@ -115,4 +135,4 @@ RecipePage = React.createClass {
     </div>
 }
 
-module.exports = RecipePage
+module.exports = RecipeListView
