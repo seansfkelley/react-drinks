@@ -95,7 +95,7 @@ RecipeView = React.createClass {
 
   _hideRecipe : ->
     AppDispatcher.dispatch {
-      type : 'hide-overlay'
+      type : 'hide-flyup'
     }
 }
 

@@ -92,7 +92,7 @@ RecipeListItem = React.createClass {
 
   _openRecipe : ->
     AppDispatcher.dispatch {
-      type      : 'show-overlay'
+      type      : 'show-flyup'
       component : <RecipeView recipe={@props.recipe}/>
     }
 }

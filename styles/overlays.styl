@@ -1,0 +1,25 @@
+.overlay, .flyup
+  position absolute
+
+  top 0
+  left 0
+  right 0
+  bottom 0
+
+  z-index 2
+
+.overlay
+  background-color rgba(0, 0, 0, 0.5)
+
+
+.flyup
+  top 568px
+  bottom -568px
+
+  transition top 0.33s, bottom 0.33s
+
+#flyup-root.visible .flyup
+  top 0
+  bottom 0
+
+  transition top 0.33s, bottom 0.33s

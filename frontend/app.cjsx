@@ -17,6 +17,6 @@ App = React.createClass {
     </div>
 }
 
-require('./overlayView').attachOverlayView()
+require('./overlayViews').attachOverlayViews()
 
 React.render <App/>, document.querySelector('#app-root')
