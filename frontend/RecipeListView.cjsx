@@ -5,7 +5,8 @@ React = require 'react'
 
 FluxMixin       = require './FluxMixin'
 AppDispatcher   = require './AppDispatcher'
-{ RecipeStore } = require './stores'
+
+{ RecipeStore, UiStore } = require './stores'
 
 StickyHeaderMixin = require './StickyHeaderMixin'
 
@@ -101,36 +102,44 @@ AlphabeticalRecipeList = React.createClass {
     }
 }
 
-# GroupedRecipeList = React.createClass {
-#   mixins : [
-#     FluxMixin RecipeStore, 'groupedMixableRecipes'
-#     StickyHeaderMixin
-#   ]
+GroupedRecipeList = React.createClass {
+  mixins : [
+    FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
+    StickyHeaderMixin
+  ]
 
-#   render : ->
-#     data = _.chain @state.groupedMixableRecipes
-#       .map ({ name, recipes }) ->
-#         _.map recipes, (r) -> [ name, r ]
-#       .flatten()
-#       .value()
+  render : ->
+    data = _.chain @state.searchedGroupedMixableRecipes
+      .map ({ name, recipes }) ->
+        _.map recipes, (r) -> [ name, r ]
+      .flatten()
+      .value()
 
-#     return @generateList {
-#       data        : data
-#       getTitle    : ([ name, recipe ]) -> name
-#       createChild : ([ name, recipe ]) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
-#       classNames  : 'recipe-list grouped'
-#     }
-# }
+    return @generateList {
+      data        : data
+      getTitle    : ([ name, recipe ]) -> name
+      createChild : ([ name, recipe ]) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+      classNames  : 'recipe-list grouped'
+    }
+}
 
 RecipeListView = React.createClass {
+  mixins : [
+    FluxMixin UiStore, 'useIngredients'
+  ]
+
   render : ->
     # There's no way rewrapping these elements in divs that give them the fixed classes is best practices.
+    if @state.useIngredients
+      list = <GroupedRecipeList/>
+    else
+      list = <AlphabeticalRecipeList/>
     <div className='recipe-list-view'>
       <div className='fixed-header-bar'>
         <Header/>
       </div>
       <div className='fixed-content-pane'>
-        <AlphabeticalRecipeList/>
+        {list}
       </div>
     </div>
 }

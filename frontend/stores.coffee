@@ -49,10 +49,11 @@ UiStore = new class extends FluxStore
 
 RecipeStore = new class extends FluxStore
   fields : ->
-    searchTerm                  : ''
-    alphabeticalRecipes         : []
-    groupedMixableRecipes       : []
-    searchedAlphabeticalRecipes : []
+    searchTerm                    : ''
+    alphabeticalRecipes           : []
+    groupedMixableRecipes         : []
+    searchedAlphabeticalRecipes   : []
+    searchedGroupedMixableRecipes : []
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
@@ -91,10 +92,18 @@ RecipeStore = new class extends FluxStore
 
   _updateSearchedRecipes : ->
     if @searchTerm == ''
-      @searchedAlphabeticalRecipes = @alphabeticalRecipes
+      @searchedAlphabeticalRecipes   = @alphabeticalRecipes
+      @searchedGroupedMixableRecipes = @groupedMixableRecipes
     else
-      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, (r) =>
-        return r.name.toLowerCase().indexOf(@searchTerm) != -1
+      filterBySearchTerm = (r) => r.name.toLowerCase().indexOf(@searchTerm) != -1
+      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, filterBySearchTerm
+      @searchedGroupedMixableRecipes = _.chain @groupedMixableRecipes
+        .map ({ name, recipes }) ->
+          recipes = _.filter recipes, filterBySearchTerm
+          return { name, recipes }
+        .filter ({ recipes }) -> recipes.length > 0
+        .value()
+
 
 Promise.resolve $.get('/ingredients')
 .then ({ alphabetical, grouped }) =>
