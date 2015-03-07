@@ -73,11 +73,6 @@ Header = React.createClass {
     }
 }
 
-Footer = React.createClass {
-  render : ->
-    <div/>
-}
-
 RecipeListItem = React.createClass {
   render : ->
     <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
@@ -116,9 +111,6 @@ RecipePage = React.createClass {
       </div>
       <div className='fixed-content-pane'>
         <AlphabeticalRecipeList/>
-      </div>
-      <div className='fixed-footer-bar'>
-        <Footer/>
       </div>
     </div>
 }
