@@ -125,7 +125,7 @@ AlphabeticalRecipeList = React.createClass {
 RecipeListView = React.createClass {
   render : ->
     # There's no way rewrapping these elements in divs that give them the fixed classes is best practices.
-    <div className='recipe-page'>
+    <div className='recipe-list-view'>
       <div className='fixed-header-bar'>
         <Header/>
       </div>

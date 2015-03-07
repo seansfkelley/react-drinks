@@ -2,7 +2,7 @@ React = require 'react'
 
 IngredientsFooter = React.createClass {
   render : ->
-    <div />
+    <div>test</div>
 }
 
 module.exports = IngredientsFooter
