@@ -1,4 +1,5 @@
 @require 'colors'
+@require 'sizes'
 
 .sticky-header-container
   position relative
@@ -8,6 +9,31 @@
     top 0
     width 100%
     z-index 1
+
+.ingredients-footer
+  background-color grey8
+  color grey0
+
+  font-size header-footer-font-size
+  text-align center
+
+  height 100%
+
+  .fa, .footer-title
+    line-height header-footer-size
+
+  .fa
+    width 20px
+    padding 0 12px 0
+
+  .fa.fa-square-o, .fa.fa-check-square-o
+    margin-top 1px // Visual correction.
+
+  .fa.float-left
+    border-right 1px solid grey7
+
+  .fa.float-right
+    border-left 1px solid grey7
 
 .ingredient-list
   height 100%
