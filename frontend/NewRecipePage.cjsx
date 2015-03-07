@@ -11,7 +11,15 @@ StickyHeaderMixin = require './StickyHeaderMixin'
 
 SearchBar = React.createClass {
   render : ->
-    <input className='search-input' type='text' onChange={@_onChange}/>
+    <div className='search-bar'>
+      <input className='search-input' type='text' ref='input' onChange={@_onChange}/>
+      <i className='fa fa-times-circle' onClick={@clearAndFocus}/>
+    </div>
+
+  clearAndFocus : ->
+    input = @refs.input.getDOMNode()
+    input.value = ''
+    input.focus()
 
   _onChange : (event) ->
     @props.onChange event.target.value
@@ -29,14 +37,20 @@ Header = React.createClass {
       <span className='header-title'>Drinks</span>
       <i className='fa fa-search right' onClick={@_openSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
-        <SearchBar onChange={@_onSearchChange} key='search-bar'/>
+        <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
       </div>
     </div>
 
   _openSearch : ->
-    @setState { searchBarVisible : not @state.searchBarVisible }
+    searchBarVisible = not @state.searchBarVisible
+    @setState { searchBarVisible }
+    @_setSearchTerm ''
+    if searchBarVisible
+      # This defer is a hack because we haven't rerendered but we can't focus hidden things.
+      _.defer =>
+        @refs.searchBar.clearAndFocus()
 
-  _onSearchChange : (searchTerm) ->
+  _setSearchTerm : (searchTerm) ->
     console.log searchTerm
 
 }
