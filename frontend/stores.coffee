@@ -40,6 +40,13 @@ IngredientStore = new class extends FluxStore
 
 FUZZY_MATCH = 2
 
+UiStore = new class extends FluxStore
+  fields : ->
+    useIngredients : false
+
+  'toggle-use-ingredients' : ->
+    @useIngredients = not @useIngredients
+
 RecipeStore = new class extends FluxStore
   fields : ->
     searchTerm                  : ''
@@ -107,6 +114,7 @@ Promise.resolve $.get('/recipes')
 module.exports = {
   IngredientStore
   RecipeStore
+  UiStore
 }
 
 _.extend (window.debug ?= {}), module.exports
