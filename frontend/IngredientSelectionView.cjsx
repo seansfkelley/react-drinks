@@ -104,6 +104,9 @@ GroupedIngredientList = React.createClass {
           {_.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>}
         </div>
 
+    if children.length == 0
+      children.push <div className='empty-search-results' key='empty'>Nothing matched your search.</div>
+
     <div className='ingredient-selection-list'>
       {children}
     </div>
