@@ -60,19 +60,29 @@ IngredientStore = new class extends FluxStore
         .filter ({ ingredients }) -> ingredients.length > 0
         .value()
 
+UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
+UI_PERSISTABLE_FIELDS = [ 'useIngredients', 'openIngredientGroups' ]
+
 UiStore = new class extends FluxStore
   fields : ->
-    useIngredients       : false
-    openIngredientGroups : {}
+    return _.extend {
+      useIngredients       : false
+      openIngredientGroups : {}
+    }, JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? 'null')
 
   'toggle-use-ingredients' : ->
     @useIngredients = not @useIngredients
+    @_persist()
 
   'toggle-ingredient-group' : ({ group }) ->
     if @openIngredientGroups[group]?
       delete @openIngredientGroups[group]
     else
       @openIngredientGroups[group] = true
+    @_persist()
+
+  _persist : ->
+    localStorage[UI_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, UI_PERSISTABLE_FIELDS)
 
 FUZZY_MATCH = 2
 
