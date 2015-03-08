@@ -52,14 +52,17 @@ Header = React.createClass {
 
 IngredientGroupHeader = React.createClass {
   render : ->
+    text = @props.groupName
+    if @props.selectedCount > 0
+      text += " (#{@props.selectedCount})"
     <div className='ingredient-group-header' onClick={@_toggleGroup}>
-      <span>{@props.name}</span>
+      <span>{text}</span>
     </div>
 
   _toggleGroup : ->
     AppDispatcher.dispatch {
       type  : 'toggle-ingredient-group'
-      group : @props.name
+      group : @props.groupName
     }
 }
 
@@ -87,14 +90,15 @@ IngredientListItem = React.createClass {
 
 GroupedIngredientList = React.createClass {
   mixins : [
-    FluxMixin IngredientStore, 'groupedIngredients'
+    FluxMixin IngredientStore, 'groupedIngredients', 'selectedIngredientTags'
     FluxMixin UiStore, 'openIngredientGroups'
   ]
 
   render : ->
     children = []
     for { name, ingredients } in @state.groupedIngredients
-      children.push <IngredientGroupHeader name={name} key={'header-' + name}/>
+      selectedCount = _.filter(ingredients, (i) => @state.selectedIngredientTags[i.tag]?).length
+      children.push <IngredientGroupHeader groupName={name} selectedCount={selectedCount} key={'header-' + name}/>
       if @state.openIngredientGroups[name]
         children.push <div className='ingredient-section'>
           {_.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>}
