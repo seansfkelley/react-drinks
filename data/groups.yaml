@@ -1,60 +1,62 @@
+# Note that this is ordered how they will appear in the interface.
 ---
-  bitters:
-    - Mixers
-    - Bitters
-  brandy:
-    - Spirits
-    - Brandy
-  fruit:
-    - 'Fruits & Vegetables'
-    - Fruits
-  gin:
-    - Spirits
-    - Gin
-  herb:
-    - Other
-    - Herbs
-  liqueur-fruit:
-    - Liqueur
-    - Fruit
-  liqueur-herbal:
-    - Liqueur
-    - Herbal
-  liqueur-other:
-    - Liqueur
-    - Other
-  mixer-juice:
-    - Mixers
-    - Juice
-  mixer-soda:
-    - Mixers
-    - Soda
-  mixer-other:
-    - Mixers
-    - Other
-  other:
-    - Other
-  rum:
-    - Spirits
-    - Rum
-  spirit-other:
-    - Spirits
-    - Other
-  syrup:
-    - Mixers
-    - Syrups
-  tequila:
-    - Spirits
-    - Tequila
-  vegetable:
-    - 'Fruits & Vegetables'
-    - Vegetables
-  vodka:
-    - Spirits
-    - Vodka
-  whiskey:
-    - Spirits
-    - Whiskey
-  wine:
-    - Spirits
-    - Wine
+  -
+    type    : 'gin'
+    display : 'Gin'
+  -
+    type    : 'rum'
+    display : 'Rum'
+  -
+    type    : 'tequila'
+    display : 'Tequila'
+  -
+    type    : 'vodka'
+    display : 'Vodka'
+  -
+    type    : 'whiskey'
+    display : 'Whiskey'
+  -
+    type    : 'wine'
+    display : 'Wine'
+  -
+    type    : 'brandy'
+    display : 'Brandy'
+  -
+    type    : 'liqueur-fruit'
+    display : 'Fruit Liqueur'
+  -
+    type    : 'liqueur-herbal'
+    display : 'Herbal Liqueur'
+  -
+    type    : 'liqueur-other'
+    display : 'Other Liqueur'
+  -
+    type    : 'spirit-other'
+    display : 'Other Spirits'
+  -
+    type    : 'bitters'
+    display : 'Bitters'
+  -
+    type    : 'syrup'
+    display : 'Syrups'
+  -
+    type    : 'mixer-juice'
+    display : 'Juice'
+  -
+    type    : 'mixer-soda'
+    display : 'Soda'
+  -
+    type    : 'mixer-other'
+    display : 'Other Mixers'
+  -
+    type    : 'fruit'
+    display : 'Fruit'
+  -
+    type    : 'vegetable'
+    display : 'Vegetables'
+  -
+    type    : 'herb'
+    display : 'Herbs'
+  -
+    type    : 'other'
+    display : 'Other'

@@ -52,12 +52,11 @@ ALPHABETICAL = _.sortBy INGREDIENTS, (i) -> i.display.toLowerCase()
 GROUPED = _.chain ALPHABETICAL
   .groupBy 'group'
   .map (ingredients, groupTag) ->
-    name = GROUPS[groupTag].join ' > '
     return {
-      name
+      name : _.findWhere(GROUPS, { type : groupTag }).display
       ingredients
     }
-  .sortBy 'name'
+  .sortBy ({ name }) -> _.findIndex GROUPS, { display : name }
   .value()
 
 module.exports = {
