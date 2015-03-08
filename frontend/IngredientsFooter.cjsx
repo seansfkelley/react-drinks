@@ -4,6 +4,7 @@ FluxMixin     = require './FluxMixin'
 AppDispatcher = require './AppDispatcher'
 { UiStore }   = require './stores'
 
+ShoppingList            = require './ShoppingList'
 IngredientSelectionView = require './IngredientSelectionView'
 
 IngredientsFooter = React.createClass {
@@ -19,7 +20,7 @@ IngredientsFooter = React.createClass {
     <div className='ingredients-footer'>
       <i className={'fa float-left ' + iconClass} onClick={@_toggleUseIngredients}/>
       <span className='footer-title' onClick={@_openIngredientPanel}>Ingredients</span>
-      <i className='fa fa-shopping-cart float-right'/>
+      <i className='fa fa-shopping-cart float-right' onClick={@_openShoppingList}/>
     </div>
 
   _toggleUseIngredients : ->
@@ -31,6 +32,12 @@ IngredientsFooter = React.createClass {
     AppDispatcher.dispatch {
       type      : 'show-flyup'
       component : <IngredientSelectionView/>
+    }
+
+  _openShoppingList : ->
+    AppDispatcher.dispatch {
+      type      : 'show-flyup'
+      component : <ShoppingList/>
     }
 }
 

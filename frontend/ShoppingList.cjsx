@@ -12,6 +12,7 @@ SearchBar         = require './SearchBar'
 RecipeView        = require './RecipeView'
 StickyHeaderMixin = require './StickyHeaderMixin'
 
+# TODO: Factor this out so we can share it between recipes and ingredients.
 Header = React.createClass {
   mixins : [
     FluxMixin UiStore, 'useIngredients'
@@ -23,14 +24,9 @@ Header = React.createClass {
     }
 
   render : ->
-    if @state.useIngredients
-      title = 'Mixable Drinks'
-    else
-      title = 'All Drinks'
-
     <div className='recipe-header'>
-      <i className='fa fa-list-ul float-left' onClick={-> console.log 'list click'}/>
-      <span className='header-title'>{title}</span>
+      <i className='fa fa-times-circle float-left' onClick={@_hideShoppingList}/>
+      <span className='header-title'>Shopping List</span>
       <i className='fa fa-search float-right' onClick={@_toggleSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
@@ -47,6 +43,11 @@ Header = React.createClass {
     else
       @refs.searchBar.clear()
 
+  _hideShoppingList : ->
+    AppDispatcher.dispatch {
+      type : 'hide-flyup'
+    }
+
   # In the future, this should pop up a loader and then throttle the number of filters performed.
   _setSearchTerm : (searchTerm) ->
     AppDispatcher.dispatch {
@@ -55,9 +56,9 @@ Header = React.createClass {
     }
 }
 
-RecipeListItem = React.createClass {
+IncompleteRecipeListItem = React.createClass {
   render : ->
-    <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
+    <div className='incomplete-recipe-list-item list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipe.name}</div>
     </div>
 
@@ -68,22 +69,7 @@ RecipeListItem = React.createClass {
     }
 }
 
-AlphabeticalRecipeList = React.createClass {
-  mixins : [
-    FluxMixin RecipeStore, 'searchedAlphabeticalRecipes'
-    StickyHeaderMixin
-  ]
-
-  render : ->
-    return @generateList {
-      data        : @state.searchedAlphabeticalRecipes
-      getTitle    : (recipe) -> recipe.name[0].toUpperCase()
-      createChild : (recipe) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
-      classNames  : 'recipe-list alphabetical'
-    }
-}
-
-GroupedRecipeList = React.createClass {
+ShoppingList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
     StickyHeaderMixin
@@ -91,6 +77,7 @@ GroupedRecipeList = React.createClass {
 
   render : ->
     data = _.chain @state.searchedGroupedMixableRecipes
+      .filter ({ missing }) -> missing > 0
       .map ({ name, recipes }) ->
         _.map recipes, (r) -> [ name, r ]
       .flatten()
@@ -99,31 +86,21 @@ GroupedRecipeList = React.createClass {
     return @generateList {
       data        : data
       getTitle    : ([ name, recipe ]) -> name
-      createChild : ([ name, recipe ]) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
-      classNames  : 'recipe-list grouped'
+      createChild : ([ name, recipe ]) -> <IncompleteRecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+      classNames  : 'shopping-list grouped'
     }
 }
 
-RecipeListView = React.createClass {
-  mixins : [
-    FluxMixin UiStore, 'useIngredients'
-  ]
-
+ShoppingListView = React.createClass {
   render : ->
-    # There's no way rewrapping these elements in divs that give them the fixed classes is best practices.
-    if @state.useIngredients
-      list = <GroupedRecipeList/>
-    else
-      list = <AlphabeticalRecipeList/>
-
-    <div className='recipe-list-view'>
+    <div className='shopping-list-view'>
       <div className='fixed-header-bar'>
         <Header/>
       </div>
       <div className='fixed-content-pane'>
-        {list}
+        <ShoppingList/>
       </div>
     </div>
 }
 
-module.exports = RecipeListView
+module.exports = ShoppingListView

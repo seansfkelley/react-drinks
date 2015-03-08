@@ -126,13 +126,14 @@ RecipeStore = new class extends FluxStore
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     selectedTags = _.keys IngredientStore.selectedIngredientTags
     mixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, FUZZY_MATCH
-    @groupedMixableRecipes = _.map mixableRecipes, (recipes, missingCount) ->
-      name = switch +missingCount
+    @groupedMixableRecipes = _.map mixableRecipes, (recipes, missing) ->
+      missing = +missing
+      name = switch missing
         when 0 then 'Mixable Drinks'
         when 1 then 'With 1 More Ingredient'
-        else "With #{missingCount} More Ingredients"
+        else "With #{missing} More Ingredients"
       recipes = _.sortBy recipes, 'name'
-      return { name, recipes }
+      return { name, recipes, missing }
 
   _updateSearchedRecipes : ->
     if @searchTerm == ''
