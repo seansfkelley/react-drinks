@@ -9,4 +9,3 @@ todo
 
 bugs
 - since modals reuse the same dom element, doing one and then the other really fast (i.e. before the 1s cleanup) makes it so they don't come in with a transition
-- something on the ingredients page isn't assigning a key and is causing problems

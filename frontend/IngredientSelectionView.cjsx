@@ -100,7 +100,7 @@ GroupedIngredientList = React.createClass {
       selectedCount = _.filter(ingredients, (i) => @state.selectedIngredientTags[i.tag]?).length
       children.push <IngredientGroupHeader groupName={name} selectedCount={selectedCount} key={'header-' + name}/>
       if @state.openIngredientGroups[name]
-        children.push <div className='ingredient-section'>
+        children.push <div className='ingredient-section' key={'section-' + name}>
           {_.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>}
         </div>
 
