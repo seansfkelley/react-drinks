@@ -27,6 +27,11 @@ StickyHeaderMixin = {
       .flatten()
       .value()
 
+    if childNodes.length == 0
+      childNodes = [
+        <div className='empty-list-text' key='empty'>Nothing to see here.</div>
+      ]
+
     <div className='sticky-header-container' onScroll={@_stickHeaderOnScroll}>
       {if @state.stickyHeaderTitle?
         <div className='sticky-header-wrapper' style={{ marginTop : @state.stickyHeaderOffset }}>

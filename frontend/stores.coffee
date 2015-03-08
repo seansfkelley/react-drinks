@@ -143,9 +143,10 @@ RecipeStore = new class extends FluxStore
       filterBySearchTerm = (r) => r.name.toLowerCase().indexOf(@searchTerm) != -1
       @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, filterBySearchTerm
       @searchedGroupedMixableRecipes = _.chain @groupedMixableRecipes
-        .map ({ name, recipes }) ->
-          recipes = _.filter recipes, filterBySearchTerm
-          return { name, recipes }
+        .map (group) ->
+          return _.defaults {
+            recipes : _.filter group.recipes, filterBySearchTerm
+          }, group
         .filter ({ recipes }) -> recipes.length > 0
         .value()
 
