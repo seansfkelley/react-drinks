@@ -6,7 +6,7 @@ React = require 'react'
 FluxMixin     = require './FluxMixin'
 AppDispatcher = require './AppDispatcher'
 
-{ IngredientStore } = require './stores'
+{ IngredientStore, UiStore } = require './stores'
 
 SearchBar         = require './SearchBar'
 StickyHeaderMixin = require './StickyHeaderMixin'
@@ -51,13 +51,26 @@ Header = React.createClass {
     }
 }
 
+IngredientGroupHeader = React.createClass {
+  render : ->
+    <div className='ingredient-group-header' onClick={@_toggleGroup}>
+      <span>{@props.name}</span>
+    </div>
+
+  _toggleGroup : ->
+    AppDispatcher.dispatch {
+      type  : 'toggle-ingredient-group'
+      group : @props.name
+    }
+}
+
 IngredientListItem = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'selectedIngredientTags'
   ]
 
   render : ->
-    className = 'ingredient-list-item list-item'
+    className = 'ingredient-list-item'
     if @state.selectedIngredientTags[@props.ingredient.tag]
       className += ' is-selected'
 
@@ -76,22 +89,21 @@ IngredientListItem = React.createClass {
 GroupedIngredientList = React.createClass {
   mixins : [
     FluxMixin IngredientStore, 'groupedIngredients'
-    StickyHeaderMixin
+    FluxMixin UiStore, 'openIngredientGroups'
   ]
 
   render : ->
-    data = _.chain @state.groupedIngredients
-      .map ({ name, ingredients }) ->
-        _.map ingredients, (i) -> [ name, i ]
-      .flatten()
-      .value()
+    children = []
+    for { name, ingredients } in @state.groupedIngredients
+      children.push <IngredientGroupHeader name={name} key={'header-' + name}/>
+      if @state.openIngredientGroups[name]
+        children.push <div className='ingredient-section'>
+          {_.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>}
+        </div>
 
-    return @generateList {
-      data        : data
-      getTitle    : ([ name, ingredient ]) -> name
-      createChild : ([ name, ingredient ]) -> <IngredientListItem ingredient={ingredient} key={ingredient.tag}/>
-      classNames  : 'ingredient-list grouped'
-    }
+    <div className='ingredient-selection-list'>
+      {children}
+    </div>
 }
 
 IngredientSelectionView = React.createClass {

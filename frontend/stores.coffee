@@ -38,14 +38,21 @@ IngredientStore = new class extends FluxStore
       @selectedIngredientTags[tag] = true
     localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
 
-FUZZY_MATCH = 2
-
 UiStore = new class extends FluxStore
   fields : ->
-    useIngredients : false
+    useIngredients       : false
+    openIngredientGroups : {}
 
   'toggle-use-ingredients' : ->
     @useIngredients = not @useIngredients
+
+  'toggle-ingredient-group' : ({ group }) ->
+    if @openIngredientGroups[group]?
+      delete @openIngredientGroups[group]
+    else
+      @openIngredientGroups[group] = true
+
+FUZZY_MATCH = 2
 
 RecipeStore = new class extends FluxStore
   fields : ->
@@ -82,7 +89,8 @@ RecipeStore = new class extends FluxStore
 
   _updateMixableRecipes : ->
     selectedTags = _.keys IngredientStore.selectedIngredientTags
-    @groupedMixableRecipes = _.map @_recipeSearch.computeMixableRecipes(selectedTags, FUZZY_MATCH), (recipes, missingCount) ->
+    mixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, FUZZY_MATCH
+    @groupedMixableRecipes = _.map mixableRecipes, (recipes, missingCount) ->
       name = switch +missingCount
         when 0 then 'Mixable Drinks'
         when 1 then 'With 1 More Ingredient'
