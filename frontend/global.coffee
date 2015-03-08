@@ -4,6 +4,8 @@ if window.navigator.standalone
 require('react').initializeTouchEvents true
 require('react-tap-event-plugin')()
 
+require('bluebird').longStackTraces()
+
 window.getJquery = ->
   jq = document.createElement 'script'
   jq.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js'
