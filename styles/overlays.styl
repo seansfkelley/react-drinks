@@ -1,19 +1,15 @@
-#overlay-root
-  // This is an awkward interaction between transitions and the js cleanup steps that happen when
-  // these views are hidden: we clean them up after 1 second to allow the CSS transitions to make
-  // it happen in a pretty way, but while it's invisible it's still in the way. So we have to do
-  // this pointer-events thing so interactions work.
-  pointer-events none
-
-#overlay-root.visible
-  pointer-events auto
-
 body[standalone] #overlay-root
   .modal, .flyup
     top 20px
 
 #overlay-root
   .modal, .flyup
+    // This is an awkward interaction between transitions and the js cleanup steps that happen when
+    // these views are hidden: we clean them up after 1 second to allow the CSS transitions to make
+    // it happen in a pretty way, but while it's invisible it's still in the way. So we have to do
+    // this pointer-events thing so interactions work.
+    pointer-events none
+
     position absolute
 
     top 0
@@ -29,15 +25,16 @@ body[standalone] #overlay-root
     opacity 0
     transition opacity 0.33s
 
+    &.visible
+      pointer-events auto
+      opacity 1
+      transition opacity 0.33s
+
   .flyup
     transform translate(0, 100%)
     transition transform 0.33s
 
-  &.visible
-    .modal
-      opacity 1
-      transition opacity 0.33s
-
-    .flyup
+    &.visible
+      pointer-events auto
       transform none
       transition transform 0.33s

@@ -13,25 +13,27 @@ OverlayView = React.createClass {
 }
 
 MODAL_TYPES = [ 'modal', 'flyup' ]
-DOM_ELEMENT = document.querySelector '#overlay-root'
+ROOT_OVERLAY_ELEMENT = document.querySelector '#overlay-root'
 
 attachOverlayViews = ->
-  shouldHide = false
-
+  # TODO (maybe): When showing a new thing, add a class to pop it over everything else.
   _.each MODAL_TYPES, (type) ->
+    shouldHide = false
+    domElement = ROOT_OVERLAY_ELEMENT.querySelector '.' + type
+
     show = (component) ->
       shouldHide = false
-      React.render <OverlayView className={type}>{component}</OverlayView>, DOM_ELEMENT
+      React.render component, domElement
       _.defer ->
-        DOM_ELEMENT.classList.add 'visible'
+        domElement.classList.add 'visible'
 
     hide = ->
-      DOM_ELEMENT.classList.remove 'visible'
+      domElement.classList.remove 'visible'
       # TODO: Fix this implementation; shouldHide is a hack.
       shouldHide = true
       _.delay (->
         if shouldHide
-          React.unmountComponentAtNode DOM_ELEMENT
+          React.unmountComponentAtNode domElement
       ), 1000
 
     AppDispatcher.register (payload) ->
