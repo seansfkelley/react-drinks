@@ -23,13 +23,14 @@ INGREDIENTS_KEY = 'drinks-app-ingredients'
 
 IngredientStore = new class extends FluxStore
   fields : ->
-    alphabeticalIngredients : []
-    groupedIngredients      : []
-    selectedIngredientTags  : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
+    searchTerm                 : ''
+    groupedIngredients         : []
+    searchedGroupedIngredients : []
+    selectedIngredientTags     : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
 
-  'set-ingredients' : ({ alphabetical, grouped }) ->
-    @alphabeticalIngredients = alphabetical
-    @groupedIngredients      = grouped
+  'set-ingredients' : ({ groupedIngredients }) ->
+    @groupedIngredients = groupedIngredients
+    @_updateSearchedIngredients()
 
   'toggle-ingredient' : ({ tag }) ->
     if @selectedIngredientTags[tag]?
@@ -37,6 +38,27 @@ IngredientStore = new class extends FluxStore
     else
       @selectedIngredientTags[tag] = true
     localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
+
+  'search-ingredients' : ({ searchTerm }) ->
+    @searchTerm = searchTerm.toLowerCase()
+    @_updateSearchedIngredients()
+
+  _updateSearchedIngredients : ->
+    if @searchTerm == ''
+      @searchedGroupedIngredients = @groupedIngredients
+    else
+      filterBySearchTerm = (i) =>
+        for term in i.searchable
+          if term.indexOf(@searchTerm) != -1
+            return true
+        return false
+
+      @searchedGroupedIngredients = _.chain @groupedIngredients
+        .map ({ name, ingredients }) ->
+          ingredients = _.filter ingredients, filterBySearchTerm
+          return { name, ingredients }
+        .filter ({ ingredients }) -> ingredients.length > 0
+        .value()
 
 UiStore = new class extends FluxStore
   fields : ->
@@ -63,7 +85,6 @@ RecipeStore = new class extends FluxStore
     searchedGroupedMixableRecipes : []
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
-    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     @_createRecipeSearch()
     @_updateDerivedRecipeLists()
 
@@ -73,7 +94,6 @@ RecipeStore = new class extends FluxStore
     @_updateDerivedRecipeLists()
 
   'toggle-ingredient' : ->
-    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     @_updateDerivedRecipeLists()
 
   'search-recipes' : ({ searchTerm }) ->
@@ -81,13 +101,19 @@ RecipeStore = new class extends FluxStore
     @_updateSearchedRecipes()
 
   _createRecipeSearch : ->
-    @_recipeSearch = new RecipeSearch IngredientStore.alphabeticalIngredients, @alphabeticalRecipes
+    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
+    ingredients = _.chain IngredientStore.groupedIngredients
+      .pluck 'ingredients'
+      .flatten()
+      .value()
+    @_recipeSearch = new RecipeSearch ingredients, @alphabeticalRecipes
 
   _updateDerivedRecipeLists : ->
     @_updateMixableRecipes()
     @_updateSearchedRecipes()
 
   _updateMixableRecipes : ->
+    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     selectedTags = _.keys IngredientStore.selectedIngredientTags
     mixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, FUZZY_MATCH
     @groupedMixableRecipes = _.map mixableRecipes, (recipes, missingCount) ->
@@ -114,11 +140,10 @@ RecipeStore = new class extends FluxStore
 
 
 Promise.resolve $.get('/ingredients')
-.then ({ alphabetical, grouped }) =>
+.then (groupedIngredients) =>
   AppDispatcher.dispatch {
     type : 'set-ingredients'
-    alphabetical
-    grouped
+    groupedIngredients
   }
 
 Promise.resolve $.get('/recipes')

@@ -46,10 +46,8 @@ for i in INGREDIENTS
   # if i.generic and not _.contains i.searchable, i.generic
   #   i.searchable.push i.generic
 
-
-ALPHABETICAL = _.sortBy INGREDIENTS, (i) -> i.display.toLowerCase()
-
-GROUPED = _.chain ALPHABETICAL
+GROUPED = _.chain INGREDIENTS
+  .sortBy (i) -> i.display.toLowerCase()
   .groupBy 'group'
   .map (ingredients, groupTag) ->
     return {
@@ -62,8 +60,5 @@ GROUPED = _.chain ALPHABETICAL
 module.exports = {
   method  : 'get'
   route   : '/ingredients'
-  handler : (req, res) -> res.json {
-    alphabetical : ALPHABETICAL
-    grouped      : GROUPED
-  }
+  handler : (req, res) -> res.json GROUPED
 }

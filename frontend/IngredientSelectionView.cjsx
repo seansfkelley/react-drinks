@@ -90,13 +90,13 @@ IngredientListItem = React.createClass {
 
 GroupedIngredientList = React.createClass {
   mixins : [
-    FluxMixin IngredientStore, 'groupedIngredients', 'selectedIngredientTags'
+    FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
     FluxMixin UiStore, 'openIngredientGroups'
   ]
 
   render : ->
     children = []
-    for { name, ingredients } in @state.groupedIngredients
+    for { name, ingredients } in @state.searchedGroupedIngredients
       selectedCount = _.filter(ingredients, (i) => @state.selectedIngredientTags[i.tag]?).length
       children.push <IngredientGroupHeader groupName={name} selectedCount={selectedCount} key={'header-' + name}/>
       if @state.openIngredientGroups[name]
