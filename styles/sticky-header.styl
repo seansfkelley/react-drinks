@@ -1,0 +1,30 @@
+@require 'sizes'
+@require 'colors'
+
+.sticky-header-container
+  position relative
+
+  .sticky-header-wrapper
+    position absolute
+    top 0
+    width 100%
+    z-index 1
+
+  .list-header
+    font-size 16px
+    background-color grey1
+    text-transform uppercase
+
+    .text
+      padding 0 6px
+
+  .list-item
+    font-size 16px
+    line-height list-item-size
+
+    padding-left 6px
+
+    background-color grey0
+
+    &:not(:first-child)
+      border-top 1px solid darken(grey0, 5%)

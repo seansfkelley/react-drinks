@@ -8,8 +8,7 @@ AppDispatcher = require './AppDispatcher'
 
 { IngredientStore, UiStore } = require './stores'
 
-SearchBar         = require './SearchBar'
-StickyHeaderMixin = require './StickyHeaderMixin'
+SearchBar = require './SearchBar'
 
 # TODO: Factor this out so we can share it between recipes and ingredients.
 Header = React.createClass {
