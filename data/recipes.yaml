@@ -952,8 +952,8 @@
     ingredients:
       -
         tag: "benedictine"
-        displayAmount: "1"
-        displayUnit: "2 tsp"
+        displayAmount: "1/2"
+        displayUnit: "tsp"
         displayIngredient: "Bénédictine"
       -
         tag: "rye whiskey"
@@ -1069,6 +1069,7 @@
       -
         tag: "simple syrup"
         displayAmount: "1/2"
+        displayUnit: "oz"
         displayIngredient: "lemon basil simple syrup"
     instructions: |
       In a Collins glass, muddle the lemon zest and basil.
