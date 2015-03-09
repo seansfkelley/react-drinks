@@ -19,6 +19,7 @@ bugs
   - immediately (within 1s), grab the ingredients button and drag it up
   - oops, you can see the shopping list for a split second before it's removed (this might only happen on iOS)
 - rotating the app sideways or dragging the wrong thing at the wrong time can wreck the iOS display in Safari (do I care?)
+- when showing the page for the first time you get a flash of "nothing to see here" -- perhaps some better zero state while things load?
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"
@@ -29,3 +30,4 @@ design ideas
 - a note about glassware (and garnish?) would be a neat addition
 - some kind of reset for ingredients would be nice
 - buffer space on the bottom of the exandable list for ingredients might make for a nicer expanding-things-near-the-bottom experience
+- designing around the sticky header might be nice -- it's crazy inefficient and could potentially drain the battery on a phone (and look dumb in the process)
