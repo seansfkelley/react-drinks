@@ -59,7 +59,9 @@ Header = React.createClass {
 IncompleteRecipeListItem = React.createClass {
   render : ->
     missingIngredients = _.map @props.recipe.missing, (m) ->
-      return <div className='missing-ingredient' key={m.displayIngredient}>{m.displayMeasure ? ''} {m.displayIngredient}</div>
+      return <div className='missing-ingredient' key={m.displayIngredient}>
+        {m.displayAmount ? ''} {m.displayUnit ? ''} {m.displayIngredient}
+      </div>
     <div className='incomplete-recipe-list-item list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipe.name}</div>
       {missingIngredients}

@@ -17,7 +17,8 @@ RECIPE_SCHEMA = {
       required   : true
       properties :
         tag               : REQUIRED_STRING
-        displayMeasure    : REQUIRED_STRING
+        displayAmount     : REQUIRED_STRING
+        displayUnit       : REQUIRED_STRING
         displayIngredient : REQUIRED_STRING
     # A string of one or more lines explaining how to make the drink.
     instructions : REQUIRED_STRING

@@ -6,6 +6,17 @@ React = require 'react'
 
 AppDispatcher = require './AppDispatcher'
 
+HTML_FRACTIONS =
+  '1/4' : '\u00bc'
+  '1/2' : '\u00bd'
+  '3/4' : '\u00be'
+  '1/8' : '\u215b'
+  '3/8' : '\u215c'
+  '5/8' : '\u215d'
+  '7/8' : '\u215e'
+  '1/3' : '\u2153'
+  '2/3' : '\u2154'
+
 SectionHeader = React.createClass {
   render : ->
     <div className='recipe-section-header'>{@props.text}</div>
@@ -13,8 +24,17 @@ SectionHeader = React.createClass {
 
 IngredientView = React.createClass {
   render : ->
+    amount = @props.measuredIngredient.displayAmount ? ''
+    if HTML_FRACTIONS[amount]
+      amount = HTML_FRACTIONS[amount]
+    unit = @props.measuredIngredient.displayUnit ? ''
+    # The space is necessary to space out the spans from each other. Newlines are insufficient.
     <div className='measured-ingredient'>
-      <span className='measure'>{@props.measuredIngredient.displayMeasure}</span>
+      <span className='measure'>
+        <span className='amount'>{amount}</span>
+        {' '}
+        <span className='unit'>{unit}</span>
+      </span>
       <span className='ingredient'>{@props.measuredIngredient.displayIngredient}</span>
     </div>
 }
