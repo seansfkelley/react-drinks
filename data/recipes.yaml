@@ -595,7 +595,7 @@
         tag: "bourbon"
         displayAmount: "2"
         displayUnit: "oz"
-        displayIngredient: "Bourbon"
+        displayIngredient: "bourbon"
       -
         tag: "coffee liqueur"
         displayAmount: "1/2"

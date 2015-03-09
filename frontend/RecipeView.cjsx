@@ -52,8 +52,8 @@ HUMAN_READABLE_CATEGORY_TITLE =
 
 RecipeView = React.createClass {
   render : ->
-    # TODO: If nothing is missing or subbed, don't use the have-missing-subbed terminology?
-    if @props.recipe.missing? # TODO: We're reusing this view for both types of recipes; seems bad.
+    # TODO: We're reusing this view for both types of recipes; seems bad.
+    if @props.recipe.missing? and (@props.recipe.missing.length > 0 or @props.recipe.substitute.length > 0)
       ingredientNodes = _.chain IngredientCategory
         .invert()
         .mapValues (_, key) => @props.recipe[key]
