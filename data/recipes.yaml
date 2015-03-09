@@ -218,7 +218,10 @@
         displayAmount: "1/2"
         displayIngredient: "lime, cut into quarters"
       -
-        displayIngredient: "sprig of mint"
+        tag: "mint"
+        displayAmount: "1"
+        displayUnit: "sprig"
+        displayIngredient: "mint"
     instructions: |
       Muddle the lime, simple syrup, and mint together in a shaker.
       Add ice and the alcohol and shake well.

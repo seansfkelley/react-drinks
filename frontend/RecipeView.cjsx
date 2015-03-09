@@ -17,6 +17,8 @@ HTML_FRACTIONS =
   '1/3' : '\u2153'
   '2/3' : '\u2154'
 
+ALL_FRACTION_REGEX = new RegExp _.keys(HTML_FRACTIONS).join('|'), 'g'
+
 SectionHeader = React.createClass {
   render : ->
     <div className='recipe-section-header'>{@props.text}</div>
@@ -24,9 +26,8 @@ SectionHeader = React.createClass {
 
 IngredientView = React.createClass {
   render : ->
-    amount = @props.measuredIngredient.displayAmount ? ''
-    if HTML_FRACTIONS[amount]
-      amount = HTML_FRACTIONS[amount]
+    amount = (@props.measuredIngredient.displayAmount ? '')
+      .replace(ALL_FRACTION_REGEX, (match) -> HTML_FRACTIONS[match])
     unit = @props.measuredIngredient.displayUnit ? ''
     # The space is necessary to space out the spans from each other. Newlines are insufficient.
     <div className='measured-ingredient'>
