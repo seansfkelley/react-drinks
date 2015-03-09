@@ -7,23 +7,6 @@ _countSubset = (small, large) ->
       missed++
   return missed
 
-_generateSearchResult = (recipe, availableTags) ->
-  missing    = []
-  available  = []
-  substitute = []
-
-  for ingredient in recipe.ingredients
-    if not ingredient.tag? # Things like 'water' are untagged.
-      available.push ingredient
-    else if ingredient.tag in availableTags
-      available.push ingredient
-    else if ingredient.genericTag in availableTags
-      substitute.push ingredient
-    else
-      missing.push ingredient
-
-  return _.defaults { missing, available, substitute }, recipe
-
 class RecipeSearch
   constructor : (ingredients, @_recipes) ->
     @_ingredientForTag = {}
@@ -58,6 +41,23 @@ class RecipeSearch
       .uniq()
       .value()
 
+  _generateSearchResult : (recipe, availableTags) ->
+    missing    = []
+    available  = []
+    substitute = []
+
+    for ingredient in recipe.ingredients
+      if not ingredient.tag? # Things like 'water' are untagged.
+        available.push ingredient
+      else if ingredient.tag in availableTags
+        available.push ingredient
+      else if @_ingredientForTag[ingredient.tag]?.generic in availableTags
+        substitute.push ingredient
+      else
+        missing.push ingredient
+
+    return _.defaults { missing, available, substitute }, recipe
+
   computeMixableRecipes : (ingredientTags, fuzzyMatchThreshold = 0) ->
     exactlyAvailableIngredients  = _.map ingredientTags, (tag) => @_ingredientForTag[tag]
     allAvailableTagsWithGenerics = _.pluck @_includeAllGenerics(exactlyAvailableIngredients), 'tag'
@@ -67,7 +67,7 @@ class RecipeSearch
       .map (r) =>
         mostGenericRecipeTags = @_toMostGenericTags _.filter(r.ingredients, 'tag')
         if _countSubset(mostGenericRecipeTags, mostGenericAvailableTags) <= fuzzyMatchThreshold
-          return _generateSearchResult r, allAvailableTagsWithGenerics
+          return @_generateSearchResult r, allAvailableTagsWithGenerics
       .compact()
       .groupBy (result) -> result.missing.length
       .value()
