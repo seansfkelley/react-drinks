@@ -15,11 +15,15 @@ RECIPE_SCHEMA = {
     ingredients :
       type       : 'array'
       required   : true
-      properties :
-        tag               : REQUIRED_STRING
-        displayAmount     : REQUIRED_STRING
-        displayUnit       : REQUIRED_STRING
-        displayIngredient : REQUIRED_STRING
+      items      :
+        properties :
+          tag               : OPTIONAL_STRING
+          displayAmount     :
+            type     : 'string'
+            required : false
+            pattern  : /(\d+([- \/]\d+)?)+/
+          displayUnit       : OPTIONAL_STRING
+          displayIngredient : REQUIRED_STRING
     # A string of one or more lines explaining how to make the drink.
     instructions : REQUIRED_STRING
     # A string of one or more lines with possibly interesting suggestions or historical notes.
