@@ -244,8 +244,8 @@
         displayIngredient: "vodka"
       -
         tag: "lillet"
-        displayAmount: "1"
-        displayUnit: "2 part"
+        displayAmount: "1/2"
+        displayUnit: "part"
         displayIngredient: "Lillet"
       -
         displayIngredient: "thin slice of lemon peel"
