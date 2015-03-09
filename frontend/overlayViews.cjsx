@@ -5,25 +5,18 @@ React = require 'react'
 
 AppDispatcher = require './AppDispatcher'
 
-OverlayView = React.createClass {
-  render : ->
-    <div className={@props.className}>
-      {@props.children}
-    </div>
-}
-
 MODAL_TYPES = [ 'modal', 'flyup' ]
-ROOT_OVERLAY_ELEMENT = document.querySelector '#overlay-root'
 
 attachOverlayViews = ->
+  # Note that this implementation is very fragile to the ordering of the container elements in the DOM.
   # TODO (maybe): When showing a new thing, add a class to pop it over everything else.
   _.each MODAL_TYPES, (type) ->
     shouldHide = false
-    domElement = ROOT_OVERLAY_ELEMENT.querySelector '.' + type
+    domElement = document.querySelector "##{type}-root"
 
     show = (component) ->
       shouldHide = false
-      React.render component, domElement
+      React.render <div className='content'>{component}</div>, domElement
       _.defer ->
         domElement.classList.add 'visible'
 
