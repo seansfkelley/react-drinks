@@ -56,10 +56,13 @@
   .recipe-description > :nth-child(odd)
     background-color grey1
 
-  // TODO: It'd be nice if we could make the last row fill up all remaining space if appropriate.
-  // Not sure how to do this yet, so for now just tack on the border to everything.
-  .recipe-description > *
-    border-bottom 1px solid grey2
+  .recipe-description
+    // Make iPhone overscroll look less dumb.
+    > :first-child
+      border-top 1px solid grey2
+    // Ideally we could fill any remaining space with the last block's background color, but this will do.
+    > :not(:last-child), > :last-child:nth-child(odd)
+      border-bottom 1px solid grey2
 
   .recipe-ingredients, .recipe-instructions, .recipe-notes
     padding 0 20px 20px
