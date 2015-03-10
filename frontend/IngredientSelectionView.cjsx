@@ -76,7 +76,7 @@ IngredientListItem = React.createClass {
     if @state.selectedIngredientTags[@props.ingredient.tag]
       className += ' is-selected'
 
-    <div className={className} onTouchTap={@_toggleIngredient}>
+    <div className={className} onClick={@_toggleIngredient}>
       <div className='name'>{@props.ingredient.display}</div>
       <i className='fa fa-check-circle'/>
     </div>

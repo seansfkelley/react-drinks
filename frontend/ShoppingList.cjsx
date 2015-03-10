@@ -67,7 +67,7 @@ IncompleteRecipeListItem = React.createClass {
         {' '}
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
-    <div className='incomplete-recipe-list-item list-item' onTouchTap={@_openRecipe}>
+    <div className='incomplete-recipe-list-item list-item' onClick={@_openRecipe}>
       <div className='name'>{@props.recipe.name}</div>
       {missingIngredients}
     </div>
