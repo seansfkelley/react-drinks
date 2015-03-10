@@ -16,5 +16,6 @@ for { method, route, handler } in routes
   app[method ? 'get'](route, handler)
 
 # Go.
-app.listen 80
-console.log 'listening on localhost:80'
+port = process.env.PORT ? 8080
+app.listen port
+console.log "listening on localhost:#{port}"
