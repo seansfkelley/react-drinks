@@ -6,9 +6,10 @@ features
 todo
 - clean up styling (more variables for sizes, things are in the wrong place, things are duplicated)
 - do animations for overlays and ingredient sections when they're created destroyed (ReactCSSTransitionGroup?)
-- turn of autocorrect/autofill for search bars
 - make it easier to open all the groups of ingredients
 - on-scroll behavior is hilariously, wildly inefficient: there has got to be a better way to do this or at least to design around it
+- deployment scripts
+  - and pick something better than nohup to run the exectuable
 
 bugs
 - gotta use ontouchtap cause the 300ms delay is killing me

@@ -10,8 +10,9 @@ SearchBar = React.createClass {
 
   render : ->
     <div className='search-bar'>
-      <input className='search-input' type='text' ref='input' onChange={@_onChange}/>
-      <i className='fa fa-times-circle' onClick={@clearAndFocus}/>
+      <input className='search-input' type='text' ref='input' onChange={@_onChange}
+          autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false'/>
+      <i className='fa fa-times-circle' onClick={@clearAndFocus} data-autoblur='false'/>
     </div>
 
   clearAndFocus : ->
