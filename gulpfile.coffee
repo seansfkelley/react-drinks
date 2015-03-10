@@ -12,7 +12,7 @@ source       = require 'vinyl-source-stream'
 autoprefixer = require 'autoprefixer-core'
 
 paths =
-  root    : [ './frontend/app.cjsx', './frontend/global.coffee' ]
+  root    : [ './frontend/init.cjsx' ]
   scripts : [ 'frontend/**/*.coffee', 'frontend/**/*.cjsx' ]
   styles  : [ 'styles/**/*.styl', 'styles/**/*.css' ]
 

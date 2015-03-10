@@ -2,6 +2,7 @@ features
 - react router for permalinking to recipes?
 - adding recipes
 - swiping between recipes
+- bookmarking instead of lists
 
 todo
 - clean up styling (more variables for sizes, things are in the wrong place, things are duplicated)
@@ -24,7 +25,6 @@ design ideas
   - an inverted shopping cart -- for each ingredient, what are the drinks you could make if you got { just it, other stuff too }?
 - "What drinks can I make with {X} in them?"
   - some way to search withiin mixables/all for an ingredient as well as a name
-- not sure about the value of recipe lists, though bookmarked drinks would be a good idea
 - a note about glassware (and garnish?) would be a neat addition
 - some kind of reset for ingredients would be nice
 - buffer space on the bottom of the exandable list for ingredients might make for a nicer expanding-things-near-the-bottom experience
