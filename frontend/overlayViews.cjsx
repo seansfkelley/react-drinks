@@ -10,13 +10,19 @@ MODAL_TYPES = [ 'modal', 'flyup' ]
 attachOverlayViews = ->
   # Note that this implementation is very fragile to the ordering of the container elements in the DOM.
   # TODO (maybe): When showing a new thing, add a class to pop it over everything else.
+  allDomElements = []
+
   _.each MODAL_TYPES, (type) ->
     shouldHide = false
     domElement = document.querySelector "##{type}-root"
+    allDomElements.push domElement
 
     show = (component) ->
       shouldHide = false
       React.render <div className='content'>{component}</div>, domElement
+      for e in allDomElements
+        e.classList.remove 'topmost'
+      domElement.classList.add 'topmost'
       _.defer ->
         domElement.classList.add 'visible'
 
@@ -27,7 +33,9 @@ attachOverlayViews = ->
       _.delay (->
         if shouldHide
           React.unmountComponentAtNode domElement
-      ), 1000
+      # This should match up with the duration of animations in the syling to avoid situations in which
+      # the panel exists but is off screen before/after animations.
+      ), 333
 
     AppDispatcher.register (payload) ->
       switch payload.type
