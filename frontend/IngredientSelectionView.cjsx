@@ -19,9 +19,9 @@ Header = React.createClass {
 
   render : ->
     <div className='ingredient-header'>
-      <i className='fa fa-times-circle float-left' onClick={@_hideIngredients}/>
+      <i className='fa fa-times-circle float-left' onTouchTap={@_hideIngredients}/>
       <span className='header-title'>Ingredients</span>
-      <i className='fa fa-search float-right' onClick={@_toggleSearch}/>
+      <i className='fa fa-search float-right' onTouchTap={@_toggleSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
       </div>
@@ -55,7 +55,7 @@ IngredientGroupHeader = React.createClass {
     text = @props.groupName
     if @props.selectedCount > 0
       text += " (#{@props.selectedCount})"
-    <div className='ingredient-group-header' onClick={@_toggleGroup}>
+    <div className='ingredient-group-header' onTouchTap={@_toggleGroup}>
       <span>{text}</span>
     </div>
 
@@ -76,7 +76,7 @@ IngredientListItem = React.createClass {
     if @state.selectedIngredientTags[@props.ingredient.tag]
       className += ' is-selected'
 
-    <div className={className} onClick={@_toggleIngredient}>
+    <div className={className} onTouchTap={@_toggleIngredient}>
       <div className='name'>{@props.ingredient.display}</div>
       <i className='fa fa-check-circle'/>
     </div>

@@ -29,9 +29,9 @@ Header = React.createClass {
       title = 'All Drinks'
 
     <div className='recipe-header'>
-      <i className='fa fa-list-ul float-left' onClick={-> console.log 'list click'}/>
+      <i className='fa fa-list-ul float-left' onTouchTap={-> console.log 'list click'}/>
       <span className='header-title'>{title}</span>
-      <i className='fa fa-search float-right' onClick={@_toggleSearch}/>
+      <i className='fa fa-search float-right' onTouchTap={@_toggleSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
       </div>

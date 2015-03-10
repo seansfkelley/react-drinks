@@ -95,11 +95,11 @@ RecipeView = React.createClass {
         {recipeNotes}
       </div>
       <div className='recipe-controls fixed-footer-bar'>
-        <div className='save-to-button' onClick={@_saveTo}>
+        <div className='save-to-button' onTouchTap={@_saveTo}>
           <i className='fa fa-list-ul'/>
           <span>Save To</span>
         </div>
-        <div className='close-button' onClick={@_hideRecipe}>
+        <div className='close-button' onTouchTap={@_hideRecipe}>
           <span>Close</span>
           <i className='fa fa-times'/>
         </div>

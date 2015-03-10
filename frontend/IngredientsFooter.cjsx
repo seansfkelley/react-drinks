@@ -18,9 +18,9 @@ IngredientsFooter = React.createClass {
     else
       iconClass = 'fa-square-o'
     <div className='ingredients-footer'>
-      <i className={'fa float-left ' + iconClass} onClick={@_toggleUseIngredients}/>
-      <span className='footer-title' onClick={@_openIngredientPanel}>Ingredients</span>
-      <i className='fa fa-shopping-cart float-right' onClick={@_openShoppingList}/>
+      <i className={'fa float-left ' + iconClass} onTouchTap={@_toggleUseIngredients}/>
+      <span className='footer-title' onTouchTap={@_openIngredientPanel}>Ingredients</span>
+      <i className='fa fa-shopping-cart float-right' onTouchTap={@_openShoppingList}/>
     </div>
 
   _toggleUseIngredients : ->

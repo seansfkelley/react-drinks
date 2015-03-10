@@ -26,9 +26,9 @@ Header = React.createClass {
 
   render : ->
     <div className='recipe-header'>
-      <i className='fa fa-times-circle float-left' onClick={@_hideShoppingList}/>
+      <i className='fa fa-times-circle float-left' onTouchTap={@_hideShoppingList}/>
       <span className='header-title'>Shopping List</span>
-      <i className='fa fa-search float-right' onClick={@_toggleSearch}/>
+      <i className='fa fa-search float-right' onTouchTap={@_toggleSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
       </div>
@@ -67,7 +67,7 @@ IncompleteRecipeListItem = React.createClass {
         {' '}
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
-    <div className='incomplete-recipe-list-item list-item' onClick={@_openRecipe}>
+    <div className='incomplete-recipe-list-item list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipe.name}</div>
       {missingIngredients}
     </div>
