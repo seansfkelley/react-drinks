@@ -1,0 +1,52 @@
+@require 'colors'
+
+transition-duration = 0.33s
+
+// This doesn't really belong here, but it's better than where it was. Perhaps the search bar should be
+// part of the default header bar implementation?
+.search-bar-wrapper
+  position absolute
+
+  top 6px
+  right 36px
+  bottom 6px
+
+  overflow hidden
+
+  &.hidden
+    width 0
+    opacity 0
+    transition opacity 0s ease transition-duration, width transition-duration
+
+  &.visible
+    width calc(100% - 42px) // 6px + 36px
+    opacity 1
+    transition opacity 0s, width transition-duration
+
+.search-bar
+  height 100%
+  width 100%
+
+  position relative
+
+  input
+    appearance none
+    -webkit-appearance none
+
+    font-size 16px
+    height 100%
+    width 100%
+    outline none
+
+    border 1px solid grey5
+    border-radius 4px
+    box-shadow none
+
+  i.fa
+    font-size 20px
+    line-height 0
+
+    position absolute
+    right 0
+
+    padding 16px 6px 16px

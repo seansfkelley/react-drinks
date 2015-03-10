@@ -2,27 +2,6 @@
 @require 'colors'
 @require 'sizes'
 
-.search-bar
-  height 100%
-  width 100%
-
-  input
-    font-size 16px
-    height 100%
-    width 100%
-    outline none
-
-  position relative
-
-  i.fa
-    font-size 20px
-    line-height 0
-
-    position absolute
-    right 0
-
-    padding 16px 6px 16px
-
 .recipe-list-view
   fixed-header-footer-container header-footer-size, 0
 
@@ -41,26 +20,6 @@
 
   .fa
     padding 0 12px 0
-
-  .search-bar-wrapper
-    position absolute
-
-    top 6px
-    right 36px
-    bottom 6px
-
-    overflow hidden
-
-    &.hidden
-      width 0
-      opacity 0
-      transition opacity 0s ease 0.5s, width 0.5s
-
-    &.visible
-      width calc(100% - 42px) // 6px + 36px
-      opacity 1
-      transition opacity 0s, width 0.5s
-
 
 .recipe-view
   fixed-header-footer-container header-footer-size, header-footer-size
