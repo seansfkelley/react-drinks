@@ -20,7 +20,6 @@ bugs
   - oops, you can see the shopping list for a split second before it's removed (this might only happen on iOS)
 - rotating the app sideways or dragging the wrong thing at the wrong time can wreck the iOS display in Safari (do I care?)
 - when showing the page for the first time you get a flash of "nothing to see here" -- perhaps some better zero state while things load?
-- includes drinks that have zero ingredients available just because they only have two ingredients total
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"
