@@ -42,7 +42,8 @@ body #iphone-status-bar-spacer
 iphone-status-bar-height = 20px
 
 body[standalone]
-  height "calc(100% - %s)" % iphone-status-bar-height
+  #app-root
+    height "calc(100% - %s)" % iphone-status-bar-height
 
   #iphone-status-bar-spacer
     display block
