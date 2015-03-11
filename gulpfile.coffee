@@ -28,7 +28,7 @@ makeBundler = ->
 generateBundlingFunction = (bundler) ->
   return ->
     return bundler.bundle()
-      .on 'error', gutil.log.bind(gutil, 'Browserify Error')
+      .on 'error', (e) -> gutil.log 'Browserify Error', e?.stack ? e?.message ? e
       .pipe source 'all-scripts.js'
       .pipe buffer()
       .pipe sourcemaps.init { loadMaps : true }
