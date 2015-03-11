@@ -15,7 +15,7 @@ StickyHeaderMixin = {
   generateList : ({ data, getTitle, createChild, classNames }) ->
     lastTitle = null
     childNodes = _.chain data
-      .map (datum) ->
+      .map (datum, i) ->
         newTitle = getTitle datum
         if newTitle != lastTitle
           elements = [ <ListHeader title={newTitle} key={'header-' + newTitle} ref={'header-' + newTitle}/> ]
@@ -23,7 +23,7 @@ StickyHeaderMixin = {
         else
           elements = []
 
-        return elements.concat [ createChild datum ]
+        return elements.concat [ createChild datum, i ]
       .flatten()
       .value()
 

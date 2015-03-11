@@ -18,6 +18,8 @@ bugs
 - when showing the page for the first time you get a flash of "nothing to see here" -- perhaps some better zero state while things load?
 - when searching on the iPhone, the search results can appear below the keyboard, forcing you to dismiss it to see them
 - autoprefixer isn't adding things it should (like the appearance rule on inputs)
+- tapping on the search bar selects them immediately deselects the input
+- if the search input on recipes is left open when you open ingredients (should it be?), you can open ingredients, then close it and it will also highlight the search bar (perhaps something to do with pointer-events being turned off when the class changes? prevent default?)
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"

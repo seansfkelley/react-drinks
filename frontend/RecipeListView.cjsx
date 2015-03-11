@@ -8,9 +8,9 @@ AppDispatcher = require './AppDispatcher'
 
 { RecipeStore, UiStore } = require './stores'
 
-SearchBar         = require './SearchBar'
-RecipeView        = require './RecipeView'
-StickyHeaderMixin = require './StickyHeaderMixin'
+SearchBar          = require './SearchBar'
+SwipableRecipeView = require './SwipableRecipeView'
+StickyHeaderMixin  = require './StickyHeaderMixin'
 
 Header = React.createClass {
   mixins : [
@@ -58,13 +58,13 @@ Header = React.createClass {
 RecipeListItem = React.createClass {
   render : ->
     <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
-      <div className='name'>{@props.recipe.name}</div>
+      <div className='name'>{@props.recipes[@props.index].name}</div>
     </div>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
       type      : 'show-modal'
-      component : <RecipeView recipe={@props.recipe}/>
+      component : <SwipableRecipeView recipes={@props.recipes} index={@props.index}/>
     }
 }
 
@@ -78,7 +78,7 @@ AlphabeticalRecipeList = React.createClass {
     return @generateList {
       data        : @state.searchedAlphabeticalRecipes
       getTitle    : (recipe) -> recipe.name[0].toUpperCase()
-      createChild : (recipe) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+      createChild : (recipe, i) => <RecipeListItem recipes={@state.searchedAlphabeticalRecipes} index={i} key={recipe.normalizedName}/>
       classNames  : 'recipe-list alphabetical'
     }
 }
