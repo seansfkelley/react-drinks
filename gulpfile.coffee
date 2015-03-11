@@ -25,10 +25,16 @@ makeBundler = ->
   b.transform require 'coffee-reactify'
   return b
 
+shouldDieOnBrowserifyError = true
+
 generateBundlingFunction = (bundler) ->
   return ->
-    return bundler.bundle()
-      .on 'error', (e) -> gutil.log 'Browserify Error', e?.stack ? e?.message ? e
+    b = bundler.bundle()
+
+    if not shouldDieOnBrowserifyError
+      b = b.on 'error', (e) -> gutil.log 'Browserify Error', e?.stack ? e?.message ? e
+
+    return b
       .pipe source 'all-scripts.js'
       .pipe buffer()
       .pipe sourcemaps.init { loadMaps : true }
@@ -49,9 +55,11 @@ buildStyles = ->
     .pipe gulp.dest './.dist'
 
 buildScripts = ->
+  shouldDieOnBrowserifyError = true
   generateBundlingFunction(makeBundler())()
 
 buildAndWatchScripts = ->
+  shouldDieOnBrowserifyError = false
   watchingBundler = watchify makeBundler()
   bundlingFunction = generateBundlingFunction(watchingBundler)
   bundlingFunction()
