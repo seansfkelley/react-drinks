@@ -5,11 +5,11 @@ React = require 'react'
 
 AppDispatcher = require './AppDispatcher'
 
-MODAL_TYPES = [ 'modal', 'flyup' ]
+MODAL_TYPES = [ 'modal', 'flyup', 'pushover' ]
+
+appRootElement = document.querySelector '#app-root'
 
 attachOverlayViews = ->
-  # Note that this implementation is very fragile to the ordering of the container elements in the DOM.
-  # TODO (maybe): When showing a new thing, add a class to pop it over everything else.
   allDomElements = []
 
   _.each MODAL_TYPES, (type) ->
@@ -22,11 +22,13 @@ attachOverlayViews = ->
       React.render <div className='content'>{component}</div>, domElement
       for e in allDomElements
         e.classList.remove 'topmost'
+      appRootElement.classList.add "showing-#{type}"
       domElement.classList.add 'topmost'
       _.defer ->
         domElement.classList.add 'visible'
 
     hide = ->
+      appRootElement.classList.remove "showing-#{type}"
       domElement.classList.remove 'visible'
       # TODO: Fix this implementation; shouldHide is a hack.
       shouldHide = true

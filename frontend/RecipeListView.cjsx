@@ -9,6 +9,7 @@ AppDispatcher = require './AppDispatcher'
 { RecipeStore, UiStore } = require './stores'
 
 SearchBar          = require './SearchBar'
+FavoritesList      = require './FavoritesList'
 SwipableRecipeView = require './SwipableRecipeView'
 StickyHeaderMixin  = require './StickyHeaderMixin'
 
@@ -29,13 +30,19 @@ Header = React.createClass {
       title = 'All Drinks'
 
     <div className='recipe-header'>
-      <i className='fa fa-list-ul float-left' onTouchTap={-> console.log 'list click'}/>
+      <i className='fa fa-star float-left' onTouchTap={@_openFavorites}/>
       <span className='header-title'>{title}</span>
       <i className='fa fa-search float-right' onTouchTap={@_toggleSearch}/>
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
       </div>
     </div>
+
+  _openFavorites : ->
+    AppDispatcher.dispatch {
+      type      : 'show-pushover'
+      component : <FavoritesList/>
+    }
 
   _toggleSearch : ->
     searchBarVisible = not @state.searchBarVisible

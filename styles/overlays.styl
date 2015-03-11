@@ -1,11 +1,40 @@
 // This should match up with the constant in the view code.
 transition-duration = 0.33s
+pushover-right-space = 48px
 
 body[standalone]
-  #modal-root, #flyup-root
+  #modal-root, #flyup-root, #pushover-root
     top 20px
 
-#modal-root, #flyup-root
+#app-root
+  transition transform transition-duration
+
+  &:after
+    pointer-events none
+    content ''
+    width 100%
+    height 100%
+    position absolute
+    top 0
+    left 0
+    right 0
+    bottom 0
+    z-index 1
+    box-shadow inset 4px 0px 4px 0px rgba(0, 0, 0, 0.25)
+
+    background-color rgba(0, 0, 0, 0.25)
+    opacity 0
+    transition opacity transition-duration
+
+#app-root.showing-pushover
+  transform translate("calc(100% - %s)" % pushover-right-space, 0px)
+  transition transform transition-duration
+
+  &:after
+    opacity 1
+    transition opacity transition-duration
+
+#modal-root, #flyup-root, #pushover-root
   // This is an awkward interaction between transitions and the js cleanup steps that happen when
   // these views are hidden: we clean them up after 1 second to allow the CSS transitions to make
   // it happen in a pretty way, but while it's invisible it's still in the way. So we have to do
@@ -32,9 +61,12 @@ body[standalone]
     right 0
     bottom 0
 
-#modal-root, #flyup-root
+#modal-root, #flyup-root, #pushover-root
   &.visible
     pointer-events auto
+
+#pushover-root
+  right pushover-right-space
 
 #modal-root
   .content
