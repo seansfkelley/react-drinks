@@ -12,4 +12,4 @@ git checkout origin/master
 npm install
 gulp dist
 
-forever start -c coffee index.coffee
+PORT=80 forever start -c ./node_modules/.bin/coffee index.coffee
