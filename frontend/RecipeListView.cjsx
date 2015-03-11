@@ -96,10 +96,13 @@ GroupedRecipeList = React.createClass {
       .flatten()
       .value()
 
+    # TODO: Fix this in a more elegant way I hope.
+    recipes = _.pluck data, '1'
+
     return @generateList {
       data        : data
       getTitle    : ([ name, recipe ]) -> name
-      createChild : ([ name, recipe ]) -> <RecipeListItem recipe={recipe} key={recipe.normalizedName}/>
+      createChild : ([ name, recipe ], i) -> <RecipeListItem recipes={recipes} index={i} key={recipe.normalizedName}/>
       classNames  : 'recipe-list grouped'
     }
 }
