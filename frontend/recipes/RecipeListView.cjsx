@@ -83,6 +83,7 @@ AlphabeticalRecipeList = React.createClass {
     </HeaderedList>
 }
 
+# This is broken because it doesn't return the right titles.
 GroupedRecipeList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
@@ -96,12 +97,15 @@ GroupedRecipeList = React.createClass {
       .flatten()
       .value()
 
+    titleExtractor = (child) ->
+      return groupRecipePairs[child.props.index][0]
+
     orderedRecipes = _.pluck groupRecipePairs, '1'
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    <HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
+    <HeaderedList titleExtractor={titleExtractor}>
       {recipeNodes}
     </HeaderedList>
 }
