@@ -2,19 +2,17 @@
 
 React = require 'react'
 
+FixedHeaderFooter = require './components/FixedHeaderFooter'
 RecipeListView    = require './recipes/RecipeListView'
 IngredientsFooter = require './ingredients/IngredientsFooter'
 
 App = React.createClass {
   render : ->
-    <div className='drinks-app'>
-      <div className='fixed-content-pane'>
-        <RecipeListView/>
-      </div>
-      <div className='fixed-footer-bar'>
-        <IngredientsFooter/>
-      </div>
-    </div>
+    <FixedHeaderFooter
+      footer={<IngredientsFooter/>}
+    >
+      <RecipeListView/>
+    </FixedHeaderFooter>
 }
 
 module.exports = App

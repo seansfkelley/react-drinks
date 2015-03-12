@@ -10,6 +10,7 @@ utils         = require '../utils'
 { RecipeStore, UiStore } = require '../stores'
 
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
+FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 HeaderedList       = require '../components/HeaderedList'
 HeaderWithSearch   = require '../components/HeaderWithSearch'
 
@@ -96,14 +97,12 @@ ShoppingList = React.createClass {
 
 ShoppingListView = React.createClass {
   render : ->
-    <div className='shopping-list-view'>
-      <div className='fixed-header-bar'>
-        <ShoppingListHeader/>
-      </div>
-      <div className='fixed-content-pane'>
-        <ShoppingList/>
-      </div>
-    </div>
+    <FixedHeaderFooter
+      header={<ShoppingListHeader/>}
+      classNames='shopping-list-view'
+    >
+      <ShoppingList/>
+    </FixedHeaderFooter>
 }
 
 module.exports = ShoppingListView

@@ -12,7 +12,8 @@ FavoritesList      = require '../favorites/FavoritesList'
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
 HeaderWithSearch   = require '../components/HeaderWithSearch'
 
-HeaderedList = require '../components/HeaderedList'
+FixedHeaderFooter = require '../components/FixedHeaderFooter'
+HeaderedList      = require '../components/HeaderedList'
 
 RecipeListHeader = React.createClass {
   mixins : [
@@ -121,14 +122,11 @@ RecipeListView = React.createClass {
     else
       list = <AlphabeticalRecipeList/>
 
-    <div className='recipe-list-view'>
-      <div className='fixed-header-bar'>
-        <RecipeListHeader/>
-      </div>
-      <div className='fixed-content-pane'>
-        {list}
-      </div>
-    </div>
+    <FixedHeaderFooter
+      header={<RecipeListHeader/>}
+    >
+      {list}
+    </FixedHeaderFooter>
 }
 
 module.exports = RecipeListView
