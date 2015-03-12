@@ -12,6 +12,7 @@ StickyHeaderMixin = {
       stickyHeaderOffset : 0
     }
 
+  # TODO: Make this a class that takes a bunch of children.
   generateList : ({ data, getTitle, createChild, classNames }) ->
     lastTitle = null
     childNodes = _.chain data

@@ -68,6 +68,7 @@ UiStore = new class extends FluxStore
     return _.extend {
       useIngredients       : false
       openIngredientGroups : {}
+      favoritedRecipes     : {}
     }, JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? 'null')
 
   'toggle-use-ingredients' : ->
@@ -79,6 +80,13 @@ UiStore = new class extends FluxStore
       delete @openIngredientGroups[group]
     else
       @openIngredientGroups[group] = true
+    @_persist()
+
+  'toggle-favorite-recipe' : ({ normalizedName }) ->
+    if @favoritedRecipes[normalizedName]
+      delete @favoritedRecipes[normalizedName]
+    else
+      @favoritedRecipes[normalizedName] = true
     @_persist()
 
   _persist : ->
