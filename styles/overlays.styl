@@ -1,6 +1,6 @@
 // This should match up with the constant in the view code.
 transition-duration = 0.33s
-pushover-right-space = 48px
+pushover-width = 87%
 
 body[standalone]
   #modal-root, #flyup-root, #pushover-root
@@ -27,7 +27,7 @@ body[standalone]
     transition opacity transition-duration
 
 #app-root.showing-pushover
-  transform translate("calc(100% - %s)" % pushover-right-space, 0px)
+  transform translate(pushover-width, 0px)
   transition transform transition-duration
 
   &:after
@@ -66,7 +66,7 @@ body[standalone]
     pointer-events auto
 
 #pushover-root
-  right pushover-right-space
+  width pushover-width
 
 #modal-root
   .content
