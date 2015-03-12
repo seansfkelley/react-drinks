@@ -8,7 +8,8 @@ AppDispatcher = require '../AppDispatcher'
 
 { IngredientStore, UiStore } = require '../stores'
 
-HeaderWithSearch = require '../components/HeaderWithSearch'
+FixedHeaderFooter = require '../components/FixedHeaderFooter'
+HeaderWithSearch  = require '../components/HeaderWithSearch'
 
 IngredientSelectionHeader = React.createClass {
   render : ->
@@ -96,14 +97,12 @@ GroupedIngredientList = React.createClass {
 
 IngredientSelectionView = React.createClass {
   render : ->
-    <div className='ingredient-list-view'>
-      <div className='fixed-header-bar'>
-        <IngredientSelectionHeader/>
-      </div>
-      <div className='fixed-content-pane'>
-        <GroupedIngredientList/>
-      </div>
-    </div>
+    <FixedHeaderFooter
+      classNames='ingredient-list-view'
+      header={<IngredientSelectionHeader/>}
+    >
+      <GroupedIngredientList/>
+    </FixedHeaderFooter>
 }
 
 module.exports = IngredientSelectionView
