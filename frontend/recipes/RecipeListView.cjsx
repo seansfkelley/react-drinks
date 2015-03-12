@@ -10,8 +10,9 @@ AppDispatcher = require '../AppDispatcher'
 
 FavoritesList      = require '../favorites/FavoritesList'
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
-StickyHeaderMixin  = require '../components/StickyHeaderMixin'
 HeaderWithSearch   = require '../components/HeaderWithSearch'
+
+HeaderedList = require '../components/HeaderedList'
 
 RecipeListHeader = React.createClass {
   mixins : [
@@ -48,7 +49,7 @@ RecipeListHeader = React.createClass {
 RecipeListItem = React.createClass {
   render : ->
     <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
-      <div className='name'>{@props.recipes[@props.index].name}</div>
+      <div className='name'>{@_getRecipe().name}</div>
     </div>
 
   _openRecipe : ->
@@ -56,45 +57,53 @@ RecipeListItem = React.createClass {
       type      : 'show-modal'
       component : <SwipableRecipeView recipes={@props.recipes} index={@props.index}/>
     }
+
+  _getRecipe : ->
+    return RecipeListItem.getRecipeFor @
+
+  statics :
+    getRecipeFor : (element) ->
+      return element.props.recipes[element.props.index]
 }
+
+_recipeListItemTitleExtractor = (child) ->
+  return RecipeListItem.getRecipeFor(child).name[0].toUpperCase()
 
 AlphabeticalRecipeList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'searchedAlphabeticalRecipes'
-    StickyHeaderMixin
   ]
 
   render : ->
-    return @generateList {
-      data        : @state.searchedAlphabeticalRecipes
-      getTitle    : (recipe) -> recipe.name[0].toUpperCase()
-      createChild : (recipe, i) => <RecipeListItem recipes={@state.searchedAlphabeticalRecipes} index={i} key={recipe.normalizedName}/>
-      classNames  : 'recipe-list alphabetical'
-    }
+    recipeNodes = _.map @state.searchedAlphabeticalRecipes, (r, i) =>
+      <RecipeListItem recipes={@state.searchedAlphabeticalRecipes} index={i} key={r.normalizedName}/>
+
+    <HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
+      {recipeNodes}
+    </HeaderedList>
 }
 
 GroupedRecipeList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
-    StickyHeaderMixin
   ]
 
   render : ->
-    data = _.chain @state.searchedGroupedMixableRecipes
+    # This whole munging of the group business is kinda gross.
+    groupRecipePairs = _.chain @state.searchedGroupedMixableRecipes
       .map ({ name, recipes }) ->
         _.map recipes, (r) -> [ name, r ]
       .flatten()
       .value()
 
-    # TODO: Fix this in a more elegant way I hope.
-    recipes = _.pluck data, '1'
+    orderedRecipes = _.pluck groupRecipePairs, '1'
 
-    return @generateList {
-      data        : data
-      getTitle    : ([ name, recipe ]) -> name
-      createChild : ([ name, recipe ], i) -> <RecipeListItem recipes={recipes} index={i} key={recipe.normalizedName}/>
-      classNames  : 'recipe-list grouped'
-    }
+    recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
+      <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
+
+    <HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
+      {recipeNodes}
+    </HeaderedList>
 }
 
 RecipeListView = React.createClass {

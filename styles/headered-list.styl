@@ -1,0 +1,31 @@
+@require 'sizes'
+@require 'colors'
+
+.headered-list
+  height 100%
+  overflow scroll
+
+.headered-list.default-headered-list
+  .list-header
+    font-size 14px
+    background-color grey1
+    color grey7
+    text-transform uppercase
+
+    .text
+      padding-left 8px
+
+  .list-item
+    font-size 16px
+    line-height list-item-size
+
+    padding-left 16px
+
+    background-color grey0
+
+    &:not(:first-child)
+      border-top 1px solid darken(grey0, 5%)
+
+  .empty-list-text
+    text-align center
+    line-height list-item-size
