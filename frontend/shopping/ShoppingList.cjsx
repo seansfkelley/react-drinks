@@ -10,8 +10,8 @@ utils         = require '../utils'
 { RecipeStore, UiStore } = require '../stores'
 
 RecipeView        = require '../recipes/RecipeView'
-StickyHeaderMixin = require '../components/StickyHeaderMixin'
 
+HeaderedList     = require '../components/HeaderedList'
 HeaderWithSearch = require '../components/HeaderWithSearch'
 
 ShoppingListHeader = React.createClass {
@@ -62,26 +62,28 @@ IncompleteRecipeListItem = React.createClass {
     }
 }
 
+# This is busted.
 ShoppingList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
-    StickyHeaderMixin
   ]
 
   render : ->
-    data = _.chain @state.searchedGroupedMixableRecipes
+    groupRecipePairs = _.chain @state.searchedGroupedMixableRecipes
       .filter ({ missing }) -> missing > 0
       .map ({ name, recipes }) ->
         _.map recipes, (r) -> [ name, r ]
       .flatten()
       .value()
 
-    return @generateList {
-      data        : data
-      getTitle    : ([ name, recipe ]) -> name
-      createChild : ([ name, recipe ]) -> <IncompleteRecipeListItem recipe={recipe} key={recipe.normalizedName}/>
-      classNames  : 'shopping-list grouped'
-    }
+    orderedRecipes = _.pluck groupRecipePairs, '1'
+
+    recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
+      <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
+
+    <HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
+      {recipeNodes}
+    </HeaderedList>
 }
 
 ShoppingListView = React.createClass {
