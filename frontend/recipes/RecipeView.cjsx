@@ -5,7 +5,10 @@ md5   = require 'MD5'
 React = require 'react'
 
 AppDispatcher = require '../AppDispatcher'
+FluxMixin     = require '../FluxMixin'
 utils         = require '../utils'
+
+{ UiStore } = require '../stores'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 Header            = require '../components/Header'
@@ -49,11 +52,18 @@ HUMAN_READABLE_CATEGORY_TITLE =
 RecipeFooter = React.createClass {
   displayName : 'RecipeFooter'
 
+  mixins : [
+    FluxMixin UiStore, 'favoritedRecipes'
+  ]
+
   render : ->
+    iconClass = 'fa-star-o'
+    if @state.favoritedRecipes[@props.recipe.normalizedName]?
+      iconClass = 'fa-star'
     <div className='recipe-controls'>
       <div className='save-to-button' onTouchTap={@_saveTo}>
-        <i className='fa fa-list-ul'/>
-        <span>Save To</span>
+        <i className={'fa ' + iconClass}/>
+        <span>Save</span>
       </div>
       <div className='close-button' onTouchTap={@_close}>
         <span>Close</span>
