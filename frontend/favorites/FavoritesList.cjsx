@@ -3,13 +3,13 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin         = require './FluxMixin'
-AppDispatcher     = require './AppDispatcher'
-StickyHeaderMixin = require './StickyHeaderMixin'
+FluxMixin         = require '../FluxMixin'
+AppDispatcher     = require '../AppDispatcher'
+StickyHeaderMixin = require '../components/StickyHeaderMixin'
 
-{ UiStore, RecipeStore } = require './stores'
+{ UiStore, RecipeStore } = require '../stores'
 
-Header = require './Header'
+Header = require '../components/Header'
 
 RecipeListItem = React.createClass {
   render : ->

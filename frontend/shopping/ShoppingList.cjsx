@@ -3,17 +3,16 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin     = require './FluxMixin'
-AppDispatcher = require './AppDispatcher'
+FluxMixin     = require '../FluxMixin'
+AppDispatcher = require '../AppDispatcher'
+utils         = require '../utils'
 
-{ RecipeStore, UiStore } = require './stores'
+{ RecipeStore, UiStore } = require '../stores'
 
-SearchBar         = require './SearchBar'
-RecipeView        = require './RecipeView'
-StickyHeaderMixin = require './StickyHeaderMixin'
-utils             = require './utils'
+RecipeView        = require '../recipes/RecipeView'
+StickyHeaderMixin = require '../components/StickyHeaderMixin'
 
-HeaderWithSearch = require './HeaderWithSearch'
+HeaderWithSearch = require '../components/HeaderWithSearch'
 
 ShoppingListHeader = React.createClass {
   mixins : [

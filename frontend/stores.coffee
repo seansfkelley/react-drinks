@@ -4,7 +4,7 @@ MicroEvent = require 'microevent'
 Promise    = require 'bluebird'
 
 AppDispatcher = require './AppDispatcher'
-RecipeSearch   = require './RecipeSearch'
+RecipeSearch  = require './recipes/RecipeSearch'
 
 class FluxStore
   MicroEvent.mixin this

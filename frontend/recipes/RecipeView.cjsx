@@ -4,9 +4,9 @@ _     = require 'lodash'
 md5   = require 'MD5'
 React = require 'react'
 
-AppDispatcher = require './AppDispatcher'
+AppDispatcher = require '../AppDispatcher'
 
-utils = require './utils'
+utils = require '../utils'
 
 SectionHeader = React.createClass {
   render : ->

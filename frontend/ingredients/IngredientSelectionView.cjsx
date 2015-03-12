@@ -3,14 +3,12 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin     = require './FluxMixin'
-AppDispatcher = require './AppDispatcher'
+FluxMixin     = require '../FluxMixin'
+AppDispatcher = require '../AppDispatcher'
 
-{ IngredientStore, UiStore } = require './stores'
+{ IngredientStore, UiStore } = require '../stores'
 
-SearchBar = require './SearchBar'
-
-HeaderWithSearch = require './HeaderWithSearch'
+HeaderWithSearch = require '../components/HeaderWithSearch'
 
 IngredientSelectionHeader = React.createClass {
   render : ->

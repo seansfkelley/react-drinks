@@ -2,8 +2,8 @@
 
 React = require 'react'
 
-RecipeListView    = require './RecipeListView'
-IngredientsFooter = require './IngredientsFooter'
+RecipeListView    = require './recipes/RecipeListView'
+IngredientsFooter = require './ingredients/IngredientsFooter'
 
 App = React.createClass {
   render : ->
