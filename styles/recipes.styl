@@ -1,10 +1,11 @@
-@require 'mixins'
 @require 'colors'
 @require 'sizes'
 
-.recipe-view
-  fixed-header-footer-container header-footer-size, header-footer-size
+.swipable-wrapper
+  display inline-block
+  height 100%
 
+.recipe-view
   width calc(100% - 24px)
   height calc(100% - 48px)
 
@@ -14,7 +15,7 @@
   background-color grey0
   border-radius 4px
 
-  .recipe-title, .recipe-controls
+  .header, .recipe-controls
     font-size header-footer-font-size
     font-weight 500
     line-height header-footer-size
@@ -22,17 +23,9 @@
     background-color grey8
     color grey0
 
-  .recipe-title
-    text-align center
-
+  .fixed-header, .header
     border-top-left-radius inherit
     border-top-right-radius inherit
-
-  .recipe-section-header
-    font-size 14px
-    text-transform uppercase
-    text-align center
-    padding 16px 0 16px
 
   .recipe-description > :nth-child(odd)
     background-color grey1
@@ -45,28 +38,34 @@
     > :not(:last-child), > :last-child:nth-child(odd)
       border-bottom 1px solid grey2
 
-  .recipe-ingredients, .recipe-instructions, .recipe-notes
-    padding 0 20px 20px
+    .recipe-ingredients, .recipe-instructions, .recipe-notes
+      padding 0 20px 20px
 
-  .recipe-ingredients .measured-ingredient
-    display flex
-    font-weight 500
+    .recipe-section-header
+      font-size 14px
+      text-transform uppercase
+      text-align center
+      padding 16px 0 16px
 
-    .measure
-      width 25%
+    .recipe-ingredients .measured-ingredient
+      display flex
+      font-weight 500
 
-      .unit
-        font-size 0.75em
-        text-transform uppercase
+      .measure
+        width 25%
 
-    .ingredient
-      width 75%
+        .unit
+          font-size 0.75em
+          text-transform uppercase
 
-  .recipe-instructions .text .text-line:not(:last-child)
-    margin-bottom 6px
+      .ingredient
+        width 75%
 
-  .recipe-notes
-    //
+    .recipe-instructions .text .text-line:not(:last-child)
+      margin-bottom 6px
+
+    .recipe-notes
+      //
 
   .recipe-controls
     font-size slightly-smaller-size
@@ -89,6 +88,3 @@
 
     .close-button
       width 50%
-
-.swipable-wrapper
-  display inline-block

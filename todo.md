@@ -9,8 +9,7 @@ todo
 - do animations for overlays and ingredient sections when they're created destroyed (ReactCSSTransitionGroup?)
 - make it easier to open all the groups of ingredients
 - on-scroll behavior is hilariously, wildly inefficient: there has got to be a better way to do this or at least to design around it
-- deployment scripts
-  - and pick something better than nohup to run the exectuable
+- having views hide themselves by knowing which overlay they're in is sketchy
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb

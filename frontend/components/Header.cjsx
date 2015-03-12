@@ -12,21 +12,24 @@ Header = React.createClass {
     titleOnTouchTap     : React.PropTypes.func
     rightIconOnTouchTap : React.PropTypes.func
 
+  getDefaultProps : -> {
+    classNames : ''
+  }
+
   render : ->
     title = <span className='header-title' onTouchTap={@props.titleOnTouchTap}>{@props.title}</span>
+
     if @props.leftIcon?
       leftIcon = <i className={'fa float-left ' + @props.leftIcon} onTouchTap={@props.leftIconOnTouchTap}/>
     else
       leftIcon = <i className='fa float-left'/>
+
     if @props.rightIcon?
       rightIcon = <i className={'fa float-right ' + @props.rightIcon} onTouchTap={@props.rightIconOnTouchTap}/>
     else
       rightIcon = <i className='fa float-right'/>
-    classNames = 'header '
-    if @props.classNames?
-      classNames += @props.classNames
 
-    <div className={classNames}>
+    <div className={'header ' + @props.classNames}>
       {leftIcon}
       {title}
       {rightIcon}

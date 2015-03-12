@@ -4,7 +4,7 @@ React = require 'react'
 
 FixedHeaderFooter = React.createClass {
   propTypes :
-    classNames : React.PropTypes.string.isRequired
+    classNames : React.PropTypes.string
     header     : React.PropTypes.element
     footer     : React.PropTypes.element
 

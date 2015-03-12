@@ -5,8 +5,11 @@ md5   = require 'MD5'
 React = require 'react'
 
 AppDispatcher = require '../AppDispatcher'
+utils         = require '../utils'
 
-utils = require '../utils'
+FixedHeaderFooter = require '../components/FixedHeaderFooter'
+Header            = require '../components/Header'
+
 
 SectionHeader = React.createClass {
   render : ->
@@ -38,6 +41,28 @@ HUMAN_READABLE_CATEGORY_TITLE =
   missing    : 'You\'re Missing'
   substitute : 'You Can Substitute'
   available  : 'You Have'
+
+RecipeFooter = React.createClass {
+  render : ->
+    <div className='recipe-controls'>
+      <div className='save-to-button' onTouchTap={@_saveTo}>
+        <i className='fa fa-list-ul'/>
+        <span>Save To</span>
+      </div>
+      <div className='close-button' onTouchTap={@_close}>
+        <span>Close</span>
+        <i className='fa fa-times'/>
+      </div>
+    </div>
+
+  _saveTo : ->
+    console.log 'save to'
+
+  _close : ->
+    AppDispatcher.dispatch {
+      type : 'hide-modal'
+    }
+}
 
 RecipeView = React.createClass {
   render : ->
@@ -83,36 +108,19 @@ RecipeView = React.createClass {
         <div className='text'>{instructionLines}</div>
       </div>
 
-    <div className='recipe-view'>
-      <div className='recipe-title fixed-header-bar'>
-        {@props.recipe.name}
-      </div>
-      <div className='recipe-description fixed-content-pane'>
+    <FixedHeaderFooter
+      classNames='recipe-view'
+      header={<Header title={@props.recipe.name}/>}
+      footer={<RecipeFooter recipe={@props.recipe}/>}
+    >
+      <div className='recipe-description'>
         <div className='recipe-ingredients'>
           {ingredientNodes}
         </div>
         {recipeInstructions}
         {recipeNotes}
       </div>
-      <div className='recipe-controls fixed-footer-bar'>
-        <div className='save-to-button' onTouchTap={@_saveTo}>
-          <i className='fa fa-list-ul'/>
-          <span>Save To</span>
-        </div>
-        <div className='close-button' onTouchTap={@_hideRecipe}>
-          <span>Close</span>
-          <i className='fa fa-times'/>
-        </div>
-      </div>
-    </div>
-
-  _saveTo : ->
-    console.log 'save to'
-
-  _hideRecipe : ->
-    AppDispatcher.dispatch {
-      type : 'hide-modal'
-    }
+    </FixedHeaderFooter>
 }
 
 module.exports = RecipeView
