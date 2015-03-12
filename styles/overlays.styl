@@ -69,6 +69,15 @@ body[standalone]
 #pushover-root
   width pushover-width
 
+  .content
+    // We can do a sweet parallax-y transition if we make this greater than the width.
+    transform translate(-(pushover-width), 0)
+    transition transform transition-duration
+
+  &.visible .content
+    transform none
+    transition transform transition-duration
+
 #modal-root
   .content
     background-color rgba(0, 0, 0, 0.5)

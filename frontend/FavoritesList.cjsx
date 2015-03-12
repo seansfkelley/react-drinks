@@ -9,6 +9,8 @@ StickyHeaderMixin = require './StickyHeaderMixin'
 
 { UiStore, RecipeStore } = require './stores'
 
+Header = require './Header'
+
 RecipeListItem = React.createClass {
   render : ->
     <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
@@ -39,11 +41,15 @@ FavoritesList = React.createClass {
     }
 
     <div className='favorites-list'>
-      <div className='header'>Favorites</div>
+      <Header
+        leftIcon='fa-times-circle'
+        leftIconOnTouchTap={@_closeFavorites}
+        title='Favorites'
+      />
       {listNode}
     </div>
 
-  _close : ->
+  _closeFavorites : ->
     AppDispatcher.dispatch {
       type : 'hide-pushover'
     }
