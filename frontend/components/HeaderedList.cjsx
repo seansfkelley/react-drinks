@@ -3,7 +3,14 @@
 _     = require 'lodash'
 React = require 'react'
 
-ListHeader = require './ListHeader'
+ListHeader = React.createClass {
+  displayName : 'ListHeader'
+
+  render : ->
+    <div className='list-header'>
+      <span className='text'>{@props.title}</span>
+    </div>
+}
 
 HeaderedList = React.createClass {
   displayName : 'HeaderedList'
