@@ -3,9 +3,8 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin         = require '../FluxMixin'
-AppDispatcher     = require '../AppDispatcher'
-StickyHeaderMixin = require '../components/StickyHeaderMixin'
+FluxMixin     = require '../FluxMixin'
+AppDispatcher = require '../AppDispatcher'
 
 { UiStore, RecipeStore } = require '../stores'
 
@@ -30,7 +29,6 @@ FavoritesList = React.createClass {
   mixins : [
     FluxMixin UiStore, 'favoritedRecipes'
     FluxMixin RecipeStore, 'alphabeticalRecipes'
-    StickyHeaderMixin
   ]
 
   render : ->
