@@ -13,36 +13,20 @@ RecipeView        = require './RecipeView'
 StickyHeaderMixin = require './StickyHeaderMixin'
 utils             = require './utils'
 
-# TODO: Factor this out so we can share it between recipes and ingredients.
-Header = React.createClass {
+HeaderWithSearch = require './HeaderWithSearch'
+
+ShoppingListHeader = React.createClass {
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]
 
-  getInitialState : ->
-    return {
-      searchBarVisible : false
-    }
-
   render : ->
-    <div className='recipe-header'>
-      <i className='fa fa-times-circle float-left' onTouchTap={@_hideShoppingList}/>
-      <span className='header-title'>Shopping List</span>
-      <i className='fa fa-search float-right' onTouchTap={@_toggleSearch}/>
-      <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
-        <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
-      </div>
-    </div>
-
-  _toggleSearch : ->
-    searchBarVisible = not @state.searchBarVisible
-    @setState { searchBarVisible }
-    if searchBarVisible
-      # This defer is a hack because we haven't rerendered but we can't focus hidden things.
-      _.defer =>
-        @refs.searchBar.clearAndFocus()
-    else
-      @refs.searchBar.clear()
+    <HeaderWithSearch
+      leftIcon='fa-times-circle'
+      leftIconOnTouchTap={@_hideShoppingList}
+      title='Shopping List'
+      onSearch={@_setSearchTerm}
+    />
 
   _hideShoppingList : ->
     AppDispatcher.dispatch {
@@ -105,7 +89,7 @@ ShoppingListView = React.createClass {
   render : ->
     <div className='shopping-list-view'>
       <div className='fixed-header-bar'>
-        <Header/>
+        <ShoppingListHeader/>
       </div>
       <div className='fixed-content-pane'>
         <ShoppingList/>

@@ -13,15 +13,12 @@ FavoritesList      = require './FavoritesList'
 SwipableRecipeView = require './SwipableRecipeView'
 StickyHeaderMixin  = require './StickyHeaderMixin'
 
-Header = React.createClass {
+HeaderWithSearch = require './HeaderWithSearch'
+
+RecipeListHeader = React.createClass {
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]
-
-  getInitialState : ->
-    return {
-      searchBarVisible : false
-    }
 
   render : ->
     if @state.useIngredients
@@ -29,30 +26,18 @@ Header = React.createClass {
     else
       title = 'All Drinks'
 
-    <div className='recipe-header'>
-      <i className='fa fa-star float-left' onTouchTap={@_openFavorites}/>
-      <span className='header-title'>{title}</span>
-      <i className='fa fa-search float-right' onTouchTap={@_toggleSearch}/>
-      <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
-        <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
-      </div>
-    </div>
+    <HeaderWithSearch
+      leftIcon='fa-star'
+      leftIconOnTouchTap={@_openFavorites}
+      title={title}
+      onSearch={@_setSearchTerm}
+    />
 
   _openFavorites : ->
     AppDispatcher.dispatch {
       type      : 'show-pushover'
       component : <FavoritesList/>
     }
-
-  _toggleSearch : ->
-    searchBarVisible = not @state.searchBarVisible
-    @setState { searchBarVisible }
-    if searchBarVisible
-      # This defer is a hack because we haven't rerendered but we can't focus hidden things.
-      _.defer =>
-        @refs.searchBar.clearAndFocus()
-    else
-      @refs.searchBar.clear()
 
   # In the future, this should pop up a loader and then throttle the number of filters performed.
   _setSearchTerm : (searchTerm) ->
@@ -128,7 +113,7 @@ RecipeListView = React.createClass {
 
     <div className='recipe-list-view'>
       <div className='fixed-header-bar'>
-        <Header/>
+        <RecipeListHeader/>
       </div>
       <div className='fixed-content-pane'>
         {list}

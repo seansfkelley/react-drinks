@@ -10,32 +10,16 @@ AppDispatcher = require './AppDispatcher'
 
 SearchBar = require './SearchBar'
 
-# TODO: Factor this out so we can share it between recipes and ingredients.
-Header = React.createClass {
-  getInitialState : ->
-    return {
-      searchBarVisible : false
-    }
+HeaderWithSearch = require './HeaderWithSearch'
 
+IngredientSelectionHeader = React.createClass {
   render : ->
-    <div className='ingredient-header'>
-      <i className='fa fa-times-circle float-left' onTouchTap={@_hideIngredients}/>
-      <span className='header-title'>Ingredients</span>
-      <i className='fa fa-search float-right' onTouchTap={@_toggleSearch}/>
-      <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
-        <SearchBar onChange={@_setSearchTerm} key='search-bar' ref='searchBar'/>
-      </div>
-    </div>
-
-  _toggleSearch : ->
-    searchBarVisible = not @state.searchBarVisible
-    @setState { searchBarVisible }
-    if searchBarVisible
-      # This defer is a hack because we haven't rerendered but we can't focus hidden things.
-      _.defer =>
-        @refs.searchBar.clearAndFocus()
-    else
-      @refs.searchBar.clear()
+    <HeaderWithSearch
+      leftIcon='fa-times-circle'
+      leftIconOnTouchTap={@_hideIngredients}
+      title='Ingredients'
+      onSearch={@_setSearchTerm}
+    />
 
   # In the future, this should pop up a loader and then throttle the number of filters performed.
   _setSearchTerm : (searchTerm) ->
@@ -116,7 +100,7 @@ IngredientSelectionView = React.createClass {
   render : ->
     <div className='ingredient-list-view'>
       <div className='fixed-header-bar'>
-        <Header/>
+        <IngredientSelectionHeader/>
       </div>
       <div className='fixed-content-pane'>
         <GroupedIngredientList/>
