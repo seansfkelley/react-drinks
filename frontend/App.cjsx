@@ -7,6 +7,8 @@ RecipeListView    = require './recipes/RecipeListView'
 IngredientsFooter = require './ingredients/IngredientsFooter'
 
 App = React.createClass {
+  displayName : 'App'
+
   render : ->
     <FixedHeaderFooter
       footer={<IngredientsFooter/>}

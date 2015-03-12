@@ -12,6 +12,8 @@ StickyHeaderMixin = require '../components/StickyHeaderMixin'
 Header = require '../components/Header'
 
 RecipeListItem = React.createClass {
+  displayName : 'RecipeListItem'
+
   render : ->
     <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipes[@props.index].name}</div>

@@ -3,6 +3,8 @@
 React = require 'react'
 
 Header = React.createClass {
+  displayName : 'Header'
+
   propTypes :
     classNames          : React.PropTypes.string
     leftIcon            : React.PropTypes.string

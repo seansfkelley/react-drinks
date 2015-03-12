@@ -6,6 +6,8 @@ React = require 'react'
 ListHeader = require './ListHeader'
 
 HeaderedList = React.createClass {
+  displayName : 'HeaderedList'
+
   propTypes :
     classNames     : React.PropTypes.string
     emptyText      : React.PropTypes.string
@@ -31,6 +33,14 @@ HeaderedList = React.createClass {
 
     <div className={'headered-list ' + @props.classNames}>
       {children}
+    </div>
+}
+
+HeaderedList.ListItem = React.createClass {
+  render : ->
+    className = 'list-item ' + (@props.className ? '')
+    <div {...@props} className={className}>
+      {@props.children}
     </div>
 }
 

@@ -3,6 +3,8 @@
 React = require 'react'
 
 FixedHeaderFooter = React.createClass {
+  displayName : 'FixedHeaderFooter'
+
   propTypes :
     classNames : React.PropTypes.string
     header     : React.PropTypes.element

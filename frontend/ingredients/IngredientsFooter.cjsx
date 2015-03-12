@@ -8,6 +8,8 @@ ShoppingList            = require '../shopping/ShoppingList'
 IngredientSelectionView = require './IngredientSelectionView'
 
 IngredientsFooter = React.createClass {
+  displayName : 'IngredientsFooter'
+
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]

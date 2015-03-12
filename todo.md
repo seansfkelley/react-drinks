@@ -10,6 +10,9 @@ todo
 - make it easier to open all the groups of ingredients
 - on-scroll behavior is hilariously, wildly inefficient: there has got to be a better way to do this or at least to design around it
 - having views hide themselves by knowing which overlay they're in is sketchy
+- sticky header based off of headered list
+- collapsible list based off of headered list
+- swipable list may not be cleaning up nodes after it's hidden
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb

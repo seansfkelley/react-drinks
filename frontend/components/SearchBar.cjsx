@@ -3,6 +3,8 @@
 React = require 'react'
 
 SearchBar = React.createClass {
+  displayName : 'SearchBar'
+
   getInitialState : ->
     return {
       value : ''

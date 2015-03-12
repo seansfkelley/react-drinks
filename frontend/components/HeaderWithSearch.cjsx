@@ -7,6 +7,8 @@ Header    = require './Header'
 SearchBar = require './SearchBar'
 
 HeaderWithSearch = React.createClass {
+  displayName : 'HeaderWithSearch'
+
   propTypes :
     onSearch : React.PropTypes.func
 

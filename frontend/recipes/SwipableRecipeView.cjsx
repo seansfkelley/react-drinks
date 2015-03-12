@@ -7,6 +7,8 @@ Swipe = require 'react-swipe'
 RecipeView = require './RecipeView'
 
 SwipableRecipeView = React.createClass {
+  displayName : 'SwipableRecipeView'
+
   render : ->
     recipePages = _.map @props.recipes, (r) ->
       <div className='swipable-wrapper' key={r.normalizedName}>

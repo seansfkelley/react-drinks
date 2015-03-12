@@ -15,6 +15,8 @@ HeaderedList       = require '../components/HeaderedList'
 HeaderWithSearch   = require '../components/HeaderWithSearch'
 
 ShoppingListHeader = React.createClass {
+  displayName : 'ShoppingListHeader'
+
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]
@@ -41,6 +43,8 @@ ShoppingListHeader = React.createClass {
 }
 
 IncompleteRecipeListItem = React.createClass {
+  displayName : 'IncompleteRecipeListItem'
+
   render : ->
     missingIngredients = _.map @_getRecipe().missing, (m) ->
       return <div className='missing-ingredient' key={m.displayIngredient}>
@@ -70,6 +74,8 @@ IncompleteRecipeListItem = React.createClass {
 }
 
 ShoppingList = React.createClass {
+  displayName : 'ShoppingList'
+
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
   ]
@@ -96,6 +102,8 @@ ShoppingList = React.createClass {
 }
 
 ShoppingListView = React.createClass {
+  displayName : 'ShoppingListView'
+
   render : ->
     <FixedHeaderFooter
       header={<ShoppingListHeader/>}

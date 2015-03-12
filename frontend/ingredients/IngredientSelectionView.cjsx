@@ -12,6 +12,8 @@ FixedHeaderFooter = require '../components/FixedHeaderFooter'
 HeaderWithSearch  = require '../components/HeaderWithSearch'
 
 IngredientSelectionHeader = React.createClass {
+  displayName : 'IngredientSelectionHeader'
+
   render : ->
     <HeaderWithSearch
       leftIcon='fa-times-circle'
@@ -34,6 +36,8 @@ IngredientSelectionHeader = React.createClass {
 }
 
 IngredientGroupHeader = React.createClass {
+  displayName : 'IngredientGroupHeader'
+
   render : ->
     text = @props.groupName
     if @props.selectedCount > 0
@@ -50,6 +54,8 @@ IngredientGroupHeader = React.createClass {
 }
 
 IngredientListItem = React.createClass {
+  displayName : 'IngredientListItem'
+
   mixins : [
     FluxMixin IngredientStore, 'selectedIngredientTags'
   ]

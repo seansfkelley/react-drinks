@@ -12,12 +12,16 @@ Header            = require '../components/Header'
 
 
 SectionHeader = React.createClass {
+  displayName : 'SectionHeader'
+
   render : ->
     <div className='recipe-section-header'>{@props.text}</div>
 }
 
 # TODO: Factor this out into a MeasuredIngredientView that is easily stylable?
 IngredientView = React.createClass {
+  displayName : 'IngredientView'
+
   render : ->
     amount = utils.fractionify(@props.measuredIngredient.displayAmount ? '')
     unit = @props.measuredIngredient.displayUnit ? ''
@@ -43,6 +47,8 @@ HUMAN_READABLE_CATEGORY_TITLE =
   available  : 'You Have'
 
 RecipeFooter = React.createClass {
+  displayName : 'RecipeFooter'
+
   render : ->
     <div className='recipe-controls'>
       <div className='save-to-button' onTouchTap={@_saveTo}>
@@ -65,6 +71,8 @@ RecipeFooter = React.createClass {
 }
 
 RecipeView = React.createClass {
+  displayName : 'RecipeView'
+
   render : ->
     # TODO: We're reusing this view for both types of recipes; seems bad.
     if @props.recipe.missing? and (@props.recipe.missing.length > 0 or @props.recipe.substitute.length > 0)

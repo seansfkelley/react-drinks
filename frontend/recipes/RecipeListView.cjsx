@@ -16,6 +16,8 @@ FixedHeaderFooter = require '../components/FixedHeaderFooter'
 HeaderedList      = require '../components/HeaderedList'
 
 RecipeListHeader = React.createClass {
+  displayName : 'RecipeListHeader'
+
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]
@@ -48,10 +50,12 @@ RecipeListHeader = React.createClass {
 }
 
 RecipeListItem = React.createClass {
+  displayName : 'RecipeListItem'
+
   render : ->
-    <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
+    <HeaderedList.ListItem className= 'recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@_getRecipe().name}</div>
-    </div>
+    </HeaderedList.ListItem>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
@@ -71,6 +75,8 @@ _recipeListItemTitleExtractor = (child) ->
   return RecipeListItem.getRecipeFor(child).name[0].toUpperCase()
 
 AlphabeticalRecipeList = React.createClass {
+  displayName : 'AlphabeticalRecipeList'
+
   mixins : [
     FluxMixin RecipeStore, 'searchedAlphabeticalRecipes'
   ]
@@ -85,6 +91,8 @@ AlphabeticalRecipeList = React.createClass {
 }
 
 GroupedRecipeList = React.createClass {
+  displayName : 'GroupedRecipeList'
+
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
   ]
@@ -111,6 +119,8 @@ GroupedRecipeList = React.createClass {
 }
 
 RecipeListView = React.createClass {
+  displayName : 'RecipeListView'
+
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]
