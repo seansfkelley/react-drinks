@@ -9,10 +9,9 @@ utils         = require '../utils'
 
 { RecipeStore, UiStore } = require '../stores'
 
-RecipeView        = require '../recipes/RecipeView'
-
-HeaderedList     = require '../components/HeaderedList'
-HeaderWithSearch = require '../components/HeaderWithSearch'
+SwipableRecipeView = require '../recipes/SwipableRecipeView'
+HeaderedList       = require '../components/HeaderedList'
+HeaderWithSearch   = require '../components/HeaderWithSearch'
 
 ShoppingListHeader = React.createClass {
   mixins : [
@@ -42,7 +41,7 @@ ShoppingListHeader = React.createClass {
 
 IncompleteRecipeListItem = React.createClass {
   render : ->
-    missingIngredients = _.map @props.recipe.missing, (m) ->
+    missingIngredients = _.map @_getRecipe().missing, (m) ->
       return <div className='missing-ingredient' key={m.displayIngredient}>
         <span className='amount'>{utils.fractionify(m.displayAmount ? '')}</span>
         {' '}
@@ -51,18 +50,24 @@ IncompleteRecipeListItem = React.createClass {
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
     <div className='incomplete-recipe-list-item list-item' onTouchTap={@_openRecipe}>
-      <div className='name'>{@props.recipe.name}</div>
+      <div className='name'>{@_getRecipe().name}</div>
       {missingIngredients}
     </div>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
       type      : 'show-modal'
-      component : <RecipeView recipe={@props.recipe}/>
+      component : <SwipableRecipeView recipes={@props.recipes} index={@props.index}/>
     }
+
+  _getRecipe : ->
+    return IncompleteRecipeListItem.getRecipeFor @
+
+  statics :
+    getRecipeFor : (element) ->
+      return element.props.recipes[element.props.index]
 }
 
-# This is busted.
 ShoppingList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
@@ -76,12 +81,15 @@ ShoppingList = React.createClass {
       .flatten()
       .value()
 
+    titleExtractor = (child) ->
+      return groupRecipePairs[child.props.index][0]
+
     orderedRecipes = _.pluck groupRecipePairs, '1'
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    <HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
+    <HeaderedList titleExtractor={titleExtractor}>
       {recipeNodes}
     </HeaderedList>
 }

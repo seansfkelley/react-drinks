@@ -83,7 +83,6 @@ AlphabeticalRecipeList = React.createClass {
     </HeaderedList>
 }
 
-# This is broken because it doesn't return the right titles.
 GroupedRecipeList = React.createClass {
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
