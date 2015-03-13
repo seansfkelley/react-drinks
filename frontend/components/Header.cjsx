@@ -25,13 +25,13 @@ Header = React.createClass {
 
     if @props.leftIcon?
       leftIcon = <i className={'fa float-left ' + @props.leftIcon} onTouchTap={@props.leftIconOnTouchTap}/>
-    else
-      leftIcon = <i className='fa float-left'/>
 
     if @props.rightIcon?
       rightIcon = <i className={'fa float-right ' + @props.rightIcon} onTouchTap={@props.rightIconOnTouchTap}/>
-    else
-      rightIcon = <i className='fa float-right'/>
+
+    if @props.leftIcon? or @props.rightIcon?
+      leftIcon  ?= <i className='fa float-left'/>
+      rightIcon ?= <i className='fa float-right'/>
 
     <div className={@getClassName 'header'}>
       {leftIcon}
