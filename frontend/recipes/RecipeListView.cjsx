@@ -13,7 +13,7 @@ SwipableRecipeView = require '../recipes/SwipableRecipeView'
 HeaderWithSearch   = require '../components/HeaderWithSearch'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
-HeaderedList      = require '../components/HeaderedList'
+Lists             = require '../components/Lists'
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
@@ -53,9 +53,9 @@ RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
   render : ->
-    <HeaderedList.ListItem className= 'recipe-list-item' onTouchTap={@_openRecipe}>
+    <Lists.ListItem className= 'recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@_getRecipe().name}</div>
-    </HeaderedList.ListItem>
+    </Lists.ListItem>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
@@ -85,9 +85,9 @@ AlphabeticalRecipeList = React.createClass {
     recipeNodes = _.map @state.searchedAlphabeticalRecipes, (r, i) =>
       <RecipeListItem recipes={@state.searchedAlphabeticalRecipes} index={i} key={r.normalizedName}/>
 
-    <HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
+    <Lists.HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
       {recipeNodes}
-    </HeaderedList>
+    </Lists.HeaderedList>
 }
 
 GroupedRecipeList = React.createClass {
@@ -113,9 +113,9 @@ GroupedRecipeList = React.createClass {
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    <HeaderedList titleExtractor={titleExtractor}>
+    <Lists.HeaderedList titleExtractor={titleExtractor}>
       {recipeNodes}
-    </HeaderedList>
+    </Lists.HeaderedList>
 }
 
 RecipeListView = React.createClass {

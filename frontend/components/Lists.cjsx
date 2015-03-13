@@ -3,6 +3,8 @@
 _     = require 'lodash'
 React = require 'react'
 
+Lists = {}
+
 ListHeader = React.createClass {
   displayName : 'ListHeader'
 
@@ -12,7 +14,7 @@ ListHeader = React.createClass {
     </div>
 }
 
-HeaderedList = React.createClass {
+Lists.HeaderedList = React.createClass {
   displayName : 'HeaderedList'
 
   propTypes :
@@ -21,8 +23,7 @@ HeaderedList = React.createClass {
     titleExtractor : React.PropTypes.func.isRequired
 
   getDefaultProps : -> {
-    classNames : 'default-headered-list'
-    emptyText  : 'Nothing to see here.'
+    classNames : ''
   }
 
   render : ->
@@ -35,15 +36,40 @@ HeaderedList = React.createClass {
         children.push <ListHeader title={title} key={'header-' + title} ref={'header-' + title}/>
       children.push child
 
-    if children.length == 0
-      children.push <div className='empty-list-text' key='empty'>Nothing to see here.</div>
+    # TODO: Pass the empty text through.
+    # TODO: Will React have a null clobber a default if the passed null is explicit? Or can I blindly pass in @props.emptyText?
+    <Lists.List className={'headered-list ' + @props.classNames}>
+      {children}
+    </Lists.List>
+}
 
-    <div className={'headered-list ' + @props.classNames}>
+Lists.List = React.createClass {
+  displayName : 'List'
+
+  propTypes :
+    className : React.PropTypes.string
+    emptyText : React.PropTypes.string
+
+  getDefaultProps : -> {
+    className : ''
+    emptyText : 'Nothing to see here.'
+  }
+
+  render : ->
+    className = 'list ' + @props.className
+    if React.Children.count(@props.children) == 0
+      children = <div className='empty-list-text'>{@props.emptyText}</div>
+    else
+      children = @props.children
+
+    <div {...@props} className={className}>
       {children}
     </div>
 }
 
-HeaderedList.ListItem = React.createClass {
+Lists.ListItem = React.createClass {
+  displayName : 'ListItem'
+
   render : ->
     className = 'list-item ' + (@props.className ? '')
     <div {...@props} className={className}>
@@ -51,4 +77,4 @@ HeaderedList.ListItem = React.createClass {
     </div>
 }
 
-module.exports = HeaderedList
+module.exports = Lists

@@ -8,15 +8,17 @@ AppDispatcher = require '../AppDispatcher'
 
 { UiStore, RecipeStore } = require '../stores'
 
-Header = require '../components/Header'
+FixedHeaderFooter = require '../components/FixedHeaderFooter'
+Lists             = require '../components/Lists'
+Header            = require '../components/Header'
 
 RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
   render : ->
-    <div className='recipe-list-item list-item' onTouchTap={@_openRecipe}>
+    <Lists.ListItem className='recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipes[@props.index].name}</div>
-    </div>
+    </Lists.ListItem>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
@@ -32,22 +34,20 @@ FavoritesList = React.createClass {
   ]
 
   render : ->
+    headerNode = <Header
+      leftIcon='fa-times-circle'
+      leftIconOnTouchTap={@_closeFavorites}
+      title='Favorites'/>
+
     recipes = _.filter @state.alphabeticalRecipes, (r) => @state.favoritedRecipes[r.normalizedName]
 
-    listNode = @generateList {
-      data        : recipes
-      getTitle    : (recipe) -> recipe.name[0].toUpperCase()
-      createChild : (recipe, i) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
-    }
+    recipeNodes = _.map recipes, (r) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
 
-    <div className='favorites-list'>
-      <Header
-        leftIcon='fa-times-circle'
-        leftIconOnTouchTap={@_closeFavorites}
-        title='Favorites'
-      />
-      {listNode}
-    </div>
+    <FixedHeaderFooter header={headerNode}>
+      <Lists.List>
+        {recipeNodes}
+      </Lists.List>
+    </FixedHeaderFooter>
 
   _closeFavorites : ->
     AppDispatcher.dispatch {
