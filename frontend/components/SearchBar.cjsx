@@ -28,8 +28,8 @@ SearchBar = React.createClass {
   focus : ->
     @refs.input.getDOMNode().focus()
 
-  _onChange : (event) ->
-    @props.onChange event.target.value
+  _onChange : (e) ->
+    @props.onChange e.target.value
 }
 
 module.exports = SearchBar

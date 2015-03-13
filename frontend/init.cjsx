@@ -17,12 +17,10 @@ window.getJquery = ->
   jq.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js'
   document.getElementsByTagName('head')[0].appendChild jq
 
-_oldOnTouchStart = document.ontouchstart
-document.ontouchstart = (e) ->
-  # This autoblur attribute is kind of a hack, cause we don't want clearing the search input
-  # to unfocus it (cause you touched something else) and then immediately refocus it.
-  if e.target.nodeName != 'INPUT' and e.target.dataset.autoblur != 'false'
+blurOnTouch = (e) ->
+  if e.target.nodeName != 'INPUT' and document.activeElement.nodeName == 'INPUT'
     document.activeElement.blur()
-  return _oldOnTouchStart?(arguments...)
+
+document.addEventListener 'touchstart', blurOnTouch, false
 
 React.render <App/>, document.querySelector('#app-root')
