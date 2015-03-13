@@ -16,30 +16,17 @@ ListHeader = React.createClass {
     </div>
 }
 
-Lists.HeaderedList = React.createClass {
-  displayName : 'HeaderedList'
-
-  propTypes :
-    emptyText      : React.PropTypes.string
-    titleExtractor : React.PropTypes.func.isRequired
+Lists.ListItem = React.createClass {
+  displayName : 'ListItem'
 
   mixins : [
     ClassNameMixin
   ]
 
   render : ->
-    children = []
-    lastTitle = null
-    React.Children.forEach @props.children, (child, i) =>
-      title = @props.titleExtractor child, i
-      if title != lastTitle
-        lastTitle = title
-        children.push <ListHeader title={title} key={'header-' + title} ref={'header-' + title}/>
-      children.push child
-
-    <Lists.List className={@getClassName 'headered-list'} emptyText={@props.emptyText}>
-      {children}
-    </Lists.List>
+    <div {...@props} className={@getClassName 'list-item'}>
+      {@props.children}
+    </div>
 }
 
 Lists.List = React.createClass {
@@ -67,17 +54,30 @@ Lists.List = React.createClass {
     </div>
 }
 
-Lists.ListItem = React.createClass {
-  displayName : 'ListItem'
+Lists.HeaderedList = React.createClass {
+  displayName : 'HeaderedList'
+
+  propTypes :
+    emptyText      : React.PropTypes.string
+    titleExtractor : React.PropTypes.func.isRequired
 
   mixins : [
     ClassNameMixin
   ]
 
   render : ->
-    <div {...@props} className={@getClassName 'list-item'}>
-      {@props.children}
-    </div>
+    children = []
+    lastTitle = null
+    React.Children.forEach @props.children, (child, i) =>
+      title = @props.titleExtractor child, i
+      if title != lastTitle
+        lastTitle = title
+        children.push <ListHeader title={title} key={'header-' + title} ref={'header-' + title}/>
+      children.push child
+
+    <Lists.List className={@getClassName 'headered-list'} emptyText={@props.emptyText}>
+      {children}
+    </Lists.List>
 }
 
 module.exports = Lists
