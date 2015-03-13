@@ -1,15 +1,21 @@
 gulp         = require 'gulp'
 gutil        = require 'gulp-util'
+gulpif       = require 'gulp-if'
 rename       = require 'gulp-rename'
 stylus       = require 'gulp-stylus'
 postcss      = require 'gulp-postcss'
 sourcemaps   = require 'gulp-sourcemaps'
 concat       = require 'gulp-concat'
+uglify       = require 'gulp-uglify'
+minifyCss    = require 'gulp-minify-css'
 browserify   = require 'browserify'
 watchify     = require 'watchify'
 buffer       = require 'vinyl-buffer'
 source       = require 'vinyl-source-stream'
 autoprefixer = require 'autoprefixer-core'
+
+# What are "best practices" for changing behavior in prod mode here?
+IS_PROD = process.env.PRODUCTION?
 
 paths =
   root    : [ './frontend/init.cjsx' ]
@@ -38,6 +44,7 @@ generateBundlingFunction = (bundler) ->
       .pipe source 'all-scripts.js'
       .pipe buffer()
       .pipe sourcemaps.init { loadMaps : true }
+      .pipe gulpif IS_PROD, uglify()
       .pipe sourcemaps.write './'
       .pipe gulp.dest './.dist'
 
@@ -51,6 +58,7 @@ buildStyles = ->
       autoprefixer()
     ]
     .pipe concat 'all-styles.css'
+    .pipe gulpif IS_PROD, minifyCss()
     .pipe sourcemaps.write './'
     .pipe gulp.dest './.dist'
 
