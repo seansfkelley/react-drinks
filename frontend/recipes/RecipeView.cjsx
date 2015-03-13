@@ -5,7 +5,7 @@ md5   = require 'MD5'
 React = require 'react'
 
 AppDispatcher = require '../AppDispatcher'
-FluxMixin     = require '../FluxMixin'
+FluxMixin     = require '../mixins/FluxMixin'
 utils         = require '../utils'
 
 { UiStore } = require '../stores'

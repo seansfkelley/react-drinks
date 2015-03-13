@@ -3,7 +3,7 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin     = require '../FluxMixin'
+FluxMixin     = require '../mixins/FluxMixin'
 AppDispatcher = require '../AppDispatcher'
 
 { UiStore, RecipeStore } = require '../stores'

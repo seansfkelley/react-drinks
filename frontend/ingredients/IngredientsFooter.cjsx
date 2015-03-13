@@ -1,6 +1,6 @@
 React = require 'react'
 
-FluxMixin     = require '../FluxMixin'
+FluxMixin     = require '../mixins/FluxMixin'
 AppDispatcher = require '../AppDispatcher'
 { UiStore }   = require '../stores'
 
