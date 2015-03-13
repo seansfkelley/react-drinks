@@ -61,7 +61,7 @@ IngredientStore = new class extends FluxStore
         .value()
 
 UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
-UI_PERSISTABLE_FIELDS = [ 'useIngredients', 'openIngredientGroups' ]
+UI_PERSISTABLE_FIELDS = [ 'useIngredients', 'openIngredientGroups', 'favoritedRecipes' ]
 
 UiStore = new class extends FluxStore
   fields : ->

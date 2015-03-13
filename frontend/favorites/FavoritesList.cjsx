@@ -8,9 +8,10 @@ AppDispatcher = require '../AppDispatcher'
 
 { UiStore, RecipeStore } = require '../stores'
 
-FixedHeaderFooter = require '../components/FixedHeaderFooter'
-Lists             = require '../components/Lists'
-Header            = require '../components/Header'
+FixedHeaderFooter  = require '../components/FixedHeaderFooter'
+Lists              = require '../components/Lists'
+Header             = require '../components/Header'
+SwipableRecipeView = require '../recipes/SwipableRecipeView'
 
 RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
@@ -41,7 +42,7 @@ FavoritesList = React.createClass {
 
     recipes = _.filter @state.alphabeticalRecipes, (r) => @state.favoritedRecipes[r.normalizedName]
 
-    recipeNodes = _.map recipes, (r) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
+    recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
 
     <FixedHeaderFooter header={headerNode}>
       <Lists.List>

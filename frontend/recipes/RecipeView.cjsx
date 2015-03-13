@@ -72,7 +72,10 @@ RecipeFooter = React.createClass {
     </div>
 
   _saveTo : ->
-    console.log 'save to'
+    AppDispatcher.dispatch {
+      type           : 'toggle-favorite-recipe'
+      normalizedName : @props.recipe.normalizedName
+    }
 
   _close : ->
     AppDispatcher.dispatch {
