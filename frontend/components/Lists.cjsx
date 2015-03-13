@@ -37,10 +37,7 @@ Lists.HeaderedList = React.createClass {
         children.push <ListHeader title={title} key={'header-' + title} ref={'header-' + title}/>
       children.push child
 
-    # TODO: Pass the empty text through.
-    # TODO: Will React have a null clobber a default if the passed null is explicit? Or can I blindly pass in @props.emptyText?
-    # TODO: Make sure everything is using Lists.ListItem?
-    <Lists.List className={@getClassName 'headered-list'}>
+    <Lists.List className={@getClassName 'headered-list'} emptyText={@props.emptyText}>
       {children}
     </Lists.List>
 }
