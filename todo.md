@@ -11,6 +11,7 @@ todo
 - sticky header based off of headered list
 - collapsible list based off of headered list
 - swipable list may not be cleaning up nodes after it's hidden
+- use NODE_ENV, not PRODUCTION (and maybe make npm start respect it too, byt ignoring file changes?)
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb
@@ -20,6 +21,7 @@ bugs
 - tapping on the search bar selects them immediately deselects the input
 - if the search input on recipes is left open when you open ingredients (should it be?), you can open ingredients, then close it and it will also highlight the search bar (perhaps something to do with pointer-events being turned off when the class changes? prevent default?)
 - when the pushover view is shown on iOS you can scroll the page back over and see the hidden view; also pointer events still work on it for some reason
+- fix swipable recipe view to not generate thousands of nodes and slow down the renderer
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"
