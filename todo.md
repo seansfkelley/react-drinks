@@ -1,8 +1,6 @@
 features
 - react router for permalinking to recipes?
 - adding recipes
-- swiping between recipes
-- bookmarking instead of lists
 
 todo
 - clean up styling (more variables for sizes, things are in the wrong place, things are duplicated)

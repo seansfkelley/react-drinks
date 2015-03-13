@@ -43,15 +43,15 @@ generateBundlingFunction = (bundler) ->
 
 buildStyles = ->
   gulp.src paths.styles
-    .pipe sourcemaps.init()
+    .pipe sourcemaps.init { loadMaps : true }
     .pipe stylus {
       include : [ __dirname + '/styles' ]
     }
     .pipe postcss [
       autoprefixer()
     ]
-    .pipe sourcemaps.write()
     .pipe concat 'all-styles.css'
+    .pipe sourcemaps.write './'
     .pipe gulp.dest './.dist'
 
 buildScripts = ->
