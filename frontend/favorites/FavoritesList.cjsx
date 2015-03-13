@@ -47,7 +47,7 @@ FavoritesList = React.createClass {
     recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
 
     <FixedHeaderFooter header={headerNode}>
-      <Lists.List>
+      <Lists.List className='favorites-list'>
         {recipeNodes}
       </Lists.List>
     </FixedHeaderFooter>
