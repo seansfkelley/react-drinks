@@ -78,6 +78,8 @@ IngredientListItem = React.createClass {
 }
 
 GroupedIngredientList = React.createClass {
+  display : 'GroupedIngredientList'
+
   mixins : [
     FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
     FluxMixin UiStore, 'openIngredientGroups'
@@ -102,6 +104,8 @@ GroupedIngredientList = React.createClass {
 }
 
 IngredientSelectionView = React.createClass {
+  displayName : 'IngredientSelectionView'
+
   render : ->
     <FixedHeaderFooter
       classNames='ingredient-list-view'

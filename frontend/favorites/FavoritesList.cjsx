@@ -29,6 +29,8 @@ RecipeListItem = React.createClass {
 }
 
 FavoritesList = React.createClass {
+  displayName : 'FavoritesList'
+
   mixins : [
     FluxMixin UiStore, 'favoritedRecipes'
     FluxMixin RecipeStore, 'alphabeticalRecipes'
