@@ -130,7 +130,7 @@ RecipeView = React.createClass {
       </div>
 
     <FixedHeaderFooter
-      classNames='recipe-view'
+      className='recipe-view'
       header={<Header title={@props.recipe.name}/>}
       footer={<RecipeFooter recipe={@props.recipe}/>}
     >

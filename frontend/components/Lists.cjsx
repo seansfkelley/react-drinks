@@ -3,6 +3,8 @@
 _     = require 'lodash'
 React = require 'react'
 
+ClassNameMixin = require '../mixins/ClassNameMixin'
+
 Lists = {}
 
 ListHeader = React.createClass {
@@ -18,13 +20,12 @@ Lists.HeaderedList = React.createClass {
   displayName : 'HeaderedList'
 
   propTypes :
-    classNames     : React.PropTypes.string
     emptyText      : React.PropTypes.string
     titleExtractor : React.PropTypes.func.isRequired
 
-  getDefaultProps : -> {
-    classNames : ''
-  }
+  mixins : [
+    ClassNameMixin
+  ]
 
   render : ->
     children = []
@@ -38,7 +39,8 @@ Lists.HeaderedList = React.createClass {
 
     # TODO: Pass the empty text through.
     # TODO: Will React have a null clobber a default if the passed null is explicit? Or can I blindly pass in @props.emptyText?
-    <Lists.List className={'headered-list ' + @props.classNames}>
+    # TODO: Make sure everything is using Lists.ListItem?
+    <Lists.List className={@getClassName 'headered-list'}>
       {children}
     </Lists.List>
 }
@@ -47,22 +49,23 @@ Lists.List = React.createClass {
   displayName : 'List'
 
   propTypes :
-    className : React.PropTypes.string
     emptyText : React.PropTypes.string
 
+  mixins : [
+    ClassNameMixin
+  ]
+
   getDefaultProps : -> {
-    className : ''
     emptyText : 'Nothing to see here.'
   }
 
   render : ->
-    className = 'list ' + @props.className
     if React.Children.count(@props.children) == 0
       children = <div className='empty-list-text'>{@props.emptyText}</div>
     else
       children = @props.children
 
-    <div {...@props} className={className}>
+    <div {...@props} className={@getClassName 'list'}>
       {children}
     </div>
 }
@@ -70,9 +73,12 @@ Lists.List = React.createClass {
 Lists.ListItem = React.createClass {
   displayName : 'ListItem'
 
+  mixins : [
+    ClassNameMixin
+  ]
+
   render : ->
-    className = 'list-item ' + (@props.className ? '')
-    <div {...@props} className={className}>
+    <div {...@props} className={@getClassName 'list-item'}>
       {@props.children}
     </div>
 }

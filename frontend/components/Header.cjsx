@@ -2,11 +2,12 @@
 
 React = require 'react'
 
+ClassNameMixin = require '../mixins/ClassNameMixin'
+
 Header = React.createClass {
   displayName : 'Header'
 
   propTypes :
-    classNames          : React.PropTypes.string
     leftIcon            : React.PropTypes.string
     title               : React.PropTypes.string.isRequired
     rightIcon           : React.PropTypes.string
@@ -14,9 +15,10 @@ Header = React.createClass {
     titleOnTouchTap     : React.PropTypes.func
     rightIconOnTouchTap : React.PropTypes.func
 
-  getDefaultProps : -> {
-    classNames : ''
-  }
+
+  mixins : [
+    ClassNameMixin
+  ]
 
   render : ->
     title = <span className='header-title' onTouchTap={@props.titleOnTouchTap}>{@props.title}</span>
@@ -31,7 +33,7 @@ Header = React.createClass {
     else
       rightIcon = <i className='fa float-right'/>
 
-    <div className={'header ' + @props.classNames}>
+    <div className={@getClassName 'header'}>
       {leftIcon}
       {title}
       {rightIcon}

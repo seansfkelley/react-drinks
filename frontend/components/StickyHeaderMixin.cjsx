@@ -13,7 +13,7 @@ StickyHeaderMixin = {
     }
 
   # TODO: Make this a class that takes a bunch of children.
-  generateList : ({ data, getTitle, createChild, classNames }) ->
+  generateList : ({ data, getTitle, createChild, className }) ->
     lastTitle = null
     childNodes = _.chain data
       .map (datum, i) ->
@@ -38,7 +38,7 @@ StickyHeaderMixin = {
         <div className='sticky-header-wrapper' style={{ marginTop : @state.stickyHeaderOffset }}>
           <ListHeader title={@state.stickyHeaderTitle}/>
         </div>}
-      <div className={'sticky-header-list ' + classNames}>
+      <div className={'sticky-header-list ' + className}>
         {childNodes}
       </div>
     </div>

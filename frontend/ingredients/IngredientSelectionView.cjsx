@@ -108,7 +108,7 @@ IngredientSelectionView = React.createClass {
 
   render : ->
     <FixedHeaderFooter
-      classNames='ingredient-list-view'
+      className='ingredient-list-view'
       header={<IngredientSelectionHeader/>}
     >
       <GroupedIngredientList/>

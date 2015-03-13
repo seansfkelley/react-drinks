@@ -107,7 +107,7 @@ ShoppingListView = React.createClass {
   render : ->
     <FixedHeaderFooter
       header={<ShoppingListHeader/>}
-      classNames='shopping-list-view'
+      className='shopping-list-view'
     >
       <ShoppingList/>
     </FixedHeaderFooter>

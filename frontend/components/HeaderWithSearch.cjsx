@@ -3,6 +3,8 @@
 _     = require 'lodash'
 React = require 'react'
 
+ClassNameMixin = require '../mixins/ClassNameMixin'
+
 Header    = require './Header'
 SearchBar = require './SearchBar'
 
@@ -12,18 +14,18 @@ HeaderWithSearch = React.createClass {
   propTypes :
     onSearch : React.PropTypes.func
 
+  mixins : [
+    ClassNameMixin
+  ]
+
   getInitialState : ->
     return {
       searchBarVisible : false
     }
 
   render : ->
-    classNames = 'with-search'
-    if @props.classNames?
-      classNames += @props.classNames
-
     <Header {...@props}
-      classNames={classNames}
+      className={@getClassName 'with-search'}
       rightIcon={'fa-search'}
       rightIconOnTouchTap={@_toggleSearch}
     >
