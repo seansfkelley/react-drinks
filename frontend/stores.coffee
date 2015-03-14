@@ -66,10 +66,13 @@ UI_PERSISTABLE_FIELDS = [ 'useIngredients', 'openIngredientGroups', 'favoritedRe
 UiStore = new class extends FluxStore
   fields : ->
     return _.extend {
-      useIngredients       : false
+      useIngredients       : true
       openIngredientGroups : {}
       favoritedRecipes     : {}
     }, JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? 'null')
+
+  'toggle-ingredient' : ->
+    @useIngredients = true
 
   'toggle-use-ingredients' : ->
     @useIngredients = not @useIngredients

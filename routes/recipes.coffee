@@ -39,6 +39,8 @@ OTHER_RECIPES = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/recipes.yaml
 
 RECIPES = _.sortBy IBA_RECIPES.concat(OTHER_RECIPES), 'name'
 
+console.log "loaded #{RECIPES.length} recipes"
+
 revalidatorUtils.validateOrThrow RECIPES, {
   type  : 'array'
   items : RECIPE_SCHEMA

@@ -38,8 +38,8 @@ FavoritesList = React.createClass {
 
   render : ->
     headerNode = <Header
-      leftIcon='fa-times-circle'
-      leftIconOnTouchTap={@_closeFavorites}
+      rightIcon='fa-chevron-right'
+      rightIconOnTouchTap={@_closeFavorites}
       title='Favorites'/>
 
     recipes = _.filter @state.alphabeticalRecipes, (r) => @state.favoritedRecipes[r.normalizedName]
@@ -47,7 +47,7 @@ FavoritesList = React.createClass {
     recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
 
     <FixedHeaderFooter header={headerNode}>
-      <Lists.List className='favorites-list'>
+      <Lists.List className='favorites-list' emptyText='Add some favorites first!'>
         {recipeNodes}
       </Lists.List>
     </FixedHeaderFooter>

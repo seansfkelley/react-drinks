@@ -16,7 +16,7 @@ IngredientSelectionHeader = React.createClass {
 
   render : ->
     <HeaderWithSearch
-      leftIcon='fa-times-circle'
+      leftIcon='fa-chevron-down'
       leftIconOnTouchTap={@_hideIngredients}
       title='Ingredients'
       onSearch={@_setSearchTerm}

@@ -30,6 +30,8 @@ INGREDIENT_SCHEMA = {
 GROUPS      = yaml.safeLoad fs.readFileSync(__dirname + '/../data/groups.yaml')
 INGREDIENTS = yaml.safeLoad fs.readFileSync(__dirname + '/../data/ingredients.yaml')
 
+console.log "loaded #{INGREDIENTS.length} ingredients in #{GROUPS.length} groups"
+
 revalidatorUtils.validateOrThrow INGREDIENTS, {
   type  : 'array'
   items : INGREDIENT_SCHEMA

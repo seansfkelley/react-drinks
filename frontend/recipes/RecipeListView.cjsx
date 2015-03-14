@@ -90,6 +90,15 @@ AlphabeticalRecipeList = React.createClass {
     </Lists.HeaderedList>
 }
 
+EmptyListView = React.createClass {
+  render : ->
+    <div className='empty-list-text'>
+      No drinks?
+      <br/>
+      Try adding some ingredients!
+    </div>
+}
+
 GroupedRecipeList = React.createClass {
   displayName : 'GroupedRecipeList'
 
@@ -113,7 +122,7 @@ GroupedRecipeList = React.createClass {
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    <Lists.HeaderedList titleExtractor={titleExtractor}>
+    <Lists.HeaderedList titleExtractor={titleExtractor} emptyView={<EmptyListView/>}>
       {recipeNodes}
     </Lists.HeaderedList>
 }

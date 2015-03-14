@@ -1,6 +1,7 @@
 @require 'sizes'
 
 transition-duration = 0.33s
+icon-width = 44px
 
 .header
   font-size header-footer-font-size
@@ -23,7 +24,7 @@ transition-duration = 0.33s
     position absolute
 
     top 6px
-    right 36px
+    right icon-width
     bottom 6px
 
     overflow hidden
@@ -34,6 +35,6 @@ transition-duration = 0.33s
       transition opacity 0s ease transition-duration, width transition-duration
 
     &.visible
-      width calc(100% - 42px) // 6px + 36px
+      width "calc(100% - %s)" % (icon-width * 2)
       opacity 1
       transition opacity 0s, width transition-duration

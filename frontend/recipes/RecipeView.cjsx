@@ -63,7 +63,7 @@ RecipeFooter = React.createClass {
     <div className='recipe-controls'>
       <div className='save-to-button' onTouchTap={@_saveTo}>
         <i className={'fa ' + iconClass}/>
-        <span>Save</span>
+        <span>Favorite</span>
       </div>
       <div className='close-button' onTouchTap={@_close}>
         <span>Close</span>

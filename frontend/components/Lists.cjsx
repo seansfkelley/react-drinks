@@ -34,6 +34,7 @@ Lists.List = React.createClass {
 
   propTypes :
     emptyText : React.PropTypes.string
+    emptyView : React.PropTypes.element
 
   mixins : [
     ClassNameMixin
@@ -45,7 +46,10 @@ Lists.List = React.createClass {
 
   render : ->
     if React.Children.count(@props.children) == 0
-      children = <div className='empty-list-text'>{@props.emptyText}</div>
+      if @props.emptyView
+        children = @props.emptyView
+      else
+        children = <div className='empty-list-text'>{@props.emptyText}</div>
     else
       children = @props.children
 
@@ -58,7 +62,7 @@ Lists.HeaderedList = React.createClass {
   displayName : 'HeaderedList'
 
   propTypes :
-    emptyText      : React.PropTypes.string
+    emptyView      : React.PropTypes.element
     titleExtractor : React.PropTypes.func.isRequired
 
   mixins : [
@@ -75,7 +79,7 @@ Lists.HeaderedList = React.createClass {
         children.push <ListHeader title={title} key={'header-' + title} ref={'header-' + title}/>
       children.push child
 
-    <Lists.List className={@getClassName 'headered-list'} emptyText={@props.emptyText}>
+    <Lists.List className={@getClassName 'headered-list'} emptyView={@props.emptyView}>
       {children}
     </Lists.List>
 }
