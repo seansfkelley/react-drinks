@@ -58,5 +58,8 @@
     type    : 'herb'
     display : 'Herbs'
   -
+    type    : 'dairy'
+    display : 'Dairy'
+  -
     type    : 'other'
     display : 'Other'

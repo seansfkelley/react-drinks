@@ -78,7 +78,7 @@
     group      : wine
   -
     display    : Egg White
-    group      : other
+    group      : dairy
   -
     display    : Elderflower Liqueur
     group      : liqueur-herbal
@@ -155,7 +155,7 @@
     group      : tequila
   -
     display    : Milk
-    group      : other
+    group      : dairy
   -
     display    : Mint
     group      : herb
@@ -273,3 +273,16 @@
   -
     display    : Peach
     group      : fruit
+  -
+    display    : Créme de Cacao
+    tag        : creme de cacao
+    group      : liqueur-other
+  -
+    display    : Cream
+    group      : dairy
+  -
+    display    : Campari
+    group      : liqueur-herbal
+  -
+    display    : Brandy
+    group      : brandy
