@@ -10,6 +10,7 @@ todo
 - having views hide themselves by knowing which overlay they're in is sketchy
 - sticky header based off of headered list
 - collapsible list based off of headered list
+- use URL/source property so people can check out the original recipe
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb
@@ -25,6 +26,7 @@ design ideas
   - an inverted shopping cart -- for each ingredient, what are the drinks you could make if you got { just it, other stuff too }?
 - "What drinks can I make with {X} in them?"
   - some way to search withiin mixables/all for an ingredient as well as a name
+- FTUE -- it's not clear what people should be doing (but how much of this can we just design around?)
 - a note about glassware (and garnish?) would be a neat addition
 - some kind of reset for ingredients would be nice
 - buffer space on the bottom of the exandable list for ingredients might make for a nicer expanding-things-near-the-bottom experience

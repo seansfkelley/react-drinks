@@ -34,7 +34,10 @@ RECIPE_SCHEMA = {
     url : OPTIONAL_STRING
 }
 
-RECIPES = _.sortBy yaml.safeLoad(fs.readFileSync(__dirname + '/../data/recipes.yaml')), 'name'
+IBA_RECIPES   = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/iba-recipes.yaml'))
+OTHER_RECIPES = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/recipes.yaml'))
+
+RECIPES = _.sortBy IBA_RECIPES.concat(OTHER_RECIPES), 'name'
 
 revalidatorUtils.validateOrThrow RECIPES, {
   type  : 'array'
