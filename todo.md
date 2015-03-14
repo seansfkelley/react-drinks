@@ -39,3 +39,6 @@ recipes
   - no recipes calling for ingredients that don't exist
 - everything is in thirds and is it acceptable to adjust the measurements to not be dumb?
 - apricot brandy -- worth making its own ingredient?
+- add:
+  - white russian
+  - blind russian
