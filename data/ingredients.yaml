@@ -286,3 +286,7 @@
   -
     display    : Brandy
     group      : brandy
+  -
+    display    : Gomme Syrup
+    generic    : simple syrup
+    group      : syrup

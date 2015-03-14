@@ -86,26 +86,26 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "B52"
+      name: "B-52"
       ingredients:
         -
-          tag: "kahlua"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "coffee liqueur"
+          displayAmount: "1/2"
+          displayUnit: "oz"
           displayIngredient: "kahlua"
         -
-          tag: "bailey's irish cream"
-          displayAmount: "2"
-          displayUnit: "cl"
-          displayIngredient: "bailey's irish cream"
+          tag: "irish cream"
+          displayAmount: "1/2"
+          displayUnit: "oz"
+          displayIngredient: "Baileys irish cream"
         -
           tag: "grand marnier"
-          displayAmount: "2"
-          displayUnit: "cl"
-          displayIngredient: "grand marnier"
+          displayAmount: "1/2"
+          displayUnit: "oz"
+          displayIngredient: "Grand Marnier"
       instructions: |
-        Layer ingredients one at a time starting with Kahlua, followed by Bailey's Irish Cream and top with Grand Marnier.
-        Flame the Grand Marnier, serve while the flame is still on, accompanied with a straw on side plate.
+        Layer ingredients one at a time starting with Kahlúa, followed by Baileys and topped with Grand Marnier.
+        Flame the Grand Marnier and serve while the flame is still on, accompanied with a straw on side plate.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -290,23 +290,22 @@
       ingredients:
         -
           tag: "cachaca"
-          displayAmount: "5"
-          displayUnit: "cl"
-          displayIngredient: "cachaca"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
+          displayIngredient: "cachaça"
         -
-          tag: ""
-          displayAmount: "4"
-          displayUnit: "wedges"
-          displayIngredient: ""
+          tag: "lime"
+          displayAmount: "1/2"
+          displayIngredient: "lime, cut into wedges"
         -
           tag: "sugar"
           displayAmount: "2"
-          displayUnit: "teaspoon"
+          displayUnit: "tsp"
           displayIngredient: "sugar"
       instructions: |
-        Place lime and suger in old fashion glass and muddle.
-        Fill glass with ice and Cachaca
-        (note:Caipiroska- use Vodka instead of Cachaca).
+        Place lime and sugar in an old fashioned glass and muddle.
+        Fill glass with ice and cachaça.
+        Garnish with sugar cane.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -477,7 +476,7 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Derby"
+      name: "Derby #1"
       ingredients:
         -
           tag: "gin"
@@ -496,8 +495,7 @@
           displayIngredient: "mint leafs"
       instructions: |
         Pour all ingredients into a mixing glass with ice.
-        Stir.
-        Strain into a cocktail glass.
+        Stir and strain into a cocktail glass.
         Garnish with a fresh mint leaves in the drink.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
@@ -977,23 +975,23 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "lemon juice, fresh"
-          displayAmount: "2.5"
-          displayUnit: "cl"
-          displayIngredient: "lemon juice, fresh"
+          tag: "lemon juice"
+          displayAmount: "3/4"
+          displayUnit: "oz"
+          displayIngredient: "fresh lemon juice"
         -
           tag: "gomme syrup"
-          displayAmount: "3.0"
-          displayUnit: "cl"
+          displayAmount: "1"
+          displayUnit: "oz"
           displayIngredient: "gomme syrup"
         -
-          tag: "of cola"
+          tag: "cola"
           displayAmount: "1"
           displayUnit: "dash"
           displayIngredient: "of cola"
       instructions: |
-        Add all ingredients into highball glass filled with ice.
-        Stir gently. Garnish with lemon spiral. Serve with straw.
+        Add all ingredients into highball glass filled with ice and stir gently.
+        Garnish with lemon spiral and serve with straw.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -1035,19 +1033,19 @@
       ingredients:
         -
           tag: "rye whiskey"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
           displayIngredient: "rye whiskey"
         -
-          tag: "red vermouth"
-          displayAmount: "2"
-          displayUnit: "cl"
-          displayIngredient: "red vermouth"
+          tag: "sweet vermouth"
+          displayAmount: "2/3"
+          displayUnit: "oz"
+          displayIngredient: "sweet vermouth"
         -
           tag: "angostura bitters"
           displayAmount: "1"
           displayUnit: "dash"
-          displayIngredient: "angostura bitters"
+          displayIngredient: "Angostura bitters"
       instructions: |
         Pour all ingredients into mixing glass with ice cubes. Stir well.
         Strain into chilled cocktail glass.
@@ -1055,27 +1053,28 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Margarita"
+      name: "Margarita #1"
       ingredients:
         -
           tag: "tequila"
-          displayAmount: "3.5"
-          displayUnit: "cl"
+          displayAmount: "1"
+          displayUnit: "oz"
           displayIngredient: "tequila"
         -
           tag: "cointreau"
-          displayAmount: "2"
-          displayUnit: "cl"
-          displayIngredient: "cointreau"
+          displayAmount: "2/3"
+          displayUnit: "oz"
+          displayIngredient: "Cointreau"
         -
-          tag: "freshly squeezed lime juice"
+          tag: "lime juice"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "freshly squeezed lime juice"
+          displayIngredient: "fresh lime juice"
       instructions: |
+        Rim a margarita glass with salt.
         Pour all ingredients into shaker with ice.
-        Shake well and strain into cocktail glass rimmed with salt
-        (note:Fruit Margarita - blend selected fruit with the above recipe).
+        Shake well and strain into glass.
+        Garnish with wheel of lime.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -1540,8 +1539,8 @@
           displayIngredient: "scotch whisky"
         -
           tag: "drambuie"
-          displayAmount: "2.5"
-          displayUnit: "cl"
+          displayAmount: "3/4"
+          displayUnit: "oz"
           displayIngredient: "drambuie"
       instructions: |
         Pour all ingredients directly into old-fashioned glass filled with ice.
@@ -1550,33 +1549,31 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Sazerac"
+      name: "Sazerac #1"
       ingredients:
         -
           tag: "cognac"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
           displayIngredient: "cognac"
         -
           tag: "absinthe"
-          displayAmount: "1"
-          displayUnit: "cl"
           displayIngredient: "absinthe"
         -
-          tag: "cube"
+          tag: "sugar"
           displayAmount: "1"
-          displayUnit: "sugar"
-          displayIngredient: "cube"
+          displayIngredient: "sugar cube"
         -
-          tag: "peychaud’s bitters"
+          tag: "peychauds bitters"
           displayAmount: "2"
           displayUnit: "dashes"
           displayIngredient: "peychaud’s bitters"
       instructions: |
         Rinse a chilled old-fashioned glass with the absinthe, add crushed ice and set it aside.
         Stir the remaining ingredients over ice and set it aside.
-        Discard the ice and any excess absinthe from the prepared glass, and strain the drink into the glass. Add the Lemon peel for garnish.
-        Note: The original recipe changed after the American Civil War, rye whiskey substituted cognac as it became hard to obtain.
+        Discard the ice and any excess absinthe from the prepared glass, and strain the drink into the glass.
+        Add the lemon peel for garnish.
+      notes: The original recipe changed after the American Civil War. Rye whiskey substituted cognac as it became hard to obtain cognac.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -1934,8 +1931,8 @@
       ingredients:
         -
           tag: "gin"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "gin"
         -
           tag: "triple sec"
@@ -1943,13 +1940,14 @@
           displayUnit: "oz"
           displayIngredient: "triple sec"
         -
-          tag: "fresh lemon juice"
-          displayAmount: "2"
-          displayUnit: "cl"
-          displayIngredient: "fresh lemon juice"
+          tag: "lemon juice"
+          displayAmount: "2/3"
+          displayUnit: "oz"
+          displayIngredient: "lemon juice"
       instructions: |
         Add all ingredients into cocktail shaker filled with ice.
         Shake well and strain into large cocktail glass.
+      notes: "Being a sour, some variants of the White Lady include an egg white."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -

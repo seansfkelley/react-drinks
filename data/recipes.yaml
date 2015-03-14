@@ -1,27 +1,5 @@
 ---
   -
-    name: "Caipirinha"
-    ingredients:
-      -
-        tag: "cachaca"
-        displayAmount: "2"
-        displayUnit: "oz"
-        displayIngredient: "cachaça"
-      -
-        tag: "lime"
-        displayAmount: "1"
-        displayIngredient: "lime, cut into eighths"
-      -
-        tag: "sugar"
-        displayAmount: "1"
-        displayUnit: "tsp"
-        displayIngredient: "sugar"
-    instructions: |
-      Muddle lime and sugar in a lowball glass until the lime is juiced.
-      Fill to brim with crushed ice and add cachaça.
-      Garnish with sugar cane.
-    notes: "Proper Brazilian Caipirinhas are unmeasured. The glass is simply filled with cachaça after the ice is added."
-  -
     name: "Gin and Tonic"
     ingredients:
       -
@@ -127,48 +105,6 @@
     instructions: |
       Pour ginger beer into a highball glass filled with ice.
       Top off with rum.
-  -
-    name: "Long Island Iced Tea"
-    ingredients:
-      -
-        tag: "vodka"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "vodka"
-      -
-        tag: "tequila"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "tequila"
-      -
-        tag: "gin"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "gin"
-      -
-        tag: "white rum"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "white rum"
-      -
-        tag: "triple sec"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "triple sec"
-      -
-        tag: "lemon juice"
-        displayAmount: "2"
-        displayUnit: "parts"
-        displayIngredient: "lemon juice"
-      -
-        tag: "simple syrup"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "simple syrup"
-      -
-        tag: "cola"
-        displayIngredient: "splash of cola"
-    instructions: "Mix ingredients in a highball glass over ice."
   -
     name: "Chateau Romani"
     ingredients:
@@ -379,7 +315,7 @@
     source: "Saveur"
     url: "http://www.saveur.com/article/Recipes/The-Lumiere"
   -
-    name: "Margarita"
+    name: "Margarita #2"
     ingredients:
       -
         tag: "blanco tequila"
@@ -472,27 +408,6 @@
     source: "NY Times"
     url: "http://www.nytimes.com/2010/12/01/dining/01partiesrex3.html"
   -
-    name: "Manhattan"
-    ingredients:
-      -
-        tag: "whiskey"
-        displayAmount: "2 1/2"
-        displayUnit: "oz"
-        displayIngredient: "whiskey"
-      -
-        tag: "sweet vermouth"
-        displayAmount: "1"
-        displayUnit: "oz"
-        displayIngredient: "sweet vermouth"
-      -
-        tag: "angostura bitters"
-        displayAmount: "1"
-        displayUnit: "dash"
-        displayIngredient: "Angostura bitters"
-    instructions:
-      Stir gently over ice.
-      Strain into a chilled cocktail glass and garnish with a Maraschino cherry.
-  -
     name: "Brooklyn"
     ingredients:
       -
@@ -519,48 +434,6 @@
       Stir gently over ice.
       Strain into a chilled cocktail glass.
     notes: "The bitters may be replaced with 1/4oz Amer Picon, a French version of Italy's Amaro."
-  -
-    name: "White Lady"
-    ingredients:
-      -
-        tag: "gin"
-        displayAmount: "2"
-        displayUnit: "oz"
-        displayIngredient: "London dry gin"
-      -
-        tag: "cointreau"
-        displayAmount: "1/2"
-        displayUnit: "oz"
-        displayIngredient: "Cointreau"
-      -
-        tag: "lemon juice"
-        displayAmount: "1/2"
-        displayUnit: "oz"
-        displayIngredient: "lemon juice"
-      -
-        tag: "egg white"
-        displayAmount: "1"
-        displayIngredient: "egg white"
-    instructions: "Shake well with cracked ice, then strain into a chilled cocktail glass."
-  -
-    name: "B-52"
-    ingredients:
-      -
-        tag: "coffee liqueur"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "Kahlúa"
-      -
-        tag: "baileys"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "Baileys"
-      -
-        tag: "triple sec"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "Grand Marnier"
-    instructions: "Layer ingredients into a shot glass (Kahlúa, then Baileys, then Grand Marnier)."
   -
     name: "La Palabra"
     ingredients:
@@ -700,7 +573,7 @@
     source: "Cocktailia"
     url: "http://www.cocktailia.com/cocktail-recipes/el-presidente"
   -
-    name: "Derby"
+    name: "Derby #2"
     ingredients:
       -
         tag: "bourbon"
@@ -987,7 +860,7 @@
     source: "Serious Eats"
     url: "http://www.seriouseats.com/recipes/2008/07/vieux-carre-recipe.html"
   -
-    name: "Sazerac"
+    name: "Sazerac #2"
     ingredients:
       -
         tag: "rye whiskey"
@@ -1078,22 +951,6 @@
     notes: "To make the lemon basil simple syrup, use 4 parts sugar and 4 parts water to 1 part (loosely packed) basil leaves."
     source: "Saveur"
     url: "http://www.saveur.com/article/Recipes/Lemon-Basil-Blossom-Cocktail"
-  -
-    name: "Rusty Nail"
-    ingredients:
-      -
-        tag: "drambuie"
-        displayAmount: "3/4"
-        displayUnit: "oz"
-        displayIngredient: "Drambuie"
-      -
-        tag: "scotch"
-        displayAmount: "2"
-        displayUnit: "oz"
-        displayIngredient: "blended scotch whiskey"
-    instructions: |
-      Stir ingredients together with ice.
-      Strain into ice-filled glass.
   -
     name: "Peach Julep"
     ingredients:
