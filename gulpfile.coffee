@@ -14,8 +14,7 @@ buffer       = require 'vinyl-buffer'
 source       = require 'vinyl-source-stream'
 autoprefixer = require 'autoprefixer-core'
 
-# What are "best practices" for changing behavior in prod mode here?
-IS_PROD = process.env.PRODUCTION?
+IS_PROD = process.env.NODE_ENV == 'production'
 
 paths =
   root    : [ './frontend/init.cjsx' ]

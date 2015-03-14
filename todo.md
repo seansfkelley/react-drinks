@@ -10,8 +10,6 @@ todo
 - having views hide themselves by knowing which overlay they're in is sketchy
 - sticky header based off of headered list
 - collapsible list based off of headered list
-- swipable list may not be cleaning up nodes after it's hidden
-- use NODE_ENV, not PRODUCTION (and maybe make npm start respect it too, byt ignoring file changes?)
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb
