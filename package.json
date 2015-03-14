@@ -46,7 +46,7 @@
     "microevent": "^1.0.0",
     "nodemon": "^1.3.7",
     "react": "^0.12.2",
-    "react-swipe": "git://github.com/tbo/react-swipe.git#f3c295f04c883802c1098625ea8a7e5c60229835",
+    "react-swipe": "^1.0.3",
     "react-tap-event-plugin": "^0.1.4",
     "revalidator": "^0.3.1",
     "vinyl-buffer": "^1.0.0",
