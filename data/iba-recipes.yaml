@@ -8,15 +8,15 @@
           displayUnit: "oz"
           displayIngredient: "cognac"
         -
-          tag: "créme de cacao (brown)"
+          tag: "creme de cacao"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "créme de cacao (brown)"
         -
-          tag: "fresh cream"
+          tag: "cream"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "fresh cream"
+          displayIngredient: "cream"
       instructions: |
         Shake and strain into a chilled cocktail glass.
         Sprinkle with fresh ground nutmeg.
@@ -31,14 +31,14 @@
           displayUnit: "oz"
           displayIngredient: "campari"
         -
-          tag: "red vermouth"
+          tag: "sweet vermouth"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "red vermouth"
+          displayIngredient: "sweet vermouth"
         -
-          tag: "a splash of soda water"
-          displayIngredient: "a splash of soda water"
-      instructions: "Mix the ingredients directly in an old-fashioned glass filled with ice-cubes, add a splash of soda water and garnish with half orange slice."
+          tag: "club soda"
+          displayIngredient: "splash of club soda"
+      instructions: "Mix the ingredients directly in an old-fashioned glass filled with ice-cubes, add a splash of club soda and garnish with half orange slice."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -50,7 +50,7 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "apricot brandy"
+          tag: "brandy"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "apricot brandy"
@@ -73,12 +73,12 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "maraschino"
+          tag: "maraschino liqueur"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "maraschino"
+          displayIngredient: "Maraschino liqueur"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
@@ -112,19 +112,19 @@
       name: "Bacardi"
       ingredients:
         -
-          tag: "bacardi rum white"
+          tag: "rum white"
           displayAmount: "1 1/2"
           displayUnit: "oz"
-          displayIngredient: "bacardi rum white"
+          displayIngredient: "Bacardi rum white"
         -
-          tag: "fresh lime juice"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "lime juice"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "fresh lime juice"
         -
           tag: "grenadine"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "grenadine"
       instructions: "Pour all ingredients into shaker with ice cubes, shake well, strain into chilled cocktail glass."
       source: "IBA"
@@ -148,15 +148,16 @@
           displayUnit: "oz"
           displayIngredient: "pineapple juice"
         -
-          tag: "fresh lime juice"
+          tag: "lime juice"
           displayAmount: "1"
           displayUnit: "dash"
           displayIngredient: "fresh lime juice"
         -
-          tag: "top with prosecco "
-          displayIngredient: "top with prosecco "
+          tag: "sparkling wine"
+          displayIngredient: "prosecco"
       instructions: |
-
+        Combine ingredients in mixing glass with ice and stir.
+        Strain into cocktail glass and top with prosecco.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -164,17 +165,16 @@
       ingredients:
         -
           tag: "prosecco"
-          displayAmount: "10"
-          displayUnit: "cl"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "prosecco"
         -
-          tag: "fresh peach puree"
-          displayAmount: "5"
-          displayUnit: "cl"
+          tag: "peach"
+          displayAmount: "1 1/2"
+          displayUnit: "oz"
           displayIngredient: "fresh peach puree"
       instructions: |
-        Pour peach puree into chilled glass and add sparkling wine. Stir gently.
-        Variations:
+        Pour peach puree into chilled glass and add prosecco. Stir gently.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -189,16 +189,16 @@
           tag: "cognac"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "cognac"
+          displayIngredient: "Cognac"
         -
           tag: "triple sec"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "triple sec"
         -
-          tag: "fresh lemon juice"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "lemon juice"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
       instructions: "Pour all ingredients into shaker with ice cubes, shake, strain into chilled cocktail glass."
       source: "IBA"
@@ -208,13 +208,13 @@
       ingredients:
         -
           tag: "vodka"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
           displayIngredient: "vodka"
         -
           tag: "coffee liqueur"
-          displayAmount: "2"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "coffee liqueur"
       instructions: |
         Pour the ingredients into the old fashioned-glass filled with ice cubes. Stir gently.
@@ -231,8 +231,8 @@
           displayIngredient: "vodka"
         -
           tag: "tomato juice"
-          displayAmount: "9"
-          displayUnit: "cl"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "tomato juice"
         -
           tag: "lemon juice"
@@ -240,20 +240,18 @@
           displayUnit: "oz"
           displayIngredient: "lemon juice"
         -
-          tag: "3 dashes of worcestershire sauce"
-          displayAmount: "2"
-          displayUnit: "to"
-          displayIngredient: "3 dashes of worcestershire sauce"
+          tag: "worcestershire"
+          displayAmount: "2-3"
+          displayUnit: "dashed"
+          displayIngredient: "Worcestershire sauce"
         -
           tag: "tabasco"
           displayIngredient: "tabasco"
         -
-          tag: "celery salt"
           displayIngredient: "celery salt"
         -
-          tag: "pepper"
           displayIngredient: "pepper"
-      instructions: "Stir gently, pour all ingredients into highball glass. Garnish with celery and lemon wedge (optional)."
+      instructions: "Stir gently, pour all ingredients into highball glass. Garnish with celery and lemon wedge."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -261,19 +259,19 @@
       ingredients:
         -
           tag: "gin"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "sugar syrup"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "sugar syrup"
+          tag: "simple syrup"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "simple syrup"
         -
           tag: "blackberry liqueur"
           displayAmount: "1/2"
@@ -282,7 +280,7 @@
       instructions: |
         Build over crushed ice, in a rock glass.
         Stir, then pour the blackberry liqueur over the top of the drink in a circular fashion.
-        Garnish with a lemon slice, and two blackberries.
+        Garnish with a lemon slice and two blackberries.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -312,24 +310,24 @@
       name: "Casino"
       ingredients:
         -
-          tag: "old tom gin"
-          displayAmount: "4"
-          displayUnit: "cl"
-          displayIngredient: "old tom gin"
+          tag: "gin"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
+          displayIngredient: "Old Tom gin"
         -
-          tag: "maraschino"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "maraschino"
+          tag: "maraschino liqueur"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "Maraschino liqueur"
         -
           tag: "orange bitters"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "orange bitters"
         -
-          tag: "fresh lemon juice"
-          displayAmount: "1"
-          displayUnit: "cl"
+          tag: "lemon juice"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
       instructions: "Pour all ingredients into shaker with ice cubes, shake well, strain into chilled cocktail glass and garnish with a lemon twist and a maraschino cherry."
       source: "IBA"
@@ -338,25 +336,24 @@
       name: "Champagne Cocktail"
       ingredients:
         -
-          tag: "chilled champagne"
-          displayAmount: "9"
-          displayUnit: "cl"
+          tag: "sparkling wine"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "chilled champagne"
         -
           tag: "cognac"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "cognac"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "Cognac"
         -
           tag: "angostura bitters"
           displayAmount: "2"
           displayUnit: "dashes"
-          displayIngredient: "angostura bitters"
+          displayIngredient: "Angostura bitters"
         -
-          tag: "cube"
+          tag: "sugar"
           displayAmount: "1"
-          displayUnit: "sugar"
-          displayIngredient: "cube"
+          displayIngredient: "sugar cube"
       instructions: |
         Add dash of Angostura bitter onto sugar cube and drop it into champagne flute. Add cognac followed by pouring gently chilled champagne.
         Garnish with orange slice and maraschino cherry.
@@ -371,18 +368,18 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "raspberry syrup"
+          tag: "simple syrup"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "raspberry syrup"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "few drops of egg white"
-          displayIngredient: "few drops of egg white"
+          tag: "egg white"
+          displayIngredient: "a few drops of egg white"
       instructions: |
         Pour all ingredients into cocktail shaker filled with ice. Shake well.
         Strain into cocktail glass.
@@ -392,9 +389,9 @@
       name: "Cosmopolitan"
       ingredients:
         -
-          tag: "citron vodka"
-          displayAmount: "4"
-          displayUnit: "cl"
+          tag: "vodka"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "citron vodka"
         -
           tag: "cointreau"
@@ -402,7 +399,7 @@
           displayUnit: "oz"
           displayIngredient: "cointreau"
         -
-          tag: "fresh lime juice"
+          tag: "lime juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lime juice"
@@ -422,18 +419,18 @@
       ingredients:
         -
           tag: "white rum"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "2"
+          displayUnit: "oz"
           displayIngredient: "white rum"
         -
           tag: "cola"
-          displayAmount: "12"
-          displayUnit: "cl"
+          displayAmount: "4"
+          displayUnit: "oz"
           displayIngredient: "cola"
         -
-          tag: "fresh lime juice"
-          displayAmount: "1"
-          displayUnit: "cl"
+          tag: "lime juice"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "fresh lime juice"
       instructions: "Build all ingredients in a highball glass filled with ice. Garnish with lime wedge."
       source: "IBA"
@@ -447,9 +444,9 @@
           displayUnit: "oz"
           displayIngredient: "white rum"
         -
-          tag: "fresh lime juice"
-          displayAmount: "2.5"
-          displayUnit: "cl"
+          tag: "lime juice"
+          displayAmount: "3/4"
+          displayUnit: "oz"
           displayIngredient: "fresh lime juice"
         -
           tag: "simple syrup"
@@ -460,7 +457,7 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Dark ‘N' Stormy"
+      name: "Dark 'N' Stormy"
       ingredients:
         -
           tag: "dark rum"
@@ -469,10 +466,10 @@
           displayIngredient: "dark rum"
         -
           tag: "ginger beer"
-          displayAmount: "10"
-          displayUnit: "cl"
+          displayAmount: "4"
+          displayUnit: "oz"
           displayIngredient: "ginger beer"
-      instructions: "In a highball glass filled with ice add 6cl Dark Rum and top with ginger beer. Garnish with lime wedge."
+      instructions: "In a highball glass filled with ice add  dark rum and top with ginger beer. Garnish with lime wedge."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -484,15 +481,14 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "peach bitters"
+          tag: "bitters"
           displayAmount: "2"
-          displayUnit: "Drops"
+          displayUnit: "drops"
           displayIngredient: "peach bitters"
         -
-          tag: "mint leafs"
+          tag: "mint"
           displayAmount: "2"
-          displayUnit: "Fresh"
-          displayIngredient: "mint leafs"
+          displayIngredient: "mint leaves"
       instructions: |
         Pour all ingredients into a mixing glass with ice.
         Stir and strain into a cocktail glass.
@@ -509,13 +505,13 @@
           displayIngredient: "vodka"
         -
           tag: "dry vermouth"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "dry vermouth"
         -
           tag: "olive juice"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "olive juice"
       instructions: |
         Pour all ingredients into mixing glass with ice cubes.
@@ -534,8 +530,8 @@
           displayIngredient: "gin"
         -
           tag: "dry vermouth"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "dry vermouth"
       instructions: |
         Pour all ingredients into mixing glass with ice cubes.
@@ -549,21 +545,21 @@
       ingredients:
         -
           tag: "vodka"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
           displayIngredient: "vodka"
         -
-          tag: "kahlúa"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "kahlúa"
+          tag: "kahlua"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "Kahlúa"
         -
-          tag: "sugar syrup (according to individual preference of sweetness)"
-          displayIngredient: "sugar syrup (according to individual preference of sweetness)"
+          tag: "simple syrup"
+          displayIngredient: "simple syrup"
         -
-          tag: "strong espresso"
+          tag: "coffee"
           displayAmount: "1"
-          displayUnit: "short"
+          displayUnit: "shot"
           displayIngredient: "strong espresso"
       instructions: "Shake and strain into a chilled cocktail glass."
       source: "IBA"
@@ -577,17 +573,17 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "sugar syrup"
+          tag: "simple syrup"
           displayAmount: "2"
           displayUnit: "dashes"
-          displayIngredient: "sugar syrup"
+          displayIngredient: "simple syrup"
         -
-          tag: "champagne"
+          tag: "sparkling wine"
           displayAmount: "2"
           displayUnit: "oz"
           displayIngredient: "champagne"
@@ -629,7 +625,7 @@
           displayUnit: "oz"
           displayIngredient: "raspberry liqueur"
         -
-          tag: "fresh pineapple juice"
+          tag: "pineapple juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh pineapple juice"
@@ -648,23 +644,23 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "sugar syrup"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "sugar syrup"
+          tag: "simple syrup"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "simple syrup"
         -
-          tag: "soda water"
-          displayAmount: "8"
-          displayUnit: "cl"
-          displayIngredient: "soda water"
+          tag: "club soda"
+          displayAmount: "3"
+          displayUnit: "oz"
+          displayIngredient: "club soda"
       instructions: |
-        Shake all ingredients with ice cubes, except soda water. Pour into tumbler.
-        Top with soda water.
+        Shake all ingredients with ice cubes, except club soda. Pour into tumbler.
+        Top with club soda.
         Garnish with lemon slice.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
@@ -709,23 +705,23 @@
       ingredients:
         -
           tag: "galliano"
-          displayAmount: "2"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "galliano"
         -
           tag: "triple sec"
-          displayAmount: "2"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "triple sec"
         -
-          tag: "fresh orange juice"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "orange juice"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "fresh orange juice"
         -
-          tag: "fresh cream"
-          displayAmount: "1"
-          displayUnit: "cl"
+          tag: "cream"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "fresh cream"
       instructions: |
         Pour all ingredients into shaker filled with ice.
@@ -737,20 +733,20 @@
       name: "Grasshopper"
       ingredients:
         -
-          tag: "créme de cacao (white)"
+          tag: "creme de cacao"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "créme de cacao (white)"
         -
-          tag: "créme de menthe (green)"
+          tag: "creme de menthe"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "créme de menthe (green)"
         -
-          tag: "fresh cream"
+          tag: "cream"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "fresh cream"
+          displayIngredient: "cream"
       instructions: |
         Pour all ingredients into shaker filled with ice.
         Shake briskly for few seconds.
@@ -766,14 +762,14 @@
           displayUnit: "oz"
           displayIngredient: "vodka"
         -
-          tag: "galliano (to float on drink)"
+          tag: "galliano"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "galliano (to float on drink)"
+          displayIngredient: "Galliano"
         -
           tag: "orange juice"
-          displayAmount: "9"
-          displayUnit: "cl"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "orange juice"
       instructions: |
         Pour vodka and orange juice into a highball glass filled with ice.
@@ -790,16 +786,16 @@
           displayIngredient: "white rum"
         -
           tag: "grapefruit juice"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "grapefruit juice"
         -
-          tag: "maraschino"
+          tag: "maraschino liqueur"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "maraschino"
+          displayIngredient: "Maraschino liqueur"
         -
-          tag: "fresh lime juice"
+          tag: "lime juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lime juice"
@@ -809,25 +805,27 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Horse’S Neck"
+      name: "Horse's Neck"
       ingredients:
         -
           tag: "brandy"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "brandy"
         -
           tag: "ginger ale"
-          displayAmount: "12"
-          displayUnit: "cl"
+          displayAmount: "4"
+          displayUnit: "oz"
           displayIngredient: "ginger ale"
         -
-          tag: "dash of angostura bitters (optional)"
-          displayIngredient: "dash of angostura bitters (optional)"
+          tag: "angostura bitters"
+          displayAmount: "1"
+          displayUnit: "dash"
+          displayIngredient: "Angostura bitters"
       instructions: |
         Pour brandy and ginger ale directly into hi-ball glass with ice cubes. Stir gently.
         Garnish with rind of one lemon spiral.
-        If required, add dashes of Angostura bitters.
+        If desired, add dashes of Angostura bitters.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -835,24 +833,24 @@
       ingredients:
         -
           tag: "irish whiskey"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "irish whiskey"
         -
-          tag: "hot coffee"
-          displayAmount: "9"
-          displayUnit: "cl"
+          tag: "coffee"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "hot coffee"
         -
-          tag: "fresh cream"
+          tag: "cream"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "fresh cream"
         -
-          tag: "of brown sugar"
+          tag: "sugar"
           displayAmount: "1"
-          displayUnit: "teaspoon"
-          displayIngredient: "of brown sugar"
+          displayUnit: "tsp"
+          displayIngredient: "brown sugar"
       instructions: "Warm the Irish whiskey over a burner. Pour into the glass (for hot drink) hot coffee, and add a teaspoon of sugar. Float Cream on top."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
@@ -865,25 +863,25 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "sugar syrup"
+          tag: "simple syrup"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "sugar syrup"
+          displayIngredient: "simple syrup"
         -
-          tag: "soda water"
+          tag: "club soda"
           displayAmount: "2"
           displayUnit: "oz"
-          displayIngredient: "soda water"
+          displayIngredient: "club soda"
       instructions: |
         Pour all ingredients directly into highball glass filled with ice. Stir gently.
         Garnish with lemon slice and maraschino cherry.
         Add a dash of Angostura bitters.
-        (Note: Use Old Tom Gin for Tom Collins)
+      notes: "Use Old Tom Gin to make a Tom Collins."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -900,7 +898,7 @@
           displayUnit: "oz"
           displayIngredient: "triple sec"
         -
-          tag: "fresh lime juice"
+          tag: "lime juice"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "fresh lime juice"
@@ -911,35 +909,34 @@
       name: "Kir"
       ingredients:
         -
-          tag: "dry white wine"
-          displayAmount: "9"
-          displayUnit: "cl"
+          tag: "white wine"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "dry white wine"
         -
-          tag: "créme de cassis"
-          displayAmount: "1"
-          displayUnit: "cl"
+          tag: "creme de cassis"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "créme de cassis"
-      instructions: |
-        Pour Créme de Cassis into glass, top up with white wine.
-        For Kir Royal: Use champagne instead of white wine.
+      instructions: "Pour créme de cassis into glass, top up with white wine."
+      notes: "Use champagne instead of white wine for a Kir Royale."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
       name: "Lemon Drop Martini"
       ingredients:
         -
-          tag: "vodka citron"
-          displayAmount: "2.5"
-          displayUnit: "cl"
+          tag: "citron"
+          displayAmount: "3/4"
+          displayUnit: "oz"
           displayIngredient: "vodka citron"
         -
           tag: "triple sec"
-          displayAmount: "2"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "triple sec"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
@@ -999,13 +996,13 @@
       ingredients:
         -
           tag: "white rum"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "white rum"
         -
           tag: "dark rum"
-          displayAmount: "2"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "dark rum"
         -
           tag: "orange curaćao"
@@ -1019,8 +1016,8 @@
           displayIngredient: "orgeat syrup"
         -
           tag: "fresh lime juice"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "fresh lime juice"
       instructions: |
         Shake and strain into highball glass.
@@ -1086,20 +1083,20 @@
           displayUnit: "oz"
           displayIngredient: "white rum"
         -
-          tag: "maraschino"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "maraschino"
+          tag: "maraschino liqueur"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "Maraschino liqueur"
         -
-          tag: "fresh pineapple juice"
+          tag: "pineapple juice"
           displayAmount: "2"
           displayUnit: "oz"
           displayIngredient: "fresh pineapple juice"
         -
-          tag: "grenadine syrup"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "grenadine syrup"
+          tag: "grenadine"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "grenadine"
       instructions: "Shake and strain into a chilled large cocktail glass."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
@@ -1107,43 +1104,42 @@
       name: "Mimosa"
       ingredients:
         -
-          tag: "champagne"
-          displayAmount: "7.5"
-          displayUnit: "cl"
+          tag: "sparkling wine"
+          displayAmount: "2 1/2"
+          displayUnit: "oz"
           displayIngredient: "champagne"
         -
-          tag: "orange juice, fresh"
-          displayAmount: "7.5"
-          displayUnit: "cl"
-          displayIngredient: "orange juice, fresh"
+          tag: "orange juice"
+          displayAmount: "2 1/2"
+          displayUnit: "oz"
+          displayIngredient: "fresh orange juice"
       instructions: |
-        Pour orange juice into flute and gently pour Champagne. Stir gently.
-        Garnish with orange twist (optional).
-        Note: a Buck’s Fizz and a Mimosa are the same drink.
+        Pour orange juice into flute and gently pour champagne. Stir gently.
+        Optionally garnish with orange twist.
+      notes: "A Buck's Fizz is the same thing as a Mimosa."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
       name: "Mint Julep"
       ingredients:
         -
-          tag: "bourbon whiskey"
+          tag: "bourbon"
           displayAmount: "2"
           displayUnit: "oz"
-          displayIngredient: "bourbon whiskey"
+          displayIngredient: "bourbon"
         -
-          tag: "mint sprigs"
+          tag: "mint"
           displayAmount: "4"
-          displayUnit: "fresh"
-          displayIngredient: "mint sprigs"
+          displayUnit: "springs"
+          displayIngredient: "fresh mint"
         -
-          tag: "powdered sugar"
+          tag: "sugar"
           displayAmount: "1"
-          displayUnit: "teaspoon"
+          displayUnit: "tsp"
           displayIngredient: "powdered sugar"
         -
-          tag: "water"
           displayAmount: "2"
-          displayUnit: "teaspoons"
+          displayUnit: "tsp"
           displayIngredient: "water"
       instructions: |
         In a highball glass gently muddle the mint, sugar and water.
@@ -1155,31 +1151,31 @@
       name: "Mojito"
       ingredients:
         -
-          tag: "white cuban rum"
-          displayAmount: "4"
-          displayUnit: "cl"
+          tag: "white rum"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "white cuban rum"
         -
-          tag: "fresh lime juice"
+          tag: "lime juice"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "fresh lime juice"
         -
-          tag: "sprigs"
+          tag: "mint"
           displayAmount: "6"
-          displayUnit: "Mint"
-          displayIngredient: "sprigs"
+          displayUnit: "sprigs"
+          displayIngredient: "mint"
         -
-          tag: "white sugar"
+          tag: "sugar"
           displayAmount: "2"
-          displayUnit: "teaspoons"
-          displayIngredient: "white sugar"
+          displayUnit: "tsp"
+          displayIngredient: "sugar"
         -
-          tag: "soda water"
-          displayIngredient: "soda water"
+          tag: "club soda"
+          displayIngredient: "club soda"
       instructions: |
         Muddle mint springs with sugar and lime juice.
-        Add splash of soda water and fill glass with cracked ice. Pour rum and top with soda water.
+        Add splash of club soda and fill glass with cracked ice. Pour rum and top with club soda.
         Garnish with spring of mint leaves and lemon slice. Serve with straw.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
@@ -1188,8 +1184,8 @@
       ingredients:
         -
           tag: "gin"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
           displayIngredient: "gin"
         -
           tag: "orange juice"
@@ -1197,10 +1193,10 @@
           displayUnit: "oz"
           displayIngredient: "orange juice"
         -
-          tag: "absinth"
+          tag: "absinthe"
           displayAmount: "2"
           displayUnit: "drops"
-          displayIngredient: "absinth"
+          displayIngredient: "absinthe"
         -
           tag: "grenadine"
           displayAmount: "2"
@@ -1219,23 +1215,18 @@
           displayIngredient: "vodka"
         -
           tag: "ginger beer"
-          displayAmount: "12"
-          displayUnit: "cl"
+          displayAmount: "4"
+          displayUnit: "oz"
           displayIngredient: "ginger beer"
         -
-          tag: "lime juice, fresh"
-          displayAmount: "0.5"
-          displayUnit: "cl"
-          displayIngredient: "lime juice, fresh"
-        -
-          tag: "lime in a highball glass"
-          displayAmount: "1"
-          displayUnit: "slice"
-          displayIngredient: "lime in a highball glass"
+          tag: "lime juice"
+          displayAmount: "1/4"
+          displayUnit: "oz"
+          displayIngredient: "fresh lime juice"
       instructions: |
         Combine the vodka and ginger beer.
         Add lime juice.
-        Garnish with a lime slice.
+        Garnish with a slice of lime.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
@@ -1252,10 +1243,10 @@
           displayUnit: "oz"
           displayIngredient: "campari"
         -
-          tag: "sweet red vermouth"
+          tag: "sweet vermouth"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "sweet red vermouth"
+          displayIngredient: "sweet vermouth"
       instructions: |
         Pour all ingredients directly into old-fashioned glass filled with ice.
         Stir gently.
@@ -1266,23 +1257,21 @@
       name: "Old Fashioned"
       ingredients:
         -
-          tag: "bourbon or rye whiskey"
+          tag: "whiskey"
           displayAmount: "1 1/2"
           displayUnit: "oz"
-          displayIngredient: "bourbon or rye whiskey"
+          displayIngredient: "bourbon/rye whiskey"
         -
           tag: "angostura bitters"
           displayAmount: "2"
-          displayUnit: "Dashes"
+          displayUnit: "dashes"
           displayIngredient: "angostura bitters"
         -
-          tag: "cube"
+          tag: "sugar"
           displayAmount: "1"
-          displayUnit: "sugar"
-          displayIngredient: "cube"
+          displayIngredient: "sugar cube"
         -
-          tag: "few dashes plain water"
-          displayIngredient: "few dashes plain water"
+          displayIngredient: "a few dashes water"
       instructions: |
         Place sugar cube in old-fashioned glass and saturate with bitters, add a dash of plain water.
         Muddle until dissolve.
@@ -1295,13 +1284,13 @@
       ingredients:
         -
           tag: "gin"
-          displayAmount: "3.5"
-          displayUnit: "cl"
+          displayAmount: "1"
+          displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "apricot brandy"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "brandy"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "apricot brandy"
         -
           tag: "orange juice"
@@ -1321,8 +1310,8 @@
           displayIngredient: "white rum"
         -
           tag: "pineapple juice"
-          displayAmount: "9"
-          displayUnit: "cl"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "pineapple juice"
         -
           tag: "coconut milk"
@@ -1348,22 +1337,21 @@
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "sugar syrup"
-          displayAmount: "2"
-          displayUnit: "cl"
-          displayIngredient: "sugar syrup"
+          tag: "simple syrup"
+          displayAmount: "2/3"
+          displayUnit: "oz"
+          displayIngredient: "simple syrup"
         -
-          tag: "egg white (small egg)"
+          tag: "egg white"
           displayAmount: "1"
-          displayUnit: "raw"
-          displayIngredient: "egg white (small egg)"
+          displayIngredient: "small egg white"
       instructions: |
         Shake and strain into a chilled champagne flute.
         Dash some Angostura bitters on top.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Planter'S Punch"
+      name: "Planter's Punch"
       ingredients:
         -
           tag: "dark rum"
@@ -1371,35 +1359,35 @@
           displayUnit: "oz"
           displayIngredient: "dark rum"
         -
-          tag: "fresh orange juice"
-          displayAmount: "3.5"
-          displayUnit: "cl"
+          tag: "orange juice"
+          displayAmount: "1"
+          displayUnit: "oz"
           displayIngredient: "fresh orange juice"
         -
-          tag: "fresh pineapple juice"
-          displayAmount: "3.5"
-          displayUnit: "cl"
+          tag: "pineapple juice"
+          displayAmount: "1"
+          displayUnit: "oz"
           displayIngredient: "fresh pineapple juice"
         -
-          tag: "fresh lemon juice"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "lemon juice"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
           tag: "grenadine"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "grenadine"
         -
-          tag: "sugar syrup"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "sugar syrup"
+          tag: "simple syrup"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "simple syrup"
         -
-          tag: "4 dashes angostura bitters"
-          displayAmount: "3"
-          displayUnit: "to"
-          displayIngredient: "4 dashes angostura bitters"
+          tag: "angostura bitters"
+          displayAmount: "3-4"
+          displayUnit: "dashes"
+          displayIngredient: "Angostura bitters"
       instructions: |
         Pour all ingredients, except the bitters, into shaker filled with ice. Shake well. Pour into large glass, filled with ice. Add Angostura bitters, “on top”.
         Garnish with cocktail cherry and pineapple.
@@ -1414,14 +1402,14 @@
           displayUnit: "oz"
           displayIngredient: "brandy"
         -
-          tag: "red port"
+          tag: "port"
           displayAmount: "1 1/2"
           displayUnit: "oz"
           displayIngredient: "red port"
         -
           tag: "egg yolk"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "egg yolk"
       instructions: |
         Pour all ingredients into cocktail shaker filled with ice. Shake well.
@@ -1441,27 +1429,26 @@
           tag: "lime juice"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "lime juice"
+          displayIngredient: "fresh lime juice"
         -
-          tag: "fresh lemon juice"
+          tag: "lemon juice"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "sugar syrup"
+          tag: "simple syrup"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "sugar syrup"
+          displayIngredient: "simple syrup"
         -
           tag: "cream"
           displayAmount: "2"
           displayUnit: "oz"
           displayIngredient: "cream"
         -
-          tag: "white"
+          tag: "egg white"
           displayAmount: "1"
-          displayUnit: "Egg"
-          displayIngredient: "white"
+          displayIngredient: "egg white"
         -
           tag: "orange flower water"
           displayAmount: "3"
@@ -1473,8 +1460,8 @@
           displayUnit: "drops"
           displayIngredient: "vanilla extract"
         -
-          tag: "soda water"
-          displayIngredient: "soda water"
+          tag: "club soda"
+          displayIngredient: "club soda"
       instructions: |
         Pour all ingredients (except soda) in a mixing glass, dry shake (no ice) for two minutes, add ice and hard shake for another minute.
         Strain into a highball glass without ice, top with soda.
@@ -1484,14 +1471,14 @@
       name: "Rose"
       ingredients:
         -
-          tag: "kirsch"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "brandy"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "kirsch"
         -
           tag: "dry vermouth"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "dry vermouth"
         -
           tag: "strawberry syrup"
@@ -1506,24 +1493,24 @@
       ingredients:
         -
           tag: "vodka"
-          displayAmount: "2.5"
-          displayUnit: "cl"
+          displayAmount: "3/4"
+          displayUnit: "oz"
           displayIngredient: "vodka"
         -
-          tag: "lemon juice, fresh"
-          displayAmount: "2.5"
-          displayUnit: "cl"
-          displayIngredient: "lemon juice, fresh"
+          tag: "lemon juice"
+          displayAmount: "3/4"
+          displayUnit: "oz"
+          displayIngredient: "fresh lemon juice"
         -
-          tag: "créme de cassis"
+          tag: "creme de cassis"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "créme de cassis"
         -
-          tag: "sugar syrup"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "sugar syrup"
+          tag: "simple syrup"
+          displayAmount: "1/4"
+          displayUnit: "oz"
+          displayIngredient: "simple syrup"
       instructions: |
         Shake the ingredients and pour into highball glass. Top with Sparkling wine.
         Garnish with a lemon slice and a blackberry.
@@ -1581,13 +1568,13 @@
       ingredients:
         -
           tag: "vodka"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "2"
+          displayUnit: "oz"
           displayIngredient: "vodka"
         -
           tag: "orange juice"
-          displayAmount: "10"
-          displayUnit: "cl"
+          displayAmount: "4"
+          displayUnit: "oz"
           displayIngredient: "orange juice"
       instructions: |
         Pour all ingredients into a highball glass filled with ice.
@@ -1599,13 +1586,13 @@
       ingredients:
         -
           tag: "vodka"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "vodka"
         -
           tag: "cranberry juice"
-          displayAmount: "12"
-          displayUnit: "cl"
+          displayAmount: "4"
+          displayUnit: "oz"
           displayIngredient: "cranberry juice"
         -
           tag: "grapefruit juice"
@@ -1620,23 +1607,23 @@
       ingredients:
         -
           tag: "vodka"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "vodka"
         -
           tag: "peach schnapps"
-          displayAmount: "2"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "peach schnapps"
         -
           tag: "cranberry juice"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "cranberry juice"
         -
           tag: "orange juice"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "orange juice"
       instructions: "Build all ingredients in a highball glass filled with ice. Garnish with orange slice."
       source: "IBA"
@@ -1646,18 +1633,18 @@
       ingredients:
         -
           tag: "cognac"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
           displayIngredient: "cognac"
         -
           tag: "triple sec"
-          displayAmount: "2"
-          displayUnit: "cl"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "triple sec"
         -
-          tag: "fresh lemon juice"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "lemon juice"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
       instructions: "Pour all ingredients into cocktail shaker filled with ice. Shake well and strain into cocktail glass."
       source: "IBA"
@@ -1681,10 +1668,10 @@
           displayUnit: "oz"
           displayIngredient: "cointreau"
         -
-          tag: "dom bénédictine"
+          tag: "benedictine"
           displayAmount: "1/4"
           displayUnit: "oz"
-          displayIngredient: "dom bénédictine"
+          displayIngredient: "Bénédictine"
         -
           tag: "pineapple juice"
           displayAmount: "12.0"
@@ -1697,14 +1684,14 @@
           displayIngredient: "lime juice"
         -
           tag: "grenadine"
-          displayAmount: "1"
-          displayUnit: "cl"
+          displayAmount: "1/3"
+          displayUnit: "oz"
           displayIngredient: "grenadine"
         -
           tag: "angostura bitters"
           displayAmount: "1"
           displayUnit: "dash"
-          displayIngredient: "angostura bitters"
+          displayIngredient: "Angostura bitters"
       instructions: |
         Pour all ingredients into cocktail shaker filled with ice cubes. Shake well.
         Strain into highball glass.
@@ -1715,7 +1702,7 @@
       name: "Spritz Veneziano"
       ingredients:
         -
-          tag: "prosecco"
+          tag: "sparkling wine"
           displayAmount: "2"
           displayUnit: "oz"
           displayIngredient: "prosecco"
@@ -1725,11 +1712,11 @@
           displayUnit: "cl"
           displayIngredient: "aperol"
         -
-          tag: "splash of soda water"
-          displayIngredient: "splash of soda water"
+          tag: "club soda"
+          displayIngredient: "splash of club soda"
       instructions: |
         Build into an old-fashioned glass filled with ice.
-        Top with a splash of soda water.
+        Top with a splash of club soda.
         Garnish with half orange slice.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
@@ -1738,13 +1725,13 @@
       ingredients:
         -
           tag: "cognac"
-          displayAmount: "5"
-          displayUnit: "cl"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
           displayIngredient: "cognac"
         -
-          tag: "créme de menthe (white)"
-          displayAmount: "2"
-          displayUnit: "cl"
+          tag: "creme de menthe"
+          displayAmount: "2/3"
+          displayUnit: "oz"
           displayIngredient: "créme de menthe (white)"
       instructions: |
         Pour all ingredients into a mixing glass with ice. Stir.
@@ -1761,8 +1748,8 @@
           displayIngredient: "tequila"
         -
           tag: "orange juice"
-          displayAmount: "9"
-          displayUnit: "cl"
+          displayAmount: "3"
+          displayUnit: "oz"
           displayIngredient: "orange juice"
         -
           tag: "grenadine"
@@ -1776,7 +1763,7 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Tommy’S Margarita"
+      name: "Tommy's Margarita"
       ingredients:
         -
           tag: "tequila"
@@ -1784,15 +1771,15 @@
           displayUnit: "oz"
           displayIngredient: "tequila"
         -
-          tag: "freshly squeezed lime juice"
+          tag: "lime juice"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "freshly squeezed lime juice"
+          displayIngredient: "fresh lime juice"
         -
-          tag: "spoons of agave nectar"
+          tag: "agave nectar"
           displayAmount: "2"
-          displayUnit: "bar"
-          displayIngredient: "spoons of agave nectar"
+          displayUnit: "barspoons"
+          displayIngredient: "agave nectar"
       instructions: "Shake and strain into a chilled cocktail glass."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
@@ -1800,25 +1787,25 @@
       name: "Tuxedo"
       ingredients:
         -
-          tag: "old tom gin"
+          tag: "gin"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "old tom gin"
+          displayIngredient: "Old Tom gin"
         -
           tag: "dry vermouth"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "dry vermouth"
         -
-          tag: "spoon maraschino"
+          tag: "maraschino"
           displayAmount: "2"
-          displayUnit: "bar"
-          displayIngredient: "spoon maraschino"
+          displayUnit: "barspoons"
+          displayIngredient: "Maraschino liqueur"
         -
-          tag: "spoon absinthe"
+          tag: "absinthe"
           displayAmount: "4"
-          displayUnit: "bar"
-          displayIngredient: "spoon absinthe"
+          displayUnit: "barspoons"
+          displayIngredient: "absinthe"
         -
           tag: "orange bitters"
           displayAmount: "3"
@@ -1830,44 +1817,47 @@
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
-      name: "Vampiro "
+      name: "Vampiro"
       ingredients:
         -
-          tag: "tequila (silver)"
-          displayAmount: "5"
-          displayUnit: "cl"
-          displayIngredient: "tequila (silver)"
+          tag: "blanco tequila"
+          displayAmount: "1 2/3"
+          displayUnit: "oz"
+          displayIngredient: "blanco tequila"
         -
           tag: "tomato juice"
-          displayAmount: "7"
-          displayUnit: "cl"
+          displayAmount: "2 1/3"
+          displayUnit: "oz"
           displayIngredient: "tomato juice"
         -
-          tag: "orange juice, fresh"
+          tag: "orange juice"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "orange juice, fresh"
+          displayIngredient: "fresh orange juice"
         -
-          tag: "lime juice, fresh"
-          displayAmount: "1"
-          displayUnit: "cl"
-          displayIngredient: "lime juice, fresh"
+          tag: "lime juice"
+          displayAmount: "1/3"
+          displayUnit: "oz"
+          displayIngredient: "fresh lime juice"
         -
-          tag: "clear honey"
+          tag: "honey"
           displayAmount: "1"
-          displayUnit: "teaspoon"
+          displayUnit: "tsp"
           displayIngredient: "clear honey"
         -
-          tag: "half slice onion finely chopped"
-          displayIngredient: "half slice onion finely chopped"
+          tag: "onion"
+          displayAmount: "1/2"
+          displayUnit: "slice"
+          displayIngredient: "onion, finely chopped"
         -
-          tag: "few slices fresh red hot chili peppers"
-          displayIngredient: "few slices fresh red hot chili peppers"
+          tag: "chili pepper"
+          displayUnit: "few slices"
+          displayIngredient: "fresh red hot chili peppers"
         -
-          tag: "few drops worchestershire sauce"
-          displayIngredient: "few drops worchestershire sauce"
+          tag: "worchestershire"
+          displayUnit: "few drops"
+          displayIngredient: "Worchestershire sauce"
         -
-          tag: "salt"
           displayIngredient: "salt"
       instructions: |
         Pour all ingredients into a shaker filled with ice. Shake well, to relaese the flavour of the chili.
@@ -1889,40 +1879,38 @@
           displayUnit: "oz"
           displayIngredient: "vodka"
         -
-          tag: "lillet blonde"
+          tag: "lillet"
           displayAmount: "1/4"
           displayUnit: "oz"
           displayIngredient: "lillet blonde"
-        -
-          tag: "lemon twist (garnish)"
-          displayIngredient: "lemon twist (garnish)"
       instructions: |
         Shake and strain into a chilled cocktail glass.
         Add the garnish.
+      notes: "This is what James Bond used to drink before he switched to vodka martinis."
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
   -
       name: "Whiskey Sour"
       ingredients:
         -
-          tag: "bourbon whiskey"
+          tag: "bourbon"
           displayAmount: "1 1/2"
           displayUnit: "oz"
           displayIngredient: "bourbon whiskey"
         -
-          tag: "fresh lemon juice"
-          displayAmount: "3.0"
-          displayUnit: "cl"
+          tag: "lemon juice"
+          displayAmount: "1"
+          displayUnit: "oz"
           displayIngredient: "fresh lemon juice"
         -
-          tag: "sugar syrup"
+          tag: "simple syrup"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "sugar syrup"
+          displayIngredient: "simple syrup"
       instructions: |
         Dash egg white (Optional: if used shake little harder to foam up the egg white).
         Pour all ingredients into cocktail shaker filled with ice. Shake well. Strain in cocktail glass.
-        If served ‘On the rocks’, strain ingredients into old-fashioned glass filled with ice.
+        If served 'On the rocks', strain ingredients into old-fashioned glass filled with ice.
         Garnish with half orange slice and maraschino cherry.
       source: "IBA"
       url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"

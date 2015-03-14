@@ -27,7 +27,15 @@ design ideas
 - "What drinks can I make with {X} in them?"
   - some way to search withiin mixables/all for an ingredient as well as a name
 - FTUE -- it's not clear what people should be doing (but how much of this can we just design around?)
+- similar drink suggestions based on ingredients?
 - a note about glassware (and garnish?) would be a neat addition
 - some kind of reset for ingredients would be nice
 - buffer space on the bottom of the exandable list for ingredients might make for a nicer expanding-things-near-the-bottom experience
 - designing around the sticky header might be nice -- it's crazy inefficient and could potentially drain the battery on a phone (and look dumb in the process)
+
+recipes
+- add a validation for:
+  - no duplicate recipes (by normalized name)
+  - no recipes calling for ingredients that don't exist
+- everything is in thirds and is it acceptable to adjust the measurements to not be dumb?
+- apricot brandy -- worth making its own ingredient?

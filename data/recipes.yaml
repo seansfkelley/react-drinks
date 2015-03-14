@@ -76,36 +76,6 @@
       Strain into a chilled cocktail glass.
     source: "The Clover Club, NY"
   -
-    name: "Rum & Coke"
-    ingredients:
-      -
-        tag: "white rum"
-        displayAmount: "2"
-        displayUnit: "oz"
-        displayIngredient: "white rum"
-      -
-        tag: "cola"
-        displayAmount: "4"
-        displayUnit: "oz"
-        displayIngredient: "cola"
-    instructions: "Build ingredients in a lowball glass filled with ice."
-  -
-    name: "Dark & Stormy"
-    ingredients:
-      -
-        tag: "dark rum"
-        displayAmount: "1 1/2"
-        displayUnit: "oz"
-        displayIngredient: "dark rum"
-      -
-        tag: "ginger beer"
-        displayAmount: "3"
-        displayUnit: "oz"
-        displayIngredient: "ginger beer"
-    instructions: |
-      Pour ginger beer into a highball glass filled with ice.
-      Top off with rum.
-  -
     name: "Chateau Romani"
     ingredients:
       -
@@ -165,30 +135,6 @@
     notes: "Brinstar is a zone overgrown with vegetation. Having very recently been introduced to a lime-y cocktail known as a caipirinha, I decided to try combining it with another leafy drink - namely, a mojito. The resulting combination, plus a little extra, wound up being a tasty creation that I’m rather proud of."
     source: "The Drunken Moogle"
     url: "http://www.thedrunkenmoogle.com/post/36070643600/drinks-brinstar"
-  -
-    name: "Vesper Martini"
-    ingredients:
-      -
-        tag: "gin"
-        displayAmount: "3"
-        displayUnit: "parts"
-        displayIngredient: "gin"
-      -
-        tag: "vodka"
-        displayAmount: "1"
-        displayUnit: "part"
-        displayIngredient: "vodka"
-      -
-        tag: "lillet"
-        displayAmount: "1/2"
-        displayUnit: "part"
-        displayIngredient: "Lillet"
-      -
-        displayIngredient: "thin slice of lemon peel"
-    instructions: |
-      Shake over ice until well chilled.
-      Strain into a deep goblet and garnish with lemon peel.
-    notes: "This is what James Bond used to drink before he switched to vodka martinis."
   -
     name: "Corpse Reviver #2"
     ingredients:

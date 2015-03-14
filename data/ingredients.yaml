@@ -290,3 +290,76 @@
     display    : Gomme Syrup
     generic    : simple syrup
     group      : syrup
+  -
+    display    : Galliano
+    group      : liqueur-herbal
+  -
+    display    : Rum (gold)
+    tag        : gold rum
+    generic    : rum
+    group      : rum
+  -
+    display    : Pineapple Juice
+    group      : mixer-juice
+  -
+    display    : Tomato Juice
+    group      : mixer-juice
+  -
+    display    : Worcestershire Sauce
+    tag        : worcestershire
+    group      : other
+  -
+    display    : Tabasco Sauce
+    tag        : tabasco
+    group      : other
+  -
+    display    : Cranberry Juice
+    group      : mixer-juice
+  -
+    display    : Olive Juice
+    group      : mixer-juice
+  -
+    display    : Pickle Juice
+    group      : mixer-juice
+  -
+    display    : Coffee
+    group      : mixer-other
+  -
+    display    : Disarrono
+    group      : liqueur-other
+  -
+    display    : Créme de Menthe
+    tag        : creme de menthe
+    group      : liqueur-herbal
+  -
+    display    : Grapefruit Juice
+    group      : mixer-juice
+  -
+    display    : Ginger Ale
+    group      : mixer-soda
+  -
+    display    : White Wine
+    group      : wine
+  -
+    display    : Créme de Cassis
+    tag        : creme de cassis
+    group      : liqueur-other
+  -
+    display    : Orgeat Syrup
+    generic    : simple syrup
+    group      : syrup
+  -
+    display    : Pisco
+    group      : brandy
+  -
+    display    : Port
+    group      : wine
+  -
+    display    : Egg Yolk
+    group      : dairy
+  -
+    display    : Aperol
+    group      : liqueur-herbal
+  -
+    display    : Honey
+    group      : other
