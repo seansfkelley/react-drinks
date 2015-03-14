@@ -147,7 +147,7 @@ for url in PAGES:
   results[title] = '\n'.join(map(lambda l: '  ' + l, ('''-
     name: "%s"
     ingredients: %s
-    description: %s
+    instructions: %s
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"''' % (title, ''.join(ingredients), desc)).split('\n')))
 
