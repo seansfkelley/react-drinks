@@ -38,7 +38,7 @@ FavoritesList = React.createClass {
 
   render : ->
     headerNode = <Header
-      rightIcon='fa-chevron-right'
+      rightIcon='fa-chevron-left'
       rightIconOnTouchTap={@_closeFavorites}
       title='Favorites'/>
 
