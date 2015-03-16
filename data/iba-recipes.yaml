@@ -50,7 +50,7 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "brandy"
+          tag: "apricot brandy"
           displayAmount: "1"
           displayUnit: "oz"
           displayIngredient: "apricot brandy"
@@ -549,7 +549,7 @@
           displayUnit: "oz"
           displayIngredient: "vodka"
         -
-          tag: "kahlua"
+          tag: "coffee liqueur"
           displayAmount: "1/3"
           displayUnit: "oz"
           displayIngredient: "Kahlúa"
@@ -926,7 +926,7 @@
       name: "Lemon Drop Martini"
       ingredients:
         -
-          tag: "citron"
+          tag: "vodka"
           displayAmount: "3/4"
           displayUnit: "oz"
           displayIngredient: "vodka citron"
@@ -1288,7 +1288,7 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "brandy"
+          tag: "apricot brandy"
           displayAmount: "2/3"
           displayUnit: "oz"
           displayIngredient: "apricot brandy"
@@ -1797,7 +1797,7 @@
           displayUnit: "oz"
           displayIngredient: "dry vermouth"
         -
-          tag: "maraschino"
+          tag: "maraschino liqueur"
           displayAmount: "2"
           displayUnit: "barspoons"
           displayIngredient: "Maraschino liqueur"
@@ -1850,7 +1850,7 @@
           displayUnit: "slice"
           displayIngredient: "onion, finely chopped"
         -
-          tag: "chili pepper"
+          tag: "hot pepper"
           displayUnit: "few slices"
           displayIngredient: "fresh red hot chili peppers"
         -

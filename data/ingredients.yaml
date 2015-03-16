@@ -368,3 +368,15 @@
   -
     display    : Honey
     group      : other
+  -
+    display    : Onion
+    group      : vegetable
+  -
+    display    : Hot Pepper
+    group      : vegetable
+  -
+    display    : Peach Schnapps
+    group      : liqueur-fruit
+  -
+    display    : Apricot Brandy
+    group      : brandy
