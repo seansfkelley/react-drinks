@@ -10,11 +10,16 @@ App = React.createClass {
   displayName : 'App'
 
   render : ->
-    <FixedHeaderFooter
-      footer={<IngredientsFooter/>}
-    >
-      <RecipeListView/>
-    </FixedHeaderFooter>
+    <div className='app-event-wrapper' onTouchStart={@_deselectActiveElement}>
+      <FixedHeaderFooter
+        footer={<IngredientsFooter/>}
+      >
+        <RecipeListView/>
+      </FixedHeaderFooter>
+    </div>
+
+  _deselectActiveElement : ->
+    document.activeElement?.blur()
 }
 
 module.exports = App

@@ -44,6 +44,7 @@ HeaderWithSearch = React.createClass {
         @refs.searchBar.clearAndFocus()
     else
       @refs.searchBar.clear()
+      document.activeElement?.blur()
 }
 
 module.exports = HeaderWithSearch

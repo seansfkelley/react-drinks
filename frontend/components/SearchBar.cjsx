@@ -18,7 +18,7 @@ SearchBar = React.createClass {
     <div className='search-bar'>
       <input className='search-input' type='text' ref='input' onChange={@_onChange}
           autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' placeholder={@props.placeholder}/>
-      <i className='fa fa-times-circle' onTouchTap={@clearAndFocus} data-autoblur='false'/>
+      <i className='fa fa-times-circle' onTouchTap={@clearAndFocus} onTouchStart={@_stopTouchStart}/>
     </div>
 
   clearAndFocus : ->
@@ -34,6 +34,13 @@ SearchBar = React.createClass {
 
   _onChange : (e) ->
     @props.onChange e.target.value
+
+  _stopTouchStart : (e) ->
+    # This is hacky, but both of these are independently necessary.
+    # 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
+    e.stopPropagation()
+    # 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
+    e.preventDefault()
 }
 
 module.exports = SearchBar
