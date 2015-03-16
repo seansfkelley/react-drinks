@@ -146,17 +146,25 @@ RecipeStore = new class extends FluxStore
       recipes = _.sortBy recipes, 'name'
       return { name, recipes, missing }
 
+  _filterRecipeBySearchTerm : (r) =>
+    if r.name.toLowerCase().indexOf(@searchTerm) != -1
+      return true
+    return _.chain r.ingredients
+      .pluck 'displayIngredient'
+      .invoke 'toLowerCase'
+      .any (i) => i.indexOf(@searchTerm) != -1
+      .value()
+
   _updateSearchedRecipes : ->
     if @searchTerm == ''
       @searchedAlphabeticalRecipes   = @alphabeticalRecipes
       @searchedGroupedMixableRecipes = @groupedMixableRecipes
     else
-      filterBySearchTerm = (r) => r.name.toLowerCase().indexOf(@searchTerm) != -1
-      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, filterBySearchTerm
+      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, @_filterRecipeBySearchTerm
       @searchedGroupedMixableRecipes = _.chain @groupedMixableRecipes
-        .map (group) ->
+        .map (group) =>
           return _.defaults {
-            recipes : _.filter group.recipes, filterBySearchTerm
+            recipes : _.filter group.recipes, @_filterRecipeBySearchTerm
           }, group
         .filter ({ recipes }) -> recipes.length > 0
         .value()
