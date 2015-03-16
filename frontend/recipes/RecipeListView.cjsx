@@ -33,7 +33,7 @@ RecipeListHeader = React.createClass {
       leftIconOnTouchTap={@_openFavorites}
       title={title}
       onSearch={@_setSearchTerm}
-      placeholder='Drink Name or Ingredient...'
+      placeholder='Name or ingredient...'
     />
 
   _openFavorites : ->
