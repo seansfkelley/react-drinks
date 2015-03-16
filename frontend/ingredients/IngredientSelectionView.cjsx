@@ -39,11 +39,9 @@ IngredientGroupHeader = React.createClass {
   displayName : 'IngredientGroupHeader'
 
   render : ->
-    text = @props.groupName
-    if @props.selectedCount > 0
-      text += " (#{@props.selectedCount})"
     <div className='ingredient-group-header' onTouchTap={@_toggleGroup}>
-      <span>{text}</span>
+      <span className='title'>{@props.groupName}</span>
+      {if @props.selectedCount > 0 then <span className='count'>{@props.selectedCount}</span>}
     </div>
 
   _toggleGroup : ->

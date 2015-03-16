@@ -19,6 +19,7 @@ bugs
 - autoprefixer isn't adding things it should (like the appearance rule on inputs)
 - if the search input on recipes is left open when you open ingredients (should it be?), you can open ingredients, then close it and it will also highlight the search bar (perhaps something to do with pointer-events being turned off when the class changes? prevent default?)
 - when overlays are shown, you can still interact with things behind it; pointer-events doesn't seem to be sufficient
+- fix up the numerical display on the ingredient group tabs -- soo many magic constants, and the visuals don't quite match the check-in-circle
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"
@@ -40,3 +41,5 @@ recipes
 - add:
   - white russian
   - blind russian
+- for specialty ingredients like e.g. raspberry simple syrup, consider classifying the ingredient as listed in the recipe under just "raspberry", since cluttering the ingredients page with really rare syrups or bitters or infusions when you could theoretically remake them with the base ingredient seems silly
+- merge some ingredients, e.g., egg white + egg yolk should just be "egg" under the hood
