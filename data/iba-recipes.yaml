@@ -602,10 +602,10 @@
           displayUnit: "oz"
           displayIngredient: "Cognac"
         -
-          tag: "disarrono"
+          tag: "disaronno"
           displayAmount: "1 1/4"
           displayUnit: "oz"
-          displayIngredient: "Disarrono"
+          displayIngredient: "Disaronno"
       instructions: |
         Pour all ingredients directly into old fashioned glass filled with ice cubes.
         Stir gently.
@@ -673,10 +673,10 @@
           displayUnit: "oz"
           displayIngredient: "scotch"
         -
-          tag: "disarrono"
+          tag: "disaronno"
           displayAmount: "1 1/4"
           displayUnit: "oz"
-          displayIngredient: "Disarrono"
+          displayIngredient: "Disaronno"
       instructions: |
         Pour all ingredients directly into old fashioned glass filled with ice cubes.
         Stir gently.
@@ -691,10 +691,10 @@
           displayUnit: "oz"
           displayIngredient: "vodka"
         -
-          tag: "disarrono"
+          tag: "disaronno"
           displayAmount: "1 1/4"
           displayUnit: "oz"
-          displayIngredient: "Disarrono"
+          displayIngredient: "Disaronno"
       instructions: |
         Pour all ingredients directly into old fashioned glass filled with ice cubes.
         Stir gently.
