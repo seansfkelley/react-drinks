@@ -592,7 +592,7 @@
         tag: "chartreuse"
         displayAmount: "3/4"
         displayUnit: "oz"
-        displayIngredient: "yellow/green Chartreuse"
+        displayIngredient: "Chartreuse"
       -
         tag: "simple syrup"
         displayAmount: "3/4"
@@ -760,7 +760,7 @@
         tag: "chartreuse"
         displayAmount: "1"
         displayUnit: "part"
-        displayIngredient: "yellow/green Chartreuse"
+        displayIngredient: "Chartreuse"
     instructions: |
       Add all ingredients to a mixing glass filled with ice.
       Stir well, strain into a chilled cocktail glass and serve.

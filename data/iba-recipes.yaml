@@ -242,7 +242,7 @@
         -
           tag: "worcestershire"
           displayAmount: "2-3"
-          displayUnit: "dashed"
+          displayUnit: "dashes"
           displayIngredient: "Worcestershire sauce"
         -
           tag: "tabasco"
@@ -1130,7 +1130,7 @@
         -
           tag: "mint"
           displayAmount: "4"
-          displayUnit: "springs"
+          displayUnit: "sprigs"
           displayIngredient: "fresh mint"
         -
           tag: "sugar"
