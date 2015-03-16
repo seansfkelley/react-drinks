@@ -12,7 +12,8 @@ HeaderWithSearch = React.createClass {
   displayName : 'HeaderWithSearch'
 
   propTypes :
-    onSearch : React.PropTypes.func
+    onSearch    : React.PropTypes.func.isRequired
+    placeholder : React.PropTypes.string
 
   mixins : [
     ClassNameMixin
@@ -30,7 +31,7 @@ HeaderWithSearch = React.createClass {
       rightIconOnTouchTap={@_toggleSearch}
     >
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
-        <SearchBar onChange={@props.onSearch} key='search-bar' ref='searchBar'/>
+        <SearchBar onChange={@props.onSearch} key='search-bar' ref='searchBar' placeholder={@props.placeholder}/>
       </div>
     </Header>
 
