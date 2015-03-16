@@ -11,6 +11,8 @@ todo
 - sticky header based off of headered list
 - collapsible list based off of headered list
 - use URL/source property so people can check out the original recipe
+- swiping support for opening/closing overlays
+- clean up inconsistent spelling/casing for IBA recipe text
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb
@@ -20,6 +22,10 @@ bugs
 - if the search input on recipes is left open when you open ingredients (should it be?), you can open ingredients, then close it and it will also highlight the search bar (perhaps something to do with pointer-events being turned off when the class changes? prevent default?)
 - when overlays are shown, you can still interact with things behind it; pointer-events doesn't seem to be sufficient
 - fix up the numerical display on the ingredient group tabs -- soo many magic constants, and the visuals don't quite match the check-in-circle
+- some search headers don't have prompts
+- scrolling on the shopping list doesn't dismiss the search focus (should listen on document, probably)
+- would it be possible to use media queries to remove the iPhone spacer header bar thing when Personal Hotspot is on?
+
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"
