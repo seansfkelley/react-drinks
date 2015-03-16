@@ -61,3 +61,10 @@ body[standalone]
 
 .float-right
   float right
+
+input[type="text"]
+  // Need to specify this even though it should be inherited?
+  font-family 'Source Sans Pro'
+
+  &::-webkit-input-placeholder
+    font-family 'Source Sans Pro'
