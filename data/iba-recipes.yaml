@@ -29,7 +29,7 @@
           tag: "campari"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "campari"
+          displayIngredient: "Campari"
         -
           tag: "sweet vermouth"
           displayAmount: "1"
@@ -112,10 +112,10 @@
       name: "Bacardi"
       ingredients:
         -
-          tag: "rum white"
+          tag: "white rum"
           displayAmount: "1 1/2"
           displayUnit: "oz"
-          displayIngredient: "Bacardi rum white"
+          displayIngredient: "Bacardi white rum"
         -
           tag: "lime juice"
           displayAmount: "2/3"
@@ -164,7 +164,7 @@
       name: "Bellini"
       ingredients:
         -
-          tag: "prosecco"
+          tag: "sparkling wine"
           displayAmount: "3"
           displayUnit: "oz"
           displayIngredient: "prosecco"
@@ -189,7 +189,7 @@
           tag: "cognac"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "Cognac"
+          displayIngredient: "cognac"
         -
           tag: "triple sec"
           displayAmount: "1"
@@ -344,7 +344,7 @@
           tag: "cognac"
           displayAmount: "1/3"
           displayUnit: "oz"
-          displayIngredient: "Cognac"
+          displayIngredient: "cognac"
         -
           tag: "angostura bitters"
           displayAmount: "2"
@@ -600,7 +600,7 @@
           tag: "cognac"
           displayAmount: "1 1/4"
           displayUnit: "oz"
-          displayIngredient: "Cognac"
+          displayIngredient: "cognac"
         -
           tag: "disaronno"
           displayAmount: "1 1/4"
@@ -1241,7 +1241,7 @@
           tag: "campari"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "campari"
+          displayIngredient: "Campari"
         -
           tag: "sweet vermouth"
           displayAmount: "1"

@@ -23,10 +23,12 @@
     group      : bitters
   -
     display    : Applejack
-    group      : spirit-other
+    generic    : calvados
+    group      : brandy
   -
     display    : Calvados
-    group      : spirit-other
+    generic    : apple-brandy
+    group      : brandy
   -
     display    : Irish Cream
     group      : liqueur-other
@@ -233,6 +235,7 @@
     group      : mixer-soda
     searchable :
       - seltzer
+      - soda water
   -
     display    : Scotch
     generic    : whiskey
@@ -282,6 +285,7 @@
     group      : dairy
   -
     display    : Campari
+    generic    : campari-like
     group      : liqueur-herbal
   -
     display    : Brandy
@@ -359,6 +363,7 @@
     group      : dairy
   -
     display    : Aperol
+    generic    : campari-like
     group      : liqueur-herbal
   -
     display    : Honey
