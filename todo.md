@@ -10,6 +10,7 @@ todo
 - swiping support for opening/closing overlays
 - clean up inconsistent spelling/casing for IBA recipe text
 - ingredients footer should be implemented as a Title, and Header should become Title
+- dark-on-light and light-on-dark theme classes?
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb

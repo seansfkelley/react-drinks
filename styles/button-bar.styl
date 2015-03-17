@@ -1,0 +1,23 @@
+@require 'constants'
+
+.button-bar
+  font-size body-font-size
+  text-transform uppercase
+  display flex
+
+  // This will, of course, have to be customized by the theoretical color theme. As will the border.
+  background-color grey8
+  color grey0
+
+  .button
+    display inline-block
+    text-align center
+    flex 1
+
+    .fa
+      margin-left 6px
+      margin-right 6px
+
+    &:not(:last-child)
+      border-right 1px solid grey7
+

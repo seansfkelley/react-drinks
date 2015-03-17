@@ -1,0 +1,41 @@
+# @cjsx React.DOM
+
+React = require 'react'
+
+ClassNameMixin = require '../mixins/ClassNameMixin'
+
+ButtonBar = {}
+
+ButtonBar.Bar = React.createClass {
+  displayName : 'ButtonBar.Bar'
+
+  mixins : [
+    ClassNameMixin
+  ]
+
+  render : ->
+    <div className={@getClassName 'button-bar'}>
+      {@props.children}
+    </div>
+}
+
+ButtonBar.Button = React.createClass {
+  displayName : 'ButtonBar.Button'
+
+  propTypes :
+    icon      : React.PropTypes.string
+    label     : React.PropTypes.string
+    className : React.PropTypes.string
+
+  mixins : [
+    ClassNameMixin
+  ]
+
+  render : ->
+    <div {...@props} className={@getClassName 'button'}>
+      {if @props.icon then <i className={'fa ' + @props.icon}/>}
+      {if @props.label then <span>{@props.label}</span>}
+    </div>
+}
+
+module.exports = ButtonBar

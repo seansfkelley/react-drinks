@@ -12,7 +12,17 @@ utils         = require '../utils'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 Header            = require '../components/Header'
+ButtonBar         = require '../components/ButtonBar'
 
+IngredientCategory =
+  MISSING    : 'missing'
+  SUBSTITUTE : 'substitute'
+  AVAILABLE  : 'available'
+
+HUMAN_READABLE_CATEGORY_TITLE =
+  missing    : 'You\'re Missing'
+  substitute : 'You Can Substitute'
+  available  : 'You Have'
 
 SectionHeader = React.createClass {
   displayName : 'SectionHeader'
@@ -21,7 +31,6 @@ SectionHeader = React.createClass {
     <div className='recipe-section-header'>{@props.text}</div>
 }
 
-# TODO: Factor this out into a MeasuredIngredientView that is easily stylable?
 IngredientView = React.createClass {
   displayName : 'IngredientView'
 
@@ -39,16 +48,6 @@ IngredientView = React.createClass {
     </div>
 }
 
-IngredientCategory =
-  MISSING    : 'missing'
-  SUBSTITUTE : 'substitute'
-  AVAILABLE  : 'available'
-
-HUMAN_READABLE_CATEGORY_TITLE =
-  missing    : 'You\'re Missing'
-  substitute : 'You Can Substitute'
-  available  : 'You Have'
-
 RecipeFooter = React.createClass {
   displayName : 'RecipeFooter'
 
@@ -57,19 +56,15 @@ RecipeFooter = React.createClass {
   ]
 
   render : ->
-    iconClass = 'fa-star-o'
-    if @state.favoritedRecipes[@props.recipe.normalizedName]?
-      iconClass = 'fa-star'
-    <div className='recipe-controls'>
-      <div className='save-to-button' onTouchTap={@_saveTo}>
-        <i className={'fa ' + iconClass}/>
-        <span>Favorite</span>
-      </div>
-      <div className='close-button' onTouchTap={@_close}>
-        <span>Close</span>
-        <i className='fa fa-times'/>
-      </div>
-    </div>
+    if @state.favoritedRecipes[@props.normalizedName]?
+      saveIcon = 'fa-star'
+    else
+      saveIcon = 'fa-star-o'
+
+    <ButtonBar.Bar className='recipe-controls'>
+      <ButtonBar.Button icon={saveIcon} label='Favorite' onTouchTap={@_saveTo}/>
+      <ButtonBar.Button icon='fa-times' label='Close' onTouchTap={@_close}/>
+    </ButtonBar.Bar>
 
   _saveTo : ->
     AppDispatcher.dispatch {
@@ -107,7 +102,7 @@ RecipeView = React.createClass {
       ingredientNodes = [
         <SectionHeader text='Ingredients' key={'header-' + IngredientCategory.AVAILABLE}/>
       ].concat _.map @props.recipe.ingredients, (i) ->
-        <IngredientView category={IngredientCategory.AVAILABLE} measuredIngredient={i} key={i.tag ? i.displayIngredient}/>
+        <IngredientView measuredIngredient={i} key={i.tag ? i.displayIngredient}/>
 
     if @props.recipe.notes?
       recipeNotes =
