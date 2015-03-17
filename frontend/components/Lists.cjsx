@@ -70,27 +70,30 @@ Lists.List = React.createClass {
 Lists.headerify = ({ nodes, computeHeaderData, Header }) ->
   Header ?= Lists.ListHeader
 
-  headerData = null
-  headeredNodes = []
+  groupedNodes = []
   for n, i in nodes
+    # computeHeaderData must return an object with at least a 'key' field.
     newHeaderData = computeHeaderData n, i
-    if not _.isEqual(headerData, newHeaderData)
-      headeredNodes.push <Header {...newHeaderData}/>
-      headerData = newHeaderData
-    headeredNodes.push n
-  return headeredNodes
+    group = _.last groupedNodes
+    if not group? or not _.isEqual(group.headerData, newHeaderData)
+      group = {
+        headerData : newHeaderData
+        items      : []
+      }
+      groupedNodes.push group
+    group.items.push n
 
-Lists.HeaderedList = React.createClass {
-  displayName : 'Lists.HeaderedList'
+  return _.chain groupedNodes
+    .map ({ headerData, items }) ->
+      return [
+        <Header {...headerData}/>
+        <div className='list-group' key={'group-' + headerData.key}>{items}</div>
+      ]
+    .flatten()
+    .value()
 
-  mixins : [
-    ClassNameMixin
-  ]
-
-  render : ->
-    <Lists.List {...@props} className={@getClassName 'headered-list'}>
-      {@props.children}
-    </Lists.List>
-}
+Lists.ClassNames =
+  HEADERED    : 'headered-list'
+  COLLAPSIBLE : 'collapsible'
 
 module.exports = Lists

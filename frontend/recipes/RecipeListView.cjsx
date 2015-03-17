@@ -96,9 +96,9 @@ AlphabeticalRecipeList = React.createClass {
         }
     }
 
-    <Lists.HeaderedList>
+    <Lists.List className={Lists.ClassNames.HEADERED}>
       {headeredNodes}
-    </Lists.HeaderedList>
+    </Lists.List>
 }
 
 EmptyListView = React.createClass {
@@ -143,9 +143,9 @@ GroupedRecipeList = React.createClass {
         }
     }
 
-    <Lists.HeaderedList emptyView={<EmptyListView/>}>
+    <Lists.List className={Lists.ClassNames.HEADERED} emptyView={<EmptyListView/>}>
       {headeredNodes}
-    </Lists.HeaderedList>
+    </Lists.List>
 }
 
 RecipeListView = React.createClass {
@@ -156,7 +156,6 @@ RecipeListView = React.createClass {
   ]
 
   render : ->
-    # There's no way rewrapping these elements in divs that give them the fixed classes is best practices.
     if @state.useIngredients
       list = <GroupedRecipeList/>
     else
