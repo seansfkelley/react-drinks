@@ -7,12 +7,21 @@ ClassNameMixin = require '../mixins/ClassNameMixin'
 
 Lists = {}
 
-ListHeader = React.createClass {
+Lists.ListHeader = React.createClass {
   displayName : 'ListHeader'
 
+  mixins : [
+    ClassNameMixin
+  ]
+
   render : ->
-    <div className='list-header'>
-      <span className='text'>{@props.title}</span>
+    if React.Children.count(@props.children) == 0
+      children = <span className='text'>{@props.title}</span>
+    else
+      children = @props.children
+
+    <div className={@getClassName 'list-header'}>
+      {children}
     </div>
 }
 
@@ -58,29 +67,29 @@ Lists.List = React.createClass {
     </div>
 }
 
-Lists.HeaderedList = React.createClass {
-  displayName : 'HeaderedList'
+Lists.headerify = ({ nodes, computeHeaderData, Header }) ->
+  Header ?= Lists.ListHeader
 
-  propTypes :
-    emptyView      : React.PropTypes.element
-    titleExtractor : React.PropTypes.func.isRequired
+  headerData = null
+  headeredNodes = []
+  for n, i in nodes
+    newHeaderData = computeHeaderData n, i
+    if not _.isEqual(headerData, newHeaderData)
+      headeredNodes.push <Header {...newHeaderData}/>
+      headerData = newHeaderData
+    headeredNodes.push n
+  return headeredNodes
+
+Lists.HeaderedList = React.createClass {
+  displayName : 'Lists.HeaderedList'
 
   mixins : [
     ClassNameMixin
   ]
 
   render : ->
-    children = []
-    lastTitle = null
-    React.Children.forEach @props.children, (child, i) =>
-      title = @props.titleExtractor child, i
-      if title != lastTitle
-        lastTitle = title
-        children.push <ListHeader title={title} key={'header-' + title} ref={'header-' + title}/>
-      children.push child
-
-    <Lists.List className={@getClassName 'headered-list'} emptyView={@props.emptyView}>
-      {children}
+    <Lists.List {...@props} className={@getClassName 'headered-list'}>
+      {@props.children}
     </Lists.List>
 }
 

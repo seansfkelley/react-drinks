@@ -86,8 +86,18 @@ AlphabeticalRecipeList = React.createClass {
     recipeNodes = _.map @state.searchedAlphabeticalRecipes, (r, i) =>
       <RecipeListItem recipes={@state.searchedAlphabeticalRecipes} index={i} key={r.normalizedName}/>
 
-    <Lists.HeaderedList titleExtractor={_recipeListItemTitleExtractor}>
-      {recipeNodes}
+    headeredNodes = Lists.headerify {
+      nodes             : recipeNodes
+      computeHeaderData : (node, i) ->
+        title = _recipeListItemTitleExtractor node
+        return {
+          title
+          key : 'header-' + title
+        }
+    }
+
+    <Lists.HeaderedList>
+      {headeredNodes}
     </Lists.HeaderedList>
 }
 
@@ -116,15 +126,25 @@ GroupedRecipeList = React.createClass {
       .value()
 
     titleExtractor = (child) ->
-      return groupRecipePairs[child.props.index][0]
+      return
 
     orderedRecipes = _.pluck groupRecipePairs, '1'
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    <Lists.HeaderedList titleExtractor={titleExtractor} emptyView={<EmptyListView/>}>
-      {recipeNodes}
+    headeredNodes = Lists.headerify {
+      nodes             : recipeNodes
+      computeHeaderData : (node, i) ->
+        title = groupRecipePairs[node.props.index][0]
+        return {
+          title
+          key : 'header-' + title
+        }
+    }
+
+    <Lists.HeaderedList emptyView={<EmptyListView/>}>
+      {headeredNodes}
     </Lists.HeaderedList>
 }
 
