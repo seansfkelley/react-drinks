@@ -116,7 +116,12 @@ GroupedIngredientList = React.createClass {
       ItemGroup         : IngredientItemGroup
       computeHeaderData : (node, i) =>
         title         = tagToGroupName[node.props.ingredient.tag]
-        selectedCount = _.filter(@state.searchedGroupedIngredients[title], (i) => @state.selectedIngredientTags[i.tag]?).length
+        selectedCount = _.chain @state.searchedGroupedIngredients
+          .where { name : title }
+          .value()[0]
+          .ingredients
+          .filter (i) => @state.selectedIngredientTags[i.tag]?
+          .length
         return {
           title
           selectedCount
