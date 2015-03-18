@@ -56,38 +56,6 @@ IngredientGroupHeader = React.createClass {
       type  : 'toggle-ingredient-group'
       group : @props.title
     }
-
-  _isCollapsed : ->
-    return not @state.openIngredientGroups[@props.title]
-
-  _getNearestScrollableElement : ->
-    node = @getDOMNode()
-    while node?
-      switch window.getComputedStyle(node).overflow
-        when 'auto', 'scroll'
-          return node
-        else
-          node = node.parentElement
-    return null
-
-  _animateScrollToTop : (scrollParent, offset) ->
-    if scrollParent.scrollTop < offset
-      stepSize = 16
-    else
-      stepSize = -16
-    previous = null
-    step = ->
-      scrollParent.scrollTop += stepSize
-      if scrollParent.scrollTop <= offset and previous != scrollParent.scrollTop
-        requestAnimationFrame step
-      previous = scrollParent.scrollTop
-    step()
-
-  componentDidUpdate : ->
-    # if not @_isCollapsed()
-    #   scrollParent = @_getNearestScrollableElement()
-    #   _.defer =>
-    #     @_animateScrollToTop scrollParent, @getDOMNode().offsetTop
 }
 
 IngredientItemGroup = React.createClass {
