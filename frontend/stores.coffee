@@ -61,7 +61,7 @@ IngredientStore = new class extends FluxStore
         .value()
 
 UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
-UI_PERSISTABLE_FIELDS = [ 'useIngredients', 'openIngredientGroups', 'favoritedRecipes' ]
+UI_PERSISTABLE_FIELDS = [ 'useIngredients', 'favoritedRecipes' ]
 
 UiStore = new class extends FluxStore
   fields : ->
@@ -69,7 +69,7 @@ UiStore = new class extends FluxStore
       useIngredients       : true
       openIngredientGroups : {}
       favoritedRecipes     : {}
-    }, JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? 'null')
+    }, _.pick(JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? '{}'), UI_PERSISTABLE_FIELDS)
 
   'toggle-ingredient' : ->
     @useIngredients = true
@@ -84,7 +84,6 @@ UiStore = new class extends FluxStore
     else
       @openIngredientGroups = {}
       @openIngredientGroups[group] = true
-    @_persist()
 
   'toggle-favorite-recipe' : ({ normalizedName }) ->
     if @favoritedRecipes[normalizedName]
