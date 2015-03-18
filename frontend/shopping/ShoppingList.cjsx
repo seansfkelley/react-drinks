@@ -27,6 +27,7 @@ ShoppingListHeader = React.createClass {
       leftIconOnTouchTap={@_hideShoppingList}
       title='Shopping List'
       onSearch={@_setSearchTerm}
+      placeholder='Recipe or ingredient...'
     />
 
   _hideShoppingList : ->

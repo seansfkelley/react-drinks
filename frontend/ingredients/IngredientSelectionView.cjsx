@@ -23,6 +23,7 @@ IngredientSelectionHeader = React.createClass {
       leftIconOnTouchTap={@_hideIngredients}
       title='Ingredients'
       onSearch={@_setSearchTerm}
+      placeholder='Ingredient name...'
     />
 
   # In the future, this should pop up a loader and then throttle the number of filters performed.

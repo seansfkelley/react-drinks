@@ -4,12 +4,9 @@ features
 
 todo
 - clean up styling (more variables for sizes, things are in the wrong place, things are duplicated)
-- do animations for overlays and ingredient sections when they're created destroyed (ReactCSSTransitionGroup?)
-- make it easier to open all the groups of ingredients
 - on-scroll behavior is hilariously, wildly inefficient: there has got to be a better way to do this or at least to design around it
 - having views hide themselves by knowing which overlay they're in is sketchy
 - sticky header based off of headered list
-- collapsible list based off of headered list
 - use URL/source property so people can check out the original recipe
 - swiping support for opening/closing overlays
 - clean up inconsistent spelling/casing for IBA recipe text
@@ -19,13 +16,11 @@ bugs
 - rotating the app sideways or dragging the wrong thing at the wrong time can wreck the iOS display in Safari (do I care?)
 - when showing the page for the first time you get a flash of "nothing to see here" -- perhaps some better zero state while things load?
 - autoprefixer isn't adding things it should (like the appearance rule on inputs)
-- if the search input on recipes is left open when you open ingredients (should it be?), you can open ingredients, then close it and it will also highlight the search bar (perhaps something to do with pointer-events being turned off when the class changes? prevent default?)
 - when overlays are shown, you can still interact with things behind it; pointer-events doesn't seem to be sufficient
-- fix up the numerical display on the ingredient group tabs -- soo many magic constants, and the visuals don't quite match the check-in-circle
-- some search headers don't have prompts
+- fix up the numerical display on the ingredient group tabs -- too many magic constants
 - scrolling on the shopping list doesn't dismiss the search focus (should listen on document, probably)
 - would it be possible to use media queries to remove the iPhone spacer header bar thing when Personal Hotspot is on?
-
+- searsching on the shopping list is the same as regular recipes, meaning it includes ingredients you can't see (and might already have, which yields potentially confusing results)
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"
