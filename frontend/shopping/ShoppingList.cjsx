@@ -88,17 +88,24 @@ ShoppingList = React.createClass {
       .flatten()
       .value()
 
-    titleExtractor = (child) ->
-      return groupRecipePairs[child.props.index][0]
-
     orderedRecipes = _.pluck groupRecipePairs, '1'
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    <Lists.HeaderedList titleExtractor={titleExtractor}>
-      {recipeNodes}
-    </Lists.HeaderedList>
+    headeredNodes = Lists.headerify {
+      nodes : recipeNodes
+      computeHeaderData : (node, i) ->
+        title = groupRecipePairs[node.props.index][0]
+        return {
+          title
+          key : 'header-' + title
+        }
+    }
+
+    <Lists.List className={Lists.ClassNames.HEADERED}>
+      {headeredNodes}
+    </Lists.List>
 }
 
 ShoppingListView = React.createClass {
