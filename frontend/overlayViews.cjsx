@@ -20,8 +20,7 @@ attachOverlayViews = ->
 
     show = (component) ->
       shouldHide = false
-      # div.content exists because I can't figure out how to keep iOS from showing things that are translated off the screen.
-      React.render <div className='content'>{component}</div>, domElement
+      React.render component, domElement
       for e in allDomElements
         e.classList.remove 'topmost'
       appRootElement.classList.add "showing-#{type}"

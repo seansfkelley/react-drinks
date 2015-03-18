@@ -54,14 +54,6 @@ body[standalone]
   &.topmost
     z-index 2
 
-  .content
-    position absolute
-
-    top 0
-    left 0
-    right 0
-    bottom 0
-
 #modal-root, #flyup-root, #pushover-root
   &.visible
     pointer-events auto
@@ -69,31 +61,31 @@ body[standalone]
 #pushover-root
   width pushover-width
 
-  .content
+  > *
     // We can do a sweet parallax-y transition if we make this greater than the width.
     transform translate(-100%, 0)
     transition transform transition-duration
 
-  &.visible .content
+  &.visible > *
     transform none
     transition transform transition-duration
 
 #modal-root
-  .content
+  > *
     background-color rgba(0, 0, 0, 0.5)
 
     opacity 0
     transition opacity transition-duration
 
-  &.visible .content
+  &.visible > *
     opacity 1
     transition opacity transition-duration
 
 #flyup-root
-  .content
+  > *
     transform translate(0, 100%)
     transition transform transition-duration
 
-  &.visible .content
+  &.visible > *
     transform none
     transition transform transition-duration
