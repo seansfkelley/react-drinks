@@ -1,4 +1,3 @@
-// This should match up with the constant in the view code.
 transition-duration = 0.33s
 pushover-width = 87%
 
@@ -20,10 +19,15 @@ body[standalone]
     right 0
     bottom 0
     z-index 1
-    box-shadow inset 4px 0px 4px 0px rgba(0, 0, 0, 0.25)
 
-    background-color rgba(0, 0, 0, 0.25)
+    background-color rgba(0, 0, 0, 0.5)
     opacity 0
+    transition opacity transition-duration
+
+#app-root.showing-overlay
+  &:after
+    pointer-events auto
+    opacity 1
     transition opacity transition-duration
 
 #app-root.showing-pushover
@@ -31,9 +35,7 @@ body[standalone]
   transition transform transition-duration
 
   &:after
-    pointer-events auto
-    opacity 1
-    transition opacity transition-duration
+    box-shadow inset 4px 0px 4px 0px rgba(0, 0, 0, 0.25)
 
 #modal-root, #flyup-root, #pushover-root
   // This is an awkward interaction between transitions and the js cleanup steps that happen when
@@ -54,7 +56,6 @@ body[standalone]
   &.topmost
     z-index 2
 
-#modal-root, #flyup-root, #pushover-root
   &.visible
     pointer-events auto
 
@@ -62,7 +63,7 @@ body[standalone]
   width pushover-width
 
   > *
-    // We can do a sweet parallax-y transition if we make this greater than the width.
+    // If this is the same as the actual pushover width, the iPhone renders weird ugly artifacts.
     transform translate(-100%, 0)
     transition transform transition-duration
 
@@ -72,8 +73,6 @@ body[standalone]
 
 #modal-root
   > *
-    background-color rgba(0, 0, 0, 0.5)
-
     opacity 0
     transition opacity transition-duration
 
