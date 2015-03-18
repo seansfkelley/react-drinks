@@ -8,6 +8,8 @@ AppDispatcher = require '../AppDispatcher'
 
 { IngredientStore, UiStore } = require '../stores'
 
+Lists             = require '../components/Lists'
+Header            = require '../components/Header'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 HeaderWithSearch  = require '../components/HeaderWithSearch'
 
@@ -39,10 +41,10 @@ IngredientGroupHeader = React.createClass {
   displayName : 'IngredientGroupHeader'
 
   render : ->
-    <div className='ingredient-group-header' onTouchTap={@_toggleGroup}>
-      <span className='title'>{@props.groupName}</span>
+    <Lists.ListHeader onTouchTap={@_toggleGroup}>
+      <span className='text'>{@props.title}</span>
       {if @props.selectedCount > 0 then <span className='count'>{@props.selectedCount}</span>}
-    </div>
+    </Lists.ListHeader>
 
   _toggleGroup : ->
     AppDispatcher.dispatch {
@@ -59,14 +61,13 @@ IngredientListItem = React.createClass {
   ]
 
   render : ->
-    className = 'ingredient-list-item'
     if @state.selectedIngredientTags[@props.ingredient.tag]
-      className += ' is-selected'
+      className = 'is-selected'
 
-    <div className={className} onTouchTap={@_toggleIngredient}>
+    <Lists.ListItem className={className} onTouchTap={@_toggleIngredient}>
       <div className='name'>{@props.ingredient.display}</div>
       <i className='fa fa-check-circle'/>
-    </div>
+    </Lists.ListItem>
 
   _toggleIngredient : ->
     AppDispatcher.dispatch {
@@ -84,21 +85,32 @@ GroupedIngredientList = React.createClass {
   ]
 
   render : ->
-    children = []
-    for { name, ingredients } in @state.searchedGroupedIngredients
-      selectedCount = _.filter(ingredients, (i) => @state.selectedIngredientTags[i.tag]?).length
-      children.push <IngredientGroupHeader groupName={name} selectedCount={selectedCount} key={'header-' + name}/>
-      if @state.openIngredientGroups[name]
-        children.push <div className='ingredient-section' key={'section-' + name}>
-          {_.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>}
-        </div>
+    tagToGroupName = {}
+    for { name, ingredients} in @state.searchedGroupedIngredients
+      for i in ingredients
+        tagToGroupName[i.tag] = name
 
-    if children.length == 0
-      children.push <div className='empty-search-results' key='empty'>Nothing matched your search.</div>
+    ingredientNodes = _.chain @state.searchedGroupedIngredients
+      .map ({ ingredients }) => _.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>
+      .flatten()
+      .value()
 
-    <div className='ingredient-selection-list'>
-      {children}
-    </div>
+    headeredNodes = Lists.headerify {
+      nodes             : ingredientNodes
+      Header            : IngredientGroupHeader
+      computeHeaderData : (node, i) =>
+        title         = tagToGroupName[node.props.ingredient.tag]
+        selectedCount = _.filter(@state.searchedGroupedIngredients[title], (i) => @state.selectedIngredientTags[i.tag]?).length
+        return {
+          title
+          selectedCount
+          key : 'header-' + title
+        }
+    }
+
+    <Lists.List className={Lists.ClassNames.HEADERED + ' ingredient-list'} emptyText='Nothing matched your search.'>
+      {headeredNodes}
+    </Lists.List>
 }
 
 IngredientSelectionView = React.createClass {
@@ -106,7 +118,7 @@ IngredientSelectionView = React.createClass {
 
   render : ->
     <FixedHeaderFooter
-      className='ingredient-list-view'
+      className='ingredient-selection-view'
       header={<IngredientSelectionHeader/>}
     >
       <GroupedIngredientList/>

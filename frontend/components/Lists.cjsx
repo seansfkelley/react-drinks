@@ -20,7 +20,7 @@ Lists.ListHeader = React.createClass {
     else
       children = @props.children
 
-    <div className={@getClassName 'list-header'}>
+    <div {...@props} className={@getClassName 'list-header'}>
       {children}
     </div>
 }

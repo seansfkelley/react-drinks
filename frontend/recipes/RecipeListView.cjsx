@@ -125,9 +125,6 @@ GroupedRecipeList = React.createClass {
       .flatten()
       .value()
 
-    titleExtractor = (child) ->
-      return
-
     orderedRecipes = _.pluck groupRecipePairs, '1'
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
