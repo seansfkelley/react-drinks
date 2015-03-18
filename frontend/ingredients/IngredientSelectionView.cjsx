@@ -40,19 +40,32 @@ IngredientSelectionHeader = React.createClass {
 IngredientGroupHeader = React.createClass {
   displayName : 'IngredientGroupHeader'
 
-  getInitialState : ->
-    return {
-      collapsed : @props.initialCollapsed
-    }
-
   render : ->
-    <Lists.ListHeader onTouchTap={@_toggleGroup} className={if @state.collapsed then 'collapsed'}>
+    <Lists.ListHeader onTouchTap={@_toggleGroup}>
       <span className='text'>{@props.title}</span>
       {if @props.selectedCount > 0 then <span className='count'>{@props.selectedCount}</span>}
     </Lists.ListHeader>
 
   _toggleGroup : ->
-    @setState { collapsed : not @state.collapsed }
+    AppDispatcher.dispatch {
+      type  : 'toggle-ingredient-group'
+      group : @props.title
+    }
+}
+
+IngredientItemGroup = React.createClass {
+  displayName : 'IngredientItemGroup'
+
+  mixins : [
+    FluxMixin UiStore, 'openIngredientGroups'
+  ]
+
+  render : ->
+    collapsed = not @state.openIngredientGroups[@props.title]
+
+    <Lists.ListItemGroup className={if collapsed then 'collapsed'} >
+      {@props.children}
+    </Lists.ListItemGroup>
 }
 
 IngredientListItem = React.createClass {
@@ -100,14 +113,14 @@ GroupedIngredientList = React.createClass {
     headeredNodes = Lists.headerify {
       nodes             : ingredientNodes
       Header            : IngredientGroupHeader
+      ItemGroup         : IngredientItemGroup
       computeHeaderData : (node, i) =>
         title         = tagToGroupName[node.props.ingredient.tag]
         selectedCount = _.filter(@state.searchedGroupedIngredients[title], (i) => @state.selectedIngredientTags[i.tag]?).length
         return {
           title
           selectedCount
-          initialCollapsed : true
-          key              : 'header-' + title
+          key : 'header-' + title
         }
     }
     className = "#{Lists.ClassNames.HEADERED} #{Lists.ClassNames.COLLAPSIBLE} ingredient-list"

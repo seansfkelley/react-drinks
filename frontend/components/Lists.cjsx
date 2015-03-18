@@ -25,6 +25,19 @@ Lists.ListHeader = React.createClass {
     </div>
 }
 
+Lists.ListItemGroup = React.createClass {
+  displayName : 'ListItemGroup'
+
+  mixins : [
+    ClassNameMixin
+  ]
+
+  render : ->
+    <div {...@props} className={@getClassName 'list-group'}>
+      {@props.children}
+    </div>
+}
+
 Lists.ListItem = React.createClass {
   displayName : 'ListItem'
 
@@ -67,8 +80,9 @@ Lists.List = React.createClass {
     </div>
 }
 
-Lists.headerify = ({ nodes, computeHeaderData, Header }) ->
-  Header ?= Lists.ListHeader
+Lists.headerify = ({ nodes, computeHeaderData, Header, ItemGroup }) ->
+  Header    ?= Lists.ListHeader
+  ItemGroup ?= Lists.ListItemGroup
 
   groupedNodes = []
   for n, i in nodes
@@ -87,7 +101,7 @@ Lists.headerify = ({ nodes, computeHeaderData, Header }) ->
     .map ({ headerData, items }) ->
       return [
         <Header {...headerData}/>
-        <div className='list-group' key={'group-' + headerData.key}>{items}</div>
+        <ItemGroup {...headerData} key={'group-' + headerData.key}>{items}</ItemGroup>
       ]
     .flatten()
     .value()

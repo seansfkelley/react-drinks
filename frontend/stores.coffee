@@ -80,8 +80,9 @@ UiStore = new class extends FluxStore
 
   'toggle-ingredient-group' : ({ group }) ->
     if @openIngredientGroups[group]?
-      delete @openIngredientGroups[group]
+      @openIngredientGroups = {}
     else
+      @openIngredientGroups = {}
       @openIngredientGroups[group] = true
     @_persist()
 
