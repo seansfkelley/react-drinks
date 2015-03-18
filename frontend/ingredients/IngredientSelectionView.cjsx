@@ -74,16 +74,19 @@ IngredientGroupHeader = React.createClass {
       stepSize = 16
     else
       stepSize = -16
+    previous = null
     step = ->
       scrollParent.scrollTop += stepSize
-      if scrollParent.scrollTop < offset
+      if scrollParent.scrollTop <= offset and previous != scrollParent.scrollTop
         requestAnimationFrame step
+      previous = scrollParent.scrollTop
     step()
 
   componentDidUpdate : ->
-    if not @_isCollapsed()
-      scrollParent = @_getNearestScrollableElement()
-      @_animateScrollToTop scrollParent, @getDOMNode().offsetTop
+    # if not @_isCollapsed()
+    #   scrollParent = @_getNearestScrollableElement()
+    #   _.defer =>
+    #     @_animateScrollToTop scrollParent, @getDOMNode().offsetTop
 }
 
 IngredientItemGroup = React.createClass {
@@ -94,7 +97,13 @@ IngredientItemGroup = React.createClass {
   ]
 
   render : ->
-    <Lists.ListItemGroup className={if @_isCollapsed() then 'collapsed'}>
+    groupSize = React.Children.count @props.children
+    if @_isCollapsed()
+      className = 'collapsed'
+    else
+      style = { height : groupSize * 44 }
+
+    <Lists.ListItemGroup className={className} style={style}>
       {@props.children}
     </Lists.ListItemGroup>
 
