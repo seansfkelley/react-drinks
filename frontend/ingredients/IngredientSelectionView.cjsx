@@ -40,6 +40,10 @@ IngredientSelectionHeader = React.createClass {
 IngredientGroupHeader = React.createClass {
   displayName : 'IngredientGroupHeader'
 
+  mixins : [
+    FluxMixin UiStore, 'openIngredientGroups'
+  ]
+
   render : ->
     <Lists.ListHeader onTouchTap={@_toggleGroup}>
       <span className='text'>{@props.title}</span>
@@ -51,6 +55,35 @@ IngredientGroupHeader = React.createClass {
       type  : 'toggle-ingredient-group'
       group : @props.title
     }
+
+  _isCollapsed : ->
+    return not @state.openIngredientGroups[@props.title]
+
+  _getNearestScrollableElement : ->
+    node = @getDOMNode()
+    while node?
+      switch window.getComputedStyle(node).overflow
+        when 'auto', 'scroll'
+          return node
+        else
+          node = node.parentElement
+    return null
+
+  _animateScrollToTop : (scrollParent, offset) ->
+    if scrollParent.scrollTop < offset
+      stepSize = 16
+    else
+      stepSize = -16
+    step = ->
+      scrollParent.scrollTop += stepSize
+      if scrollParent.scrollTop < offset
+        requestAnimationFrame step
+    step()
+
+  componentDidUpdate : ->
+    if not @_isCollapsed()
+      scrollParent = @_getNearestScrollableElement()
+      @_animateScrollToTop scrollParent, @getDOMNode().offsetTop
 }
 
 IngredientItemGroup = React.createClass {
@@ -61,11 +94,12 @@ IngredientItemGroup = React.createClass {
   ]
 
   render : ->
-    collapsed = not @state.openIngredientGroups[@props.title]
-
-    <Lists.ListItemGroup className={if collapsed then 'collapsed'} >
+    <Lists.ListItemGroup className={if @_isCollapsed() then 'collapsed'}>
       {@props.children}
     </Lists.ListItemGroup>
+
+  _isCollapsed : ->
+    return not @state.openIngredientGroups[@props.title]
 }
 
 IngredientListItem = React.createClass {
@@ -96,7 +130,6 @@ GroupedIngredientList = React.createClass {
 
   mixins : [
     FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
-    FluxMixin UiStore, 'openIngredientGroups'
   ]
 
   render : ->
@@ -143,7 +176,7 @@ IngredientSelectionView = React.createClass {
       className='ingredient-selection-view'
       header={<IngredientSelectionHeader/>}
     >
-      <GroupedIngredientList/>
+      <GroupedIngredientList />
     </FixedHeaderFooter>
 }
 
