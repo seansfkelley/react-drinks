@@ -40,17 +40,19 @@ IngredientSelectionHeader = React.createClass {
 IngredientGroupHeader = React.createClass {
   displayName : 'IngredientGroupHeader'
 
+  getInitialState : ->
+    return {
+      collapsed : @props.initialCollapsed
+    }
+
   render : ->
-    <Lists.ListHeader onTouchTap={@_toggleGroup}>
+    <Lists.ListHeader onTouchTap={@_toggleGroup} className={if @state.collapsed then 'collapsed'}>
       <span className='text'>{@props.title}</span>
       {if @props.selectedCount > 0 then <span className='count'>{@props.selectedCount}</span>}
     </Lists.ListHeader>
 
   _toggleGroup : ->
-    AppDispatcher.dispatch {
-      type  : 'toggle-ingredient-group'
-      group : @props.groupName
-    }
+    @setState { collapsed : not @state.collapsed }
 }
 
 IngredientListItem = React.createClass {
@@ -104,11 +106,13 @@ GroupedIngredientList = React.createClass {
         return {
           title
           selectedCount
-          key : 'header-' + title
+          initialCollapsed : true
+          key              : 'header-' + title
         }
     }
+    className = "#{Lists.ClassNames.HEADERED} #{Lists.ClassNames.COLLAPSIBLE} ingredient-list"
 
-    <Lists.List className={Lists.ClassNames.HEADERED + ' ingredient-list'} emptyText='Nothing matched your search.'>
+    <Lists.List className={className} emptyText='Nothing matched your search.'>
       {headeredNodes}
     </Lists.List>
 }

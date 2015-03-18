@@ -94,6 +94,6 @@ Lists.headerify = ({ nodes, computeHeaderData, Header }) ->
 
 Lists.ClassNames =
   HEADERED    : 'headered-list'
-  COLLAPSIBLE : 'collapsible'
+  COLLAPSIBLE : 'collapsible-list'
 
 module.exports = Lists

@@ -24,3 +24,15 @@
     color grey7
     text-transform uppercase
     padding-left 8px
+
+// TODO: This should not be a function of the header, of course.
+// TOOD: How to transition the height?
+.list.headered-list.collapsible-list
+  .list-header + .list-group
+    height auto
+    transition height 1s
+
+  .list-header.collapsed + .list-group
+    height 0
+    transition height 1s
+    overflow hidden
