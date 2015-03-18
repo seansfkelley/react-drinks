@@ -3,7 +3,8 @@
 _     = require 'lodash'
 React = require 'react'
 
-AppDispatcher = require './AppDispatcher'
+AppDispatcher    = require './AppDispatcher'
+stylingConstants = require './stylingConstants'
 
 MODAL_TYPES = [ 'modal', 'flyup', 'pushover' ]
 
@@ -36,9 +37,7 @@ attachOverlayViews = ->
       _.delay (->
         if shouldHide
           React.unmountComponentAtNode domElement
-      # This should match up with the duration of animations in the syling to avoid situations in which
-      # the panel exists but is off screen before/after animations.
-      ), 333
+      ), stylingConstants.OVERLAY_TRANSITION_DURATION
 
     AppDispatcher.register (payload) ->
       switch payload.type

@@ -3,8 +3,9 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin     = require '../mixins/FluxMixin'
-AppDispatcher = require '../AppDispatcher'
+FluxMixin        = require '../mixins/FluxMixin'
+AppDispatcher    = require '../AppDispatcher'
+stylingConstants = require '../stylingConstants'
 
 { IngredientStore, UiStore } = require '../stores'
 
@@ -101,7 +102,7 @@ IngredientItemGroup = React.createClass {
     if @_isCollapsed()
       className = 'collapsed'
     else
-      style = { height : groupSize * 44 }
+      style = { height : groupSize * stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT }
 
     <Lists.ListItemGroup className={className} style={style}>
       {@props.children}
