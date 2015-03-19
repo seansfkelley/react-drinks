@@ -39,12 +39,15 @@ HeaderWithSearch = React.createClass {
     searchBarVisible = not @state.searchBarVisible
     @setState { searchBarVisible }
     if searchBarVisible
-      # This defer is a hack because we haven't rerendered but we can't focus hidden things.
-      _.defer =>
-        @refs.searchBar.clearAndFocus()
+      @refs.searchBar.clearAndFocus()
     else
       @refs.searchBar.clear()
       document.activeElement?.blur()
+
+  componentDidMount : ->
+    if @state.searchBarVisible
+      @refs.searchBar.clearAndFocus()
+
 }
 
 module.exports = HeaderWithSearch

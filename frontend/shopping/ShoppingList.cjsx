@@ -34,6 +34,8 @@ ShoppingListHeader = React.createClass {
     AppDispatcher.dispatch {
       type : 'hide-flyup'
     }
+    # This might be more "semantic" if we clear the header, but this will do.
+    @_setSearchTerm ''
 
   # In the future, this should pop up a loader and then throttle the number of filters performed.
   _setSearchTerm : (searchTerm) ->

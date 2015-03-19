@@ -20,7 +20,7 @@ bugs
 - fix up the numerical display on the ingredient group tabs -- too many magic constants
 - scrolling on the shopping list doesn't dismiss the search focus (should listen on document, probably)
 - would it be possible to use media queries to remove the iPhone spacer header bar thing when Personal Hotspot is on?
-- searsching on the shopping list is the same as regular recipes, meaning it includes ingredients you can't see (and might already have, which yields potentially confusing results)
+- searching on the shopping list is the same as regular recipes, meaning it includes ingredients you can't see (and might already have, which yields potentially confusing results)
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"
