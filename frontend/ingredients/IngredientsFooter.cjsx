@@ -4,6 +4,7 @@ FluxMixin     = require '../mixins/FluxMixin'
 AppDispatcher = require '../AppDispatcher'
 { UiStore }   = require '../stores'
 
+Header                  = require '../components/Header'
 ShoppingList            = require '../shopping/ShoppingList'
 IngredientSelectionView = require './IngredientSelectionView'
 
@@ -16,14 +17,19 @@ IngredientsFooter = React.createClass {
 
   render : ->
     if @state.useIngredients
-      iconClass = 'fa-check-square-o'
+      leftIcon = 'fa-check-square-o'
     else
-      iconClass = 'fa-square-o'
-    <div className='ingredients-footer'>
-      <i className={'fa float-left ' + iconClass} onTouchTap={@_toggleUseIngredients}/>
-      <span className='footer-title' onTouchTap={@_openIngredientPanel}>Ingredients</span>
-      <i className='fa fa-shopping-cart float-right' onTouchTap={@_openShoppingList}/>
-    </div>
+      leftIcon = 'fa-square-o'
+
+    <Header
+      className='ingredients-footer'
+      leftIcon={leftIcon}
+      leftIconOnTouchTap={@_toggleUseIngredients}
+      title='Ingredients'
+      titleOnTouchTap={@_openIngredientPanel}
+      rightIcon='fa-shopping-cart'
+      rightIconOnTouchTap={@_openShoppingList}
+    />
 
   _toggleUseIngredients : ->
     AppDispatcher.dispatch {

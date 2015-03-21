@@ -9,7 +9,6 @@ todo
 - use URL/source property so people can check out the original recipe
 - swiping support for opening/closing overlays
 - clean up inconsistent spelling/casing for IBA recipe text
-- ingredients footer should be implemented as a Title, and Header should become Title
 - dark-on-light and light-on-dark theme classes?
 
 bugs
