@@ -25,8 +25,6 @@ bugs
 design ideas
 - "What ingredient gives me the most bang for my buck?"
   - an inverted shopping cart -- for each ingredient, what are the drinks you could make if you got { just it, other stuff too }?
-- "What drinks can I make with {X} in them?"
-  - some way to search withiin mixables/all for an ingredient as well as a name
 - FTUE -- it's not clear what people should be doing (but how much of this can we just design around?)
 - similar drink suggestions based on ingredients?
 - a note about glassware (and garnish?) would be a neat addition
