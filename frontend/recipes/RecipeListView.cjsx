@@ -13,7 +13,7 @@ SwipableRecipeView = require '../recipes/SwipableRecipeView'
 HeaderWithSearch   = require '../components/HeaderWithSearch'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
-Lists             = require '../components/Lists'
+List              = require '../components/List'
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
@@ -54,9 +54,9 @@ RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
   render : ->
-    <Lists.ListItem className= 'recipe-list-item' onTouchTap={@_openRecipe}>
+    <List.Item className= 'recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@_getRecipe().name}</div>
-    </Lists.ListItem>
+    </List.Item>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
@@ -86,7 +86,7 @@ AlphabeticalRecipeList = React.createClass {
     recipeNodes = _.map @state.searchedAlphabeticalRecipes, (r, i) =>
       <RecipeListItem recipes={@state.searchedAlphabeticalRecipes} index={i} key={r.normalizedName}/>
 
-    headeredNodes = Lists.headerify {
+    headeredNodes = List.headerify {
       nodes             : recipeNodes
       computeHeaderData : (node, i) ->
         title = _recipeListItemTitleExtractor node
@@ -96,9 +96,9 @@ AlphabeticalRecipeList = React.createClass {
         }
     }
 
-    <Lists.List className={Lists.ClassNames.HEADERED}>
+    <List.List className={List.ClassNames.HEADERED}>
       {headeredNodes}
-    </Lists.List>
+    </List.List>
 }
 
 EmptyListView = React.createClass {
@@ -130,7 +130,7 @@ GroupedRecipeList = React.createClass {
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    headeredNodes = Lists.headerify {
+    headeredNodes = List.headerify {
       nodes             : recipeNodes
       computeHeaderData : (node, i) ->
         title = groupRecipePairs[node.props.index][0]
@@ -140,9 +140,9 @@ GroupedRecipeList = React.createClass {
         }
     }
 
-    <Lists.List className={Lists.ClassNames.HEADERED} emptyView={<EmptyListView/>}>
+    <List.List className={List.ClassNames.HEADERED} emptyView={<EmptyListView/>}>
       {headeredNodes}
-    </Lists.List>
+    </List.List>
 }
 
 RecipeListView = React.createClass {

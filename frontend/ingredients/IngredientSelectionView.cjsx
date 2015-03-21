@@ -9,7 +9,7 @@ stylingConstants = require '../stylingConstants'
 
 { IngredientStore, UiStore } = require '../stores'
 
-Lists             = require '../components/Lists'
+List              = require '../components/List'
 Header            = require '../components/Header'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 HeaderWithSearch  = require '../components/HeaderWithSearch'
@@ -47,10 +47,10 @@ IngredientGroupHeader = React.createClass {
   ]
 
   render : ->
-    <Lists.ListHeader onTouchTap={@_toggleGroup}>
+    <List.Header onTouchTap={@_toggleGroup}>
       <span className='text'>{@props.title}</span>
       {if @props.selectedCount > 0 then <span className='count'>{@props.selectedCount}</span>}
-    </Lists.ListHeader>
+    </List.Header>
 
   _toggleGroup : ->
     AppDispatcher.dispatch {
@@ -75,9 +75,9 @@ IngredientItemGroup = React.createClass {
         height : groupSize * stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT + stylingConstants.INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET
       }
 
-    <Lists.ListItemGroup className={className} style={style}>
+    <List.ItemGroup className={className} style={style}>
       {@props.children}
-    </Lists.ListItemGroup>
+    </List.ItemGroup>
 
   _isCollapsed : ->
     return not @state.openIngredientGroups[@props.title]
@@ -94,10 +94,10 @@ IngredientListItem = React.createClass {
     if @state.selectedIngredientTags[@props.ingredient.tag]
       className = 'is-selected'
 
-    <Lists.ListItem className={className} onTouchTap={@_toggleIngredient}>
+    <List.Item className={className} onTouchTap={@_toggleIngredient}>
       <div className='name'>{@props.ingredient.display}</div>
       <i className='fa fa-check-circle'/>
-    </Lists.ListItem>
+    </List.Item>
 
   _toggleIngredient : ->
     AppDispatcher.dispatch {
@@ -124,7 +124,7 @@ GroupedIngredientList = React.createClass {
       .flatten()
       .value()
 
-    headeredNodes = Lists.headerify {
+    headeredNodes = List.headerify {
       nodes             : ingredientNodes
       Header            : IngredientGroupHeader
       ItemGroup         : IngredientItemGroup
@@ -142,11 +142,11 @@ GroupedIngredientList = React.createClass {
           key : 'header-' + title
         }
     }
-    className = "#{Lists.ClassNames.HEADERED} #{Lists.ClassNames.COLLAPSIBLE} ingredient-list"
+    className = "#{List.ClassNames.HEADERED} #{List.ClassNames.COLLAPSIBLE} ingredient-list"
 
-    <Lists.List className={className} emptyText='Nothing matched your search.'>
+    <List.List className={className} emptyText='Nothing matched your search.'>
       {headeredNodes}
-    </Lists.List>
+    </List.List>
 }
 
 IngredientSelectionView = React.createClass {

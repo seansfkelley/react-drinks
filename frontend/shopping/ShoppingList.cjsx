@@ -11,7 +11,7 @@ utils         = require '../utils'
 
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
-Lists              = require '../components/Lists'
+List               = require '../components/List'
 HeaderWithSearch   = require '../components/HeaderWithSearch'
 
 ShoppingListHeader = React.createClass {
@@ -57,10 +57,10 @@ IncompleteRecipeListItem = React.createClass {
         {' '}
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
-    <Lists.ListItem className='incomplete-recipe-list-item' onTouchTap={@_openRecipe}>
+    <List.Item className='incomplete-recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@_getRecipe().name}</div>
       {missingIngredients}
-    </Lists.ListItem>
+    </List.Item>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
@@ -96,7 +96,7 @@ ShoppingList = React.createClass {
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
-    headeredNodes = Lists.headerify {
+    headeredNodes = List.headerify {
       nodes : recipeNodes
       computeHeaderData : (node, i) ->
         title = groupRecipePairs[node.props.index][0]
@@ -106,9 +106,9 @@ ShoppingList = React.createClass {
         }
     }
 
-    <Lists.List className={Lists.ClassNames.HEADERED}>
+    <List.List className={List.ClassNames.HEADERED}>
       {headeredNodes}
-    </Lists.List>
+    </List.List>
 }
 
 ShoppingListView = React.createClass {

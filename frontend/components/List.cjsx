@@ -5,10 +5,10 @@ React = require 'react'
 
 ClassNameMixin = require '../mixins/ClassNameMixin'
 
-Lists = {}
+List = {}
 
-Lists.ListHeader = React.createClass {
-  displayName : 'ListHeader'
+List.Header = React.createClass {
+  displayName : 'List.Header'
 
   mixins : [
     ClassNameMixin
@@ -25,8 +25,8 @@ Lists.ListHeader = React.createClass {
     </div>
 }
 
-Lists.ListItemGroup = React.createClass {
-  displayName : 'ListItemGroup'
+List.ItemGroup = React.createClass {
+  displayName : 'List.ItemGroup'
 
   mixins : [
     ClassNameMixin
@@ -38,8 +38,8 @@ Lists.ListItemGroup = React.createClass {
     </div>
 }
 
-Lists.ListItem = React.createClass {
-  displayName : 'ListItem'
+List.Item = React.createClass {
+  displayName : 'List.Item'
 
   mixins : [
     ClassNameMixin
@@ -51,8 +51,8 @@ Lists.ListItem = React.createClass {
     </div>
 }
 
-Lists.List = React.createClass {
-  displayName : 'List'
+List.List = React.createClass {
+  displayName : 'List.List'
 
   propTypes :
     emptyText : React.PropTypes.string
@@ -80,9 +80,9 @@ Lists.List = React.createClass {
     </div>
 }
 
-Lists.headerify = ({ nodes, computeHeaderData, Header, ItemGroup }) ->
-  Header    ?= Lists.ListHeader
-  ItemGroup ?= Lists.ListItemGroup
+List.headerify = ({ nodes, computeHeaderData, Header, ItemGroup }) ->
+  Header    ?= List.Header
+  ItemGroup ?= List.ItemGroup
 
   groupedNodes = []
   for n, i in nodes
@@ -106,8 +106,8 @@ Lists.headerify = ({ nodes, computeHeaderData, Header, ItemGroup }) ->
     .flatten()
     .value()
 
-Lists.ClassNames =
+List.ClassNames =
   HEADERED    : 'headered-list'
   COLLAPSIBLE : 'collapsible-list'
 
-module.exports = Lists
+module.exports = List

@@ -9,7 +9,7 @@ AppDispatcher = require '../AppDispatcher'
 { UiStore, RecipeStore } = require '../stores'
 
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
-Lists              = require '../components/Lists'
+List               = require '../components/List'
 Header             = require '../components/Header'
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
 
@@ -17,9 +17,9 @@ RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
   render : ->
-    <Lists.ListItem className='recipe-list-item' onTouchTap={@_openRecipe}>
+    <List.Item className='recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipes[@props.index].name}</div>
-    </Lists.ListItem>
+    </List.Item>
 
   _openRecipe : ->
     AppDispatcher.dispatch {
@@ -47,9 +47,9 @@ FavoritesList = React.createClass {
     recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
 
     <FixedHeaderFooter header={headerNode}>
-      <Lists.List className='favorites-list' emptyText='Add some favorites first!'>
+      <List.List className='favorites-list' emptyText='Add some favorites first!'>
         {recipeNodes}
-      </Lists.List>
+      </List.List>
     </FixedHeaderFooter>
 
   _closeFavorites : ->
