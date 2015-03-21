@@ -10,7 +10,7 @@ AppDispatcher = require '../AppDispatcher'
 
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
-Header             = require '../components/Header'
+TitleBar           = require '../components/TitleBar'
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
 
 RecipeListItem = React.createClass {
@@ -37,7 +37,7 @@ FavoritesList = React.createClass {
   ]
 
   render : ->
-    headerNode = <Header
+    headerNode = <TitleBar
       rightIcon='fa-chevron-left'
       rightIconOnTouchTap={@_closeFavorites}
       title='Favorites'/>

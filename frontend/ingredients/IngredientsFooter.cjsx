@@ -4,7 +4,7 @@ FluxMixin     = require '../mixins/FluxMixin'
 AppDispatcher = require '../AppDispatcher'
 { UiStore }   = require '../stores'
 
-Header                  = require '../components/Header'
+TitleBar                = require '../components/TitleBar'
 ShoppingList            = require '../shopping/ShoppingList'
 IngredientSelectionView = require './IngredientSelectionView'
 
@@ -21,7 +21,7 @@ IngredientsFooter = React.createClass {
     else
       leftIcon = 'fa-square-o'
 
-    <Header
+    <TitleBar
       className='ingredients-footer'
       leftIcon={leftIcon}
       leftIconOnTouchTap={@_toggleUseIngredients}

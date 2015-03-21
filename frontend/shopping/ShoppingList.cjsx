@@ -12,7 +12,7 @@ utils         = require '../utils'
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
-HeaderWithSearch   = require '../components/HeaderWithSearch'
+TitleBarWithSearch   = require '../components/TitleBarWithSearch'
 
 ShoppingListHeader = React.createClass {
   displayName : 'ShoppingListHeader'
@@ -22,7 +22,7 @@ ShoppingListHeader = React.createClass {
   ]
 
   render : ->
-    <HeaderWithSearch
+    <TitleBarWithSearch
       leftIcon='fa-times-circle'
       leftIconOnTouchTap={@_hideShoppingList}
       title='Shopping List'

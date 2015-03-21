@@ -4,8 +4,8 @@ React = require 'react'
 
 ClassNameMixin = require '../mixins/ClassNameMixin'
 
-Header = React.createClass {
-  displayName : 'Header'
+TitleBar = React.createClass {
+  displayName : 'TitleBar'
 
   propTypes :
     leftIcon            : React.PropTypes.string
@@ -15,13 +15,12 @@ Header = React.createClass {
     titleOnTouchTap     : React.PropTypes.func
     rightIconOnTouchTap : React.PropTypes.func
 
-
   mixins : [
     ClassNameMixin
   ]
 
   render : ->
-    title = <span className='header-title' onTouchTap={@props.titleOnTouchTap}>{@props.title}</span>
+    title = <span className='title' onTouchTap={@props.titleOnTouchTap}>{@props.title}</span>
 
     if @props.leftIcon?
       leftIcon = <i className={'fa float-left ' + @props.leftIcon} onTouchTap={@props.leftIconOnTouchTap} onTouchStart={@_stopTouchStart}/>
@@ -33,7 +32,7 @@ Header = React.createClass {
       leftIcon  ?= <i className='fa float-left'/>
       rightIcon ?= <i className='fa float-right'/>
 
-    <div className={@getClassName 'header'}>
+    <div className={@getClassName 'title-bar'}>
       {leftIcon}
       {title}
       {rightIcon}
@@ -48,4 +47,4 @@ Header = React.createClass {
     e.preventDefault()
 }
 
-module.exports = Header
+module.exports = TitleBar

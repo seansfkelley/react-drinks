@@ -11,7 +11,7 @@ utils         = require '../utils'
 { UiStore } = require '../stores'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
-Header            = require '../components/Header'
+TitleBar          = require '../components/TitleBar'
 ButtonBar         = require '../components/ButtonBar'
 
 IngredientCategory =
@@ -126,7 +126,7 @@ RecipeView = React.createClass {
 
     <FixedHeaderFooter
       className='recipe-view'
-      header={<Header title={@props.recipe.name}/>}
+      header={<TitleBar title={@props.recipe.name}/>}
       footer={<RecipeFooter recipe={@props.recipe}/>}
     >
       <div className='recipe-description'>

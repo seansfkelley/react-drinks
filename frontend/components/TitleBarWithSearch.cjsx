@@ -5,11 +5,11 @@ React = require 'react'
 
 ClassNameMixin = require '../mixins/ClassNameMixin'
 
-Header    = require './Header'
+TitleBar  = require './TitleBar'
 SearchBar = require './SearchBar'
 
-HeaderWithSearch = React.createClass {
-  displayName : 'HeaderWithSearch'
+TitleBarWithSearch = React.createClass {
+  displayName : 'TitleBarWithSearch'
 
   propTypes :
     onSearch    : React.PropTypes.func.isRequired
@@ -25,7 +25,7 @@ HeaderWithSearch = React.createClass {
     }
 
   render : ->
-    <Header {...@props}
+    <TitleBar {...@props}
       className={@getClassName 'with-search'}
       rightIcon={'fa-search'}
       rightIconOnTouchTap={@_toggleSearch}
@@ -33,7 +33,7 @@ HeaderWithSearch = React.createClass {
       <div className={'search-bar-wrapper ' + if @state.searchBarVisible then 'visible' else 'hidden'}>
         <SearchBar onChange={@props.onSearch} key='search-bar' ref='searchBar' placeholder={@props.placeholder}/>
       </div>
-    </Header>
+    </TitleBar>
 
   _toggleSearch : ->
     searchBarVisible = not @state.searchBarVisible
@@ -50,4 +50,4 @@ HeaderWithSearch = React.createClass {
 
 }
 
-module.exports = HeaderWithSearch
+module.exports = TitleBarWithSearch

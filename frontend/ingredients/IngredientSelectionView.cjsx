@@ -10,15 +10,15 @@ stylingConstants = require '../stylingConstants'
 { IngredientStore, UiStore } = require '../stores'
 
 List              = require '../components/List'
-Header            = require '../components/Header'
+TitleBar          = require '../components/TitleBar'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
-HeaderWithSearch  = require '../components/HeaderWithSearch'
+TitleBarWithSearch  = require '../components/TitleBarWithSearch'
 
 IngredientSelectionHeader = React.createClass {
   displayName : 'IngredientSelectionHeader'
 
   render : ->
-    <HeaderWithSearch
+    <TitleBarWithSearch
       leftIcon='fa-chevron-down'
       leftIconOnTouchTap={@_hideIngredients}
       title='Ingredients'

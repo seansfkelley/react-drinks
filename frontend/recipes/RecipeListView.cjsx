@@ -10,7 +10,7 @@ AppDispatcher = require '../AppDispatcher'
 
 FavoritesList      = require '../favorites/FavoritesList'
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
-HeaderWithSearch   = require '../components/HeaderWithSearch'
+TitleBarWithSearch   = require '../components/TitleBarWithSearch'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 List              = require '../components/List'
@@ -28,7 +28,7 @@ RecipeListHeader = React.createClass {
     else
       title = 'All Drinks'
 
-    <HeaderWithSearch
+    <TitleBarWithSearch
       leftIcon='fa-star'
       leftIconOnTouchTap={@_openFavorites}
       title={title}
