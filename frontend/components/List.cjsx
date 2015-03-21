@@ -5,7 +5,35 @@ React = require 'react'
 
 ClassNameMixin = require '../mixins/ClassNameMixin'
 
-List = {}
+List = React.createClass {
+  displayName : 'List'
+
+  propTypes :
+    emptyText : React.PropTypes.string
+    emptyView : React.PropTypes.element
+
+  mixins : [
+    ClassNameMixin
+  ]
+
+  getDefaultProps : -> {
+    emptyText : 'Nothing to see here.'
+  }
+
+  render : ->
+    if React.Children.count(@props.children) == 0
+      if @props.emptyView
+        children = @props.emptyView
+      else
+        children = <div className='empty-list-text'>{@props.emptyText}</div>
+    else
+      children = @props.children
+
+    renderableProps = _.omit @props, 'emptyView', 'emptyText'
+    <div {...renderableProps} className={@getClassName 'list'}>
+      {children}
+    </div>
+}
 
 List.Header = React.createClass {
   displayName : 'List.Header'
@@ -49,36 +77,6 @@ List.Item = React.createClass {
   render : ->
     <div {...@props} className={@getClassName 'list-item'}>
       {@props.children}
-    </div>
-}
-
-List.List = React.createClass {
-  displayName : 'List.List'
-
-  propTypes :
-    emptyText : React.PropTypes.string
-    emptyView : React.PropTypes.element
-
-  mixins : [
-    ClassNameMixin
-  ]
-
-  getDefaultProps : -> {
-    emptyText : 'Nothing to see here.'
-  }
-
-  render : ->
-    if React.Children.count(@props.children) == 0
-      if @props.emptyView
-        children = @props.emptyView
-      else
-        children = <div className='empty-list-text'>{@props.emptyText}</div>
-    else
-      children = @props.children
-
-    renderableProps = _.omit @props, 'emptyView', 'emptyText'
-    <div {...renderableProps} className={@getClassName 'list'}>
-      {children}
     </div>
 }
 

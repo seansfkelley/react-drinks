@@ -106,9 +106,9 @@ ShoppingList = React.createClass {
         }
     }
 
-    <List.List className={List.ClassNames.HEADERED}>
+    <List className={List.ClassNames.HEADERED}>
       {headeredNodes}
-    </List.List>
+    </List>
 }
 
 ShoppingListView = React.createClass {

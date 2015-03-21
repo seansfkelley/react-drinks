@@ -144,9 +144,9 @@ GroupedIngredientList = React.createClass {
     }
     className = "#{List.ClassNames.HEADERED} #{List.ClassNames.COLLAPSIBLE} ingredient-list"
 
-    <List.List className={className} emptyText='Nothing matched your search.'>
+    <List className={className} emptyText='Nothing matched your search.'>
       {headeredNodes}
-    </List.List>
+    </List>
 }
 
 IngredientSelectionView = React.createClass {

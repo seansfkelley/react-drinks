@@ -5,10 +5,8 @@ React = require 'react'
 
 ClassNameMixin = require '../mixins/ClassNameMixin'
 
-ButtonBar = {}
-
-ButtonBar.Bar = React.createClass {
-  displayName : 'ButtonBar.Bar'
+ButtonBar = React.createClass {
+  displayName : 'ButtonBar'
 
   mixins : [
     ClassNameMixin

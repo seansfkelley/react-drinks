@@ -61,10 +61,10 @@ RecipeFooter = React.createClass {
     else
       saveIcon = 'fa-star-o'
 
-    <ButtonBar.Bar className='recipe-controls'>
+    <ButtonBar className='recipe-controls'>
       <ButtonBar.Button icon={saveIcon} label='Favorite' onTouchTap={@_saveTo}/>
       <ButtonBar.Button icon='fa-times' label='Close' onTouchTap={@_close}/>
-    </ButtonBar.Bar>
+    </ButtonBar>
 
   _saveTo : ->
     AppDispatcher.dispatch {

@@ -96,9 +96,9 @@ AlphabeticalRecipeList = React.createClass {
         }
     }
 
-    <List.List className={List.ClassNames.HEADERED}>
+    <List className={List.ClassNames.HEADERED}>
       {headeredNodes}
-    </List.List>
+    </List>
 }
 
 EmptyListView = React.createClass {
@@ -140,9 +140,9 @@ GroupedRecipeList = React.createClass {
         }
     }
 
-    <List.List className={List.ClassNames.HEADERED} emptyView={<EmptyListView/>}>
+    <List className={List.ClassNames.HEADERED} emptyView={<EmptyListView/>}>
       {headeredNodes}
-    </List.List>
+    </List>
 }
 
 RecipeListView = React.createClass {
