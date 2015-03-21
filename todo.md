@@ -10,6 +10,7 @@ todo
 - swiping support for opening/closing overlays
 - clean up inconsistent spelling/casing for IBA recipe text
 - dark-on-light and light-on-dark theme classes?
+- when there are few enough search results in ingredients, don't hide them behind categories (just show them in noe alphabetical list!)
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb

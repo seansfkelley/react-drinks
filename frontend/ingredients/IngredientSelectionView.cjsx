@@ -37,6 +37,7 @@ IngredientSelectionHeader = React.createClass {
     AppDispatcher.dispatch {
       type : 'hide-flyup'
     }
+    @_setSearchTerm ''
 }
 
 IngredientGroupHeader = React.createClass {

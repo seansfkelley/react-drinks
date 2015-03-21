@@ -8,14 +8,17 @@ icon-width = title-bar-height
   font-weight 600
   text-align center
 
-  i.fa, .title
+  .title
     height title-bar-height
     line-height title-bar-height
 
   i.fa
-    padding 0 12px 0
-    box-sizing border-box
-    width icon-width
+    &.float-left, &.float-right
+      height title-bar-height
+      line-height title-bar-height
+      padding 0 12px 0
+      box-sizing border-box
+      width icon-width
 
 .title-bar.with-search
   position relative
