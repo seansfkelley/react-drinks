@@ -20,7 +20,8 @@ List.Header = React.createClass {
     else
       children = @props.children
 
-    <div {...@props} className={@getClassName 'list-header'}>
+    renderableProps = _.omit @props, 'title'
+    <div {...renderableProps} className={@getClassName 'list-header'}>
       {children}
     </div>
 }
@@ -75,7 +76,8 @@ List.List = React.createClass {
     else
       children = @props.children
 
-    <div {...@props} className={@getClassName 'list'}>
+    renderableProps = _.omit @props, 'emptyView', 'emptyText'
+    <div {...renderableProps} className={@getClassName 'list'}>
       {children}
     </div>
 }
