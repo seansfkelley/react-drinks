@@ -18,7 +18,6 @@ bugs
 - when showing the page for the first time you get a flash of "nothing to see here" -- perhaps some better zero state while things load?
 - autoprefixer isn't adding things it should (like the appearance rule on inputs)
 - when overlays are shown, you can still interact with things behind it; pointer-events doesn't seem to be sufficient
-- fix up the numerical display on the ingredient group tabs -- too many magic constants
 - scrolling on the shopping list doesn't dismiss the search focus (should listen on document, probably)
 - would it be possible to use media queries to remove the iPhone spacer header bar thing when Personal Hotspot is on?
 - searching on the shopping list is the same as regular recipes, meaning it includes ingredients you can't see (and might already have, which yields potentially confusing results)

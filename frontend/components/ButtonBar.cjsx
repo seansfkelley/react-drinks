@@ -1,5 +1,6 @@
 # @cjsx React.DOM
 
+_     = require 'lodash'
 React = require 'react'
 
 ClassNameMixin = require '../mixins/ClassNameMixin'
@@ -32,7 +33,8 @@ ButtonBar.Button = React.createClass {
   ]
 
   render : ->
-    <div {...@props} className={@getClassName 'button'}>
+    renderableProps = _.omit @props, 'icon', 'label'
+    <div {...renderableProps} className={@getClassName 'button'}>
       {if @props.icon then <i className={'fa ' + @props.icon}/>}
       {if @props.label then <span>{@props.label}</span>}
     </div>
