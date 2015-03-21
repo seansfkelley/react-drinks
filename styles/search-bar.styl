@@ -1,4 +1,5 @@
 @require 'colors'
+@require 'sizes'
 
 .search-bar
   height 100%
@@ -10,27 +11,29 @@
     appearance none
     -webkit-appearance none
 
-    font-size 16px
+    font-size body-font-size
     height 100%
     width 100%
     outline none
 
     border 1px solid grey5
-    border-radius 4px
+    border-radius standard-border-radius
     box-shadow none
 
     padding-left 4px
 
     &::-webkit-input-placeholder
-      font-size 16px
+      font-size body-font-size
 
   i.fa
-    font-size 20px
+    font-size icon-font-size
 
     position absolute
     right 0
 
     padding 0
+    // These are some magic constants I can't get rid of cause line-height is relative to font-size
+    // but we would like to make it 100% of the container height. Oh well.
     width 32px
     height 32px
     line-height 32px

@@ -1,21 +1,22 @@
 @require 'sizes'
 
 transition-duration = 0.33s
-icon-width = 44px
+icon-width = title-bar-height
 
 .header
-  font-size header-footer-font-size
+  height title-bar-height
+  font-size title-font-size
   font-weight 500
   text-align center
 
   i.fa, .header-title
-    height header-footer-size
-    line-height header-footer-size
+    height title-bar-height
+    line-height title-bar-height
 
   i.fa
     padding 0 12px 0
     box-sizing border-box
-    width header-footer-size // Make em square.
+    width icon-width
 
 .header.with-search
   position relative

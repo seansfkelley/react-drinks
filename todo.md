@@ -3,13 +3,16 @@ features
 - adding recipes
 
 todo
-- clean up styling (more variables for sizes, things are in the wrong place, things are duplicated)
 - on-scroll behavior is hilariously, wildly inefficient: there has got to be a better way to do this or at least to design around it
 - having views hide themselves by knowing which overlay they're in is sketchy
 - sticky header based off of headered list
 - use URL/source property so people can check out the original recipe
 - swiping support for opening/closing overlays
 - clean up inconsistent spelling/casing for IBA recipe text
+- ingredients footer should be implemented as a Title, and Header should become Title
+- change 500 to 600 font weight
+- standardize transition duration somewhere
+- index style for mixins with a separate folder
 
 bugs
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb

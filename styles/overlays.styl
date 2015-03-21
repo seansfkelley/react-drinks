@@ -1,9 +1,12 @@
+@require 'mixins'
+@require 'sizes'
+
 transition-duration = 0.33s
 pushover-width = 87%
 
 body[standalone]
   #modal-root, #flyup-root, #pushover-root
-    top 20px
+    top iphone-status-bar-height
 
 #app-root
   transition transform transition-duration
@@ -35,7 +38,7 @@ body[standalone]
   transition transform transition-duration
 
   &:after
-    box-shadow inset 4px 0px 4px 0px rgba(0, 0, 0, 0.25)
+    shadow-inset('left', 3px)
 
 #modal-root, #flyup-root, #pushover-root
   // This is an awkward interaction between transitions and the js cleanup steps that happen when
