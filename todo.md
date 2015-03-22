@@ -21,6 +21,8 @@ bugs
 - scrolling on the shopping list doesn't dismiss the search focus (should listen on document, probably)
 - would it be possible to use media queries to remove the iPhone spacer header bar thing when Personal Hotspot is on?
 - searching on the shopping list is the same as regular recipes, meaning it includes ingredients you can't see (and might already have, which yields potentially confusing results)
+- the modal over the flyup when viewing recipes in the shopping list doesn't have a background, but you can't fix it with a :before on the overlays cause that makes the pushover look bad
+- searching ingredients doesn't ignore accents
 
 design ideas
 - "What ingredient gives me the most bang for my buck?"

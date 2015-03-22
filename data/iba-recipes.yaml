@@ -11,7 +11,7 @@
           tag: "creme de cacao"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "créme de cacao (brown)"
+          displayIngredient: "crème de cacao (brown)"
         -
           tag: "cream"
           displayAmount: "1"
@@ -736,12 +736,12 @@
           tag: "creme de cacao"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "créme de cacao (white)"
+          displayIngredient: "crème de cacao (white)"
         -
           tag: "creme de menthe"
           displayAmount: "1"
           displayUnit: "oz"
-          displayIngredient: "créme de menthe (green)"
+          displayIngredient: "crème de menthe (green)"
         -
           tag: "cream"
           displayAmount: "1"
@@ -1732,7 +1732,7 @@
           tag: "creme de menthe"
           displayAmount: "2/3"
           displayUnit: "oz"
-          displayIngredient: "créme de menthe (white)"
+          displayIngredient: "crème de menthe (white)"
       instructions: |
         Pour all ingredients into a mixing glass with ice. Stir.
         Strain into a cocktail glass.
