@@ -3,6 +3,7 @@ fs          = require 'fs'
 yaml        = require 'js-yaml'
 revalidator = require 'revalidator'
 
+latinize         = require '../shared/latinize'
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
@@ -47,7 +48,8 @@ revalidatorUtils.validateOrThrow RECIPES, {
 }
 
 for r in RECIPES
-  r.normalizedName = r.name.toLowerCase().replace('/ /g', '-').replace(/[^-a-z0-9]/g, '')
+  r.searchableName = latinize(r.name).toLowerCase()
+  r.normalizedName = r.searchableName.replace('/ /g', '-').replace(/[^-a-z0-9]/g, '')
 
 module.exports = {
   method  : 'get'

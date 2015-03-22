@@ -3,6 +3,7 @@ fs          = require 'fs'
 yaml        = require 'js-yaml'
 revalidator = require 'revalidator'
 
+latinize         = require '../shared/latinize'
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
@@ -40,10 +41,7 @@ revalidatorUtils.validateOrThrow INGREDIENTS, {
 for i in INGREDIENTS
   i.tag        ?= i.display.toLowerCase()
   i.searchable ?= []
-  # TODO: Should run this and the search terms through a Unicode canonicalization, e.g,
-  # replace the non-ASCII characters with their equivalents.
-  if not _.contains i.searchable, i.display.toLowerCase()
-    i.searchable.push i.display.toLowerCase()
+  i.searchable.push latinize(i.display).toLowerCase()
   # TODO: Add display for generic to here.
   # if i.generic and not _.contains i.searchable, i.generic
   #   i.searchable.push i.generic

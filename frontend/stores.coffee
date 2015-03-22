@@ -27,9 +27,17 @@ IngredientStore = new class extends FluxStore
     groupedIngredients         : []
     searchedGroupedIngredients : []
     selectedIngredientTags     : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
+    ingredientsByTag           : {}
 
   'set-ingredients' : ({ groupedIngredients }) ->
     @groupedIngredients = groupedIngredients
+    @ingredientsByTag = _.chain groupedIngredients
+      .pluck 'ingredients'
+      .flatten()
+      .filter (i) -> i.tag?
+      .reduce ((map, i) -> map[i.tag] = i ; return map), {}
+      .value()
+    console.log @ingredientsByTag
     @_updateSearchedIngredients()
 
   'toggle-ingredient' : ({ tag }) ->
@@ -118,7 +126,7 @@ RecipeStore = new class extends FluxStore
     @_updateDerivedRecipeLists()
 
   'search-recipes' : ({ searchTerm }) ->
-    @searchTerm = searchTerm.toLowerCase()
+    @searchTerm = searchTerm.toLowerCase().trim()
     @_updateSearchedRecipes()
 
   _createRecipeSearch : ->
@@ -146,16 +154,26 @@ RecipeStore = new class extends FluxStore
       recipes = _.sortBy recipes, 'name'
       return { name, recipes, missing }
 
+  # You must guarantee that IngredientStore is updated before calling this.
   _filterRecipeBySearchTerm : (r) =>
-    if r.name.toLowerCase().indexOf(@searchTerm) != -1
+    if r.searchableName.indexOf(@searchTerm) != -1
       return true
+    # TODO: This is crazily, wildly inefficient.
     return _.chain r.ingredients
-      .pluck 'displayIngredient'
-      .invoke 'toLowerCase'
-      .any (i) => i.indexOf(@searchTerm) != -1
+      .pluck 'tag'
+      .compact()
+      # This step is dumb as hell. The problem here is when recipes specify an inferred generic
+      # (e.g., "chartreuse") and since no actual recipe entry exists for that we fake one out
+      # with just the tag. Right thing to do? Probably have the backend auto-infer things before
+      # shipping them up to the frontend so that we can assert this case never arises.
+      .map (t) => IngredientStore.ingredientsByTag[t] ? { searchable : t }
+      .pluck 'searchable'
+      .flatten()
+      .any (term) => term.indexOf(@searchTerm) != -1
       .value()
 
   _updateSearchedRecipes : ->
+    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     if @searchTerm == ''
       @searchedAlphabeticalRecipes   = @alphabeticalRecipes
       @searchedGroupedMixableRecipes = @groupedMixableRecipes
