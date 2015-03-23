@@ -34,6 +34,7 @@ design ideas
 - some kind of reset for ingredients would be nice
 - buffer space on the bottom of the exandable list for ingredients might make for a nicer expanding-things-near-the-bottom experience
 - designing around the sticky header might be nice -- it's crazy inefficient and could potentially drain the battery on a phone (and look dumb in the process)
+- explain what substitutions are expected
 
 recipes
 - add a validation for:

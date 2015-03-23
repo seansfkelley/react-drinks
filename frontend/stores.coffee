@@ -37,7 +37,6 @@ IngredientStore = new class extends FluxStore
       .filter (i) -> i.tag?
       .reduce ((map, i) -> map[i.tag] = i ; return map), {}
       .value()
-    console.log @ingredientsByTag
     @_updateSearchedIngredients()
 
   'toggle-ingredient' : ({ tag }) ->
