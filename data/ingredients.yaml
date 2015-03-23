@@ -8,6 +8,8 @@
   -
     display    : Amaretto
     group      : liqueur-other
+    searchable :
+      - disaronno
   -
     display    : Angostura Bitters
     generic    : bitters
@@ -23,7 +25,7 @@
     group      : bitters
   -
     display    : Applejack
-    generic    : calvados
+    generic    : apple-brandy
     group      : brandy
   -
     display    : Calvados
@@ -189,6 +191,8 @@
   -
     display    : Sugar
     group      : other
+    searchable :
+      - sugar cube
   -
     display    : Vermouth (sweet)
     tag        : sweet vermouth
@@ -213,7 +217,7 @@
     group      : mixer-soda
   -
     display    : Triple Sec
-    group      : liqueur-herbal
+    group      : liqueur-fruit
   -
     display    : Vodka
     group      : vodka
@@ -329,9 +333,6 @@
     display    : Coffee
     group      : mixer-other
   -
-    display    : Disaronno
-    group      : liqueur-other
-  -
     display    : Crème de menthe
     tag        : creme de menthe
     group      : liqueur-herbal
@@ -374,6 +375,9 @@
   -
     display    : Hot Pepper
     group      : vegetable
+    searchable :
+      - jalapeno
+      - habanero
   -
     display    : Peach Schnapps
     group      : liqueur-fruit

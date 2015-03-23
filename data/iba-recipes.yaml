@@ -97,7 +97,7 @@
           tag: "irish cream"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "Baileys irish cream"
+          displayIngredient: "Baileys Irish cream"
         -
           tag: "grand marnier"
           displayAmount: "1/2"
@@ -141,7 +141,7 @@
           tag: "galliano"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "galliano"
+          displayIngredient: "Galliano"
         -
           tag: "pineapple juice"
           displayAmount: "2"
@@ -368,7 +368,7 @@
           displayUnit: "oz"
           displayIngredient: "gin"
         -
-          tag: "simple syrup"
+          tag: "raspberry"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "raspberry syrup"
@@ -602,7 +602,7 @@
           displayUnit: "oz"
           displayIngredient: "cognac"
         -
-          tag: "disaronno"
+          tag: "amaretto"
           displayAmount: "1 1/4"
           displayUnit: "oz"
           displayIngredient: "Disaronno"
@@ -673,7 +673,7 @@
           displayUnit: "oz"
           displayIngredient: "scotch"
         -
-          tag: "disaronno"
+          tag: "amaretto"
           displayAmount: "1 1/4"
           displayUnit: "oz"
           displayIngredient: "Disaronno"
@@ -691,7 +691,7 @@
           displayUnit: "oz"
           displayIngredient: "vodka"
         -
-          tag: "disaronno"
+          tag: "amaretto"
           displayAmount: "1 1/4"
           displayUnit: "oz"
           displayIngredient: "Disaronno"
@@ -707,7 +707,7 @@
           tag: "galliano"
           displayAmount: "2/3"
           displayUnit: "oz"
-          displayIngredient: "galliano"
+          displayIngredient: "Galliano"
         -
           tag: "triple sec"
           displayAmount: "2/3"
@@ -985,7 +985,7 @@
           tag: "cola"
           displayAmount: "1"
           displayUnit: "dash"
-          displayIngredient: "of cola"
+          displayIngredient: "cola"
       instructions: |
         Add all ingredients into highball glass filled with ice and stir gently.
         Garnish with lemon spiral and serve with straw.
@@ -1950,7 +1950,7 @@
           tag: "galliano"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "galliano"
+          displayIngredient: "Galliano"
         -
           tag: "triple sec"
           displayAmount: "1/2"
