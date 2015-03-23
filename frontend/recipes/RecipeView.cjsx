@@ -27,6 +27,9 @@ HUMAN_READABLE_CATEGORY_TITLE =
 SectionHeader = React.createClass {
   displayName : 'SectionHeader'
 
+  propTypes :
+    text : React.PropTypes.string.isRequired
+
   render : ->
     <div className='recipe-section-header'>{@props.text}</div>
 }
@@ -34,9 +37,14 @@ SectionHeader = React.createClass {
 IngredientView = React.createClass {
   displayName : 'IngredientView'
 
+  propTypes :
+    displayAmount     : React.PropTypes.string
+    displayUnit       : React.PropTypes.string
+    displayIngredient : React.PropTypes.string.isRequired
+
   render : ->
-    amount = utils.fractionify(@props.measuredIngredient.displayAmount ? '')
-    unit = @props.measuredIngredient.displayUnit ? ''
+    amount = utils.fractionify(@props.displayAmount ? '')
+    unit = @props.displayUnit ? ''
     # The space is necessary to space out the spans from each other. Newlines are insufficient.
     <div className='measured-ingredient'>
       <span className='measure'>
@@ -44,37 +52,36 @@ IngredientView = React.createClass {
         {' '}
         <span className='unit'>{unit}</span>
       </span>
-      <span className='ingredient'>{@props.measuredIngredient.displayIngredient}</span>
+      <span className='ingredient'>{@props.displayIngredient}</span>
     </div>
 }
 
 RecipeFooter = React.createClass {
   displayName : 'RecipeFooter'
 
+  propTypes :
+    normalizedRecipeName : React.PropTypes.string.isRequired
+    onClose              : React.PropTypes.func.isRequired
+
   mixins : [
     FluxMixin UiStore, 'favoritedRecipes'
   ]
 
   render : ->
-    if @state.favoritedRecipes[@props.normalizedName]?
+    if @state.favoritedRecipes[@props.normalizedRecipeName]?
       saveIcon = 'fa-star'
     else
       saveIcon = 'fa-star-o'
 
     <ButtonBar className='recipe-controls'>
       <ButtonBar.Button icon={saveIcon} label='Favorite' onTouchTap={@_saveTo}/>
-      <ButtonBar.Button icon='fa-times' label='Close' onTouchTap={@_close}/>
+      <ButtonBar.Button icon='fa-times' label='Close' onTouchTap={@props.onClose}/>
     </ButtonBar>
 
   _saveTo : ->
     AppDispatcher.dispatch {
       type           : 'toggle-favorite-recipe'
-      normalizedName : @props.recipe.normalizedName
-    }
-
-  _close : ->
-    AppDispatcher.dispatch {
-      type : 'hide-modal'
+      normalizedName : @props.normalizedRecipeName
     }
 }
 
@@ -94,7 +101,7 @@ RecipeView = React.createClass {
           else
             return [
               <SectionHeader text={HUMAN_READABLE_CATEGORY_TITLE[category]} key={'header-' + category}/>
-              _.map measuredIngredients, (i) -> <IngredientView measuredIngredient={i} key={i.tag ? i.displayIngredient}/>
+              _.map measuredIngredients, (i) -> <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
             ]
         .flatten()
         .value()
@@ -102,7 +109,7 @@ RecipeView = React.createClass {
       ingredientNodes = [
         <SectionHeader text='Ingredients' key={'header-' + IngredientCategory.AVAILABLE}/>
       ].concat _.map @props.recipe.ingredients, (i) ->
-        <IngredientView measuredIngredient={i} key={i.tag ? i.displayIngredient}/>
+        <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
 
     if @props.recipe.notes?
       recipeNotes =
@@ -127,7 +134,7 @@ RecipeView = React.createClass {
     <FixedHeaderFooter
       className='recipe-view'
       header={<TitleBar title={@props.recipe.name}/>}
-      footer={<RecipeFooter recipe={@props.recipe}/>}
+      footer={<RecipeFooter normalizedRecipeName={@props.recipe.normalizedName} onClose={@_onClose}/>}
     >
       <div className='recipe-description'>
         <div className='recipe-ingredients'>
@@ -137,6 +144,11 @@ RecipeView = React.createClass {
         {recipeNotes}
       </div>
     </FixedHeaderFooter>
+
+  _onClose : ->
+    AppDispatcher.dispatch {
+      type : 'hide-modal'
+    }
 }
 
 module.exports = RecipeView
