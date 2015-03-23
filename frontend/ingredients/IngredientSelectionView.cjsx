@@ -125,28 +125,38 @@ GroupedIngredientList = React.createClass {
       .flatten()
       .value()
 
-    headeredNodes = List.headerify {
-      nodes             : ingredientNodes
-      Header            : IngredientGroupHeader
-      ItemGroup         : IngredientItemGroup
-      computeHeaderData : (node, i) =>
-        title         = tagToGroupName[node.props.ingredient.tag]
-        selectedCount = _.chain @state.searchedGroupedIngredients
-          .where { name : title }
-          .value()[0]
-          .ingredients
-          .filter (i) => @state.selectedIngredientTags[i.tag]?
-          .length
-        return {
-          title
-          selectedCount
-          key : 'header-' + title
-        }
-    }
-    className = "#{List.ClassNames.HEADERED} #{List.ClassNames.COLLAPSIBLE} ingredient-list"
+    if ingredientNodes.length < 10
+      sortedIngredientNodes = _.sortBy ingredientNodes, (n) -> n.props.ingredient.displayName
+      selectedCount = _.chain ingredientNodes
+        .filter (i) => @state.selectedIngredientTags[i.props.ingredient.tag]?
+        .value()
+        .length
+      listNodes = [
+        <IngredientGroupHeader title='All Results' selectedCount={selectedCount} key='header-all-results'/>
+      ].concat sortedIngredientNodes
+    else
+      listNodes = List.headerify {
+        nodes             : ingredientNodes
+        Header            : IngredientGroupHeader
+        ItemGroup         : IngredientItemGroup
+        computeHeaderData : (node, i) =>
+          title         = tagToGroupName[node.props.ingredient.tag]
+          selectedCount = _.chain @state.searchedGroupedIngredients
+            .where { name : title }
+            .value()[0]
+            .ingredients
+            .filter (i) => @state.selectedIngredientTags[i.tag]?
+            .length
+          return {
+            title
+            selectedCount
+            key : 'header-' + title
+          }
+      }
 
+    className = "#{List.ClassNames.HEADERED} #{List.ClassNames.COLLAPSIBLE} ingredient-list"
     <List className={className} emptyText='Nothing matched your search.'>
-      {headeredNodes}
+      {listNodes}
     </List>
 }
 
