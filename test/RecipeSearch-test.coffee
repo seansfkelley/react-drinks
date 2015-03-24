@@ -1,3 +1,6 @@
+# Should figure out how to include this in all Mocha setup cleanly.
+require('loglevel').setLevel 'silent'
+
 _      = require 'lodash'
 should = require('chai').should()
 
@@ -12,6 +15,8 @@ INGREDIENT_A_CHILD_1_1 = ingredient 'a-1-1', 'a-1'
 INGREDIENT_A_CHILD_2   = ingredient 'a-2', 'a'
 
 INGREDIENT_B_ROOT      = ingredient 'b'
+
+INGREDIENT_Z_ROOT      = ingredient 'z'
 
 INGREDIENT_NULL        = ingredient()
 
@@ -132,6 +137,17 @@ describe 'RecipeSearch', ->
         ]
       }
 
+    it 'should consider ingredients without tags always available', ->
+      search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_NULL)
+      search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ]).should.deep.equal {
+        '0' : [
+          ingredients : [ INGREDIENT_A_ROOT, INGREDIENT_NULL ]
+          missing     : []
+          substitute  : []
+          available   : [ INGREDIENT_A_ROOT, INGREDIENT_NULL ]
+        ]
+      }
+
     it 'should return a fuzzy match for a recipe (within 1) if there is at least one matching tag', ->
       search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_B_ROOT)
       search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ], 1).should.deep.equal {
@@ -149,7 +165,7 @@ describe 'RecipeSearch', ->
 
     it 'should silently ignore ingredients with no tags', ->
       search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_NULL)
-      result = search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ]).should.have.all.keys [ '0' ]
+      search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ]).should.have.all.keys [ '0' ]
 
     it 'should return a match for a recipe if it calls for generics', ->
       search = makeSearch recipe(INGREDIENT_A_ROOT)
@@ -173,3 +189,7 @@ describe 'RecipeSearch', ->
         ]
       }
 
+    # This is an upgrade consideration, if someone has a tag in localStorage but it's removed in later versions.
+    it 'should silently ingredient tags it doesn\'t understand', ->
+      search = makeSearch recipe(INGREDIENT_A_ROOT)
+      search.computeMixableRecipes([ INGREDIENT_Z_ROOT.tag ]).should.deep.equal {}

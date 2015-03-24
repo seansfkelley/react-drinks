@@ -1,4 +1,5 @@
-_ = require 'lodash'
+_   = require 'lodash'
+log = require 'loglevel'
 
 class RecipeSearch
   constructor : (ingredients, @_recipes) ->
@@ -60,7 +61,11 @@ class RecipeSearch
     return _.defaults { missing, available, substitute }, recipe
 
   computeMixableRecipes : (ingredientTags, fuzzyMatchThreshold = 0) ->
-    exactlyAvailableIngredients  = _.map ingredientTags, (tag) => @_ingredientForTag[tag]
+    exactlyAvailableIngredientsRaw = _.map ingredientTags, (tag) => @_ingredientForTag[tag]
+    exactlyAvailableIngredients = _.compact exactlyAvailableIngredientsRaw
+    if exactlyAvailableIngredientsRaw.length != exactlyAvailableIngredients.length
+      log.warn "some tags that were searched are extraneous and will be ignored: #{JSON.stringify ingredientTags}"
+
     allAvailableTagsWithGenerics = _.pluck @_includeAllGenerics(exactlyAvailableIngredients), 'tag'
     mostGenericAvailableTags     = @_toMostGenericTags exactlyAvailableIngredients
 
