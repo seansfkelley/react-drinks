@@ -32,7 +32,7 @@
         tag: "maraschino liqueur"
         displayAmount: "3/4"
         displayUnit: "oz"
-        displayIngredient: "maraschino liqueur"
+        displayIngredient: "Maraschino liqueur"
       -
         tag: "lime juice"
         displayAmount: "3/4"
@@ -303,13 +303,14 @@
         displayUnit: "oz"
         displayIngredient: "lemon juice"
       -
-        tag: "honey syrup"
+        tag: "honey"
         displayAmount: "3/4"
         displayUnit: "oz"
         displayIngredient: "honey syrup"
     instructions: |
       Shake ingredients well with ice.
       Strain into a chilled cocktail glass and garnish with a wedge of lemon.
+    notes: "To make honey syrup, use one part honey to one part water."
   -
     name: "Death in the Afternoon"
     ingredients:

@@ -121,9 +121,6 @@
     display    : Grenadine
     group      : syrup
   -
-    display    : Honey Syrup
-    group      : syrup
-  -
     display    : Honey Whiskey
     generic    : whiskey
     group      : whiskey
@@ -175,6 +172,7 @@
     group      : whiskey
   -
     display    : Simple Syrup
+    generic    : simple-syrup-like
     group      : syrup
   -
     display    : Sparkling Wine
@@ -297,7 +295,7 @@
     group      : brandy
   -
     display    : Gomme Syrup
-    generic    : simple syrup
+    generic    : simple-syrup-like
     group      : syrup
   -
     display    : Galliano
@@ -352,7 +350,7 @@
     group      : liqueur-other
   -
     display    : Orgeat Syrup
-    generic    : simple syrup
+    generic    : simple-syrup-like
     group      : syrup
   -
     display    : Pisco
