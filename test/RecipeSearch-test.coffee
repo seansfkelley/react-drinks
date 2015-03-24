@@ -13,6 +13,8 @@ INGREDIENT_A_CHILD_2   = ingredient 'a-2', 'a'
 
 INGREDIENT_B_ROOT      = ingredient 'b'
 
+INGREDIENT_NULL        = ingredient()
+
 recipe = (ingredients...) ->
   return { ingredients }
 
@@ -96,6 +98,9 @@ describe 'RecipeSearch', ->
     it 'should return how values in the first array are not in the second', ->
       RecipeSearch._countSubsetMissing([ 1, 2, 3 ], [ 1, 4, 5 ]).should.equal 2
 
+  # TODO: Many of these tests are sensitive to the ordering of the nested ingredient
+  # arrays. I don't currently see a way in Mocha to get around this without picking
+  # the result apart into multiple assertions.
   describe '#computeMixableRecipes', ->
     makeSearch = (recipes...) ->
       return new RecipeSearch([
@@ -103,6 +108,7 @@ describe 'RecipeSearch', ->
         INGREDIENT_A_CHILD_1
         INGREDIENT_A_CHILD_1_1
         INGREDIENT_A_CHILD_2
+        INGREDIENT_B_ROOT
       ], recipes)
 
     it 'should return the empty object for no results', ->
@@ -126,8 +132,44 @@ describe 'RecipeSearch', ->
         ]
       }
 
-    it 'should return a fuzzy match for a recipe (within 1) if there is at least one matching tag'
-    it 'should not return a fuzzy match for a 1-ingredient recipe (within 1) if there are no matching tags'
-    it 'should silently ignore ingredients with no tags'
-    it 'should return a match for a recipe if it calls for generics'
-    it 'should return a match for a recipe if it calls for substitutable ingredients'
+    it 'should return a fuzzy match for a recipe (within 1) if there is at least one matching tag', ->
+      search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_B_ROOT)
+      search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ], 1).should.deep.equal {
+        '1' : [
+          ingredients : [ INGREDIENT_A_ROOT, INGREDIENT_B_ROOT ]
+          missing     : [ INGREDIENT_B_ROOT ]
+          substitute  : []
+          available   : [ INGREDIENT_A_ROOT ]
+        ]
+      }
+
+    it 'should not return a fuzzy match for a 1-ingredient recipe (within 1) if there are no matching tags', ->
+      search = makeSearch recipe(INGREDIENT_A_ROOT)
+      search.computeMixableRecipes([ INGREDIENT_B_ROOT.tag ], 1).should.deep.equal {}
+
+    it 'should silently ignore ingredients with no tags', ->
+      search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_NULL)
+      result = search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ]).should.have.all.keys [ '0' ]
+
+    it 'should return a match for a recipe if it calls for generics', ->
+      search = makeSearch recipe(INGREDIENT_A_ROOT)
+      result = search.computeMixableRecipes([ INGREDIENT_A_CHILD_2.tag ]).should.deep.equal {
+        '0' : [
+          ingredients : [ INGREDIENT_A_ROOT ]
+          missing     : []
+          substitute  : []
+          available   : [ INGREDIENT_A_ROOT ]
+        ]
+      }
+
+    it 'should return a match for a recipe if it calls for substitutable ingredients', ->
+      search = makeSearch recipe(INGREDIENT_A_CHILD_1)
+      result = search.computeMixableRecipes([ INGREDIENT_A_CHILD_2.tag ]).should.deep.equal {
+        '0' : [
+          ingredients : [ INGREDIENT_A_CHILD_1 ]
+          missing     : []
+          substitute  : [ INGREDIENT_A_CHILD_1 ]
+          available   : []
+        ]
+      }
+
