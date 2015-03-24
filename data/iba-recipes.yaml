@@ -1005,17 +1005,17 @@
           displayUnit: "oz"
           displayIngredient: "dark rum"
         -
-          tag: "orange curaćao"
+          tag: "triple sec"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "orange curaćao"
+          displayIngredient: "orange curaçao"
         -
           tag: "orgeat syrup"
           displayAmount: "1/2"
           displayUnit: "oz"
           displayIngredient: "orgeat syrup"
         -
-          tag: "fresh lime juice"
+          tag: "lime juice"
           displayAmount: "1/3"
           displayUnit: "oz"
           displayIngredient: "fresh lime juice"

@@ -8,3 +8,5 @@
 - would it be possible to use media queries to remove the iPhone spacer header bar thing when Personal Hotspot is on?
 - searching on the shopping list is the same as regular recipes, meaning it includes ingredients you can't see (and might already have, which yields potentially confusing results)
 - buffer space on the bottom of the exandable list for ingredients might make for a nicer expanding-things-near-the-bottom experience
+
+- I have lime juice, white and dark rum, simple syrup and cointreau (or triple sec?) and mai-tai still doesn't come up
