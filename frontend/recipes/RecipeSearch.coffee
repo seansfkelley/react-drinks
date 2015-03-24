@@ -1,12 +1,5 @@
 _ = require 'lodash'
 
-_countSubsetMissing = (small, large) ->
-  missed = 0
-  for s in small
-    if s not in large
-      missed++
-  return missed
-
 class RecipeSearch
   constructor : (ingredients, @_recipes) ->
     @_ingredientForTag = {}
@@ -23,6 +16,14 @@ class RecipeSearch
         }
 
     return # for loop
+
+  @_countSubsetMissing : (small, large) ->
+    missed = 0
+    for s in small
+      if s not in large
+        missed++
+    return missed
+
 
   _includeAllGenerics : (ingredients) ->
     withGenerics = []
@@ -66,7 +67,7 @@ class RecipeSearch
     return _.chain @_recipes
       .map (r) =>
         mostGenericRecipeTags = @_toMostGenericTags _.filter(r.ingredients, 'tag')
-        missingCount = _countSubsetMissing(mostGenericRecipeTags, mostGenericAvailableTags)
+        missingCount = @constructor._countSubsetMissing(mostGenericRecipeTags, mostGenericAvailableTags)
         if missingCount <= fuzzyMatchThreshold and missingCount < mostGenericRecipeTags.length
           return @_generateSearchResult r, allAvailableTagsWithGenerics
       .compact()

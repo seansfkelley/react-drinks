@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "./node_modules/.bin/coffee index.coffee",
+    "test": "./node_modules/.bin/mocha",
     "dev": "./node_modules/.bin/nodemon index.coffee",
     "livereload": "./node_modules/.bin/coffee livereload.coffee"
   },
@@ -21,6 +22,7 @@
     "autoprefixer-core": "^5.1.7",
     "bluebird": "^2.9.12",
     "browserify": "^8.1.3",
+    "chai": "^2.1.2",
     "coffee-reactify": "^2.4.1",
     "coffee-script": "^1.9.0",
     "express": "^4.11.2",
@@ -43,6 +45,7 @@
     "livereload": "^0.3.6",
     "lodash": "^3.2.0",
     "microevent": "^1.0.0",
+    "mocha": "^2.2.1",
     "nodemon": "^1.3.7",
     "react": "^0.12.2",
     "react-swipe": "^1.0.3",
