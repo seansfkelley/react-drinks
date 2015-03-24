@@ -46,7 +46,7 @@ FavoritesList = React.createClass {
 
     recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
 
-    <FixedHeaderFooter header={headerNode}>
+    <FixedHeaderFooter header={headerNode} className='favorites-list-view'>
       <List className='favorites-list' emptyText='Add some favorites first!'>
         {recipeNodes}
       </List>

@@ -10,33 +10,20 @@ body[standalone]
 #app-root
   transition transform transition-duration
 
-  &:after
-    pointer-events none
-    content ''
-    width 100%
-    height 100%
-    position absolute
-    top 0
-    left 0
-    right 0
-    bottom 0
-    z-index 1
-
-    background-color rgba(0, 0, 0, 0.5)
-    opacity 0
-    transition opacity transition-duration
-
-#app-root.showing-overlay
-  &:after
-    pointer-events auto
-    opacity 1
-    transition opacity transition-duration
-
 #app-root.showing-pushover
   transform translate(pushover-width, 0px)
   transition transform transition-duration
 
   &:after
+    content ' '
+
+    position absolute
+
+    top 0
+    left 0
+    right 0
+    bottom 0
+
     shadow-inset('left', 3px)
 
 #modal-root, #flyup-root, #pushover-root
@@ -61,10 +48,27 @@ body[standalone]
   &.visible
     pointer-events auto
 
-#pushover-root
-  width pushover-width
+  &:before
+    pointer-events none
+    content ''
+    position absolute
+    top 0
+    left 0
+    right 0
+    bottom 0
 
+    background-color rgba(0, 0, 0, 0.5)
+    opacity 0
+    transition opacity transition-duration
+
+  &.visible:before
+    pointer-events auto
+    opacity 1
+    transition opacity transition-duration
+
+#pushover-root
   > *
+    width pushover-width
     // If this is the same as the actual pushover width, the iPhone renders weird ugly artifacts.
     transform translate(-100%, 0)
     transition transform transition-duration
