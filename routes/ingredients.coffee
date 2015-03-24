@@ -2,6 +2,7 @@ _           = require 'lodash'
 fs          = require 'fs'
 yaml        = require 'js-yaml'
 revalidator = require 'revalidator'
+log         = require 'loglevel'
 
 latinize         = require '../shared/latinize'
 revalidatorUtils = require './revalidator-utils'
@@ -31,7 +32,7 @@ INGREDIENT_SCHEMA = {
 GROUPS      = yaml.safeLoad fs.readFileSync(__dirname + '/../data/groups.yaml')
 INGREDIENTS = yaml.safeLoad fs.readFileSync(__dirname + '/../data/ingredients.yaml')
 
-console.log "loaded #{INGREDIENTS.length} ingredients in #{GROUPS.length} groups"
+log.info "loaded #{INGREDIENTS.length} ingredients in #{GROUPS.length} groups"
 
 revalidatorUtils.validateOrThrow INGREDIENTS, {
   type  : 'array'

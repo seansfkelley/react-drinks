@@ -1,7 +1,9 @@
 _       = require 'lodash'
 express = require 'express'
+log     = require 'loglevel'
 
-routes = require './routes'
+# Logging.
+log.setLevel 'info'
 
 # Express.
 app = express()
@@ -12,10 +14,10 @@ app.set 'view engine', 'jade'
 # Routes.
 app.use '/', express.static(__dirname)
 app.use '/', express.static(__dirname + '/.dist')
-for { method, route, handler } in routes
+for { method, route, handler } in require './routes'
   app[method ? 'get'](route, handler)
 
 # Go.
 port = process.env.PORT ? 8080
 app.listen port
-console.log "listening on localhost:#{port}"
+log.info "listening on localhost:#{port}"
