@@ -38,6 +38,9 @@ List = React.createClass {
 List.Header = React.createClass {
   displayName : 'List.Header'
 
+  propTypes :
+    title : React.PropTypes.string
+
   mixins : [
     ClassNameMixin
   ]
@@ -57,6 +60,8 @@ List.Header = React.createClass {
 List.ItemGroup = React.createClass {
   displayName : 'List.ItemGroup'
 
+  propTypes : {}
+
   mixins : [
     ClassNameMixin
   ]
@@ -69,6 +74,8 @@ List.ItemGroup = React.createClass {
 
 List.Item = React.createClass {
   displayName : 'List.Item'
+
+  propTypes : {}
 
   mixins : [
     ClassNameMixin

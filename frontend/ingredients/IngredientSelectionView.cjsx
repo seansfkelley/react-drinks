@@ -17,6 +17,8 @@ TitleBarWithSearch  = require '../components/TitleBarWithSearch'
 IngredientSelectionHeader = React.createClass {
   displayName : 'IngredientSelectionHeader'
 
+  propTypes : {}
+
   render : ->
     <TitleBarWithSearch
       leftIcon='fa-chevron-down'
@@ -43,6 +45,10 @@ IngredientSelectionHeader = React.createClass {
 IngredientGroupHeader = React.createClass {
   displayName : 'IngredientGroupHeader'
 
+  propTypes :
+    title         : React.PropTypes.string.isRequired
+    selectedCount : React.PropTypes.number.isRequired
+
   mixins : [
     FluxMixin UiStore, 'openIngredientGroups'
   ]
@@ -62,6 +68,9 @@ IngredientGroupHeader = React.createClass {
 
 IngredientItemGroup = React.createClass {
   displayName : 'IngredientItemGroup'
+
+  propTypes :
+    title : React.PropTypes.string.isRequired
 
   mixins : [
     FluxMixin UiStore, 'openIngredientGroups'
@@ -87,6 +96,9 @@ IngredientItemGroup = React.createClass {
 IngredientListItem = React.createClass {
   displayName : 'IngredientListItem'
 
+  propTypes :
+    ingredient : React.PropTypes.object.isRequired
+
   mixins : [
     FluxMixin IngredientStore, 'selectedIngredientTags'
   ]
@@ -109,6 +121,8 @@ IngredientListItem = React.createClass {
 
 GroupedIngredientList = React.createClass {
   display : 'GroupedIngredientList'
+
+  propTypes : {}
 
   mixins : [
     FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
@@ -162,6 +176,8 @@ GroupedIngredientList = React.createClass {
 
 IngredientSelectionView = React.createClass {
   displayName : 'IngredientSelectionView'
+
+  propTypes : {}
 
   render : ->
     <FixedHeaderFooter

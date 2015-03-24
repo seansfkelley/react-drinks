@@ -18,6 +18,8 @@ List              = require '../components/List'
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
 
+  propTypes : {}
+
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]
@@ -53,6 +55,10 @@ RecipeListHeader = React.createClass {
 RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
+  propTypes :
+    recipes : React.PropTypes.array.isRequired
+    index   : React.PropTypes.number.isRequired
+
   render : ->
     <List.Item className= 'recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@_getRecipe().name}</div>
@@ -78,6 +84,8 @@ _recipeListItemTitleExtractor = (child) ->
 AlphabeticalRecipeList = React.createClass {
   displayName : 'AlphabeticalRecipeList'
 
+  propTypes : {}
+
   mixins : [
     FluxMixin RecipeStore, 'searchedAlphabeticalRecipes'
   ]
@@ -102,6 +110,10 @@ AlphabeticalRecipeList = React.createClass {
 }
 
 EmptyListView = React.createClass {
+  displayName : 'EmptyListView'
+
+  propTypes : {}
+
   render : ->
     <div className='empty-list-text'>
       No drinks?
@@ -112,6 +124,8 @@ EmptyListView = React.createClass {
 
 GroupedRecipeList = React.createClass {
   displayName : 'GroupedRecipeList'
+
+  propTypes : {}
 
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
@@ -147,6 +161,8 @@ GroupedRecipeList = React.createClass {
 
 RecipeListView = React.createClass {
   displayName : 'RecipeListView'
+
+  propTypes : {}
 
   mixins : [
     FluxMixin UiStore, 'useIngredients'

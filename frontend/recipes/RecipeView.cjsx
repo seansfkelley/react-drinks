@@ -88,6 +88,9 @@ RecipeFooter = React.createClass {
 RecipeView = React.createClass {
   displayName : 'RecipeView'
 
+  propTypes :
+    recipe : React.PropTypes.object.isRequired
+
   render : ->
     # TODO: We're reusing this view for both types of recipes; seems bad.
     if @props.recipe.missing? and (@props.recipe.missing.length > 0 or @props.recipe.substitute.length > 0)

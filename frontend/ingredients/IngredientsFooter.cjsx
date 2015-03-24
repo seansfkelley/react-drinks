@@ -11,6 +11,8 @@ IngredientSelectionView = require './IngredientSelectionView'
 IngredientsFooter = React.createClass {
   displayName : 'IngredientsFooter'
 
+  propTypes : {}
+
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]

@@ -9,6 +9,10 @@ RecipeView = require './RecipeView'
 SwipableRecipeView = React.createClass {
   displayName : 'SwipableRecipeView'
 
+  propTypes :
+    recipes : React.PropTypes.array.isRequired
+    index   : React.PropTypes.number.isRequired
+
   getInitialState : -> {
     visibleIndex : @props.index
   }

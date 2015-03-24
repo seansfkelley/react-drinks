@@ -8,9 +8,8 @@ FixedHeaderFooter = React.createClass {
   displayName : 'FixedHeaderFooter'
 
   propTypes :
-    className : React.PropTypes.string
-    header    : React.PropTypes.element
-    footer    : React.PropTypes.element
+    header : React.PropTypes.element
+    footer : React.PropTypes.element
 
   mixins : [
     ClassNameMixin

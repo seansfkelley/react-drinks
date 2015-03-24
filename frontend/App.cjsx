@@ -9,6 +9,8 @@ IngredientsFooter = require './ingredients/IngredientsFooter'
 App = React.createClass {
   displayName : 'App'
 
+  propTypes : {}
+
   render : ->
     <div className='app-event-wrapper' onTouchStart={@_deselectActiveElement}>
       <FixedHeaderFooter

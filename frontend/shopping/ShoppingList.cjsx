@@ -17,6 +17,8 @@ TitleBarWithSearch   = require '../components/TitleBarWithSearch'
 ShoppingListHeader = React.createClass {
   displayName : 'ShoppingListHeader'
 
+  propTypes : {}
+
   mixins : [
     FluxMixin UiStore, 'useIngredients'
   ]
@@ -48,6 +50,10 @@ ShoppingListHeader = React.createClass {
 IncompleteRecipeListItem = React.createClass {
   displayName : 'IncompleteRecipeListItem'
 
+  propTypes :
+    recipes : React.PropTypes.array.isRequired
+    index   : React.PropTypes.number.isRequired
+
   render : ->
     missingIngredients = _.map @_getRecipe().missing, (m) ->
       return <div className='missing-ingredient' key={m.displayIngredient}>
@@ -78,6 +84,8 @@ IncompleteRecipeListItem = React.createClass {
 
 ShoppingList = React.createClass {
   displayName : 'ShoppingList'
+
+  propTypes : {}
 
   mixins : [
     FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
@@ -113,6 +121,8 @@ ShoppingList = React.createClass {
 
 ShoppingListView = React.createClass {
   displayName : 'ShoppingListView'
+
+  propTypes : {}
 
   render : ->
     <FixedHeaderFooter

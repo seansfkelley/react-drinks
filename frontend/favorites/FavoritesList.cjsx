@@ -16,6 +16,10 @@ SwipableRecipeView = require '../recipes/SwipableRecipeView'
 RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
+  propTypes :
+    recipes : React.PropTypes.array.isRequired
+    index   : React.PropTypes.number.isRequired
+
   render : ->
     <List.Item className='recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@props.recipes[@props.index].name}</div>
@@ -30,6 +34,8 @@ RecipeListItem = React.createClass {
 
 FavoritesList = React.createClass {
   displayName : 'FavoritesList'
+
+  propTypes : {}
 
   mixins : [
     FluxMixin UiStore, 'favoritedRecipes'

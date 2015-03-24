@@ -25,7 +25,8 @@ TitleBarWithSearch = React.createClass {
     }
 
   render : ->
-    <TitleBar {...@props}
+    renderableProps = _.omit @props, 'placeholder'
+    <TitleBar {...renderableProps}
       className={@getClassName 'with-search'}
       rightIcon={'fa-search'}
       rightIconOnTouchTap={@_toggleSearch}

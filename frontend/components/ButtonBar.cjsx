@@ -8,6 +8,8 @@ ClassNameMixin = require '../mixins/ClassNameMixin'
 ButtonBar = React.createClass {
   displayName : 'ButtonBar'
 
+  propTypes : {}
+
   mixins : [
     ClassNameMixin
   ]
@@ -22,9 +24,8 @@ ButtonBar.Button = React.createClass {
   displayName : 'ButtonBar.Button'
 
   propTypes :
-    icon      : React.PropTypes.string
-    label     : React.PropTypes.string
-    className : React.PropTypes.string
+    icon  : React.PropTypes.string
+    label : React.PropTypes.string
 
   mixins : [
     ClassNameMixin
