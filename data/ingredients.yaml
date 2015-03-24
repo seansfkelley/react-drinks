@@ -385,3 +385,8 @@
   -
     display    : Apricot Brandy
     group      : brandy
+  -
+    display    : Bison Grass Vodka
+    group      : vodka
+    searchable :
+      - zubrowka
