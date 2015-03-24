@@ -1,5 +1,4 @@
 gulp         = require 'gulp'
-gutil        = require 'gulp-util'
 gulpif       = require 'gulp-if'
 rename       = require 'gulp-rename'
 stylus       = require 'gulp-stylus'
@@ -8,6 +7,7 @@ sourcemaps   = require 'gulp-sourcemaps'
 concat       = require 'gulp-concat'
 uglify       = require 'gulp-uglify'
 minifyCss    = require 'gulp-minify-css'
+notify       = require 'gulp-notify'
 browserify   = require 'browserify'
 watchify     = require 'watchify'
 buffer       = require 'vinyl-buffer'
@@ -37,13 +37,20 @@ generateBundlingFunction = (bundler) ->
     b = bundler.bundle()
 
     if not shouldDieOnBrowserifyError
-      b = b.on 'error', (e) -> gutil.log 'Browserify Error', e?.stack ? e?.message ? e
+      b = b.on 'error', notify.onError {
+        title : 'Browserify Error'
+      }
 
     return b
       .pipe source 'all-scripts.js'
       .pipe buffer()
       .pipe sourcemaps.init { loadMaps : true }
       .pipe gulpif IS_PROD, uglify()
+      .pipe notify {
+        title   : 'Finished compiling Javscript'
+        message : '<%= file.relative %>'
+        wait    : true
+      }
       .pipe sourcemaps.write './'
       .pipe gulp.dest './.dist'
 
@@ -58,6 +65,11 @@ buildStyles = ->
     ]
     .pipe concat 'all-styles.css'
     .pipe gulpif IS_PROD, minifyCss()
+    .pipe notify {
+      title   : 'Finished compiling CSS'
+      message : '<%= file.relative %>'
+      wait    : true
+    }
     .pipe sourcemaps.write './'
     .pipe gulp.dest './.dist'
 
