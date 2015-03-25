@@ -135,7 +135,7 @@ RecipeView = React.createClass {
       </div>
 
     <FixedHeaderFooter
-      className='recipe-view'
+      className='default-modal recipe-view'
       header={<TitleBar title={@props.recipe.name}/>}
       footer={<RecipeFooter normalizedRecipeName={@props.recipe.normalizedName} onClose={@_onClose}/>}
     >
