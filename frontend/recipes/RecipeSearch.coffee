@@ -71,7 +71,8 @@ class RecipeSearch
 
     return _.chain @_recipes
       .map (r) =>
-        mostGenericRecipeTags = @_toMostGenericTags _.filter(r.ingredients, 'tag')
+        # TODO: Fix the tests cause the generic tag is causing problems. Drop it from the output?
+        mostGenericRecipeTags = @_toMostGenericTags _.compact _.map(r.ingredients, (i) => @_ingredientForTag[i.tag])
         missingCount = @constructor._countSubsetMissing(mostGenericRecipeTags, mostGenericAvailableTags)
         if missingCount <= fuzzyMatchThreshold and missingCount < mostGenericRecipeTags.length
           return @_generateSearchResult r, allAvailableTagsWithGenerics

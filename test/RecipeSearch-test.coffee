@@ -7,96 +7,100 @@ should = require('chai').should()
 RecipeSearch = require '../frontend/recipes/RecipeSearch'
 
 ingredient = (tag, generic = null) ->
-  return { tag, generic, _id : _.uniqueId() }
+  return { tag, generic }
 
-INGREDIENT_A_ROOT      = ingredient 'a'
-INGREDIENT_A_CHILD_1   = ingredient 'a-1', 'a'
-INGREDIENT_A_CHILD_1_1 = ingredient 'a-1-1', 'a-1'
-INGREDIENT_A_CHILD_2   = ingredient 'a-2', 'a'
+IndexableIngredient = {
+  A_ROOT      : ingredient 'a'
+  A_CHILD_1   : ingredient 'a-1', 'a'
+  A_CHILD_1_1 : ingredient 'a-1-1', 'a-1'
+  A_CHILD_2   : ingredient 'a-2', 'a'
+  B_ROOT      : ingredient 'b'
+  Z_ROOT      : ingredient 'z'
+  NULL        : ingredient()
+}
 
-INGREDIENT_B_ROOT      = ingredient 'b'
-
-INGREDIENT_Z_ROOT      = ingredient 'z'
-
-INGREDIENT_NULL        = ingredient()
+ResultIngredient = _.mapValues IndexableIngredient, (i) -> _.omit i, 'generic'
 
 recipe = (ingredients...) ->
-  return { ingredients }
+  # This is very important: the recipes that are indexed do NOT have a generic flag.
+  return {
+    ingredients : _.map ingredients, (i) -> _.omit i, 'generic'
+  }
 
 describe 'RecipeSearch', ->
   describe '#_includeAllGenerics', ->
     search = null
     beforeEach ->
       search = new RecipeSearch [
-        INGREDIENT_A_ROOT
-        INGREDIENT_A_CHILD_1
-        INGREDIENT_A_CHILD_1_1
-        INGREDIENT_A_CHILD_2
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_1_1
+        IndexableIngredient.A_CHILD_2
       ]
 
     it 'should return an input ingredient with no generic', ->
-      search._includeAllGenerics([ INGREDIENT_A_ROOT ]).should.have.members [
-        INGREDIENT_A_ROOT
+      search._includeAllGenerics([ IndexableIngredient.A_ROOT ]).should.have.members [
+        IndexableIngredient.A_ROOT
       ]
 
     it 'should return an ingredient and its single generic', ->
-      search._includeAllGenerics([ INGREDIENT_A_CHILD_1 ]).should.have.members [
-        INGREDIENT_A_ROOT
-        INGREDIENT_A_CHILD_1
+      search._includeAllGenerics([ IndexableIngredient.A_CHILD_1 ]).should.have.members [
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
       ]
 
     it 'should return an ingredient and its multiple generics', ->
-      search._includeAllGenerics([ INGREDIENT_A_CHILD_1_1 ]).should.have.members [
-        INGREDIENT_A_ROOT
-        INGREDIENT_A_CHILD_1
-        INGREDIENT_A_CHILD_1_1
+      search._includeAllGenerics([ IndexableIngredient.A_CHILD_1_1 ]).should.have.members [
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_1_1
       ]
 
     it 'should not return any duplicates if multiple ingredients are the same', ->
-      search._includeAllGenerics([ INGREDIENT_A_ROOT, INGREDIENT_A_ROOT ]).should.have.members [
-        INGREDIENT_A_ROOT
+      search._includeAllGenerics([ IndexableIngredient.A_ROOT, IndexableIngredient.A_ROOT ]).should.have.members [
+        IndexableIngredient.A_ROOT
       ]
 
     it 'should not return any duplicates if multiple ingredients have the same generic', ->
-      search._includeAllGenerics([ INGREDIENT_A_CHILD_1, INGREDIENT_A_CHILD_2 ]).should.have.members [
-        INGREDIENT_A_ROOT
-        INGREDIENT_A_CHILD_1
-        INGREDIENT_A_CHILD_2
+      search._includeAllGenerics([ IndexableIngredient.A_CHILD_1, IndexableIngredient.A_CHILD_2 ]).should.have.members [
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_2
       ]
 
   describe '#_toMostGenericTags', ->
     search = null
     beforeEach ->
       search = new RecipeSearch [
-        INGREDIENT_A_ROOT
-        INGREDIENT_A_CHILD_1
-        INGREDIENT_A_CHILD_1_1
-        INGREDIENT_A_CHILD_2
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_1_1
+        IndexableIngredient.A_CHILD_2
       ]
 
     it 'should return the tag of an ingredient with no generic', ->
-      search._toMostGenericTags([ INGREDIENT_A_ROOT ]).should.have.members [
-        INGREDIENT_A_ROOT.tag
+      search._toMostGenericTags([ IndexableIngredient.A_ROOT ]).should.have.members [
+        IndexableIngredient.A_ROOT.tag
       ]
 
     it 'should return the tag of a generic of an ingredient', ->
-      search._toMostGenericTags([ INGREDIENT_A_CHILD_1 ]).should.have.members [
-        INGREDIENT_A_ROOT.tag
+      search._toMostGenericTags([ IndexableIngredient.A_CHILD_1 ]).should.have.members [
+        IndexableIngredient.A_ROOT.tag
       ]
 
     it 'should return the tag of the most generic ancestor of an ingredient', ->
-      search._toMostGenericTags([ INGREDIENT_A_CHILD_1_1 ]).should.have.members [
-        INGREDIENT_A_ROOT.tag
+      search._toMostGenericTags([ IndexableIngredient.A_CHILD_1_1 ]).should.have.members [
+        IndexableIngredient.A_ROOT.tag
       ]
 
     it 'should not return any duplicates if multiple ingredients are the same', ->
-      search._toMostGenericTags([ INGREDIENT_A_ROOT, INGREDIENT_A_ROOT ]).should.have.members [
-        INGREDIENT_A_ROOT.tag
+      search._toMostGenericTags([ IndexableIngredient.A_ROOT, IndexableIngredient.A_ROOT ]).should.have.members [
+        IndexableIngredient.A_ROOT.tag
       ]
 
     it 'should not return any duplicates if multiple ingredients have the same generic', ->
-      search._toMostGenericTags([ INGREDIENT_A_CHILD_1, INGREDIENT_A_CHILD_2 ]).should.have.members [
-        INGREDIENT_A_ROOT.tag
+      search._toMostGenericTags([ IndexableIngredient.A_CHILD_1, IndexableIngredient.A_CHILD_2 ]).should.have.members [
+        IndexableIngredient.A_ROOT.tag
       ]
 
   describe '#_countSubsetMissing', ->
@@ -109,87 +113,98 @@ describe 'RecipeSearch', ->
   describe '#computeMixableRecipes', ->
     makeSearch = (recipes...) ->
       return new RecipeSearch([
-        INGREDIENT_A_ROOT
-        INGREDIENT_A_CHILD_1
-        INGREDIENT_A_CHILD_1_1
-        INGREDIENT_A_CHILD_2
-        INGREDIENT_B_ROOT
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_1_1
+        IndexableIngredient.A_CHILD_2
+        IndexableIngredient.B_ROOT
       ], recipes)
 
     it 'should return the empty object for no results', ->
       makeSearch().computeMixableRecipes([]).should.deep.equal {}
 
+# This is an upgrade consideration, if someone has a tag in localStorage but it's removed in later versions.
+    it 'should silently ingredient tags it doesn\'t understand', ->
+      search = makeSearch recipe(IndexableIngredient.A_ROOT)
+      search.computeMixableRecipes([ IndexableIngredient.Z_ROOT.tag ]).should.deep.equal {}
+
     it 'should return results keyed by missing count', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT), recipe
-      result = search.computeMixableRecipes [ INGREDIENT_A_ROOT.tag ]
+      search = makeSearch recipe(IndexableIngredient.A_ROOT), recipe
+      result = search.computeMixableRecipes [ IndexableIngredient.A_ROOT.tag ]
 
       result.should.have.all.keys [ '0' ]
       result['0'].should.be.an 'array'
 
     it 'should return a match for a recipe that matches exactly', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT)
-      search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ]).should.deep.equal {
+      search = makeSearch recipe(IndexableIngredient.A_ROOT)
+      search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.deep.equal {
         '0' : [
-          ingredients : [ INGREDIENT_A_ROOT ]
+          ingredients : [ ResultIngredient.A_ROOT ]
           missing     : []
           substitute  : []
-          available   : [ INGREDIENT_A_ROOT ]
+          available   : [ ResultIngredient.A_ROOT ]
         ]
       }
 
     it 'should consider ingredients without tags always available', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_NULL)
-      search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ]).should.deep.equal {
+      search = makeSearch recipe(IndexableIngredient.A_ROOT, IndexableIngredient.NULL)
+      search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.deep.equal {
         '0' : [
-          ingredients : [ INGREDIENT_A_ROOT, INGREDIENT_NULL ]
+          ingredients : [ ResultIngredient.A_ROOT, ResultIngredient.NULL ]
           missing     : []
           substitute  : []
-          available   : [ INGREDIENT_A_ROOT, INGREDIENT_NULL ]
+          available   : [ ResultIngredient.A_ROOT, ResultIngredient.NULL ]
         ]
       }
 
     it 'should return a fuzzy match for a recipe (within 1) if there is at least one matching tag', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_B_ROOT)
-      search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ], 1).should.deep.equal {
+      search = makeSearch recipe(IndexableIngredient.A_ROOT, IndexableIngredient.B_ROOT)
+      search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ], 1).should.deep.equal {
         '1' : [
-          ingredients : [ INGREDIENT_A_ROOT, INGREDIENT_B_ROOT ]
-          missing     : [ INGREDIENT_B_ROOT ]
+          ingredients : [ ResultIngredient.A_ROOT, ResultIngredient.B_ROOT ]
+          missing     : [ ResultIngredient.B_ROOT ]
           substitute  : []
-          available   : [ INGREDIENT_A_ROOT ]
+          available   : [ ResultIngredient.A_ROOT ]
         ]
       }
 
     it 'should not return a fuzzy match for a 1-ingredient recipe (within 1) if there are no matching tags', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT)
-      search.computeMixableRecipes([ INGREDIENT_B_ROOT.tag ], 1).should.deep.equal {}
+      search = makeSearch recipe(IndexableIngredient.A_ROOT)
+      search.computeMixableRecipes([ IndexableIngredient.B_ROOT.tag ], 1).should.deep.equal {}
 
     it 'should silently ignore ingredients with no tags', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT, INGREDIENT_NULL)
-      search.computeMixableRecipes([ INGREDIENT_A_ROOT.tag ]).should.have.all.keys [ '0' ]
+      search = makeSearch recipe(IndexableIngredient.A_ROOT, IndexableIngredient.NULL)
+      search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.have.all.keys [ '0' ]
 
-    it 'should return a match for a recipe if it calls for generics', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT)
-      result = search.computeMixableRecipes([ INGREDIENT_A_CHILD_2.tag ]).should.deep.equal {
+    it 'should return an available match for a recipe if it calls for a parent (less specific) ingredient', ->
+      search = makeSearch recipe(IndexableIngredient.A_ROOT)
+      result = search.computeMixableRecipes([ IndexableIngredient.A_CHILD_2.tag ]).should.deep.equal {
         '0' : [
-          ingredients : [ INGREDIENT_A_ROOT ]
+          ingredients : [ ResultIngredient.A_ROOT ]
           missing     : []
           substitute  : []
-          available   : [ INGREDIENT_A_ROOT ]
+          available   : [ ResultIngredient.A_ROOT ]
         ]
       }
 
-    it 'should return a match for a recipe if it calls for substitutable ingredients', ->
-      search = makeSearch recipe(INGREDIENT_A_CHILD_1)
-      result = search.computeMixableRecipes([ INGREDIENT_A_CHILD_2.tag ]).should.deep.equal {
+    it 'should return a substitutable match for a recipe if it calls for a sibling (equally specific) ingredient', ->
+      search = makeSearch recipe(IndexableIngredient.A_CHILD_1)
+      result = search.computeMixableRecipes([ IndexableIngredient.A_CHILD_2.tag ]).should.deep.equal {
         '0' : [
-          ingredients : [ INGREDIENT_A_CHILD_1 ]
+          ingredients : [ ResultIngredient.A_CHILD_1 ]
           missing     : []
-          substitute  : [ INGREDIENT_A_CHILD_1 ]
+          substitute  : [ ResultIngredient.A_CHILD_1 ]
           available   : []
         ]
       }
 
-    # This is an upgrade consideration, if someone has a tag in localStorage but it's removed in later versions.
-    it 'should silently ingredient tags it doesn\'t understand', ->
-      search = makeSearch recipe(INGREDIENT_A_ROOT)
-      search.computeMixableRecipes([ INGREDIENT_Z_ROOT.tag ]).should.deep.equal {}
+    it 'should return a substitutable match for a recipe if it calls for a child (more specific) ingredient', ->
+      search = makeSearch recipe(IndexableIngredient.A_CHILD_1)
+      search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.deep.equal {
+        '0' : [
+          ingredients : [ ResultIngredient.A_CHILD_1 ]
+          missing     : []
+          substitute  : [ ResultIngredient.A_CHILD_1 ]
+          available   : []
+        ]
+      }
