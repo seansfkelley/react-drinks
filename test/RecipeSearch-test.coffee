@@ -123,9 +123,9 @@ describe 'RecipeSearch', ->
     it 'should return the empty object for no results', ->
       makeSearch().computeMixableRecipes([]).should.deep.equal {}
 
-# This is an upgrade consideration, if someone has a tag in localStorage but it's removed in later versions.
-    it 'should silently ingredient tags it doesn\'t understand', ->
-      search = makeSearch recipe(IndexableIngredient.A_ROOT)
+    # This is an upgrade consideration, if someone has a tag in localStorage but it's removed in later versions.
+    it 'should should not throw an exception when given ingredients it doesn\'t understand', ->
+      search = makeSearch()
       search.computeMixableRecipes([ IndexableIngredient.Z_ROOT.tag ]).should.deep.equal {}
 
     it 'should return results keyed by missing count', ->
@@ -172,7 +172,7 @@ describe 'RecipeSearch', ->
       search = makeSearch recipe(IndexableIngredient.A_ROOT)
       search.computeMixableRecipes([ IndexableIngredient.B_ROOT.tag ], 1).should.deep.equal {}
 
-    it 'should silently ignore ingredients with no tags', ->
+    it 'should silently ignore input ingredients with no tags', ->
       search = makeSearch recipe(IndexableIngredient.A_ROOT, IndexableIngredient.NULL)
       search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.have.all.keys [ '0' ]
 
@@ -208,3 +208,7 @@ describe 'RecipeSearch', ->
           available   : []
         ]
       }
+
+    it 'should count unknown recipe ingredients as missing', ->
+      search = makeSearch recipe(IndexableIngredient.Z_ROOT, IndexableIngredient.A_ROOT)
+      search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.deep.equal {}
