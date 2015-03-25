@@ -8,12 +8,13 @@ AppDispatcher = require '../AppDispatcher'
 
 { RecipeStore, UiStore } = require '../stores'
 
+SwipableRecipeView = require './SwipableRecipeView'
+EditableRecipeView = require './EditableRecipeView'
 FavoritesList      = require '../favorites/FavoritesList'
-SwipableRecipeView = require '../recipes/SwipableRecipeView'
-TitleBarWithSearch   = require '../components/TitleBarWithSearch'
 
-FixedHeaderFooter = require '../components/FixedHeaderFooter'
-List              = require '../components/List'
+TitleBarWithSearch = require '../components/TitleBarWithSearch'
+FixedHeaderFooter  = require '../components/FixedHeaderFooter'
+List               = require '../components/List'
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
@@ -30,13 +31,22 @@ RecipeListHeader = React.createClass {
     else
       title = 'All Drinks'
 
+    # Temporarily hack in the add-recipe behavior to test it.
+      # leftIcon='fa-star'
+      # leftIconOnTouchTap={@_openFavorites}
     <TitleBarWithSearch
-      leftIcon='fa-star'
-      leftIconOnTouchTap={@_openFavorites}
+      leftIcon='fa-plus'
+      leftIconOnTouchTap={@_newRecipe}
       title={title}
       onSearch={@_setSearchTerm}
       placeholder='Name or ingredient...'
     />
+
+  _newRecipe : ->
+    AppDispatcher.dispatch {
+      type      : 'show-modal'
+      component : <EditableRecipeView/>
+    }
 
   _openFavorites : ->
     AppDispatcher.dispatch {
