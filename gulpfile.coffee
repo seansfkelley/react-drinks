@@ -60,6 +60,10 @@ buildStyles = ->
     .pipe stylus {
       include : [ __dirname + '/styles' ]
     }
+    # TODO: Why doesn't this abort the stream like the Browserify one does?
+    .on 'error', notify.onError {
+      title : 'Stylus Error'
+    }
     .pipe postcss [
       autoprefixer()
     ]
