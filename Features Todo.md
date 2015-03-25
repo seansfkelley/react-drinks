@@ -10,9 +10,6 @@
   - no duplicate recipes (by normalized name)
   - no recipes calling for ingredients that don't exist
 - everything is in thirds so is it acceptable to adjust the measurements to not be dumb?
-- add:
-  - white russian
-  - blind russian
 
 ### Ingredients
 - merge some ingredients, e.g., egg white + egg yolk should just be "egg" under the hood

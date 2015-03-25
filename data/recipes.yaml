@@ -204,12 +204,12 @@
     name: "Mudslide"
     ingredients:
       -
-        tag: "baileys"
+        tag: "irish cream"
         displayAmount: "1"
         displayUnit: "part"
         displayIngredient: "Baileys"
       -
-        tag: "kahlua"
+        tag: "coffee liqueur"
         displayAmount: "1"
         displayUnit: "part"
         displayIngredient: "Kahlúa"
@@ -932,3 +932,25 @@
       Fill serving glass with crushed ice, garnish with large bunch of mint.
     source: "Serious Eats"
     url: "http://www.seriouseats.com/recipes/2012/08/eastern-standard-peach-julep-cocktail-cognac-lillet-blanc-mint-recipe.html"
+  -
+    name: "White Russian"
+    ingredients:
+      -
+        tag: "coffee liqueur"
+        displayAmount: "2/3"
+        displayUnit: "oz"
+        displayIngredient: "coffee liqueur"
+      -
+        tag: "vodka"
+        displayAmount: "1 2/3"
+        displayUnit: "oz"
+        displayIngredient: "vodka"
+      -
+        tag: "cream"
+        displayAmount: "1"
+        displayUnit: "oz"
+        displayIngredient: "cream"
+    instructions: |
+      Pour coffee liqueur and vodka into an Old Fashioned glass filled with ice.
+      Float fresh cream on top and stir slowly.
+    notes: "Replace the cream with Baileys to make a Blind Russian, so named because the drink is 100% alcohol."
