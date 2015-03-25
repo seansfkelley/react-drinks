@@ -9,7 +9,7 @@ TitleBar = React.createClass {
 
   propTypes :
     leftIcon            : React.PropTypes.string
-    title               : React.PropTypes.string.isRequired
+    title               : React.PropTypes.string
     rightIcon           : React.PropTypes.string
     leftIconOnTouchTap  : React.PropTypes.func
     titleOnTouchTap     : React.PropTypes.func
@@ -20,7 +20,8 @@ TitleBar = React.createClass {
   ]
 
   render : ->
-    title = <span className='title' onTouchTap={@props.titleOnTouchTap}>{@props.title}</span>
+    if @props.title
+      title = <span className='title' onTouchTap={@props.titleOnTouchTap}>{@props.title}</span>
 
     if @props.leftIcon?
       leftIcon = <i className={'fa float-left ' + @props.leftIcon} onTouchTap={@props.leftIconOnTouchTap} onTouchStart={@_stopTouchStart}/>
