@@ -3,9 +3,13 @@
 _     = require 'lodash'
 React = require 'react'
 
+Select = require 'react-select'
+
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 ButtonBar         = require '../components/ButtonBar'
+
+{ IngredientStore } = require '../stores'
 
 EditableTitleBar = React.createClass {
   displayName : 'EditableTitleBar'
@@ -73,6 +77,49 @@ EditableIngredient = React.createClass {
     @props.onRemove()
 }
 
+EditableIngredient2 = React.createClass {
+  displayName : 'EditableIngredient2'
+
+  propTypes : {}
+
+  render : ->
+    options = _.map IngredientStore.alphabeticalIngredients, (i) ->
+      return {
+        value : i.tag
+        label : i.display
+      }
+
+    <div className='editable-ingredient-2'>
+      <Select
+        className='tile'
+        placeholder='Ingredient...'
+        noResultsText='No ingredients!'
+        clearable=false
+        options={options}
+        filterOption={@_filterOption}
+        onChange={@_onChange}
+        autoload=false
+      />
+      <div className='tile edit-button'>
+        <i className='fa fa-edit'/>
+      </div>
+      <div className='tile save-button'>
+        <i className='fa fa-check'/>
+      </div>
+    </div>
+
+
+  _filterOption : (option, searchString) ->
+    searchString = searchString.toLowerCase()
+    # Should expose this search as a utility method on ingredients to ensure consistent behavior.
+    ingredient = IngredientStore.ingredientsByTag[option.value]
+    return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
+
+
+  _onChange : (value) ->
+    console.log value
+}
+
 EditableRecipeView = React.createClass {
   displayName : 'EditableRecipeView'
 
@@ -89,8 +136,9 @@ EditableRecipeView = React.createClass {
       header={<EditableTitleBar/>}
       footer={<EditableFooter/>}
     >
+      <EditableIngredient/>
       {_.map @state.ingredients, (id) =>
-        <EditableIngredient key={id} onRemove={@_generateRemoveCallback(id)}/>}
+        <EditableIngredient2 key={id} onRemove={@_generateRemoveCallback(id)}/>}
       <button className='add-ingredient-button' onTouchTap={@_addIngredient}>
         Add Ingredient
       </button>

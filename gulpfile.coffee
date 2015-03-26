@@ -21,6 +21,7 @@ IS_PROD = process.env.NODE_ENV == 'production'
 
 LIBRARY_CSS_PATHS = [
   'font-awesome/css/font-awesome.css'
+  'react-select/dist/default.css'
 ]
 
 SRC_PATHS =

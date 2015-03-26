@@ -160,3 +160,55 @@
     padding 0
     border-radius standard-border-radius
 
+.editable-recipe-view .editable-ingredient-2
+  display flex
+
+  .tile
+    border-radius standard-border-radius
+    height touch-element-height
+
+    margin-right 8px
+
+    &:first-child
+      margin-left 8px
+
+  .Select
+    flex 1
+    background-color grey1
+
+    &.is-focused:not(.is-open) .Select-control
+      box-shadow none
+      border-color grey2
+
+    .Select-control
+      border 1px dashed grey2
+      height touch-element-height
+
+      > *
+        margin-top 3px
+
+    .Select-menu
+      max-height 108px
+
+    .Select-option
+      background-color grey0
+      color grey8
+
+      &.is-focused
+        background-color grey0
+        color grey8
+
+  .edit-button, .save-button
+    box-sizing border-box
+    width touch-element-height
+    line-height touch-element-height
+    vertical-align middle
+    text-align center
+
+    background-color darken(grey0, 3%)
+    border 1px solid grey2
+    border-radius standard-border-radius
+
+    i.fa
+      line-height inherit
+      font-size icon-font-size
