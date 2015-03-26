@@ -29,14 +29,17 @@ IngredientStore = new class extends FluxStore
     selectedIngredientTags     : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
     ingredientsByTag           : {}
 
-  'set-ingredients' : ({ groupedIngredients }) ->
+  'set-ingredients' : ({ groupedIngredients, alphabeticalIngredientTags }) ->
     @groupedIngredients = groupedIngredients
+
     @ingredientsByTag = _.chain groupedIngredients
       .pluck 'ingredients'
       .flatten()
       .filter (i) -> i.tag?
       .reduce ((map, i) -> map[i.tag] = i ; return map), {}
       .value()
+
+    @alphabeticalIngredients = _.map alphabeticalIngredientTags, (tag) => @ingredientsByTag[tag]
     @_updateSearchedIngredients()
 
   'toggle-ingredient' : ({ tag }) ->
@@ -188,10 +191,11 @@ RecipeStore = new class extends FluxStore
 
 
 Promise.resolve $.get('/ingredients')
-.then (groupedIngredients) =>
+.then ({ groupedIngredients, alphabeticalIngredientTags }) =>
   AppDispatcher.dispatch {
     type : 'set-ingredients'
     groupedIngredients
+    alphabeticalIngredientTags
   }
 
 Promise.resolve $.get('/recipes')

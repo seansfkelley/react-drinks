@@ -61,5 +61,9 @@ GROUPED = _.chain INGREDIENTS
 module.exports = {
   method  : 'get'
   route   : '/ingredients'
-  handler : (req, res) -> res.json GROUPED
+  handler : (req, res) ->
+    res.json {
+      groupedIngredients         : GROUPED
+      alphabeticalIngredientTags : _.pluck INGREDIENTS, 'tag'
+    }
 }
