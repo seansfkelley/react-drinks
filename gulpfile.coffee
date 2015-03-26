@@ -9,6 +9,7 @@ concat       = require 'gulp-concat'
 uglify       = require 'gulp-uglify'
 minifyCss    = require 'gulp-minify-css'
 notify       = require 'gulp-notify'
+livereload   = require 'gulp-livereload'
 browserify   = require 'browserify'
 watchify     = require 'watchify'
 buffer       = require 'vinyl-buffer'
@@ -69,8 +70,9 @@ buildScripts = (watch = false, dieOnError = false) ->
         message : '<%= file.relative %>'
         wait    : true
       }
-      .pipe sourcemaps.write './'
       .pipe gulp.dest './.dist'
+      .pipe livereload()
+      .pipe sourcemaps.write './'
 
   bundler.on 'update', rebundle
   rebundle()
@@ -95,13 +97,15 @@ buildStyles = ->
       message : '<%= file.relative %>'
       wait    : true
     }
-    .pipe sourcemaps.write './'
     .pipe gulp.dest './.dist'
+    .pipe livereload()
+    .pipe sourcemaps.write './'
 
 gulp.task 'fonts', copyFonts
 gulp.task 'scripts', -> buildScripts(false, true)
 gulp.task 'styles', buildStyles
 gulp.task 'watch', ->
+  livereload.listen()
   copyFonts()
   buildScripts(true, false)
   buildStyles()

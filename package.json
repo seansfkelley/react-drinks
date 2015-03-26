@@ -5,8 +5,7 @@
   "scripts": {
     "start": "./node_modules/.bin/coffee index.coffee",
     "test": "./node_modules/.bin/mocha",
-    "dev": "./node_modules/.bin/nodemon index.coffee",
-    "livereload": "./node_modules/.bin/coffee livereload.coffee"
+    "dev": "./node_modules/.bin/nodemon index.coffee"
   },
   "repository": {
     "type": "git",
@@ -33,6 +32,7 @@
     "gulp-concat": "^2.5.2",
     "gulp-if": "^1.2.5",
     "gulp-jade": "^1.0.0",
+    "gulp-livereload": "^3.8.0",
     "gulp-minify-css": "^1.0.0",
     "gulp-notify": "^2.2.0",
     "gulp-postcss": "^4.0.3",
@@ -43,7 +43,6 @@
     "jade": "^1.9.2",
     "jquery": "^2.1.3",
     "js-yaml": "^3.2.7",
-    "livereload": "^0.3.6",
     "lodash": "^3.2.0",
     "loglevel": "^1.2.0",
     "microevent": "^1.0.0",

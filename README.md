@@ -42,9 +42,8 @@ Install the commit hooks:
 
 Then run each in a separate terminal session:
 
-    gulp watch         # Recompile assets on change.
-    npm run dev        # Restart server on backend code change.
-    npm run livereload # Automatically reload browser when assets change.
+    gulp watch  # Recompile assets on change. Start the livereload server.
+    npm run dev # Restart server on backend code change.
 
 Install the LiveReload browser extension to get live reloading behavior.
 
