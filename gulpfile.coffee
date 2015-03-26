@@ -21,22 +21,24 @@ paths =
   scripts : [ 'frontend/**/*.coffee', 'frontend/**/*.cjsx' ]
   styles  : [ 'styles/**/*.styl', 'styles/**/*.css' ]
 
-makeBundler = ->
-  b = browserify paths.root, {
-    extensions : [ '.coffee', '.cjsx' ]
-    debug      : true
+buildScripts = (watch = false, dieOnError = false) ->
+  bundler = browserify paths.root, {
+    extensions   : [ '.coffee', '.cjsx' ]
+    debug        : true
+    cache        : {}
+    packageCache : {}
+    fullPaths    : watch
   }
+  if watch
+    bundler = watchify bundler
+
   # https://github.com/substack/node-browserify/issues/1124
-  b.transform require 'coffee-reactify'
-  return b
+  bundler.transform require 'coffee-reactify'
 
-shouldDieOnBrowserifyError = true
-
-generateBundlingFunction = (bundler) ->
-  return ->
+  rebundle = ->
     b = bundler.bundle()
 
-    if not shouldDieOnBrowserifyError
+    if not dieOnError
       b = b.on 'error', notify.onError {
         title : 'Browserify Error'
       }
@@ -47,12 +49,15 @@ generateBundlingFunction = (bundler) ->
       .pipe sourcemaps.init { loadMaps : true }
       .pipe gulpif IS_PROD, uglify()
       .pipe notify {
-        title   : 'Finished compiling Javscript'
+        title   : 'Finished compiling Javascript'
         message : '<%= file.relative %>'
         wait    : true
       }
       .pipe sourcemaps.write './'
       .pipe gulp.dest './.dist'
+
+  bundler.on 'update', rebundle
+  rebundle()
 
 buildStyles = ->
   gulp.src paths.styles
@@ -77,21 +82,10 @@ buildStyles = ->
     .pipe sourcemaps.write './'
     .pipe gulp.dest './.dist'
 
-buildScripts = ->
-  shouldDieOnBrowserifyError = true
-  generateBundlingFunction(makeBundler())()
-
-buildAndWatchScripts = ->
-  shouldDieOnBrowserifyError = false
-  watchingBundler = watchify makeBundler()
-  bundlingFunction = generateBundlingFunction(watchingBundler)
-  bundlingFunction()
-  watchingBundler.on 'update', bundlingFunction
-
-gulp.task 'scripts', buildScripts
+gulp.task 'scripts', -> buildScripts(false, true)
 gulp.task 'styles', buildStyles
 gulp.task 'watch', ->
-  buildAndWatchScripts()
+  buildScripts(true, false)
   buildStyles()
   gulp.watch paths.styles,  [ 'styles' ]
 gulp.task 'dist', [ 'scripts', 'styles' ]
