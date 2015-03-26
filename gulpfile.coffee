@@ -1,3 +1,4 @@
+_            = require 'lodash'
 gulp         = require 'gulp'
 gulpif       = require 'gulp-if'
 rename       = require 'gulp-rename'
@@ -16,13 +17,28 @@ autoprefixer = require 'autoprefixer-core'
 
 IS_PROD = process.env.NODE_ENV == 'production'
 
-paths =
+LIBRARY_CSS_PATHS = [
+  'font-awesome/css/font-awesome.css'
+]
+
+SRC_PATHS =
   root    : [ './frontend/init.cjsx' ]
-  scripts : [ 'frontend/**/*.coffee', 'frontend/**/*.cjsx' ]
-  styles  : [ 'styles/**/*.styl', 'styles/**/*.css' ]
+  scripts : [ './frontend/**/*.coffee', './frontend/**/*.cjsx' ]
+  styles  : [
+    './styles/**/*.styl'
+    './styles/**/*.css'
+  ].concat _.map(LIBRARY_CSS_PATHS, (p) -> './node_modules/' + p)
+  fonts   : [
+    './fonts/**.*'
+    './node_modules/font-awesome/fonts/**.*'
+  ]
+
+copyFonts = ->
+  gulp.src SRC_PATHS.fonts
+    .pipe gulp.dest './.dist/fonts'
 
 buildScripts = (watch = false, dieOnError = false) ->
-  bundler = browserify paths.root, {
+  bundler = browserify SRC_PATHS.root, {
     extensions   : [ '.coffee', '.cjsx' ]
     debug        : true
     cache        : {}
@@ -60,7 +76,7 @@ buildScripts = (watch = false, dieOnError = false) ->
   rebundle()
 
 buildStyles = ->
-  gulp.src paths.styles
+  gulp.src SRC_PATHS.styles
     .pipe sourcemaps.init { loadMaps : true }
     .pipe stylus {
       include : [ __dirname + '/styles' ]
@@ -82,11 +98,13 @@ buildStyles = ->
     .pipe sourcemaps.write './'
     .pipe gulp.dest './.dist'
 
+gulp.task 'fonts', copyFonts
 gulp.task 'scripts', -> buildScripts(false, true)
 gulp.task 'styles', buildStyles
 gulp.task 'watch', ->
+  copyFonts()
   buildScripts(true, false)
   buildStyles()
-  gulp.watch paths.styles,  [ 'styles' ]
-gulp.task 'dist', [ 'scripts', 'styles' ]
+  gulp.watch SRC_PATHS.styles,  [ 'styles' ]
+gulp.task 'dist', [ 'scripts', 'styles', 'fonts' ]
 gulp.task 'default', [ 'watch' ]

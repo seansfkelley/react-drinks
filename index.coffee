@@ -12,7 +12,6 @@ app = express()
 app.set 'view engine', 'jade'
 
 # Routes.
-app.use '/', express.static(__dirname)
 app.use '/', express.static(__dirname + '/.dist')
 for { method, route, handler } in require './routes'
   app[method ? 'get'](route, handler)
