@@ -292,75 +292,77 @@
     &.is-committed
       width touch-element-height
 
-      .accept-button
-        width 0
-        opacity 0
-        transition all transition-duration
-
     > *
       display inline-block
       height inherit
       line-height inherit
 
-    .input-field
-      flex 1
 
-    input.input-field
-      border 1px solid grey2
+  .tile .accept-button
+    box-sizing border-box
+    width touch-element-height
+    line-height touch-element-height
+    vertical-align middle
+    text-align center
+
+    background-color darken(grey0, 3%)
+    border 1px solid grey2
+    border-left none
+    border-top-right-radius standard-border-radius
+    border-bottom-right-radius standard-border-radius
+
+    i.fa
+      line-height inherit
+      font-size icon-font-size
+
+  .tile.is-committed .accept-button
+    width 0
+    opacity 0
+    transition all transition-duration
+
+
+  .tile .input-field
+    flex 1
+
+  .tile input.input-field
+    border 1px solid grey2
+    background-color darken(grey0, 3%)
+    font-size body-font-size
+    line-height body-font-size
+
+    padding-left 8px
+
+    border-top-left-radius standard-border-radius
+    border-bottom-left-radius standard-border-radius
+
+  .tile .Select.input-field
+    &.is-focused:not(.is-open) .Select-control
+      box-shadow none
+      border-color grey2
+
+    .Select-control
       background-color darken(grey0, 3%)
-      font-size body-font-size
-      line-height body-font-size
 
-      padding-left 8px
+      border 1px solid grey2
+      height touch-element-height
 
-      border-top-left-radius standard-border-radius
-      border-bottom-left-radius standard-border-radius
+      border-top-right-radius 0
+      border-bottom-right-radius 0
 
-    .input-field.Select
-      &.is-focused:not(.is-open) .Select-control
-        box-shadow none
-        border-color grey2
+    .Select-menu
+      max-height 108px
 
-      .Select-control
-        background-color darken(grey0, 3%)
+    .Select-option
+      background-color grey0
+      color grey8
 
-        border 1px solid grey2
-        height touch-element-height
-
-        border-top-right-radius 0
-        border-bottom-right-radius 0
-
-      .Select-menu
-        max-height 108px
-
-      .Select-option
+      &.is-focused
         background-color grey0
         color grey8
 
-        &.is-focused
-          background-color grey0
-          color grey8
+  .tile.is-committed .Select.input-field
+    .Select-control
+      padding-right 0
 
-    &.is-committed .input-field.Select
-      .Select-control
-        padding-right 0
-
-      .Select-arrow
-        display none
-
-    .accept-button
-      box-sizing border-box
-      width touch-element-height
-      line-height touch-element-height
-      vertical-align middle
-      text-align center
-
-      background-color darken(grey0, 3%)
-      border 1px solid grey2
-      border-left none
-      border-top-right-radius standard-border-radius
-      border-bottom-right-radius standard-border-radius
-
-      i.fa
-        line-height inherit
-        font-size icon-font-size
+    .Select-arrow
+      display none
