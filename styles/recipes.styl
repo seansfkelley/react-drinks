@@ -172,6 +172,15 @@
     &:first-child
       margin-left 8px
 
+  &.is-editing-text
+    .Select
+      .Select-control
+        background-color grey7
+        transition transition-duration background-color
+
+      &.has-value .Select-placeholder
+        color grey2
+        transition transition-duration color
 
   .Select
     flex 1
@@ -181,9 +190,17 @@
       box-shadow none
       border-color grey2
 
+    &.has-value
+      .Select-control
+        border 1px solid grey2
+
     .Select-control
+      background-color darken(grey0, 3%)
+
       border 1px dashed grey2
       height touch-element-height
+
+      transition transition-duration background-color
 
       > *
         margin-top 3px

@@ -87,9 +87,10 @@ EditableIngredient2 = React.createClass {
 
   getInitialState : ->
     return {
-      tag : null
+      tag            : null
       ingredientText : null
-      searchValue : null
+      searchValue    : null
+      editingText    : false
     }
 
   render : ->
@@ -101,9 +102,9 @@ EditableIngredient2 = React.createClass {
 
     # It seems that setting value is necessary in order to have the
     # control maintain the selection once we trigger a state change.
-    <div className='editable-ingredient-2'>
+    <div className={'editable-ingredient-2' + if @state.editingText then ' is-editing-text' else ''}>
       <Select
-        className={'tile' + if @state.tag? then ' changed' else ''}
+        className='tile'
         placeholder='Ingredient...'
         noResultsText='No ingredients!'
         clearable=false
@@ -137,7 +138,7 @@ EditableIngredient2 = React.createClass {
       @setState { tag : null }
 
   _editText : ->
-
+    @setState { editingText : true }
 
 }
 
