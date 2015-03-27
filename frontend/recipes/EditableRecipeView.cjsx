@@ -1,9 +1,10 @@
 # @cjsx React.DOM
 
-_     = require 'lodash'
-React = require 'react'
-
+_      = require 'lodash'
+React  = require 'react'
 Select = require 'react-select'
+
+AppDispatcher     = require '../AppDispatcher'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
@@ -40,7 +41,9 @@ EditableFooter = React.createClass {
     console.log 'save'
 
   _close : ->
-    console.log 'close'
+    AppDispatcher.dispatch {
+      type : 'hide-modal'
+    }
 }
 
 EditableTextField = React.createClass {
@@ -82,6 +85,13 @@ EditableIngredient2 = React.createClass {
 
   propTypes : {}
 
+  getInitialState : ->
+    return {
+      tag : null
+      ingredientText : null
+      searchValue : null
+    }
+
   render : ->
     options = _.map IngredientStore.alphabeticalIngredients, (i) ->
       return {
@@ -89,21 +99,26 @@ EditableIngredient2 = React.createClass {
         label : i.display
       }
 
+    # It seems that setting value is necessary in order to have the
+    # control maintain the selection once we trigger a state change.
     <div className='editable-ingredient-2'>
       <Select
-        className='tile'
+        className={'tile' + if @state.tag? then ' changed' else ''}
         placeholder='Ingredient...'
         noResultsText='No ingredients!'
         clearable=false
         options={options}
         filterOption={@_filterOption}
-        onChange={@_onChange}
+        onChange={@_onIngredientTagSelection}
         autoload=false
+        key='select-ingredient'
+        value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
       />
-      <div className='tile edit-button'>
-        <i className='fa fa-edit'/>
-      </div>
-      <div className='tile save-button'>
+      {if @state.tag?
+        <div className='tile edit-button animate-in' onTouchTap={@_editText}>
+          <i className='fa fa-edit'/>
+        </div>}
+      <div className={'tile save-button' + if not @state.tag? then ' disabled' else ''}>
         <i className='fa fa-check'/>
       </div>
     </div>
@@ -115,9 +130,15 @@ EditableIngredient2 = React.createClass {
     ingredient = IngredientStore.ingredientsByTag[option.value]
     return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
+  _onIngredientTagSelection : (value) ->
+    if IngredientStore.ingredientsByTag[value]
+      @setState { tag : value }
+    else
+      @setState { tag : null }
 
-  _onChange : (value) ->
-    console.log value
+  _editText : ->
+
+
 }
 
 EditableRecipeView = React.createClass {

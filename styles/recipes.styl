@@ -172,9 +172,10 @@
     &:first-child
       margin-left 8px
 
+
   .Select
     flex 1
-    background-color grey1
+    transition 1s flex
 
     &.is-focused:not(.is-open) .Select-control
       box-shadow none
@@ -209,6 +210,17 @@
     border 1px solid grey2
     border-radius standard-border-radius
 
+    &.animate-in
+      width 0
+      animation to-standard-width transition-duration ease forwards
+
     i.fa
       line-height inherit
       font-size icon-font-size
+
+    &.disabled
+      color grey2
+
+@keyframes to-standard-width
+  to
+    width touch-element-height
