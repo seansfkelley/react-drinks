@@ -268,3 +268,99 @@
 @keyframes to-standard-width
   to
     width touch-element-height
+
+.editable-recipe-view .editable-ingredient-3
+  white-space nowrap
+
+  .tile
+    display inline-flex
+
+    margin-right 8px
+
+    &:first-child
+      margin-left 8px
+
+    border-radius standard-border-radius
+    height touch-element-height
+
+    transition width transition-duration
+
+    for i in 1 2 3
+      &:nth-child({i})
+        width "calc(100% - %s)" % (8px + i * 8px + (i - 1) * touch-element-height)
+
+    &.is-committed
+      width touch-element-height
+
+      .accept-button
+        width 0
+        opacity 0
+        transition all transition-duration
+
+    > *
+      display inline-block
+      height inherit
+      line-height inherit
+
+    .input-field
+      flex 1
+
+    input.input-field
+      border 1px solid grey2
+      background-color darken(grey0, 3%)
+      font-size body-font-size
+      line-height body-font-size
+
+      padding-left 8px
+
+      border-top-left-radius standard-border-radius
+      border-bottom-left-radius standard-border-radius
+
+    .input-field.Select
+      &.is-focused:not(.is-open) .Select-control
+        box-shadow none
+        border-color grey2
+
+      .Select-control
+        background-color darken(grey0, 3%)
+
+        border 1px solid grey2
+        height touch-element-height
+
+        border-top-right-radius 0
+        border-bottom-right-radius 0
+
+      .Select-menu
+        max-height 108px
+
+      .Select-option
+        background-color grey0
+        color grey8
+
+        &.is-focused
+          background-color grey0
+          color grey8
+
+    &.is-committed .input-field.Select
+      .Select-control
+        padding-right 0
+
+      .Select-arrow
+        display none
+
+    .accept-button
+      box-sizing border-box
+      width touch-element-height
+      line-height touch-element-height
+      vertical-align middle
+      text-align center
+
+      background-color darken(grey0, 3%)
+      border 1px solid grey2
+      border-left none
+      border-top-right-radius standard-border-radius
+      border-bottom-right-radius standard-border-radius
+
+      i.fa
+        line-height inherit
+        font-size icon-font-size
