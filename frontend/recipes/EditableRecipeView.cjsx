@@ -203,6 +203,7 @@ EditableIngredient3 = React.createClass {
           <i className='fa fa-chevron-right'/>
         </div>
       </div>
+
         # value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
 
     descriptionNode =

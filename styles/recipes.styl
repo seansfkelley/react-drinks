@@ -273,6 +273,7 @@ tile-background-color = darken(grey0, 3%)
 between-tile-spacing = 8px
 
 .editable-recipe-view .editable-ingredient-3
+  overflow hidden
   white-space nowrap
 
   .tile
@@ -300,6 +301,10 @@ between-tile-spacing = 8px
       height inherit
       line-height inherit
 
+  // HACK HACK HACK
+  // Can't figure out why there's an extra pixel of space on this guy.
+  .tile.ingredient
+    transform translate(0, -1px)
 
   .tile .accept-button
     box-sizing border-box
