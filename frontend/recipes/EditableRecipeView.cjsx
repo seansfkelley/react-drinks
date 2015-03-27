@@ -46,113 +46,8 @@ EditableFooter = React.createClass {
     }
 }
 
-EditableTextField = React.createClass {
-  displayName : 'EditableTextField'
-
-  propTypes :
-    onChange : React.PropTypes.func.isRequired
-
-  render : ->
-    <div className='editable-text-field'>
-      <input type='text' onChange={@_onChange}/>
-    </div>
-
-  _onChange : (e) ->
-    @props.onChange e.target.value
-}
-
 EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
-
-  propTypes :
-    onRemove : React.PropTypes.func.isRequired
-
-  render : ->
-    <div className='editable-ingredient'>
-      <div className='remove-button' onTouchTap={@_remove}>
-        <i className='fa fa-minus'/>
-      </div>
-      <EditableTextField/>
-      <EditableTextField/>
-    </div>
-
-  _remove : ->
-    @props.onRemove()
-}
-
-EditableIngredient2 = React.createClass {
-  displayName : 'EditableIngredient2'
-
-  propTypes : {}
-
-  getInitialState : ->
-    return {
-      tag            : null
-      ingredientText : null
-      searchValue    : null
-      editingText    : false
-    }
-
-  render : ->
-    options = _.map IngredientStore.alphabeticalIngredients, (i) ->
-      return {
-        value : i.tag
-        label : i.display
-      }
-
-    # It seems that setting value is necessary in order to have the
-    # control maintain the selection once we trigger a state change.
-    <div className={'editable-ingredient-2' + if @state.editingText then ' is-editing-text' else ''}>
-      <Select
-        className='tile'
-        placeholder='Ingredient...'
-        noResultsText='No ingredients!'
-        clearable=false
-        options={options}
-        filterOption={@_filterOption}
-        onChange={@_onIngredientTagSelection}
-        autoload=false
-        key='select-ingredient'
-        value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
-        disabled={@state.editingText}
-      />
-      {if @state.tag?
-        <div className='tile edit-button animate-in' onTouchTap={@_editText}>
-          <i className='fa fa-edit'/>
-        </div>}
-      <div className={'tile save-button' + if not @state.tag? then ' disabled' else ''} onTouchTap={@_onAccept}>
-        <i className='fa fa-check'/>
-      </div>
-      <input type='text' className={'clarifying-text ' + if @state.editingText then 'animate-in' else 'animate-out'} placeholder='More detailed...'/>
-    </div>
-
-
-  _filterOption : (option, searchString) ->
-    searchString = searchString.toLowerCase()
-    # Should expose this search as a utility method on ingredients to ensure consistent behavior.
-    ingredient = IngredientStore.ingredientsByTag[option.value]
-    return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
-
-  _onIngredientTagSelection : (value) ->
-    if IngredientStore.ingredientsByTag[value]
-      @setState { tag : value }
-    else
-      @setState { tag : null }
-
-  _editText : ->
-    @setState { editingText : true }
-
-  _onAccept : ->
-    if @state.editingText
-      @setState { editingText : false }
-      document.activeElement.blur()
-    else
-      console.log 'commit it!'
-
-}
-
-EditableIngredient3 = React.createClass {
-  displayName : 'EditableIngredient3'
 
   propTypes : {}
 
@@ -215,7 +110,7 @@ EditableIngredient3 = React.createClass {
       </div>
 
 
-    <div className='editable-ingredient-3'>
+    <div className='editable-ingredient'>
       {amountNode}
       {tagNode}
       {descriptionNode}
@@ -255,7 +150,7 @@ EditableRecipeView = React.createClass {
       footer={<EditableFooter/>}
     >
       {_.map @state.ingredients, (id) =>
-        <EditableIngredient3 key={id} onRemove={@_generateRemoveCallback(id)}/>}
+        <EditableIngredient key={id} onRemove={@_generateRemoveCallback(id)}/>}
       <button className='add-ingredient-button' onTouchTap={@_addIngredient}>
         Add Ingredient
       </button>

@@ -1,0 +1,151 @@
+@require 'constants'
+
+tile-background-color = darken(grey0, 3%)
+between-tile-spacing = 8px
+
+.editable-recipe-view
+  .title-bar input
+    width 90%
+    height 100%
+
+    text-align center
+
+    color grey0
+    font-weight 600
+    font-size title-font-size
+
+    background transparent
+    border none
+
+    &::-webkit-input-placeholder
+      color grey3
+      font-weight 600
+      font-size title-font-size
+
+  .fixed-content-pane
+    background-color grey0
+
+  button
+    width calc(100% - 16px)
+    box-sizing border-box
+    line-height touch-element-height
+
+    margin-left 8px
+    margin-top 8px
+
+    font-size body-font-size
+    color grey7
+    text-transform uppercase
+    background-color grey2
+
+    border none
+    padding 0
+    border-radius standard-border-radius
+
+.editable-recipe-view .editable-ingredient
+  overflow hidden
+  white-space nowrap
+
+  .tile
+    display inline-flex
+
+    margin-right between-tile-spacing
+
+    &:first-child
+      margin-left between-tile-spacing
+
+    border-radius standard-border-radius
+    height touch-element-height
+
+    transition width transition-duration
+
+    for i in 1 2 3
+      &:nth-child({i})
+        width "calc(100% - %s)" % (between-tile-spacing + i * between-tile-spacing + (i - 1) * touch-element-height)
+
+    &.is-committed
+      width touch-element-height
+
+    > *
+      display inline-block
+      height inherit
+      line-height inherit
+
+  // HACK HACK HACK
+  // Can't figure out why there's an extra pixel of space on this guy.
+  .tile.ingredient
+    transform translate(0, -1px)
+
+  .tile .accept-button
+    box-sizing border-box
+    width touch-element-height
+    line-height touch-element-height
+    vertical-align middle
+    text-align center
+
+    background-color tile-background-color
+    border 1px solid grey2
+    border-left none
+    border-top-right-radius standard-border-radius
+    border-bottom-right-radius standard-border-radius
+
+    i.fa
+      line-height inherit
+      font-size icon-font-size
+
+  .tile.is-committed .accept-button
+    width 0
+    opacity 0
+    transition all transition-duration
+
+
+  .tile .input-field
+    flex 1
+
+  .tile input.input-field
+    border 1px solid grey2
+    background-color tile-background-color
+    font-size body-font-size
+    line-height body-font-size
+
+    padding-left 8px
+    border-radius standard-border-radius
+
+  .tile:not(.is-committed) input.input-field
+    border-top-right-radius 0
+    border-bottom-right-radius 0
+
+
+  .tile .Select.input-field
+    &.is-focused:not(.is-open) .Select-control
+      box-shadow none
+      border-color grey2
+
+    .Select-control
+      background-color tile-background-color
+
+      border 1px solid grey2
+      height touch-element-height
+
+    .Select-menu
+      max-height 108px
+
+    .Select-option
+      background-color grey0
+      color grey8
+
+      &.is-focused
+        background-color grey0
+        color grey8
+
+  .tile:not(.is-committed) .Select.input-field
+    .Select-control
+      border-top-right-radius 0
+      border-bottom-right-radius 0
+
+  .tile.is-committed .Select.input-field
+    .Select-control
+      padding-right 0
+
+    .Select-arrow
+      display none
