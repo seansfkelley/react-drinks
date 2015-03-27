@@ -114,14 +114,16 @@ EditableIngredient2 = React.createClass {
         autoload=false
         key='select-ingredient'
         value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
+        disabled={@state.editingText}
       />
       {if @state.tag?
         <div className='tile edit-button animate-in' onTouchTap={@_editText}>
           <i className='fa fa-edit'/>
         </div>}
-      <div className={'tile save-button' + if not @state.tag? then ' disabled' else ''}>
+      <div className={'tile save-button' + if not @state.tag? then ' disabled' else ''} onTouchTap={@_onAccept}>
         <i className='fa fa-check'/>
       </div>
+      <input type='text' className={'clarifying-text ' + if @state.editingText then 'animate-in' else 'animate-out'} placeholder='More detailed...'/>
     </div>
 
 
@@ -139,6 +141,13 @@ EditableIngredient2 = React.createClass {
 
   _editText : ->
     @setState { editingText : true }
+
+  _onAccept : ->
+    if @state.editingText
+      @setState { editingText : false }
+      document.activeElement.blur()
+    else
+      console.log 'commit it!'
 
 }
 

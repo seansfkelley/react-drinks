@@ -161,6 +161,7 @@
     border-radius standard-border-radius
 
 .editable-recipe-view .editable-ingredient-2
+  position relative
   display flex
 
   .tile
@@ -237,6 +238,32 @@
 
     &.disabled
       color grey2
+
+  input.clarifying-text
+    position absolute
+    right touch-element-height + 16px
+    height touch-element-height
+
+    border-radius standard-border-radius
+    border 1px solid grey2
+    background-color darken(grey0, 3%)
+    font-size body-font-size
+    line-height body-font-size
+    padding-left 8px
+
+    &.animate-in
+      width "calc(100% - %s)" % (touch-element-height + 48px + 16px)
+      opacity 1
+      transition width transition-duration, opacity .1s ease
+
+    &.animate-out
+      width touch-element-height
+      opacity 0
+      pointer-events none
+      transition width transition-duration, opacity .1s ease (transition-duration - .1s)
+
+    &::-webkit-input-placeholder
+      padding-top 2px
 
 @keyframes to-standard-width
   to
