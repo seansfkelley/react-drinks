@@ -1,6 +1,7 @@
 @require 'constants'
 
-ingredient-spacing = 8px
+horizontal-spacing = 8px
+vertical-spacing = 8px
 
 .editable-recipe-view
   .title-bar input
@@ -21,16 +22,12 @@ ingredient-spacing = 8px
       font-weight 600
       font-size title-font-size
 
+  // A bunch of this is copy-pasted from the regular recipe display. Can refactor together?
   .fixed-content-pane
     background-color grey0
 
-// A bunch of this is copy-pasted from the regular recipe display. Can refactor together?
-.editable-recipe-view
   .recipe-description > :nth-child(odd)
     background-color grey1
-
-  .fixed-content-pane
-    background-color grey0
 
   .recipe-description
     // Make iPhone overscroll look less dumb.
@@ -45,22 +42,23 @@ ingredient-spacing = 8px
       text-transform uppercase
       text-align center
 
-      padding 16px 0 16px
+      padding (2 * vertical-spacing) 0 (2 * vertical-spacing)
 
+.editable-recipe-view
   .editable-ingredient, .deletable-ingredient
-    margin-top ingredient-spacing
+    margin-top vertical-spacing
 
     &:last-child
-      margin-bottom ingredient-spacing
+      margin-bottom vertical-spacing
 
 .editable-recipe-view .deletable-ingredient
-  margin-left ingredient-spacing
+  margin-left vertical-spacing
 
   > *
     display inline-block
 
   .icon-button
-    margin-right ingredient-spacing
+    margin-right vertical-spacing
 
   // display flex
   font-weight 600
@@ -74,3 +72,12 @@ ingredient-spacing = 8px
 
   .description
     width 70%
+
+.editable-recipe-view .editable-text-area
+  border-radius standard-border-radius
+  border 1px solid grey2
+  width "calc(100% - %s)" % (2 * horizontal-spacing)
+  margin-left horizontal-spacing
+  margin-bottom 2 * vertical-spacing
+  padding 8px
+

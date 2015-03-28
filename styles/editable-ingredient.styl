@@ -8,7 +8,8 @@ between-tile-spacing = 8px
   .tile
     display inline-flex
 
-    margin-right between-tile-spacing
+    // -1 to compensate for the weird bug named below
+    margin-right between-tile-spacing - 1
 
     &:first-child
       margin-left between-tile-spacing
@@ -23,7 +24,8 @@ between-tile-spacing = 8px
         width "calc(100% - %s)" % (between-tile-spacing + i * between-tile-spacing + (i - 1) * touch-element-size)
 
     &.is-committed
-      width touch-element-size
+      // +1 to adjust for some weird bug in the width of input elements
+      width touch-element-size + 1
 
     > *
       display inline-block
@@ -57,6 +59,8 @@ between-tile-spacing = 8px
 
     padding-left 8px
     border-radius standard-border-radius
+
+    margin 0
 
   .tile:not(.is-committed) input.input-field
     border-top-right-radius 0

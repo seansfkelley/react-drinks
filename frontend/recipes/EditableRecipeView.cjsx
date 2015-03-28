@@ -51,10 +51,35 @@ EditableFooter = React.createClass {
 EditableTextArea = React.createClass {
   displayName : 'EditableTextArea'
 
-  propTypes : {}
+  propTypes :
+    placeholder : React.PropTypes.string
 
   render : ->
-    <textarea className='editable-text-area'/>
+    <textarea
+      className='editable-text-area'
+      placeholder={@props.placeholder}
+      onInput={@_onInput}
+      ref='textarea'/>
+
+  getText : ->
+    return @refs.textarea.getDOMNode().value
+
+  componentDidMount : ->
+    @_sizeToFit()
+
+  # This is kind of crap:
+  #   1. Requires a reflow (seems to be the only way to be accurate, though:
+  #      https://github.com/andreypopp/react-textarea-autosize/blob/master/index.js)
+  #   2. Doesn't use state. Seems bad, but can't prove it.
+  _sizeToFit : _.throttle(->
+    # +2 is because of the border: avoids a scrollbar.
+    node = @getDOMNode()
+    node.style.height = 'auto'
+    node.style.height = node.scrollHeight + 2
+  ), 100
+
+  _onInput : ->
+    @_sizeToFit()
 }
 
 DeletableIngredient = React.createClass {
@@ -114,11 +139,11 @@ EditableRecipeView = React.createClass {
         </div>
         <div className='recipe-instructions'>
           <div className='recipe-section-header'>Instructions</div>
-          <EditableTextArea/>
+          <EditableTextArea placeholder='Optional...' ref='instructions'/>
         </div>
         <div className='recipe-notes'>
           <div className='recipe-section-header'>Notes</div>
-          <EditableTextArea/>
+          <EditableTextArea placeholder='Optional...' ref='notes'/>
         </div>
       </div>
     </FixedHeaderFooter>
