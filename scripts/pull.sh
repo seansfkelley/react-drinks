@@ -9,7 +9,9 @@ set -e
 git fetch
 git checkout origin/master
 
+export NODE_ENV=production
+
 npm install
-NODE_ENV=production gulp dist
+gulp dist
 
 PORT=80 forever start -c ./node_modules/.bin/coffee index.coffee
