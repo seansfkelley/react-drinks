@@ -10,6 +10,7 @@ FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 ButtonBar         = require '../components/ButtonBar'
 
+utils               = require '../utils'
 { IngredientStore } = require '../stores'
 
 EditableTitleBar = React.createClass {
@@ -49,7 +50,8 @@ EditableFooter = React.createClass {
 EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
 
-  propTypes : {}
+  propTypes :
+    saveIngredient : React.PropTypes.func.isRequired
 
   getInitialState : ->
     return {
@@ -68,22 +70,25 @@ EditableIngredient = React.createClass {
       }
 
     amountNode =
-      <div className={'tile amount' + if @state.amountCommitted then ' is-committed' else ''}>
+      <div className={'tile amount' + if @state.amountCommitted then ' is-committed' else ''} onTouchTap={@_skipBackToAmount}>
         <input
           type='text'
           className='input-field'
+          value={@state.amount}
           placeholder={if not @state.amountCommitted then 'Amount' else 'Amt.'}
+          onChange={@_onChangeAmount}
           disabled={@state.amountCommitted}
-          onChange={@_onChangeAmount}/>
+        />
         <div className='accept-button' onTouchTap={@_commitAmount}>
           <i className='fa fa-chevron-right'/>
         </div>
       </div>
 
     tagNode =
-      <div className={'tile ingredient' + if @state.tagCommitted then ' is-committed' else ''}>
+      <div className={'tile ingredient' + if @state.tagCommitted then ' is-committed' else ''} onTouchTap={@_skipBackToTag}>
         <Select
           className='input-field'
+          value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
           placeholder='Ingredient...'
           noResultsText='No ingredients!'
           clearable=false
@@ -91,7 +96,7 @@ EditableIngredient = React.createClass {
           filterOption={@_filterOption}
           onChange={@_onIngredientTagSelection}
           autoload=false
-          key='select-ingredient'
+          key='select'
           disabled={@state.tagCommitted}
         />
         <div className='accept-button' onTouchTap={@_commitTag}>
@@ -99,11 +104,9 @@ EditableIngredient = React.createClass {
         </div>
       </div>
 
-        # value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
-
     descriptionNode =
       <div className='tile description'>
-        <input type='text' className='input-field' placeholder='Description...' onChange={@_onChangeDescription}/>
+        <input type='text' className='input-field' placeholder='Brand/variety...' onChange={@_onChangeDescription}/>
         <div className='accept-button' onTouchTap={@_commitDescription}>
           <i className='fa fa-check'/>
         </div>
@@ -122,14 +125,31 @@ EditableIngredient = React.createClass {
     ingredient = IngredientStore.ingredientsByTag[option.value]
     return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
-  _commitAmount : ->
+  _onChangeAmount : (e) ->
+     @setState { amount : utils.fractionify(e.target.value) }
+
+  _commitAmount : (e) ->
+    e.stopPropagation()
     @setState { amountCommitted : true }
 
-  _commitTag : ->
+  _skipBackToAmount : ->
+    @setState {
+      amountCommitted : false
+      tagCommitted    : false
+    }
+
+  _onIngredientTagSelection : (tag) ->
+    @setState { tag }
+
+  _commitTag : (e) ->
+    e.stopPropagation()
     @setState { tagCommitted : true }
 
+  _skipBackToTag : ->
+    @setState { tagCommitted : false }
+
   _commitDescription : ->
-    console.log 'save ingredient!'
+    @props.saveIngredient _.pick(@state, 'amount', 'tag', 'description')
 
 }
 
@@ -140,31 +160,42 @@ EditableRecipeView = React.createClass {
 
   getInitialState : ->
     return {
-      ingredients : [ @_newIngredientId() ]
+      ingredients       : []
+      currentIngredient : @_newIngredientId()
     }
 
   render : ->
+    deletableIngredients = _.map @state.ingredients, ({ amount, tag, description }) ->
+      <div>{amount} {tag}</div>
+
+    if @state.currentIngredient?
+      editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
+
     <FixedHeaderFooter
       className='default-modal editable-recipe-view'
       header={<EditableTitleBar/>}
       footer={<EditableFooter/>}
     >
-      {_.map @state.ingredients, (id) =>
-        <EditableIngredient key={id} onRemove={@_generateRemoveCallback(id)}/>}
-      <button className='add-ingredient-button' onTouchTap={@_addIngredient}>
+      {deletableIngredients}
+      {editingIngredient}
+      <button
+        className='add-ingredient-button'
+        disabled={@state.currentIngredient?}
+        onTouchTap={@_addIngredient}
+      >
         Add Ingredient
       </button>
     </FixedHeaderFooter>
 
-  _generateRemoveCallback : (id) ->
-    return =>
-      @setState {
-        ingredients : _.without @state.ingredients, id
-      }
+  _saveIngredient : (ingredient) ->
+    @setState {
+      ingredients       : @state.ingredients.concat [ ingredient ]
+      currentIngredient : @_newIngredientId()
+    }
 
   _addIngredient : ->
     @setState {
-      ingredients : @state.ingredients.concat [ @_newIngredientId() ]
+      currentIngredient : @_newIngredientId()
     }
 
   _newIngredientId : ->
