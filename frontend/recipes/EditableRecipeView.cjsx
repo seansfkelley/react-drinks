@@ -48,9 +48,19 @@ EditableFooter = React.createClass {
     }
 }
 
+EditableTextArea = React.createClass {
+  displayName : 'EditableTextArea'
+
+  propTypes : {}
+
+  render : ->
+    <textarea className='editable-text-area'/>
+}
+
 DeletableIngredient = React.createClass {
   displayName : 'DeletableIngredient'
 
+  # This requires at least one of tag or description. Not sure how to validate that.
   propTypes :
     measure     : React.PropTypes.string
     unit        : React.PropTypes.string
@@ -66,7 +76,7 @@ DeletableIngredient = React.createClass {
         {' '}
         <span className='unit'>{@props.unit}</span>
       </div>
-      <span className='ingredient'>{@props.description ? IngredientStore.ingredientsByTag[@props.tag].display}</span>
+      <span className='ingredient'>{@props.description ? IngredientStore.ingredientsByTag[@props.tag]?.display}</span>
     </div>
 
   _delete : ->
@@ -96,8 +106,21 @@ EditableRecipeView = React.createClass {
       header={<EditableTitleBar/>}
       footer={<EditableFooter/>}
     >
-      {deletableIngredients}
-      {editingIngredient}
+      <div className='recipe-description'>
+        <div className='recipe-ingredients'>
+          <div className='recipe-section-header'>Ingredients</div>
+          {deletableIngredients}
+          {editingIngredient}
+        </div>
+        <div className='recipe-instructions'>
+          <div className='recipe-section-header'>Instructions</div>
+          <EditableTextArea/>
+        </div>
+        <div className='recipe-notes'>
+          <div className='recipe-section-header'>Notes</div>
+          <EditableTextArea/>
+        </div>
+      </div>
     </FixedHeaderFooter>
 
   _saveIngredient : (ingredient) ->

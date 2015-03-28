@@ -24,7 +24,29 @@ ingredient-spacing = 8px
   .fixed-content-pane
     background-color grey0
 
+// A bunch of this is copy-pasted from the regular recipe display. Can refactor together?
 .editable-recipe-view
+  .recipe-description > :nth-child(odd)
+    background-color grey1
+
+  .fixed-content-pane
+    background-color grey0
+
+  .recipe-description
+    // Make iPhone overscroll look less dumb.
+    > :first-child
+      border-top 1px solid grey2
+    // Ideally we could fill any remaining space with the last block's background color, but this will do.
+    > :not(:last-child), > :last-child:nth-child(odd)
+      border-bottom 1px solid grey2
+
+    .recipe-section-header
+      font-size uppercase-font-size
+      text-transform uppercase
+      text-align center
+
+      padding 16px 0 16px
+
   .editable-ingredient, .deletable-ingredient
     margin-top ingredient-spacing
 
