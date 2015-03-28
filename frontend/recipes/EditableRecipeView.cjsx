@@ -178,23 +178,11 @@ EditableRecipeView = React.createClass {
     >
       {deletableIngredients}
       {editingIngredient}
-      <button
-        className='add-ingredient-button'
-        disabled={@state.currentIngredient?}
-        onTouchTap={@_addIngredient}
-      >
-        Add Ingredient
-      </button>
     </FixedHeaderFooter>
 
   _saveIngredient : (ingredient) ->
     @setState {
       ingredients       : @state.ingredients.concat [ ingredient ]
-      currentIngredient : @_newIngredientId()
-    }
-
-  _addIngredient : ->
-    @setState {
       currentIngredient : @_newIngredientId()
     }
 
