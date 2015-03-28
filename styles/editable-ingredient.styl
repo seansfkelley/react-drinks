@@ -1,0 +1,98 @@
+@require 'constants'
+
+between-tile-spacing = 8px
+
+.editable-ingredient
+  white-space nowrap
+
+  .tile
+    display inline-flex
+
+    margin-right between-tile-spacing
+
+    &:first-child
+      margin-left between-tile-spacing
+
+    border-radius standard-border-radius
+    height touch-element-size
+
+    transition width transition-duration
+
+    for i in 1 2 3
+      &:nth-child({i})
+        width "calc(100% - %s)" % (between-tile-spacing + i * between-tile-spacing + (i - 1) * touch-element-size)
+
+    &.is-committed
+      width touch-element-size
+
+    > *
+      display inline-block
+      height inherit
+
+  // HACK HACK HACK
+  // Can't figure out why there's an extra pixel of space on this guy.
+  .tile.ingredient
+    transform translate(0, -1px)
+
+  .tile .accept-button
+    border-left none
+    border-top-left-radius 0
+    border-bottom-left-radius 0
+    transition all transition-duration
+
+  .tile.is-committed .accept-button
+    width 0
+    opacity 0
+    transition all transition-duration
+
+
+  .tile .input-field
+    flex 1
+
+  .tile input.input-field
+    border 1px solid grey2
+    background-color grey0a
+    font-size body-font-size
+    line-height body-font-size
+
+    padding-left 8px
+    border-radius standard-border-radius
+
+  .tile:not(.is-committed) input.input-field
+    border-top-right-radius 0
+    border-bottom-right-radius 0
+
+
+  .tile .Select.input-field
+    &.is-focused:not(.is-open) .Select-control
+      box-shadow none
+      border-color grey2
+
+    .Select-control
+      background-color grey0a
+
+      border 1px solid grey2
+      height touch-element-size
+
+    .Select-menu
+      max-height 108px
+
+    .Select-option
+      background-color grey0
+      color grey8
+
+      &.is-focused
+        background-color grey0
+        color grey8
+
+  .tile:not(.is-committed) .Select.input-field
+    .Select-control
+      border-top-right-radius 0
+      border-bottom-right-radius 0
+
+  .tile.is-committed .Select.input-field
+    .Select-control
+      padding-right 0
+
+    .Select-arrow
+      display none

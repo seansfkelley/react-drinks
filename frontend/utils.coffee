@@ -26,13 +26,13 @@ defractionify = (s) ->
 MEASURE_AMOUNT_REGEX = /^(\d[- \/\d]+)(.*)$/
 
 splitMeasure = (s) ->
-  s = s.trim()
+  s = s?.trim()
   if match = MEASURE_AMOUNT_REGEX.exec(s)
     return {
       measure : match[1].trim()
       unit    : match[2].trim()
     }
   else
-    return { unit : s }
+    return { unit : s ? '' }
 
 module.exports = { fractionify, defractionify, splitMeasure }

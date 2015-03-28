@@ -18,7 +18,6 @@ EditableIngredient = React.createClass {
   getInitialState : ->
     return {
       measure          : null
-      unit             : null
       measureCommitted : false
       tag              : null
       tagCommitted     : false
