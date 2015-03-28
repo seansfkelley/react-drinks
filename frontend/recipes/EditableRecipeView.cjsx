@@ -39,11 +39,11 @@ EditableTitleBar = React.createClass {
 
   render : ->
     <TitleBar>
-      <input type='text' onChange={@_onChange} placeholder='Recipe title...'/>
+      <input type='text' placeholder='Recipe title...' ref='input'/>
     </TitleBar>
 
-  _onChange : (e) ->
-    console.log e.target.value
+  getText : ->
+    return @refs.input.value
 }
 
 EditableFooter = React.createClass {
@@ -75,6 +75,7 @@ EditableIngredient = React.createClass {
   getInitialState : ->
     return {
       measure          : null
+      unit             : null
       measureCommitted : false
       tag              : null
       tagCommitted     : false
@@ -144,7 +145,7 @@ EditableIngredient = React.createClass {
     return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
   _onChangeMeasure : (e) ->
-     @setState { measure : utils.fractionify(e.target.value) }
+    @setState { measure : utils.fractionify(e.target.value) }
 
   _commitMeasure : (e) ->
     e.stopPropagation()
@@ -170,7 +171,14 @@ EditableIngredient = React.createClass {
     @setState { description : e.target.value }
 
   _commitDescription : (e) ->
-    @props.saveIngredient _.pick(@state, 'measure', 'tag', 'description')
+    # Defractionifying is kind of silly, but ensures a saner result to the caller and a nicer UI to the user.
+    { measure, unit } = utils.splitMeasure utils.defractionify(@state.measure)
+    @props.saveIngredient(_.chain(@state)
+      .pick 'tag', 'description'
+      .extend { measure, unit }
+      .mapValues (v) -> v?.trim() or null # empty2null
+      .value()
+    )
 
 }
 
@@ -188,7 +196,7 @@ DeletableIngredient = React.createClass {
     <div className='deletable-ingredient'>
       <IconButton iconClass='fa-times' onTouchTap={@_delete}/>
       <div className='measure'>
-        {@props.measure}
+        {utils.fractionify @props.measure}
         {' '}
         <span className='unit'>{@props.unit}</span>
       </div>
@@ -226,9 +234,8 @@ EditableRecipeView = React.createClass {
       {editingIngredient}
     </FixedHeaderFooter>
 
-  _saveIngredient : ({ measure, tag, description }) ->
-    description or= null # empty2null
-    ingredient = _.extend { tag, description }, utils.splitMeasure measure
+  _saveIngredient : (ingredient) ->
+    console.log ingredient
     @setState {
       ingredients       : @state.ingredients.concat [
         _.defaults { id : @state.currentIngredient }, ingredient
