@@ -25,6 +25,21 @@ between-tile-spacing = 8px
   .fixed-content-pane
     background-color grey0
 
+.icon-button
+  box-sizing border-box
+  width touch-element-size
+  line-height touch-element-size
+  vertical-align middle
+  text-align center
+
+  background-color tile-background-color
+  border 1px solid grey2
+  border-radius standard-border-radius
+
+  i.fa
+    line-height inherit
+    font-size icon-font-size
+
 .editable-recipe-view .editable-ingredient
   white-space nowrap
 
@@ -37,21 +52,20 @@ between-tile-spacing = 8px
       margin-left between-tile-spacing
 
     border-radius standard-border-radius
-    height touch-element-height
+    height touch-element-size
 
     transition width transition-duration
 
     for i in 1 2 3
       &:nth-child({i})
-        width "calc(100% - %s)" % (between-tile-spacing + i * between-tile-spacing + (i - 1) * touch-element-height)
+        width "calc(100% - %s)" % (between-tile-spacing + i * between-tile-spacing + (i - 1) * touch-element-size)
 
     &.is-committed
-      width touch-element-height
+      width touch-element-size
 
     > *
       display inline-block
       height inherit
-      line-height inherit
 
   // HACK HACK HACK
   // Can't figure out why there's an extra pixel of space on this guy.
@@ -59,21 +73,10 @@ between-tile-spacing = 8px
     transform translate(0, -1px)
 
   .tile .accept-button
-    box-sizing border-box
-    width touch-element-height
-    line-height touch-element-height
-    vertical-align middle
-    text-align center
-
-    background-color tile-background-color
-    border 1px solid grey2
     border-left none
-    border-top-right-radius standard-border-radius
-    border-bottom-right-radius standard-border-radius
-
-    i.fa
-      line-height inherit
-      font-size icon-font-size
+    border-top-left-radius 0
+    border-bottom-left-radius 0
+    transition all transition-duration
 
   .tile.is-committed .accept-button
     width 0
@@ -107,7 +110,7 @@ between-tile-spacing = 8px
       background-color tile-background-color
 
       border 1px solid grey2
-      height touch-element-height
+      height touch-element-size
 
     .Select-menu
       max-height 108px

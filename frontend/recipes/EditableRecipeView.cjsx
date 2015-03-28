@@ -10,8 +10,27 @@ FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 ButtonBar         = require '../components/ButtonBar'
 
+ClassNameMixin = require '../mixins/ClassNameMixin'
+
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
+
+IconButton = React.createClass {
+  displayName : 'IconButton'
+
+  propTypes :
+    iconClass : React.PropTypes.string
+
+  mixins : [
+    ClassNameMixin
+  ]
+
+  render : ->
+    renderableProps = _.omit @props, 'iconClass'
+    <div  {...renderableProps} className={@getClassName 'icon-button'}>
+      <i className={'fa ' + @props.iconClass}/>
+    </div>
+}
 
 EditableTitleBar = React.createClass {
   displayName : 'EditableTitleBar'
@@ -79,9 +98,7 @@ EditableIngredient = React.createClass {
           onChange={@_onChangeAmount}
           disabled={@state.amountCommitted}
         />
-        <div className='accept-button' onTouchTap={@_commitAmount}>
-          <i className='fa fa-chevron-right'/>
-        </div>
+        <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitAmount}/>
       </div>
 
     tagNode =
@@ -99,17 +116,13 @@ EditableIngredient = React.createClass {
           key='select'
           disabled={@state.tagCommitted}
         />
-        <div className='accept-button' onTouchTap={@_commitTag}>
-          <i className='fa fa-chevron-right'/>
-        </div>
+        <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitTag}/>
       </div>
 
     descriptionNode =
       <div className='tile description'>
         <input type='text' className='input-field' placeholder='Brand/variety...' onChange={@_onChangeDescription}/>
-        <div className='accept-button' onTouchTap={@_commitDescription}>
-          <i className='fa fa-check'/>
-        </div>
+        <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_commitDescription}/>
       </div>
 
 
@@ -153,6 +166,24 @@ EditableIngredient = React.createClass {
 
 }
 
+DeletableIngredient = React.createClass {
+  displayName : 'DeletableIngredient'
+
+  propTypes :
+    amount      : React.PropTypes.string
+    tag         : React.PropTypes.string
+    description : React.PropTypes.string
+    delete      : React.PropTypes.func.isRequired
+
+  render : ->
+    <div className='deletable-ingredient'>
+      <IconButton iconClass='fa-minus' onTouchTap={@_delete}/>
+    </div>
+
+  _delete : ->
+    @props.delete()
+}
+
 EditableRecipeView = React.createClass {
   displayName : 'EditableRecipeView'
 
@@ -165,8 +196,8 @@ EditableRecipeView = React.createClass {
     }
 
   render : ->
-    deletableIngredients = _.map @state.ingredients, ({ amount, tag, description }) ->
-      <div>{amount} {tag}</div>
+    deletableIngredients = _.map @state.ingredients, (i) =>
+      return <DeletableIngredient {...i} delete={@_generateDeleteCallback(i.id)}/>
 
     if @state.currentIngredient?
       editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
@@ -182,9 +213,17 @@ EditableRecipeView = React.createClass {
 
   _saveIngredient : (ingredient) ->
     @setState {
-      ingredients       : @state.ingredients.concat [ ingredient ]
+      ingredients       : @state.ingredients.concat [
+        _.defaults { id : @state.currentIngredient }, ingredient
+      ]
       currentIngredient : @_newIngredientId()
     }
+
+  _generateDeleteCallback : (id) ->
+    return =>
+      @setState {
+        ingredients : _.reject @state.ingredients, { id }
+      }
 
   _newIngredientId : ->
     return _.uniqueId 'ingredient-'
