@@ -139,7 +139,7 @@ EditableRecipeView = React.createClass {
         </div>
         <div className='recipe-instructions'>
           <div className='recipe-section-header'>Instructions</div>
-          <EditableTextArea placeholder='Optional...' ref='instructions'/>
+          <EditableTextArea placeholder='Required...' ref='instructions'/>
         </div>
         <div className='recipe-notes'>
           <div className='recipe-section-header'>Notes</div>
