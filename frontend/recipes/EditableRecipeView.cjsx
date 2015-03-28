@@ -74,11 +74,11 @@ EditableIngredient = React.createClass {
 
   getInitialState : ->
     return {
-      amount          : null
-      amountCommitted : false
-      tag             : null
-      tagCommitted    : false
-      description     : null
+      measure          : null
+      measureCommitted : false
+      tag              : null
+      tagCommitted     : false
+      description      : null
     }
 
   render : ->
@@ -88,17 +88,17 @@ EditableIngredient = React.createClass {
         label : i.display
       }
 
-    amountNode =
-      <div className={'tile amount' + if @state.amountCommitted then ' is-committed' else ''} onTouchTap={@_skipBackToAmount}>
+    measureNode =
+      <div className={'tile measure' + if @state.measureCommitted then ' is-committed' else ''} onTouchTap={@_skipBackToMeasure}>
         <input
           type='text'
           className='input-field'
-          value={@state.amount}
-          placeholder={if not @state.amountCommitted then 'Amount' else 'Amt.'}
-          onChange={@_onChangeAmount}
-          disabled={@state.amountCommitted}
+          value={@state.measure}
+          placeholder={if not @state.measureCommitted then 'Amount' else 'Amt.'}
+          onChange={@_onChangeMeasure}
+          disabled={@state.measureCommitted}
         />
-        <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitAmount}/>
+        <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitMeasure}/>
       </div>
 
     tagNode =
@@ -121,13 +121,18 @@ EditableIngredient = React.createClass {
 
     descriptionNode =
       <div className='tile description'>
-        <input type='text' className='input-field' placeholder='Brand/variety...' onChange={@_onChangeDescription}/>
+        <input
+          type='text'
+          className='input-field'
+          placeholder='Brand/variety...'
+          onChange={@_onChangeDescription}
+        />
         <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_commitDescription}/>
       </div>
 
 
     <div className='editable-ingredient'>
-      {amountNode}
+      {measureNode}
       {tagNode}
       {descriptionNode}
     </div>
@@ -138,17 +143,17 @@ EditableIngredient = React.createClass {
     ingredient = IngredientStore.ingredientsByTag[option.value]
     return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
-  _onChangeAmount : (e) ->
-     @setState { amount : utils.fractionify(e.target.value) }
+  _onChangeMeasure : (e) ->
+     @setState { measure : utils.fractionify(e.target.value) }
 
-  _commitAmount : (e) ->
+  _commitMeasure : (e) ->
     e.stopPropagation()
-    @setState { amountCommitted : true }
+    @setState { measureCommitted : true }
 
-  _skipBackToAmount : ->
+  _skipBackToMeasure : ->
     @setState {
-      amountCommitted : false
-      tagCommitted    : false
+      measureCommitted : false
+      tagCommitted     : false
     }
 
   _onIngredientTagSelection : (tag) ->
@@ -161,8 +166,11 @@ EditableIngredient = React.createClass {
   _skipBackToTag : ->
     @setState { tagCommitted : false }
 
-  _commitDescription : ->
-    @props.saveIngredient _.pick(@state, 'amount', 'tag', 'description')
+  _onChangeDescription : (e) ->
+    @setState { description : e.target.value }
+
+  _commitDescription : (e) ->
+    @props.saveIngredient _.pick(@state, 'measure', 'tag', 'description')
 
 }
 
@@ -170,14 +178,21 @@ DeletableIngredient = React.createClass {
   displayName : 'DeletableIngredient'
 
   propTypes :
-    amount      : React.PropTypes.string
+    measure     : React.PropTypes.string
+    unit        : React.PropTypes.string
     tag         : React.PropTypes.string
     description : React.PropTypes.string
     delete      : React.PropTypes.func.isRequired
 
   render : ->
     <div className='deletable-ingredient'>
-      <IconButton iconClass='fa-minus' onTouchTap={@_delete}/>
+      <IconButton iconClass='fa-times' onTouchTap={@_delete}/>
+      <div className='measure'>
+        {@props.measure}
+        {' '}
+        <span className='unit'>{@props.unit}</span>
+      </div>
+      <span className='ingredient'>{@props.description ? IngredientStore.ingredientsByTag[@props.tag].display}</span>
     </div>
 
   _delete : ->
@@ -211,7 +226,9 @@ EditableRecipeView = React.createClass {
       {editingIngredient}
     </FixedHeaderFooter>
 
-  _saveIngredient : (ingredient) ->
+  _saveIngredient : ({ measure, tag, description }) ->
+    description or= null # empty2null
+    ingredient = _.extend { tag, description }, utils.splitMeasure measure
     @setState {
       ingredients       : @state.ingredients.concat [
         _.defaults { id : @state.currentIngredient }, ingredient

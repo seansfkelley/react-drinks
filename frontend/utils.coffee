@@ -15,4 +15,17 @@ ALL_FRACTION_REGEX = new RegExp _.keys(HTML_FRACTIONS).join('|'), 'g'
 
 fractionify = (s) -> s.replace(ALL_FRACTION_REGEX, (m) -> HTML_FRACTIONS[m])
 
-module.exports = { fractionify }
+# This does not account for fractionified strings!
+MEASURE_AMOUNT_REGEX = /^(\d[- \/\d]+)(.*)$/
+
+splitMeasure = (s) ->
+  s = s.trim()
+  if match = MEASURE_AMOUNT_REGEX.exec(s)
+    return {
+      measure : match[1].trim()
+      unit    : match[2].trim()
+    }
+  else
+    return { unit : s }
+
+module.exports = { fractionify, splitMeasure }

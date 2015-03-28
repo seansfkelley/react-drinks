@@ -40,6 +40,35 @@ between-tile-spacing = 8px
     line-height inherit
     font-size icon-font-size
 
+.editable-recipe-view
+  .editable-ingredient, .deletable-ingredient
+    margin-top between-tile-spacing
+
+    &:last-child
+      margin-bottom between-tile-spacing
+
+.editable-recipe-view .deletable-ingredient
+  margin-left between-tile-spacing
+
+  > *
+    display inline-block
+
+  .icon-button
+    margin-right between-tile-spacing
+
+  // display flex
+  font-weight 600
+
+  .measure
+    width 30%
+
+    .unit
+      font-size 0.75em
+      text-transform uppercase
+
+  .description
+    width 70%
+
 .editable-recipe-view .editable-ingredient
   white-space nowrap
 
