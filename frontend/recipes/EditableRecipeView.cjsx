@@ -86,7 +86,7 @@ EditableRecipeView = React.createClass {
 
   render : ->
     deletableIngredients = _.map @state.ingredients, (i) =>
-      return <DeletableIngredient {...i} delete={@_generateDeleteCallback(i.id)}/>
+      return <DeletableIngredient {...i} key={i.id} delete={@_generateDeleteCallback(i.id)}/>
 
     if @state.currentIngredient?
       editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
