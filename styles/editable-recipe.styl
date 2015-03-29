@@ -44,6 +44,9 @@ vertical-spacing = 8px
 
       padding (2 * vertical-spacing) 0 (2 * vertical-spacing)
 
+.editable-recipe-view .recipe-ingredients .recipe-section-header + *
+  margin-top 0
+
 .editable-recipe-view
   .editable-ingredient, .deletable-ingredient
     margin-top vertical-spacing
@@ -53,6 +56,10 @@ vertical-spacing = 8px
 
 .editable-recipe-view .deletable-ingredient
   margin-left vertical-spacing
+  padding-right horizontal-spacing
+
+  display flex
+  align-items center
 
   > *
     display inline-block
@@ -70,8 +77,11 @@ vertical-spacing = 8px
       font-size 0.75em
       text-transform uppercase
 
-  .description
-    width 70%
+  .ingredient
+    flex 1
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
 
 .editable-recipe-view .editable-text-area
   border-radius standard-border-radius

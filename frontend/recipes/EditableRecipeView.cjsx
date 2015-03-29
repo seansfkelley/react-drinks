@@ -123,8 +123,7 @@ EditableRecipeView = React.createClass {
     deletableIngredients = _.map @state.ingredients, (i) =>
       return <DeletableIngredient {...i} key={i.id} delete={@_generateDeleteCallback(i.id)}/>
 
-    if @state.currentIngredient?
-      editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
+    editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
 
     <FixedHeaderFooter
       className='default-modal editable-recipe-view'
@@ -133,8 +132,13 @@ EditableRecipeView = React.createClass {
     >
       <div className='recipe-description'>
         <div className='recipe-ingredients'>
-          <div className='recipe-section-header'>Ingredients</div>
-          {deletableIngredients}
+          {if deletableIngredients.length
+            [
+              <div className='recipe-section-header'>Ingredients</div>
+              deletableIngredients
+            ]
+          }
+          <div className='recipe-section-header'>New Ingredient...</div>
           {editingIngredient}
         </div>
         <div className='recipe-instructions'>
