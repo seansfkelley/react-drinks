@@ -33,8 +33,14 @@ EditableIngredient = React.createClass {
         label : i.display
       }
 
+    classNames = 'tile measure'
+    disabled = false
+    if @state.measureCommitted
+      classNames += ' is-committed'
+      disabled = true
+
     measureNode =
-      <div className={'tile measure' + if @state.measureCommitted then ' is-committed' else ''} onTouchTap={@_skipBackToMeasure}>
+      <div className={classNames} onTouchTap={@_skipBackToMeasure}>
         <input
           type='text'
           className='input-field'
@@ -42,13 +48,22 @@ EditableIngredient = React.createClass {
           placeholder={if not @state.measureCommitted then 'Amount' else 'Amt.'}
           onChange={@_onChangeMeasure}
           ref='measure'
-          disabled={@state.measureCommitted}
+          disabled={disabled}
         />
         <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitMeasure}/>
       </div>
 
+    classNames = 'tile ingredient'
+    disabled = false
+    if @state.tagCommitted
+      classNames += ' is-committed'
+      disabled = true
+    else if not @state.measureCommitted
+      classNames += ' is-hidden'
+      disabled = true
+
     tagNode =
-      <div className={'tile ingredient' + if @state.tagCommitted then ' is-committed' else ''} onTouchTap={@_skipBackToTag}>
+      <div className={classNames} onTouchTap={@_skipBackToTag}>
         <Select
           className='input-field'
           value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
@@ -61,20 +76,26 @@ EditableIngredient = React.createClass {
           autoload=false
           key='select'
           ref='tag'
-          disabled={not @state.measureCommitted or @state.tagCommitted}
+          disabled={disabled}
         />
         <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitTag}/>
       </div>
 
+    classNames = 'tile description'
+    disabled = false
+    if not @state.measureCommitted or not @state.tagCommitted
+      classNames += ' is-hidden'
+      disabled = true
+
     descriptionNode =
-      <div className='tile description'>
+      <div className={classNames}>
         <input
           type='text'
           className='input-field'
           placeholder='Brand/variety...'
           ref='description'
           onChange={@_onChangeDescription}
-          disabled={not @state.measureCommitted or not @state.tagCommitted}
+          disabled={disabled}
         />
         <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_commitDescription}/>
       </div>

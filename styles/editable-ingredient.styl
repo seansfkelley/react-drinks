@@ -4,7 +4,6 @@ between-tile-spacing = 8px
 
 .editable-ingredient
   white-space nowrap
-  overflow-x hidden
 
   .tile
     display inline-flex
@@ -27,6 +26,9 @@ between-tile-spacing = 8px
     &.is-committed
       // +1 to adjust for some weird bug in the width of input elements
       width touch-element-size + 1
+
+    &.is-hidden
+      display none
 
     > *
       display inline-block
