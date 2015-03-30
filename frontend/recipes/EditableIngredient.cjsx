@@ -61,7 +61,7 @@ EditableIngredient = React.createClass {
           autoload=false
           key='select'
           ref='tag'
-          disabled={@state.tagCommitted}
+          disabled={not @state.measureCommitted or @state.tagCommitted}
         />
         <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitTag}/>
       </div>
@@ -74,6 +74,7 @@ EditableIngredient = React.createClass {
           placeholder='Brand/variety...'
           ref='description'
           onChange={@_onChangeDescription}
+          disabled={not @state.measureCommitted or not @state.tagCommitted}
         />
         <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_commitDescription}/>
       </div>
