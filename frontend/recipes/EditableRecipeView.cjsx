@@ -11,6 +11,8 @@ ButtonBar          = require '../components/ButtonBar'
 IconButton         = require './IconButton'
 EditableIngredient = require './EditableIngredient'
 
+stylingConstants = require '../stylingConstants'
+
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
 
@@ -26,6 +28,9 @@ EditableTitleBar = React.createClass {
 
   getText : ->
     return @refs.input.value
+
+  focus : ->
+    @refs.input.getDOMNode().focus()
 }
 
 EditableFooter = React.createClass {
@@ -127,7 +132,7 @@ EditableRecipeView = React.createClass {
 
     <FixedHeaderFooter
       className='default-modal editable-recipe-view'
-      header={<EditableTitleBar/>}
+      header={<EditableTitleBar ref='title'/>}
       footer={<EditableFooter/>}
     >
       <div className='recipe-description'>
@@ -151,6 +156,11 @@ EditableRecipeView = React.createClass {
         </div>
       </div>
     </FixedHeaderFooter>
+
+  componentDidMount : ->
+    _.delay (=>
+      @refs.title.focus()
+    ), stylingConstants.TRANSITION_DURATION
 
   _saveIngredient : (ingredient) ->
     @setState {
