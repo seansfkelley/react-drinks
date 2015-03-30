@@ -134,7 +134,7 @@ EditableRecipeView = React.createClass {
         <div className='recipe-ingredients'>
           {if deletableIngredients.length
             [
-              <div className='recipe-section-header'>Ingredients</div>
+              <div className='recipe-section-header' key='deletable-header'>Ingredients</div>
               deletableIngredients
             ]
           }

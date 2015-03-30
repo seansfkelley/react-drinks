@@ -38,7 +38,7 @@ attachOverlayViews = ->
       _.delay (->
         if shouldHide
           React.unmountComponentAtNode domElement
-      ), stylingConstants.OVERLAY_TRANSITION_DURATION
+      ), stylingConstants.TRANSITION_DURATION
 
     AppDispatcher.register (payload) ->
       switch payload.type

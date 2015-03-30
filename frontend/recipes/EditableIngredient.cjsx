@@ -6,6 +6,8 @@ Select = require 'react-select'
 
 IconButton = require './IconButton'
 
+stylingConstants = require '../stylingConstants'
+
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
 
@@ -39,6 +41,7 @@ EditableIngredient = React.createClass {
           value={@state.measure}
           placeholder={if not @state.measureCommitted then 'Amount' else 'Amt.'}
           onChange={@_onChangeMeasure}
+          ref='measure'
           disabled={@state.measureCommitted}
         />
         <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitMeasure}/>
@@ -57,6 +60,7 @@ EditableIngredient = React.createClass {
           onChange={@_onIngredientTagSelection}
           autoload=false
           key='select'
+          ref='tag'
           disabled={@state.tagCommitted}
         />
         <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitTag}/>
@@ -68,6 +72,7 @@ EditableIngredient = React.createClass {
           type='text'
           className='input-field'
           placeholder='Brand/variety...'
+          ref='description'
           onChange={@_onChangeDescription}
         />
         <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_commitDescription}/>
@@ -79,6 +84,17 @@ EditableIngredient = React.createClass {
       {tagNode}
       {descriptionNode}
     </div>
+
+  # This isn't quite right, but it's better than nothing.
+  componentDidUpdate : ->
+    _.delay (=>
+      if @state.tagCommitted
+        @refs.description.getDOMNode().focus()
+      else if @state.measureCommitted
+        @refs.tag.getInputNode().focus()
+      else
+        @refs.measure.getDOMNode().focus()
+    ), stylingConstants.TRANSITION_DURATION
 
   _filterOption : (option, searchString) ->
     searchString = searchString.toLowerCase()

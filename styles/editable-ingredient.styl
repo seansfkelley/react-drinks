@@ -4,6 +4,7 @@ between-tile-spacing = 8px
 
 .editable-ingredient
   white-space nowrap
+  overflow-x hidden
 
   .tile
     display inline-flex
@@ -77,6 +78,17 @@ between-tile-spacing = 8px
 
       border 1px solid grey2
       height touch-element-size
+
+      // Some hacks to get everything to line up nice.
+      .Select-placeholder
+        top 2px
+
+      .Select-input
+        position relative
+        top 2px
+
+      .Select-arrow
+        margin-top 4px
 
     .Select-menu
       max-height 108px
