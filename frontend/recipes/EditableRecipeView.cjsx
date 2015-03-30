@@ -36,16 +36,19 @@ EditableTitleBar = React.createClass {
 EditableFooter = React.createClass {
   displayName : 'EditableFooter'
 
-  propTypes : {}
+  propTypes :
+    canSave : React.PropTypes.bool
+    save    : React.PropTypes.func.isRequired
 
   render : ->
     <ButtonBar>
-      <ButtonBar.Button icon='fa-save' label='Save' onTouchTap={@_save}/>
+      <ButtonBar.Button icon='fa-save' label='Save' disabled={not @props.canSave} onTouchTap={@_save}/>
       <ButtonBar.Button icon='fa-times' label='Close' onTouchTap={@_close}/>
     </ButtonBar>
 
   _save : ->
-    console.log 'save'
+    return if not @props.canSave
+    @props.save()
 
   _close : ->
     AppDispatcher.dispatch {
@@ -130,10 +133,13 @@ EditableRecipeView = React.createClass {
 
     editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
 
+    header = <EditableTitleBar ref='title'/>
+    footer = <EditableFooter canSave=true save={@_saveRecipe}/>
+
     <FixedHeaderFooter
       className='default-modal editable-recipe-view'
-      header={<EditableTitleBar ref='title'/>}
-      footer={<EditableFooter/>}
+      header={header}
+      footer={footer}
     >
       <div className='recipe-description'>
         <div className='recipe-ingredients'>
@@ -178,6 +184,9 @@ EditableRecipeView = React.createClass {
 
   _newIngredientId : ->
     return _.uniqueId 'ingredient-'
+
+  _saveRecipe : ->
+    console.log 'save recipe'
 }
 
 module.exports = EditableRecipeView
