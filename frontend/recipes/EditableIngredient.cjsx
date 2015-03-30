@@ -40,7 +40,7 @@ EditableIngredient = React.createClass {
       disabled = true
 
     measureNode =
-      <div className={classNames} onTouchTap={@_skipBackToMeasure}>
+      <div className={classNames} onTouchTap={if disabled then @_skipBackToMeasure}>
         <input
           type='text'
           className='input-field'
@@ -63,7 +63,7 @@ EditableIngredient = React.createClass {
       disabled = true
 
     tagNode =
-      <div className={classNames} onTouchTap={@_skipBackToTag}>
+      <div className={classNames} onTouchTap={if disabled then @_skipBackToTag}>
         <Select
           className='input-field'
           value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
