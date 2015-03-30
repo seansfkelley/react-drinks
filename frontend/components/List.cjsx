@@ -1,9 +1,8 @@
 # @cjsx React.DOM
 
-_     = require 'lodash'
-React = require 'react'
-
-ClassNameMixin = require '../mixins/ClassNameMixin'
+_          = require 'lodash'
+React      = require 'react'
+classnames = require 'classnames'
 
 List = React.createClass {
   displayName : 'List'
@@ -11,10 +10,6 @@ List = React.createClass {
   propTypes :
     emptyText : React.PropTypes.string
     emptyView : React.PropTypes.element
-
-  mixins : [
-    ClassNameMixin
-  ]
 
   getDefaultProps : -> {
     emptyText : 'Nothing to see here.'
@@ -30,7 +25,7 @@ List = React.createClass {
       children = @props.children
 
     renderableProps = _.omit @props, 'emptyView', 'emptyText'
-    <div {...renderableProps} className={@getClassName 'list'}>
+    <div {...renderableProps} className={classnames 'list', @props.className}>
       {children}
     </div>
 }
@@ -41,10 +36,6 @@ List.Header = React.createClass {
   propTypes :
     title : React.PropTypes.string
 
-  mixins : [
-    ClassNameMixin
-  ]
-
   render : ->
     if React.Children.count(@props.children) == 0
       children = <span className='text'>{@props.title}</span>
@@ -52,7 +43,7 @@ List.Header = React.createClass {
       children = @props.children
 
     renderableProps = _.omit @props, 'title'
-    <div {...renderableProps} className={@getClassName 'list-header'}>
+    <div {...renderableProps} className={classnames 'list-header', @props.className}>
       {children}
     </div>
 }
@@ -62,12 +53,8 @@ List.ItemGroup = React.createClass {
 
   propTypes : {}
 
-  mixins : [
-    ClassNameMixin
-  ]
-
   render : ->
-    <div {...@props} className={@getClassName 'list-group'}>
+    <div {...@props} className={classnames 'list-group', @props.className}>
       {@props.children}
     </div>
 }
@@ -77,12 +64,8 @@ List.Item = React.createClass {
 
   propTypes : {}
 
-  mixins : [
-    ClassNameMixin
-  ]
-
   render : ->
-    <div {...@props} className={@getClassName 'list-item'}>
+    <div {...@props} className={classnames 'list-item', @props.className}>
       {@props.children}
     </div>
 }

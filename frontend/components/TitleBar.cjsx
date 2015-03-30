@@ -1,8 +1,7 @@
 # @cjsx React.DOM
 
-React = require 'react'
-
-ClassNameMixin = require '../mixins/ClassNameMixin'
+React      = require 'react'
+classnames = require 'classnames'
 
 TitleBar = React.createClass {
   displayName : 'TitleBar'
@@ -14,10 +13,6 @@ TitleBar = React.createClass {
     leftIconOnTouchTap  : React.PropTypes.func
     titleOnTouchTap     : React.PropTypes.func
     rightIconOnTouchTap : React.PropTypes.func
-
-  mixins : [
-    ClassNameMixin
-  ]
 
   render : ->
     if @props.title
@@ -33,7 +28,7 @@ TitleBar = React.createClass {
       leftIcon  ?= <i className='fa float-left'/>
       rightIcon ?= <i className='fa float-right'/>
 
-    <div className={@getClassName 'title-bar'}>
+    <div className={classnames 'title-bar', @props.className }>
       {leftIcon}
       {title}
       {rightIcon}

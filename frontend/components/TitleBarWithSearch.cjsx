@@ -1,9 +1,8 @@
 # @cjsx React.DOM
 
-_     = require 'lodash'
-React = require 'react'
-
-ClassNameMixin = require '../mixins/ClassNameMixin'
+_          = require 'lodash'
+React      = require 'react'
+classnames = require 'classnames'
 
 TitleBar  = require './TitleBar'
 SearchBar = require './SearchBar'
@@ -15,10 +14,6 @@ TitleBarWithSearch = React.createClass {
     onSearch    : React.PropTypes.func.isRequired
     placeholder : React.PropTypes.string
 
-  mixins : [
-    ClassNameMixin
-  ]
-
   getInitialState : ->
     return {
       searchBarVisible : false
@@ -27,7 +22,7 @@ TitleBarWithSearch = React.createClass {
   render : ->
     renderableProps = _.omit @props, 'placeholder'
     <TitleBar {...renderableProps}
-      className={@getClassName 'with-search'}
+      className={classnames 'with-search', @props.className}
       rightIcon={'fa-search'}
       rightIconOnTouchTap={@_toggleSearch}
     >

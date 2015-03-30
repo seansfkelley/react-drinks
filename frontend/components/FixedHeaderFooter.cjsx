@@ -1,8 +1,7 @@
 # @cjsx React.DOM
 
-React = require 'react'
-
-ClassNameMixin = require '../mixins/ClassNameMixin'
+React      = require 'react'
+classnames = require 'classnames'
 
 FixedHeaderFooter = React.createClass {
   displayName : 'FixedHeaderFooter'
@@ -11,12 +10,8 @@ FixedHeaderFooter = React.createClass {
     header : React.PropTypes.element
     footer : React.PropTypes.element
 
-  mixins : [
-    ClassNameMixin
-  ]
-
   render : ->
-    <div className={@getClassName 'fixed-header-footer'}>
+    <div className={classnames 'fixed-header-footer', @props.className}>
       {@_wrapIfDefined @props.header, 'fixed-header'}
       <div className='fixed-content-pane'>
         {@props.children}
