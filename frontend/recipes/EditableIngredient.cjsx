@@ -92,7 +92,7 @@ EditableIngredient = React.createClass {
       if @state.tagCommitted
         @refs.description.getDOMNode().focus()
       else if @state.measureCommitted
-        @refs.tag.getInputNode().focus()
+        @refs.tag.focus()
       else
         @refs.measure.getDOMNode().focus()
     ), stylingConstants.TRANSITION_DURATION
