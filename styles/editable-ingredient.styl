@@ -7,6 +7,7 @@ between-tile-spacing = 8px
 
   .tile
     display inline-flex
+    position relative
 
     // -1 to compensate for the weird bug named below
     margin-right between-tile-spacing - 1
@@ -33,6 +34,19 @@ between-tile-spacing = 8px
     > *
       display inline-block
       height inherit
+
+
+  .tile .image-overlay
+    position absolute
+    right 0
+    width touch-element-size + 1
+
+    pointer-events none
+
+  // Not sure why this is necessary.
+  .tile.is-committed.ingredient .image-overlay
+    z-index 1
+
 
   // HACK HACK HACK
   // Can't figure out why there's an extra pixel of space on this guy.

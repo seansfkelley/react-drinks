@@ -41,11 +41,13 @@ EditableIngredient = React.createClass {
 
     measureNode =
       <div className={classNames} onTouchTap={if disabled then @_skipBackToMeasure}>
+        {if disabled
+          <IconButton className='image-overlay' iconClass='fa-question'/>}
         <input
           type='text'
           className='input-field'
           value={@state.measure}
-          placeholder={if not @state.measureCommitted then 'Amount' else 'Amt.'}
+          placeholder='Amount...'
           onChange={@_onChangeMeasure}
           ref='measure'
           disabled={disabled}
@@ -64,6 +66,8 @@ EditableIngredient = React.createClass {
 
     tagNode =
       <div className={classNames} onTouchTap={if disabled then @_skipBackToTag}>
+        {if disabled
+          <IconButton className='image-overlay' iconClass='fa-question'/>}
         <Select
           className='input-field'
           value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}

@@ -27,3 +27,4 @@
   - When you tap on once to go back
   - on iOS, tabbing over using the keyboard buttons doesn't work nicely cause the other inputs are hidden
 - on iOS, the keyboard jumps in and out as things are focused and blurred and it's really annoying
+- on iOS, focus tag selection, then hit next and the dropdown will stay open -- I think this related to the fact that iOS doesn't drop focus (notice also that it doesn't drop focus on the "amount" field)
