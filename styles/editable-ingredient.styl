@@ -65,6 +65,14 @@ between-tile-spacing = 8px
 
     margin 0
 
+    transition background-color transition-duration
+
+  .tile.is-committed input.input-field
+    opacity 1 // Undo iPhone fading of disabled elements.
+    color grey5
+    border-color grey2
+    background-color grey0a
+
   .tile:not(.is-committed) input.input-field
     border-top-right-radius 0
     border-bottom-right-radius 0
@@ -103,14 +111,18 @@ between-tile-spacing = 8px
         background-color grey0
         color grey8
 
-  .tile:not(.is-committed) .Select.input-field
-    .Select-control
-      border-top-right-radius 0
-      border-bottom-right-radius 0
-
   .tile.is-committed .Select.input-field
     .Select-control
       padding-right 0
 
+      color grey5
+      border-color grey2
+      background-color grey0a
+
     .Select-arrow
       display none
+
+  .tile:not(.is-committed) .Select.input-field
+    .Select-control
+      border-top-right-radius 0
+      border-bottom-right-radius 0
