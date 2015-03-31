@@ -16,6 +16,11 @@ describe 'utils', ->
       output :
         unit : ''
     ,
+      input  : '1'
+      output :
+        measure : '1'
+        unit    : ''
+    ,
       input  : '1 ounce'
       output :
         measure : '1'

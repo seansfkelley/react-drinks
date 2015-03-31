@@ -23,7 +23,7 @@ defractionify = (s) ->
   return s?.replace(ENTITY_FRACTION_REGEX, (m) -> ENTITY_TO_ASCII[m])
 
 # This does not account for fractionified strings!
-MEASURE_AMOUNT_REGEX = /^(\d[- \/\d]+)(.*)$/
+MEASURE_AMOUNT_REGEX = /^(\d[- \/\d]*)(.*)$/
 
 splitMeasure = (s) ->
   s = s?.trim()
