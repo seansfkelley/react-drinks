@@ -12,34 +12,20 @@ stylingConstants = require '../stylingConstants'
 List              = require '../components/List'
 TitleBar          = require '../components/TitleBar'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
-TitleBarWithSearch  = require '../components/TitleBarWithSearch'
+SearchBar         = require '../components/SearchBar'
 
 IngredientSelectionHeader = React.createClass {
   displayName : 'IngredientSelectionHeader'
 
-  propTypes : {}
+  propTypes :
+    onClose : React.PropTypes.func
 
   render : ->
-    <TitleBarWithSearch
+    <TitleBar
       leftIcon='fa-chevron-down'
-      leftIconOnTouchTap={@_hideIngredients}
+      leftIconOnTouchTap={@props.onClose}
       title='Ingredients'
-      onSearch={@_setSearchTerm}
-      placeholder='Ingredient name...'
     />
-
-  # In the future, this should pop up a loader and then throttle the number of filters performed.
-  _setSearchTerm : (searchTerm) ->
-    AppDispatcher.dispatch {
-      type : 'search-ingredients'
-      searchTerm
-    }
-
-  _hideIngredients : ->
-    AppDispatcher.dispatch {
-      type : 'hide-flyup'
-    }
-    @_setSearchTerm ''
 }
 
 IngredientGroupHeader = React.createClass {
@@ -122,19 +108,17 @@ IngredientListItem = React.createClass {
 GroupedIngredientList = React.createClass {
   display : 'GroupedIngredientList'
 
-  propTypes : {}
-
-  mixins : [
-    FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
-  ]
+  propTypes :
+    searchedGroupedIngredients : React.PropTypes.array
+    selectedIngredientTags     : React.PropTypes.object
 
   render : ->
     tagToGroupName = {}
-    for { name, ingredients} in @state.searchedGroupedIngredients
+    for { name, ingredients} in @props.searchedGroupedIngredients
       for i in ingredients
         tagToGroupName[i.tag] = name
 
-    ingredientNodes = _.chain @state.searchedGroupedIngredients
+    ingredientNodes = _.chain @props.searchedGroupedIngredients
       .map ({ ingredients }) => _.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>
       .flatten()
       .value()
@@ -142,7 +126,7 @@ GroupedIngredientList = React.createClass {
     if ingredientNodes.length < 10
       sortedIngredientNodes = _.sortBy ingredientNodes, (n) -> n.props.ingredient.displayName
       selectedCount = _.chain ingredientNodes
-        .filter (i) => @state.selectedIngredientTags[i.props.ingredient.tag]?
+        .filter (i) => @props.selectedIngredientTags[i.props.ingredient.tag]?
         .value()
         .length
       listNodes = [
@@ -155,11 +139,11 @@ GroupedIngredientList = React.createClass {
         ItemGroup         : IngredientItemGroup
         computeHeaderData : (node, i) =>
           title         = tagToGroupName[node.props.ingredient.tag]
-          selectedCount = _.chain @state.searchedGroupedIngredients
+          selectedCount = _.chain @props.searchedGroupedIngredients
             .where { name : title }
             .value()[0]
             .ingredients
-            .filter (i) => @state.selectedIngredientTags[i.tag]?
+            .filter (i) => @props.selectedIngredientTags[i.tag]?
             .length
           return {
             title
@@ -179,13 +163,39 @@ IngredientSelectionView = React.createClass {
 
   propTypes : {}
 
+  mixins : [
+    FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
+  ]
+
   render : ->
     <FixedHeaderFooter
       className='ingredient-selection-view'
-      header={<IngredientSelectionHeader/>}
+      header={<IngredientSelectionHeader onClose={@_onClose}/>}
+      ref='container'
     >
-      <GroupedIngredientList />
+      <SearchBar placeholder='Ingredient name...' onChange={@_onSearch}/>
+      <GroupedIngredientList {...@state}/>
     </FixedHeaderFooter>
+
+  componentDidMount : ->
+    @refs.container.scrollTo 44
+
+  # In the future, this should pop up a loader and then throttle the number of filters performed.
+  _onSearch : (searchTerm) ->
+    AppDispatcher.dispatch {
+      type : 'search-ingredients'
+      searchTerm
+    }
+
+  _onClose : ->
+    AppDispatcher.dispatch {
+      type : 'hide-flyup'
+    }
+    AppDispatcher.dispatch {
+      type       : 'search-ingredients'
+      searchTerm : ''
+    }
 }
+
 
 module.exports = IngredientSelectionView

@@ -33,8 +33,18 @@ right-padding = 12px
   .title-bar
     color grey0
 
-    .search-bar-wrapper
-      color grey7
+  .search-bar
+    box-sizing border-box
+    height list-item-height
+    padding 6px 12px
+
+    i.fa
+      padding-right 12px
+
+  .fixed-header
+    // Use a non-alpha color so it looks better when it overlays lighter elements.
+    shadow('bottom', 2px, darken(grey8a, 25%))
+    z-index 1 // To see the shadow.
 
 .list.ingredient-list.headered-list
   background-color grey8a
