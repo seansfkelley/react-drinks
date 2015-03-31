@@ -4,7 +4,7 @@ yaml        = require 'js-yaml'
 revalidator = require 'revalidator'
 log         = require 'loglevel'
 
-latinize         = require '../shared/latinize'
+normalization    = require '../shared/normalization'
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
@@ -48,9 +48,7 @@ revalidatorUtils.validateOrThrow RECIPES, {
   items : RECIPE_SCHEMA
 }
 
-for r in RECIPES
-  r.searchableName = latinize(r.name).toLowerCase()
-  r.normalizedName = r.searchableName.replace('/ /g', '-').replace(/[^-a-z0-9]/g, '')
+RECIPES = _.map RECIPES, normalization.normalizeRecipe
 
 module.exports = {
   method  : 'get'

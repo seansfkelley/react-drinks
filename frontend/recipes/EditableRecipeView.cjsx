@@ -11,6 +11,7 @@ ButtonBar          = require '../components/ButtonBar'
 IconButton         = require './IconButton'
 EditableIngredient = require './EditableIngredient'
 
+normalization    = require '../../shared/normalization'
 stylingConstants = require '../stylingConstants'
 
 utils               = require '../utils'
@@ -34,7 +35,7 @@ EditableTitleBar = React.createClass {
     @refs.input.getDOMNode().focus()
 
   _onChange : ->
-    @props.onChange()
+    @props.onChange?()
 }
 
 EditableFooter = React.createClass {
@@ -141,7 +142,7 @@ EditableRecipeView = React.createClass {
     editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
-    footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
+    footer = <EditableFooter canSave={@_isSaveable()} save={@_saveRecipe}/>
 
     <FixedHeaderFooter
       className='default-modal editable-recipe-view'
@@ -182,22 +183,25 @@ EditableRecipeView = React.createClass {
       ]
       currentIngredient : @_newIngredientId()
     }
-    @_computeSaveable()
 
   _generateDeleteCallback : (id) ->
     return =>
       @setState {
         ingredients : _.reject @state.ingredients, { id }
       }
-      @_computeSaveable()
 
   _newIngredientId : ->
     return _.uniqueId 'ingredient-'
 
-  _computeSaveable : ->
-    @setState {
-      saveable : !!(@refs.title.getText().length and @refs.instructions.getText().length and @state.ingredients.length)
-    }
+  _isSaveable : ->
+    if not @isMounted()
+      return false
+    else
+      return !!(
+        @refs.title.getText().length and
+        @refs.instructions.getText().length and
+        @state.ingredients.length
+      )
 
   _saveRecipe : ->
     # Well, doing two things here certainly seems weird. Time for an Action?
@@ -217,13 +221,12 @@ EditableRecipeView = React.createClass {
         displayUnit       : unit
         displayIngredient : description
       }, _.identity
-    # TODO: Missing searchableName and normalizedName. Should share impl between server and client.
-    return _.pick {
+    return normalization.normalizeRecipe _.pick({
       ingredients
       name         : @refs.title.getText()
       instructions : @refs.instructions.getText()
       notes        : @refs.notes.getText()
-    }, _.identity
+    }, _.identity)
 }
 
 module.exports = EditableRecipeView

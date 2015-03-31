@@ -88,8 +88,14 @@ RecipeListItem = React.createClass {
       return element.props.recipes[element.props.index]
 }
 
+NUMBER_REGEX = /[0-9]/
+
 _recipeListItemTitleExtractor = (child) ->
-  return RecipeListItem.getRecipeFor(child).name[0].toUpperCase()
+  letter = RecipeListItem.getRecipeFor(child).name[0].toUpperCase()
+  if NUMBER_REGEX.test letter
+    return '#'
+  else
+    return letter
 
 AlphabeticalRecipeList = React.createClass {
   displayName : 'AlphabeticalRecipeList'

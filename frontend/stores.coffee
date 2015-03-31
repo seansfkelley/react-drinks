@@ -138,11 +138,11 @@ RecipeStore = new class extends FluxStore
 
   'save-recipe' : ({ recipe }) ->
     @customRecipes.push recipe
-    @_setRecipes _.sortBy(@alphabeticalRecipes.concat([ recipe ]), 'name')
+    @_setRecipes @alphabeticalRecipes.concat([ recipe ])
     @_persist()
 
   _setRecipes : (recipes) ->
-    @alphabeticalRecipes = recipes
+    @alphabeticalRecipes = _.sortBy(recipes, 'name')
     @_createRecipeSearch()
     @_updateDerivedRecipeLists()
 
