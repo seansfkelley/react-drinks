@@ -109,14 +109,14 @@ EditableIngredient = React.createClass {
 
   # This isn't quite right, but it's better than nothing.
   componentDidUpdate : ->
-    _.delay (=>
-      if @state.tagCommitted
-        @refs.description.getDOMNode().focus()
-      else if @state.measureCommitted
-        @refs.tag.focus()
-      else
-        @refs.measure.getDOMNode().focus()
-    ), stylingConstants.TRANSITION_DURATION
+    # _.delay (=>
+    #   if @state.tagCommitted
+    #     @refs.description.getDOMNode().focus()
+    #   else if @state.measureCommitted
+    #     @refs.tag.focus()
+    #   else
+    #     @refs.measure.getDOMNode().focus()
+    # ), stylingConstants.TRANSITION_DURATION
 
   _filterOption : (option, searchString) ->
     searchString = searchString.toLowerCase()

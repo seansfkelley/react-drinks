@@ -107,22 +107,27 @@ UiStore = new class extends FluxStore
 
 FUZZY_MATCH = 2
 
+RECIPE_LOCALSTORAGE_KEY   = 'drinks-app-recipes'
+RECIPE_PERSISTABLE_FIELDS = 'customRecipes'
+
 RecipeStore = new class extends FluxStore
   fields : ->
-    searchTerm                    : ''
-    alphabeticalRecipes           : []
-    groupedMixableRecipes         : []
-    searchedAlphabeticalRecipes   : []
-    searchedGroupedMixableRecipes : []
+    return _.extend {
+      searchTerm                    : ''
+      alphabeticalRecipes           : []
+      customRecipes                 : []
+      groupedMixableRecipes         : []
+      searchedAlphabeticalRecipes   : []
+      searchedGroupedMixableRecipes : []
+    }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     @_createRecipeSearch()
     @_updateDerivedRecipeLists()
 
+  # The semantics here are iffy -- we should just be setting whatever we get. Split state up.
   'set-recipes' : ({ recipes }) ->
-    @alphabeticalRecipes = recipes
-    @_createRecipeSearch()
-    @_updateDerivedRecipeLists()
+    @_setRecipes recipes.concat(@customRecipes)
 
   'toggle-ingredient' : ->
     @_updateDerivedRecipeLists()
@@ -130,6 +135,16 @@ RecipeStore = new class extends FluxStore
   'search-recipes' : ({ searchTerm }) ->
     @searchTerm = searchTerm.toLowerCase().trim()
     @_updateSearchedRecipes()
+
+  'save-recipe' : ({ recipe }) ->
+    @customRecipes.push recipe
+    @_setRecipes _.sortBy(@alphabeticalRecipes.concat([ recipe ]), 'name')
+    @_persist()
+
+  _setRecipes : (recipes) ->
+    @alphabeticalRecipes = recipes
+    @_createRecipeSearch()
+    @_updateDerivedRecipeLists()
 
   _createRecipeSearch : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
@@ -189,6 +204,8 @@ RecipeStore = new class extends FluxStore
         .filter ({ recipes }) -> recipes.length > 0
         .value()
 
+  _persist : ->
+    localStorage[RECIPE_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, RECIPE_PERSISTABLE_FIELDS)
 
 Promise.resolve $.get('/ingredients')
 .then ({ groupedIngredients, alphabeticalIngredientTags }) =>

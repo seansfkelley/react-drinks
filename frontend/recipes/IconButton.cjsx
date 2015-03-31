@@ -1,7 +1,8 @@
 # @cjsx React.DOM
 
-_      = require 'lodash'
-React  = require 'react'
+_          = require 'lodash'
+React      = require 'react'
+classnames = require 'classnames'
 
 IconButton = React.createClass {
   displayName : 'IconButton'

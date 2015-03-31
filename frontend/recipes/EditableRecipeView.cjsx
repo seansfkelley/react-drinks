@@ -19,18 +19,22 @@ utils               = require '../utils'
 EditableTitleBar = React.createClass {
   displayName : 'EditableTitleBar'
 
-  propTypes : {}
+  propTypes :
+    onChange : React.PropTypes.func
 
   render : ->
     <TitleBar>
-      <input type='text' placeholder='Recipe title...' ref='input'/>
+      <input type='text' placeholder='Recipe title...' ref='input' onChange={@_onChange}/>
     </TitleBar>
 
   getText : ->
-    return @refs.input.value
+    return @refs.input.getDOMNode().value
 
   focus : ->
     @refs.input.getDOMNode().focus()
+
+  _onChange : ->
+    @props.onChange()
 }
 
 EditableFooter = React.createClass {
@@ -61,6 +65,7 @@ EditableTextArea = React.createClass {
 
   propTypes :
     placeholder : React.PropTypes.string
+    onInput     : React.PropTypes.func
 
   render : ->
     <textarea
@@ -88,6 +93,7 @@ EditableTextArea = React.createClass {
 
   _onInput : ->
     @_sizeToFit()
+    @props.onInput?()
 }
 
 DeletableIngredient = React.createClass {
@@ -125,6 +131,7 @@ EditableRecipeView = React.createClass {
     return {
       ingredients       : []
       currentIngredient : @_newIngredientId()
+      saveable          : false
     }
 
   render : ->
@@ -133,8 +140,8 @@ EditableRecipeView = React.createClass {
 
     editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
 
-    header = <EditableTitleBar ref='title'/>
-    footer = <EditableFooter canSave=true save={@_saveRecipe}/>
+    header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
+    footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
 
     <FixedHeaderFooter
       className='default-modal editable-recipe-view'
@@ -154,7 +161,7 @@ EditableRecipeView = React.createClass {
         </div>
         <div className='recipe-instructions'>
           <div className='recipe-section-header'>Instructions</div>
-          <EditableTextArea placeholder='Required...' ref='instructions'/>
+          <EditableTextArea placeholder='Required...' ref='instructions' onInput={@_computeSaveable}/>
         </div>
         <div className='recipe-notes'>
           <div className='recipe-section-header'>Notes</div>
@@ -175,18 +182,48 @@ EditableRecipeView = React.createClass {
       ]
       currentIngredient : @_newIngredientId()
     }
+    @_computeSaveable()
 
   _generateDeleteCallback : (id) ->
     return =>
       @setState {
         ingredients : _.reject @state.ingredients, { id }
       }
+      @_computeSaveable()
 
   _newIngredientId : ->
     return _.uniqueId 'ingredient-'
 
+  _computeSaveable : ->
+    @setState {
+      saveable : !!(@refs.title.getText().length and @refs.instructions.getText().length and @state.ingredients.length)
+    }
+
   _saveRecipe : ->
-    console.log 'save recipe'
+    # Well, doing two things here certainly seems weird. Time for an Action?
+    AppDispatcher.dispatch {
+      type : 'save-recipe'
+      recipe : @_constructRecipe()
+    }
+    AppDispatcher.dispatch {
+      type : 'hide-modal'
+    }
+
+  _constructRecipe : ->
+    ingredients = _.map @state.ingredients, ({ measure, unit, tag, description }) ->
+      return _.pick {
+        tag
+        displayAmount     : measure
+        displayUnit       : unit
+        displayIngredient : description
+      }, _.identity
+    # TODO: Missing searchableName and normalizedName. Should share impl between server and client.
+    return _.pick {
+      ingredients
+      name         : @refs.title.getText()
+      instructions : @refs.instructions.getText()
+      notes        : @refs.notes.getText()
+    }, _.identity
 }
 
 module.exports = EditableRecipeView
