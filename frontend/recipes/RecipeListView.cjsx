@@ -12,7 +12,8 @@ SwipableRecipeView = require './SwipableRecipeView'
 EditableRecipeView = require './EditableRecipeView'
 FavoritesList      = require '../favorites/FavoritesList'
 
-TitleBarWithSearch = require '../components/TitleBarWithSearch'
+SearchBar          = require '../components/SearchBar'
+TitleBar           = require '../components/TitleBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
 
@@ -31,15 +32,12 @@ RecipeListHeader = React.createClass {
     else
       title = 'All Drinks'
 
-    # Temporarily hack in the add-recipe behavior to test it.
-      # leftIcon='fa-star'
-      # leftIconOnTouchTap={@_openFavorites}
-    <TitleBarWithSearch
-      leftIcon='fa-plus'
-      leftIconOnTouchTap={@_newRecipe}
+    <TitleBar
+      leftIcon='fa-star'
+      leftIconOnTouchTap={@_openFavorites}
       title={title}
-      onSearch={@_setSearchTerm}
-      placeholder='Name or ingredient...'
+      rightIcon='fa-plus'
+      rightIconOnTouchTap={@_newRecipe}
     />
 
   _newRecipe : ->
@@ -53,14 +51,15 @@ RecipeListHeader = React.createClass {
       type      : 'show-pushover'
       component : <FavoritesList/>
     }
-
-  # In the future, this should pop up a loader and then throttle the number of filters performed.
-  _setSearchTerm : (searchTerm) ->
-    AppDispatcher.dispatch {
-      type : 'search-recipes'
-      searchTerm
-    }
 }
+
+
+  # # In the future, this should pop up a loader and then throttle the number of filters performed.
+  # _setSearchTerm : (searchTerm) ->
+  #   AppDispatcher.dispatch {
+  #     type : 'search-recipes'
+  #     searchTerm
+  #   }
 
 RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
@@ -100,15 +99,12 @@ _recipeListItemTitleExtractor = (child) ->
 AlphabeticalRecipeList = React.createClass {
   displayName : 'AlphabeticalRecipeList'
 
-  propTypes : {}
-
-  mixins : [
-    FluxMixin RecipeStore, 'searchedAlphabeticalRecipes'
-  ]
+  propTypes :
+    recipes : React.PropTypes.array
 
   render : ->
-    recipeNodes = _.map @state.searchedAlphabeticalRecipes, (r, i) =>
-      <RecipeListItem recipes={@state.searchedAlphabeticalRecipes} index={i} key={r.normalizedName}/>
+    recipeNodes = _.map @props.recipes, (r, i) =>
+      <RecipeListItem recipes={@props.recipes} index={i} key={r.normalizedName}/>
 
     headeredNodes = List.headerify {
       nodes             : recipeNodes
@@ -141,15 +137,12 @@ EmptyListView = React.createClass {
 GroupedRecipeList = React.createClass {
   displayName : 'GroupedRecipeList'
 
-  propTypes : {}
-
-  mixins : [
-    FluxMixin RecipeStore, 'searchedGroupedMixableRecipes'
-  ]
+  propTypes :
+    recipes : React.PropTypes.array
 
   render : ->
     # This whole munging of the group business is kinda gross.
-    groupRecipePairs = _.chain @state.searchedGroupedMixableRecipes
+    groupRecipePairs = _.chain @props.recipes
       .map ({ name, recipes }) ->
         _.map recipes, (r) -> [ name, r ]
       .flatten()
@@ -182,19 +175,33 @@ RecipeListView = React.createClass {
 
   mixins : [
     FluxMixin UiStore, 'useIngredients'
+    FluxMixin RecipeStore, 'searchedAlphabeticalRecipes', 'searchedGroupedMixableRecipes'
   ]
 
   render : ->
     if @state.useIngredients
-      list = <GroupedRecipeList/>
+      list = <GroupedRecipeList recipes={@state.searchedGroupedMixableRecipes}/>
     else
-      list = <AlphabeticalRecipeList/>
+      list = <AlphabeticalRecipeList recipes={@state.searchedAlphabeticalRecipes}/>
 
     <FixedHeaderFooter
       header={<RecipeListHeader/>}
+      className='recipe-list-view'
+      ref='container'
     >
+      <SearchBar placeholder='Name or ingredient...' onChange={@_onSearch} ref='search'/>
       {list}
     </FixedHeaderFooter>
+
+  componentDidUpdate : ->
+    if not @refs.search.isFocused()
+      @refs.container.scrollTo 44
+
+  _onSearch : (searchTerm) ->
+    AppDispatcher.dispatch {
+      type : 'search-recipes'
+      searchTerm
+    }
 }
 
 module.exports = RecipeListView

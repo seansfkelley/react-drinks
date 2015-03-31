@@ -10,7 +10,7 @@ class RecipeSearch
 
     for i in ingredients
       if i.generic? and not @_ingredientForTag[i.generic]?
-        log.info "ingredient #{i.tag} refers to unknown generic #{i.generic}; inferring generic"
+        log.trace "ingredient #{i.tag} refers to unknown generic #{i.generic}; inferring generic"
         @_ingredientForTag[i.generic] = {
           tag     : i.generic
           display : "[inferred] #{i.generic}"

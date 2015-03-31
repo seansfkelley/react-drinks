@@ -18,7 +18,6 @@
 
 ### Adding Recipes
 - Fix up styling
-  - What kind of text overflow to do when you shrink elements horizontally?
   - Animate additions/removals of deletable ingredients
 - Validate:
   - Ingredients, before adding them to "deletable"

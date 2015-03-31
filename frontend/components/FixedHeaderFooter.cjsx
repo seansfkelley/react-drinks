@@ -13,11 +13,14 @@ FixedHeaderFooter = React.createClass {
   render : ->
     <div className={classnames 'fixed-header-footer', @props.className}>
       {@_wrapIfDefined @props.header, 'fixed-header'}
-      <div className='fixed-content-pane'>
+      <div className='fixed-content-pane' ref='content'>
         {@props.children}
       </div>
       {@_wrapIfDefined @props.footer, 'fixed-footer'}
     </div>
+
+  scrollTo : (offset) ->
+    @refs.content.getDOMNode().scrollTop = offset
 
   _wrapIfDefined : (element, className) ->
     if element?

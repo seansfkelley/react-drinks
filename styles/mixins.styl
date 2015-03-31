@@ -1,3 +1,13 @@
+shadow(position size, color = rgba(0, 0, 0, 0.25))
+  if position == 'top'
+    box-shadow 0px (- size) size 0px color
+  else if position == 'bottom'
+    box-shadow 0px size size 0px color
+  else if position == 'left'
+    box-shadow (- size) 0px size 0px color
+  else if position == 'right'
+    box-shadow size 0px size 0px color
+
 // Need to do awkward thing to negate variables: https://github.com/LearnBoost/stylus/issues/980
 shadow-inset(position, size, color = rgba(0, 0, 0, 0.25))
   if position == 'top'
@@ -5,6 +15,6 @@ shadow-inset(position, size, color = rgba(0, 0, 0, 0.25))
   else if position == 'bottom'
     box-shadow inset 0px (- size) size 0px color
   else if position == 'left'
-    box-shadow inset size 0px size color
+    box-shadow inset size 0px size 0px color
   else if position == 'right'
-    box-shadow inset (- size) 0px size color
+    box-shadow inset (- size) 0px size 0px color

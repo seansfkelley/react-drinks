@@ -42,6 +42,9 @@ SearchBar = React.createClass {
   focus : ->
     @refs.input.getDOMNode().focus()
 
+  isFocused : ->
+    return document.activeElement == @refs.input.getDOMNode()
+
   _onChange : (e) ->
     @props.onChange e.target.value
 
