@@ -26,6 +26,13 @@ vertical-spacing = 8px
   .fixed-content-pane
     background-color grey0
 
+    // This is pretty blunt, but it fixes issues on iOS where the select element's dropdown was behind
+    // other elements later in the DOM. Couldn't find a more precise solution based on the suggestions
+    // in this article:
+    // http://benfrain.com/z-index-stacking-contexts-experimental-css-and-ios-safari/
+    *
+      -webkit-overflow-scrolling auto
+
   .recipe-description > :nth-child(odd)
     background-color grey1
 

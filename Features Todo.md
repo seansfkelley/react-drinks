@@ -17,20 +17,13 @@
 - searching for an ingredient should bring up things based on their generics too
 
 ### Adding Recipes
-- Actually add the recipe to the index
 - Fix up styling
-  - Select height/spacing is all off
-  - Select doesn't discolor itself when it's disabled
-  - Disabled inputs grey way out on iOS, which is kind of nice but is inconsistent and may be confusing since you can actually click it
   - What kind of text overflow to do when you shrink elements horizontally?
-  - Dropdown is underneath textarea on iOS
-  - The editable ingredient is too wide bu overflowe is shitty and doesn't work like you expect
   - Animate additions/removals of deletable ingredients
 - Validate:
   - Ingredients, before adding them to "deletable"
-  - Recipe, before allowing it to be savable
-- Fix up random styling issues with Select
 - Focus elements when appropriate
   - After you hit the chevron to pick the next
   - When you tap on once to go back
-- Bug where at least on iOS it always selects the first thing from the dropdown even if it's not visible (i.e. Absinthe)
+  - on iOS, tabbing over using the keyboard buttons doesn't work nicely cause the other inputs are hidden
+- on iOS, the keyboard jumps in and out as things are focused and blurred and it's really annoying
