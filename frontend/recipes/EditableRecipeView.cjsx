@@ -54,10 +54,20 @@ EditableFooter = React.createClass {
     canSave : React.PropTypes.bool
     save    : React.PropTypes.func.isRequired
 
+  getInitialState : ->
+    return {
+      confirmingClose : false
+    }
+
   render : ->
+    if @state.confirmingClose
+      closeButton = <ButtonBar.Button icon='fa-exclamation-triangle' label='You Sure?' onTouchTap={@_close}/>
+    else
+      closeButton = <ButtonBar.Button icon='fa-times' label='Cancel' onTouchTap={@_confirmClose}/>
+
     <ButtonBar>
       <ButtonBar.Button icon='fa-save' label='Save' disabled={not @props.canSave} onTouchTap={@_save}/>
-      <ButtonBar.Button icon='fa-times' label='Close' onTouchTap={@_close}/>
+      {closeButton}
     </ButtonBar>
 
   _save : ->
@@ -65,9 +75,18 @@ EditableFooter = React.createClass {
     @props.save()
 
   _close : ->
+    clearTimeout @_confirmTimeout
     AppDispatcher.dispatch {
       type : 'hide-modal'
     }
+
+  _confirmClose : ->
+    @setState { confirmingClose : true }
+    @_confirmTimeout = setTimeout @_resetConfirm, 2500
+
+  _resetConfirm : ->
+    clearTimeout @_confirmTimeout
+    @setState { confirmingClose : false }
 }
 
 EditableTextArea = React.createClass {
