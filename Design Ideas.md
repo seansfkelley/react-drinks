@@ -42,3 +42,4 @@ I wanted to have an interface that looks like the interface for reading recipes,
 - swiping support for opening/closing overlays?
 - include some kind of clickable display for the source (and URL) for any recipes that have it
 - when searching for an ingredient using an alternate name (e.g. Baileys instead of Irish Cream), highlight what the matching term is (to show the user that the result of Irish Cream is, in fact, Baileys)
+- "wish list" so you can pick a bunch of drinks and then it tells you what you need to buy to make them all -- i.e., shopping list with favoriting

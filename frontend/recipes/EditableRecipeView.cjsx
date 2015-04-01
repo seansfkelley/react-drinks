@@ -228,7 +228,7 @@ EditableRecipeView = React.createClass {
         tag
         displayAmount     : measure
         displayUnit       : unit
-        displayIngredient : description
+        displayIngredient : description or IngredientStore.ingredientsByTag[tag]?.display
       }, _.identity
     return normalization.normalizeRecipe _.pick({
       ingredients

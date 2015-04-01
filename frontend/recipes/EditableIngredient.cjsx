@@ -47,10 +47,14 @@ EditableIngredient = React.createClass {
           type='text'
           className='input-field'
           value={@state.measure}
-          placeholder='Amount...'
           onChange={@_onChangeMeasure}
+          placeholder='Amount...'
           ref='measure'
           disabled={disabled}
+          autoCorrect='off'
+          autoCapitalize='off'
+          autoComplete='off'
+          spellCheck='false'
         />
         <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitMeasure}/>
       </div>
@@ -97,9 +101,13 @@ EditableIngredient = React.createClass {
           type='text'
           className='input-field'
           placeholder='Brand/variety...'
-          ref='description'
           onChange={@_onChangeDescription}
           disabled={disabled}
+          ref='description'
+          autoCorrect='off'
+          autoCapitalize='off'
+          autoComplete='off'
+          spellCheck='false'
         />
         <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_commitDescription}/>
       </div>
