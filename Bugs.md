@@ -10,7 +10,8 @@
 - buffer space on the bottom of the exandable list for ingredients might make for a nicer expanding-things-near-the-bottom experience
 - tapping in some places in the recipe editing UI causes keyboard jitter or the keyboard to be erroneously dismissed because the touch tap focuses and scrolls the page, then the 300ms click hits and is no longer over the input and so deselects the input by clicking on the body or whatever
 - can tab over to search bars that are currently obscured, but tabIndex=-1 doesn't seem to prevent it
+- list-with-search should probably be mixinified or something -- got some copy-paste going on
 
-- shopping list needs new search bar
 - favorites should incorporate ingredients you have
 - try not to show dropdown before a search?
+- in Chrome (but not iOS, for once), tapping the right chevron in editable ingredients starts to select the next section and then reverts

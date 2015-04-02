@@ -12,38 +12,24 @@ utils         = require '../utils'
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
-TitleBarWithSearch   = require '../components/TitleBarWithSearch'
+SearchBar          = require '../components/SearchBar'
+TitleBar           = require '../components/TitleBar'
 
 ShoppingListHeader = React.createClass {
   displayName : 'ShoppingListHeader'
 
   propTypes : {}
 
-  mixins : [
-    FluxMixin UiStore, 'useIngredients'
-  ]
-
   render : ->
-    <TitleBarWithSearch
+    <TitleBar
       leftIcon='fa-chevron-down'
       leftIconOnTouchTap={@_hideShoppingList}
       title='Shopping List'
-      onSearch={@_setSearchTerm}
-      placeholder='Recipe or ingredient...'
     />
 
   _hideShoppingList : ->
     AppDispatcher.dispatch {
       type : 'hide-flyup'
-    }
-    # This might be more "semantic" if we clear the header, but this will do.
-    @_setSearchTerm ''
-
-  # In the future, this should pop up a loader and then throttle the number of filters performed.
-  _setSearchTerm : (searchTerm) ->
-    AppDispatcher.dispatch {
-      type : 'search-recipes'
-      searchTerm
     }
 }
 
@@ -128,9 +114,22 @@ ShoppingListView = React.createClass {
     <FixedHeaderFooter
       header={<ShoppingListHeader/>}
       className='shopping-list-view'
+      ref='container'
     >
+      <SearchBar placeholder='Recipe or ingredient...' onSearch={@_onSearch} ref='search'/>
       <ShoppingList/>
     </FixedHeaderFooter>
+
+  componentDidUpdate : ->
+    if not @refs.search.isFocused()
+      @refs.container.scrollTo 44
+
+  # In the future, this should pop up a loader and then throttle the number of filters performed.
+  _onSearch : (searchTerm) ->
+    AppDispatcher.dispatch {
+      type : 'search-recipes'
+      searchTerm
+    }
 }
 
 module.exports = ShoppingListView
