@@ -102,7 +102,6 @@ EditableTextArea = React.createClass {
       className='editable-text-area'
       placeholder={@props.placeholder}
       onInput={@_onInput}
-      onTouchTap={@_focus}
       ref='textarea'
     />
 
@@ -122,9 +121,6 @@ EditableTextArea = React.createClass {
     node.style.height = 'auto'
     node.style.height = node.scrollHeight + 2
   ), 100
-
-  _focus : ->
-    @refs.textarea.getDOMNode().focus()
 
   _onInput : ->
     @_sizeToFit()
