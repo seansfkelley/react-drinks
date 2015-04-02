@@ -52,11 +52,13 @@ EditableIngredient = React.createClass {
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
+          onTouchTap={@_goToSection(Section.DESCRIPTION)}
+          onFocus={@_goToSection(Section.MEASURE)}
         />
         {if isCurrent
           <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.TAG)}/>
         else
-          <IconButton className='image-overlay' iconClass='fa-question' onTouchTap={@_goToSection(Section.MEASURE)}/>}
+          <IconButton className='image-overlay' iconClass='fa-question'/>}
       </div>
 
     isCurrent = @state.current == Section.TAG
@@ -74,11 +76,13 @@ EditableIngredient = React.createClass {
           autoload=false
           key='select'
           ref={Section.TAG}
+          onTouchTap={@_goToSection(Section.DESCRIPTION)}
+          onFocus={@_goToSection(Section.TAG)}
         />
         {if isCurrent
           <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.DESCRIPTION)}/>
         else
-          <IconButton className='image-overlay' iconClass='fa-question' onTouchTap={@_goToSection(Section.TAG)}/>}
+          <IconButton className='image-overlay' iconClass='fa-question'/>}
       </div>
 
     isCurrent = @state.current == Section.DESCRIPTION
@@ -94,11 +98,13 @@ EditableIngredient = React.createClass {
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
+          onTouchTap={@_goToSection(Section.DESCRIPTION)}
+          onFocus={@_goToSection(Section.DESCRIPTION)}
         />
         {if isCurrent
           <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_saveRecipe}/>
         else
-          <IconButton className='image-overlay' iconClass='fa-question' onTouchTap={@_goToSection(Section.DESCRIPTION)}/>}
+          <IconButton className='image-overlay' iconClass='fa-question'/>}
       </div>
 
     <div className='editable-ingredient'>
@@ -112,6 +118,11 @@ EditableIngredient = React.createClass {
       @setState { current : section }
 
   componentDidUpdate : ->
+    if @state.current != Section.TAG
+      @refs[Section.TAG].setState {
+        isFocused : false
+        isOpen    : false
+      }
     _.delay (=>
       if @state.current == Section.TAG
         @refs[Section.TAG].focus()
