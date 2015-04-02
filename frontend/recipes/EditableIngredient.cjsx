@@ -1,8 +1,9 @@
 # @cjsx React.DOM
 
-_      = require 'lodash'
-React  = require 'react'
-Select = require 'react-select'
+_          = require 'lodash'
+React      = require 'react'
+Select     = require 'react-select'
+classnames = require 'classnames'
 
 IconButton = require './IconButton'
 
@@ -10,6 +11,11 @@ stylingConstants = require '../stylingConstants'
 
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
+
+Section =
+  MEASURE     : 'measure'
+  TAG         : 'tag'
+  DESCRIPTION : 'description'
 
 EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
@@ -19,11 +25,10 @@ EditableIngredient = React.createClass {
 
   getInitialState : ->
     return {
-      measure          : null
-      measureCommitted : false
-      tag              : null
-      tagCommitted     : false
-      description      : null
+      measure     : null
+      tag         : null
+      description : null
+      current     : Section.MEASURE
     }
 
   render : ->
@@ -33,44 +38,30 @@ EditableIngredient = React.createClass {
         label : i.display
       }
 
-    classNames = 'tile measure'
-    disabled = false
-    if @state.measureCommitted
-      classNames += ' is-committed'
-      disabled = true
-
+    isCurrent = @state.current == Section.MEASURE
     measureNode =
-      <div className={classNames} onTouchTap={if disabled then @_skipBackToMeasure}>
-        {if disabled
-          <IconButton className='image-overlay' iconClass='fa-question'/>}
+      <div className={classnames 'tile', 'measure', { 'is-current' : isCurrent }}>
         <input
           type='text'
           className='input-field'
           value={@state.measure}
           onChange={@_onChangeMeasure}
           placeholder='Amount...'
-          ref='measure'
+          ref={Section.MEASURE}
           autoCorrect='off'
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
         />
-        <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitMeasure}/>
+        {if isCurrent
+          <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.TAG)}/>
+        else
+          <IconButton className='image-overlay' iconClass='fa-question' onTouchTap={@_goToSection(Section.MEASURE)}/>}
       </div>
 
-    classNames = 'tile ingredient'
-    disabled = false
-    if @state.tagCommitted
-      classNames += ' is-committed'
-      disabled = true
-    else if not @state.measureCommitted
-      classNames += ' is-hidden'
-      disabled = true
-
+    isCurrent = @state.current == Section.TAG
     tagNode =
-      <div className={classNames} onTouchTap={if disabled then @_skipBackToTag}>
-        {if disabled
-          <IconButton className='image-overlay' iconClass='fa-question'/>}
+      <div className={classnames 'tile', 'tag', { 'is-current' : isCurrent }}>
         <Select
           className='input-field'
           value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
@@ -82,31 +73,32 @@ EditableIngredient = React.createClass {
           onChange={@_onIngredientTagSelection}
           autoload=false
           key='select'
-          ref='tag'
+          ref={Section.TAG}
         />
-        <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_commitTag}/>
+        {if isCurrent
+          <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.DESCRIPTION)}/>
+        else
+          <IconButton className='image-overlay' iconClass='fa-question' onTouchTap={@_goToSection(Section.TAG)}/>}
       </div>
 
-    classNames = 'tile description'
-    disabled = false
-    if not @state.measureCommitted or not @state.tagCommitted
-      classNames += ' is-hidden'
-      disabled = true
-
+    isCurrent = @state.current == Section.DESCRIPTION
     descriptionNode =
-      <div className={classNames}>
+      <div className={classnames 'tile', 'description', { 'is-current' : isCurrent }}>
         <input
           type='text'
           className='input-field'
           placeholder='Brand/variety...'
           onChange={@_onChangeDescription}
-          ref='description'
+          ref={Section.DESCRIPTION}
           autoCorrect='off'
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
         />
-        <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_commitDescription}/>
+        {if isCurrent
+          <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_saveRecipe}/>
+        else
+          <IconButton className='image-overlay' iconClass='fa-question' onTouchTap={@_goToSection(Section.DESCRIPTION)}/>}
       </div>
 
     <div className='editable-ingredient'>
@@ -115,15 +107,16 @@ EditableIngredient = React.createClass {
       {descriptionNode}
     </div>
 
+  _goToSection : (section) ->
+    return =>
+      @setState { current : section }
+
   componentDidUpdate : ->
     _.delay (=>
-      if @state.measureCommitted
-        if @state.tagCommitted
-          @refs.description.getDOMNode().focus()
-        else
-          @refs.tag.focus()
+      if @state.current == Section.TAG
+        @refs[Section.TAG].focus()
       else
-        @refs.measure.getDOMNode().focus()
+        @refs[@state.current].getDOMNode().focus()
     ), stylingConstants.TRANSITION_DURATION + 100
 
   _filterOption : (option, searchString) ->
@@ -135,30 +128,13 @@ EditableIngredient = React.createClass {
   _onChangeMeasure : (e) ->
     @setState { measure : utils.fractionify(e.target.value) }
 
-  _commitMeasure : (e) ->
-    e.stopPropagation()
-    @setState { measureCommitted : true }
-
-  _skipBackToMeasure : ->
-    @setState {
-      measureCommitted : false
-      tagCommitted     : false
-    }
-
   _onIngredientTagSelection : (tag) ->
     @setState { tag }
-
-  _commitTag : (e) ->
-    e.stopPropagation()
-    @setState { tagCommitted : true }
-
-  _skipBackToTag : ->
-    @setState { tagCommitted : false }
 
   _onChangeDescription : (e) ->
     @setState { description : e.target.value }
 
-  _commitDescription : (e) ->
+  _saveRecipe : (e) ->
     # Defractionifying is kind of silly, but ensures a saner result to the caller and a nicer UI to the user.
     { measure, unit } = utils.splitMeasure utils.defractionify(@state.measure)
     @props.saveIngredient(_.chain(@state)

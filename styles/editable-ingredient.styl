@@ -20,11 +20,9 @@ between-tile-spacing = 8px
 
     transition width transition-duration
 
-    for i in 1 2 3
-      &:nth-child({i})
-        width "calc(100% - %s)" % (between-tile-spacing + i * between-tile-spacing + (i - 1) * touch-element-size)
+    width "calc(100% - %s)" % ((between-tile-spacing + touch-element-size) * 2 + between-tile-spacing * 2)
 
-    &.is-committed
+    &:not(.is-current)
       // +1 to adjust for some weird bug in the width of input elements
       width touch-element-size + 1
 
@@ -44,27 +42,20 @@ between-tile-spacing = 8px
     right 0
     width touch-element-size + 1
 
-    pointer-events none
-
   // Not sure why this is necessary.
-  .tile.is-committed.ingredient .image-overlay
+  .tile.is-committed.tag .image-overlay
     z-index 1
 
 
   // HACK HACK HACK
   // Can't figure out why there's an extra pixel of space on this guy.
-  .tile.ingredient
+  .tile.tag
     transform translate(0, -1px)
 
   .tile .accept-button
     border-left none
     border-top-left-radius 0
     border-bottom-left-radius 0
-    transition all transition-duration
-
-  .tile.is-committed .accept-button
-    width 0
-    opacity 0
     transition all transition-duration
 
 
@@ -84,15 +75,15 @@ between-tile-spacing = 8px
 
     transition background-color transition-duration
 
-  .tile.is-committed input.input-field
+  .tile.is-current input.input-field
+    border-top-right-radius 0
+    border-bottom-right-radius 0
+
+  .tile:not(.is-current) input.input-field
     opacity 1 // Undo iPhone fading of disabled elements.
     color grey5
     border-color grey2
     background-color grey0a
-
-  .tile:not(.is-committed) input.input-field
-    border-top-right-radius 0
-    border-bottom-right-radius 0
 
 
   .tile .Select.input-field
@@ -128,7 +119,12 @@ between-tile-spacing = 8px
         background-color grey0
         color grey8
 
-  .tile.is-committed .Select.input-field
+  .tile.is-current .Select.input-field
+    .Select-control
+      border-top-right-radius 0
+      border-bottom-right-radius 0
+
+  .tile:not(.is-current) .Select.input-field
     .Select-control
       padding-right 0
 
@@ -140,16 +136,3 @@ between-tile-spacing = 8px
 
     .Select-arrow
       display none
-
-  .tile:not(.is-committed) .Select.input-field
-    .Select-control
-      border-top-right-radius 0
-      border-bottom-right-radius 0
-
-.iphone-hack-input
-  width 0
-  height 0
-  opacity 0
-  padding 0
-  border 0
-  margin 0

@@ -202,7 +202,7 @@ EditableRecipeView = React.createClass {
   componentDidMount : ->
     _.delay (=>
       @refs.title.focus()
-    ), stylingConstants.TRANSITION_DURATION
+    ), stylingConstants.TRANSITION_DURATION + 100
 
   _saveIngredient : (ingredient) ->
     @setState {
