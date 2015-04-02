@@ -28,6 +28,7 @@ EditableIngredient = React.createClass {
       measure     : null
       tag         : null
       description : null
+      lastCurrent : Section.MEASURE
       current     : Section.MEASURE
     }
 
@@ -38,9 +39,8 @@ EditableIngredient = React.createClass {
         label : i.display
       }
 
-    isCurrent = @state.current == Section.MEASURE
     measureNode =
-      <div className={classnames 'tile', 'measure', { 'is-current' : isCurrent }}>
+      <div className={classnames 'tile', 'measure', { 'is-current' : @_isCurrentSection(Section.MEASURE) }}>
         <input
           type='text'
           className='input-field'
@@ -54,8 +54,9 @@ EditableIngredient = React.createClass {
           spellCheck='false'
           onTouchTap={@_goToSection(Section.MEASURE)}
           onFocus={@_goToSection(Section.MEASURE)}
+          onBlur={@_clearSectionIf(Section.MEASURE)}
         />
-        {if isCurrent
+        {if @_isCurrentSection Section.MEASURE
           <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.TAG)}/>
         else
           <IconButton className='image-overlay' iconClass='fa-question'/>}
@@ -63,7 +64,7 @@ EditableIngredient = React.createClass {
 
     isCurrent = @state.current == Section.TAG
     tagNode =
-      <div className={classnames 'tile', 'tag', { 'is-current' : isCurrent }}>
+      <div className={classnames 'tile', 'tag', { 'is-current' : @_isCurrentSection(Section.TAG) }}>
         <Select
           className='input-field'
           value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
@@ -78,8 +79,9 @@ EditableIngredient = React.createClass {
           ref={Section.TAG}
           onTouchTap={@_goToSection(Section.TAG)}
           onFocus={@_goToSection(Section.TAG)}
+          onBlur={@_clearSectionIf(Section.TAG)}
         />
-        {if isCurrent
+        {if @_isCurrentSection Section.TAG
           <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.DESCRIPTION)}/>
         else
           <IconButton className='image-overlay' iconClass='fa-question'/>}
@@ -87,7 +89,7 @@ EditableIngredient = React.createClass {
 
     isCurrent = @state.current == Section.DESCRIPTION
     descriptionNode =
-      <div className={classnames 'tile', 'description', { 'is-current' : isCurrent }}>
+      <div className={classnames 'tile', 'description', { 'is-current' : @_isCurrentSection(Section.DESCRIPTION) }}>
         <input
           type='text'
           className='input-field'
@@ -100,8 +102,9 @@ EditableIngredient = React.createClass {
           spellCheck='false'
           onTouchTap={@_goToSection(Section.DESCRIPTION)}
           onFocus={@_goToSection(Section.DESCRIPTION)}
+          onBlur={@_clearSectionIf(Section.DESCRIPTION)}
         />
-        {if isCurrent
+        {if @_isCurrentSection Section.DESCRIPTION
           <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_saveRecipe}/>
         else
           <IconButton className='image-overlay' iconClass='fa-question'/>}
@@ -113,9 +116,17 @@ EditableIngredient = React.createClass {
       {descriptionNode}
     </div>
 
+  _isCurrentSection : (section) ->
+    return @state.current == section or (not @state.current and @state.lastCurrent == section)
+
   _goToSection : (section) ->
     return  =>
-      @setState { current : section }
+      @setState { current : section, lastCurrent : section }
+
+  _clearSectionIf : (section) ->
+    return =>
+      if @state.current == section
+        @setState { current : null, lastCurrent : @state.current }
 
   componentDidUpdate : ->
     if @state.current == Section.TAG
@@ -125,7 +136,8 @@ EditableIngredient = React.createClass {
         isFocused : false
         isOpen    : false
       }
-      @refs[@state.current].getDOMNode().focus()
+      if @state.current
+        @refs[@state.current].getDOMNode().focus()
 
   _filterOption : (option, searchString) ->
     searchString = searchString.toLowerCase()
