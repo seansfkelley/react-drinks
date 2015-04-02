@@ -4,6 +4,10 @@
 
 A cocktail-mixing web app for your phone!
 
+## Try It!
+
+There is a version I keep mostly up-to-date at [104.236.188.87](104.236.188.87) (domain name forthcoming). It's tailored for Safari on iOS but generally seems to work elsewhere. Try saving it as a Web Clip from Safari to your home screen to remove the browser chrome and get a better experience.
+
 ## Features
 
 ### See what you can mix
