@@ -45,16 +45,16 @@ EditableIngredient = React.createClass {
           type='text'
           className='input-field'
           value={@state.measure}
-          onChange={@_onChangeMeasure}
           placeholder='Amount...'
           ref={Section.MEASURE}
+          onChange={@_onChangeMeasure}
+          onTouchTap={@_goToSection(Section.MEASURE)}
+          onFocus={@_goToSection(Section.MEASURE)}
+          onBlur={@_clearSectionIf(Section.MEASURE)}
           autoCorrect='off'
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
-          onTouchTap={@_goToSection(Section.MEASURE)}
-          onFocus={@_goToSection(Section.MEASURE)}
-          onBlur={@_clearSectionIf(Section.MEASURE)}
         />
         {if @_isCurrentSection Section.MEASURE
           <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.TAG)}/>
@@ -73,13 +73,18 @@ EditableIngredient = React.createClass {
           clearable=false
           options={options}
           filterOption={@_filterOption}
-          onChange={@_onIngredientTagSelection}
           autoload=false
-          key='select'
           ref={Section.TAG}
+          onChange={@_onIngredientTagSelection}
           onTouchTap={@_goToSection(Section.TAG)}
           onFocus={@_goToSection(Section.TAG)}
           onBlur={@_clearSectionIf(Section.TAG)}
+          inputProps={{
+            autoCorrect    : 'off'
+            autoCapitalize : 'off'
+            autoComplete   : 'off'
+            spellCheck     : 'false'
+          }}
         />
         {if @_isCurrentSection Section.TAG
           <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.DESCRIPTION)}/>
@@ -94,15 +99,15 @@ EditableIngredient = React.createClass {
           type='text'
           className='input-field'
           placeholder='Brand/variety...'
-          onChange={@_onChangeDescription}
           ref={Section.DESCRIPTION}
+          onChange={@_onChangeDescription}
+          onTouchTap={@_goToSection(Section.DESCRIPTION)}
+          onFocus={@_goToSection(Section.DESCRIPTION)}
+          onBlur={@_clearSectionIf(Section.DESCRIPTION)}
           autoCorrect='off'
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
-          onTouchTap={@_goToSection(Section.DESCRIPTION)}
-          onFocus={@_goToSection(Section.DESCRIPTION)}
-          onBlur={@_clearSectionIf(Section.DESCRIPTION)}
         />
         {if @_isCurrentSection Section.DESCRIPTION
           <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_saveRecipe}/>

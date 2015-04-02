@@ -28,7 +28,7 @@ EditableTitleBar = React.createClass {
       <input
         type='text'
         placeholder='Recipe title...'
-        autoCorrect='on'
+        autoCorrect='off'
         autoCapitalize='on'
         autoComplete='off'
         spellCheck='false'
