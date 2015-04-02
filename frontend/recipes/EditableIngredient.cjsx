@@ -29,7 +29,7 @@ EditableIngredient = React.createClass {
       tag         : null
       description : null
       lastCurrent : Section.MEASURE
-      current     : Section.MEASURE
+      current     : null
     }
 
   render : ->

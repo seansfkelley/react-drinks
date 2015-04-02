@@ -172,7 +172,7 @@ EditableRecipeView = React.createClass {
     editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
-    footer = <EditableFooter canSave={@_isSaveable()} save={@_saveRecipe}/>
+    footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
 
     <FixedHeaderFooter
       className='default-modal editable-recipe-view'
@@ -223,15 +223,16 @@ EditableRecipeView = React.createClass {
   _newIngredientId : ->
     return _.uniqueId 'ingredient-'
 
-  _isSaveable : ->
+  _computeSaveable : ->
     if not @isMounted()
-      return false
+      saveable = false
     else
-      return !!(
+      saveable = !!(
         @refs.title.getText().length and
         @refs.instructions.getText().length and
         @state.ingredients.length
       )
+    @setState { saveable }
 
   _saveRecipe : ->
     # Well, doing two things here certainly seems weird. Time for an Action?
