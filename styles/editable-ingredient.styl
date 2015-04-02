@@ -29,7 +29,10 @@ between-tile-spacing = 8px
       width touch-element-size + 1
 
     &.is-hidden
-      display none
+      width 0
+      overflow-x hidden
+      margin-right 0
+      transition width transition-duration
 
     > *
       display inline-block
