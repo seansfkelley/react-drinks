@@ -25,7 +25,7 @@ ShoppingListHeader = React.createClass {
 
   render : ->
     <TitleBarWithSearch
-      leftIcon='fa-times-circle'
+      leftIcon='fa-chevron-down'
       leftIconOnTouchTap={@_hideShoppingList}
       title='Shopping List'
       onSearch={@_setSearchTerm}

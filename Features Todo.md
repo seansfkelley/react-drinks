@@ -21,4 +21,4 @@
   - Animate additions/removals of deletable ingredients
 - Validate:
   - Ingredients, before adding them to "deletable"
-- Tapping a suggestion in the the autocomplete unfocuses then refocuses the key element and causes keyboard jitter
+- Tapping a suggestion in the them autocomplete unfocuses then refocuses the key element and causes keyboard jitter

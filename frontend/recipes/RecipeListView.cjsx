@@ -53,14 +53,6 @@ RecipeListHeader = React.createClass {
     }
 }
 
-
-  # # In the future, this should pop up a loader and then throttle the number of filters performed.
-  # _setSearchTerm : (searchTerm) ->
-  #   AppDispatcher.dispatch {
-  #     type : 'search-recipes'
-  #     searchTerm
-  #   }
-
 RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 

@@ -39,7 +39,10 @@ revalidatorUtils.validateOrThrow INGREDIENTS, {
   items : INGREDIENT_SCHEMA
 }
 
-INGREDIENTS = _.map INGREDIENTS, normalization.normalizeIngredient
+INGREDIENTS = _.chain INGREDIENTS
+  .map normalization.normalizeIngredient
+  .sortBy 'display'
+  .value()
 
 GROUPED = _.chain INGREDIENTS
   .sortBy (i) -> i.display.toLowerCase()
