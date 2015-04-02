@@ -21,5 +21,4 @@
   - Animate additions/removals of deletable ingredients
 - Validate:
   - Ingredients, before adding them to "deletable"
-- on iOS, tabbing over using the keyboard buttons doesn't work nicely cause the other inputs are hidden
-- on iOS, focus tag selection, then hit next and the dropdown will stay open -- I think this related to the fact that iOS doesn't drop focus (notice also that it doesn't drop focus on the "amount" field)
+- Tapping a suggestion in the the autocomplete unfocuses then refocuses the key element and causes keyboard jitter

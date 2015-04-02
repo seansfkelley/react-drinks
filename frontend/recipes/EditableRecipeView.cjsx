@@ -34,6 +34,7 @@ EditableTitleBar = React.createClass {
         spellCheck='false'
         ref='input'
         onChange={@_onChange}
+        onTouchTap={@focus}
       />
     </TitleBar>
 
@@ -101,7 +102,9 @@ EditableTextArea = React.createClass {
       className='editable-text-area'
       placeholder={@props.placeholder}
       onInput={@_onInput}
-      ref='textarea'/>
+      onTouchTap={@_focus}
+      ref='textarea'
+    />
 
   getText : ->
     return @refs.textarea.getDOMNode().value
@@ -119,6 +122,9 @@ EditableTextArea = React.createClass {
     node.style.height = 'auto'
     node.style.height = node.scrollHeight + 2
   ), 100
+
+  _focus : ->
+    @refs.textarea.getDOMNode().focus()
 
   _onInput : ->
     @_sizeToFit()
