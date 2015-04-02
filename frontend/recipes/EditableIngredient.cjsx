@@ -52,7 +52,7 @@ EditableIngredient = React.createClass {
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
-          onTouchTap={@_goToSection(Section.DESCRIPTION)}
+          onTouchTap={@_goToSection(Section.MEASURE)}
           onFocus={@_goToSection(Section.MEASURE)}
         />
         {if isCurrent
@@ -76,7 +76,7 @@ EditableIngredient = React.createClass {
           autoload=false
           key='select'
           ref={Section.TAG}
-          onTouchTap={@_goToSection(Section.DESCRIPTION)}
+          onTouchTap={@_goToSection(Section.TAG)}
           onFocus={@_goToSection(Section.TAG)}
         />
         {if isCurrent
@@ -114,21 +114,18 @@ EditableIngredient = React.createClass {
     </div>
 
   _goToSection : (section) ->
-    return =>
+    return  =>
       @setState { current : section }
 
   componentDidUpdate : ->
-    if @state.current != Section.TAG
+    if @state.current == Section.TAG
+      @refs[Section.TAG].focus()
+    else
       @refs[Section.TAG].setState {
         isFocused : false
         isOpen    : false
       }
-    _.delay (=>
-      if @state.current == Section.TAG
-        @refs[Section.TAG].focus()
-      else
-        @refs[@state.current].getDOMNode().focus()
-    ), stylingConstants.TRANSITION_DURATION + 100
+      @refs[@state.current].getDOMNode().focus()
 
   _filterOption : (option, searchString) ->
     searchString = searchString.toLowerCase()
