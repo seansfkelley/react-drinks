@@ -92,12 +92,12 @@
           tag: "coffee liqueur"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "kahlua"
+          displayIngredient: "Kahlua"
         -
           tag: "irish cream"
           displayAmount: "1/2"
           displayUnit: "oz"
-          displayIngredient: "Baileys Irish cream"
+          displayIngredient: "Baileys"
         -
           tag: "grand marnier"
           displayAmount: "1/2"
@@ -1674,8 +1674,8 @@
           displayIngredient: "Bénédictine"
         -
           tag: "pineapple juice"
-          displayAmount: "12.0"
-          displayUnit: "cl"
+          displayAmount: "4"
+          displayUnit: "oz"
           displayIngredient: "pineapple juice"
         -
           tag: "lime juice"
@@ -1708,8 +1708,8 @@
           displayIngredient: "prosecco"
         -
           tag: "aperol"
-          displayAmount: "4"
-          displayUnit: "cl"
+          displayAmount: "1 1/3"
+          displayUnit: "oz"
           displayIngredient: "aperol"
         -
           tag: "club soda"
