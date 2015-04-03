@@ -6,6 +6,7 @@ React = require 'react'
 FluxMixin     = require '../mixins/FluxMixin'
 AppDispatcher = require '../AppDispatcher'
 
+utils                    = require '../utils'
 { RecipeStore, UiStore } = require '../stores'
 
 SwipableRecipeView = require './SwipableRecipeView'
@@ -72,7 +73,42 @@ RecipeListItem = React.createClass {
     }
 
   _getRecipe : ->
-    return RecipeListItem.getRecipeFor @
+    return IncompleteRecipeListItem.getRecipeFor @
+
+  statics :
+    getRecipeFor : (element) ->
+      return element.props.recipes[element.props.index]
+}
+
+IncompleteRecipeListItem = React.createClass {
+  displayName : 'IncompleteRecipeListItem'
+
+  propTypes :
+    recipes : React.PropTypes.array.isRequired
+    index   : React.PropTypes.number.isRequired
+
+  render : ->
+    missingIngredients = _.map @_getRecipe().missing, (m) ->
+      return <div className='missing-ingredient' key={m.displayIngredient}>
+        <span className='amount'>{utils.fractionify(m.displayAmount ? '')}</span>
+        {' '}
+        <span className='unit'>{m.displayUnit ? ''}</span>
+        {' '}
+        <span className='ingredient'>{m.displayIngredient}</span>
+      </div>
+    <List.Item className='recipe-list-item incomplete' onTouchTap={@_openRecipe}>
+      <div className='name'>{@_getRecipe().name}</div>
+      {missingIngredients}
+    </List.Item>
+
+  _openRecipe : ->
+    AppDispatcher.dispatch {
+      type      : 'show-modal'
+      component : <SwipableRecipeView recipes={@props.recipes} index={@props.index}/>
+    }
+
+  _getRecipe : ->
+    return IncompleteRecipeListItem.getRecipeFor @
 
   statics :
     getRecipeFor : (element) ->
@@ -143,7 +179,7 @@ GroupedRecipeList = React.createClass {
     orderedRecipes = _.pluck groupRecipePairs, '1'
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
-      <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
+      <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
     headeredNodes = List.headerify {
       nodes             : recipeNodes
@@ -181,7 +217,12 @@ RecipeListView = React.createClass {
       className='recipe-list-view'
       ref='container'
     >
-      <SearchBar placeholder='Name or ingredient...' onChange={@_onSearch} ref='search'/>
+      <SearchBar
+        className='list-topper'
+        placeholder='Name or ingredient...'
+        onChange={@_onSearch}
+        ref='search'
+      />
       {list}
     </FixedHeaderFooter>
 

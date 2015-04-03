@@ -173,7 +173,7 @@ IngredientSelectionView = React.createClass {
       header={<IngredientSelectionHeader onClose={@_onClose}/>}
       ref='container'
     >
-      <SearchBar placeholder='Ingredient name...' onChange={@_onSearch}/>
+      <SearchBar className='list-topper' placeholder='Ingredient name...' onChange={@_onSearch}/>
       <GroupedIngredientList {...@state}/>
     </FixedHeaderFooter>
 

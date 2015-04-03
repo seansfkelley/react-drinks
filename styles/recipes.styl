@@ -6,17 +6,27 @@
   height 100%
 
 .recipe-list-view
-  .search-bar
-    box-sizing border-box
-    height list-item-height
-    padding 6px 12px
-
-    i.fa
-      padding-right 12px
+  .search-bar input
+    border 1px solid grey2
 
   .fixed-header
     shadow('bottom', 2px)
     z-index 1 // To see the shadow.
+
+  .missing-ingredient
+    font-size 0.9em
+    line-height 1.2em
+    padding-left 12px
+    color theme-red
+
+    .unit
+      font-size 0.75em
+      text-transform uppercase
+      font-weight 600
+
+    &:last-child
+      padding-bottom 12px
+
 
 .recipe-view, .editable-recipe-view
   .title-bar, .button-bar

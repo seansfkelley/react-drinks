@@ -20,7 +20,7 @@ Substitutions are accounted for when listing out mixable recipes -- have bourbon
 
 ### Almost-mixable drinks
 
-If you've ever gotten that sneaking suspicion that you were one cheap mixer away from making a whole bunch of drinks, you were probably right. The Shopping List feature calls out anything you can't _yet_ mix, so you can figure out what to grab at the corner shop.
+If you've ever gotten that sneaking suspicion that you were one cheap mixer away from making a whole bunch of drinks, you were probably right. Things that are only one or two ingredients away will still come up and call out what they're missing so you can decide what to get at the corner store.
 
 ### Curated ingredient/recipe lists
 

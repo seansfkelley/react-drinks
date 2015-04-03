@@ -1,6 +1,7 @@
 # @cjsx React.DOM
 
-React = require 'react'
+React      = require 'react'
+classnames = require 'classnames'
 
 SearchBar = React.createClass {
   displayName : 'SearchBar'
@@ -15,7 +16,7 @@ SearchBar = React.createClass {
     }
 
   render : ->
-    <div className='search-bar' onTouchStart={@_stopTouchStart}>
+    <div className={classnames 'search-bar', @props.className}  onTouchStart={@_stopTouchStart}>
       <input
         type='text'
         className='search-input'

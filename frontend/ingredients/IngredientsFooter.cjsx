@@ -5,7 +5,6 @@ AppDispatcher = require '../AppDispatcher'
 { UiStore }   = require '../stores'
 
 TitleBar                = require '../components/TitleBar'
-ShoppingList            = require '../shopping/ShoppingList'
 IngredientSelectionView = require './IngredientSelectionView'
 
 IngredientsFooter = React.createClass {
@@ -29,8 +28,6 @@ IngredientsFooter = React.createClass {
       leftIconOnTouchTap={@_toggleUseIngredients}
       title='Ingredients'
       titleOnTouchTap={@_openIngredientPanel}
-      rightIcon='fa-shopping-cart'
-      rightIconOnTouchTap={@_openShoppingList}
     />
 
   _toggleUseIngredients : ->
@@ -42,12 +39,6 @@ IngredientsFooter = React.createClass {
     AppDispatcher.dispatch {
       type      : 'show-flyup'
       component : <IngredientSelectionView/>
-    }
-
-  _openShoppingList : ->
-    AppDispatcher.dispatch {
-      type      : 'show-flyup'
-      component : <ShoppingList/>
     }
 }
 
