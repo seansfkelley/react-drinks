@@ -123,14 +123,20 @@ GroupedIngredientList = React.createClass {
       .flatten()
       .value()
 
-    if ingredientNodes.length < 10
+    if not ingredientNodes.length
+      listNodes = []
+    else if ingredientNodes.length < 10
       sortedIngredientNodes = _.sortBy ingredientNodes, (n) -> n.props.ingredient.displayName
       selectedCount = _.chain ingredientNodes
         .filter (i) => @props.selectedIngredientTags[i.props.ingredient.tag]?
         .value()
         .length
       listNodes = [
-        <IngredientGroupHeader title='All Results' selectedCount={selectedCount} key='header-all-results'/>
+        <IngredientGroupHeader
+          title="All Results (#{ingredientNodes.length})"
+          selectedCount={selectedCount}
+          key='header-all-results'
+        />
       ].concat sortedIngredientNodes
     else
       listNodes = List.headerify {
