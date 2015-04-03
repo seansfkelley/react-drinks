@@ -24,7 +24,7 @@ If you've ever gotten that sneaking suspicion that you were one cheap mixer away
 
 ### Curated ingredient/recipe lists
 
-No longer do you have to enter all three of "Baileys", "Tia Maria" and "Irish Cream" to make sure you got all the results you should. The search understands that these are freely interchangable and will bring up the single representative -- "irish cream" -- when you look for any of them.
+No longer do you have to enter all three of "Kahlua", "Tia Maria" and "coffee liqueur" to make sure you got all the results you should. The search understands that these are freely interchangable and will bring up the single representative -- "coffee liqueur" -- when you look for any of them.
 
 ## Setup
 
