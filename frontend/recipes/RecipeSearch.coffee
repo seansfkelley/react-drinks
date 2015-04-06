@@ -71,7 +71,10 @@ class RecipeSearch
               have : _.map substitutionMap[currentTag], (t) => @_ingredientForTag[t].display
             }
             break
-          currentTag = @_ingredientForTag[@_ingredientForTag[currentTag].generic]?.tag
+          currentIngredient = @_ingredientForTag[currentTag]
+          if not currentIngredient?
+            log.warn "recipe '#{recipe.name}' calls for or has a generic that calls for unknown tag '#{currentTag}'"
+          currentTag = @_ingredientForTag[currentIngredient?.generic]?.tag
         if not currentTag?
           missing.push ingredient
 

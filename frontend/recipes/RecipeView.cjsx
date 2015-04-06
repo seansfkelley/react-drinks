@@ -38,14 +38,17 @@ IngredientView = React.createClass {
   displayName : 'IngredientView'
 
   propTypes :
-    displayAmount     : React.PropTypes.string
-    displayUnit       : React.PropTypes.string
-    displayIngredient : React.PropTypes.string.isRequired
+    displayAmount             : React.PropTypes.string
+    displayUnit               : React.PropTypes.string
+    displayIngredient         : React.PropTypes.string.isRequired
+    displayIngredientSubtitle : React.PropTypes.string
 
   render : ->
     amount = utils.fractionify(@props.displayAmount ? '')
     unit = @props.displayUnit ? ''
     # The space is necessary to space out the spans from each other. Newlines are insufficient.
+    # Include the keys only to keep React happy so that it warns us about significant uses of
+    # arrays without key props.
     <div className='measured-ingredient'>
       <span className='measure'>
         <span className='amount'>{amount}</span>
@@ -53,6 +56,12 @@ IngredientView = React.createClass {
         <span className='unit'>{unit}</span>
       </span>
       <span className='ingredient'>{@props.displayIngredient}</span>
+      {if @props.displayIngredientSubtitle
+        [
+          <br key='br'/>
+          <span className='ingredient-subtitle' key='subtitle'>{@props.displayIngredientSubtitle}</span>
+        ]
+      }
     </div>
 }
 
@@ -98,14 +107,7 @@ RecipeView = React.createClass {
         .invert()
         .mapValues (_, key) => @props.recipe[key]
         # TODO: The order these sections end up in is arbitrary; we should enforce it.
-        .map (measuredIngredients, category) =>
-          if measuredIngredients.length == 0
-            return []
-          else
-            return [
-              <SectionHeader text={HUMAN_READABLE_CATEGORY_TITLE[category]} key={'header-' + category}/>
-              _.map measuredIngredients, (i) -> <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
-            ]
+        .map @_renderCategory
         .flatten()
         .value()
     else
@@ -147,6 +149,21 @@ RecipeView = React.createClass {
         {recipeNotes}
       </div>
     </FixedHeaderFooter>
+
+  _renderCategory : (measuredIngredients, category) ->
+    if measuredIngredients.length == 0
+      return []
+    else
+      header = <SectionHeader text={HUMAN_READABLE_CATEGORY_TITLE[category]} key={'header-' + category}/>
+      if category == IngredientCategory.SUBSTITUTE
+        measuredIngredients = _.map measuredIngredients, (i) ->
+          if i.have.length > 1
+            displayIngredientSubtitle = "(try: #{_.initial(i.have).join(', ')} or #{_.last(i.have)})"
+          else
+            displayIngredientSubtitle = "(try: #{i.have[0]})"
+          return _.defaults { displayIngredientSubtitle }, i.need
+      ingredients = _.map measuredIngredients, (i) -> <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
+      return [ header ].concat ingredients
 
   _onClose : ->
     AppDispatcher.dispatch {

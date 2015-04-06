@@ -63,8 +63,10 @@
       padding 16px 0 16px
 
     .recipe-ingredients .measured-ingredient
-      display flex
       font-weight 600
+
+      > *
+        display inline-block
 
       .measure
         width 30%
@@ -75,6 +77,13 @@
 
       .ingredient
         width 70%
+
+      .ingredient-subtitle
+        position relative
+        left 30%
+        width 70%
+
+        font-size 0.75em
 
     .recipe-instructions .text .text-line:not(:last-child)
       margin-bottom 6px
