@@ -15,6 +15,10 @@
 - merge some ingredients, e.g., egg white + egg yolk should just be "egg" under the hood
 - for specialty ingredients like e.g. raspberry simple syrup, consider classifying the ingredient as listed in the recipe under just "raspberry", since cluttering the ingredients page with really rare syrups or bitters or infusions when you could theoretically remake them with the base ingredient seems silly
 - searching for an ingredient should bring up things based on their generics too
+- change recipes to infer display from ingredient if they don't want to specify something more specific
+- edit recipe search to include the substitutes
+  - can have multiple, how to display?
+  - grab display from ingredient definition
 
 ### Adding Recipes
 - Fix up styling

@@ -7,13 +7,15 @@ should = require('chai').should()
 RecipeSearch = require '../frontend/recipes/RecipeSearch'
 
 ingredient = (tag, generic = null) ->
-  return { tag, generic }
+  display = 'name-' + tag
+  return { tag, generic, display }
 
 IndexableIngredient = {
   A_ROOT      : ingredient 'a'
   A_CHILD_1   : ingredient 'a-1', 'a'
   A_CHILD_1_1 : ingredient 'a-1-1', 'a-1'
   A_CHILD_2   : ingredient 'a-2', 'a'
+  A_CHILD_3   : ingredient 'a-3', 'a'
   B_ROOT      : ingredient 'b'
   Z_ROOT      : ingredient 'z'
   NULL        : ingredient()
@@ -103,6 +105,73 @@ describe 'RecipeSearch', ->
         IndexableIngredient.A_ROOT.tag
       ]
 
+  describe '#_computeSubstitutionMap', ->
+    search = null
+    beforeEach ->
+      search = new RecipeSearch [
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_1_1
+        IndexableIngredient.A_CHILD_1_1
+      ]
+
+    it 'should return a map from an ingredient to itself when given an ingredient with no generic', ->
+      search._computeSubstitutionMap([ IndexableIngredient.A_ROOT ]).should.deep.equal {
+        "#{IndexableIngredient.A_ROOT.tag}" : [ IndexableIngredient.A_ROOT.tag ]
+      }
+
+    it 'should return a map that includes direct descendants in their generic\'s entry when both are given', ->
+      search._computeSubstitutionMap([ IndexableIngredient.A_ROOT, IndexableIngredient.A_CHILD_1 ]).should.deep.equal {
+        "#{IndexableIngredient.A_ROOT.tag}"    : [ IndexableIngredient.A_ROOT.tag, IndexableIngredient.A_CHILD_1.tag ]
+        "#{IndexableIngredient.A_CHILD_1.tag}" : [ IndexableIngredient.A_CHILD_1.tag ]
+      }
+
+    it 'should not include an inferred generic\'s tag as a value if that generic was not given', ->
+      search._computeSubstitutionMap([ IndexableIngredient.A_CHILD_1 ]).should.deep.equal {
+        "#{IndexableIngredient.A_ROOT.tag}"    : [ IndexableIngredient.A_CHILD_1.tag ]
+        "#{IndexableIngredient.A_CHILD_1.tag}" : [ IndexableIngredient.A_CHILD_1.tag ]
+      }
+
+    it 'should return a map where each generic includes all descendant generations\' tags', ->
+      search._computeSubstitutionMap([
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_1_1
+      ]).should.deep.equal {
+        "#{IndexableIngredient.A_ROOT.tag}" : [
+          IndexableIngredient.A_ROOT.tag
+          IndexableIngredient.A_CHILD_1.tag
+          IndexableIngredient.A_CHILD_1_1.tag
+        ]
+        "#{IndexableIngredient.A_CHILD_1.tag}" : [
+          IndexableIngredient.A_CHILD_1.tag
+          IndexableIngredient.A_CHILD_1_1.tag
+        ]
+        "#{IndexableIngredient.A_CHILD_1_1.tag}" : [
+          IndexableIngredient.A_CHILD_1_1.tag
+        ]
+      }
+
+    it 'should return a map where a generic with multiple descendants includes all their tags', ->
+      search._computeSubstitutionMap([
+        IndexableIngredient.A_ROOT
+        IndexableIngredient.A_CHILD_1
+        IndexableIngredient.A_CHILD_2
+      ]).should.deep.equal {
+        "#{IndexableIngredient.A_ROOT.tag}" : [
+          IndexableIngredient.A_ROOT.tag
+          IndexableIngredient.A_CHILD_1.tag
+          IndexableIngredient.A_CHILD_2.tag
+        ]
+        "#{IndexableIngredient.A_CHILD_1.tag}" : [
+          IndexableIngredient.A_CHILD_1.tag
+        ]
+        "#{IndexableIngredient.A_CHILD_2.tag}" : [
+          IndexableIngredient.A_CHILD_2.tag
+        ]
+      }
+
+
   describe '#_countSubsetMissing', ->
     it 'should return how values in the first array are not in the second', ->
       RecipeSearch._countSubsetMissing([ 1, 2, 3 ], [ 1, 4, 5 ]).should.equal 2
@@ -117,6 +186,7 @@ describe 'RecipeSearch', ->
         IndexableIngredient.A_CHILD_1
         IndexableIngredient.A_CHILD_1_1
         IndexableIngredient.A_CHILD_2
+        IndexableIngredient.A_CHILD_3
         IndexableIngredient.B_ROOT
       ], recipes)
 
@@ -193,7 +263,7 @@ describe 'RecipeSearch', ->
         '0' : [
           ingredients : [ ResultIngredient.A_CHILD_1 ]
           missing     : []
-          substitute  : [ ResultIngredient.A_CHILD_1 ]
+          substitute  : [{ need : ResultIngredient.A_CHILD_1, have : [ ResultIngredient.A_CHILD_2.display ] }]
           available   : []
         ]
       }
@@ -204,7 +274,21 @@ describe 'RecipeSearch', ->
         '0' : [
           ingredients : [ ResultIngredient.A_CHILD_1 ]
           missing     : []
-          substitute  : [ ResultIngredient.A_CHILD_1 ]
+          substitute  : [ { need : ResultIngredient.A_CHILD_1, have : [ ResultIngredient.A_ROOT.display ] }]
+          available   : []
+        ]
+      }
+
+    it 'should return multiple substitutable matches for a recipe (with sibling ingredients)', ->
+      search = makeSearch recipe(IndexableIngredient.A_CHILD_1)
+      search.computeMixableRecipes([ IndexableIngredient.A_CHILD_2.tag, IndexableIngredient.A_CHILD_3.tag ]).should.deep.equal {
+        '0' : [
+          ingredients : [ ResultIngredient.A_CHILD_1 ]
+          missing     : []
+          substitute  : [{
+            need : ResultIngredient.A_CHILD_1
+            have : [ ResultIngredient.A_CHILD_2.display, ResultIngredient.A_CHILD_3.display ]
+          }]
           available   : []
         ]
       }

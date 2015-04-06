@@ -43,7 +43,16 @@ class RecipeSearch
       .uniq()
       .value()
 
-  _generateSearchResult : (recipe, availableTags) ->
+  _computeSubstitutionMap : (ingredients) ->
+    ingredientsByTagWithGenerics = {}
+    for i in ingredients
+      generic = i
+      (ingredientsByTagWithGenerics[generic.tag] ?= []).push i.tag
+      while generic = @_ingredientForTag[generic.generic]
+        (ingredientsByTagWithGenerics[generic.tag] ?= []).push i.tag
+    return ingredientsByTagWithGenerics
+
+  _generateSearchResult : (recipe, substitutionMap) ->
     missing    = []
     available  = []
     substitute = []
@@ -51,12 +60,20 @@ class RecipeSearch
     for ingredient in recipe.ingredients
       if not ingredient.tag? # Things like 'water' are untagged.
         available.push ingredient
-      else if ingredient.tag in availableTags
+      else if substitutionMap[ingredient.tag]?
         available.push ingredient
-      else if @_ingredientForTag[ingredient.tag]?.generic in availableTags
-        substitute.push ingredient
       else
-        missing.push ingredient
+        currentTag = ingredient.tag
+        while currentTag?
+          if substitutionMap[currentTag]?
+            substitute.push {
+              need : ingredient
+              have : _.map substitutionMap[currentTag], (t) => @_ingredientForTag[t].display
+            }
+            break
+          currentTag = @_ingredientForTag[@_ingredientForTag[currentTag].generic]?.tag
+        if not currentTag?
+          missing.push ingredient
 
     return _.defaults { missing, available, substitute }, recipe
 
@@ -66,8 +83,8 @@ class RecipeSearch
     if exactlyAvailableIngredientsRaw.length != exactlyAvailableIngredients.length
       log.warn "some tags that were searched are extraneous and will be ignored: #{JSON.stringify ingredientTags}"
 
-    allAvailableTagsWithGenerics = _.pluck @_includeAllGenerics(exactlyAvailableIngredients), 'tag'
-    mostGenericAvailableTags     = @_toMostGenericTags exactlyAvailableIngredients
+    substitutionMap = @_computeSubstitutionMap exactlyAvailableIngredients
+    allAvailableTagsWithGenerics = _.keys substitutionMap
 
     return _.chain @_recipes
       .map (r) =>
@@ -79,10 +96,10 @@ class RecipeSearch
         mostGenericRecipeTags = @_toMostGenericTags _.compact(indexableIngredients)
         missingCount = @constructor._countSubsetMissing(
           mostGenericRecipeTags
-          mostGenericAvailableTags
+          allAvailableTagsWithGenerics
         ) + unknownIngredientAdjustment
         if missingCount <= fuzzyMatchThreshold and missingCount < mostGenericRecipeTags.length
-          return @_generateSearchResult r, allAvailableTagsWithGenerics
+          return @_generateSearchResult r, substitutionMap
       .compact()
       .groupBy (result) -> result.missing.length
       .value()
