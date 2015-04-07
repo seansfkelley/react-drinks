@@ -71,6 +71,8 @@ List.Item = React.createClass {
     </div>
 }
 
+DELETABLE_WIDTH = 80
+
 List.DeletableItem = React.createClass {
   displayName : 'List.DeletableItem'
 
@@ -89,10 +91,14 @@ List.DeletableItem = React.createClass {
         {@props.children}
         <div
           className='delete-button'
-          style={{ width : 80, right : @state.left, clip : "rect(0px, 80px, 44px, #{80 - Math.abs(@state.left)}px)" }}
+          style={{
+            width : DELETABLE_WIDTH
+            right : @state.left
+            WebkitClipPath : "inset(0px 0px 0px #{DELETABLE_WIDTH - Math.abs(@state.left)}px)"
+          }}
           onTouchTap={@_onDelete}
         >
-          Delete
+          <span className='text'>Delete</span>
         </div>
       </List.Item>
     </Draggable>
@@ -105,17 +111,17 @@ List.DeletableItem = React.createClass {
     if position.left > 0
       @refs.draggable.setState { clientX : 0 }
       @setState { left : 0 }
-    else if position.left < -80
-      @refs.draggable.setState { clientX : -80 }
-      @setState { left : -80 }
+    else if position.left < -DELETABLE_WIDTH
+      @refs.draggable.setState { clientX : -DELETABLE_WIDTH }
+      @setState { left : -DELETABLE_WIDTH }
     else
       @setState { left : position.left }
 
   # TODO: Make this animate.
   _onDragEnd : (event, { position }) ->
-    if position.left < -40
-      @refs.draggable.setState { clientX : -80 }
-      @setState { left : -80 }
+    if position.left < -DELETABLE_WIDTH / 2
+      @refs.draggable.setState { clientX : -DELETABLE_WIDTH }
+      @setState { left : -DELETABLE_WIDTH }
     else
       @refs.draggable.setState { clientX : 0 }
       @setState { left : 0 }
