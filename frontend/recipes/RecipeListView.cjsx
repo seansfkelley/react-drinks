@@ -96,17 +96,13 @@ IncompleteRecipeListItem = React.createClass {
         {' '}
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
-    <List.DeletableItem
+    <List.Item
       className='recipe-list-item incomplete'
-      onDelete={@_delete}
       onTouchTap={@_openRecipe}
     >
       <div className='name'>{@_getRecipe().name}</div>
       {missingIngredients}
-    </List.DeletableItem>
-
-  _delete : ->
-    console.log 'delete!'
+    </List.Item>
 
   _openRecipe : ->
     AppDispatcher.dispatch {

@@ -17,9 +17,10 @@
 - searching for an ingredient should bring up things based on their generics too
 - change recipes to infer display from ingredient if they don't want to specify something more specific
 
-### Adding Recipes
+### Adding/Editing Recipes
 - Fix up styling
   - Animate additions/removals of deletable ingredients
 - Validate:
   - Ingredients, before adding them to "deletable"
 - Tapping a suggestion in the them autocomplete unfocuses then refocuses the key element and causes keyboard jitter
+- Flag which recipes are custom so we can delete them
