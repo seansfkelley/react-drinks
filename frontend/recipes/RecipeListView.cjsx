@@ -62,7 +62,7 @@ RecipeListItem = React.createClass {
     index   : React.PropTypes.number.isRequired
 
   render : ->
-    <List.Item className= 'recipe-list-item' onTouchTap={@_openRecipe}>
+    <List.Item className='recipe-list-item' onTouchTap={@_openRecipe}>
       <div className='name'>{@_getRecipe().name}</div>
     </List.Item>
 
@@ -96,10 +96,17 @@ IncompleteRecipeListItem = React.createClass {
         {' '}
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
-    <List.Item className='recipe-list-item incomplete' onTouchTap={@_openRecipe}>
+    <List.DeletableItem
+      className='recipe-list-item incomplete'
+      onDelete={@_delete}
+      onTouchTap={@_openRecipe}
+    >
       <div className='name'>{@_getRecipe().name}</div>
       {missingIngredients}
-    </List.Item>
+    </List.DeletableItem>
+
+  _delete : ->
+    console.log 'delete!'
 
   _openRecipe : ->
     AppDispatcher.dispatch {
@@ -179,7 +186,10 @@ GroupedRecipeList = React.createClass {
     orderedRecipes = _.pluck groupRecipePairs, '1'
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
-      <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
+      if r.missing.length
+        return <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
+      else
+        return <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
 
     headeredNodes = List.headerify {
       nodes             : recipeNodes

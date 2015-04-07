@@ -49,6 +49,7 @@
     "microevent": "^1.0.0",
     "nodemon": "^1.3.7",
     "react": "^0.12.2",
+    "react-draggable": "git://github.com/seansfkelley/react-draggable.git#da2360b5dcd94c4ba9a87af36f51eee8958846ee",
     "react-select": "git://github.com/seansfkelley/react-select.git#5807326feac2a205918832f3c18ddd6e77635ea9",
     "react-swipe": "^1.0.3",
     "react-tap-event-plugin": "^0.1.4",

@@ -2,6 +2,7 @@
 
 _          = require 'lodash'
 React      = require 'react'
+Draggable  = require 'react-draggable'
 classnames = require 'classnames'
 
 List = React.createClass {
@@ -68,6 +69,56 @@ List.Item = React.createClass {
     <div {...@props} className={classnames 'list-item', @props.className}>
       {@props.children}
     </div>
+}
+
+List.DeletableItem = React.createClass {
+  displayName : 'List.DeletableItem'
+
+  propTypes :
+    onDelete : React.PropTypes.func.isRequired
+
+  getInitialState : ->
+    return {
+      left : 0
+    }
+
+  render : ->
+    renderableProps = _.omit @props, 'onDelete'
+    <Draggable axis='x' onDrag={@_clampDrag} onStop={@_onDragEnd} ref='draggable'>
+      <List.Item {...renderableProps} className={classnames 'deletable', @props.className}>
+        {@props.children}
+        <div
+          className='delete-button'
+          style={{ width : 80, right : @state.left, clip : "rect(0px, 80px, 44px, #{80 - Math.abs(@state.left)}px)" }}
+          onTouchTap={@_onDelete}
+        >
+          Delete
+        </div>
+      </List.Item>
+    </Draggable>
+
+  _onDelete : (e) ->
+    e.stopPropagation()
+    @props.onDelete()
+
+  _clampDrag : (event, { position }) ->
+    if position.left > 0
+      @refs.draggable.setState { clientX : 0 }
+      @setState { left : 0 }
+    else if position.left < -80
+      @refs.draggable.setState { clientX : -80 }
+      @setState { left : -80 }
+    else
+      @setState { left : position.left }
+
+  # TODO: Make this animate.
+  _onDragEnd : (event, { position }) ->
+    if position.left < -40
+      @refs.draggable.setState { clientX : -80 }
+      @setState { left : -80 }
+    else
+      @refs.draggable.setState { clientX : 0 }
+      @setState { left : 0 }
 }
 
 List.headerify = ({ nodes, computeHeaderData, Header, ItemGroup }) ->

@@ -22,6 +22,7 @@ IS_PROD = process.env.NODE_ENV == 'production'
 LIBRARY_CSS_PATHS = [
   'font-awesome/css/font-awesome.css'
   'react-select/dist/default.css'
+  'react-draggable/lib/styles.css'
 ]
 
 SRC_PATHS =
