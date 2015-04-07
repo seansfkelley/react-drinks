@@ -95,6 +95,7 @@ List.DeletableItem = React.createClass {
           style={{
             width          : DELETABLE_WIDTH
             right          : @state.left
+            # Must use polygon, not inset, here because iOS doesn't support inset. :\
             WebkitClipPath : "polygon(#{left}px 0, #{left}px 100%, 100% 100%, 100% 0)"
           }}
           onTouchTap={@_onDelete}

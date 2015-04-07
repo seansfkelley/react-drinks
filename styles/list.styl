@@ -29,3 +29,27 @@
 
     &.collapsed
       height 0
+
+.list-item.deletable .delete-button
+  overflow hidden
+  // Width is set in javascript to keep things in one place.
+  position absolute
+  top 0
+
+  background-color red
+  font-weight 600
+  text-align center
+  color grey1
+  height 100%
+
+  .text
+    display inline-block
+    vertical-align middle
+
+    // Gotta do this stupid thing because relative/top 50% doesn't work on the iPhone for some reason.
+    &:before
+      content ''
+      display inline-block
+      height 100%
+      vertical-align middle
+
