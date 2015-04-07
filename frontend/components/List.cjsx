@@ -86,15 +86,16 @@ List.DeletableItem = React.createClass {
 
   render : ->
     renderableProps = _.omit @props, 'onDelete'
+    left = DELETABLE_WIDTH - Math.abs(@state.left)
     <Draggable axis='x' onDrag={@_clampDrag} onStop={@_onDragEnd} ref='draggable'>
       <List.Item {...renderableProps} className={classnames 'deletable', @props.className}>
         {@props.children}
         <div
           className='delete-button'
           style={{
-            width : DELETABLE_WIDTH
-            right : @state.left
-            WebkitClipPath : "inset(0px 0px 0px #{DELETABLE_WIDTH - Math.abs(@state.left)}px)"
+            width          : DELETABLE_WIDTH
+            right          : @state.left
+            WebkitClipPath : "polygon(#{left}px 0, #{left}px 100%, 100% 100%, 100% 0)"
           }}
           onTouchTap={@_onDelete}
         >
