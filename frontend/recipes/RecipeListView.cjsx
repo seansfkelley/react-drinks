@@ -3,20 +3,21 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin     = require '../mixins/FluxMixin'
-AppDispatcher = require '../AppDispatcher'
-
-utils                    = require '../utils'
-{ RecipeStore, UiStore } = require '../stores'
-
-SwipableRecipeView = require './SwipableRecipeView'
-EditableRecipeView = require './EditableRecipeView'
-FavoritesList      = require '../favorites/FavoritesList'
+FluxMixin = require '../mixins/FluxMixin'
 
 SearchBar          = require '../components/SearchBar'
 TitleBar           = require '../components/TitleBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
+
+AppDispatcher            = require '../AppDispatcher'
+utils                    = require '../utils'
+stylingConstants         = require '../stylingConstants'
+{ RecipeStore, UiStore } = require '../stores'
+
+SwipableRecipeView = require './SwipableRecipeView'
+EditableRecipeView = require './EditableRecipeView'
+FavoritesList      = require '../favorites/FavoritesList'
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
@@ -234,7 +235,7 @@ RecipeListView = React.createClass {
 
   componentDidUpdate : ->
     if not @refs.search.isFocused()
-      @refs.container.scrollTo 44
+      @refs.container.scrollTo stylingConstants.RECIPE_LIST_ITEM_HEIGHT
 
   _onSearch : (searchTerm) ->
     AppDispatcher.dispatch {

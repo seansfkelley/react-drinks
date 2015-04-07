@@ -3,16 +3,17 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin        = require '../mixins/FluxMixin'
-AppDispatcher    = require '../AppDispatcher'
-stylingConstants = require '../stylingConstants'
-
-{ IngredientStore, UiStore } = require '../stores'
+FluxMixin = require '../mixins/FluxMixin'
 
 List              = require '../components/List'
 TitleBar          = require '../components/TitleBar'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 SearchBar         = require '../components/SearchBar'
+
+AppDispatcher                = require '../AppDispatcher'
+stylingConstants             = require '../stylingConstants'
+{ IngredientStore, UiStore } = require '../stores'
+
 
 IngredientSelectionHeader = React.createClass {
   displayName : 'IngredientSelectionHeader'
@@ -184,7 +185,7 @@ IngredientSelectionView = React.createClass {
     </FixedHeaderFooter>
 
   componentDidMount : ->
-    @refs.container.scrollTo 44
+    @refs.container.scrollTo stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT
 
   # In the future, this should pop up a loader and then throttle the number of filters performed.
   _onSearch : (searchTerm) ->

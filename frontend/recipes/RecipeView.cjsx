@@ -4,15 +4,15 @@ _     = require 'lodash'
 md5   = require 'MD5'
 React = require 'react'
 
-AppDispatcher = require '../AppDispatcher'
-FluxMixin     = require '../mixins/FluxMixin'
-utils         = require '../utils'
-
-{ UiStore } = require '../stores'
+FluxMixin = require '../mixins/FluxMixin'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 ButtonBar         = require '../components/ButtonBar'
+
+AppDispatcher = require '../AppDispatcher'
+utils         = require '../utils'
+{ UiStore }   = require '../stores'
 
 IngredientCategory =
   MISSING    : 'missing'

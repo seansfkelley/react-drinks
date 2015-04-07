@@ -5,12 +5,11 @@ React      = require 'react'
 Select     = require 'react-select'
 classnames = require 'classnames'
 
-IconButton = require './IconButton'
-
-stylingConstants = require '../stylingConstants'
-
+stylingConstants    = require '../stylingConstants'
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
+
+IconButton = require './IconButton'
 
 Section =
   MEASURE     : 'measure'

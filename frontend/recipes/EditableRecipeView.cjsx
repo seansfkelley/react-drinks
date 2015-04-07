@@ -3,19 +3,18 @@
 _      = require 'lodash'
 React  = require 'react'
 
-AppDispatcher     = require '../AppDispatcher'
+FixedHeaderFooter = require '../components/FixedHeaderFooter'
+TitleBar          = require '../components/TitleBar'
+ButtonBar         = require '../components/ButtonBar'
+normalization     = require '../../shared/normalization'
 
-FixedHeaderFooter  = require '../components/FixedHeaderFooter'
-TitleBar           = require '../components/TitleBar'
-ButtonBar          = require '../components/ButtonBar'
-IconButton         = require './IconButton'
-EditableIngredient = require './EditableIngredient'
-
-normalization    = require '../../shared/normalization'
-stylingConstants = require '../stylingConstants'
-
+AppDispatcher       = require '../AppDispatcher'
+stylingConstants    = require '../stylingConstants'
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
+
+IconButton         = require './IconButton'
+EditableIngredient = require './EditableIngredient'
 
 EditableTitleBar = React.createClass {
   displayName : 'EditableTitleBar'

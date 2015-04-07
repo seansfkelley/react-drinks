@@ -3,14 +3,15 @@
 _     = require 'lodash'
 React = require 'react'
 
-FluxMixin     = require '../mixins/FluxMixin'
-AppDispatcher = require '../AppDispatcher'
-
-{ UiStore, RecipeStore } = require '../stores'
+FluxMixin = require '../mixins/FluxMixin'
 
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
 TitleBar           = require '../components/TitleBar'
+
+AppDispatcher            = require '../AppDispatcher'
+{ UiStore, RecipeStore } = require '../stores'
+
 SwipableRecipeView = require '../recipes/SwipableRecipeView'
 
 RecipeListItem = React.createClass {

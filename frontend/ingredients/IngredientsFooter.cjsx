@@ -1,10 +1,12 @@
 React = require 'react'
 
-FluxMixin     = require '../mixins/FluxMixin'
+FluxMixin = require '../mixins/FluxMixin'
+
+TitleBar = require '../components/TitleBar'
+
 AppDispatcher = require '../AppDispatcher'
 { UiStore }   = require '../stores'
 
-TitleBar                = require '../components/TitleBar'
 IngredientSelectionView = require './IngredientSelectionView'
 
 IngredientsFooter = React.createClass {
