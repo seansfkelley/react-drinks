@@ -92,15 +92,10 @@ List.DeletableItem = React.createClass {
         {@props.children}
         <div
           className='delete-button'
-          style={{
-            width          : DELETABLE_WIDTH
-            right          : @state.left
-            # Must use polygon, not inset, here because iOS doesn't support inset. :\
-            WebkitClipPath : "polygon(#{left}px 0, #{left}px 100%, 100% 100%, 100% 0)"
-          }}
+          style={{ width : Math.abs(@state.left), right : @state.left }}
           onTouchTap={@_onDelete}
         >
-          <span className='text'>Delete</span>
+          <span className='text' style={{ width : DELETABLE_WIDTH }}>Delete</span>
         </div>
       </List.Item>
     </Draggable>
