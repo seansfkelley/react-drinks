@@ -24,6 +24,7 @@ INGREDIENTS_KEY = 'drinks-app-ingredients'
 IngredientStore = new class extends FluxStore
   fields : ->
     searchTerm                 : ''
+    alphabeticalIngredients    : []
     groupedIngredients         : []
     searchedGroupedIngredients : []
     selectedIngredientTags     : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}

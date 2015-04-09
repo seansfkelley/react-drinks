@@ -1,8 +1,14 @@
 # @cjsx React.DOM
 
-React = require 'react'
+React      = require 'react'
+classnames = require 'classnames'
 
-utils = require '../utils'
+FluxMixin = require '../mixins/FluxMixin'
+
+IngredientGuesser = require '../ingredients/IngredientGuesser'
+
+utils               = require '../utils'
+{ IngredientStore } = require '../stores'
 
 KeyCode = {
   BACKSPACE  : 8
@@ -19,6 +25,38 @@ BORING_INPUT_PROPS = {
   spellCheck     : 'false'
 }
 
+TagGuesser = React.createClass {
+  displayName : 'TagGuesser'
+
+  propTypes :
+    forString : React.PropTypes.string.isRequired
+
+  mixins : [
+    FluxMixin IngredientStore, 'alphabeticalIngredients'
+  ]
+
+  render : ->
+    ingredientGuess = new IngredientGuesser(IngredientStore.alphabeticalIngredients).guess @props.forString
+
+    if ingredientGuess?
+      guessString = ingredientGuess.display
+      isUnknown   = false
+    else
+      guessString = 'unknown'
+      isUnknown   = true
+
+    <div className='tag-guesser'>
+      <div className='description small-text'>Matched As</div>
+      <div className={classnames 'guess', { 'is-unknown' : isUnknown }}>{guessString}</div>
+      <div className='change-button-container'>
+        <div className='change-button small-text' onTouchTap={@_changeGuess}>Change</div>
+      </div>
+    </div>
+
+  _changeGuess : ->
+
+}
+
 EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
 
@@ -33,33 +71,37 @@ EditableIngredient = React.createClass {
     }
 
   render : ->
-    <div className='editable-ingredient2' onKeyUp={@_maybeRefocus}>
-      <input
-        className='measure'
-        placeholder='#'
-        value={@state.measure}
-        onChange={@_onMeasureChange}
-        onKeyDown={@_onMeasureKeyDown}
-        {...BORING_INPUT_PROPS}
-        ref='measure'
-      />
-      <input
-        className='unit'
-        placeholder='unit'
-        value={@state.unit}
-        onChange={@_onUnitChange}
-        onKeyDown={@_onUnitKeyDown}
-        {...BORING_INPUT_PROPS}
-        ref='unit'
-      />
-      <input
-        className='display'
-        placeholder='ingredient'
-        onChange={@_onDisplayChange}
-        onKeyDown={@_onDisplayKeyDown}
-        {...BORING_INPUT_PROPS}
-        ref='display'
-      />
+    <div className='editable-ingredient2'>
+      <div className='input-fields' onKeyUp={@_maybeRefocus}>
+        <input
+          className='measure'
+          placeholder='#'
+          value={@state.measure}
+          onChange={@_onMeasureChange}
+          onKeyDown={@_onMeasureKeyDown}
+          {...BORING_INPUT_PROPS}
+          ref='measure'
+        />
+        <input
+          className='unit'
+          placeholder='unit'
+          value={@state.unit}
+          onChange={@_onUnitChange}
+          onKeyDown={@_onUnitKeyDown}
+          {...BORING_INPUT_PROPS}
+          ref='unit'
+        />
+        <input
+          className='display'
+          placeholder='ingredient'
+          value={@state.display}
+          onChange={@_onDisplayChange}
+          onKeyDown={@_onDisplayKeyDown}
+          {...BORING_INPUT_PROPS}
+          ref='display'
+        />
+      </div>
+      <TagGuesser key='guesser' forString={@state.display}/>
     </div>
 
   _maybeRefocus : (e) ->
@@ -100,7 +142,8 @@ EditableIngredient = React.createClass {
   _onUnitChange : (e) ->
     @setState { unit : e.target.value.trim() }
 
-  _onDisplayChange : ->
+  _onDisplayChange : (e) ->
+    @setState { display : e.target.value }
 
 }
 

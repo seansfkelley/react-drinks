@@ -1,11 +1,31 @@
 @require 'constants'
 
 .editable-ingredient2
-  border 1px solid grey1
-  border-radius standard-border-radius
-  padding 4px
+  .input-fields, .tag-guesser
+    height 44px
+    padding 4px 12px
+
+    &:before
+      content ''
+      display inline-block
+      height 44px
+      vertical-align middle
+
+  .input-fields
+    border-top-left-radius standard-border-radius
+    border-top-right-radius standard-border-radius
+
+  .tag-guesser
+    border-bottom-left-radius standard-border-radius
+    border-bottom-right-radius standard-border-radius
+
+.editable-ingredient2 .input-fields
+  background-color grey1
 
   input
+    background-color grey1
+    vertical-align middle
+
     font-weight 600
     border none
     display inline-block
@@ -18,3 +38,39 @@
 
   .display
     width 60%
+
+.editable-ingredient2 .tag-guesser
+  background-color grey2
+
+  > *
+    display inline-block
+
+  .description
+    width 40%
+    color grey6
+
+  .small-text
+    text-transform uppercase
+    font-size 10px
+
+  .guess
+    width 40%
+
+  .guess.is-unknown
+    color grey7
+
+  .change-button-container
+    width 20%
+    text-align center
+
+  .change-button-container .change-button
+    display inline-block
+
+    background-color grey3
+    color grey6
+
+    // Hacks. Not sure why I can't get this properly vertically align.
+    margin-top -2px
+    padding 6px
+    border-radius 2px
+    line-height 1em
