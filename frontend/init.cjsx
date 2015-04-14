@@ -12,6 +12,17 @@ require('./overlayViews').attachOverlayViews()
 require('bluebird').longStackTraces()
 require('react-tap-event-plugin')()
 
+if window.ontouchstart?
+  kill = (type) ->
+    window.document.body.addEventListener(type, (e) ->
+      e.preventDefault()
+      e.stopPropagation()
+      return false
+    , true)
+
+  for type in [ 'mousedown', 'mouseup', 'mousemove', 'click' ]
+    kill type
+
 window.getJquery = ->
   jq = document.createElement 'script'
   jq.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js'
