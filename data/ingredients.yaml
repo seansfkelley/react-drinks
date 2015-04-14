@@ -376,6 +376,7 @@
   searchable :
     - jalapeno
     - habanero
+    - chili
 -
   display    : Peach Schnapps
   group      : liqueur-fruit
@@ -387,4 +388,19 @@
   group      : vodka
   searchable :
     - zubrowka
-
+-
+  display    : Chartreuse (Any)
+  tag        : chartreuse
+  tangible   : false
+-
+  display    : Rum (Any)
+  tag        : rum
+  tangible   : false
+-
+  display    : Whiskey (Any)
+  tag        : whiskey
+  tangible   : false
+-
+  display    : Tequila (Any)
+  tag        : tequila
+  tangible   : false

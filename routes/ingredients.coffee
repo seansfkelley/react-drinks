@@ -8,13 +8,20 @@ normalization   = require '../shared/normalization'
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
+xor = (a, b) -> (a or b) and not (a and b)
+
 INGREDIENT_SCHEMA = {
   type       : 'object'
   properties :
     # The display name of the ingredient.
     display : REQUIRED_STRING
     # The category this ingredient is in (e.g., spirit, mixer, syrup...)
-    group : REQUIRED_STRING
+    group :
+      type    : 'string'
+      conform : (v, object) -> xor(v?, not (object.tangible ? true))
+    tangible :
+      type    : 'boolean'
+      conform : (v, object) -> xor(not (v ? true), object.group?)
     # The uniquely identifying tag for this ingredient. Defaults to the lowercase display name.
     tag : OPTIONAL_STRING
     # The tag for the generic (substitutable) ingredient for this ingredient. If the target doesn't
@@ -45,6 +52,7 @@ INGREDIENTS = _.chain INGREDIENTS
   .value()
 
 GROUPED = _.chain INGREDIENTS
+  .filter 'tangible'
   .sortBy (i) -> i.display.toLowerCase()
   .groupBy 'group'
   .map (ingredients, groupTag) ->
