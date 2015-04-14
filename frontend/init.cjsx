@@ -19,8 +19,4 @@ window.getJquery = ->
 
 window.debug.log = require 'loglevel'
 
-# React.render <App/>, document.querySelector('#app-root')
-
-EditableThing = require './recipes/EditableIngredient2'
-
-React.render <EditableThing/>, document.querySelector('#app-root')
+React.render <App/>, document.querySelector('#app-root')

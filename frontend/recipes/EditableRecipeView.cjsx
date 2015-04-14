@@ -15,7 +15,6 @@ utils               = require '../utils'
 
 IconButton         = require './IconButton'
 EditableIngredient = require './EditableIngredient'
-EditableIngredient2 = require './EditableIngredient2'
 
 EditableTitleBar = React.createClass {
   displayName : 'EditableTitleBar'
@@ -127,32 +126,6 @@ EditableTextArea = React.createClass {
     @props.onInput?()
 }
 
-DeletableIngredient = React.createClass {
-  displayName : 'DeletableIngredient'
-
-  # This requires at least one of tag or description. Not sure how to validate that.
-  propTypes :
-    measure     : React.PropTypes.string
-    unit        : React.PropTypes.string
-    tag         : React.PropTypes.string
-    description : React.PropTypes.string
-    delete      : React.PropTypes.func.isRequired
-
-  render : ->
-    <div className='deletable-ingredient'>
-      <IconButton iconClass='fa-times' onTouchTap={@_delete}/>
-      <div className='measure'>
-        {utils.fractionify @props.measure}
-        {' '}
-        <span className='unit'>{@props.unit}</span>
-      </div>
-      <span className='ingredient'>{@props.description ? IngredientStore.ingredientsByTag[@props.tag]?.display}</span>
-    </div>
-
-  _delete : ->
-    @props.delete()
-}
-
 EditableRecipeView = React.createClass {
   displayName : 'EditableRecipeView'
 
@@ -160,16 +133,13 @@ EditableRecipeView = React.createClass {
 
   getInitialState : ->
     return {
-      ingredients       : []
-      currentIngredient : @_newIngredientId()
-      saveable          : false
+      ingredients : [ @_newIngredientId() ]
+      saveable    : false
     }
 
   render : ->
-    deletableIngredients = _.map @state.ingredients, (i) =>
-      return <DeletableIngredient {...i} key={i.id} delete={@_generateDeleteCallback(i.id)}/>
-
-    editingIngredient = <EditableIngredient key={@state.currentIngredient} saveIngredient={@_saveIngredient}/>
+    editableIngredients = _.map @state.ingredients, (i) =>
+      return <EditableIngredient key={i.id}/>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
     footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
@@ -181,14 +151,8 @@ EditableRecipeView = React.createClass {
     >
       <div className='recipe-description'>
         <div className='recipe-ingredients'>
-          {if deletableIngredients.length
-            [
-              <div className='recipe-section-header' key='deletable-header'>Ingredients</div>
-              deletableIngredients
-            ]
-          }
-          <div className='recipe-section-header'>New Ingredient...</div>
-          {editingIngredient}
+          {editableIngredients}
+          <div className='new-ingredient-button' onTouchTap={@_newIngredient}>New Ingredient</div>
         </div>
         <div className='recipe-instructions'>
           <div className='recipe-section-header'>Instructions</div>
@@ -206,12 +170,9 @@ EditableRecipeView = React.createClass {
       @refs.title.focus()
     ), stylingConstants.TRANSITION_DURATION + 100
 
-  _saveIngredient : (ingredient) ->
+  _newIngredient : ->
     @setState {
-      ingredients       : @state.ingredients.concat [
-        _.defaults { id : @state.currentIngredient }, ingredient
-      ]
-      currentIngredient : @_newIngredientId()
+      ingredients : @state.ingredients.concat [ @_newIngredientId() ]
     }
 
   _generateDeleteCallback : (id) ->

@@ -5,168 +5,186 @@ React      = require 'react'
 Select     = require 'react-select'
 classnames = require 'classnames'
 
-stylingConstants    = require '../stylingConstants'
+FluxMixin = require '../mixins/FluxMixin'
+
+IngredientGuesser = require '../ingredients/IngredientGuesser'
+
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
 
-IconButton = require './IconButton'
+KeyCode = {
+  BACKSPACE  : 8
+  ENTER      : 13
+  SPACE      : 32
+  ARROW_KEYS : [ 37, 38, 39, 40 ]
+}
 
-Section =
-  MEASURE     : 'measure'
-  TAG         : 'tag'
-  DESCRIPTION : 'description'
+BORING_INPUT_PROPS = {
+  type           : 'text'
+  autoCorrect    : 'off'
+  autoCapitalize : 'off'
+  autoComplete   : 'off'
+  spellCheck     : 'false'
+}
 
-EditableIngredient = React.createClass {
-  displayName : 'EditableIngredient'
+NO_INGREDIENT_SENTINEL = -1
+
+TagGuesser = React.createClass {
+  displayName : 'TagGuesser'
 
   propTypes :
-    saveIngredient : React.PropTypes.func.isRequired
+    forString : React.PropTypes.string.isRequired
+
+  mixins : [
+    FluxMixin IngredientStore, 'alphabeticalIngredients'
+  ]
 
   getInitialState : ->
     return {
-      measure     : null
-      tag         : null
-      description : null
-      lastCurrent : Section.MEASURE
-      current     : null
+      isManual : false
     }
 
   render : ->
-    options = _.map IngredientStore.alphabeticalIngredients, (i) ->
-      return {
-        value : i.tag
-        label : i.display
-      }
+    if @state.isManual
+      options = _.map IngredientStore.allAlphabeticalIngredients, (i) ->
+        return { value : i.tag, label : i.display }
 
-    measureNode =
-      <div className={classnames 'tile', 'measure', { 'is-current' : @_isCurrentSection(Section.MEASURE) }}>
-        <input
-          type='text'
-          className='input-field'
-          value={@state.measure}
-          placeholder='Amount...'
-          ref={Section.MEASURE}
-          onChange={@_onChangeMeasure}
-          onTouchTap={@_goToSection(Section.MEASURE)}
-          onFocus={@_goToSection(Section.MEASURE)}
-          onBlur={@_clearSectionIf(Section.MEASURE)}
-          autoCorrect='off'
-          autoCapitalize='off'
-          autoComplete='off'
-          spellCheck='false'
-        />
-        {if @_isCurrentSection Section.MEASURE
-          <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.TAG)}/>
-        else
-          <IconButton className='image-overlay' iconClass='fa-question'/>}
-      </div>
+      options.push { value : NO_INGREDIENT_SENTINEL, label : '(none)' }
 
-    isCurrent = @state.current == Section.TAG
-    tagNode =
-      <div className={classnames 'tile', 'tag', { 'is-current' : @_isCurrentSection(Section.TAG) }}>
+      guessNode =
         <Select
-          className='input-field'
-          value={if @state.tag? then IngredientStore.ingredientsByTag[@state.tag].display}
+          className='guess'
           placeholder='Ingredient...'
-          noResultsText='No ingredients!'
           clearable=false
           options={options}
           filterOption={@_filterOption}
           autoload=false
-          ref={Section.TAG}
-          onChange={@_onIngredientTagSelection}
-          onTouchTap={@_goToSection(Section.TAG)}
-          onFocus={@_goToSection(Section.TAG)}
-          onBlur={@_clearSectionIf(Section.TAG)}
-          inputProps={{
-            autoCorrect    : 'off'
-            autoCapitalize : 'off'
-            autoComplete   : 'off'
-            spellCheck     : 'false'
-          }}
+          inputProps={BORING_INPUT_PROPS}
         />
-        {if @_isCurrentSection Section.TAG
-          <IconButton className='accept-button' iconClass='fa-chevron-right' onTouchTap={@_goToSection(Section.DESCRIPTION)}/>
-        else
-          <IconButton className='image-overlay' iconClass='fa-question'/>}
-      </div>
+    else
+      ingredientGuess = new IngredientGuesser(IngredientStore.allAlphabeticalIngredients).guess @props.forString
 
-    isCurrent = @state.current == Section.DESCRIPTION
-    descriptionNode =
-      <div className={classnames 'tile', 'description', { 'is-current' : @_isCurrentSection(Section.DESCRIPTION) }}>
-        <input
-          type='text'
-          className='input-field'
-          placeholder='Brand/variety...'
-          ref={Section.DESCRIPTION}
-          onChange={@_onChangeDescription}
-          onTouchTap={@_goToSection(Section.DESCRIPTION)}
-          onFocus={@_goToSection(Section.DESCRIPTION)}
-          onBlur={@_clearSectionIf(Section.DESCRIPTION)}
-          autoCorrect='off'
-          autoCapitalize='off'
-          autoComplete='off'
-          spellCheck='false'
-        />
-        {if @_isCurrentSection Section.DESCRIPTION
-          <IconButton className='accept-button' iconClass='fa-check' onTouchTap={@_saveRecipe}/>
-        else
-          <IconButton className='image-overlay' iconClass='fa-question'/>}
-      </div>
+      if ingredientGuess?
+        guessString = ingredientGuess.display
+        isUnknown   = false
+      else
+        guessString = '(none)'
+        isUnknown   = true
 
-    <div className='editable-ingredient'>
-      {measureNode}
-      {tagNode}
-      {descriptionNode}
+      guessNode = <div className={classnames 'guess', { 'is-unknown' : isUnknown }}>{guessString}</div>
+
+    <div className={classnames 'tag-guesser', { 'is-manual' : @state.isManual }}>
+      <div className='description small-text'>Matched As</div>
+      {guessNode}
+      {if not @state.isManual
+        <div className='change-button-container'>
+          <div className='change-button small-text' onTouchTap={@_changeGuess}>Change</div>
+        </div>
+      }
     </div>
 
-  _isCurrentSection : (section) ->
-    return @state.current == section or (not @state.current and @state.lastCurrent == section)
-
-  _goToSection : (section) ->
-    return  =>
-      @setState { current : section, lastCurrent : section }
-
-  _clearSectionIf : (section) ->
-    return =>
-      if @state.current == section
-        @setState { current : null, lastCurrent : @state.current }
-
-  componentDidUpdate : ->
-    if @state.current == Section.TAG
-      @refs[Section.TAG].focus()
-    else
-      @refs[Section.TAG].setState {
-        isFocused : false
-        isOpen    : false
-      }
-      if @state.current
-        @refs[@state.current].getDOMNode().focus()
+  _changeGuess : ->
+    @setState { isManual : true }
 
   _filterOption : (option, searchString) ->
-    searchString = searchString.toLowerCase()
-    # Should expose this search as a utility method on ingredients to ensure consistent behavior.
-    ingredient = IngredientStore.ingredientsByTag[option.value]
-    return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
+    if option.value == NO_INGREDIENT_SENTINEL
+      return true
+    else
+      searchString = searchString.toLowerCase()
+      # Should expose this search as a utility method on ingredients to ensure consistent behavior.
+      ingredient = IngredientStore.ingredientsByTag[option.value]
+      return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
-  _onChangeMeasure : (e) ->
-    @setState { measure : utils.fractionify(e.target.value) }
+}
 
-  _onIngredientTagSelection : (tag) ->
-    @setState { tag }
+EditableIngredient = React.createClass {
+  displayName : 'EditableIngredient'
 
-  _onChangeDescription : (e) ->
-    @setState { description : e.target.value }
+  propTypes : {}
 
-  _saveRecipe : (e) ->
-    # Defractionifying is kind of silly, but ensures a saner result to the caller and a nicer UI to the user.
-    { measure, unit } = utils.splitMeasure utils.defractionify(@state.measure)
-    @props.saveIngredient(_.chain(@state)
-      .pick 'tag', 'description'
-      .extend { measure, unit }
-      .mapValues (v) -> v?.trim() or null # empty2null
-      .value()
-    )
+  getInitialState : ->
+    return {
+      measure         : ''
+      unit            : ''
+      display         : ''
+      skipOnNextSpace : true
+    }
+
+  render : ->
+    <div className='editable-ingredient2'>
+      <div className='input-fields' onKeyUp={@_maybeRefocus}>
+        <input
+          className='measure'
+          placeholder='#'
+          value={@state.measure}
+          onChange={@_onMeasureChange}
+          onKeyDown={@_onMeasureKeyDown}
+          {...BORING_INPUT_PROPS}
+          ref='measure'
+        />
+        <input
+          className='unit'
+          placeholder='unit'
+          value={@state.unit}
+          onChange={@_onUnitChange}
+          onKeyDown={@_onUnitKeyDown}
+          {...BORING_INPUT_PROPS}
+          ref='unit'
+        />
+        <input
+          className='display'
+          placeholder='ingredient'
+          value={@state.display}
+          onChange={@_onDisplayChange}
+          onKeyDown={@_onDisplayKeyDown}
+          {...BORING_INPUT_PROPS}
+          ref='display'
+        />
+      </div>
+      <TagGuesser key='guesser' forString={@state.display}/>
+    </div>
+
+  _maybeRefocus : (e) ->
+    if @_refToFocus?
+      @_refToFocus.getDOMNode().focus()
+      @_refToFocus = null
+
+  _onMeasureKeyDown : (e) ->
+    if /[a-zA-Z]/.test(String.fromCharCode(e.keyCode)) or e.keyCode == KeyCode.ENTER
+      @refs.unit.getDOMNode().focus()
+      @setState { measure : @state.measure.trim() }
+    else if @state.skipOnNextSpace and e.keyCode == KeyCode.SPACE
+      @_refToFocus = @refs.unit
+      @setState {
+        measure         : @state.measure.trim()
+        skipOnNextSpace : false
+      }
+    else if not @state.skipOnNextSpace and e.keyCode not in KeyCode.ARROW_KEYS
+      @setState { skipOnNextSpace : true }
+
+  _onUnitKeyDown : (e) ->
+    if e.keyCode == KeyCode.ENTER or e.keyCode == KeyCode.SPACE
+      @_refToFocus = @refs.display
+      @setState { unit : @state.unit.trim() }
+    else if e.keyCode == KeyCode.BACKSPACE and e.target.value == ''
+      @_refToFocus = @refs.measure
+
+  _onDisplayKeyDown : (e) ->
+    if e.keyCode == KeyCode.BACKSPACE and e.target.value == ''
+      @_refToFocus = @refs.unit
+
+  _onMeasureChange : (e) ->
+    measure = utils.fractionify e.target.value
+    if not @state.skipOnNextSpace
+      measure = measure.trim()
+    @setState { measure }
+
+  _onUnitChange : (e) ->
+    @setState { unit : e.target.value.trim() }
+
+  _onDisplayChange : (e) ->
+    @setState { display : e.target.value }
+
 }
 
 module.exports = EditableIngredient
