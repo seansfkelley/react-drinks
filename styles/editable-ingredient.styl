@@ -1,6 +1,8 @@
 @require 'constants'
 
 .editable-ingredient
+  outline none
+
   .input-fields, .tag-guesser
     height 44px
     transition height transition-duration
@@ -93,6 +95,8 @@
 .editable-ingredient:not(.is-expanded) .tag-guesser
   height 0
   transition height transition-duration
+
+.editable-ingredient:not(.show-overflow) .tag-guesser
   overflow-y hidden
 
 .editable-ingredient .tag-guesser .Select

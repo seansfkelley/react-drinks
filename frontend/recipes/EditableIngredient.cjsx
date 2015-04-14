@@ -1,16 +1,18 @@
 # @cjsx React.DOM
 
 _          = require 'lodash'
+$          = require 'jquery'
 React      = require 'react'
 Select     = require 'react-select'
 classnames = require 'classnames'
 
 FluxMixin = require '../mixins/FluxMixin'
 
-IngredientGuesser = require '../ingredients/IngredientGuesser'
-
 utils               = require '../utils'
+stylingConstants    = require '../stylingConstants'
 { IngredientStore } = require '../stores'
+
+IngredientGuesser = require '../ingredients/IngredientGuesser'
 
 KeyCode = {
   BACKSPACE  : 8
@@ -33,7 +35,8 @@ TagGuesser = React.createClass {
   displayName : 'TagGuesser'
 
   propTypes :
-    forString : React.PropTypes.string.isRequired
+    forString        : React.PropTypes.string.isRequired
+    requestHoldFocus : React.PropTypes.func
 
   mixins : [
     FluxMixin IngredientStore, 'alphabeticalIngredients'
@@ -86,8 +89,7 @@ TagGuesser = React.createClass {
       {if not @state.isManual
         <div className='change-button-container'>
           <div className='change-button small-text' onTouchTap={@_switchToManual}>Change</div>
-        </div>
-      }
+        </div>}
     </div>
 
   _switchToManual : ->
@@ -96,6 +98,7 @@ TagGuesser = React.createClass {
       @refs.select.focus()
 
   _selectIngredient : (value) ->
+    @props.requestHoldFocus()
     @setState { selected : IngredientStore.ingredientsByTag[value] }
 
   _filterOption : (option, searchString) ->
@@ -122,10 +125,18 @@ EditableIngredient = React.createClass {
       display         : ''
       skipOnNextSpace : true
       isExpanded      : false
+      showOverflow    : false
+      holdFocus       : false
     }
 
   render : ->
-    <div className={classnames 'editable-ingredient', { 'is-expanded' : true }} onBlur={@_onBlur} onFocus={@_onFocus}>
+    # tabIndex allows us to use focus to define when we should expand stuff.
+    <div
+      className={classnames 'editable-ingredient', { 'is-expanded' : @state.isExpanded, 'show-overflow' : @state.showOverflow }}
+      onBlur={@_onBlur}
+      onFocus={@_onFocus}
+      tabIndex=-1
+    >
       <div className='input-fields' onKeyUp={@_maybeRefocus}>
         <input
           className='measure'
@@ -155,8 +166,15 @@ EditableIngredient = React.createClass {
           ref='display'
         />
       </div>
-      <TagGuesser key='guesser' forString={@state.display}/>
+      <TagGuesser key='guesser' forString={@state.display} requestHoldFocus={@_holdFocus}/>
     </div>
+
+  _holdFocus : ->
+    @setState { holdFocus : true }
+    _.delay (=>
+      @setState { holdFocus : false }
+      @getDOMNode().focus()
+    ), stylingConstants.TRANSITION_DURATION
 
   _maybeRefocus : (e) ->
     if @_refToFocus?
@@ -201,9 +219,16 @@ EditableIngredient = React.createClass {
 
   _onFocus : ->
     @setState { isExpanded : true }
+    _.delay (=>
+      @setState { showOverflow : true  }
+    ), stylingConstants.TRANSITION_DURATION
 
   _onBlur : ->
-    @setState { isExpanded : false }
+    return if @state.holdFocus
+    @setState {
+      isExpanded   : false
+      showOverflow : false
+    }
 
   componentDidMount : ->
     if @props.shouldGrabFocus
