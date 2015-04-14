@@ -1,5 +1,6 @@
 _          = require 'lodash'
 $          = require 'jquery'
+log        = require 'loglevel'
 MicroEvent = require 'microevent'
 Promise    = require 'bluebird'
 
@@ -25,22 +26,40 @@ IngredientStore = new class extends FluxStore
   fields : ->
     searchTerm                 : ''
     alphabeticalIngredients    : []
+    allAlphabeticalIngredients : []
     groupedIngredients         : []
     searchedGroupedIngredients : []
     selectedIngredientTags     : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
     ingredientsByTag           : {}
 
-  'set-ingredients' : ({ groupedIngredients, alphabeticalIngredientTags }) ->
+  'set-ingredients' : ({ groupedIngredients, intangibleIngredients, alphabeticalIngredientTags }) ->
     @groupedIngredients = groupedIngredients
 
-    @ingredientsByTag = _.chain groupedIngredients
+    ingredients = _.chain groupedIngredients
       .pluck 'ingredients'
       .flatten()
+      .value()
+
+    @ingredientsByTag = _.chain ingredients
       .filter (i) -> i.tag?
       .reduce ((map, i) -> map[i.tag] = i ; return map), {}
       .value()
 
-    @alphabeticalIngredients = _.map alphabeticalIngredientTags, (tag) => @ingredientsByTag[tag]
+    for i in intangibleIngredients
+      @ingredientsByTag[i.tag] = i
+      ingredients.push i
+
+    for i in ingredients
+      if i.generic? and not @ingredientsByTag[i.generic]?
+        log.trace "ingredient #{i.tag} refers to unknown generic #{i.generic}; inferring generic"
+        @ingredientsByTag[i.generic] = {
+          tag     : i.generic
+          display : "[inferred] #{i.generic}"
+        }
+
+    @allAlphabeticalIngredients = _.map alphabeticalIngredientTags, (t) => @ingredientsByTag[t]
+    @alphabeticalIngredients = _.filter @allAlphabeticalIngredients, 'tangible'
+
     @_updateSearchedIngredients()
 
   'toggle-ingredient' : ({ tag }) ->
@@ -149,11 +168,7 @@ RecipeStore = new class extends FluxStore
 
   _createRecipeSearch : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
-    ingredients = _.chain IngredientStore.groupedIngredients
-      .pluck 'ingredients'
-      .flatten()
-      .value()
-    @_recipeSearch = new RecipeSearch ingredients, @alphabeticalRecipes
+    @_recipeSearch = new RecipeSearch IngredientStore.ingredientsByTag, @alphabeticalRecipes
 
   _updateDerivedRecipeLists : ->
     @_updateMixableRecipes()
@@ -209,12 +224,10 @@ RecipeStore = new class extends FluxStore
     localStorage[RECIPE_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, RECIPE_PERSISTABLE_FIELDS)
 
 Promise.resolve $.get('/ingredients')
-.then ({ groupedIngredients, alphabeticalIngredientTags }) =>
-  AppDispatcher.dispatch {
+.then (ingredients) =>
+  AppDispatcher.dispatch _.extend {
     type : 'set-ingredients'
-    groupedIngredients
-    alphabeticalIngredientTags
-  }
+  }, ingredients
 
 Promise.resolve $.get('/recipes')
 .then (recipes) =>

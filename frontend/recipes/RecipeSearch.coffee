@@ -2,21 +2,7 @@ _   = require 'lodash'
 log = require 'loglevel'
 
 class RecipeSearch
-  constructor : (ingredients, @_recipes) ->
-    @_ingredientForTag = {}
-    for i in ingredients
-      if i.tag?
-        @_ingredientForTag[i.tag] = i
-
-    for i in ingredients
-      if i.generic? and not @_ingredientForTag[i.generic]?
-        log.trace "ingredient #{i.tag} refers to unknown generic #{i.generic}; inferring generic"
-        @_ingredientForTag[i.generic] = {
-          tag     : i.generic
-          display : "[inferred] #{i.generic}"
-        }
-
-    return # for loop
+  constructor : (@_ingredientsByTag, @_recipes) ->
 
   @_countSubsetMissing : (small, large) ->
     missed = 0
@@ -31,7 +17,7 @@ class RecipeSearch
 
     for current in ingredients
       withGenerics.push current
-      while current = @_ingredientForTag[current.generic]
+      while current = @_ingredientsByTag[current.generic]
         withGenerics.push current
 
     return _.uniq withGenerics
@@ -48,7 +34,7 @@ class RecipeSearch
     for i in ingredients
       generic = i
       (ingredientsByTagWithGenerics[generic.tag] ?= []).push i.tag
-      while generic = @_ingredientForTag[generic.generic]
+      while generic = @_ingredientsByTag[generic.generic]
         (ingredientsByTagWithGenerics[generic.tag] ?= []).push i.tag
     return ingredientsByTagWithGenerics
 
@@ -68,20 +54,20 @@ class RecipeSearch
           if substitutionMap[currentTag]?
             substitute.push {
               need : ingredient
-              have : _.map substitutionMap[currentTag], (t) => @_ingredientForTag[t].display
+              have : _.map substitutionMap[currentTag], (t) => @_ingredientsByTag[t].display
             }
             break
-          currentIngredient = @_ingredientForTag[currentTag]
+          currentIngredient = @_ingredientsByTag[currentTag]
           if not currentIngredient?
             log.warn "recipe '#{recipe.name}' calls for or has a generic that calls for unknown tag '#{currentTag}'"
-          currentTag = @_ingredientForTag[currentIngredient?.generic]?.tag
+          currentTag = @_ingredientsByTag[currentIngredient?.generic]?.tag
         if not currentTag?
           missing.push ingredient
 
     return _.defaults { missing, available, substitute }, recipe
 
   computeMixableRecipes : (ingredientTags, fuzzyMatchThreshold = 0) ->
-    exactlyAvailableIngredientsRaw = _.map ingredientTags, (tag) => @_ingredientForTag[tag]
+    exactlyAvailableIngredientsRaw = _.map ingredientTags, (tag) => @_ingredientsByTag[tag]
     exactlyAvailableIngredients = _.compact exactlyAvailableIngredientsRaw
     if exactlyAvailableIngredientsRaw.length != exactlyAvailableIngredients.length
       log.warn "some tags that were searched are extraneous and will be ignored: #{JSON.stringify ingredientTags}"
@@ -93,7 +79,7 @@ class RecipeSearch
       .map (r) =>
         indexableIngredients = _.chain r.ingredients
           .filter 'tag'
-          .map (i) => @_ingredientForTag[i.tag]
+          .map (i) => @_ingredientsByTag[i.tag]
           .value()
         unknownIngredientAdjustment = indexableIngredients.length - _.compact(indexableIngredients).length
         mostGenericRecipeTags = @_toMostGenericTags _.compact(indexableIngredients)

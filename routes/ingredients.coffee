@@ -69,6 +69,7 @@ module.exports = {
   handler : (req, res) ->
     res.json {
       groupedIngredients         : GROUPED
+      intangibleIngredients      : _.reject INGREDIENTS, 'tangible'
       alphabeticalIngredientTags : _.pluck INGREDIENTS, 'tag'
     }
 }

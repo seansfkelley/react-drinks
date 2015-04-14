@@ -10,6 +10,12 @@ ingredient = (tag, generic = null) ->
   display = 'name-' + tag
   return { tag, generic, display }
 
+mapify = (array) ->
+  ingredientsByTag = {}
+  for i in array
+    ingredientsByTag[i.tag] = i
+  return ingredientsByTag
+
 IndexableIngredient = {
   A_ROOT      : ingredient 'a'
   A_CHILD_1   : ingredient 'a-1', 'a'
@@ -33,7 +39,7 @@ describe 'RecipeSearch', ->
   describe '#_includeAllGenerics', ->
     search = null
     beforeEach ->
-      search = new RecipeSearch [
+      search = new RecipeSearch mapify [
         IndexableIngredient.A_ROOT
         IndexableIngredient.A_CHILD_1
         IndexableIngredient.A_CHILD_1_1
@@ -73,7 +79,7 @@ describe 'RecipeSearch', ->
   describe '#_toMostGenericTags', ->
     search = null
     beforeEach ->
-      search = new RecipeSearch [
+      search = new RecipeSearch mapify [
         IndexableIngredient.A_ROOT
         IndexableIngredient.A_CHILD_1
         IndexableIngredient.A_CHILD_1_1
@@ -108,7 +114,7 @@ describe 'RecipeSearch', ->
   describe '#_computeSubstitutionMap', ->
     search = null
     beforeEach ->
-      search = new RecipeSearch [
+      search = new RecipeSearch mapify [
         IndexableIngredient.A_ROOT
         IndexableIngredient.A_CHILD_1
         IndexableIngredient.A_CHILD_1_1
@@ -181,14 +187,14 @@ describe 'RecipeSearch', ->
   # the result apart into multiple assertions.
   describe '#computeMixableRecipes', ->
     makeSearch = (recipes...) ->
-      return new RecipeSearch([
+      return new RecipeSearch mapify([
         IndexableIngredient.A_ROOT
         IndexableIngredient.A_CHILD_1
         IndexableIngredient.A_CHILD_1_1
         IndexableIngredient.A_CHILD_2
         IndexableIngredient.A_CHILD_3
         IndexableIngredient.B_ROOT
-      ], recipes)
+      ]), recipes
 
     it 'should return the empty object for no results', ->
       makeSearch().computeMixableRecipes([]).should.deep.equal {}
