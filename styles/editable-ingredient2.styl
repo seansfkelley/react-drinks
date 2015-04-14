@@ -3,7 +3,6 @@
 .editable-ingredient2
   .input-fields, .tag-guesser
     height 44px
-    padding 4px 12px
 
     &:before
       content ''
@@ -21,6 +20,7 @@
 
 .editable-ingredient2 .input-fields
   background-color grey1
+  padding 4px 12px
 
   input
     background-color grey1
@@ -41,26 +41,19 @@
 
 .editable-ingredient2 .tag-guesser
   background-color grey2
+  padding-left 12px
 
   > *
     display inline-block
-
-  .description
-    width 40%
-    color grey6
 
   .small-text
     text-transform uppercase
     font-size 10px
 
-  .guess
-    width 40%
-
   .guess.is-unknown
     color grey7
 
   .change-button-container
-    width 20%
     text-align center
 
   .change-button-container .change-button
@@ -74,3 +67,61 @@
     padding 6px
     border-radius 2px
     line-height 1em
+
+  // Sizing + Layout
+
+  .description
+    width 20%
+    color grey6
+
+  .guess
+    width 60%
+
+  .change-button-container
+    width 20%
+
+  &:not(.is-manual) .guess
+    // Kind of a hack, but this is to match the padding from react-select.
+    padding-left 10px
+    box-sizing border-box
+
+  &.is-manual .guess
+    width 80%
+
+.editable-ingredient2 .tag-guesser .Select
+  vertical-align middle
+
+  &.is-focused:not(.is-open) .Select-control
+    box-shadow none
+    border-color grey2
+
+  .Select-control
+    background-color grey2
+
+    border 1px solid grey2
+    height touch-element-size
+
+    // Some hacks to get everything to line up nice.
+    .Select-placeholder
+      top 2px
+
+    .Select-input
+      position relative
+      top 2px
+
+    .Select-arrow
+      display none
+
+  .Select-menu-outer
+    border-top none
+
+  .Select-menu
+    max-height 108px
+
+  .Select-option
+    background-color grey2
+    color grey8
+
+    &.is-focused
+      background-color grey2
+      color grey8

@@ -1,6 +1,8 @@
 # @cjsx React.DOM
 
+_          = require 'lodash'
 React      = require 'react'
+Select     = require 'react-select'
 classnames = require 'classnames'
 
 FluxMixin = require '../mixins/FluxMixin'
@@ -25,6 +27,8 @@ BORING_INPUT_PROPS = {
   spellCheck     : 'false'
 }
 
+NO_INGREDIENT_SENTINEL = -1
+
 TagGuesser = React.createClass {
   displayName : 'TagGuesser'
 
@@ -35,25 +39,61 @@ TagGuesser = React.createClass {
     FluxMixin IngredientStore, 'alphabeticalIngredients'
   ]
 
+  getInitialState : ->
+    return {
+      isManual : false
+    }
+
   render : ->
-    ingredientGuess = new IngredientGuesser(IngredientStore.alphabeticalIngredients).guess @props.forString
+    if @state.isManual
+      options = _.map IngredientStore.alphabeticalIngredients, (i) ->
+        return { value : i.tag, label : i.display }
 
-    if ingredientGuess?
-      guessString = ingredientGuess.display
-      isUnknown   = false
+      options.push { value : NO_INGREDIENT_SENTINEL, label : '(none)' }
+
+      guessNode =
+        <Select
+          className='guess'
+          placeholder='Ingredient...'
+          clearable=false
+          options={options}
+          filterOption={@_filterOption}
+          autoload=false
+          inputProps={BORING_INPUT_PROPS}
+        />
     else
-      guessString = 'unknown'
-      isUnknown   = true
+      ingredientGuess = new IngredientGuesser(IngredientStore.alphabeticalIngredients).guess @props.forString
 
-    <div className='tag-guesser'>
+      if ingredientGuess?
+        guessString = ingredientGuess.display
+        isUnknown   = false
+      else
+        guessString = '(none)'
+        isUnknown   = true
+
+      guessNode = <div className={classnames 'guess', { 'is-unknown' : isUnknown }}>{guessString}</div>
+
+    <div className={classnames 'tag-guesser', { 'is-manual' : @state.isManual }}>
       <div className='description small-text'>Matched As</div>
-      <div className={classnames 'guess', { 'is-unknown' : isUnknown }}>{guessString}</div>
-      <div className='change-button-container'>
-        <div className='change-button small-text' onTouchTap={@_changeGuess}>Change</div>
-      </div>
+      {guessNode}
+      {if not @state.isManual
+        <div className='change-button-container'>
+          <div className='change-button small-text' onTouchTap={@_changeGuess}>Change</div>
+        </div>
+      }
     </div>
 
   _changeGuess : ->
+    @setState { isManual : true }
+
+  _filterOption : (option, searchString) ->
+    if option.value == NO_INGREDIENT_SENTINEL
+      return true
+    else
+      searchString = searchString.toLowerCase()
+      # Should expose this search as a utility method on ingredients to ensure consistent behavior.
+      ingredient = IngredientStore.ingredientsByTag[option.value]
+      return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
 }
 

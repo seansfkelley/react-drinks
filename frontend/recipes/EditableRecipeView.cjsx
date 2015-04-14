@@ -15,6 +15,7 @@ utils               = require '../utils'
 
 IconButton         = require './IconButton'
 EditableIngredient = require './EditableIngredient'
+EditableIngredient2 = require './EditableIngredient2'
 
 EditableTitleBar = React.createClass {
   displayName : 'EditableTitleBar'
