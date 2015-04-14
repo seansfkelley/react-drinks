@@ -3,6 +3,7 @@
 _      = require 'lodash'
 React  = require 'react'
 
+List              = require '../components/List'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 ButtonBar         = require '../components/ButtonBar'
@@ -133,13 +134,19 @@ EditableRecipeView = React.createClass {
 
   getInitialState : ->
     return {
-      ingredients : [ @_newIngredientId() ]
-      saveable    : false
+      ingredients        : [ @_newIngredientId() ]
+      saveable           : false
+      focusNewIngredient : false
     }
 
   render : ->
-    editableIngredients = _.map @state.ingredients, (id) =>
-      return <EditableIngredient key={id}/>
+    editableIngredients = _.map @state.ingredients, (id, i) =>
+      props = {}
+      if i == @state.ingredients.length - 1 and @state.focusNewIngredient
+        props.shouldGrabFocus = true
+      return <List.DeletableItem key={id} onDelete={@_generateDeleter(id)}>
+        <EditableIngredient {...props}/>
+      </List.DeletableItem>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
     footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
@@ -172,13 +179,14 @@ EditableRecipeView = React.createClass {
 
   _newIngredient : ->
     @setState {
-      ingredients : @state.ingredients.concat [ @_newIngredientId() ]
+      ingredients        : @state.ingredients.concat [ @_newIngredientId() ]
+      focusNewIngredient : true
     }
 
-  _generateDeleteCallback : (id) ->
+  _generateDeleter : (id) ->
     return =>
       @setState {
-        ingredients : _.reject @state.ingredients, { id }
+        ingredients : _.without @state.ingredients, id
       }
 
   _newIngredientId : ->

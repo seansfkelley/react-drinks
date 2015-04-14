@@ -42,6 +42,7 @@ TagGuesser = React.createClass {
   getInitialState : ->
     return {
       isManual : false
+      selected : null
     }
 
   render : ->
@@ -56,10 +57,13 @@ TagGuesser = React.createClass {
           className='guess'
           placeholder='Ingredient...'
           clearable=false
+          value={@state.selected?.display}
           options={options}
+          onChange={@_selectIngredient}
           filterOption={@_filterOption}
           autoload=false
           inputProps={BORING_INPUT_PROPS}
+          ref='select'
         />
     else
       ingredientGuess = new IngredientGuesser(IngredientStore.allAlphabeticalIngredients).guess @props.forString
@@ -71,20 +75,28 @@ TagGuesser = React.createClass {
         guessString = '(none)'
         isUnknown   = true
 
-      guessNode = <div className={classnames 'guess', { 'is-unknown' : isUnknown }}>{guessString}</div>
+      guessNode =
+        <div className={classnames 'guess', { 'is-unknown' : isUnknown }} onTouchTap={@_switchToManual}>
+          {guessString}
+        </div>
 
     <div className={classnames 'tag-guesser', { 'is-manual' : @state.isManual }}>
       <div className='description small-text'>Matched As</div>
       {guessNode}
       {if not @state.isManual
         <div className='change-button-container'>
-          <div className='change-button small-text' onTouchTap={@_changeGuess}>Change</div>
+          <div className='change-button small-text' onTouchTap={@_switchToManual}>Change</div>
         </div>
       }
     </div>
 
-  _changeGuess : ->
+  _switchToManual : ->
     @setState { isManual : true }
+    _.defer =>
+      @refs.select.focus()
+
+  _selectIngredient : (value) ->
+    @setState { selected : IngredientStore.ingredientsByTag[value] }
 
   _filterOption : (option, searchString) ->
     if option.value == NO_INGREDIENT_SENTINEL
@@ -100,7 +112,8 @@ TagGuesser = React.createClass {
 EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
 
-  propTypes : {}
+  propTypes :
+    shouldGrabFocus : React.PropTypes.bool
 
   getInitialState : ->
     return {
@@ -108,10 +121,11 @@ EditableIngredient = React.createClass {
       unit            : ''
       display         : ''
       skipOnNextSpace : true
+      isExpanded      : false
     }
 
   render : ->
-    <div className='editable-ingredient'>
+    <div className={classnames 'editable-ingredient', { 'is-expanded' : true }} onBlur={@_onBlur} onFocus={@_onFocus}>
       <div className='input-fields' onKeyUp={@_maybeRefocus}>
         <input
           className='measure'
@@ -185,6 +199,15 @@ EditableIngredient = React.createClass {
   _onDisplayChange : (e) ->
     @setState { display : e.target.value }
 
+  _onFocus : ->
+    @setState { isExpanded : true }
+
+  _onBlur : ->
+    @setState { isExpanded : false }
+
+  componentDidMount : ->
+    if @props.shouldGrabFocus
+      @refs.measure.getDOMNode().focus()
 }
 
 module.exports = EditableIngredient

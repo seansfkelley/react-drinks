@@ -3,6 +3,7 @@
 .editable-ingredient
   .input-fields, .tag-guesser
     height 44px
+    transition height transition-duration
 
     &:before
       content ''
@@ -19,12 +20,13 @@
     border-bottom-right-radius standard-border-radius
 
 .editable-ingredient .input-fields
-  background-color grey1
-  padding 4px 12px
+  background-color darken(grey1, 5%)
+  padding 0 12px
 
   input
-    background-color grey1
+    background-color darken(grey1, 5%)
     vertical-align middle
+    height 100%
 
     font-weight 600
     border none
@@ -84,10 +86,14 @@
   &:not(.is-manual) .guess
     // Kind of a hack, but this is to match the padding from react-select.
     padding-left 10px
-    box-sizing border-box
 
   &.is-manual .guess
     width 78%
+
+.editable-ingredient:not(.is-expanded) .tag-guesser
+  height 0
+  transition height transition-duration
+  overflow-y hidden
 
 .editable-ingredient .tag-guesser .Select
   vertical-align middle
