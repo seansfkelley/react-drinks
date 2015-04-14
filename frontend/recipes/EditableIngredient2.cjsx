@@ -46,7 +46,7 @@ TagGuesser = React.createClass {
 
   render : ->
     if @state.isManual
-      options = _.map IngredientStore.alphabeticalIngredients, (i) ->
+      options = _.map IngredientStore.allAlphabeticalIngredients, (i) ->
         return { value : i.tag, label : i.display }
 
       options.push { value : NO_INGREDIENT_SENTINEL, label : '(none)' }
@@ -62,7 +62,7 @@ TagGuesser = React.createClass {
           inputProps={BORING_INPUT_PROPS}
         />
     else
-      ingredientGuess = new IngredientGuesser(IngredientStore.alphabeticalIngredients).guess @props.forString
+      ingredientGuess = new IngredientGuesser(IngredientStore.allAlphabeticalIngredients).guess @props.forString
 
       if ingredientGuess?
         guessString = ingredientGuess.display
