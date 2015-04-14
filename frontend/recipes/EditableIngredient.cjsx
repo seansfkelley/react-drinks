@@ -111,7 +111,7 @@ EditableIngredient = React.createClass {
     }
 
   render : ->
-    <div className='editable-ingredient2'>
+    <div className='editable-ingredient'>
       <div className='input-fields' onKeyUp={@_maybeRefocus}>
         <input
           className='measure'

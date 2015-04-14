@@ -1,6 +1,6 @@
 @require 'constants'
 
-.editable-ingredient2
+.editable-ingredient
   .input-fields, .tag-guesser
     height 44px
 
@@ -18,7 +18,7 @@
     border-bottom-left-radius standard-border-radius
     border-bottom-right-radius standard-border-radius
 
-.editable-ingredient2 .input-fields
+.editable-ingredient .input-fields
   background-color grey1
   padding 4px 12px
 
@@ -39,12 +39,13 @@
   .display
     width 60%
 
-.editable-ingredient2 .tag-guesser
+.editable-ingredient .tag-guesser
   background-color grey2
   padding-left 12px
 
   > *
     display inline-block
+    box-sizing border-box
 
   .small-text
     text-transform uppercase
@@ -71,14 +72,14 @@
   // Sizing + Layout
 
   .description
-    width 20%
+    width 22%
     color grey6
 
   .guess
-    width 60%
+    width 54%
 
   .change-button-container
-    width 20%
+    width 24%
 
   &:not(.is-manual) .guess
     // Kind of a hack, but this is to match the padding from react-select.
@@ -86,9 +87,9 @@
     box-sizing border-box
 
   &.is-manual .guess
-    width 80%
+    width 78%
 
-.editable-ingredient2 .tag-guesser .Select
+.editable-ingredient .tag-guesser .Select
   vertical-align middle
 
   &.is-focused:not(.is-open) .Select-control

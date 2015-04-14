@@ -138,8 +138,8 @@ EditableRecipeView = React.createClass {
     }
 
   render : ->
-    editableIngredients = _.map @state.ingredients, (i) =>
-      return <EditableIngredient key={i.id}/>
+    editableIngredients = _.map @state.ingredients, (id) =>
+      return <EditableIngredient key={id}/>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
     footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
