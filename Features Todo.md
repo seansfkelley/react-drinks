@@ -24,3 +24,7 @@
   - Ingredients, before adding them to "deletable"
 - Tapping a suggestion in the them autocomplete unfocuses then refocuses the key element and causes keyboard jitter
 - Flag which recipes are custom so we can delete them
+
+- Ensure that you can still make a recipe with the new ingredient editor.
+- Change the display name; send it to people.
+- Change <input> to be contenteditable divs so that they can be dragged.

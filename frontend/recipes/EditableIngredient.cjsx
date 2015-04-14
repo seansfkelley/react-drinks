@@ -1,10 +1,9 @@
 # @cjsx React.DOM
 
-_          = require 'lodash'
-$          = require 'jquery'
-React      = require 'react'
-Select     = require 'react-select'
-classnames = require 'classnames'
+_             = require 'lodash'
+React         = require 'react'
+{ Typeahead } = require 'react-typeahead'
+classnames    = require 'classnames'
 
 FluxMixin = require '../mixins/FluxMixin'
 
@@ -29,7 +28,7 @@ BORING_INPUT_PROPS = {
   spellCheck     : 'false'
 }
 
-NO_INGREDIENT_SENTINEL = -1
+NO_INGREDIENT_SENTINEL = 'n/a'
 
 TagGuesser = React.createClass {
   displayName : 'TagGuesser'
@@ -56,16 +55,10 @@ TagGuesser = React.createClass {
       options.push { value : NO_INGREDIENT_SENTINEL, label : '(none)' }
 
       guessNode =
-        <Select
-          className='guess'
+        <Typeahead
+          options={_.pluck options, 'value'}
           placeholder='Ingredient...'
-          clearable=false
-          value={@state.selected?.display}
-          options={options}
-          onChange={@_selectIngredient}
-          filterOption={@_filterOption}
-          autoload=false
-          inputProps={BORING_INPUT_PROPS}
+          onOptionSelected={@_selectIngredient}
           ref='select'
         />
     else
@@ -94,12 +87,13 @@ TagGuesser = React.createClass {
 
   _switchToManual : ->
     @setState { isManual : true }
-    _.defer =>
-      @refs.select.focus()
+    # _.defer =>
+    #   @refs.select.getDOMNode().focus()
 
   _selectIngredient : (value) ->
-    @props.requestHoldFocus()
-    @setState { selected : IngredientStore.ingredientsByTag[value] }
+    console.log arguments
+    # @props.requestHoldFocus()
+    # @setState { selected : IngredientStore.ingredientsByTag[value] }
 
   _filterOption : (option, searchString) ->
     if option.value == NO_INGREDIENT_SENTINEL
@@ -132,7 +126,7 @@ EditableIngredient = React.createClass {
   render : ->
     # tabIndex allows us to use focus to define when we should expand stuff.
     <div
-      className={classnames 'editable-ingredient', { 'is-expanded' : @state.isExpanded, 'show-overflow' : @state.showOverflow }}
+      className={classnames 'editable-ingredient', { 'is-expanded' : true, 'show-overflow' : @state.showOverflow }}
       onBlur={@_onBlur}
       onFocus={@_onFocus}
       tabIndex=-1

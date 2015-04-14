@@ -99,8 +99,19 @@
 .editable-ingredient:not(.show-overflow) .tag-guesser
   overflow-y hidden
 
-.editable-ingredient .tag-guesser .Select
-  vertical-align middle
+.editable-ingredient .tag-guesser .typeahead
+  input
+    vertical-align middle
+    background-color grey2
+    border none
+    height touch-element-size
+
+  ul
+    margin 0
+    list-style none
+
+  .typeahead-selector
+    height 0
 
   &.is-focused:not(.is-open) .Select-control
     box-shadow none
@@ -110,7 +121,7 @@
     background-color grey2
 
     border 1px solid grey2
-    height touch-element-size
+
 
     // Some hacks to get everything to line up nice.
     .Select-placeholder
