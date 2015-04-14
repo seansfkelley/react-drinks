@@ -1,390 +1,390 @@
----
-  -
-    display    : Absinthe
-    group      : spirit-other
-  -
-    display    : Agave Nectar
-    group      : syrup
-  -
-    display    : Amaretto
-    group      : liqueur-other
-    searchable :
-      - disaronno
-  -
-    display    : Angostura Bitters
-    generic    : bitters
-    group      : bitters
-  -
-    display    : Peychaud's Bitters
-    tag        : peychauds bitters
-    generic    : bitters
-    group      : bitters
-  -
-    display    : Orange Bitters
-    generic    : bitters
-    group      : bitters
-  -
-    display    : Applejack
-    generic    : apple-brandy
-    group      : brandy
-  -
-    display    : Calvados
-    generic    : apple-brandy
-    group      : brandy
-  -
-    display    : Irish Cream
-    group      : liqueur-other
-    searchable :
-      - baileys
-  -
-    display    : Bénédictine
-    tag        : benedictine
-    group      : liqueur-herbal
-  -
-    display    : Bourbon
-    generic    : whiskey
-    group      : whiskey
-  -
-    display    : Cachaça
-    tag        : cachaca
-    group      : rum
-  -
-    display    : Coffee Liqueur
-    group      : liqueur-other
-    searchable :
-      - kahlua
-      - tia maria
-  -
-    display    : Cointreau
-    generic    : triple sec
-    group      : liqueur-fruit
-  -
-    display    : Cola
-    group      : mixer-soda
-    searchable :
-      - coke
-      - coca cola
-      - pepsi
-  -
-    display    : Cognac
-    group      : brandy
-  -
-    display    : Cynar
-    group      : liqueur-herbal
-  -
-    display    : Rum (dark)
-    tag        : dark rum
-    generic    : rum
-    group      : rum
-  -
-    display    : Vermouth (dry)
-    tag        : dry vermouth
-    group      : wine
-  -
-    display    : Egg White
-    group      : dairy
-  -
-    display    : Elderflower Liqueur
-    group      : liqueur-herbal
-    searchable :
-     - st germain
-  -
-    display    : Genever
-    group      : gin
-  -
-    display    : Gin
-    group      : gin
-  -
-    display    : Ginger Beer
-    group      : mixer-soda
-  -
-    display    : Ginger Liqueur
-    group      : liqueur-herbal
-    searchable :
-      - domaine de canton
-      - kings ginger
-  -
-    display    : Grand Marnier
-    generic    : triple sec
-    group      : liqueur-fruit
-  -
-    display    : Chartreuse (green)
-    tag        : green chartreuse
-    generic    : chartreuse
-    group      : liqueur-herbal
-  -
-    display    : Chartreuse (yellow)
-    tag        : yellow chartreuse
-    generic    : chartreuse
-    group      : liqueur-herbal
-  -
-    display    : Grenadine
-    group      : syrup
-  -
-    display    : Honey Whiskey
-    generic    : whiskey
-    group      : whiskey
-  -
-    display    : Lemon Juice
-    group      : mixer-juice
-  -
-    display    : Lillet
-    group      : wine
-  -
-    display    : Lime
-    group      : fruit
-  -
-    display    : Lime Juice
-    group      : mixer-juice
-  -
-    display    : Maraschino Liqueur
-    group      : liqueur-fruit
-  -
-    display    : Mezcal (blanco)
-    tag        : blanco mezcal
-    generic    : mezcal
-    group      : tequila
-  -
-    display    : Mezcal (reposado)
-    tag        : reposado mezcal
-    generic    : mezcal
-    group      : tequila
-  -
-    display    : Mezcal (añejo)
-    tag        : anejo mezcal
-    generic    : mezcal
-    group      : tequila
-  -
-    display    : Milk
-    group      : dairy
-  -
-    display    : Mint
-    group      : herb
-  -
-    display    : Hazelnut Liqueur
-    group      : liqueur-herbal
-    searchable :
-      - noisette
-      - frangelico
-  -
-    display    : Rye Whiskey
-    generic    : whiskey
-    group      : whiskey
-  -
-    display    : Simple Syrup
-    generic    : simple-syrup-like
-    group      : syrup
-  -
-    display    : Sparkling Wine
-    group      : wine
-    searchable :
-      - champagne
-      - prosecco
-  -
-    display    : Rum (spiced)
-    tag        : spiced rum
-    generic    : rum
-    group      : rum
-    searchable :
-      - kraken
-  -
-    display    : Sugar
-    group      : other
-    searchable :
-      - sugar cube
-  -
-    display    : Vermouth (sweet)
-    tag        : sweet vermouth
-    group      : wine
-  -
-    display    : Tequila (blanco)
-    tag        : blanco tequila
-    generic    : tequila
-    group      : tequila
-  -
-    display    : Tequila (reposado)
-    tag        : reposado tequila
-    generic    : tequila
-    group      : tequila
-  -
-    display    : Tequila (añejo)
-    tag        : anejo tequila
-    generic    : tequila
-    group      : tequila
-  -
-    display    : Tonic
-    group      : mixer-soda
-  -
-    display    : Triple Sec
-    group      : liqueur-fruit
-  -
-    display    : Vodka
-    group      : vodka
-  -
-    display    : Irish Whiskey
-    generic    : whiskey
-    group      : whiskey
-  -
-    display    : Rum (white)
-    tag        : white rum
-    generic    : rum
-    group      : rum
-  -
-    display    : Vermouth (white)
-    tag        : white vermouth
-    group      : wine
-  -
-    display    : Club Soda
-    group      : mixer-soda
-    searchable :
-      - seltzer
-      - soda water
-  -
-    display    : Scotch
-    generic    : whiskey
-    group      : whiskey
-  -
-    display    : Orange Juice
-    group      : mixer-juice
-  -
-    display    : Pimm's No. 1
-    tag        : pimms
-    group      : liqueur-other
-  -
-    display    : Rosemary
-    group      : herb
-  -
-    display    : Basil
-    group      : herb
-  -
-    display    : Shiso
-    group      : herb
-  -
-    display    : Cucumber
-    group      : vegetable
-  -
-    display    : Thyme
-    group      : herb
-  -
-    display    : Lemon
-    group      : fruit
-  -
-    display    : Drambuie
-    generic    : honey whiskey
-    group      : whiskey
-  -
-    display    : Tennessee Whiskey
-    generic    : whiskey
-    group      : whiskey
-  -
-    display    : Peach
-    group      : fruit
-  -
-    display    : Crème de cacao
-    tag        : creme de cacao
-    group      : liqueur-other
-  -
-    display    : Cream
-    group      : dairy
-  -
-    display    : Campari
-    generic    : campari-like
-    group      : liqueur-herbal
-  -
-    display    : Brandy
-    group      : brandy
-  -
-    display    : Gomme Syrup
-    generic    : simple-syrup-like
-    group      : syrup
-  -
-    display    : Galliano
-    group      : liqueur-herbal
-  -
-    display    : Rum (gold)
-    tag        : gold rum
-    generic    : rum
-    group      : rum
-  -
-    display    : Pineapple Juice
-    group      : mixer-juice
-  -
-    display    : Tomato Juice
-    group      : mixer-juice
-  -
-    display    : Worcestershire Sauce
-    tag        : worcestershire
-    group      : other
-  -
-    display    : Tabasco Sauce
-    tag        : tabasco
-    group      : other
-  -
-    display    : Cranberry Juice
-    group      : mixer-juice
-  -
-    display    : Olive Juice
-    group      : mixer-juice
-  -
-    display    : Pickle Juice
-    group      : mixer-juice
-  -
-    display    : Coffee
-    group      : mixer-other
-  -
-    display    : Crème de menthe
-    tag        : creme de menthe
-    group      : liqueur-herbal
-  -
-    display    : Grapefruit Juice
-    group      : mixer-juice
-  -
-    display    : Ginger Ale
-    group      : mixer-soda
-  -
-    display    : White Wine
-    group      : wine
-  -
-    display    : Crème de Cassis
-    tag        : creme de cassis
-    group      : liqueur-other
-  -
-    display    : Orgeat Syrup
-    generic    : simple-syrup-like
-    group      : syrup
-  -
-    display    : Pisco
-    group      : brandy
-  -
-    display    : Port
-    group      : wine
-  -
-    display    : Egg Yolk
-    group      : dairy
-  -
-    display    : Aperol
-    generic    : campari-like
-    group      : liqueur-herbal
-  -
-    display    : Honey
-    group      : other
-  -
-    display    : Onion
-    group      : vegetable
-  -
-    display    : Hot Pepper
-    group      : vegetable
-    searchable :
-      - jalapeno
-      - habanero
-  -
-    display    : Peach Schnapps
-    group      : liqueur-fruit
-  -
-    display    : Apricot Brandy
-    group      : brandy
-  -
-    display    : Bison Grass Vodka
-    group      : vodka
-    searchable :
-      - zubrowka
+-
+  display    : Absinthe
+  group      : spirit-other
+-
+  display    : Agave Nectar
+  group      : syrup
+-
+  display    : Amaretto
+  group      : liqueur-other
+  searchable :
+    - disaronno
+-
+  display    : Angostura Bitters
+  generic    : bitters
+  group      : bitters
+-
+  display    : Peychaud's Bitters
+  tag        : peychauds bitters
+  generic    : bitters
+  group      : bitters
+-
+  display    : Orange Bitters
+  generic    : bitters
+  group      : bitters
+-
+  display    : Applejack
+  generic    : apple-brandy
+  group      : brandy
+-
+  display    : Calvados
+  generic    : apple-brandy
+  group      : brandy
+-
+  display    : Irish Cream
+  group      : liqueur-other
+  searchable :
+    - baileys
+-
+  display    : Bénédictine
+  tag        : benedictine
+  group      : liqueur-herbal
+-
+  display    : Bourbon
+  generic    : whiskey
+  group      : whiskey
+-
+  display    : Cachaça
+  tag        : cachaca
+  group      : rum
+-
+  display    : Coffee Liqueur
+  group      : liqueur-other
+  searchable :
+    - kahlua
+    - tia maria
+-
+  display    : Cointreau
+  generic    : triple sec
+  group      : liqueur-fruit
+-
+  display    : Cola
+  group      : mixer-soda
+  searchable :
+    - coke
+    - coca cola
+    - pepsi
+-
+  display    : Cognac
+  group      : brandy
+-
+  display    : Cynar
+  group      : liqueur-herbal
+-
+  display    : Rum (dark)
+  tag        : dark rum
+  generic    : rum
+  group      : rum
+-
+  display    : Vermouth (dry)
+  tag        : dry vermouth
+  group      : wine
+-
+  display    : Egg White
+  group      : dairy
+-
+  display    : Elderflower Liqueur
+  group      : liqueur-herbal
+  searchable :
+   - st germain
+-
+  display    : Genever
+  group      : gin
+-
+  display    : Gin
+  group      : gin
+-
+  display    : Ginger Beer
+  group      : mixer-soda
+-
+  display    : Ginger Liqueur
+  group      : liqueur-herbal
+  searchable :
+    - domaine de canton
+    - kings ginger
+-
+  display    : Grand Marnier
+  generic    : triple sec
+  group      : liqueur-fruit
+-
+  display    : Chartreuse (green)
+  tag        : green chartreuse
+  generic    : chartreuse
+  group      : liqueur-herbal
+-
+  display    : Chartreuse (yellow)
+  tag        : yellow chartreuse
+  generic    : chartreuse
+  group      : liqueur-herbal
+-
+  display    : Grenadine
+  group      : syrup
+-
+  display    : Honey Whiskey
+  generic    : whiskey
+  group      : whiskey
+-
+  display    : Lemon Juice
+  group      : mixer-juice
+-
+  display    : Lillet
+  group      : wine
+-
+  display    : Lime
+  group      : fruit
+-
+  display    : Lime Juice
+  group      : mixer-juice
+-
+  display    : Maraschino Liqueur
+  group      : liqueur-fruit
+-
+  display    : Mezcal (blanco)
+  tag        : blanco mezcal
+  generic    : mezcal
+  group      : tequila
+-
+  display    : Mezcal (reposado)
+  tag        : reposado mezcal
+  generic    : mezcal
+  group      : tequila
+-
+  display    : Mezcal (añejo)
+  tag        : anejo mezcal
+  generic    : mezcal
+  group      : tequila
+-
+  display    : Milk
+  group      : dairy
+-
+  display    : Mint
+  group      : herb
+-
+  display    : Hazelnut Liqueur
+  group      : liqueur-herbal
+  searchable :
+    - noisette
+    - frangelico
+-
+  display    : Rye Whiskey
+  generic    : whiskey
+  group      : whiskey
+-
+  display    : Simple Syrup
+  generic    : simple-syrup-like
+  group      : syrup
+-
+  display    : Sparkling Wine
+  group      : wine
+  searchable :
+    - champagne
+    - prosecco
+-
+  display    : Rum (spiced)
+  tag        : spiced rum
+  generic    : rum
+  group      : rum
+  searchable :
+    - kraken
+-
+  display    : Sugar
+  group      : other
+  searchable :
+    - sugar cube
+-
+  display    : Vermouth (sweet)
+  tag        : sweet vermouth
+  group      : wine
+-
+  display    : Tequila (blanco)
+  tag        : blanco tequila
+  generic    : tequila
+  group      : tequila
+-
+  display    : Tequila (reposado)
+  tag        : reposado tequila
+  generic    : tequila
+  group      : tequila
+-
+  display    : Tequila (añejo)
+  tag        : anejo tequila
+  generic    : tequila
+  group      : tequila
+-
+  display    : Tonic
+  group      : mixer-soda
+-
+  display    : Triple Sec
+  group      : liqueur-fruit
+-
+  display    : Vodka
+  group      : vodka
+-
+  display    : Irish Whiskey
+  generic    : whiskey
+  group      : whiskey
+-
+  display    : Rum (white)
+  tag        : white rum
+  generic    : rum
+  group      : rum
+-
+  display    : Vermouth (white)
+  tag        : white vermouth
+  group      : wine
+-
+  display    : Club Soda
+  group      : mixer-soda
+  searchable :
+    - seltzer
+    - soda water
+-
+  display    : Scotch
+  generic    : whiskey
+  group      : whiskey
+-
+  display    : Orange Juice
+  group      : mixer-juice
+-
+  display    : Pimm's No. 1
+  tag        : pimms
+  group      : liqueur-other
+-
+  display    : Rosemary
+  group      : herb
+-
+  display    : Basil
+  group      : herb
+-
+  display    : Shiso
+  group      : herb
+-
+  display    : Cucumber
+  group      : vegetable
+-
+  display    : Thyme
+  group      : herb
+-
+  display    : Lemon
+  group      : fruit
+-
+  display    : Drambuie
+  generic    : honey whiskey
+  group      : whiskey
+-
+  display    : Tennessee Whiskey
+  generic    : whiskey
+  group      : whiskey
+-
+  display    : Peach
+  group      : fruit
+-
+  display    : Crème de cacao
+  tag        : creme de cacao
+  group      : liqueur-other
+-
+  display    : Cream
+  group      : dairy
+-
+  display    : Campari
+  generic    : campari-like
+  group      : liqueur-herbal
+-
+  display    : Brandy
+  group      : brandy
+-
+  display    : Gomme Syrup
+  generic    : simple-syrup-like
+  group      : syrup
+-
+  display    : Galliano
+  group      : liqueur-herbal
+-
+  display    : Rum (gold)
+  tag        : gold rum
+  generic    : rum
+  group      : rum
+-
+  display    : Pineapple Juice
+  group      : mixer-juice
+-
+  display    : Tomato Juice
+  group      : mixer-juice
+-
+  display    : Worcestershire Sauce
+  tag        : worcestershire
+  group      : other
+-
+  display    : Tabasco Sauce
+  tag        : tabasco
+  group      : other
+-
+  display    : Cranberry Juice
+  group      : mixer-juice
+-
+  display    : Olive Juice
+  group      : mixer-juice
+-
+  display    : Pickle Juice
+  group      : mixer-juice
+-
+  display    : Coffee
+  group      : mixer-other
+-
+  display    : Crème de menthe
+  tag        : creme de menthe
+  group      : liqueur-herbal
+-
+  display    : Grapefruit Juice
+  group      : mixer-juice
+-
+  display    : Ginger Ale
+  group      : mixer-soda
+-
+  display    : White Wine
+  group      : wine
+-
+  display    : Crème de Cassis
+  tag        : creme de cassis
+  group      : liqueur-other
+-
+  display    : Orgeat Syrup
+  generic    : simple-syrup-like
+  group      : syrup
+-
+  display    : Pisco
+  group      : brandy
+-
+  display    : Port
+  group      : wine
+-
+  display    : Egg Yolk
+  group      : dairy
+-
+  display    : Aperol
+  generic    : campari-like
+  group      : liqueur-herbal
+-
+  display    : Honey
+  group      : other
+-
+  display    : Onion
+  group      : vegetable
+-
+  display    : Hot Pepper
+  group      : vegetable
+  searchable :
+    - jalapeno
+    - habanero
+-
+  display    : Peach Schnapps
+  group      : liqueur-fruit
+-
+  display    : Apricot Brandy
+  group      : brandy
+-
+  display    : Bison Grass Vodka
+  group      : vodka
+  searchable :
+    - zubrowka
+
