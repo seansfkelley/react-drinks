@@ -144,7 +144,7 @@ EditableRecipeView = React.createClass {
       props = {}
       if i == @state.ingredients.length - 1 and @state.focusNewIngredient
         props.shouldGrabFocus = true
-      return <List.DeletableItem key={id} onDelete={@_generateDeleter(id)}>
+      return <List.DeletableItem key={id} onDelete={@_generateDeleter(id)} style={{ zIndex : @state.ingredients.length - i }}>
         <EditableIngredient {...props}/>
       </List.DeletableItem>
 

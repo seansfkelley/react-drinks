@@ -30,12 +30,19 @@ BORING_INPUT_PROPS = {
 
 NO_INGREDIENT_SENTINEL = 'n/a'
 
+_containsActiveElement = (e) ->
+  e = document.activeElement
+  while e?
+    if e == self
+      return true
+    e = e.parentNode
+  return false
+
 TagGuesser = React.createClass {
   displayName : 'TagGuesser'
 
   propTypes :
-    forString        : React.PropTypes.string.isRequired
-    requestHoldFocus : React.PropTypes.func
+    forString : React.PropTypes.string.isRequired
 
   mixins : [
     FluxMixin IngredientStore, 'alphabeticalIngredients'
@@ -56,6 +63,7 @@ TagGuesser = React.createClass {
 
       guessNode =
         <Typeahead
+          className='guess'
           options={_.pluck options, 'value'}
           placeholder='Ingredient...'
           onOptionSelected={@_selectIngredient}
@@ -92,7 +100,6 @@ TagGuesser = React.createClass {
 
   _selectIngredient : (value) ->
     console.log arguments
-    # @props.requestHoldFocus()
     # @setState { selected : IngredientStore.ingredientsByTag[value] }
 
   _filterOption : (option, searchString) ->
@@ -126,10 +133,9 @@ EditableIngredient = React.createClass {
   render : ->
     # tabIndex allows us to use focus to define when we should expand stuff.
     <div
-      className={classnames 'editable-ingredient', { 'is-expanded' : true, 'show-overflow' : @state.showOverflow }}
-      onBlur={@_onBlur}
-      onFocus={@_onFocus}
-      tabIndex=-1
+      className={classnames 'editable-ingredient', { 'is-expanded' : @state.isExpanded, 'show-overflow' : @state.showOverflow }}
+      onBlur={@_updateFocus}
+      onFocus={@_updateFocus}
     >
       <div className='input-fields' onKeyUp={@_maybeRefocus}>
         <input
@@ -160,17 +166,11 @@ EditableIngredient = React.createClass {
           ref='display'
         />
       </div>
-      <TagGuesser key='guesser' forString={@state.display} requestHoldFocus={@_holdFocus}/>
+      <TagGuesser key='guesser' forString={@state.display}/>
     </div>
 
-  _holdFocus : ->
-    @setState { holdFocus : true }
-    _.delay (=>
-      @setState { holdFocus : false }
-      @getDOMNode().focus()
-    ), stylingConstants.TRANSITION_DURATION
-
   _maybeRefocus : (e) ->
+    return
     if @_refToFocus?
       @_refToFocus.getDOMNode().focus()
       @_refToFocus = null
@@ -211,18 +211,21 @@ EditableIngredient = React.createClass {
   _onDisplayChange : (e) ->
     @setState { display : e.target.value }
 
-  _onFocus : ->
-    @setState { isExpanded : true }
-    _.delay (=>
-      @setState { showOverflow : true  }
-    ), stylingConstants.TRANSITION_DURATION
-
-  _onBlur : ->
-    return if @state.holdFocus
-    @setState {
-      isExpanded   : false
-      showOverflow : false
-    }
+  _updateFocus : _.debounce (->
+    self = @getDOMNode()
+    if _containsActiveElement @getDOMNode()
+      @setState {
+        isExpanded : true
+      }
+      _.delay (=>
+        @setState { showOverflow : true  }
+      ), stylingConstants.TRANSITION_DURATION
+    else
+      @setState {
+        isExpanded   : false
+        showOverflow : false
+      }
+  ), 25
 
   componentDidMount : ->
     if @props.shouldGrabFocus

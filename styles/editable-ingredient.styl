@@ -1,4 +1,5 @@
 @require 'constants'
+@require 'mixins'
 
 .editable-ingredient
   outline none
@@ -92,9 +93,13 @@
   &.is-manual .guess
     width 78%
 
-.editable-ingredient:not(.is-expanded) .tag-guesser
-  height 0
-  transition height transition-duration
+.editable-ingredient:not(.is-expanded)
+  border-bottom-left-radius standard-border-radius
+  border-bottom-right-radius standard-border-radius
+
+  .tag-guesser
+    height 0
+    transition height transition-duration
 
 .editable-ingredient:not(.show-overflow) .tag-guesser
   overflow-y hidden
@@ -105,45 +110,29 @@
     background-color grey2
     border none
     height touch-element-size
+    width 100%
 
   ul
     margin 0
+    padding 0
     list-style none
 
-  .typeahead-selector
-    height 0
+  input, ul
+    padding-left 12px
 
-  &.is-focused:not(.is-open) .Select-control
-    box-shadow none
-    border-color grey2
-
-  .Select-control
-    background-color grey2
-
-    border 1px solid grey2
-
-
-    // Some hacks to get everything to line up nice.
-    .Select-placeholder
-      top 2px
-
-    .Select-input
-      position relative
-      top 2px
-
-    .Select-arrow
-      display none
-
-  .Select-menu-outer
-    border-top none
-
-  .Select-menu
+  ul.typeahead-selector
     max-height 108px
-
-  .Select-option
+    overflow-y scroll
     background-color grey2
-    color grey8
+    shadow('bottom', 1px)
 
-    &.is-focused
-      background-color grey2
-      color grey8
+    border-bottom-left-radius standard-border-radius
+    border-bottom-right-radius standard-border-radius
+
+    li
+      height 36px
+      line-height 36px
+
+      a
+        color grey8
+        text-decoration none
