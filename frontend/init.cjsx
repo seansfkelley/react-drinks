@@ -12,9 +12,9 @@ require('./overlayViews').attachOverlayViews()
 require('bluebird').longStackTraces()
 require('react-tap-event-plugin')()
 
-# if window.ontouchstart?
+# if 'ontouchstart' of window
 #   kill = (type) ->
-#     window.document.body.addEventListener(type, (e) ->
+#     window.document.addEventListener(type, (e) ->
 #       e.preventDefault()
 #       e.stopPropagation()
 #       return false

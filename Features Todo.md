@@ -25,6 +25,12 @@
 - Tapping a suggestion in the them autocomplete unfocuses then refocuses the key element and causes keyboard jitter
 - Flag which recipes are custom so we can delete them
 
+### Shipping v0
 - Ensure that you can still make a recipe with the new ingredient editor.
-- Change the display name; send it to people.
-- Change <input> to be contenteditable divs so that they can be dragged.
+- Fix ingredients:
+  - Swipe-to-delete.
+  - Tap-to-focus and refocusing when touching New Ingredient.
+  - Drag-to-reorder.
+- Ensure that bumping React as I did will not break a fresh install.
+- Change the display name to Spirit Guide.
+- Send it to people.
