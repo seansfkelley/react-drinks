@@ -1,7 +1,8 @@
 ### Code Quality
 - having views hide themselves by knowing which overlay they're in is sketchy
 - dark-on-light and light-on-dark theme classes?
-- recipesearch should share ingredient-for-tag from stores.coffee
+- replace recipe#searchableName with something like recipe#canonicalName (it's also used for sorting!)
+- replace recipe#normalizedName with something like recipe#recipeId (cause that's what it's actually used for)
 
 ### Recipes
 - garnish section in ingredients

@@ -164,7 +164,7 @@ RecipeStore = new class extends FluxStore
     @_persist()
 
   _setRecipes : (recipes) ->
-    @alphabeticalRecipes = _.sortBy(recipes, 'name')
+    @alphabeticalRecipes = _.sortBy(recipes, 'searchableName')
     @_createRecipeSearch()
     @_updateDerivedRecipeLists()
 
