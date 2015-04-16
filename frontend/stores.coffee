@@ -4,6 +4,8 @@ log        = require 'loglevel'
 MicroEvent = require 'microevent'
 Promise    = require 'bluebird'
 
+normalization = require '../shared/normalization'
+
 AppDispatcher = require './AppDispatcher'
 RecipeSearch  = require './recipes/RecipeSearch'
 
@@ -52,7 +54,7 @@ IngredientStore = new class extends FluxStore
     for i in ingredients
       if i.generic? and not @ingredientsByTag[i.generic]?
         log.trace "ingredient #{i.tag} refers to unknown generic #{i.generic}; inferring generic"
-        @ingredientsByTag[i.generic] = {
+        @ingredientsByTag[i.generic] = normalization.normalizeIngredient {
           tag     : i.generic
           display : "[inferred] #{i.generic}"
         }

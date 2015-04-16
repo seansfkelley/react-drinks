@@ -219,12 +219,12 @@ EditableRecipeView = React.createClass {
   _constructRecipe : ->
     ingredients = _.map @state.ingredientIds, (id) =>
       { tag, measure, unit, description } = @refs[id].getIngredient()
-      return _.pick {
+      return normalization.normalizeIngredient _.pick({
         tag
         displayAmount     : measure
         displayUnit       : unit
         displayIngredient : description
-      }, _.identity
+      }, _.identity)
     return normalization.normalizeRecipe _.pick({
       ingredients
       name         : @refs.title.getText()

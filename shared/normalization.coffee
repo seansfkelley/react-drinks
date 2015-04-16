@@ -1,7 +1,10 @@
 _        = require 'lodash'
+assert   = require 'assert'
 latinize = require './latinize'
 
 normalizeIngredient = (i) ->
+  assert i.display
+
   i = _.clone i
   i.tag        ?= i.display.toLowerCase()
   i.searchable ?= []
@@ -13,6 +16,8 @@ normalizeIngredient = (i) ->
   return i
 
 normalizeRecipe = (r) ->
+  assert r.name
+
   r = _.clone r
   r.searchableName = latinize(r.name).toLowerCase()
   r.normalizedName = r.searchableName.replace('/ /g', '-').replace(/[^-a-z0-9]/g, '')

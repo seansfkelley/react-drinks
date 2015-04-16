@@ -11,7 +11,6 @@ class RecipeSearch
         missed++
     return missed
 
-
   _includeAllGenerics : (ingredients) ->
     withGenerics = []
 
