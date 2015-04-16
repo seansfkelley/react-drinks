@@ -28,7 +28,7 @@ BORING_INPUT_PROPS = {
   spellCheck     : 'false'
 }
 
-NO_INGREDIENT_SENTINEL = 'n/a'
+NO_INGREDIENT_SENTINEL = '__n/a__'
 
 _containsActiveElement = (container) ->
   e = document.activeElement
@@ -102,8 +102,8 @@ TagGuesser = React.createClass {
       guess    : null
     }
 
-  _selectIngredient : (value) ->
-    @setState { choice : IngredientStore.ingredientsByTag[value] }
+  _selectIngredient : (option) ->
+    @setState { choice : option.value }
 
   _filterOption : (searchString, option) ->
     if option.value == NO_INGREDIENT_SENTINEL
