@@ -64,9 +64,12 @@ TagGuesser = React.createClass {
       guessNode =
         <Typeahead
           className='guess'
-          options={_.pluck options, 'value'}
+          options={options}
           placeholder='Ingredient...'
           onOptionSelected={@_selectIngredient}
+          filterOption={@_filterOption}
+          displayOption='label'
+          onBlur={console.log.bind(console)}
           ref='select'
         />
     else
@@ -95,14 +98,11 @@ TagGuesser = React.createClass {
 
   _switchToManual : ->
     @setState { isManual : true }
-    # _.defer =>
-    #   @refs.select.getDOMNode().focus()
 
   _selectIngredient : (value) ->
-    console.log arguments
-    # @setState { selected : IngredientStore.ingredientsByTag[value] }
+    @setState { selected : IngredientStore.ingredientsByTag[value] }
 
-  _filterOption : (option, searchString) ->
+  _filterOption : (searchString, option) ->
     if option.value == NO_INGREDIENT_SENTINEL
       return true
     else
@@ -127,11 +127,9 @@ EditableIngredient = React.createClass {
       skipOnNextSpace : true
       isExpanded      : false
       showOverflow    : false
-      holdFocus       : false
     }
 
   render : ->
-    # tabIndex allows us to use focus to define when we should expand stuff.
     <div
       className={classnames 'editable-ingredient', { 'is-expanded' : @state.isExpanded, 'show-overflow' : @state.showOverflow }}
       onBlur={@_updateFocus}
