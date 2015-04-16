@@ -42,7 +42,7 @@ TagGuesser = React.createClass {
   displayName : 'TagGuesser'
 
   propTypes :
-    forString : React.PropTypes.string.isRequired
+    guessString : React.PropTypes.string.isRequired
 
   mixins : [
     FluxMixin IngredientStore, 'alphabeticalIngredients'
@@ -52,7 +52,7 @@ TagGuesser = React.createClass {
     return {
       isManual : false
       choice   : null
-      guess    : @_getGuessFor @props.forString
+      guess    : @_getGuessFor @props.guessString
     }
 
   render : ->
@@ -71,6 +71,7 @@ TagGuesser = React.createClass {
           filterOption={@_filterOption}
           displayOption='label'
           defaultValue={@state.guess?.display}
+          inputProps={BORING_INPUT_PROPS}
           ref='select'
         />
     else
@@ -96,7 +97,10 @@ TagGuesser = React.createClass {
     </div>
 
   _switchToManual : ->
-    @setState { isManual : true }
+    @setState {
+      isManual : true
+      guess    : null
+    }
 
   _selectIngredient : (value) ->
     @setState { choice : IngredientStore.ingredientsByTag[value] }
@@ -113,8 +117,16 @@ TagGuesser = React.createClass {
   _getGuessFor : (string) ->
     return new IngredientGuesser(IngredientStore.allAlphabeticalIngredients).guess string
 
+  revertToGuessingIfAppropriate : ->
+    if @state.isManual and not @state.choice?
+      @setState {
+        isManual : false
+        choice   : null
+        guess    : @_getGuessFor @props.guessString
+      }
+
   componentWillReceiveProps : (nextProps) ->
-    @setState { guess : @_getGuessFor(nextProps.forString) }
+    @setState { guess : @_getGuessFor(nextProps.guessString) }
 }
 
 EditableIngredient = React.createClass {
@@ -168,7 +180,7 @@ EditableIngredient = React.createClass {
           ref='display'
         />
       </div>
-      <TagGuesser key='guesser' forString={@state.display}/>
+      <TagGuesser key='guesser' guessString={@state.display} ref='guesser'/>
     </div>
 
   _maybeRefocus : (e) ->
@@ -222,12 +234,20 @@ EditableIngredient = React.createClass {
       _.delay (=>
         @setState { showOverflow : true  }
       ), stylingConstants.TRANSITION_DURATION
+      if @_isFocusingOnAnyInput()
+        @refs.guesser.revertToGuessingIfAppropriate()
     else
       @setState {
         isExpanded   : false
         showOverflow : false
       }
   ), 25
+
+  _isFocusingOnAnyInput : ->
+    for r in [ 'measure', 'unit', 'display' ]
+      if @refs[r].getDOMNode() == document.activeElement
+        return true
+    return false
 
   componentDidMount : ->
     if @props.shouldGrabFocus
