@@ -1,5 +1,6 @@
-_        = require 'lodash'
-assert   = require 'assert'
+_ = require 'lodash'
+
+assert   = require './tinyassert'
 latinize = require './latinize'
 
 normalizeIngredient = (i) ->
