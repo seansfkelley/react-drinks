@@ -30,10 +30,10 @@ BORING_INPUT_PROPS = {
 
 NO_INGREDIENT_SENTINEL = 'n/a'
 
-_containsActiveElement = (e) ->
+_containsActiveElement = (container) ->
   e = document.activeElement
   while e?
-    if e == self
+    if e == container
       return true
     e = e.parentNode
   return false
