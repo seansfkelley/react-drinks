@@ -15,8 +15,11 @@
       vertical-align middle
 
   .input-fields
-    border-top-left-radius standard-border-radius
-    border-top-right-radius standard-border-radius
+    border-radius standard-border-radius
+
+  &.is-expanded .input-fields
+    border-bottom-left-radius 0
+    border-bottom-right-radius 0
 
   .tag-guesser
     border-bottom-left-radius standard-border-radius

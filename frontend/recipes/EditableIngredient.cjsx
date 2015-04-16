@@ -184,7 +184,6 @@ EditableIngredient = React.createClass {
     </div>
 
   _maybeRefocus : (e) ->
-    return
     if @_refToFocus?
       @_refToFocus.getDOMNode().focus()
       @_refToFocus = null
