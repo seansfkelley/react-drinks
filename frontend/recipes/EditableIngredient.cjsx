@@ -125,6 +125,12 @@ TagGuesser = React.createClass {
         guess    : @_getGuessFor @props.guessString
       }
 
+  getTag : ->
+    if @state.isManual
+      return @state.choice
+    else
+      return @state.guess?.tag
+
   componentWillReceiveProps : (nextProps) ->
     @setState { guess : @_getGuessFor(nextProps.guessString) }
 }
@@ -245,6 +251,14 @@ EditableIngredient = React.createClass {
       if @refs[r].getDOMNode() == document.activeElement
         return true
     return false
+
+  getIngredient : ->
+    return {
+      measure     : utils.defractionify @state.measure
+      unit        : @state.unit
+      description : @state.display
+      tag         : @refs.guesser.getTag()
+    }
 
   componentDidMount : ->
     # Something about making this deferred like this fixes an issue where clicking on a

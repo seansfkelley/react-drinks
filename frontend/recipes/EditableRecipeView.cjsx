@@ -71,9 +71,10 @@ EditableFooter = React.createClass {
       {closeButton}
     </ButtonBar>
 
-  _save : ->
+  _save : (e) ->
     return if not @props.canSave
     @props.save()
+    e.stopPropagation()
 
   _close : ->
     clearTimeout @_confirmTimeout
@@ -134,18 +135,20 @@ EditableRecipeView = React.createClass {
 
   getInitialState : ->
     return {
-      ingredients        : [ @_newIngredientId() ]
+      ingredientIds      : [ @_newIngredientId() ]
       saveable           : false
       focusNewIngredient : false
     }
 
   render : ->
-    editableIngredients = _.map @state.ingredients, (id, i) =>
-      props = {}
-      if i == @state.ingredients.length - 1 and @state.focusNewIngredient
-        props.shouldGrabFocus = true
-      return <List.DeletableItem key={id} onDelete={@_generateDeleter(id)} style={{ zIndex : @state.ingredients.length - i }}>
-        <EditableIngredient {...props}/>
+    editableIngredients = _.map @state.ingredientIds, (id, i) =>
+      shouldGrabFocus = i == @state.ingredientIds.length - 1 and @state.focusNewIngredient
+      <List.DeletableItem
+        key={id}
+        onDelete={@_generateDeleter(id)}
+        style={{ zIndex : @state.ingredientIds.length - i }}
+      >
+        <EditableIngredient shouldGrabFocus={shouldGrabFocus} ref={id}/>
       </List.DeletableItem>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
@@ -179,14 +182,14 @@ EditableRecipeView = React.createClass {
 
   _newIngredient : ->
     @setState {
-      ingredients        : @state.ingredients.concat [ @_newIngredientId() ]
+      ingredientIds     : @state.ingredientIds.concat [ @_newIngredientId() ]
       focusNewIngredient : true
     }
 
   _generateDeleter : (id) ->
     return =>
       @setState {
-        ingredients : _.without @state.ingredients, id
+        ingredientIds : _.without @state.ingredientIds, id
       }
 
   _newIngredientId : ->
@@ -199,7 +202,7 @@ EditableRecipeView = React.createClass {
       saveable = !!(
         @refs.title.getText().length and
         @refs.instructions.getText().length and
-        @state.ingredients.length
+        @state.ingredientIds.length
       )
     @setState { saveable }
 
@@ -214,12 +217,13 @@ EditableRecipeView = React.createClass {
     }
 
   _constructRecipe : ->
-    ingredients = _.map @state.ingredients, ({ measure, unit, tag, description }) ->
+    ingredients = _.map @state.ingredientIds, (id) =>
+      { tag, measure, unit, description } = @refs[id].getIngredient()
       return _.pick {
         tag
         displayAmount     : measure
         displayUnit       : unit
-        displayIngredient : description or IngredientStore.ingredientsByTag[tag]?.display
+        displayIngredient : description
       }, _.identity
     return normalization.normalizeRecipe _.pick({
       ingredients
