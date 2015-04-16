@@ -51,7 +51,8 @@ TagGuesser = React.createClass {
   getInitialState : ->
     return {
       isManual : false
-      selected : null
+      choice   : null
+      guess    : @_getGuessFor @props.forString
     }
 
   render : ->
@@ -69,14 +70,12 @@ TagGuesser = React.createClass {
           onOptionSelected={@_selectIngredient}
           filterOption={@_filterOption}
           displayOption='label'
-          onBlur={console.log.bind(console)}
+          defaultValue={@state.guess?.display}
           ref='select'
         />
     else
-      ingredientGuess = new IngredientGuesser(IngredientStore.allAlphabeticalIngredients).guess @props.forString
-
-      if ingredientGuess?
-        guessString = ingredientGuess.display
+      if @state.guess?
+        guessString = @state.guess.display
         isUnknown   = false
       else
         guessString = '(none)'
@@ -100,7 +99,7 @@ TagGuesser = React.createClass {
     @setState { isManual : true }
 
   _selectIngredient : (value) ->
-    @setState { selected : IngredientStore.ingredientsByTag[value] }
+    @setState { choice : IngredientStore.ingredientsByTag[value] }
 
   _filterOption : (searchString, option) ->
     if option.value == NO_INGREDIENT_SENTINEL
@@ -111,6 +110,11 @@ TagGuesser = React.createClass {
       ingredient = IngredientStore.ingredientsByTag[option.value]
       return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
+  _getGuessFor : (string) ->
+    return new IngredientGuesser(IngredientStore.allAlphabeticalIngredients).guess string
+
+  componentWillReceiveProps : (nextProps) ->
+    @setState { guess : @_getGuessFor(nextProps.forString) }
 }
 
 EditableIngredient = React.createClass {
