@@ -224,8 +224,7 @@ EditableIngredient = React.createClass {
   _onDisplayChange : (e) ->
     @setState { display : e.target.value }
 
-  _updateFocus : _.debounce (->
-    self = @getDOMNode()
+  _updateFocus : ->
     if _containsActiveElement @getDOMNode()
       @setState {
         isExpanded : true
@@ -240,7 +239,6 @@ EditableIngredient = React.createClass {
         isExpanded   : false
         showOverflow : false
       }
-  ), 25
 
   _isFocusingOnAnyInput : ->
     for r in [ 'measure', 'unit', 'display' ]
@@ -249,6 +247,9 @@ EditableIngredient = React.createClass {
     return false
 
   componentDidMount : ->
+    # Something about making this deferred like this fixes an issue where clicking on a
+    # typeahead option doesn't actually apply the option the first time.
+    @_updateFocus = _.debounce @_updateFocus, 0
     if @props.shouldGrabFocus
       @refs.measure.getDOMNode().focus()
 }
