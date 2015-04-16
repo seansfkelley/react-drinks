@@ -1,6 +1,4 @@
-# react-drinks
-
-(Name is a work in progress.)
+# Spirit Guide
 
 A cocktail-mixing web app for your phone!
 

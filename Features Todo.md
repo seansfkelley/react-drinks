@@ -27,11 +27,9 @@
 - Flag which recipes are custom so we can delete them
 
 ### Shipping v0
-- Ensure that you can still make a recipe with the new ingredient editor.
 - Fix ingredients:
   - Swipe-to-delete.
   - Tap-to-focus and refocusing when touching New Ingredient.
   - Drag-to-reorder.
 - Ensure that bumping React as I did will not break a fresh install.
-- Change the display name to Spirit Guide.
 - Send it to people.
