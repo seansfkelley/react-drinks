@@ -1,7 +1,6 @@
 # @cjsx React.DOM
 
 _     = require 'lodash'
-md5   = require 'MD5'
 React = require 'react'
 
 FluxMixin = require '../mixins/FluxMixin'
@@ -126,10 +125,7 @@ RecipeView = React.createClass {
         </div>
 
     instructionLines = _.map @props.recipe.instructions.split('\n'), (l, i) ->
-      # The only reason I'm bothering to do this is in the interest of no warnings. I think React
-      # only warns you of each error once, and I want to ensure this one doesn't crop up somewhere
-      # more damaging.
-      return <div className='text-line' key={md5(l)}>{l}</div>
+      return <div className='text-line' key={i}>{l}</div>
     recipeInstructions =
       <div className='recipe-instructions'>
         <SectionHeader text='Instructions'/>
