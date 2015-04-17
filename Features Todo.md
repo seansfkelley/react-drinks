@@ -19,7 +19,6 @@
 ### Adding/Editing Recipes
 - Fix up styling
   - Animate additions/removals of deletable ingredients
-- Flag which recipes are custom so we can delete them
 - Drag-to-reorder
 
 ### Shipping v0

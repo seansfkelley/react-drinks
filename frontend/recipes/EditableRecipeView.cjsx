@@ -230,6 +230,7 @@ EditableRecipeView = React.createClass {
       name         : @refs.title.getText()
       instructions : @refs.instructions.getText()
       notes        : @refs.notes.getText()
+      isCustom     : true
     }, _.identity)
 }
 
