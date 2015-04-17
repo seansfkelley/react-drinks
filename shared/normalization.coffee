@@ -22,6 +22,9 @@ normalizeRecipe = (r) ->
 
   r = _.clone r
   r.canonicalName = latinize(r.name).toLowerCase()
+  # So, we don't really care if this is a hash or not. It just needs to be sufficiently unique.
+  # The reason it does this is because it avoids accidentally assigning the same ID to a default
+  # recipe (which don't come with any) and a custom recipe (which should retain theirs forever).
   r.recipeId ?= md5 JSON.stringify(r)
   return r
 
