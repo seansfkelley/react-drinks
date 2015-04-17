@@ -19,13 +19,11 @@
 ### Adding/Editing Recipes
 - Fix up styling
   - Animate additions/removals of deletable ingredients
-- Validate:
-  - Ingredients, before adding them to "deletable"
 - Flag which recipes are custom so we can delete them
 
 ### Shipping v0
 - Fix ingredients:
   - Tap-to-focus and refocusing when touching New Ingredient.
   - Drag-to-reorder.
-- Ensure that bumping React as I did will not break a fresh install.
+- Figure out the proper react-typeahead dependency situation.
 - Send it to people.
