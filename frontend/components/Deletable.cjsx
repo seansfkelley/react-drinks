@@ -48,7 +48,6 @@ Deletable = React.createClass {
     else
       @setState { left : position.left }
 
-  # TODO: Make this animate.
   _onDragEnd : (event, { position }) ->
     if position.left < -DELETABLE_WIDTH / 2
       @refs.draggable.setState { clientX : -DELETABLE_WIDTH }

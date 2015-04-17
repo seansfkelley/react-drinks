@@ -1,5 +1,13 @@
+@require 'constants'
+
 .deletable
   position relative
+
+.deletable:not(.react-draggable-dragging)
+  transition left transition-duration
+
+  .delete-button
+    transition width transition-duration, right transition-duration
 
 .deletable .delete-button
   overflow hidden
