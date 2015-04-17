@@ -3,7 +3,7 @@
 _      = require 'lodash'
 React  = require 'react'
 
-List              = require '../components/List'
+Deletable         = require '../components/Deletable'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 ButtonBar         = require '../components/ButtonBar'
@@ -143,13 +143,13 @@ EditableRecipeView = React.createClass {
   render : ->
     editableIngredients = _.map @state.ingredientIds, (id, i) =>
       shouldGrabFocus = i == @state.ingredientIds.length - 1 and @state.focusNewIngredient
-      <List.DeletableItem
+      <Deletable
         key={id}
         onDelete={@_generateDeleter(id)}
         style={{ zIndex : @state.ingredientIds.length - i }}
       >
         <EditableIngredient shouldGrabFocus={shouldGrabFocus} ref={id}/>
-      </List.DeletableItem>
+      </Deletable>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
     footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>

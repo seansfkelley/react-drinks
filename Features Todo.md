@@ -25,7 +25,6 @@
 
 ### Shipping v0
 - Fix ingredients:
-  - Swipe-to-delete.
   - Tap-to-focus and refocusing when touching New Ingredient.
   - Drag-to-reorder.
 - Ensure that bumping React as I did will not break a fresh install.
