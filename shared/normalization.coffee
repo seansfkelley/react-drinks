@@ -21,7 +21,7 @@ normalizeRecipe = (r) ->
   assert r.name
 
   r = _.clone r
-  r.searchableName = latinize(r.name).toLowerCase()
+  r.canonicalName = latinize(r.name).toLowerCase()
   r.recipeId ?= md5 JSON.stringify(r)
   return r
 

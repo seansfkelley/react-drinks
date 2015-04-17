@@ -1,7 +1,6 @@
 ### Code Quality
 - having views hide themselves by knowing which overlay they're in is sketchy
 - dark-on-light and light-on-dark theme classes?
-- replace recipe#searchableName with something like recipe#canonicalName (it's also used for sorting!)
 
 ### Recipes
 - garnish section in ingredients

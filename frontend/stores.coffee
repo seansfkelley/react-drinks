@@ -164,7 +164,7 @@ RecipeStore = new class extends FluxStore
     @_persist()
 
   _setRecipes : (recipes) ->
-    @alphabeticalRecipes = _.sortBy(recipes, 'searchableName')
+    @alphabeticalRecipes = _.sortBy(recipes, 'canonicalName')
     @_createRecipeSearch()
     @_updateDerivedRecipeLists()
 
@@ -191,7 +191,7 @@ RecipeStore = new class extends FluxStore
 
   # You must guarantee that IngredientStore is updated before calling this.
   _filterRecipeBySearchTerm : (r) =>
-    if r.searchableName.indexOf(@searchTerm) != -1
+    if r.canonicalName.indexOf(@searchTerm) != -1
       return true
     # TODO: This is crazily, wildly inefficient.
     return _.chain r.ingredients
