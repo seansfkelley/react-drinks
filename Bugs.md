@@ -1,7 +1,6 @@
 - the overscroll on the iphone status bar means you can drag it down away from the content of the status bar and it looks dumb
 - rotating the app sideways or dragging the wrong thing at the wrong time can wreck the iOS display in Safari (do I care?)
 - when showing the page for the first time you get a flash of "nothing to see here" -- perhaps some better zero state while things load?
-- on-scroll behavior is hilariously, wildly inefficient: there has got to be a better way to do this or at least to design around it
 - autoprefixer isn't adding things it should (like the appearance rule on inputs)
 - when overlays are shown, you can still interact with things behind it; pointer-events doesn't seem to be sufficient
 - would it be possible to use media queries to remove the iPhone spacer header bar thing when Personal Hotspot is on?
