@@ -11,5 +11,3 @@
 - list-with-search should probably be mixinified or something -- got some copy-paste going on
 
 - favorites should incorporate ingredients you have
-- try not to show dropdown before a search?
-- in Chrome (but not iOS, for once), tapping the right chevron in editable ingredients starts to select the next section and then reverts
