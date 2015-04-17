@@ -240,7 +240,8 @@ EditableIngredient = React.createClass {
         isExpanded : true
       }
       _.delay (=>
-        @setState { showOverflow : true  }
+        if @state.isExpanded
+          @setState { showOverflow : true  }
       ), stylingConstants.TRANSITION_DURATION
       if @_isFocusingOnAnyInput()
         @refs.guesser.revertToGuessingIfAppropriate()
