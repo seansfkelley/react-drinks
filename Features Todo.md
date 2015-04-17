@@ -20,10 +20,10 @@
 - Fix up styling
   - Animate additions/removals of deletable ingredients
 - Flag which recipes are custom so we can delete them
+- Drag-to-reorder
 
 ### Shipping v0
 - Fix ingredients:
   - Tap-to-focus and refocusing when touching New Ingredient.
-  - Drag-to-reorder.
 - Figure out the proper react-typeahead dependency situation.
 - Send it to people.

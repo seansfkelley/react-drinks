@@ -13,25 +13,17 @@ There's really no hand-holding at all, even though it's a fundamentally simple a
 - The ingredients button isn't obviously a button, so even with text that mention they should start with ingredients people get stuck for a bit.
 - The checkmark is totally not obvious and I don't think anyone has ever hit it by themselves. They don't know to look for it when they want to see only things they can mix.
 
-### Explain substitutions and missing ingredients better
+### Call out substitutions and missing ingredients better
 
 People skim, and they miss the fact that they can't actually make a particular drink (at least, they do at first). Making this more obvious (by having to turn it on, or color/size/text changes) could help keep people from mentally investing in something they can't do.
 
-Relatedly, when people figure out that a drink is mixable because of "substitutions", they would like to know what said substitutions are (indeed, I sometimes forget some of the rarer ones like hazulnut liqueur or whatever).
-
-### Reading more about ingredients, or "What is 'amaretto'?
+### Reading more about ingredients, or "What is 'amaretto'?"
 
 Related again to substitutions, but also in general. There are so many ingredients that it's overwhelming if you don't know what you're doing. Potential ideas to fix this:
 
 - Write up a short description of what a drink is, suitable for putting in a short popup or something.
 - Tapping an ingredient in a recipe view could bring it up.
 - Tapping some kind of "tell me more" button in the ingredients pane could bring it up.
-
-### Adding recipes
-
-This one's a doozy. The backing data for recipes (and even ingredients) is pretty complex and rich, which is how I'm able to do things like substitutions and smart-ish search.
-
-I wanted to have an interface that looks like the interface for reading recipes, but aside from the fact that the text is pretty small there (and therefore touch targets are small), there's a lot of strict validation (amounts can only be numerical) and data that is not usually surfaced that must be entered (that while it says "Old Tom gin", you also need to specify that this is, indeed "gin", since the display text is only for display -- that distinction is not obvious).
 
 ### Misc random ides
 
