@@ -117,11 +117,11 @@ UiStore = new class extends FluxStore
       @openIngredientGroups = {}
       @openIngredientGroups[group] = true
 
-  'toggle-favorite-recipe' : ({ normalizedName }) ->
-    if @favoritedRecipes[normalizedName]
-      delete @favoritedRecipes[normalizedName]
+  'toggle-favorite-recipe' : ({ recipeId }) ->
+    if @favoritedRecipes[recipeId]
+      delete @favoritedRecipes[recipeId]
     else
-      @favoritedRecipes[normalizedName] = true
+      @favoritedRecipes[recipeId] = true
     @_persist()
 
   _persist : ->

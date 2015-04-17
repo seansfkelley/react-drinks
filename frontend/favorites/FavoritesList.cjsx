@@ -49,9 +49,9 @@ FavoritesList = React.createClass {
       rightIconOnTouchTap={@_closeFavorites}
       title='Favorites'/>
 
-    recipes = _.filter @state.alphabeticalRecipes, (r) => @state.favoritedRecipes[r.normalizedName]
+    recipes = _.filter @state.alphabeticalRecipes, (r) => @state.favoritedRecipes[r.recipeId]
 
-    recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.normalizedName}/>
+    recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.recipeId}/>
 
     <FixedHeaderFooter header={headerNode} className='favorites-list-view'>
       <List className='favorites-list' emptyText='Add some favorites first!'>

@@ -89,7 +89,7 @@ RecipeFooter = React.createClass {
   _saveTo : ->
     AppDispatcher.dispatch {
       type           : 'toggle-favorite-recipe'
-      normalizedName : @props.normalizedRecipeName
+      recipeId : @props.normalizedRecipeName
     }
 }
 
@@ -135,7 +135,7 @@ RecipeView = React.createClass {
     <FixedHeaderFooter
       className='default-modal recipe-view'
       header={<TitleBar title={@props.recipe.name}/>}
-      footer={<RecipeFooter normalizedRecipeName={@props.recipe.normalizedName} onClose={@_onClose}/>}
+      footer={<RecipeFooter normalizedRecipeName={@props.recipe.recipeId} onClose={@_onClose}/>}
     >
       <div className='recipe-description'>
         <div className='recipe-ingredients'>

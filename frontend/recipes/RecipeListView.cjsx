@@ -136,7 +136,7 @@ AlphabeticalRecipeList = React.createClass {
 
   render : ->
     recipeNodes = _.map @props.recipes, (r, i) =>
-      <RecipeListItem recipes={@props.recipes} index={i} key={r.normalizedName}/>
+      <RecipeListItem recipes={@props.recipes} index={i} key={r.recipeId}/>
 
     headeredNodes = List.headerify {
       nodes             : recipeNodes
@@ -184,9 +184,9 @@ GroupedRecipeList = React.createClass {
 
     recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
       if r.missing.length
-        return <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
+        return <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.recipeId}/>
       else
-        return <RecipeListItem recipes={orderedRecipes} index={i} key={r.normalizedName}/>
+        return <RecipeListItem recipes={orderedRecipes} index={i} key={r.recipeId}/>
 
     headeredNodes = List.headerify {
       nodes             : recipeNodes

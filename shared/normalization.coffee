@@ -1,4 +1,5 @@
-_ = require 'lodash'
+_   = require 'lodash'
+md5 = require 'md5'
 
 assert   = require './tinyassert'
 latinize = require './latinize'
@@ -21,7 +22,7 @@ normalizeRecipe = (r) ->
 
   r = _.clone r
   r.searchableName = latinize(r.name).toLowerCase()
-  r.normalizedName = r.searchableName.replace('/ /g', '-').replace(/[^-a-z0-9]/g, '')
+  r.recipeId ?= md5 JSON.stringify(r)
   return r
 
 module.exports = { normalizeIngredient, normalizeRecipe }

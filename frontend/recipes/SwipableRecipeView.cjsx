@@ -19,7 +19,7 @@ SwipableRecipeView = React.createClass {
 
   render : ->
     recipePages = _.map @props.recipes, (r, i) =>
-      <div className='swipable-wrapper' key={r.normalizedName}>
+      <div className='swipable-wrapper' key={r.recipeId}>
         {if Math.abs(i - @state.visibleIndex) <= 1 then <RecipeView recipe={r}/>}
       </div>
 
