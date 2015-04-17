@@ -153,7 +153,11 @@ EditableIngredient = React.createClass {
 
   render : ->
     <div
-      className={classnames 'editable-ingredient', { 'is-expanded' : @state.isExpanded, 'show-overflow' : @state.showOverflow }}
+      className={classnames 'editable-ingredient', {
+        'is-expanded'            : @state.isExpanded
+        'show-overflow'          : @state.showOverflow
+        'prevent-pointer-events' : @state.preventPointerEvents
+      }}
       onBlur={@_updateFocus}
       onFocus={@_updateFocus}
     >
@@ -266,6 +270,12 @@ EditableIngredient = React.createClass {
     @_updateFocus = _.debounce @_updateFocus, 0
     if @props.shouldGrabFocus
       @refs.measure.getDOMNode().focus()
+      # This is gross, but it prevents the 300ms click bullshit from selecting
+      # whatever field ends up under your finger when you hit the button.
+      @setState { preventPointerEvents : true }
+      _.delay (=>
+        @setState { preventPointerEvents : false }
+      ), 300
 }
 
 module.exports = EditableIngredient
