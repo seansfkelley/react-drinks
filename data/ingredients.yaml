@@ -389,18 +389,18 @@
   searchable :
     - zubrowka
 -
-  display    : Chartreuse (Any)
+  display    : Chartreuse (any)
   tag        : chartreuse
   tangible   : false
 -
-  display    : Rum (Any)
+  display    : Rum (any)
   tag        : rum
   tangible   : false
 -
-  display    : Whiskey (Any)
+  display    : Whiskey (any)
   tag        : whiskey
   tangible   : false
 -
-  display    : Tequila (Any)
+  display    : Tequila (any)
   tag        : tequila
   tangible   : false
