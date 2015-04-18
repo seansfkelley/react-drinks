@@ -69,7 +69,7 @@ TagGuesser = React.createClass {
 
       guessNode =
         <Typeahead
-          className='guess'
+          className='manual-typeahead'
           options={options}
           placeholder='Ingredient...'
           onOptionSelected={@_selectIngredient}
@@ -88,17 +88,18 @@ TagGuesser = React.createClass {
         isUnknown   = true
 
       guessNode =
-        <div className={classnames 'guess', { 'is-unknown' : isUnknown }} onTouchTap={@_switchToManual}>
-          {guessString}
+        <div className='automatic-guess-wrapper' onTouchTap={@_switchToManual}>
+          <div className={classnames 'guess', { 'is-unknown' : isUnknown }}>
+            {guessString}
+          </div>
+          <div className='change-button-container'>
+            <div className='change-button small-text'>Change</div>
+          </div>
         </div>
 
     <div className={classnames 'tag-guesser', { 'is-manual' : @state.isManual }}>
       <div className='description small-text'>Matched As</div>
       {guessNode}
-      {if not @state.isManual
-        <div className='change-button-container'>
-          <div className='change-button small-text' onTouchTap={@_switchToManual}>Change</div>
-        </div>}
     </div>
 
   _switchToManual : ->

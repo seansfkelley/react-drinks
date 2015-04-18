@@ -101,23 +101,30 @@ section-height = touch-element-size
   .description
     width 22%
     color grey6
-    margin-top 1px
 
-  .guess
-    width 54%
+    position relative
+    top 1px
 
-  .change-button-container
-    width 24%
-
-  &:not(.is-manual) .guess
-    // Kind of a hack, but this is to match the padding from react-select.
-    padding-left 10px
-
+  .automatic-guess-wrapper, .manual-typeahead
     height section-height
     line-height section-height
 
-  &.is-manual .guess
+  .automatic-guess-wrapper
+    padding-left 12px
+
     width 78%
+
+    .guess, .change-button-container
+      display inline-block
+      position relative
+
+    .guess
+      width 70%
+      top -1px
+
+    .change-button-container
+      width 30%
+      top -3px
 
 .editable-ingredient:not(.is-expanded)
   border-bottom-left-radius standard-border-radius
