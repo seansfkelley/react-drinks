@@ -30,6 +30,11 @@ BORING_INPUT_PROPS = {
 
 NO_INGREDIENT_SENTINEL = '__n/a__'
 
+# iOS standalone does not fire touch events on input elements, yet regular iOS Safari does. What the fuck.
+# Apparently this is a long-standing issue (see comments further down, where this is used). I have an insane
+# workaround where I re-fire events, but it should be used judiciously because it's fragile and shitty.
+IS_BUGGY_IOS_STANDALONE = !!window.navigator.standalone
+
 _containsActiveElement = (container) ->
   e = document.activeElement
   while e?
@@ -168,6 +173,7 @@ EditableIngredient = React.createClass {
           value={@state.measure}
           onChange={@_onMeasureChange}
           onKeyDown={@_onMeasureKeyDown}
+          onTouchTap={@_generateFocuser('measure')}
           {...BORING_INPUT_PROPS}
           ref='measure'
         />
@@ -177,6 +183,7 @@ EditableIngredient = React.createClass {
           value={@state.unit}
           onChange={@_onUnitChange}
           onKeyDown={@_onUnitKeyDown}
+          onTouchTap={@_generateFocuser('unit')}
           {...BORING_INPUT_PROPS}
           ref='unit'
         />
@@ -186,12 +193,19 @@ EditableIngredient = React.createClass {
           value={@state.display}
           onChange={@_onDisplayChange}
           onKeyDown={@_onDisplayKeyDown}
+          onTouchTap={@_generateFocuser('display')}
           {...BORING_INPUT_PROPS}
           ref='display'
         />
+        {if IS_BUGGY_IOS_STANDALONE
+          <div className='ios-standalone-grab-target' ref='grabTarget'/>}
       </div>
       <TagGuesser key='guesser' guessString={@state.display} ref='guesser'/>
     </div>
+
+  _generateFocuser : (ref) ->
+    return =>
+      @refs[ref].getDOMNode().focus()
 
   _maybeRefocus : (e) ->
     if @_refToFocus?
@@ -266,6 +280,9 @@ EditableIngredient = React.createClass {
     }
 
   componentDidMount : ->
+    if IS_BUGGY_IOS_STANDALONE
+      forwardTouchEvents @refs.grabTarget.getDOMNode()
+
     # Something about making this deferred like this fixes an issue where clicking on a
     # typeahead option doesn't actually apply the option the first time.
     @_updateFocus = _.debounce @_updateFocus, 0
@@ -278,5 +295,46 @@ EditableIngredient = React.createClass {
         @setState { preventPointerEvents : false }
       ), 300
 }
+
+forwardTouchEvents = (node) ->
+  for type in [ 'touchstart', 'touchmove', 'touchend' ]
+    node['on' + type] = (e) ->
+      e.preventDefault()
+      e.stopPropagation()
+
+      { clientX, clientY } = e.touches[0] ? e.changedTouches[0]
+      node.style.display = 'none'
+      actualTarget = document.elementFromPoint clientX, clientY
+      node.style.display = 'block'
+
+      actualTarget?.dispatchEvent cloneEvent(e)
+
+
+cloneEvent = (e) ->
+  newEvent = document.createEvent 'TouchEvent'
+  # Inspired by https://gist.github.com/sstephenson/448808 and some tweaking of argument ordering with trial and error.
+  # iOS version.
+  newEvent.initTouchEvent(
+    e.type
+    e.bubbles, e.cancelable
+    e.view
+    e.detail
+    0, 0, 0, 0
+    e.ctrlKey, e.altKey, e.shiftKey, e.metaKey
+    e.touches, e.targetTouches, e.changedTouches
+    1, 0
+  )
+  # Chrome version, for reference/testing.
+  # newEvent.initTouchEvent(
+  #   e.touches, e.targetTouches, e.changedTouches
+  #   e.type
+  #   e.view
+  #   e.bubbles, e.cancelable
+  #   e.detail
+  #   0, 0, 0, 0
+  #   e.ctrlKey, e.altKey, e.shiftKey, e.metaKey
+  # )
+  return newEvent
+
 
 module.exports = EditableIngredient
