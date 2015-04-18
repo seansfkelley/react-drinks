@@ -158,6 +158,17 @@ EditableIngredient = React.createClass {
     }
 
   render : ->
+    inputs = [
+      id          : 'measure'
+      placeholder : '#'
+    ,
+      id          : 'unit'
+      placeholder : 'unit'
+    ,
+      id          : 'display'
+      placeholder : 'ingredient'
+    ]
+
     <div
       className={classnames 'editable-ingredient', {
         'is-expanded'            : @state.isExpanded
@@ -168,36 +179,19 @@ EditableIngredient = React.createClass {
       onFocus={@_updateFocus}
     >
       <div className='input-fields' onKeyUp={@_maybeRefocus}>
-        <input
-          className='measure'
-          placeholder='#'
-          value={@state.measure}
-          onChange={@_onMeasureChange}
-          onKeyDown={@_onMeasureKeyDown}
-          onTouchTap={@_generateFocuser('measure')}
-          {...BORING_INPUT_PROPS}
-          ref='measure'
-        />
-        <input
-          className='unit'
-          placeholder='unit'
-          value={@state.unit}
-          onChange={@_onUnitChange}
-          onKeyDown={@_onUnitKeyDown}
-          onTouchTap={@_generateFocuser('unit')}
-          {...BORING_INPUT_PROPS}
-          ref='unit'
-        />
-        <input
-          className='display'
-          placeholder='ingredient'
-          value={@state.display}
-          onChange={@_onDisplayChange}
-          onKeyDown={@_onDisplayKeyDown}
-          onTouchTap={@_generateFocuser('display')}
-          {...BORING_INPUT_PROPS}
-          ref='display'
-        />
+        {for { id, placeholder } in inputs
+          upcaseId = id[0].toUpperCase() + id[1..]
+          <input
+            className={id}
+            placeholder={placeholder}
+            value={@state[id]}
+            onChange={@["_on#{upcaseId}Change"]}
+            onKeyDown={@["_on#{upcaseId}KeyDown"]}
+            onTouchTap={@_generateFocuser(id)}
+            {...BORING_INPUT_PROPS}
+            key={id}
+            ref={id}
+          />}
         {if IS_BUGGY_IOS_STANDALONE
           <div className='ios-standalone-grab-target' ref='grabTarget'/>}
       </div>
