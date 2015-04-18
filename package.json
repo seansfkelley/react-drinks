@@ -52,6 +52,7 @@
     "react-draggable": "git://github.com/seansfkelley/react-draggable.git#b63d9948c6fe6c0fd55c3dce5d8d2d87d82e35bb",
     "react-swipe": "^1.0.3",
     "react-tap-event-plugin": "^0.1.4",
+    "react-typeahead": "git://github.com/seansfkelley/react-typeahead.git#515f0ed6bf3930bf2a5b99d603cfbb1b623ed6c3",
     "revalidator": "^0.3.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
