@@ -1,5 +1,5 @@
 _   = require 'lodash'
-md5 = require 'md5'
+md5 = require 'MD5'
 
 assert   = require './tinyassert'
 latinize = require './latinize'
