@@ -1,0 +1,162 @@
+-
+  name: "Geek Squad"
+  ingredients:
+    -
+      tag: "mezcal"
+      displayAmount: "4"
+      displayUnit: "parts"
+      displayIngredient: "mezcal"
+    -
+      tag: "green chartreuse"
+      displayAmount: "2"
+      displayUnit: "parts"
+      displayIngredient: "green Chartreuse"
+    -
+      tag: "lime juice"
+      displayAmount: "4"
+      displayUnit: "parts"
+      displayIngredient: "lime juice"
+    -
+      tag: "simple syrup"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "simple syrup"
+    -
+      tag: "cynar"
+      displayAmount: "0-1"
+      displayUnit: "part"
+      displayIngredient: "Cynar"
+  notes: "Work in progress."
+  instructions: ""
+  source: "The Clover Club, NY"
+-
+  name: "Ivy"
+  ingredients:
+    -
+      tag: "gin"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "dry gin"
+    -
+      tag: "dry vermouth"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "dry vermouth"
+    -
+      tag: "green chartreuse"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "green Chartreuse"
+    -
+      tag: "absinthe"
+      displayAmount: "1"
+      displayUnit: "tsp"
+      displayIngredient: "absinthe"
+    -
+      tag: "orange bitters"
+      displayAmount: "1-2"
+      displayUnit: "dashes"
+      displayIngredient: "orange bitters"
+  instructions: |
+    Shake all ingredients with ice for a long time.
+    Strain into a chilled cocktail glass.
+  source: "The Clover Club, NY"
+-
+  name: "Chateau Romani"
+  ingredients:
+    -
+      tag: "honey whiskey"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "honey whiskey"
+    -
+      tag: "amaretto"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "amaretto"
+    -
+      tag: "hazelnut liqueur"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "Frangelico"
+    -
+      tag: "milk"
+      displayIngredient: "milk"
+  instructions: |
+    Pour alcohol in a shaker with ice and shake vigorously.
+    Strain into a small glass and fill with milk.
+  source: "The Drunken Moogle"
+  url: "http://www.thedrunkenmoogle.com/post/28337609182/expbaronline-chateau-romani-the-legend-of-zelda"
+-
+  name: "Brinstar"
+  ingredients:
+    -
+      tag: "cachaca"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "cachaça"
+    -
+      tag: "absinthe"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "absinthe"
+    -
+      tag: "simple syrup"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "simple syrup"
+    -
+      tag: "lime"
+      displayAmount: "1/2"
+      displayIngredient: "lime, cut into quarters"
+    -
+      tag: "mint"
+      displayAmount: "1"
+      displayUnit: "sprig"
+      displayIngredient: "mint"
+  instructions: |
+    Muddle the lime, simple syrup, and mint together in a shaker.
+    Add ice and the alcohol and shake well.
+    Pour the mixture into a lowball glass.
+  notes: "Brinstar is a zone overgrown with vegetation. Having very recently been introduced to a lime-y cocktail known as a caipirinha, I decided to try combining it with another leafy drink - namely, a mojito. The resulting combination, plus a little extra, wound up being a tasty creation that I’m rather proud of."
+  source: "The Drunken Moogle"
+  url: "http://www.thedrunkenmoogle.com/post/36070643600/drinks-brinstar"
+-
+  name: "Perfect Margarita"
+  ingredients:
+    -
+      tag: "reposado tequila"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "reposado tequila"
+    -
+      tag: "tequila"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "jalapeño tequila"
+    -
+      tag: "mezcal"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "mezcal"
+    -
+      tag: "grand marnier"
+      displayAmount: "3"
+      displayUnit: "parts"
+      displayIngredient: "Grand Marnier"
+    -
+      tag: "lime juice"
+      displayAmount: "3"
+      displayUnit: "parts"
+      displayIngredient: "fresh squeezed lime juice"
+    -
+      tag: "agave nectar"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "agave nectar"
+    -
+      displayIngredient: "high-quality salt"
+  instructions: |
+    Rim a margarita glass with salt.
+    Briefly shake all ingredients with ice and strain with a fine mesh strainer into the glass.
+    Garnish with lime or a slice of jalapeño.
