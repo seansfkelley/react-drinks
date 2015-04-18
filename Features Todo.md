@@ -20,3 +20,4 @@
 - Fix up styling
   - Animate additions/removals of deletable ingredients
 - Drag-to-reorder
+- Figure out how to signal that an empty ingredient won't be used or whatever.
