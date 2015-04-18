@@ -2,7 +2,8 @@
 
 React = require 'react'
 
-App = require './App'
+App                 = require './App'
+webClipNotification = require './webClipNotification'
 
 if window.navigator.standalone
   document.body.setAttribute 'standalone', true
@@ -31,3 +32,5 @@ window.getJquery = ->
 window.debug.log = require 'loglevel'
 
 React.render <App/>, document.querySelector('#app-root')
+
+webClipNotification.renderIfAppropriate()
