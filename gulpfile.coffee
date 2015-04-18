@@ -36,10 +36,16 @@ SRC_PATHS =
     './fonts/**.*'
     './node_modules/font-awesome/fonts/**.*'
   ]
+  img     : [
+    './img/**.*'
+  ]
 
-copyFonts = ->
+copyAssets = ->
   gulp.src SRC_PATHS.fonts
     .pipe gulp.dest './.dist/fonts'
+
+  gulp.src SRC_PATHS.img
+    .pipe gulp.dest './.dist/img'
 
 buildScripts = (watch = false, dieOnError = false) ->
   bundler = browserify SRC_PATHS.root, {
@@ -106,14 +112,14 @@ buildStyles = ->
     .pipe filter [ '*', '!*.map' ]
     .pipe livereload()
 
-gulp.task 'fonts', copyFonts
+gulp.task 'assets', copyAssets
 gulp.task 'scripts', -> buildScripts(false, true)
 gulp.task 'styles', buildStyles
 gulp.task 'watch', ->
   livereload.listen()
-  copyFonts()
+  copyAssets()
   buildScripts(true, false)
   buildStyles()
   gulp.watch SRC_PATHS.styles,  [ 'styles' ]
-gulp.task 'dist', [ 'scripts', 'styles', 'fonts' ]
+gulp.task 'dist', [ 'scripts', 'styles', 'assets' ]
 gulp.task 'default', [ 'watch' ]
