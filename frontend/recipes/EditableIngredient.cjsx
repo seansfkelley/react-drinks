@@ -304,6 +304,13 @@ forwardTouchEvents = (node) ->
 
       actualTarget?.dispatchEvent cloneEvent(e)
 
+  # Prevent the simulated mouse events from causing this element to grab focus.
+  for type in [ 'mousedown', 'moveup', 'click' ]
+    node['on' + type] = (e) ->
+      e.preventDefault()
+      e.stopPropagation()
+
+  return # for loop
 
 cloneEvent = (e) ->
   newEvent = document.createEvent 'TouchEvent'
