@@ -12,6 +12,7 @@ Deletable = React.createClass {
 
   propTypes :
     onDelete : React.PropTypes.func.isRequired
+    children : React.PropTypes.element.isRequired
 
   getInitialState : ->
     return {

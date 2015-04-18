@@ -143,13 +143,11 @@ EditableRecipeView = React.createClass {
   render : ->
     editableIngredients = _.map @state.ingredientIds, (id, i) =>
       shouldGrabFocus = i == @state.ingredientIds.length - 1 and @state.focusNewIngredient
-      <Deletable
-        key={id}
-        onDelete={@_generateDeleter(id)}
-        style={{ zIndex : @state.ingredientIds.length - i }}
-      >
-        <EditableIngredient shouldGrabFocus={shouldGrabFocus} ref={id}/>
-      </Deletable>
+      <div className='z-index-wrapper' style={{ zIndex : @state.ingredientIds.length - i }}>
+        <Deletable key={id} onDelete={@_generateDeleter(id)}>
+          <EditableIngredient shouldGrabFocus={shouldGrabFocus} ref={id}/>
+        </Deletable>
+      </div>
 
     header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
     footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
