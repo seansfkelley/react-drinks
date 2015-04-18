@@ -279,7 +279,7 @@
   display    : Peach
   group      : fruit
 -
-  display    : Crème de cacao
+  display    : Crème de Cacao
   tag        : creme de cacao
   group      : liqueur-other
 -
@@ -331,9 +331,11 @@
   display    : Coffee
   group      : mixer-other
 -
-  display    : Crème de menthe
+  display    : Crème de Menthe
   tag        : creme de menthe
   group      : liqueur-herbal
+  searchable :
+    - mint
 -
   display    : Grapefruit Juice
   group      : mixer-juice
