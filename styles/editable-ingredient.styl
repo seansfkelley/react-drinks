@@ -1,6 +1,8 @@
 @require 'constants'
 @require 'mixins'
 
+section-height = touch-element-size
+
 // iOS standalone draggability fix.
 .editable-ingredient .input-fields
   position relative
@@ -20,14 +22,8 @@
   outline none
 
   .input-fields, .tag-guesser
-    height 44px
+    height section-height
     transition height transition-duration
-
-    &:before
-      content ''
-      display inline-block
-      height 44px
-      vertical-align middle
 
   .input-fields
     border-radius standard-border-radius
@@ -78,8 +74,8 @@
     font-size 10px
 
   .description
-    height touch-element-size
-    line-height touch-element-size
+    height section-height
+    line-height section-height
     vertical-align top
 
   .guess.is-unknown
@@ -117,6 +113,9 @@
     // Kind of a hack, but this is to match the padding from react-select.
     padding-left 10px
 
+    height section-height
+    line-height section-height
+
   &.is-manual .guess
     width 78%
 
@@ -136,7 +135,7 @@
     vertical-align middle
     background-color grey2
     border none
-    height touch-element-size
+    height section-height
     width 100%
     padding-bottom 3px
 
