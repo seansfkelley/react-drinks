@@ -38,16 +38,23 @@ section-height = touch-element-size
 
 .editable-ingredient .input-fields
   background-color darken(grey1, 5%)
-  padding 0 12px
 
   input
-    background-color darken(grey1, 5%)
+    background-color transparent
     vertical-align middle
     height 100%
 
     font-weight 600
     border none
     display inline-block
+
+    box-sizing border-box
+
+    &:first-child
+      padding-left 12px
+
+    &:last-child
+      padding-right 12px
 
   .measure
     width 15%
