@@ -14,7 +14,6 @@ stylingConstants    = require '../stylingConstants'
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
 
-IconButton         = require './IconButton'
 EditableIngredient = require './EditableIngredient'
 
 EditableTitleBar = React.createClass {
