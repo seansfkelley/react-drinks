@@ -96,7 +96,7 @@ IngredientListItem = React.createClass {
 
     <List.Item className={className} onTouchTap={@_toggleIngredient}>
       <div className='name'>{@props.ingredient.display}</div>
-      <i className='fa fa-check-circle'/>
+      <i className='fa fa-check-circle has-ingredient-icon'/>
     </List.Item>
 
   _toggleIngredient : ->

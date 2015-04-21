@@ -71,6 +71,56 @@ List.Item = React.createClass {
     </div>
 }
 
+List.AddableItem = React.createClass {
+  displayName : 'List.AddableItem'
+
+  propTypes :
+    placeholder : React.PropTypes.string
+    onAdd       : React.PropTypes.func.isRequired
+
+  getDefaultProps : -> {
+    placeholder : 'Add...'
+  }
+
+  getInitialState : -> {
+    isEditing : false
+    value     : ''
+  }
+
+  render : ->
+    <List.Item className='addable-list-item'>
+      <input
+        onFocus={@_setEditing}
+        onBlur={@_clearEditing}
+        onChange={@_setValue}
+        value={@state.value}
+        placeholder={@props.placeholder}
+        type='text'
+        autoCorrect='off'
+        autoCapitalize='off'
+        autoComplete='off'
+        spellCheck='false'
+        ref='input'
+      />
+      <i className={classnames 'fa fa-plus', { 'enabled' : @state.isEditing or @state.value }} onTouchTap={@_add}/>
+    </List.Item>
+
+  _setEditing : ->
+    @setState { isEditing : false }
+
+  _clearEditing : ->
+    @setState {
+      value     : @state.value.trim()
+      isEditing : false
+    }
+
+  _setValue : (e) ->
+    @setState { value : e.target.value }
+
+  _add : ->
+    @props.onAdd @state.value
+}
+
 List.headerify = ({ nodes, computeHeaderData, Header, ItemGroup }) ->
   Header    ?= List.Header
   ItemGroup ?= List.ItemGroup
