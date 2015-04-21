@@ -1,6 +1,6 @@
 _ = require 'lodash'
 
-class IngredientGuesser
+class IngredientSearch
   constructor : (@_ingredients) ->
 
   guess : (s) ->
@@ -18,4 +18,11 @@ class IngredientGuesser
       .first()
       .value()
 
-module.exports = IngredientGuesser
+  @filterIngredient : (i, term) ->
+    term = term?.trim().toLowerCase()
+    if not term
+      return false
+    else
+      return _.any i.searchable, (s) -> s.indexOf(term) != -1
+
+module.exports = IngredientSearch

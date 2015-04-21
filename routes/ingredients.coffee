@@ -19,6 +19,9 @@ INGREDIENT_SCHEMA = {
     group :
       type    : 'string'
       conform : (v, object) -> xor(v?, not (object.tangible ? true))
+    # Intangible ingredients are useful to index on or specify, but are not specific enough to
+    # warrant being something you can have in your cabinet. The canonical example is Chartreuse
+    # (either variety), but it's also useful for e.g whiskey as a generic.
     tangible :
       type    : 'boolean'
       conform : (v, object) -> xor(not (v ? true), object.group?)

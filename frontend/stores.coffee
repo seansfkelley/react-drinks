@@ -189,35 +189,19 @@ RecipeStore = new class extends FluxStore
       recipes = _.sortBy recipes, 'name'
       return { name, recipes, missing }
 
-  # You must guarantee that IngredientStore is updated before calling this.
-  _filterRecipeBySearchTerm : (r) =>
-    if r.canonicalName.indexOf(@searchTerm) != -1
-      return true
-    # TODO: This is crazily, wildly inefficient.
-    return _.chain r.ingredients
-      .pluck 'tag'
-      .compact()
-      # This step is dumb as hell. The problem here is when recipes specify an inferred generic
-      # (e.g., "chartreuse") and since no actual recipe entry exists for that we fake one out
-      # with just the tag. Right thing to do? Probably have the backend auto-infer things before
-      # shipping them up to the frontend so that we can assert this case never arises.
-      .map (t) => IngredientStore.ingredientsByTag[t] ? { searchable : t }
-      .pluck 'searchable'
-      .flatten()
-      .any (term) => term.indexOf(@searchTerm) != -1
-      .value()
-
   _updateSearchedRecipes : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
     if @searchTerm == ''
       @searchedAlphabeticalRecipes   = @alphabeticalRecipes
       @searchedGroupedMixableRecipes = @groupedMixableRecipes
     else
-      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, @_filterRecipeBySearchTerm
+      filterRecipe = (r) => @_recipeSearch.recipeMatchesSearchTerm r, @searchTerm
+
+      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, filterRecipe
       @searchedGroupedMixableRecipes = _.chain @groupedMixableRecipes
         .map (group) =>
           return _.defaults {
-            recipes : _.filter group.recipes, @_filterRecipeBySearchTerm
+            recipes : _.filter group.recipes, filterRecipe
           }, group
         .filter ({ recipes }) -> recipes.length > 0
         .value()

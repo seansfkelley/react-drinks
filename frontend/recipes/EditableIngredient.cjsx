@@ -11,7 +11,7 @@ utils               = require '../utils'
 stylingConstants    = require '../stylingConstants'
 { IngredientStore } = require '../stores'
 
-IngredientGuesser = require '../ingredients/IngredientGuesser'
+IngredientSearch = require '../ingredients/IngredientSearch'
 
 KeyCode = {
   BACKSPACE  : 8
@@ -121,7 +121,7 @@ TagGuesser = React.createClass {
       return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
 
   _getGuessFor : (string) ->
-    return new IngredientGuesser(IngredientStore.allAlphabeticalIngredients).guess string
+    return new IngredientSearch(IngredientStore.allAlphabeticalIngredients).guess string
 
   revertToGuessingIfAppropriate : ->
     if @state.isManual and not @state.choice?

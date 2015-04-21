@@ -1,8 +1,8 @@
 # Should figure out how to include this in all Mocha setup cleanly.
 require('loglevel').setLevel 'silent'
+require('chai').should()
 
-_      = require 'lodash'
-should = require('chai').should()
+_ = require 'lodash'
 
 RecipeSearch = require '../frontend/recipes/RecipeSearch'
 
@@ -16,6 +16,18 @@ mapify = (array) ->
     ingredientsByTag[i.tag] = i
   return ingredientsByTag
 
+recipe = (ingredients...) ->
+  # This is very important: the recipes that are indexed do NOT have a generic flag.
+  return {
+    ingredients : _.map ingredients, (i) -> _.omit i, 'generic'
+  }
+
+ingredient2 = (tag, searchable...) ->
+  return { tag, searchable }
+
+recipe2 = (canonicalName, ingredients...) ->
+  return { canonicalName, ingredients }
+
 IndexableIngredient = {
   A_ROOT      : ingredient 'a'
   A_CHILD_1   : ingredient 'a-1', 'a'
@@ -28,12 +40,6 @@ IndexableIngredient = {
 }
 
 ResultIngredient = _.mapValues IndexableIngredient, (i) -> _.omit i, 'generic'
-
-recipe = (ingredients...) ->
-  # This is very important: the recipes that are indexed do NOT have a generic flag.
-  return {
-    ingredients : _.map ingredients, (i) -> _.omit i, 'generic'
-  }
 
 describe 'RecipeSearch', ->
   describe '#_includeAllGenerics', ->
@@ -177,7 +183,6 @@ describe 'RecipeSearch', ->
         ]
       }
 
-
   describe '#_countSubsetMissing', ->
     it 'should return how values in the first array are not in the second', ->
       RecipeSearch._countSubsetMissing([ 1, 2, 3 ], [ 1, 4, 5 ]).should.equal 2
@@ -302,3 +307,36 @@ describe 'RecipeSearch', ->
     it 'should count unknown recipe ingredients as missing', ->
       search = makeSearch recipe(IndexableIngredient.Z_ROOT, IndexableIngredient.A_ROOT)
       search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.deep.equal {}
+
+  describe '#recipeMatchesSearchTerm', ->
+    ONE = ingredient2 'ingredient-1', '1', 'one'
+    TWO = ingredient2 'ingredient-2', '2', 'two'
+
+    search = null
+    beforeEach ->
+      search = new RecipeSearch mapify [ ONE, TWO ]
+
+    context 'should return true', ->
+      context 'when given a single-word search term', ->
+        it 'that is a substring of the recipe name', ->
+          search.recipeMatchesSearchTerm(recipe2('recipe name'), 'recipe').should.be.true
+
+        it 'that is a substring of a searchable term of a recipe ingredient', ->
+          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE), 'one').should.be.true
+
+      context 'when given a space-delimited search term', ->
+        it 'where all space-delimited terms are substrings of searchable terms of one ingredient', ->
+          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE), 'one 1').should.be.true
+
+        it 'where all space-delimited terms are substrings of searchable terms of multiple ingredients', ->
+          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE, TWO), 'one two').should.be.true
+
+        it 'where all space-delimited terms are substrings of a searchable term or the title', ->
+          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE), 'one name').should.be.true
+
+    context 'should return false', ->
+      it 'when given a string of all whitespace', ->
+        search.recipeMatchesSearchTerm(recipe2('recipe name'), ' ').should.be.false
+
+      it 'when given a space-delimited search term where only one of the two terms are substrings of a searchable term', ->
+        search.recipeMatchesSearchTerm(recipe2('recipe name', ONE, TWO), 'one three').should.be.false
