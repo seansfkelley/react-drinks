@@ -7,7 +7,7 @@ class IngredientSearch
     if not s or not s.trim().length
       return null
 
-    s = s.trim()
+    s = s.trim().toLowerCase()
 
     return _.chain @_ingredients
       .filter ({ tag, searchable }) ->
