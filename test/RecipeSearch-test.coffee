@@ -22,10 +22,10 @@ recipe = (ingredients...) ->
     ingredients : _.map ingredients, (i) -> _.omit i, 'generic'
   }
 
-ingredient2 = (tag, searchable...) ->
+searchableIngredient = (tag, searchable...) ->
   return { tag, searchable }
 
-recipe2 = (canonicalName, ingredients...) ->
+searchableRecipe = (canonicalName, ingredients...) ->
   return { canonicalName, ingredients }
 
 IndexableIngredient = {
@@ -308,9 +308,28 @@ describe 'RecipeSearch', ->
       search = makeSearch recipe(IndexableIngredient.Z_ROOT, IndexableIngredient.A_ROOT)
       search.computeMixableRecipes([ IndexableIngredient.A_ROOT.tag ]).should.deep.equal {}
 
+    it 'should maintain the relative ordering of input recipes', ->
+      recipe1 = recipe IndexableIngredient.A_ROOT
+      recipe1.sentinel = 1
+      recipe2 = recipe IndexableIngredient.A_ROOT
+      recipe2.sentinel = 2
+
+      search12 = makeSearch recipe1, recipe2
+      search21 = makeSearch recipe2, recipe1
+
+      result12 = search12.computeMixableRecipes [ IndexableIngredient.A_ROOT.tag ]
+
+      result12[0][0].sentinel.should.equal 1
+      result12[0][1].sentinel.should.equal 2
+
+      result21 = search21.computeMixableRecipes [ IndexableIngredient.A_ROOT.tag ]
+
+      result21[0][0].sentinel.should.equal 2
+      result21[0][1].sentinel.should.equal 1
+
   describe '#recipeMatchesSearchTerm', ->
-    ONE = ingredient2 'ingredient-1', '1', 'one'
-    TWO = ingredient2 'ingredient-2', '2', 'two'
+    ONE = searchableIngredient 'ingredient-1', '1', 'one'
+    TWO = searchableIngredient 'ingredient-2', '2', 'two'
 
     search = null
     beforeEach ->
@@ -319,24 +338,24 @@ describe 'RecipeSearch', ->
     context 'should return true', ->
       context 'when given a single-word search term', ->
         it 'that is a substring of the recipe name', ->
-          search.recipeMatchesSearchTerm(recipe2('recipe name'), 'recipe').should.be.true
+          search.recipeMatchesSearchTerm(searchableRecipe('recipe name'), 'recipe').should.be.true
 
         it 'that is a substring of a searchable term of a recipe ingredient', ->
-          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE), 'one').should.be.true
+          search.recipeMatchesSearchTerm(searchableRecipe('recipe name', ONE), 'one').should.be.true
 
       context 'when given a space-delimited search term', ->
         it 'where all space-delimited terms are substrings of searchable terms of one ingredient', ->
-          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE), 'one 1').should.be.true
+          search.recipeMatchesSearchTerm(searchableRecipe('recipe name', ONE), 'one 1').should.be.true
 
         it 'where all space-delimited terms are substrings of searchable terms of multiple ingredients', ->
-          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE, TWO), 'one two').should.be.true
+          search.recipeMatchesSearchTerm(searchableRecipe('recipe name', ONE, TWO), 'one two').should.be.true
 
         it 'where all space-delimited terms are substrings of a searchable term or the title', ->
-          search.recipeMatchesSearchTerm(recipe2('recipe name', ONE), 'one name').should.be.true
+          search.recipeMatchesSearchTerm(searchableRecipe('recipe name', ONE), 'one name').should.be.true
 
     context 'should return false', ->
       it 'when given a string of all whitespace', ->
-        search.recipeMatchesSearchTerm(recipe2('recipe name'), ' ').should.be.false
+        search.recipeMatchesSearchTerm(searchableRecipe('recipe name'), ' ').should.be.false
 
       it 'when given a space-delimited search term where only one of the two terms are substrings of a searchable term', ->
-        search.recipeMatchesSearchTerm(recipe2('recipe name', ONE, TWO), 'one three').should.be.false
+        search.recipeMatchesSearchTerm(searchableRecipe('recipe name', ONE, TWO), 'one three').should.be.false
