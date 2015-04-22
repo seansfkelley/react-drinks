@@ -28,6 +28,31 @@
   &.incomplete
     padding-bottom 12px
 
+  .mixability
+    float right
+    // Unfortunately this magic constant has to stay -- normally line-height would take care of
+    // vertically centering things, but because we have to reduce the line height to not mess up
+    // the background coloration.
+    margin-top 14px
+    margin-right 12px
+
+  .mixability.mixable
+    //
+
+  .mixability.near-mixable
+    padding 1px
+    padding-bottom 2px
+
+    font-size 0.8em
+
+    line-height 1em
+    min-width 1em
+
+    border 1px solid theme-red
+    border-radius standard-border-radius
+
+    color theme-red
+    text-align center
 
 .recipe-view, .editable-recipe-view
   .title-bar, .button-bar

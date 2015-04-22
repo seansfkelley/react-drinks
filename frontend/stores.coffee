@@ -134,6 +134,13 @@ RECIPE_PERSISTABLE_FIELDS = 'customRecipes'
 
 RecipeStore = new class extends FluxStore
   fields : ->
+    # Should change this to have the fields:
+    #   allRecipes (no stated ordering)
+    #   searchedAlphabeticalRecipes
+    #   searchedBaseLiquorRecipes
+    #   searchedMixableRecipes
+    # With each 'searched' being an ordered array of objects { key, recipes } where key is some
+    # domain-specific key (i.e. the letter, the base liquor, or the mixability factor)
     return _.extend {
       searchTerm                    : ''
       alphabeticalRecipes           : []
@@ -141,6 +148,7 @@ RecipeStore = new class extends FluxStore
       groupedMixableRecipes         : []
       searchedAlphabeticalRecipes   : []
       searchedGroupedMixableRecipes : []
+      mixabilityByRecipeId          : {}
     }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
@@ -188,6 +196,13 @@ RecipeStore = new class extends FluxStore
         else "With #{missing} More Ingredients"
       recipes = _.sortBy recipes, 'name'
       return { name, recipes, missing }
+
+    @mixabilityByRecipeId = _.extend _.map(mixableRecipes, (recipes, missing) ->
+      missing = +missing
+      return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
+    )...
+    for r in @alphabeticalRecipes when not @mixabilityByRecipeId[r.recipeId]?
+      @mixabilityByRecipeId[r.recipeId] = -1
 
   _updateSearchedRecipes : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
