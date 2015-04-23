@@ -121,8 +121,8 @@ AlphabeticalRecipeList = React.createClass {
   render : ->
     headeredNodes = []
     absoluteIndex = 0
-    for { letter, recipes } in @props.recipes
-      headeredNodes.push <List.Header title={letter.toUpperCase()} key={'header-' + letter}/>
+    for { key, recipes } in @props.recipes
+      headeredNodes.push <List.Header title={key.toUpperCase()} key={'header-' + key}/>
       for r in recipes
         headeredNodes.push <RecipeListItem
           recipe={r}
@@ -160,8 +160,8 @@ GroupedRecipeList = React.createClass {
   render : ->
     headeredNodes = []
     absoluteIndex = 0
-    for { mixability, recipes } in @props.recipes
-      headeredNodes.push <List.Header title={@_mixabilityToTitle mixability} key={'header-' + mixability}/>
+    for { key, recipes } in @props.recipes
+      headeredNodes.push <List.Header title={@_mixabilityToTitle key} key={'header-' + key}/>
       for r in recipes
         if r.missing.length
           listItem = <IncompleteRecipeListItem

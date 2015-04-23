@@ -17,6 +17,7 @@ SearchBar = React.createClass {
 
   render : ->
     <div className={classnames 'search-bar', @props.className}  onTouchStart={@_stopTouchStart}>
+      <i className='fa fa-search'/>
       <input
         type='text'
         className='search-input'

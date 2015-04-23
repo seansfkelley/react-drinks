@@ -183,8 +183,8 @@ RecipeStore = new class extends FluxStore
     @alphabeticalRecipes = _.chain alphabeticalRecipes
       # group by should include a clause for numbers
       .groupBy (r) -> r.canonicalName[0].toLowerCase()
-      .map (recipes, letter) -> { recipes, letter }
-      .sortBy 'letter'
+      .map (recipes, key) -> { recipes, key }
+      .sortBy 'key'
       .value()
 
     @_updateMixableRecipes()
@@ -197,8 +197,8 @@ RecipeStore = new class extends FluxStore
     mixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, FUZZY_MATCH
 
     @mixableRecipes = _.chain mixableRecipes
-      .map (recipes, missing) -> { recipes, mixability : +missing }
-      .sortBy 'mixability'
+      .map (recipes, missing) -> { recipes, key : +missing }
+      .sortBy 'key'
       .value()
     # Should have a 'rest' key where we just dump all the other recipes?
 
@@ -206,7 +206,7 @@ RecipeStore = new class extends FluxStore
       missing = +missing
       return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
     )...
-    for { letter, recipes } in @alphabeticalRecipes
+    for { recipes } in @alphabeticalRecipes
       for r in recipes when not @mixabilityByRecipeId[r.recipeId]?
         @mixabilityByRecipeId[r.recipeId] = -1
 
@@ -228,11 +228,10 @@ RecipeStore = new class extends FluxStore
       for baseList in BASE_LIST_NAMES
         srcList = @["#{baseList}Recipes"]
         dstList = @["searched#{_.capitalize(baseList)}Recipes"] = []
-        for { key, recipes }, i in srcList
-          dstList[i] = {
-            key
-            recipes : _.filter(recipes, (r) -> matchingRecipeIds[r.recipeId])
-          }
+        for { key, recipes } in srcList
+          recipes = _.filter recipes, (r) -> matchingRecipeIds[r.recipeId]
+          if recipes.length
+            dstList.push { key, recipes }
 
     return # for loop
 
