@@ -114,11 +114,6 @@ GroupedIngredientList = React.createClass {
     selectedIngredientTags     : React.PropTypes.object
 
   render : ->
-    tagToGroupName = {}
-    for { name, ingredients} in @props.searchedGroupedIngredients
-      for i in ingredients
-        tagToGroupName[i.tag] = name
-
     ingredientNodes = _.chain @props.searchedGroupedIngredients
       .map ({ ingredients }) => _.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>
       .flatten()
@@ -140,6 +135,11 @@ GroupedIngredientList = React.createClass {
         />
       ].concat sortedIngredientNodes
     else
+      tagToGroupName = {}
+      for { name, ingredients} in @props.searchedGroupedIngredients
+        for i in ingredients
+          tagToGroupName[i.tag] = name
+
       listNodes = List.headerify {
         nodes             : ingredientNodes
         Header            : IngredientGroupHeader
