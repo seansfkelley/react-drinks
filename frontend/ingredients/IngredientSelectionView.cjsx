@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 _     = require 'lodash'
-React = require 'react'
+React = require 'react/addons'
 
 FluxMixin = require '../mixins/FluxMixin'
 
@@ -84,14 +84,12 @@ IngredientListItem = React.createClass {
   displayName : 'IngredientListItem'
 
   propTypes :
+    isSelected : React.PropTypes.bool.isRequired
     ingredient : React.PropTypes.object.isRequired
-
-  mixins : [
-    FluxMixin IngredientStore, 'selectedIngredientTags'
-  ]
+    toggle     : React.PropTypes.func.isRequired
 
   render : ->
-    if @state.selectedIngredientTags[@props.ingredient.tag]
+    if @props.isSelected
       className = 'is-selected'
 
     <List.Item className={className} onTouchTap={@_toggleIngredient}>
@@ -100,69 +98,89 @@ IngredientListItem = React.createClass {
     </List.Item>
 
   _toggleIngredient : ->
-    AppDispatcher.dispatch {
-      type : 'toggle-ingredient'
-      tag  : @props.ingredient.tag
-    }
+    @props.toggle @props.ingredient.tag
+    # AppDispatcher.dispatch {
+    #   type : 'toggle-ingredient'
+    #   tag  : @props.ingredient.tag
+    # }
 }
 
 GroupedIngredientList = React.createClass {
   display : 'GroupedIngredientList'
 
   propTypes :
-    searchedGroupedIngredients : React.PropTypes.array
-    selectedIngredientTags     : React.PropTypes.object
+    searchedGroupedIngredients    : React.PropTypes.array
+    initialSelectedIngredientTags : React.PropTypes.object
+
+  getInitialState : -> {
+    selectedIngredientTags : @props.initialSelectedIngredientTags
+  }
 
   render : ->
-    ingredientNodes = _.chain @props.searchedGroupedIngredients
-      .map ({ ingredients }) => _.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>
-      .flatten()
+    ingredientCount = _.chain @props.searchedGroupedIngredients
+      .pluck 'ingredients'
+      .pluck 'length'
+      .reduce ((sum, n) -> sum + n), 0
       .value()
 
-    if not ingredientNodes.length
+    if ingredientCount == 0
       listNodes = []
-    else if ingredientNodes.length < 10
-      sortedIngredientNodes = _.sortBy ingredientNodes, (n) -> n.props.ingredient.displayName
-      selectedCount = _.chain ingredientNodes
-        .filter (i) => @props.selectedIngredientTags[i.props.ingredient.tag]?
+    else if ingredientCount < 10
+      ingredients = _.chain @props.searchedGroupedIngredients
+        .pluck 'ingredients'
+        .flatten()
+        .sortBy 'displayName'
         .value()
-        .length
-      listNodes = [
-        <IngredientGroupHeader
-          title="All Results (#{ingredientNodes.length})"
-          selectedCount={selectedCount}
-          key='header-all-results'
-        />
-      ].concat sortedIngredientNodes
-    else
-      tagToGroupName = {}
-      for { name, ingredients} in @props.searchedGroupedIngredients
-        for i in ingredients
-          tagToGroupName[i.tag] = name
 
-      listNodes = List.headerify {
-        nodes             : ingredientNodes
-        Header            : IngredientGroupHeader
-        ItemGroup         : IngredientItemGroup
-        computeHeaderData : (node, i) =>
-          title         = tagToGroupName[node.props.ingredient.tag]
-          selectedCount = _.chain @props.searchedGroupedIngredients
-            .where { name : title }
-            .value()[0]
-            .ingredients
-            .filter (i) => @props.selectedIngredientTags[i.tag]?
-            .length
-          return {
-            title
-            selectedCount
-            key : 'header-' + title
-          }
-      }
+      selectedCount = _.filter(ingredients, (i) => @state.selectedIngredientTags[i.tag]?).length
+
+      header = <IngredientGroupHeader
+        title="All Results (#{ingredientNodes.length})"
+        selectedCount={selectedCount}
+        key='header-all-results'
+      />
+
+      listNodes = [
+        header
+        _.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>
+      ]
+
+    else
+      listNodes = []
+      for { name, ingredients } in @props.searchedGroupedIngredients
+        ingredientNodes = []
+        selectedCount = 0
+        for i in ingredients
+          ingredientNodes.push <IngredientListItem
+            ingredient={i}
+            isSelected={@state.selectedIngredientTags[i.tag]?}
+            toggle={@_toggleIngredient}
+            key={i.tag}
+          />
+          if @state.selectedIngredientTags[i.tag]?
+            selectedCount += 1
+        listNodes.push [
+          <IngredientGroupHeader
+            title={name}
+            selectedCount={selectedCount}
+            key={'header-' + name}
+          />
+          <IngredientItemGroup title={name} key={'group-' + name}>{ingredientNodes}</IngredientItemGroup>
+        ]
 
     className = "#{List.ClassNames.HEADERED} #{List.ClassNames.COLLAPSIBLE} ingredient-list"
     <List className={className} emptyText='Nothing matched your search.'>
       {listNodes}
     </List>
+
+  _toggleIngredient : (tag) ->
+    # alternately, use a local store + dispatcher!? rather than state
+    # just don't apply the changes until comit
+    if @state.selectedIngredientTags[tag]?
+      delete @state.selectedIngredientTags[tag]
+    else
+      @state.selectedIngredientTags[tag] = true
+    @setState { selectedIngredientTags : @state.selectedIngredientTags }
 }
 
 IngredientSelectionView = React.createClass {
@@ -181,7 +199,11 @@ IngredientSelectionView = React.createClass {
       ref='container'
     >
       <SearchBar className='list-topper' placeholder='Ingredient name...' onChange={@_onSearch}/>
-      <GroupedIngredientList {...@state}/>
+      <GroupedIngredientList
+        searchedGroupedIngredients={@state.searchedGroupedIngredients}
+        initialSelectedIngredientTags={@state.selectedIngredientTags}
+        ref='ingredientList'
+      />
     </FixedHeaderFooter>
 
   componentDidMount : ->
@@ -201,6 +223,10 @@ IngredientSelectionView = React.createClass {
     AppDispatcher.dispatch {
       type       : 'search-ingredients'
       searchTerm : ''
+    }
+    AppDispatcher.dispatch {
+      type : 'set-selected-ingredient-tags'
+      selectedIngredientTags : @refs.ingredientList.state.selectedIngredientTags
     }
 }
 

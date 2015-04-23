@@ -1,6 +1,6 @@
 # @cjsx React.DOM
 
-React = require 'react'
+React = require 'react/addons'
 
 App                 = require './App'
 webClipNotification = require './webClipNotification'
@@ -34,3 +34,5 @@ window.debug.log = require 'loglevel'
 React.render <App/>, document.querySelector('#app-root')
 
 webClipNotification.renderIfAppropriate()
+
+window.React = require 'react/addons'

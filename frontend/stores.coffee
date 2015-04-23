@@ -64,6 +64,10 @@ IngredientStore = new class extends FluxStore
 
     @_updateSearchedIngredients()
 
+  'set-selected-ingredient-tags' : ({ selectedIngredientTags }) ->
+    @selectedIngredientTags = selectedIngredientTags
+    localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
+
   'toggle-ingredient' : ({ tag }) ->
     if @selectedIngredientTags[tag]?
       delete @selectedIngredientTags[tag]
@@ -160,7 +164,7 @@ RecipeStore = new class extends FluxStore
   'set-recipes' : ({ recipes }) ->
     @_setRecipes recipes.concat(@customRecipes)
 
-  'toggle-ingredient' : ->
+  'set-selected-ingredient-tags' : ->
     @_updateDerivedRecipeLists()
 
   'search-recipes' : ({ searchTerm }) ->

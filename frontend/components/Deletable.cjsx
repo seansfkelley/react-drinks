@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 _          = require 'lodash'
-React      = require 'react'
+React      = require 'react/addons'
 Draggable  = require 'react-draggable'
 classnames = require 'classnames'
 

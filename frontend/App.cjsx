@@ -1,6 +1,6 @@
 # @cjsx React.DOM
 
-React = require 'react'
+React = require 'react/addons'
 
 FixedHeaderFooter = require './components/FixedHeaderFooter'
 RecipeListView    = require './recipes/RecipeListView'

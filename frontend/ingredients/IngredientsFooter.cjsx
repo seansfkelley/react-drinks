@@ -1,4 +1,4 @@
-React = require 'react'
+React = require 'react/addons'
 
 FluxMixin = require '../mixins/FluxMixin'
 

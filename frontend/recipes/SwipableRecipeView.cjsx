@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 _     = require 'lodash'
-React = require 'react'
+React = require 'react/addons'
 Swipe = require 'react-swipe'
 
 RecipeView = require './RecipeView'

@@ -1,6 +1,6 @@
 # @cjsx React.DOM
 
-React      = require 'react'
+React      = require 'react/addons'
 classnames = require 'classnames'
 
 SearchBar = React.createClass {

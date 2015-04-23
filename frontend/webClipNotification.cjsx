@@ -1,7 +1,7 @@
 # @cjsx React.DOM
 
 _     = require 'lodash'
-React = require 'react'
+React = require 'react/addons'
 
 stylingConstants = require './stylingConstants'
 
