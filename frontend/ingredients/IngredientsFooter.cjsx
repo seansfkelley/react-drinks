@@ -9,32 +9,31 @@ AppDispatcher = require '../AppDispatcher'
 
 IngredientSelectionView = require './IngredientSelectionView'
 
+SORT_ORDER_ICONS =
+  alphabetical : 'fa-sort-alpha-asc'
+  mixable      : 'fa-sort-numeric-asc'
+
 IngredientsFooter = React.createClass {
   displayName : 'IngredientsFooter'
 
   propTypes : {}
 
   mixins : [
-    FluxMixin UiStore, 'useIngredients'
+    FluxMixin UiStore, 'recipeSort'
   ]
 
   render : ->
-    if @state.useIngredients
-      leftIcon = 'fa-check-square-o'
-    else
-      leftIcon = 'fa-square-o'
-
     <TitleBar
       className='ingredients-footer'
-      leftIcon={leftIcon}
-      leftIconOnTouchTap={@_toggleUseIngredients}
+      leftIcon={SORT_ORDER_ICONS[@state.recipeSort]}
+      leftIconOnTouchTap={@_toggleRecipeSort}
       title='Ingredients'
       titleOnTouchTap={@_openIngredientPanel}
     />
 
-  _toggleUseIngredients : ->
+  _toggleRecipeSort : ->
     AppDispatcher.dispatch {
-      type : 'toggle-use-ingredients'
+      type : 'toggle-recipe-sort'
     }
 
   _openIngredientPanel : ->

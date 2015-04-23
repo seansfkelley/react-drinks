@@ -24,20 +24,11 @@ RecipeListHeader = React.createClass {
 
   propTypes : {}
 
-  mixins : [
-    FluxMixin UiStore, 'useIngredients'
-  ]
-
   render : ->
-    if @state.useIngredients
-      title = 'Mixable Drinks'
-    else
-      title = 'All Drinks'
-
     <TitleBar
       leftIcon='fa-star'
       leftIconOnTouchTap={@_openFavorites}
-      title={title}
+      title='Drinks'
       rightIcon='fa-plus'
       rightIconOnTouchTap={@_newRecipe}
     />
@@ -197,21 +188,22 @@ RecipeListView = React.createClass {
   propTypes : {}
 
   mixins : [
-    FluxMixin UiStore, 'useIngredients'
+    FluxMixin UiStore, 'recipeSort'
     FluxMixin RecipeStore, 'searchedAlphabeticalRecipes', 'searchedMixableRecipes', 'mixabilityByRecipeId'
   ]
 
   render : ->
-    if @state.useIngredients
-      list = <GroupedRecipeList
-        recipes={@state.searchedMixableRecipes}
-        mixability={@state.mixabilityByRecipeId}
-      />
-    else
-      list = <AlphabeticalRecipeList
-        recipes={@state.searchedAlphabeticalRecipes}
-        mixability={@state.mixabilityByRecipeId}
-      />
+    list = switch @state.recipeSort
+      when 'alphabetical'
+        <AlphabeticalRecipeList
+          recipes={@state.searchedAlphabeticalRecipes}
+          mixability={@state.mixabilityByRecipeId}
+        />
+      when 'mixable'
+        <GroupedRecipeList
+          recipes={@state.searchedMixableRecipes}
+          mixability={@state.mixabilityByRecipeId}
+        />
 
     <FixedHeaderFooter
       header={<RecipeListHeader/>}
