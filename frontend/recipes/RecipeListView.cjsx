@@ -59,8 +59,8 @@ RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
   propTypes :
-    name       : React.PropTypes.string.isRequired
-    mixability : React.PropTypes.number.isRequired
+    recipe     : React.PropTypes.object.isRequired
+    mixability : React.PropTypes.number
     onTouchTap : React.PropTypes.func.isRequired
 
   render : ->
@@ -72,7 +72,7 @@ RecipeListItem = React.createClass {
       mixabilityNode = <span className='mixability near-mixable'>{@props.mixability}</span>
 
     <List.Item className='recipe-list-item' onTouchTap={@props.onTouchTap}>
-      <span className='name'>{@props.name}</span>
+      <span className='name'>{@props.recipe.name}</span>
       {mixabilityNode}
     </List.Item>
 }
@@ -81,48 +81,35 @@ IncompleteRecipeListItem = React.createClass {
   displayName : 'IncompleteRecipeListItem'
 
   propTypes :
-    recipes : React.PropTypes.array.isRequired
-    index   : React.PropTypes.number.isRequired
+    recipe     : React.PropTypes.object.isRequired
+    onTouchTap : React.PropTypes.func.isRequired
 
   render : ->
-    missingIngredients = _.map @_getRecipe().missing, (m) ->
-      return <div className='missing-ingredient' key={m.displayIngredient}>
+    missingIngredients = _.map @props.recipe.missing, (m) ->
+      <div className='missing-ingredient' key={m.displayIngredient}>
         <span className='amount'>{utils.fractionify(m.displayAmount ? '')}</span>
         {' '}
         <span className='unit'>{m.displayUnit ? ''}</span>
         {' '}
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
-    <List.Item
-      className='recipe-list-item incomplete'
-      onTouchTap={@_openRecipe}
-    >
-      <div className='name'>{@_getRecipe().name}</div>
+
+    <List.Item className='recipe-list-item incomplete' onTouchTap={@props.onTouchTap}>
+      <div className='name'>{@props.recipe.name}</div>
       {missingIngredients}
     </List.Item>
-
-  _openRecipe : ->
-    AppDispatcher.dispatch {
-      type      : 'show-modal'
-      component : <SwipableRecipeView recipes={@props.recipes} index={@props.index}/>
-    }
-
-  _getRecipe : ->
-    return IncompleteRecipeListItem.getRecipeFor @
-
-  statics :
-    getRecipeFor : (element) ->
-      return element.props.recipes[element.props.index]
 }
 
-NUMBER_REGEX = /[0-9]/
-
-_recipeListItemTitleExtractor = (child) ->
-  letter = child.props.name[0].toUpperCase()
-  if NUMBER_REGEX.test letter
-    return '#'
-  else
-    return letter
+_generateRecipeOpener = (groupedRecipes, absoluteIndex) ->
+  return ->
+    recipes = _.chain groupedRecipes
+      .pluck 'recipes'
+      .flatten()
+      .value()
+    AppDispatcher.dispatch {
+      type      : 'show-modal'
+      component : <SwipableRecipeView recipes={recipes} index={absoluteIndex}/>
+    }
 
 AlphabeticalRecipeList = React.createClass {
   displayName : 'AlphabeticalRecipeList'
@@ -132,33 +119,22 @@ AlphabeticalRecipeList = React.createClass {
     mixability : React.PropTypes.object.isRequired
 
   render : ->
-    recipeNodes = _.map @props.recipes, (r, i) =>
-      <RecipeListItem
-        name={r.name}
-        mixability={@props.mixability[r.recipeId]}
-        onTouchTap={_.partial @_openRecipeByIndex, i}
-        key={r.recipeId}
-      />
-
-    headeredNodes = List.headerify {
-      nodes             : recipeNodes
-      computeHeaderData : (node, i) ->
-        title = _recipeListItemTitleExtractor node
-        return {
-          title
-          key : 'header-' + title
-        }
-    }
+    headeredNodes = []
+    absoluteIndex = 0
+    for { letter, recipes } in @props.recipes
+      headeredNodes.push <List.Header title={letter.toUpperCase()} key={'header-' + letter}/>
+      for r in recipes
+        headeredNodes.push <RecipeListItem
+          recipe={r}
+          mixability={@props.mixability[r.recipeId]}
+          onTouchTap={_generateRecipeOpener @props.recipes, absoluteIndex}
+          key={r.recipeId}
+        />
+        absoluteIndex += 1
 
     <List className={List.ClassNames.HEADERED}>
       {headeredNodes}
     </List>
-
-  _openRecipeByIndex : (i) ->
-    AppDispatcher.dispatch {
-      type      : 'show-modal'
-      component : <SwipableRecipeView recipes={@props.recipes} index={i}/>
-    }
 }
 
 EmptyListView = React.createClass {
@@ -178,37 +154,41 @@ GroupedRecipeList = React.createClass {
   displayName : 'GroupedRecipeList'
 
   propTypes :
-    recipes : React.PropTypes.array
+    recipes    : React.PropTypes.array.isRequired
+    mixability : React.PropTypes.object.isRequired
 
   render : ->
-    # This whole munging of the group business is kinda gross.
-    groupRecipePairs = _.chain @props.recipes
-      .map ({ name, recipes }) ->
-        _.map recipes, (r) -> [ name, r ]
-      .flatten()
-      .value()
+    headeredNodes = []
+    absoluteIndex = 0
+    for { mixability, recipes } in @props.recipes
+      headeredNodes.push <List.Header title={@_mixabilityToTitle mixability} key={'header-' + mixability}/>
+      for r in recipes
+        if r.missing.length
+          listItem = <IncompleteRecipeListItem
+            recipe={r}
+            onTouchTap={_generateRecipeOpener @props.recipes, absoluteIndex}
+            key={r.recipeId}
+          />
+        else
+          listItem = <RecipeListItem
+            recipe={r}
+            onTouchTap={_generateRecipeOpener @props.recipes, absoluteIndex}
+            key={r.recipeId}
+          />
 
-    orderedRecipes = _.pluck groupRecipePairs, '1'
+        headeredNodes.push listItem
+        absoluteIndex += 1
 
-    recipeNodes = _.map groupRecipePairs, ([ _, r ], i) =>
-      if r.missing.length
-        return <IncompleteRecipeListItem recipes={orderedRecipes} index={i} key={r.recipeId}/>
-      else
-        return <RecipeListItem recipes={orderedRecipes} index={i} key={r.recipeId}/>
-
-    headeredNodes = List.headerify {
-      nodes             : recipeNodes
-      computeHeaderData : (node, i) ->
-        title = groupRecipePairs[node.props.index][0]
-        return {
-          title
-          key : 'header-' + title
-        }
-    }
-
-    <List className={List.ClassNames.HEADERED} emptyView={<EmptyListView/>}>
+    <List className={List.ClassNames.HEADERED}>
       {headeredNodes}
     </List>
+
+  _mixabilityToTitle : (mixability) ->
+    return switch mixability
+      when 0 then 'Mixable Drinks'
+      when 1 then 'With 1 More Ingredient'
+      else "With #{mixability} More Ingredients"
+
 }
 
 RecipeListView = React.createClass {
@@ -218,12 +198,15 @@ RecipeListView = React.createClass {
 
   mixins : [
     FluxMixin UiStore, 'useIngredients'
-    FluxMixin RecipeStore, 'searchedAlphabeticalRecipes', 'searchedGroupedMixableRecipes', 'mixabilityByRecipeId'
+    FluxMixin RecipeStore, 'searchedAlphabeticalRecipes', 'searchedMixableRecipes', 'mixabilityByRecipeId'
   ]
 
   render : ->
     if @state.useIngredients
-      list = <GroupedRecipeList recipes={@state.searchedGroupedMixableRecipes}/>
+      list = <GroupedRecipeList
+        recipes={@state.searchedMixableRecipes}
+        mixability={@state.mixabilityByRecipeId}
+      />
     else
       list = <AlphabeticalRecipeList
         recipes={@state.searchedAlphabeticalRecipes}

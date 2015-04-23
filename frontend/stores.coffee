@@ -134,25 +134,24 @@ RECIPE_PERSISTABLE_FIELDS = 'customRecipes'
 
 RecipeStore = new class extends FluxStore
   fields : ->
-    # Should change this to have the fields:
-    #   allRecipes (no stated ordering)
-    #   searchedAlphabeticalRecipes
-    #   searchedBaseLiquorRecipes
-    #   searchedMixableRecipes
-    # With each 'searched' being an ordered array of objects { key, recipes } where key is some
-    # domain-specific key (i.e. the letter, the base liquor, or the mixability factor)
     return _.extend {
       searchTerm                    : ''
-      alphabeticalRecipes           : []
       customRecipes                 : []
-      groupedMixableRecipes         : []
+
+      allRecipes                    : []
+
+      alphabeticalRecipes           : []
+      # baseLiquorRecipes             : []
+      mixableRecipes                : []
+
       searchedAlphabeticalRecipes   : []
-      searchedGroupedMixableRecipes : []
+      # searchedBaseLiquorRecipes     : []
+      searchedMixableRecipes        : []
+
       mixabilityByRecipeId          : {}
     }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
-    @_createRecipeSearch()
     @_updateDerivedRecipeLists()
 
   # The semantics here are iffy -- we should just be setting whatever we get. Split state up.
@@ -172,54 +171,70 @@ RecipeStore = new class extends FluxStore
     @_persist()
 
   _setRecipes : (recipes) ->
-    @alphabeticalRecipes = _.sortBy(recipes, 'canonicalName')
-    @_createRecipeSearch()
+    @allRecipes = recipes
     @_updateDerivedRecipeLists()
 
-  _createRecipeSearch : ->
-    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
-    @_recipeSearch = new RecipeSearch IngredientStore.ingredientsByTag, @alphabeticalRecipes
-
   _updateDerivedRecipeLists : ->
+    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
+
+    alphabeticalRecipes = _.sortBy(@allRecipes, 'canonicalName')
+    @_recipeSearch = new RecipeSearch IngredientStore.ingredientsByTag, alphabeticalRecipes
+
+    @alphabeticalRecipes = _.chain alphabeticalRecipes
+      # group by should include a clause for numbers
+      .groupBy (r) -> r.canonicalName[0].toLowerCase()
+      .map (recipes, letter) -> { recipes, letter }
+      .sortBy 'letter'
+      .value()
+
     @_updateMixableRecipes()
     @_updateSearchedRecipes()
 
   _updateMixableRecipes : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
+
     selectedTags = _.keys IngredientStore.selectedIngredientTags
     mixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, FUZZY_MATCH
-    @groupedMixableRecipes = _.map mixableRecipes, (recipes, missing) ->
-      missing = +missing
-      name = switch missing
-        when 0 then 'Mixable Drinks'
-        when 1 then 'With 1 More Ingredient'
-        else "With #{missing} More Ingredients"
-      recipes = _.sortBy recipes, 'name'
-      return { name, recipes, missing }
 
-    @mixabilityByRecipeId = _.extend _.map(mixableRecipes, (recipes, missing) ->
+    @mixableRecipes = _.chain mixableRecipes
+      .map (recipes, missing) -> { recipes, mixability : +missing }
+      .sortBy 'mixability'
+      .value()
+    # Should have a 'rest' key where we just dump all the other recipes?
+
+    @mixabilityByRecipeId = _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
       missing = +missing
       return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
     )...
-    for r in @alphabeticalRecipes when not @mixabilityByRecipeId[r.recipeId]?
-      @mixabilityByRecipeId[r.recipeId] = -1
+    for { letter, recipes } in @alphabeticalRecipes
+      for r in recipes when not @mixabilityByRecipeId[r.recipeId]?
+        @mixabilityByRecipeId[r.recipeId] = -1
+
+    return # for loop
 
   _updateSearchedRecipes : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
-    if @searchTerm == ''
-      @searchedAlphabeticalRecipes   = @alphabeticalRecipes
-      @searchedGroupedMixableRecipes = @groupedMixableRecipes
-    else
-      filterRecipe = (r) => @_recipeSearch.recipeMatchesSearchTerm r, @searchTerm
 
-      @searchedAlphabeticalRecipes = _.filter @alphabeticalRecipes, filterRecipe
-      @searchedGroupedMixableRecipes = _.chain @groupedMixableRecipes
-        .map (group) =>
-          return _.defaults {
-            recipes : _.filter group.recipes, filterRecipe
-          }, group
-        .filter ({ recipes }) -> recipes.length > 0
-        .value()
+    BASE_LIST_NAMES = [ 'alphabetical', 'mixable' ]
+
+    if @searchTerm == ''
+      for baseList in BASE_LIST_NAMES
+        @["searched#{_.capitalize(baseList)}Recipes"] = @["#{baseList}Recipes"]
+    else
+      matchingRecipeIds = {}
+      for r in @allRecipes
+        matchingRecipeIds[r.recipeId] = @_recipeSearch.recipeMatchesSearchTerm r, @searchTerm
+
+      for baseList in BASE_LIST_NAMES
+        srcList = @["#{baseList}Recipes"]
+        dstList = @["searched#{_.capitalize(baseList)}Recipes"] = []
+        for { key, recipes }, i in srcList
+          dstList[i] = {
+            key
+            recipes : _.filter(recipes, (r) -> matchingRecipeIds[r.recipeId])
+          }
+
+    return # for loop
 
   _persist : ->
     localStorage[RECIPE_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, RECIPE_PERSISTABLE_FIELDS)
