@@ -2,6 +2,7 @@
 
 _     = require 'lodash'
 React = require 'react/addons'
+{ PureRenderMixin } = React.addons
 
 FluxMixin = require '../mixins/FluxMixin'
 
@@ -21,6 +22,8 @@ IngredientSelectionHeader = React.createClass {
   propTypes :
     onClose : React.PropTypes.func
 
+  mixins : [ PureRenderMixin ]
+
   render : ->
     <TitleBar
       leftIcon='fa-chevron-down'
@@ -38,6 +41,7 @@ IngredientGroupHeader = React.createClass {
 
   mixins : [
     FluxMixin UiStore, 'openIngredientGroups'
+    PureRenderMixin
   ]
 
   render : ->
@@ -61,6 +65,7 @@ IngredientItemGroup = React.createClass {
 
   mixins : [
     FluxMixin UiStore, 'openIngredientGroups'
+    PureRenderMixin
   ]
 
   render : ->
@@ -86,7 +91,9 @@ IngredientListItem = React.createClass {
   propTypes :
     isSelected : React.PropTypes.bool.isRequired
     ingredient : React.PropTypes.object.isRequired
-    toggle     : React.PropTypes.func.isRequired
+    toggleTag  : React.PropTypes.func.isRequired
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     if @props.isSelected
@@ -98,11 +105,7 @@ IngredientListItem = React.createClass {
     </List.Item>
 
   _toggleIngredient : ->
-    @props.toggle @props.ingredient.tag
-    # AppDispatcher.dispatch {
-    #   type : 'toggle-ingredient'
-    #   tag  : @props.ingredient.tag
-    # }
+    @props.toggleTag @props.ingredient.tag
 }
 
 GroupedIngredientList = React.createClass {
@@ -112,8 +115,10 @@ GroupedIngredientList = React.createClass {
     searchedGroupedIngredients    : React.PropTypes.array
     initialSelectedIngredientTags : React.PropTypes.object
 
+  mixins : [ PureRenderMixin ]
+
   getInitialState : -> {
-    selectedIngredientTags : @props.initialSelectedIngredientTags
+    selectedIngredientTags : _.clone @props.initialSelectedIngredientTags
   }
 
   render : ->
@@ -122,6 +127,14 @@ GroupedIngredientList = React.createClass {
       .pluck 'length'
       .reduce ((sum, n) -> sum + n), 0
       .value()
+
+    _makeListItem = (i) =>
+      return <IngredientListItem
+        ingredient={i}
+        isSelected={@state.selectedIngredientTags[i.tag]?}
+        toggleTag={@_toggleIngredient}
+        key={i.tag}
+      />
 
     if ingredientCount == 0
       listNodes = []
@@ -142,7 +155,7 @@ GroupedIngredientList = React.createClass {
 
       listNodes = [
         header
-        _.map ingredients, (i) -> <IngredientListItem ingredient={i} key={i.tag}/>
+        _.map ingredients, _makeListItem
       ]
 
     else
@@ -151,12 +164,7 @@ GroupedIngredientList = React.createClass {
         ingredientNodes = []
         selectedCount = 0
         for i in ingredients
-          ingredientNodes.push <IngredientListItem
-            ingredient={i}
-            isSelected={@state.selectedIngredientTags[i.tag]?}
-            toggle={@_toggleIngredient}
-            key={i.tag}
-          />
+          ingredientNodes.push _makeListItem(i)
           if @state.selectedIngredientTags[i.tag]?
             selectedCount += 1
         listNodes.push [
@@ -174,13 +182,13 @@ GroupedIngredientList = React.createClass {
     </List>
 
   _toggleIngredient : (tag) ->
-    # alternately, use a local store + dispatcher!? rather than state
-    # just don't apply the changes until comit
+    # It is VERY IMPORTANT that these create a new instance: this is how PureRenderMixin guarantees correctness.
     if @state.selectedIngredientTags[tag]?
-      delete @state.selectedIngredientTags[tag]
+      selectedIngredientTags = _.omit @state.selectedIngredientTags, tag
     else
-      @state.selectedIngredientTags[tag] = true
-    @setState { selectedIngredientTags : @state.selectedIngredientTags }
+      selectedIngredientTags = _.clone @state.selectedIngredientTags
+      selectedIngredientTags[tag] = true
+    @setState { selectedIngredientTags }
 }
 
 IngredientSelectionView = React.createClass {
@@ -190,6 +198,7 @@ IngredientSelectionView = React.createClass {
 
   mixins : [
     FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
+    PureRenderMixin
   ]
 
   render : ->

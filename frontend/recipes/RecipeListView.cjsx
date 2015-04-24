@@ -2,6 +2,7 @@
 
 _     = require 'lodash'
 React = require 'react/addons'
+{ PureRenderMixin } = React.addons
 
 FluxMixin = require '../mixins/FluxMixin'
 
@@ -23,6 +24,8 @@ RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
 
   propTypes : {}
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     <TitleBar
@@ -54,6 +57,8 @@ RecipeListItem = React.createClass {
     mixability : React.PropTypes.number
     onTouchTap : React.PropTypes.func.isRequired
 
+  mixins : [ PureRenderMixin ]
+
   render : ->
     if @props.mixability == 0
       mixabilityNode = <span className='mixability mixable'>
@@ -74,6 +79,8 @@ IncompleteRecipeListItem = React.createClass {
   propTypes :
     recipe     : React.PropTypes.object.isRequired
     onTouchTap : React.PropTypes.func.isRequired
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     missingIngredients = _.map @props.recipe.missing, (m) ->
@@ -109,6 +116,8 @@ AlphabeticalRecipeList = React.createClass {
     recipes    : React.PropTypes.array.isRequired
     mixability : React.PropTypes.object.isRequired
 
+  mixins : [ PureRenderMixin ]
+
   render : ->
     headeredNodes = []
     absoluteIndex = 0
@@ -133,6 +142,8 @@ EmptyListView = React.createClass {
 
   propTypes : {}
 
+  mixins : [ PureRenderMixin ]
+
   render : ->
     <div className='empty-list-text'>
       No drinks?
@@ -147,6 +158,8 @@ GroupedRecipeList = React.createClass {
   propTypes :
     recipes    : React.PropTypes.array.isRequired
     mixability : React.PropTypes.object.isRequired
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     headeredNodes = []
@@ -190,6 +203,7 @@ RecipeListView = React.createClass {
   mixins : [
     FluxMixin UiStore, 'recipeSort'
     FluxMixin RecipeStore, 'searchedAlphabeticalRecipes', 'searchedMixableRecipes', 'mixabilityByRecipeId'
+    PureRenderMixin
   ]
 
   render : ->
