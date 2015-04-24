@@ -68,13 +68,6 @@ IngredientStore = new class extends FluxStore
     @selectedIngredientTags = selectedIngredientTags
     localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
 
-  'toggle-ingredient' : ({ tag }) ->
-    if @selectedIngredientTags[tag]?
-      delete @selectedIngredientTags[tag]
-    else
-      @selectedIngredientTags[tag] = true
-    localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
-
   'search-ingredients' : ({ searchTerm }) ->
     @searchTerm = searchTerm.toLowerCase()
     @_updateSearchedIngredients()
@@ -128,6 +121,8 @@ UiStore = new class extends FluxStore
       delete @favoritedRecipes[recipeId]
     else
       @favoritedRecipes[recipeId] = true
+    # Cooperate with PureRenderMixin.
+    @favoritedRecipes = _.clone @favoritedRecipes
     @_persist()
 
   _persist : ->
@@ -172,8 +167,8 @@ RecipeStore = new class extends FluxStore
     @_updateSearchedRecipes()
 
   'save-recipe' : ({ recipe }) ->
-    @customRecipes.push recipe
-    @_setRecipes @alphabeticalRecipes.concat([ recipe ])
+    @customRecipes = @customRecipes.concat [ recipe ]
+    @_setRecipes @allRecipes.concat(@customRecipes)
     @_persist()
 
   _setRecipes : (recipes) ->
