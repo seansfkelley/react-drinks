@@ -109,7 +109,7 @@ IngredientListItem = React.createClass {
 }
 
 GroupedIngredientList = React.createClass {
-  display : 'GroupedIngredientList'
+  displayName : 'GroupedIngredientList'
 
   propTypes :
     searchedGroupedIngredients    : React.PropTypes.array
