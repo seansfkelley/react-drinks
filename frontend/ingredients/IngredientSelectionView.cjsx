@@ -72,6 +72,7 @@ IngredientItemGroup = React.createClass {
     groupSize = React.Children.count @props.children
     if @_isCollapsed()
       className = 'collapsed'
+      style = {}
     else
       style = {
         height : groupSize * stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT + stylingConstants.INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET
