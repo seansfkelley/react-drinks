@@ -406,3 +406,6 @@
   display    : Tequila (any)
   tag        : tequila
   tangible   : false
+-
+  display    : Tea
+  group      : mixer-other
