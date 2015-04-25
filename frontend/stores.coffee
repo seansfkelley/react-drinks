@@ -197,19 +197,20 @@ RecipeStore = new class extends FluxStore
       .sortBy 'key'
       .value()
 
-    flattenedRawMixableRecipes = _.chain rawMixableRecipes
+    alphabeticalRecipesWithMixability = _.chain rawMixableRecipes
       .map _.identity # map2array
       .flatten()
+      .sortBy 'canonicalName'
       .value()
 
-    @alphabeticalRecipes = _.chain flattenedRawMixableRecipes
+    @alphabeticalRecipes = _.chain alphabeticalRecipesWithMixability
       # group by should include a clause for numbers
       .groupBy (r) -> r.canonicalName[0].toLowerCase()
       .map (recipes, key) -> { recipes, key }
       .sortBy 'key'
       .value()
 
-    @baseLiquorRecipes = _.chain flattenedRawMixableRecipes
+    @baseLiquorRecipes = _.chain alphabeticalRecipesWithMixability
       .groupBy 'base'
       .omit 'undefined' # Bleh.
       .map (recipes, key) ->
