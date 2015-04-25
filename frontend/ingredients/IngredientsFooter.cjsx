@@ -12,6 +12,7 @@ IngredientSelectionView = require './IngredientSelectionView'
 SORT_ORDER_ICONS =
   alphabetical : 'fa-sort-alpha-asc'
   mixable      : 'fa-sort-numeric-asc'
+  baseLiquor   : 'fa-sort-amount-asc'
 
 IngredientsFooter = React.createClass {
   displayName : 'IngredientsFooter'

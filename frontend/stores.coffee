@@ -92,7 +92,7 @@ IngredientStore = new class extends FluxStore
 UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
 UI_PERSISTABLE_FIELDS = [ 'recipeSort', 'favoritedRecipes' ]
 
-ORDERED_RECIPE_SORTS = [ 'alphabetical', 'mixable' ]
+ORDERED_RECIPE_SORTS = [ 'alphabetical', 'mixable', 'baseLiquor' ]
 _nextSortOrder = (sortOrder) ->
   l = ORDERED_RECIPE_SORTS.length
   return ORDERED_RECIPE_SORTS[(_.indexOf(ORDERED_RECIPE_SORTS, sortOrder) + l + 1) % l]
@@ -142,11 +142,11 @@ RecipeStore = new class extends FluxStore
       allRecipes                    : []
 
       alphabeticalRecipes           : []
-      # baseLiquorRecipes             : []
+      baseLiquorRecipes             : []
       mixableRecipes                : []
 
       searchedAlphabeticalRecipes   : []
-      # searchedBaseLiquorRecipes     : []
+      searchedBaseLiquorRecipes     : []
       searchedMixableRecipes        : []
 
       mixabilityByRecipeId          : {}
@@ -188,6 +188,20 @@ RecipeStore = new class extends FluxStore
       .sortBy 'key'
       .value()
 
+    @baseLiquorRecipes = _.chain alphabeticalRecipes
+      .groupBy 'base'
+      .omit 'undefined' # Bleh.
+      .map (recipes, key) ->
+        if key == 'UNASSIGNED'
+          key = 'multiple'
+        return { recipes, key }
+      .sortBy ({ key }) ->
+        if key == 'Multiple'
+          return Infinity
+        else
+          return key.charCodeAt 0
+      .value()
+
     @_updateMixableRecipes()
     @_updateSearchedRecipes()
 
@@ -216,7 +230,7 @@ RecipeStore = new class extends FluxStore
   _updateSearchedRecipes : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
 
-    BASE_LIST_NAMES = [ 'alphabetical', 'mixable' ]
+    BASE_LIST_NAMES = [ 'alphabetical', 'mixable', 'baseLiquor' ]
 
     if @searchTerm == ''
       for baseList in BASE_LIST_NAMES

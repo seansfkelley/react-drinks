@@ -9,4 +9,5 @@
 - can tab over to search bars that are currently obscured, but tabIndex=-1 doesn't seem to prevent it
 - list-with-search should probably be mixinified or something -- got some copy-paste going on
 
-- favorites should incorporate ingredients you have
+- favorites should incorporate ingredients you have somehow
+- fixedheaderfooter shouldn't take headers and footers as props: they should just be wrapper components

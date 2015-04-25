@@ -109,34 +109,6 @@ _generateRecipeOpener = (groupedRecipes, absoluteIndex) ->
       component : <SwipableRecipeView recipes={recipes} index={absoluteIndex}/>
     }
 
-AlphabeticalRecipeList = React.createClass {
-  displayName : 'AlphabeticalRecipeList'
-
-  propTypes :
-    recipes    : React.PropTypes.array.isRequired
-    mixability : React.PropTypes.object.isRequired
-
-  mixins : [ PureRenderMixin ]
-
-  render : ->
-    headeredNodes = []
-    absoluteIndex = 0
-    for { key, recipes } in @props.recipes
-      headeredNodes.push <List.Header title={key.toUpperCase()} key={'header-' + key}/>
-      for r in recipes
-        headeredNodes.push <RecipeListItem
-          recipe={r}
-          mixability={@props.mixability[r.recipeId]}
-          onTouchTap={_generateRecipeOpener @props.recipes, absoluteIndex}
-          key={r.recipeId}
-        />
-        absoluteIndex += 1
-
-    <List className={List.ClassNames.HEADERED}>
-      {headeredNodes}
-    </List>
-}
-
 EmptyListView = React.createClass {
   displayName : 'EmptyListView'
 
@@ -150,6 +122,34 @@ EmptyListView = React.createClass {
       <br/>
       Try adding some ingredients!
     </div>
+}
+
+RecipeList = React.createClass {
+  displayName : 'RecipeList'
+
+  propTypes :
+    recipes    : React.PropTypes.array.isRequired
+    makeHeader : React.PropTypes.func.isRequired
+    makeItem   : React.PropTypes.func.isRequired
+
+  mixins : [ PureRenderMixin ]
+
+  render : ->
+    headeredNodes = []
+    absoluteIndex = 0
+    for { key, recipes } in @props.recipes
+      headeredNodes.push @props.makeHeader(key, recipes)
+      for r in recipes
+        headeredNodes.push @props.makeItem(key, r, {
+          recipe     : r
+          onTouchTap : _generateRecipeOpener @props.recipes, absoluteIndex
+          key        : r.recipeId
+        })
+        absoluteIndex += 1
+
+    <List className={List.ClassNames.HEADERED}>
+      {headeredNodes}
+    </List>
 }
 
 GroupedRecipeList = React.createClass {
@@ -167,7 +167,7 @@ GroupedRecipeList = React.createClass {
     for { key, recipes } in @props.recipes
       headeredNodes.push <List.Header title={@_mixabilityToTitle key} key={'header-' + key}/>
       for r in recipes
-        if r.missing.length
+        if r.missing?.length
           listItem = <IncompleteRecipeListItem
             recipe={r}
             onTouchTap={_generateRecipeOpener @props.recipes, absoluteIndex}
@@ -186,13 +186,6 @@ GroupedRecipeList = React.createClass {
     <List className={List.ClassNames.HEADERED}>
       {headeredNodes}
     </List>
-
-  _mixabilityToTitle : (mixability) ->
-    return switch mixability
-      when 0 then 'Mixable Drinks'
-      when 1 then 'With 1 More Ingredient'
-      else "With #{mixability} More Ingredients"
-
 }
 
 RecipeListView = React.createClass {
@@ -202,22 +195,21 @@ RecipeListView = React.createClass {
 
   mixins : [
     FluxMixin UiStore, 'recipeSort'
-    FluxMixin RecipeStore, 'searchedAlphabeticalRecipes', 'searchedMixableRecipes', 'mixabilityByRecipeId'
+    FluxMixin(RecipeStore,
+      'searchedAlphabeticalRecipes'
+      'searchedMixableRecipes'
+      'searchedBaseLiquorRecipes'
+      'mixabilityByRecipeId'
+    )
     PureRenderMixin
   ]
 
   render : ->
-    list = switch @state.recipeSort
-      when 'alphabetical'
-        <AlphabeticalRecipeList
-          recipes={@state.searchedAlphabeticalRecipes}
-          mixability={@state.mixabilityByRecipeId}
-        />
-      when 'mixable'
-        <GroupedRecipeList
-          recipes={@state.searchedMixableRecipes}
-          mixability={@state.mixabilityByRecipeId}
-        />
+    list = <RecipeList
+      recipes={@state["searched#{_.capitalize @state.recipeSort}Recipes"]}
+      makeHeader={@["_#{@state.recipeSort}Header"]}
+      makeItem={@["_#{@state.recipeSort}ListItem"]}
+    />
 
     <FixedHeaderFooter
       header={<RecipeListHeader/>}
@@ -242,6 +234,30 @@ RecipeListView = React.createClass {
       type : 'search-recipes'
       searchTerm
     }
+
+  _alphabeticalHeader : (key) ->
+    return <List.Header title={key.toUpperCase()} key={'header-' + key}/>
+
+  _alphabeticalListItem : (key, r, props) ->
+    return <RecipeListItem mixability={@state.mixabilityByRecipeId[r.recipeId]} {...props}/>
+
+  _mixableHeader : (key) ->
+    return <List.Header title={@_mixabilityToTitle key} key={'header-' + key}/>
+
+  _mixableListItem : (key, r, props) ->
+    return <RecipeListItem {...props}/>
+
+  _baseLiquorHeader : (key) ->
+    return <List.Header title={_.capitalize key} key={'header-' + key}/>
+
+  _baseLiquorListItem : (key, r, props) ->
+    return <RecipeListItem mixability={@state.mixabilityByRecipeId[r.recipeId]} {...props}/>
+
+  _mixabilityToTitle : (mixability) ->
+    return switch mixability
+      when 0 then 'Mixable Drinks'
+      when 1 then 'With 1 More Ingredient'
+      else "With #{mixability} More Ingredients"
 }
 
 module.exports = RecipeListView
