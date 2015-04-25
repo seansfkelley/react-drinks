@@ -14,6 +14,7 @@
   instructions: |
     Mix ingredients highball glass filled with ice.
     Garnish with a wedge of lime.
+  base: gin
 -
   name: "The Last Word"
   ingredients:
@@ -42,6 +43,7 @@
     Strain into a cocktail glass and garnish with a twist of lime.
   source: "Saveur"
   url: "http://www.saveur.com/article/Recipes/The-Last-Word-Cocktail"
+  base: UNASSIGNED
 -
   name: "Corpse Reviver #2"
   ingredients:
@@ -73,6 +75,7 @@
   instructions: |
     Shake ingredients together in a mixer with ice.
     Strain into chilled cocktail glass.
+  base: gin
 -
   name: "Improved Whiskey Cocktail"
   ingredients:
@@ -107,6 +110,7 @@
     Cut a thin slice of lemon zest over the surface of the drink and drop it into the glass.
   source: "Cocktailia"
   url: "http://www.cocktailia.com/cocktail-recipes/improved-whiskey-cocktail"
+  base: whiskey
 -
   name: "Mudslide"
   ingredients:
@@ -133,6 +137,7 @@
   instructions: |
     Shake all ingredients with ice and pour over ice in a cocktail glass.
     Garnish with a little chocolate syrup on the inside of the glass.
+  base: liqueur
 -
   name: "Lumière"
   ingredients:
@@ -167,6 +172,7 @@
     Garnish with a lime twist.
   source: "Saveur"
   url: "http://www.saveur.com/article/Recipes/The-Lumiere"
+  base: gin
 -
   name: "Margarita #2"
   ingredients:
@@ -196,6 +202,7 @@
     Rim a margarita glass with salt.
     Shake all ingredients with ice and strain into the glass.
     Garnish with a wheel of lime.
+  base: tequila
 -
   name: "Bee's Knees"
   ingredients:
@@ -218,6 +225,7 @@
     Shake ingredients well with ice.
     Strain into a chilled cocktail glass and garnish with a wedge of lemon.
   notes: "To make honey syrup, use one part honey to one part water."
+  base: gin
 -
   name: "Death in the Afternoon"
   ingredients:
@@ -233,6 +241,7 @@
     Pour one jigger absinthe into a Champagne glass.
     Add iced Champagne until it attains the proper opalescent milkiness.
     Drink three to five of these slowly.
+  base: UNASSIGNED
 -
   name: "Angostura Sour"
   ingredients:
@@ -261,6 +270,7 @@
     Strain into a chilled cocktail glass.
   source: "NY Times"
   url: "http://www.nytimes.com/2010/12/01/dining/01partiesrex3.html"
+  base: UNASSIGNED
 -
   name: "Brooklyn"
   ingredients:
@@ -288,6 +298,7 @@
     Stir gently over ice.
     Strain into a chilled cocktail glass.
   notes: "The bitters may be replaced with 1/4oz Amer Picon, a French version of Italy's Amaro."
+  base: whiskey
 -
   name: "La Palabra"
   ingredients:
@@ -315,6 +326,7 @@
   notes: "A variant on the Last Word."
   source: "Serious Eats"
   url: "http://www.seriouseats.com/recipes/2011/07/la-palabra-no-9-park-cocktail-recipe.html"
+  base: tequila
 -
   name: "Revolver"
   ingredients:
@@ -341,6 +353,7 @@
   notes: "A rye-heavy bourbon such as Bulleit, Buffalo Trace or Basil Hayden is recommended."
   source: "Serious Eats"
   url: "http://www.seriouseats.com/recipes/2011/03/time-for-a-drink-the-revolver-bourbon-cocktail-tia-maria-kahlua-orange.html"
+  base: whiskey
 -
   name: "Chrysanthemum"
   ingredients:
@@ -360,6 +373,7 @@
       displayUnit: "dashes"
       displayIngredient: "absinthe"
   instructions: "Stir ingredients with ice until well chilled, then strain into a chilled cocktail glass and garnish with an orange peel."
+  base: liqueur
 -
   name: "El Presidente"
   ingredients:
@@ -395,6 +409,7 @@
   notes: "Dry vermouth also works. When using dry vermouth, the drink benefits from increasing the amount of rum by 1/4 ounce or so, but it works well either way."
   source: "Cocktailia"
   url: "http://www.cocktailia.com/cocktail-recipes/el-presidente"
+  base: rum
 -
   name: "Derby #2"
   ingredients:
@@ -423,23 +438,24 @@
     Garnish with lime wedge or mint leaf.
   source: "Serious Eats"
   url: "http://www.seriouseats.com/recipes/2011/10/derby-cocktail-bourbon-vermouth-grand-marnier-lime-recipe.html"
+  base: whiskey
 -
   name: "Ginger Gold Rush"
   ingredients:
     -
       tag: "bourbon"
-      displayAmount: "3"
-      displayUnit: "parts"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
       displayIngredient: "bourbon"
     -
       tag: "ginger liqueur"
-      displayAmount: "2"
-      displayUnit: "parts"
+      displayAmount: "1"
+      displayUnit: "oz"
       displayIngredient: "Domaine de Canton"
     -
       tag: "lemon juice"
-      displayAmount: "1"
-      displayUnit: "part"
+      displayAmount: "1/2"
+      displayUnit: "oz"
       displayIngredient: "lemon juice"
   instructions: |
     Put a brandied cherry in the bottom of a martini glass.
@@ -448,6 +464,7 @@
   notes: "The original recipe has the reverse proportions for the ginger and bourbon, which makes for a significantly sweeter drink."
   source: "Saveur"
   url: "http://www.saveur.com/article/Recipes/Ginger-Gold-Rush-Cocktail"
+  base: whiskey
 -
   name: "Alamagoozlum"
   ingredients:
@@ -492,6 +509,7 @@
   instructions: "Shake very hard over ice and strain into a chilled cocktail glass."
   source: "Sloshed!"
   url: "http://sloshed.hyperkinetic.org/2009/10/23/alamagoozlum-cocktail/"
+  base: UNASSIGNED
 -
   name: "Martinez"
   ingredients:
@@ -519,6 +537,7 @@
     Stir with ice until very cold and strain into a chilled cocktail glass.
     Garnish with a twist of lemon.
   notes: "Predecessor to the Martini."
+  base: gin
 -
   name: "Chartreuse Smash"
   ingredients:
@@ -547,6 +566,7 @@
     Garnish with mint sprig.
   source: "Saveur"
   url: "http://www.saveur.com/article/Recipes/Chartreuse-Smash"
+  base: liqueur
 -
   name: "Improved Holland Gin Cocktail"
   ingredients:
@@ -581,6 +601,7 @@
     Garnish with fresh lemon peel.
   source: "Loungerati"
   url: "http://loungerati.blogspot.com/2010/10/what-were-drinking-do-dutch-with-bols.html"
+  base: gin
 -
   name: "Diamondback"
   ingredients:
@@ -604,6 +625,7 @@
     Stir well, strain into a chilled cocktail glass and serve.
   source: "Sloshed!"
   url: "http://sloshed.hyperkinetic.org/2011/10/21/diamondback/"
+  base: whiskey
 -
   name: "Vieux Carré"
   ingredients:
@@ -643,6 +665,7 @@
     Garnish with a cherry.
   source: "Serious Eats"
   url: "http://www.seriouseats.com/recipes/2008/07/vieux-carre-recipe.html"
+  base: UNASSIGNED
 -
   name: "Sazerac #2"
   ingredients:
@@ -668,6 +691,7 @@
     Pour out the ice from the first glass, swirl absinthe around it and toss the extra.
     Pour the rye mixture in and serve.
   notes: "Along with the Old Fashioned, the Sazerac is one of the earliest cocktails, and one of few that adheres to the classic definition of \"cocktail\": spirits, bitters, sugar and water."
+  base: whiskey
 -
   name: "Rubicon"
   ingredients:
@@ -703,6 +727,7 @@
     Garnish with a sprig of rosemary.
   source: "Small Screen"
   url: "http://www.smallscreennetwork.com/video/499/raising_the_bar_rubicon"
+  base: gin
 -
   name: "Lemon Basil Blossom"
   ingredients:
@@ -735,6 +760,7 @@
   notes: "To make the lemon basil simple syrup, use 4 parts sugar and 4 parts water to 1 part (loosely packed) basil leaves."
   source: "Saveur"
   url: "http://www.saveur.com/article/Recipes/Lemon-Basil-Blossom-Cocktail"
+  base: rum
 -
   name: "Peach Julep"
   ingredients:
@@ -769,6 +795,7 @@
     Fill serving glass with crushed ice, garnish with large bunch of mint.
   source: "Serious Eats"
   url: "http://www.seriouseats.com/recipes/2012/08/eastern-standard-peach-julep-cocktail-cognac-lillet-blanc-mint-recipe.html"
+  base: brandy
 -
   name: "White Russian"
   ingredients:
@@ -791,3 +818,4 @@
     Pour coffee liqueur and vodka into an Old Fashioned glass filled with ice.
     Float fresh cream on top and stir slowly.
   notes: "Replace the cream with Baileys to make a Blind Russian, so named because the drink is 100% alcohol."
+  base: vodka

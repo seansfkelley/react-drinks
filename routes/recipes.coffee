@@ -34,6 +34,11 @@ RECIPE_SCHEMA = {
     source : OPTIONAL_STRING
     # The full URL to the source page for this recipe.
     url : OPTIONAL_STRING
+    # One of a few very broad ingredient categories that best describes the genre of this drink.
+    base :
+      type     : 'string'
+      required : true
+      enum     : [ 'gin', 'vodka', 'rum', 'whiskey', 'tequila', 'brandy', 'wine', 'liqueur', 'UNASSIGNED' ]
 }
 
 IBA_RECIPES   = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/iba-recipes.yaml'))

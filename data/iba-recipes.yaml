@@ -21,6 +21,7 @@
       Sprinkle with fresh ground nutmeg.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Americano"
     ingredients:
@@ -40,6 +41,7 @@
     instructions: "Mix the ingredients directly in an old-fashioned glass filled with ice-cubes, add a splash of club soda and garnish with half orange slice."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: liqueur
 -
     name: "Angel Face"
     ingredients:
@@ -63,6 +65,7 @@
       Shake. Strain into a cocktail glass.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Aviation"
     ingredients:
@@ -84,6 +87,7 @@
     instructions: "Shake and strain into a chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "B-52"
     ingredients:
@@ -107,6 +111,7 @@
       Flame the Grand Marnier and serve while the flame is still on, accompanied with a straw on side plate.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: liqueur
 -
     name: "Bacardi"
     ingredients:
@@ -128,6 +133,7 @@
     instructions: "Pour all ingredients into shaker with ice cubes, shake well, strain into chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Barracuda"
     ingredients:
@@ -159,6 +165,7 @@
       Strain into cocktail glass and top with prosecco.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Bellini"
     ingredients:
@@ -176,6 +183,7 @@
       Pour peach puree into chilled glass and add prosecco. Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: wine
 -
     name: "Between The Sheets"
     ingredients:
@@ -202,6 +210,7 @@
     instructions: "Pour all ingredients into shaker with ice cubes, shake, strain into chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: UNASSIGNED
 -
     name: "Black Russian"
     ingredients:
@@ -220,6 +229,7 @@
       Note: for White Russian, float fresh cream on the top and stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Bloody Mary"
     ingredients:
@@ -253,6 +263,7 @@
     instructions: "Stir gently, pour all ingredients into highball glass. Garnish with celery and lemon wedge."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Bramble"
     ingredients:
@@ -282,6 +293,7 @@
       Garnish with a lemon slice and two blackberries.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Caipirinha"
     ingredients:
@@ -305,6 +317,7 @@
       Garnish with sugar cane.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Casino"
     ingredients:
@@ -331,6 +344,7 @@
     instructions: "Pour all ingredients into shaker with ice cubes, shake well, strain into chilled cocktail glass and garnish with a lemon twist and a maraschino cherry."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Champagne Cocktail"
     ingredients:
@@ -358,6 +372,7 @@
       Garnish with orange slice and maraschino cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: wine
 -
     name: "Clover Club"
     ingredients:
@@ -384,6 +399,7 @@
       Strain into cocktail glass.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Cosmopolitan"
     ingredients:
@@ -413,6 +429,7 @@
       Garnish with lime slice.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Cuba Libre"
     ingredients:
@@ -434,6 +451,7 @@
     instructions: "Build all ingredients in a highball glass filled with ice. Garnish with lime wedge."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Daiquiri"
     ingredients:
@@ -455,6 +473,7 @@
     instructions: "Shake and strain into a cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Dark 'N' Stormy"
     ingredients:
@@ -471,6 +490,7 @@
     instructions: "In a highball glass filled with ice add  dark rum and top with ginger beer. Garnish with lime wedge."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Derby #1"
     ingredients:
@@ -494,6 +514,7 @@
       Garnish with a fresh mint leaves in the drink.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Dirty Martini"
     ingredients:
@@ -519,6 +540,7 @@
       Garnish with green olive.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Dry Martini"
     ingredients:
@@ -539,6 +561,7 @@
       Squeeze oil from lemon peel onto the drink, or garnish with olive.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Espresso Martini"
     ingredients:
@@ -563,6 +586,7 @@
     instructions: "Shake and strain into a chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "French 75"
     ingredients:
@@ -592,6 +616,7 @@
       Top up with champagne. Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "French Connection"
     ingredients:
@@ -610,6 +635,7 @@
       Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: UNASSIGNED
 -
     name: "French Martini"
     ingredients:
@@ -634,6 +660,7 @@
       Squeeze oil from lemon peel onto the drink.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Gin Fizz"
     ingredients:
@@ -663,6 +690,7 @@
       Garnish with lemon slice.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "God Father"
     ingredients:
@@ -681,6 +709,7 @@
       Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: UNASSIGNED
 -
     name: "God Mother"
     ingredients:
@@ -699,6 +728,7 @@
       Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: UNASSIGNED
 -
     name: "Golden Dream"
     ingredients:
@@ -728,6 +758,7 @@
       Strain into chilled cocktail glass.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: liqueur
 -
     name: "Grasshopper"
     ingredients:
@@ -752,6 +783,7 @@
       Strain into chilled cocktail glass.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: liqueur
 -
     name: "Harvey Wallbanger"
     ingredients:
@@ -775,6 +807,7 @@
       Stir gently and float Galliano on top. Garnish with orange slices and cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Hemingway Special"
     ingredients:
@@ -803,6 +836,7 @@
       Strain into a double cocktail glass.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Horse's Neck"
     ingredients:
@@ -827,6 +861,7 @@
       If desired, add dashes of Angostura bitters.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Irish Coffee"
     ingredients:
@@ -853,6 +888,7 @@
     instructions: "Warm the Irish whiskey over a burner. Pour into the glass (for hot drink) hot coffee, and add a teaspoon of sugar. Float Cream on top."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: liqueur
 -
     name: "John Collins"
     ingredients:
@@ -883,6 +919,7 @@
     notes: "Use Old Tom Gin to make a Tom Collins."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Kamikaze"
     ingredients:
@@ -904,6 +941,7 @@
     instructions: "Shake and strain into a chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: UNASSIGNED
 -
     name: "Kir"
     ingredients:
@@ -921,6 +959,7 @@
     notes: "Use champagne instead of white wine for a Kir Royale."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: wine
 -
     name: "Lemon Drop Martini"
     ingredients:
@@ -942,6 +981,7 @@
     instructions: "Shake and strain into a chilled cocktail glass rimmed with sugar, garnish with a slice of lemon."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Long Island Iced Tea"
     ingredients:
@@ -990,6 +1030,7 @@
       Garnish with lemon spiral and serve with straw.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: UNASSIGNED
 -
     name: "Mai-Tai"
     ingredients:
@@ -1024,6 +1065,7 @@
       Serve with straw.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Manhattan"
     ingredients:
@@ -1048,6 +1090,7 @@
       Garnish with cocktail cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: whiskey
 -
     name: "Margarita #1"
     ingredients:
@@ -1073,6 +1116,7 @@
       Garnish with wheel of lime.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: tequila
 -
     name: "Mary Pickford"
     ingredients:
@@ -1099,6 +1143,7 @@
     instructions: "Shake and strain into a chilled large cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Mimosa"
     ingredients:
@@ -1118,6 +1163,7 @@
     notes: "A Buck's Fizz is the same thing as a Mimosa."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: wine
 -
     name: "Mint Julep"
     ingredients:
@@ -1146,6 +1192,7 @@
       Garnish with a mint spring.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: whiskey
 -
     name: "Mojito"
     ingredients:
@@ -1178,6 +1225,7 @@
       Garnish with spring of mint leaves and lemon slice. Serve with straw.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Monkey Gland"
     ingredients:
@@ -1204,6 +1252,7 @@
     instructions: "Shake and strain into a chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Moscow Mule"
     ingredients:
@@ -1228,6 +1277,7 @@
       Garnish with a slice of lime.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Negroni"
     ingredients:
@@ -1252,6 +1302,7 @@
       Garnish with half orange slice.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: UNASSIGNED
 -
     name: "Old Fashioned"
     ingredients:
@@ -1278,6 +1329,7 @@
       Garnish with orange slice and a cocktail cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: whiskey
 -
     name: "Paradise"
     ingredients:
@@ -1299,6 +1351,7 @@
     instructions: "Pour all ingredients into cocktail shaker filled with ice. Shake and strain into chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Pina Colada"
     ingredients:
@@ -1322,6 +1375,7 @@
       Garnish with a slice of pineapple with a cocktail cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Pisco Sour"
     ingredients:
@@ -1349,6 +1403,7 @@
       Dash some Angostura bitters on top.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Planter's Punch"
     ingredients:
@@ -1392,6 +1447,7 @@
       Garnish with cocktail cherry and pineapple.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
 -
     name: "Porto Flip"
     ingredients:
@@ -1416,6 +1472,7 @@
       Sprinkle with fresh ground nutmeg.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Ramos Fizz"
     ingredients:
@@ -1466,6 +1523,7 @@
       Strain into a highball glass without ice, top with soda.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Rose"
     ingredients:
@@ -1487,6 +1545,7 @@
     instructions: "Stir all ingredients with ice and strain into a cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Russian Spring Punch"
     ingredients:
@@ -1515,6 +1574,7 @@
       Garnish with a lemon slice and a blackberry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Rusty Nail"
     ingredients:
@@ -1534,6 +1594,7 @@
       Garnish with lemon twist.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: whiskey
 -
     name: "Sazerac #1"
     ingredients:
@@ -1562,6 +1623,7 @@
     notes: The original recipe changed after the American Civil War. Rye whiskey substituted cognac as it became hard to obtain cognac.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: whiskey
 -
     name: "Screwdriver"
     ingredients:
@@ -1580,6 +1642,7 @@
       Stir gently.Garnish with a orange slice.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Sea Breeze"
     ingredients:
@@ -1601,6 +1664,7 @@
     instructions: "Build all ingredients in a rock glass filled with ice. Garnish with lime wedge."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Sex On The Beach"
     ingredients:
@@ -1627,6 +1691,7 @@
     instructions: "Build all ingredients in a highball glass filled with ice. Garnish with orange slice."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: vodka
 -
     name: "Sidecar"
     ingredients:
@@ -1648,6 +1713,7 @@
     instructions: "Pour all ingredients into cocktail shaker filled with ice. Shake well and strain into cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Singapore Sling"
     ingredients:
@@ -1697,6 +1763,7 @@
       Garnish with pineapple and cocktail cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Spritz Veneziano"
     ingredients:
@@ -1719,6 +1786,7 @@
       Garnish with half orange slice.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: wine
 -
     name: "Stinger"
     ingredients:
@@ -1737,6 +1805,7 @@
       Strain into a cocktail glass.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: brandy
 -
     name: "Tequila Sunrise"
     ingredients:
@@ -1761,6 +1830,7 @@
       Garnish with orange slice and cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: tequila
 -
     name: "Tommy's Margarita"
     ingredients:
@@ -1782,6 +1852,7 @@
     instructions: "Shake and strain into a chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: tequila
 -
     name: "Tuxedo"
     ingredients:
@@ -1815,6 +1886,7 @@
       Garnish with a cocktail cherry and a lemon zest twist.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Vampiro"
     ingredients:
@@ -1864,6 +1936,7 @@
       Garnish with a wedge of lime and a chili (green or red).
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: tequila
 -
     name: "Vesper"
     ingredients:
@@ -1888,6 +1961,7 @@
     notes: "This is what James Bond used to drink before he switched to vodka martinis."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Whiskey Sour"
     ingredients:
@@ -1913,6 +1987,7 @@
       Garnish with half orange slice and maraschino cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: whiskey
 -
     name: "White Lady"
     ingredients:
@@ -1937,6 +2012,7 @@
     notes: "Being a sour, some variants of the White Lady include an egg white."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: gin
 -
     name: "Yellow Bird"
     ingredients:
@@ -1963,3 +2039,4 @@
     instructions: "Shake and strain into a chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+    base: rum
