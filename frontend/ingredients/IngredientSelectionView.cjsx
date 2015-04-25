@@ -148,7 +148,7 @@ GroupedIngredientList = React.createClass {
       selectedCount = _.filter(ingredients, (i) => @state.selectedIngredientTags[i.tag]?).length
 
       header = <IngredientGroupHeader
-        title="All Results (#{ingredientNodes.length})"
+        title="All Results (#{ingredientCount})"
         selectedCount={selectedCount}
         key='header-all-results'
       />
