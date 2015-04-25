@@ -218,7 +218,7 @@ RecipeStore = new class extends FluxStore
           key = 'multiple'
         return { recipes, key }
       .sortBy ({ key }) ->
-        if key == 'Multiple'
+        if key == 'multiple'
           return Infinity
         else
           return key.charCodeAt 0
