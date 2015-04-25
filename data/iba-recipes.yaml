@@ -1538,7 +1538,7 @@
         displayUnit: "oz"
         displayIngredient: "dry vermouth"
       -
-        tag: "strawberry syrup"
+        tag: "strawberry"
         displayAmount: "3"
         displayUnit: "dashes"
         displayIngredient: "strawberry syrup"
@@ -1579,7 +1579,7 @@
     name: "Rusty Nail"
     ingredients:
       -
-        tag: "scotch whisky"
+        tag: "whiskey"
         displayAmount: "1 1/2"
         displayUnit: "oz"
         displayIngredient: "scotch whisky"

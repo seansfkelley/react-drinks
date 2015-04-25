@@ -409,3 +409,38 @@
 -
   display    : Tea
   group      : mixer-other
+-
+  display    : Vanilla Extract
+  group      : other
+-
+  display    : Strawberry
+  group      : fruit
+-
+  display    : Raspberry
+  group      : fruit
+-
+  display    : Cherry
+  group      : fruit
+-
+  display    : Blackberry
+  group      : fruit
+-
+  display    : Coconut Milk
+  group      : mixer-other
+-
+  display    : Raspberry Liqueur
+  group      : liqueur-fruit
+  searchable :
+    - chambord
+-
+  display    : Cherry Liqueur
+  group      : liqueur-fruit
+-
+  display    : Blackberry Liqueur
+  group      : liqueur-fruit
+-
+  display    : Orange Flower Water
+  group      : other
+-
+  display    : Rose Water
+  group      : other
