@@ -23,6 +23,11 @@ class IngredientSearch
     if not term
       return false
     else
-      return _.any i.searchable, (s) -> s.indexOf(term) != -1
+      return @filterIngredientStrict i, term
+
+  # Doesn't do any input validation.
+  @filterIngredientStrict : (i, term) ->
+    return _.any i.searchable, (s) -> s.indexOf(term) != -1
+
 
 module.exports = IngredientSearch

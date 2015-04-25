@@ -7,6 +7,7 @@ classnames    = require 'classnames'
 
 FluxMixin = require '../mixins/FluxMixin'
 
+latinize            = require '../../shared/latinize'
 utils               = require '../utils'
 stylingConstants    = require '../stylingConstants'
 { IngredientStore } = require '../stores'
@@ -47,11 +48,9 @@ TagGuesser = React.createClass {
   displayName : 'TagGuesser'
 
   propTypes :
-    guessString : React.PropTypes.string.isRequired
-
-  mixins : [
-    FluxMixin IngredientStore, 'alphabeticalIngredients'
-  ]
+    guessString                : React.PropTypes.string.isRequired
+    allAlphabeticalIngredients : React.PropTypes.array.isRequired
+    ingredientsByTag           : React.PropTypes.object.isRequired
 
   getInitialState : -> {
     isManual              : false
@@ -62,7 +61,7 @@ TagGuesser = React.createClass {
 
   render : ->
     if @state.isManual
-      options = _.map IngredientStore.allAlphabeticalIngredients, (i) ->
+      options = _.map @props.allAlphabeticalIngredients, (i) ->
         return { value : i.tag, label : i.display }
 
       options.push { value : NO_INGREDIENT_SENTINEL, label : '(none)' }
@@ -119,13 +118,12 @@ TagGuesser = React.createClass {
     if option.value == NO_INGREDIENT_SENTINEL
       return true
     else
-      searchString = searchString.toLowerCase()
-      # Should expose this search as a utility method on ingredients to ensure consistent behavior.
-      ingredient = IngredientStore.ingredientsByTag[option.value]
-      return _.any ingredient.searchable, (term) ->  term.indexOf(searchString) != -1
+      searchString = latinize searchString.toLowerCase()
+      ingredient = @props.ingredientsByTag[option.value]
+      return IngredientSearch.filterIngredientStrict ingredient, searchString
 
   _getGuessFor : (string) ->
-    return new IngredientSearch(IngredientStore.allAlphabeticalIngredients).guess string
+    return new IngredientSearch(@props.allAlphabeticalIngredients).guess latinize(string)
 
   revertToGuessingIfAppropriate : ->
     if @state.isManual and not @state.choice?
@@ -150,6 +148,10 @@ EditableIngredient = React.createClass {
 
   propTypes :
     shouldGrabFocus : React.PropTypes.bool
+
+  mixins : [
+    FluxMixin IngredientStore, 'allAlphabeticalIngredients', 'ingredientsByTag'
+  ]
 
   getInitialState : ->
     return {
@@ -197,7 +199,13 @@ EditableIngredient = React.createClass {
             ref={id}
           />}
       </div>
-      <TagGuesser key='guesser' guessString={@state.display} ref='guesser'/>
+      <TagGuesser
+        allAlphabeticalIngredients={@props.allAlphabeticalIngredients}
+        ingredientsByTag={@props.ingredientsByTag}
+        guessString={@state.display}
+        key='guesser'
+        ref='guesser'
+      />
       {if IS_BUGGY_IOS_STANDALONE
         <div className='ios-standalone-grab-target' ref='grabTarget'/>}
     </div>
