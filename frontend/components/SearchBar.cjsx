@@ -3,6 +3,8 @@
 React      = require 'react/addons'
 classnames = require 'classnames'
 
+{ PureRenderMixin } = React.addons
+
 SearchBar = React.createClass {
   displayName : 'SearchBar'
 
@@ -10,10 +12,11 @@ SearchBar = React.createClass {
     onChange    : React.PropTypes.func.isRequired
     placeholder : React.PropTypes.string
 
-  getInitialState : ->
-    return {
-      value : ''
-    }
+  mixins : [ PureRenderMixin ]
+
+  getInitialState : -> {
+    value : ''
+  }
 
   render : ->
     <div className={classnames 'search-bar', @props.className}  onTouchStart={@_stopTouchStart}>
@@ -22,6 +25,7 @@ SearchBar = React.createClass {
         type='text'
         className='search-input'
         placeholder={@props.placeholder}
+        value={@state.value}
         onChange={@_onChange}
         onTouchTap={@focus}
         ref='input'
@@ -31,7 +35,8 @@ SearchBar = React.createClass {
         autoComplete='off'
         spellCheck='false'
       />
-      <i className='fa fa-times-circle' onTouchTap={@clearAndFocus} onTouchStart={@_stopTouchStart}/>
+      {if @state.value.length
+        <i className='fa fa-times-circle' onTouchTap={@clearAndFocus} onTouchStart={@_stopTouchStart}/>}
     </div>
 
   clearAndFocus : ->
@@ -39,7 +44,7 @@ SearchBar = React.createClass {
     @focus()
 
   clear : ->
-    @refs.input.getDOMNode().value = ''
+    @setState { value : '' }
     @props.onChange ''
 
   focus : ->
@@ -49,6 +54,7 @@ SearchBar = React.createClass {
     return document.activeElement == @refs.input.getDOMNode()
 
   _onChange : (e) ->
+    @setState { value : e.target.value }
     @props.onChange e.target.value
 
   _stopTouchStart : (e) ->
