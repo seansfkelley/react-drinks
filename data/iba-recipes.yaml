@@ -1925,9 +1925,9 @@
         displayUnit: "few slices"
         displayIngredient: "fresh red hot chili peppers"
       -
-        tag: "worchestershire"
+        tag: "worcestershire"
         displayUnit: "few drops"
-        displayIngredient: "Worchestershire sauce"
+        displayIngredient: "Worcestershire sauce"
       -
         displayIngredient: "salt"
     instructions: |
