@@ -68,10 +68,17 @@ class RecipeSearch
     return _.defaults { missing, available, substitute }, recipe
 
   computeMixableRecipes : (ingredientTags, fuzzyMatchThreshold = 0) ->
+    return _.chain @computeMixabilityForAll(ingredientTags)
+      .pick (results, missing) -> +missing <= fuzzyMatchThreshold
+      .mapValues (results) -> _.filter results, (r) -> r.available.length or r.substitute.length
+      .pick (results) -> results.length
+      .value()
+
+  computeMixabilityForAll : (ingredientTags) ->
     exactlyAvailableIngredientsRaw = _.map ingredientTags, (tag) => @_ingredientsByTag[tag]
     exactlyAvailableIngredients = _.compact exactlyAvailableIngredientsRaw
     if exactlyAvailableIngredientsRaw.length != exactlyAvailableIngredients.length
-      log.warn "some tags that were searched are extraneous and will be ignored: #{JSON.stringify ingredientTags}"
+      log.warn "some tags that were searched are extraneous and will be ignored; all tags: #{JSON.stringify ingredientTags}"
 
     substitutionMap = @_computeSubstitutionMap exactlyAvailableIngredients
     allAvailableTagsWithGenerics = _.keys substitutionMap
@@ -88,8 +95,7 @@ class RecipeSearch
           mostGenericRecipeTags
           allAvailableTagsWithGenerics
         ) + unknownIngredientAdjustment
-        if missingCount <= fuzzyMatchThreshold and missingCount < mostGenericRecipeTags.length
-          return @_generateSearchResult r, substitutionMap
+        return @_generateSearchResult r, substitutionMap
       .compact()
       .groupBy (result) -> result.missing.length
       .value()

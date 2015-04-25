@@ -188,29 +188,29 @@ RecipeStore = new class extends FluxStore
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
 
     selectedTags = _.keys IngredientStore.selectedIngredientTags
-    rawMixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, Infinity
+    allMixableRecipes = @_recipeSearch.computeMixabilityForAll selectedTags
 
     # Should have a 'rest' key where we just dump all the other recipes?
-    @mixableRecipes = _.chain rawMixableRecipes
+    @mixableRecipes = _.chain allMixableRecipes
       .map (recipes, missing) -> { recipes, key : +missing }
       .filter ({ key }) -> key <= FUZZY_MATCH
       .sortBy 'key'
       .value()
 
-    alphabeticalRecipesWithMixability = _.chain rawMixableRecipes
+    allAlphabeticalMixableRecipes = _.chain allMixableRecipes
       .map _.identity # map2array
       .flatten()
       .sortBy 'canonicalName'
       .value()
 
-    @alphabeticalRecipes = _.chain alphabeticalRecipesWithMixability
+    @alphabeticalRecipes = _.chain allAlphabeticalMixableRecipes
       # group by should include a clause for numbers
       .groupBy (r) -> r.canonicalName[0].toLowerCase()
       .map (recipes, key) -> { recipes, key }
       .sortBy 'key'
       .value()
 
-    @baseLiquorRecipes = _.chain alphabeticalRecipesWithMixability
+    @baseLiquorRecipes = _.chain allAlphabeticalMixableRecipes
       .groupBy 'base'
       .omit 'undefined' # Bleh.
       .map (recipes, key) ->
@@ -224,7 +224,7 @@ RecipeStore = new class extends FluxStore
           return key.charCodeAt 0
       .value()
 
-    @mixabilityByRecipeId = _.extend {}, _.map(rawMixableRecipes, (recipes, missing) ->
+    @mixabilityByRecipeId = _.extend {}, _.map(allMixableRecipes, (recipes, missing) ->
       missing = +missing
       if missing > FUZZY_MATCH
         missing = -1

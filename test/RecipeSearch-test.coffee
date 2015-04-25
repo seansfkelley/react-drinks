@@ -210,7 +210,7 @@ describe 'RecipeSearch', ->
       search.computeMixableRecipes([ IndexableIngredient.Z_ROOT.tag ]).should.deep.equal {}
 
     it 'should return results keyed by missing count', ->
-      search = makeSearch recipe(IndexableIngredient.A_ROOT), recipe
+      search = makeSearch recipe(IndexableIngredient.A_ROOT)
       result = search.computeMixableRecipes [ IndexableIngredient.A_ROOT.tag ]
 
       result.should.have.all.keys [ '0' ]
