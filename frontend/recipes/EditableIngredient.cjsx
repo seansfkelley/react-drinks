@@ -196,10 +196,10 @@ EditableIngredient = React.createClass {
             key={id}
             ref={id}
           />}
-        {if IS_BUGGY_IOS_STANDALONE
-          <div className='ios-standalone-grab-target' ref='grabTarget'/>}
       </div>
       <TagGuesser key='guesser' guessString={@state.display} ref='guesser'/>
+      {if IS_BUGGY_IOS_STANDALONE
+        <div className='ios-standalone-grab-target' ref='grabTarget'/>}
     </div>
 
   _generateFocuser : (ref) ->
