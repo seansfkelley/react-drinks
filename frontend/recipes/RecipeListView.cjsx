@@ -109,21 +109,6 @@ _generateRecipeOpener = (groupedRecipes, absoluteIndex) ->
       component : <SwipableRecipeView recipes={recipes} index={absoluteIndex}/>
     }
 
-EmptyListView = React.createClass {
-  displayName : 'EmptyListView'
-
-  propTypes : {}
-
-  mixins : [ PureRenderMixin ]
-
-  render : ->
-    <div className='empty-list-text'>
-      No drinks?
-      <br/>
-      Try adding some ingredients!
-    </div>
-}
-
 RecipeList = React.createClass {
   displayName : 'RecipeList'
 
@@ -145,42 +130,6 @@ RecipeList = React.createClass {
           onTouchTap : _generateRecipeOpener @props.recipes, absoluteIndex
           key        : r.recipeId
         })
-        absoluteIndex += 1
-
-    <List className={List.ClassNames.HEADERED}>
-      {headeredNodes}
-    </List>
-}
-
-GroupedRecipeList = React.createClass {
-  displayName : 'GroupedRecipeList'
-
-  propTypes :
-    recipes    : React.PropTypes.array.isRequired
-    mixability : React.PropTypes.object.isRequired
-
-  mixins : [ PureRenderMixin ]
-
-  render : ->
-    headeredNodes = []
-    absoluteIndex = 0
-    for { key, recipes } in @props.recipes
-      headeredNodes.push <List.Header title={@_mixabilityToTitle key} key={'header-' + key}/>
-      for r in recipes
-        if r.missing?.length
-          listItem = <IncompleteRecipeListItem
-            recipe={r}
-            onTouchTap={_generateRecipeOpener @props.recipes, absoluteIndex}
-            key={r.recipeId}
-          />
-        else
-          listItem = <RecipeListItem
-            recipe={r}
-            onTouchTap={_generateRecipeOpener @props.recipes, absoluteIndex}
-            key={r.recipeId}
-          />
-
-        headeredNodes.push listItem
         absoluteIndex += 1
 
     <List className={List.ClassNames.HEADERED}>
