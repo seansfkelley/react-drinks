@@ -20,10 +20,16 @@ SwipableRecipeView = require './SwipableRecipeView'
 EditableRecipeView = require './EditableRecipeView'
 FavoritesList      = require '../favorites/FavoritesList'
 
+SORT_TO_DISPLAY =
+  alphabetical : 'Drinks, Alphabetical'
+  mixable      : 'Drinks by Mixability'
+  baseLiquor   : 'Drinks by Base'
+
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
 
-  propTypes : {}
+  propTypes :
+    currentSort : React.PropTypes.string.isRequired
 
   mixins : [ PureRenderMixin ]
 
@@ -31,7 +37,7 @@ RecipeListHeader = React.createClass {
     <TitleBar
       leftIcon='fa-star'
       leftIconOnTouchTap={@_openFavorites}
-      title='Drinks'
+      title={SORT_TO_DISPLAY[@props.currentSort]}
       rightIcon='fa-plus'
       rightIconOnTouchTap={@_newRecipe}
     />
@@ -161,7 +167,7 @@ RecipeListView = React.createClass {
     />
 
     <FixedHeaderFooter
-      header={<RecipeListHeader/>}
+      header={<RecipeListHeader currentSort={@state.recipeSort}/>}
       className='recipe-list-view'
       ref='container'
     >
