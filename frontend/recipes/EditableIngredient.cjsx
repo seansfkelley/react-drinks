@@ -53,12 +53,12 @@ TagGuesser = React.createClass {
     FluxMixin IngredientStore, 'alphabeticalIngredients'
   ]
 
-  getInitialState : ->
-    return {
-      isManual : false
-      choice   : null
-      guess    : @_getGuessFor @props.guessString
-    }
+  getInitialState : -> {
+    isManual              : false
+    choice                : null
+    guess                 : @_getGuessFor @props.guessString
+    initialTypeaheadValue : null
+  }
 
   render : ->
     if @state.isManual
@@ -75,7 +75,7 @@ TagGuesser = React.createClass {
           onOptionSelected={@_selectIngredient}
           filterOption={@_filterOption}
           displayOption='label'
-          defaultValue={@state.guess?.display}
+          defaultValue={@state.initialTypeaheadValue}
           inputProps={BORING_INPUT_PROPS}
           ref='select'
         />
@@ -104,9 +104,13 @@ TagGuesser = React.createClass {
 
   _switchToManual : ->
     @setState {
-      isManual : true
-      guess    : null
+      isManual              : true
+      guess                 : null
+      initialTypeaheadValue : @state.guess?.display
     }
+    # It seems that any kind of programmatic focus causes keyboard jitter.
+    _.defer =>
+      @refs.select.refs.entry.getDOMNode().focus()
 
   _selectIngredient : (option) ->
     @setState { choice : option.value }
