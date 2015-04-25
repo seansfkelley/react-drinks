@@ -181,14 +181,35 @@ RecipeStore = new class extends FluxStore
     alphabeticalRecipes = _.sortBy(@allRecipes, 'canonicalName')
     @_recipeSearch = new RecipeSearch IngredientStore.ingredientsByTag, alphabeticalRecipes
 
-    @alphabeticalRecipes = _.chain alphabeticalRecipes
+    @_updateMixableRecipes()
+    @_updateSearchedRecipes()
+
+  _updateMixableRecipes : ->
+    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
+
+    selectedTags = _.keys IngredientStore.selectedIngredientTags
+    rawMixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, Infinity
+
+    # Should have a 'rest' key where we just dump all the other recipes?
+    @mixableRecipes = _.chain rawMixableRecipes
+      .map (recipes, missing) -> { recipes, key : +missing }
+      .filter ({ key }) -> key <= FUZZY_MATCH
+      .sortBy 'key'
+      .value()
+
+    flattenedRawMixableRecipes = _.chain rawMixableRecipes
+      .map _.identity # map2array
+      .flatten()
+      .value()
+
+    @alphabeticalRecipes = _.chain flattenedRawMixableRecipes
       # group by should include a clause for numbers
       .groupBy (r) -> r.canonicalName[0].toLowerCase()
       .map (recipes, key) -> { recipes, key }
       .sortBy 'key'
       .value()
 
-    @baseLiquorRecipes = _.chain alphabeticalRecipes
+    @baseLiquorRecipes = _.chain flattenedRawMixableRecipes
       .groupBy 'base'
       .omit 'undefined' # Bleh.
       .map (recipes, key) ->
@@ -202,28 +223,12 @@ RecipeStore = new class extends FluxStore
           return key.charCodeAt 0
       .value()
 
-    @_updateMixableRecipes()
-    @_updateSearchedRecipes()
-
-  _updateMixableRecipes : ->
-    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
-
-    selectedTags = _.keys IngredientStore.selectedIngredientTags
-    mixableRecipes = @_recipeSearch.computeMixableRecipes selectedTags, FUZZY_MATCH
-
-    @mixableRecipes = _.chain mixableRecipes
-      .map (recipes, missing) -> { recipes, key : +missing }
-      .sortBy 'key'
-      .value()
-    # Should have a 'rest' key where we just dump all the other recipes?
-
-    @mixabilityByRecipeId = _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
+    @mixabilityByRecipeId = _.extend {}, _.map(rawMixableRecipes, (recipes, missing) ->
       missing = +missing
+      if missing > FUZZY_MATCH
+        missing = -1
       return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
     )...
-    for { recipes } in @alphabeticalRecipes
-      for r in recipes when not @mixabilityByRecipeId[r.recipeId]?
-        @mixabilityByRecipeId[r.recipeId] = -1
 
     return # for loop
 
