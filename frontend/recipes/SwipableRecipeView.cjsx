@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 _     = require 'lodash'
 React = require 'react/addons'
 Swipe = require 'react-swipe'

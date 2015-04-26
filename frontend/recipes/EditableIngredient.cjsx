@@ -1,5 +1,3 @@
-# @cjsx React.DOM
-
 _             = require 'lodash'
 React         = require 'react/addons'
 { Typeahead } = require 'react-typeahead'
