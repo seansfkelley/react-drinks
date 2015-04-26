@@ -50,14 +50,18 @@
     color theme-red
     text-align center
 
+// Okay this is not great, but it's probably marginally better than copy-pasting.
 .recipe-view, .editable-recipe-view
-  .title-bar, .button-bar
+  .fixed-header
     background-color grey8
     color grey0
 
-  .fixed-header, .title-bar
     border-top-left-radius inherit
     border-top-right-radius inherit
+
+  .fixed-footer
+    border-bottom-left-radius inherit
+    border-bottom-right-radius inherit
 
 .recipe-view
   .recipe-description > :nth-child(odd)
