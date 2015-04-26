@@ -193,8 +193,8 @@ RecipeListView = React.createClass {
       {list}
     </FixedHeaderFooter>
 
-  componentDidUpdate : ->
-    if not @refs.search.isFocused()
+  componentDidUpdate : (prevProps, prevState) ->
+    if not @refs.search.isFocused() and prevState.recipeSort != @state.recipeSort
       @refs.container.scrollTo stylingConstants.RECIPE_LIST_ITEM_HEIGHT
 
   _onSearch : (searchTerm) ->
