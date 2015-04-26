@@ -21,25 +21,3 @@ icon-width = title-bar-height
       padding 0 12px 0
       box-sizing border-box
       width icon-width
-
-.title-bar.with-search
-  position relative
-
-  .search-bar-wrapper
-    position absolute
-
-    top 6px
-    right icon-width
-    bottom 6px
-
-    overflow hidden
-
-    &.hidden
-      width 0
-      opacity 0
-      transition opacity 0s ease transition-duration, width transition-duration
-
-    &.visible
-      width "calc(100% - %s)" % (icon-width * 2)
-      opacity 1
-      transition opacity 0s, width transition-duration
