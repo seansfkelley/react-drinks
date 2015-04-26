@@ -200,8 +200,8 @@ EditableIngredient = React.createClass {
           />}
       </div>
       <TagGuesser
-        allAlphabeticalIngredients={@props.allAlphabeticalIngredients}
-        ingredientsByTag={@props.ingredientsByTag}
+        allAlphabeticalIngredients={@state.allAlphabeticalIngredients}
+        ingredientsByTag={@state.ingredientsByTag}
         guessString={@state.display}
         key='guesser'
         ref='guesser'
