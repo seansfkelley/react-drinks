@@ -62,6 +62,7 @@ RecipeListItem = React.createClass {
     recipe     : React.PropTypes.object.isRequired
     mixability : React.PropTypes.number
     onTouchTap : React.PropTypes.func.isRequired
+    onDelete   : React.PropTypes.func
 
   mixins : [ PureRenderMixin ]
 
@@ -73,10 +74,12 @@ RecipeListItem = React.createClass {
     else if @props.mixability > 0
       mixabilityNode = <span className='mixability near-mixable'>{@props.mixability}</span>
 
-    <List.Item className='recipe-list-item' onTouchTap={@props.onTouchTap}>
+    ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
+
+    <ListItemClass className='recipe-list-item' onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
       <span className='name'>{@props.recipe.name}</span>
       {mixabilityNode}
-    </List.Item>
+    </ListItemClass>
 }
 
 IncompleteRecipeListItem = React.createClass {
@@ -85,6 +88,7 @@ IncompleteRecipeListItem = React.createClass {
   propTypes :
     recipe     : React.PropTypes.object.isRequired
     onTouchTap : React.PropTypes.func.isRequired
+    onDelete   : React.PropTypes.func
 
   mixins : [ PureRenderMixin ]
 
@@ -98,10 +102,12 @@ IncompleteRecipeListItem = React.createClass {
         <span className='ingredient'>{m.displayIngredient}</span>
       </div>
 
-    <List.Item className='recipe-list-item incomplete' onTouchTap={@props.onTouchTap}>
+    ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
+
+    <ListItemClass className='recipe-list-item incomplete' onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
       <div className='name'>{@props.recipe.name}</div>
       {missingIngredients}
-    </List.Item>
+    </ListItemClass>
 }
 
 _generateRecipeOpener = (groupedRecipes, absoluteIndex) ->
@@ -134,6 +140,7 @@ RecipeList = React.createClass {
         headeredNodes.push @props.makeItem(key, r, {
           recipe     : r
           onTouchTap : _generateRecipeOpener @props.recipes, absoluteIndex
+          onDelete   : if r.isCustom then _.partial(@_deleteRecipe, r.recipeId)
           key        : r.recipeId
         })
         absoluteIndex += 1
@@ -141,6 +148,12 @@ RecipeList = React.createClass {
     <List className={List.ClassNames.HEADERED}>
       {headeredNodes}
     </List>
+
+  _deleteRecipe : (recipeId) ->
+    AppDispatcher.dispatch {
+      type : 'delete-recipe'
+      recipeId
+    }
 }
 
 RecipeListView = React.createClass {

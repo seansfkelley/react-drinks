@@ -136,28 +136,30 @@ RECIPE_PERSISTABLE_FIELDS = 'customRecipes'
 RecipeStore = new class extends FluxStore
   fields : ->
     return _.extend {
-      searchTerm                    : ''
-      customRecipes                 : []
+      searchTerm                  : ''
+      defaultRecipes              : []
+      customRecipes               : []
 
-      allRecipes                    : []
+      allRecipes                  : []
 
-      alphabeticalRecipes           : []
-      baseLiquorRecipes             : []
-      mixableRecipes                : []
+      alphabeticalRecipes         : []
+      baseLiquorRecipes           : []
+      mixableRecipes              : []
 
-      searchedAlphabeticalRecipes   : []
-      searchedBaseLiquorRecipes     : []
-      searchedMixableRecipes        : []
+      searchedAlphabeticalRecipes : []
+      searchedBaseLiquorRecipes   : []
+      searchedMixableRecipes      : []
 
-      mixabilityByRecipeId          : {}
+      mixabilityByRecipeId        : {}
     }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     @_updateDerivedRecipeLists()
 
   # The semantics here are iffy -- we should just be setting whatever we get. Split state up.
-  'set-recipes' : ({ recipes }) ->
-    @_setRecipes recipes.concat(@customRecipes)
+  'set-default-recipes' : ({ recipes }) ->
+    @defaultRecipes = recipes
+    @_refreshRecipes()
 
   'set-selected-ingredient-tags' : ->
     @_updateDerivedRecipeLists()
@@ -168,11 +170,16 @@ RecipeStore = new class extends FluxStore
 
   'save-recipe' : ({ recipe }) ->
     @customRecipes = @customRecipes.concat [ recipe ]
-    @_setRecipes @allRecipes.concat(@customRecipes)
+    @_refreshRecipes()
     @_persist()
 
-  _setRecipes : (recipes) ->
-    @allRecipes = recipes
+  'delete-recipe' : ({ recipeId }) ->
+    @customRecipes = _.reject @customRecipes, { recipeId }
+    @_refreshRecipes()
+    @_persist()
+
+  _refreshRecipes : ->
+    @allRecipes = @defaultRecipes.concat @customRecipes
     @_updateDerivedRecipeLists()
 
   _updateDerivedRecipeLists : ->
@@ -268,7 +275,7 @@ Promise.resolve $.get('/ingredients')
 Promise.resolve $.get('/recipes')
 .then (recipes) =>
   AppDispatcher.dispatch {
-    type : 'set-recipes'
+    type : 'set-default-recipes'
     recipes
   }
 

@@ -5,6 +5,8 @@ React      = require 'react/addons'
 Draggable  = require 'react-draggable'
 classnames = require 'classnames'
 
+Deletable = require './Deletable'
+
 List = React.createClass {
   displayName : 'List'
 
@@ -69,6 +71,23 @@ List.Item = React.createClass {
     <div {...@props} className={classnames 'list-item', @props.className}>
       {@props.children}
     </div>
+}
+
+List.DeletableItem = React.createClass {
+  displayName : 'List.DeletableItem'
+
+  propTypes :
+    onDelete : React.PropTypes.func.isRequired
+
+  render : ->
+    renderableProps = _.omit @props, 'onDelete'
+    <List.Item {...renderableProps} className={classnames 'deletable-list-item', @props.className}>
+      <Deletable onDelete={@props.onDelete}>
+        <div>
+          {@props.children}
+        </div>
+      </Deletable>
+    </List.Item>
 }
 
 List.AddableItem = React.createClass {
