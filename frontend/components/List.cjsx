@@ -138,32 +138,6 @@ List.AddableItem = React.createClass {
     @props.onAdd @state.value
 }
 
-List.headerify = ({ nodes, computeHeaderData, Header, ItemGroup }) ->
-  Header    ?= List.Header
-  ItemGroup ?= List.ItemGroup
-
-  groupedNodes = []
-  for n, i in nodes
-    # computeHeaderData must return an object with at least a 'key' field.
-    newHeaderData = computeHeaderData n, i
-    group = _.last groupedNodes
-    if not group? or not _.isEqual(group.headerData, newHeaderData)
-      group = {
-        headerData : newHeaderData
-        items      : []
-      }
-      groupedNodes.push group
-    group.items.push n
-
-  return _.chain groupedNodes
-    .map ({ headerData, items }) ->
-      return [
-        <Header {...headerData}/>
-        <ItemGroup {...headerData} key={'group-' + headerData.key}>{items}</ItemGroup>
-      ]
-    .flatten()
-    .value()
-
 List.ClassNames =
   HEADERED    : 'headered-list'
   COLLAPSIBLE : 'collapsible-list'
