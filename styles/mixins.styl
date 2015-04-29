@@ -18,3 +18,8 @@ shadow-inset(position, size, color = rgba(0, 0, 0, 0.25))
     box-shadow inset size 0px size 0px color
   else if position == 'right'
     box-shadow inset (- size) 0px size 0px color
+
+// Per the Autoprefixer readme, appearance is not in any spec and therefore not supported.
+appearance(value)
+  appearance value
+  -webkit-appearance value
