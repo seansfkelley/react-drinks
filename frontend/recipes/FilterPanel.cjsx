@@ -14,12 +14,16 @@ AppDispatcher = require '../AppDispatcher'
 
 MIXABILITY_FILTERS = [
   type    : 'mixability'
-  value   : [ 0 ]
+  value   : [ 0, 0 ]
   display : 'Mixable'
 ,
   type    : 'mixability'
   value   : [ 1, 2 ]
   display : 'Near Mixable'
+,
+  type    : 'mixability'
+  value   : [ 3, 100 ] # Infinity is not stringifiable.
+  display : 'Needs 3+ Ingredients'
 ]
 
 BASE_LIQUOR_FILTERS = [

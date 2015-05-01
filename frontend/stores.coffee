@@ -207,8 +207,6 @@ RecipeStore = new class extends FluxStore
 
     @mixabilityByRecipeId = _.extend {}, _.map(allMixableRecipes, (recipes, missing) ->
       missing = +missing
-      if missing > FUZZY_MATCH
-        missing = -1
       return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
     )...
 
@@ -239,7 +237,8 @@ RecipeStore = new class extends FluxStore
 
   _recipeFilter : (recipe, filter) ->
     if filter.type == 'mixability'
-      if @mixabilityByRecipeId[recipe.recipeId] in filter.value
+      [ min, max ] = filter.value
+      if min <= @mixabilityByRecipeId[recipe.recipeId] <= max
         return true
     else if filter.type == 'base-liquor'
       if recipe.base == filter.value
