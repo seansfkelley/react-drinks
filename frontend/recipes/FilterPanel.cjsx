@@ -49,11 +49,11 @@ FilterPanel = React.createClass {
     headerNode = <TitleBar
       rightIcon='fa-chevron-left'
       rightIconOnTouchTap={@_closeFilterPanel}
-      title='Favorites'
+      title='Filter By...'
     />
 
     <FixedHeaderFooter header={headerNode} className='recipe-filter-list-view'>
-      <List className='recipe-filter-list'>
+      <List className={'recipe-filter-list ' + List.ClassNames.HEADERED}>
         <List.Header title='Mixability'/>
         {_.map MIXABILITY_FILTERS, @_toFilterListItem}
         <List.Header title='Base Liquor'/>

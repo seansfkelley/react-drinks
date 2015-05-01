@@ -1,0 +1,29 @@
+@require 'constants'
+
+.recipe-filter-list-view
+  background-color grey8
+
+  .fixed-header
+    color grey0
+
+.recipe-filter-list.headered-list
+  font-weight 600
+
+  .list-header
+    color grey6
+    background-color transparent
+    margin-bottom 6px
+
+  .list-header:not(:first-child)
+    margin-top 24px
+
+  .list-item
+    background-color transparent
+    border-color grey8
+    color grey0
+
+    &.selected
+      background-color grey7
+
+  .list-item:first-child
+    border-top 1px solid darken(grey0, 5%)

@@ -25,7 +25,7 @@ RecipeListHeader = React.createClass {
 
   render : ->
     <TitleBar
-      leftIcon='fa-star'
+      leftIcon='fa-filter'
       leftIconOnTouchTap={@_openFilterPanel}
       title='All Drinks'
       rightIcon='fa-plus'
