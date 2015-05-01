@@ -105,11 +105,14 @@ UiStore = new class extends FluxStore
     return _.extend {
       openIngredientGroups : {}
       favoritedRecipes     : {}
-      recipeFilters        : {}
+      recipeFilters        : []
     }, _.pick(JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? '{}'), UI_PERSISTABLE_FIELDS)
 
-  'toggle-recipe-filter' : ({ filterName }) ->
-    @recipeFilters = _toggleKey @recipeFilters, filterName
+  'toggle-recipe-filter' : ({ filterType, filterValue }) ->
+    filter = { type : filterType, value : filterValue }
+    newRecipeFilters = _.reject @recipeFilters, filter
+    if @recipeFilters.length == newRecipeFilters.length
+      @recipeFilters = @recipeFilters.concat [ filter ]
     @_persist()
 
   'toggle-ingredient-group' : ({ group }) ->
@@ -134,25 +137,28 @@ RECIPE_PERSISTABLE_FIELDS = 'customRecipes'
 RecipeStore = new class extends FluxStore
   fields : ->
     return _.extend {
-      searchTerm                  : ''
-      mixabilityByRecipeId        : {}
+      searchTerm           : ''
+      mixabilityByRecipeId : {}
 
-      allRecipes                  : []
-      defaultRecipes              : []
-      customRecipes               : []
-      alphabeticalRecipes         : []
-      searchedAlphabeticalRecipes : []
+      allRecipes     : []
+      defaultRecipes : []
+      customRecipes  : []
+
+      alphabeticalRecipes                 : []
+      filteredSearchedAlphabeticalRecipes : []
     }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     @_updateDerivedRecipeLists()
 
-  # The semantics here are iffy -- we should just be setting whatever we get. Split state up.
   'set-default-recipes' : ({ recipes }) ->
     @defaultRecipes = recipes
     @_refreshRecipes()
 
   'set-selected-ingredient-tags' : ->
+    @_updateDerivedRecipeLists()
+
+  'toggle-recipe-filter' : ->
     @_updateDerivedRecipeLists()
 
   'search-recipes' : ({ searchTerm }) ->
@@ -208,22 +214,33 @@ RecipeStore = new class extends FluxStore
     return # for loop
 
   _updateSearchedRecipes : ->
-    AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
-
     if @searchTerm == ''
-      @searchedAlphabeticalRecipes = @alphabeticalRecipes
+      searchedAlphabeticalRecipes = @alphabeticalRecipes
     else
       matchingRecipeIds = {}
       for r in @allRecipes
         matchingRecipeIds[r.recipeId] = @_recipeSearch.recipeMatchesSearchTerm r, @searchTerm
+      searchedAlphabeticalRecipes = @_nestedFilter @alphabeticalRecipes, (r) -> matchingRecipeIds[r.recipeId]
 
-      @searchedAlphabeticalRecipes = []
-      for { key, recipes } in @alphabeticalRecipes
-        recipes = _.filter recipes, (r) -> matchingRecipeIds[r.recipeId]
-        if recipes.length
-          @searchedAlphabeticalRecipes.push { key, recipes }
+    if not UiStore.recipeFilters.length
+      @filteredSearchedAlphabeticalRecipes = searchedAlphabeticalRecipes
+    else
+      @filteredSearchedAlphabeticalRecipes = @_nestedFilter searchedAlphabeticalRecipes, (r) =>
+        for f in UiStore.recipeFilters
+          if f.type == 'mixability'
+            return @mixabilityByRecipeId[r.recipeId] <= f.value
+          else if f.type == 'base-liquor'
+            return r.base == f.value
+          else
+            throw new Error 'unrecognized recipe filter', f
 
-    return # for loop
+  _nestedFilter : (list, filterFn) ->
+    filteredList = []
+    for { key, recipes } in list
+      recipes = _.filter recipes, filterFn
+      if recipes.length
+        filteredList.push { key, recipes }
+    return filteredList
 
   _persist : ->
     localStorage[RECIPE_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, RECIPE_PERSISTABLE_FIELDS)

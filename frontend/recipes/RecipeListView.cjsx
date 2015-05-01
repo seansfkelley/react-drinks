@@ -18,16 +18,8 @@ SwipableRecipeView = require './SwipableRecipeView'
 EditableRecipeView = require './EditableRecipeView'
 FavoritesList      = require '../favorites/FavoritesList'
 
-SORT_TO_DISPLAY =
-  alphabetical : 'Drinks, Alphabetical'
-  mixable      : 'Drinks by Mixability'
-  baseLiquor   : 'Drinks by Base'
-
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
-
-  propTypes :
-    currentSort : React.PropTypes.string.isRequired
 
   mixins : [ PureRenderMixin ]
 
@@ -35,7 +27,7 @@ RecipeListHeader = React.createClass {
     <TitleBar
       leftIcon='fa-star'
       leftIconOnTouchTap={@_openFavorites}
-      title={SORT_TO_DISPLAY[@props.currentSort]}
+      title='All Drinks'
       rightIcon='fa-plus'
       rightIconOnTouchTap={@_newRecipe}
     />
@@ -160,11 +152,8 @@ RecipeListView = React.createClass {
   propTypes : {}
 
   mixins : [
-    FluxMixin UiStore, 'recipeSort'
     FluxMixin(RecipeStore,
-      'searchedAlphabeticalRecipes'
-      'searchedMixableRecipes'
-      'searchedBaseLiquorRecipes'
+      'filteredSearchedAlphabeticalRecipes'
       'mixabilityByRecipeId'
     )
     PureRenderMixin
@@ -172,13 +161,13 @@ RecipeListView = React.createClass {
 
   render : ->
     list = <RecipeList
-      recipes={@state["searched#{_.capitalize @state.recipeSort}Recipes"]}
-      makeHeader={@["_#{@state.recipeSort}Header"]}
-      makeItem={@["_#{@state.recipeSort}ListItem"]}
+      recipes={@state.filteredSearchedAlphabeticalRecipes}
+      makeHeader={@_alphabeticalHeader}
+      makeItem={@_alphabeticalListItem}
     />
 
     <FixedHeaderFooter
-      header={<RecipeListHeader currentSort={@state.recipeSort}/>}
+      header={<RecipeListHeader/>}
       className='recipe-list-view'
       ref='container'
     >
@@ -206,24 +195,6 @@ RecipeListView = React.createClass {
 
   _alphabeticalListItem : (key, r, props) ->
     return <RecipeListItem mixability={@state.mixabilityByRecipeId[r.recipeId]} {...props}/>
-
-  _mixableHeader : (key) ->
-    return <List.Header title={@_mixabilityToTitle key} key={'header-' + key}/>
-
-  _mixableListItem : (key, r, props) ->
-    return <RecipeListItem {...props}/>
-
-  _baseLiquorHeader : (key) ->
-    return <List.Header title={_.capitalize key} key={'header-' + key}/>
-
-  _baseLiquorListItem : (key, r, props) ->
-    return <RecipeListItem mixability={@state.mixabilityByRecipeId[r.recipeId]} {...props}/>
-
-  _mixabilityToTitle : (mixability) ->
-    return switch mixability
-      when 0 then 'Mixable Drinks'
-      when 1 then 'With 1 More Ingredient'
-      else "With #{mixability} More Ingredients"
 }
 
 module.exports = RecipeListView
