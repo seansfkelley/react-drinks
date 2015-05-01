@@ -90,23 +90,26 @@ IngredientStore = new class extends FluxStore
         .value()
 
 UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
-UI_PERSISTABLE_FIELDS = [ 'recipeSort', 'favoritedRecipes' ]
+UI_PERSISTABLE_FIELDS = [ 'recipeFilters', 'favoritedRecipes' ]
 
-ORDERED_RECIPE_SORTS = [ 'alphabetical', 'mixable', 'baseLiquor' ]
-_nextSortOrder = (sortOrder) ->
-  l = ORDERED_RECIPE_SORTS.length
-  return ORDERED_RECIPE_SORTS[(_.indexOf(ORDERED_RECIPE_SORTS, sortOrder) + l + 1) % l]
+_toggleKey = (object, key) ->
+  if object[key]
+    delete object[key]
+  else
+    object[key] = true
+  # Cooperate with PureRenderMixin.
+  return _.clone object
 
 UiStore = new class extends FluxStore
   fields : ->
     return _.extend {
-      recipeSort           : 'alphabetical'
       openIngredientGroups : {}
       favoritedRecipes     : {}
+      recipeFilters        : {}
     }, _.pick(JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? '{}'), UI_PERSISTABLE_FIELDS)
 
-  'toggle-recipe-sort' : ->
-    @recipeSort = _nextSortOrder @recipeSort
+  'toggle-recipe-filter' : ({ filterName }) ->
+    @recipeFilters = _toggleKey @recipeFilters, filterName
     @_persist()
 
   'toggle-ingredient-group' : ({ group }) ->
@@ -117,12 +120,7 @@ UiStore = new class extends FluxStore
       @openIngredientGroups[group] = true
 
   'toggle-favorite-recipe' : ({ recipeId }) ->
-    if @favoritedRecipes[recipeId]
-      delete @favoritedRecipes[recipeId]
-    else
-      @favoritedRecipes[recipeId] = true
-    # Cooperate with PureRenderMixin.
-    @favoritedRecipes = _.clone @favoritedRecipes
+    @favoritedRecipes = _toggleKey @favoritedRecipes, recipeId
     @_persist()
 
   _persist : ->
@@ -137,20 +135,13 @@ RecipeStore = new class extends FluxStore
   fields : ->
     return _.extend {
       searchTerm                  : ''
-      defaultRecipes              : []
-      customRecipes               : []
+      mixabilityByRecipeId        : {}
 
       allRecipes                  : []
-
+      defaultRecipes              : []
+      customRecipes               : []
       alphabeticalRecipes         : []
-      baseLiquorRecipes           : []
-      mixableRecipes              : []
-
       searchedAlphabeticalRecipes : []
-      searchedBaseLiquorRecipes   : []
-      searchedMixableRecipes      : []
-
-      mixabilityByRecipeId        : {}
     }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
@@ -197,38 +188,14 @@ RecipeStore = new class extends FluxStore
     selectedTags = _.keys IngredientStore.selectedIngredientTags
     allMixableRecipes = @_recipeSearch.computeMixabilityForAll selectedTags
 
-    # Should have a 'rest' key where we just dump all the other recipes?
-    @mixableRecipes = _.chain allMixableRecipes
-      .map (recipes, missing) -> { recipes, key : +missing }
-      .filter ({ key }) -> key <= FUZZY_MATCH
-      .sortBy 'key'
-      .value()
-
-    allAlphabeticalMixableRecipes = _.chain allMixableRecipes
+    @alphabeticalRecipes = _.chain allMixableRecipes
       .map _.identity # map2array
       .flatten()
       .sortBy 'canonicalName'
-      .value()
-
-    @alphabeticalRecipes = _.chain allAlphabeticalMixableRecipes
       # group by should include a clause for numbers
       .groupBy (r) -> r.canonicalName[0].toLowerCase()
       .map (recipes, key) -> { recipes, key }
       .sortBy 'key'
-      .value()
-
-    @baseLiquorRecipes = _.chain allAlphabeticalMixableRecipes
-      .groupBy 'base'
-      .omit 'undefined' # Bleh.
-      .map (recipes, key) ->
-        if key == 'UNASSIGNED'
-          key = 'multiple'
-        return { recipes, key }
-      .sortBy ({ key }) ->
-        if key == 'multiple'
-          return Infinity
-        else
-          return key.charCodeAt 0
       .value()
 
     @mixabilityByRecipeId = _.extend {}, _.map(allMixableRecipes, (recipes, missing) ->
@@ -243,23 +210,18 @@ RecipeStore = new class extends FluxStore
   _updateSearchedRecipes : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
 
-    BASE_LIST_NAMES = [ 'alphabetical', 'mixable', 'baseLiquor' ]
-
     if @searchTerm == ''
-      for baseList in BASE_LIST_NAMES
-        @["searched#{_.capitalize(baseList)}Recipes"] = @["#{baseList}Recipes"]
+      @searchedAlphabeticalRecipes = @alphabeticalRecipes
     else
       matchingRecipeIds = {}
       for r in @allRecipes
         matchingRecipeIds[r.recipeId] = @_recipeSearch.recipeMatchesSearchTerm r, @searchTerm
 
-      for baseList in BASE_LIST_NAMES
-        srcList = @["#{baseList}Recipes"]
-        dstList = @["searched#{_.capitalize(baseList)}Recipes"] = []
-        for { key, recipes } in srcList
-          recipes = _.filter recipes, (r) -> matchingRecipeIds[r.recipeId]
-          if recipes.length
-            dstList.push { key, recipes }
+      @searchedAlphabeticalRecipes = []
+      for { key, recipes } in @alphabeticalRecipes
+        recipes = _.filter recipes, (r) -> matchingRecipeIds[r.recipeId]
+        if recipes.length
+          @searchedAlphabeticalRecipes.push { key, recipes }
 
     return # for loop
 
