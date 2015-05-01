@@ -45,7 +45,8 @@ FavoritesList = React.createClass {
     headerNode = <TitleBar
       rightIcon='fa-chevron-left'
       rightIconOnTouchTap={@_closeFavorites}
-      title='Favorites'/>
+      title='Favorites'
+    />
 
     recipes = _.filter @state.alphabeticalRecipes, (r) => @state.favoritedRecipes[r.recipeId]
 

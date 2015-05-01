@@ -108,11 +108,12 @@ UiStore = new class extends FluxStore
       recipeFilters        : []
     }, _.pick(JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? '{}'), UI_PERSISTABLE_FIELDS)
 
-  'toggle-recipe-filter' : ({ filterType, filterValue }) ->
-    filter = { type : filterType, value : filterValue }
+  'toggle-recipe-filter' : ({ filter }) ->
     newRecipeFilters = _.reject @recipeFilters, filter
     if @recipeFilters.length == newRecipeFilters.length
       @recipeFilters = @recipeFilters.concat [ filter ]
+    else
+      @recipeFilters = newRecipeFilters
     @_persist()
 
   'toggle-ingredient-group' : ({ group }) ->
@@ -223,16 +224,30 @@ RecipeStore = new class extends FluxStore
       searchedAlphabeticalRecipes = @_nestedFilter @alphabeticalRecipes, (r) -> matchingRecipeIds[r.recipeId]
 
     if not UiStore.recipeFilters.length
-      @filteredSearchedAlphabeticalRecipes = searchedAlphabeticalRecipes
+      @filteredSearchedAlphabeticalRecipes = []
     else
+      filterGroups = _.chain UiStore.recipeFilters
+        .groupBy 'type'
+        .defaults { 'mixability' : [], 'base-liquor' : [] }
+        .value()
+
       @filteredSearchedAlphabeticalRecipes = @_nestedFilter searchedAlphabeticalRecipes, (r) =>
-        for f in UiStore.recipeFilters
-          if f.type == 'mixability'
-            return @mixabilityByRecipeId[r.recipeId] <= f.value
-          else if f.type == 'base-liquor'
-            return r.base == f.value
-          else
-            throw new Error 'unrecognized recipe filter', f
+        for type, filters of filterGroups
+          if not _.any(filters, (f) => @_recipeFilter(r, f))
+            return false
+        return true
+
+  _recipeFilter : (recipe, filter) ->
+    if filter.type == 'mixability'
+      if @mixabilityByRecipeId[recipe.recipeId] in filter.value
+        return true
+    else if filter.type == 'base-liquor'
+      if recipe.base == filter.value
+        return true
+    else
+      throw new Error "unrecognized recipe filter: #{JSON.stringify filter}"
+
+    return false
 
   _nestedFilter : (list, filterFn) ->
     filteredList = []

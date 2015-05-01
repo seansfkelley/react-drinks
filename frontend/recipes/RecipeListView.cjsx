@@ -16,7 +16,7 @@ stylingConstants         = require '../stylingConstants'
 
 SwipableRecipeView = require './SwipableRecipeView'
 EditableRecipeView = require './EditableRecipeView'
-FavoritesList      = require '../favorites/FavoritesList'
+FilterPanel        = require './FilterPanel'
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
@@ -26,7 +26,7 @@ RecipeListHeader = React.createClass {
   render : ->
     <TitleBar
       leftIcon='fa-star'
-      leftIconOnTouchTap={@_openFavorites}
+      leftIconOnTouchTap={@_openFilterPanel}
       title='All Drinks'
       rightIcon='fa-plus'
       rightIconOnTouchTap={@_newRecipe}
@@ -38,10 +38,10 @@ RecipeListHeader = React.createClass {
       component : <EditableRecipeView/>
     }
 
-  _openFavorites : ->
+  _openFilterPanel : ->
     AppDispatcher.dispatch {
       type      : 'show-pushover'
-      component : <FavoritesList/>
+      component : <FilterPanel/>
     }
 }
 
