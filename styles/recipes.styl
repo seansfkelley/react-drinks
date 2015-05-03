@@ -1,6 +1,44 @@
 @require 'constants'
 @require 'mixins'
 
+.recipe-list-header
+  height title-bar-height
+
+  form
+    display flex
+
+    box-sizing border-box
+    height title-bar-height
+    padding 8px 16px
+
+  form label
+    flex 1
+    text-align center
+
+    text-transform uppercase
+    font-size uppercase-font-size
+    border 1px solid grey7
+    color grey8
+
+    &.selected
+      color grey0
+      background-color grey6
+
+    &:not(:first-child)
+      border-left none
+
+    &:first-child
+      border-top-left-radius standard-border-radius
+      border-bottom-left-radius standard-border-radius
+
+    &:last-child
+      border-top-right-radius standard-border-radius
+      border-bottom-right-radius standard-border-radius
+
+    span
+      // I'm fucking sick of not being able to sanely and simply vertically-align things.
+      line-height (title-bar-height - 16px - 2px)
+
 .swipable-wrapper
   display inline-block
   height 100%

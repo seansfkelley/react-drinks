@@ -1,5 +1,7 @@
-_     = require 'lodash'
-React = require 'react/addons'
+_          = require 'lodash'
+React      = require 'react/addons'
+classnames = require 'classnames'
+
 { PureRenderMixin } = React.addons
 
 FluxMixin = require '../mixins/FluxMixin'
@@ -8,6 +10,7 @@ SearchBar          = require '../components/SearchBar'
 TitleBar           = require '../components/TitleBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
+ButtonBar          = require '../components/ButtonBar'
 
 AppDispatcher            = require '../AppDispatcher'
 utils                    = require '../utils'
@@ -18,31 +21,42 @@ SwipableRecipeView = require './SwipableRecipeView'
 EditableRecipeView = require './EditableRecipeView'
 FilterPanel        = require './FilterPanel'
 
+OPTION_TYPE_AND_NAME = {
+  mixable :
+    display : 'Mixable'
+    default : true
+  nearMixable :
+    display : 'Within 2'
+    default : true
+  notReallyMixable :
+    display : 'Not Really'
+    default : false
+}
+
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
 
   mixins : [ PureRenderMixin ]
 
+  getInitialState : ->
+    return _.mapValues OPTION_TYPE_AND_NAME, 'default'
+
   render : ->
-    <TitleBar
-      leftIcon='fa-filter'
-      leftIconOnTouchTap={@_openFilterPanel}
-      title='All Drinks'
-      rightIcon='fa-plus'
-      rightIconOnTouchTap={@_newRecipe}
-    />
+    <div className='recipe-list-header'>
+      <form>
+        {_.map OPTION_TYPE_AND_NAME, ({ display }, key) =>
+          <label className={classnames { 'selected' : @state[key] }} key={key}>
+            <input type='checkbox' value={key} checked={@state[key]} onChange={@_onOptionChecked}/>
+            <span>{display}</span>
+          </label>}
+      </form>
+    </div>
 
-  _newRecipe : ->
-    AppDispatcher.dispatch {
-      type      : 'show-modal'
-      component : <EditableRecipeView/>
-    }
-
-  _openFilterPanel : ->
-    AppDispatcher.dispatch {
-      type      : 'show-pushover'
-      component : <FilterPanel/>
-    }
+  _onOptionChecked : (e) ->
+    # I'm about 90% sure string interpolation for object keys exists in CS, but I'm too lazy to figure it out why it doesn't compile.
+    state = {}
+    state[e.target.value] = !!e.target.checked
+    @setState state
 }
 
 RecipeListItem = React.createClass {
