@@ -90,7 +90,13 @@ IngredientStore = new class extends FluxStore
         .value()
 
 UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
-UI_PERSISTABLE_FIELDS = [ 'recipeFilters', 'favoritedRecipes' ]
+UI_PERSISTABLE_FIELDS = [ 'mixabilityFilters', 'favoritedRecipes', 'baseLiquorFilter' ]
+
+MIXABILITY_FILTER_RANGES = {
+  mixable          : [ 0, 0 ]
+  nearMixable      : [ 1, 2 ]
+  notReallyMixable : [ 3, 100 ]
+}
 
 _toggleKey = (object, key) ->
   if object[key]
@@ -105,15 +111,20 @@ UiStore = new class extends FluxStore
     return _.extend {
       openIngredientGroups : {}
       favoritedRecipes     : {}
-      recipeFilters        : []
+      baseLiquorFilter     : null
+      mixabilityFilters    :
+        mixable          : true
+        nearMixable      : true
+        notReallyMixable : false
     }, _.pick(JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? '{}'), UI_PERSISTABLE_FIELDS)
 
-  'toggle-recipe-filter' : ({ filter }) ->
-    newRecipeFilters = _.reject @recipeFilters, filter
-    if @recipeFilters.length == newRecipeFilters.length
-      @recipeFilters = @recipeFilters.concat [ filter ]
-    else
-      @recipeFilters = newRecipeFilters
+  'toggle-mixability-filter' : ({ filter }) ->
+    @mixabilityFilters = _.clone @mixabilityFilters
+    @mixabilityFilters[filter] = not @mixabilityFilters[filter]
+    @_persist()
+
+  'set-base-liquor-filter' : ({ baseLiquorFilter }) ->
+    @baseLiquorFilter = baseLiquorFilter
     @_persist()
 
   'toggle-ingredient-group' : ({ group }) ->
@@ -145,8 +156,8 @@ RecipeStore = new class extends FluxStore
       defaultRecipes : []
       customRecipes  : []
 
-      alphabeticalRecipes                 : []
-      filteredSearchedAlphabeticalRecipes : []
+      alphabeticalRecipes         : []
+      filteredAlphabeticalRecipes : []
     }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
@@ -159,7 +170,7 @@ RecipeStore = new class extends FluxStore
   'set-selected-ingredient-tags' : ->
     @_updateDerivedRecipeLists()
 
-  'toggle-recipe-filter' : ->
+  'toggle-mixability-filter' : ->
     @_updateDerivedRecipeLists()
 
   'search-recipes' : ({ searchTerm }) ->
@@ -213,40 +224,26 @@ RecipeStore = new class extends FluxStore
     return # for loop
 
   _updateSearchedRecipes : ->
-    if @searchTerm == ''
-      searchedAlphabeticalRecipes = @alphabeticalRecipes
-    else
-      matchingRecipeIds = {}
-      for r in @allRecipes
-        matchingRecipeIds[r.recipeId] = @_recipeSearch.recipeMatchesSearchTerm r, @searchTerm
-      searchedAlphabeticalRecipes = @_nestedFilter @alphabeticalRecipes, (r) -> matchingRecipeIds[r.recipeId]
+    filteredRecipes = @alphabeticalRecipes
 
-    if not UiStore.recipeFilters.length
-      @filteredSearchedAlphabeticalRecipes = []
-    else
-      filterGroups = _.chain UiStore.recipeFilters
-        .groupBy 'type'
-        .defaults { 'mixability' : [], 'base-liquor' : [] }
-        .value()
+    if UiStore.baseLiquorFilter
+      filteredRecipes = @_nestedFilter filteredRecipes, { base : UiStore.baseLiquorFilter }
 
-      @filteredSearchedAlphabeticalRecipes = @_nestedFilter searchedAlphabeticalRecipes, (r) =>
-        for type, filters of filterGroups
-          if not _.any(filters, (f) => @_recipeFilter(r, f))
-            return false
-        return true
+    ranges = _.chain UiStore.mixabilityFilters
+      .pick _.identity
+      .map (_, f) -> MIXABILITY_FILTER_RANGES[f]
+      .value()
 
-  _recipeFilter : (recipe, filter) ->
-    if filter.type == 'mixability'
-      [ min, max ] = filter.value
-      if min <= @mixabilityByRecipeId[recipe.recipeId] <= max
-        return true
-    else if filter.type == 'base-liquor'
-      if recipe.base == filter.value
-        return true
-    else
-      throw new Error "unrecognized recipe filter: #{JSON.stringify filter}"
+    filteredRecipes = @_nestedFilter filteredRecipes, (r) =>
+      for [ min, max ] in ranges
+        if min <= @mixabilityByRecipeId[r.recipeId] <= max
+          return true
+      return false
 
-    return false
+    if @searchTerm
+      filteredRecipes = @_nestedFilter filteredRecipes, (r) => @_recipeSearch.recipeMatchesSearchTerm r, @searchTerm
+
+    @filteredAlphabeticalRecipes = filteredRecipes
 
   _nestedFilter : (list, filterFn) ->
     filteredList = []

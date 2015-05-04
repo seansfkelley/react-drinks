@@ -19,44 +19,37 @@ stylingConstants         = require '../stylingConstants'
 
 SwipableRecipeView = require './SwipableRecipeView'
 EditableRecipeView = require './EditableRecipeView'
-FilterPanel        = require './FilterPanel'
 
-OPTION_TYPE_AND_NAME = {
-  mixable :
-    display : 'Mixable'
-    default : true
-  nearMixable :
-    display : 'Within 2'
-    default : true
-  notReallyMixable :
-    display : 'Not Really'
-    default : false
+MIXABILITY_FILTER_NAMES = {
+  mixable          : 'Mixable'
+  nearMixable      : 'Within 2'
+  notReallyMixable : 'Not Really'
 }
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
 
-  mixins : [ PureRenderMixin ]
-
-  getInitialState : ->
-    return _.mapValues OPTION_TYPE_AND_NAME, 'default'
+  mixins : [
+    FluxMixin UiStore, 'mixabilityFilters'
+    PureRenderMixin
+  ]
 
   render : ->
     <div className='recipe-list-header'>
       <form>
-        {_.map OPTION_TYPE_AND_NAME, ({ display }, key) =>
-          <label className={classnames { 'selected' : @state[key] }} key={key}>
-            <input type='checkbox' value={key} checked={@state[key]} onChange={@_onOptionChecked}/>
-            <span>{display}</span>
+        {for key, setting of @state.mixabilityFilters
+          <label className={classnames { 'selected' : setting }} key={key}>
+            <input type='checkbox' value={key} checked={setting} onChange={@_onChange}/>
+            <span>{MIXABILITY_FILTER_NAMES[key]}</span>
           </label>}
       </form>
     </div>
 
-  _onOptionChecked : (e) ->
-    # I'm about 90% sure string interpolation for object keys exists in CS, but I'm too lazy to figure it out why it doesn't compile.
-    state = {}
-    state[e.target.value] = !!e.target.checked
-    @setState state
+  _onChange : (e) ->
+    AppDispatcher.dispatch {
+      type   : 'toggle-mixability-filter'
+      filter : e.target.value
+    }
 }
 
 RecipeListItem = React.createClass {
@@ -167,7 +160,7 @@ RecipeListView = React.createClass {
 
   mixins : [
     FluxMixin(RecipeStore,
-      'filteredSearchedAlphabeticalRecipes'
+      'filteredAlphabeticalRecipes'
       'mixabilityByRecipeId'
     )
     PureRenderMixin
@@ -175,7 +168,7 @@ RecipeListView = React.createClass {
 
   render : ->
     list = <RecipeList
-      recipes={@state.filteredSearchedAlphabeticalRecipes}
+      recipes={@state.filteredAlphabeticalRecipes}
       makeHeader={@_alphabeticalHeader}
       makeItem={@_alphabeticalListItem}
     />
