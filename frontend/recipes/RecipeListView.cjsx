@@ -10,20 +10,21 @@ SearchBar          = require '../components/SearchBar'
 TitleBar           = require '../components/TitleBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
-ButtonBar          = require '../components/ButtonBar'
 
 AppDispatcher            = require '../AppDispatcher'
 utils                    = require '../utils'
 stylingConstants         = require '../stylingConstants'
 { RecipeStore, UiStore } = require '../stores'
 
+FavoritesList = require '../favorites/FavoritesList'
+
 SwipableRecipeView = require './SwipableRecipeView'
 EditableRecipeView = require './EditableRecipeView'
 
 MIXABILITY_FILTER_NAMES = {
   mixable          : 'Mixable'
-  nearMixable      : 'Within 2'
-  notReallyMixable : 'Not Really'
+  nearMixable      : 'Nearly'
+  notReallyMixable : '3+ Missing'
 }
 
 RecipeListHeader = React.createClass {
@@ -35,20 +36,38 @@ RecipeListHeader = React.createClass {
   ]
 
   render : ->
-    <div className='recipe-list-header'>
+    <TitleBar
+      leftIcon='fa-star'
+      leftIconOnTouchTap={@_openFavoritesList}
+      rightIcon='fa-plus'
+      rightIconOnTouchTap={@_newRecipe}
+      className='recipe-list-header'
+    >
       <form>
         {for key, setting of @state.mixabilityFilters
           <label className={classnames { 'selected' : setting }} key={key}>
-            <input type='checkbox' value={key} checked={setting} onChange={@_onChange}/>
+            <input type='checkbox' value={key} checked={setting} onChange={@_onMixabilityFilterChange}/>
             <span>{MIXABILITY_FILTER_NAMES[key]}</span>
           </label>}
       </form>
-    </div>
+    </TitleBar>
 
-  _onChange : (e) ->
+  _onMixabilityFilterChange : (e) ->
     AppDispatcher.dispatch {
       type   : 'toggle-mixability-filter'
       filter : e.target.value
+    }
+
+  _newRecipe : ->
+    AppDispatcher.dispatch {
+      type      : 'show-modal'
+      component : <EditableRecipeView/>
+    }
+
+  _openFavoritesList : ->
+    AppDispatcher.dispatch {
+      type      : 'show-pushover'
+      component : <FavoritesList/>
     }
 }
 

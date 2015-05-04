@@ -6,17 +6,16 @@ TitleBar = React.createClass {
 
   propTypes :
     leftIcon            : React.PropTypes.string
-    title               : React.PropTypes.string
-    children            : React.PropTypes.element
+    children            : React.PropTypes.oneOfType([
+      React.PropTypes.element
+      React.PropTypes.string
+    ]).isRequired
     rightIcon           : React.PropTypes.string
     leftIconOnTouchTap  : React.PropTypes.func
-    titleOnTouchTap     : React.PropTypes.func
+    onTouchTap          : React.PropTypes.func
     rightIconOnTouchTap : React.PropTypes.func
 
   render : ->
-    if @props.title
-      title = <span className='title' onTouchTap={@props.titleOnTouchTap}>{@props.title}</span>
-
     if @props.leftIcon?
       leftIcon = <i
         className={'fa float-left ' + @props.leftIcon}
@@ -31,14 +30,16 @@ TitleBar = React.createClass {
         onTouchStart={@_stopTouchStart}
       />
 
-    if @props.leftIcon? or @props.rightIcon?
-      leftIcon  ?= <i className='fa float-left'/>
-      rightIcon ?= <i className='fa float-right'/>
+    showingIcons = @props.leftIcon? or @props.rightIcon?
 
-    <div className={classnames 'title-bar', @props.className }>
+    if showingIcons
+      # <i> doesn't work with the styling for some reason.
+      leftIcon  ?= <span className='fa float-left'/>
+      rightIcon ?= <span className='fa float-right'/>
+
+    <div className={classnames 'title-bar', @props.className} onTouchTap={@props.onTouchTap}>
       {leftIcon}
-      {title}
-      {@props.children}
+      <div className={classnames 'title', { 'showing-icons' : showingIcons }}>{@props.children}</div>
       {rightIcon}
     </div>
 

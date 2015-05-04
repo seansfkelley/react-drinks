@@ -11,9 +11,7 @@ App = React.createClass {
 
   render : ->
     <div className='app-event-wrapper' onTouchStart={@_deselectActiveElement}>
-      <FixedHeaderFooter
-        footer={<IngredientsFooter/>}
-      >
+      <FixedHeaderFooter footer={<IngredientsFooter/>}>
         <RecipeListView/>
       </FixedHeaderFooter>
     </div>

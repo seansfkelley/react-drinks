@@ -13,11 +13,16 @@ icon-width = title-bar-height
   .title
     height title-bar-height
     line-height title-bar-height
+    width 100%
 
-  i.fa
-    &.float-left, &.float-right
-      height title-bar-height
-      line-height title-bar-height
-      padding 0 12px 0
-      box-sizing border-box
-      width icon-width
+    &.showing-icons
+      display inline-block
+      width "calc(100% - %s)" % (icon-width * 2)
+
+  .fa
+    display inline-block
+    height title-bar-height
+    line-height title-bar-height
+    padding 0 12px 0
+    box-sizing border-box
+    width icon-width

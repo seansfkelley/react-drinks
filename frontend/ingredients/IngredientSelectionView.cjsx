@@ -23,11 +23,9 @@ IngredientSelectionHeader = React.createClass {
   mixins : [ PureRenderMixin ]
 
   render : ->
-    <TitleBar
-      leftIcon='fa-chevron-down'
-      leftIconOnTouchTap={@props.onClose}
-      title='Ingredients'
-    />
+    <TitleBar leftIcon='fa-chevron-down' leftIconOnTouchTap={@props.onClose}>
+      Ingredients
+    </TitleBar>
 }
 
 IngredientGroupHeader = React.createClass {
