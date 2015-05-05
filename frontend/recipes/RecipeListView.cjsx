@@ -10,11 +10,13 @@ SearchBar          = require '../components/SearchBar'
 TitleBar           = require '../components/TitleBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
+Swipable           = require '../components/Swipable'
 
-AppDispatcher            = require '../AppDispatcher'
-utils                    = require '../utils'
-stylingConstants         = require '../stylingConstants'
-{ RecipeStore, UiStore } = require '../stores'
+AppDispatcher    = require '../AppDispatcher'
+utils            = require '../utils'
+stylingConstants = require '../stylingConstants'
+
+{ RecipeStore, UiStore, IngredientStore } = require '../stores'
 
 FavoritesList = require '../favorites/FavoritesList'
 
@@ -31,31 +33,52 @@ RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
 
   mixins : [
-    FluxMixin UiStore, 'mixabilityFilters'
+    FluxMixin UiStore, 'mixabilityFilters', 'baseLiquorFilter'
+    FluxMixin IngredientStore, 'baseLiquors'
     PureRenderMixin
   ]
 
   render : ->
-    <TitleBar
-      leftIcon='fa-star'
-      leftIconOnTouchTap={@_openFavoritesList}
-      rightIcon='fa-plus'
-      rightIconOnTouchTap={@_newRecipe}
-      className='recipe-list-header'
-    >
-      <form>
-        {for key, setting of @state.mixabilityFilters
-          <label className={classnames { 'selected' : setting }} key={key}>
-            <input type='checkbox' value={key} checked={setting} onChange={@_onMixabilityFilterChange}/>
-            <span>{MIXABILITY_FILTER_NAMES[key]}</span>
-          </label>}
-      </form>
-    </TitleBar>
+    initialBaseLiquorIndex = _.indexOf @state.baseLiquors, @state.baseLiquorFilter
+    if initialBaseLiquorIndex == -1
+      initialBaseLiquorIndex = 0
+
+    <div>
+      <TitleBar
+        leftIcon='fa-star'
+        leftIconOnTouchTap={@_openFavoritesList}
+        rightIcon='fa-plus'
+        rightIconOnTouchTap={@_newRecipe}
+        className='recipe-list-header'
+      >
+        <form>
+          {for key, setting of @state.mixabilityFilters
+            <label className={classnames { 'selected' : setting }} key={key}>
+              <input type='checkbox' value={key} checked={setting} onChange={@_onMixabilityFilterChange}/>
+              <span>{MIXABILITY_FILTER_NAMES[key]}</span>
+            </label>}
+        </form>
+      </TitleBar>
+      <Swipable
+        className='base-liquor-container'
+        initialIndex={initialBaseLiquorIndex}
+        onSlideChange={@_onBaseLiquorChange}
+      >
+        {for base in @state.baseLiquors
+          <div className='base-liquor-option' key={base}>{base}</div>}
+      </Swipable>
+    </div>
 
   _onMixabilityFilterChange : (e) ->
     AppDispatcher.dispatch {
       type   : 'toggle-mixability-filter'
       filter : e.target.value
+    }
+
+  _onBaseLiquorChange : (index) ->
+    AppDispatcher.dispatch {
+      type   : 'set-base-liquor-filter'
+      filter : @state.baseLiquors[index]
     }
 
   _newRecipe : ->

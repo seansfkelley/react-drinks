@@ -25,7 +25,7 @@ SwipableRecipeView = React.createClass {
           </div>}
       </div>
 
-    <Swipable initialIndex={@props.index} onSlideChange={@_onSlideChange}>
+    <Swipable className='swipable-recipe-container' initialIndex={@props.index} onSlideChange={@_onSlideChange}>
       {recipePages}
     </Swipable>
 

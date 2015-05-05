@@ -33,6 +33,7 @@ IngredientStore = new class extends FluxStore
     searchedGroupedIngredients : []
     selectedIngredientTags     : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
     ingredientsByTag           : {}
+    baseLiquors                : [ 'all', 'gin', 'vodka', 'whiskey', 'rum', 'brandy', 'tequila', 'liqueur' ]
 
   'set-ingredients' : ({ groupedIngredients, intangibleIngredients, alphabeticalIngredientTags }) ->
     @groupedIngredients = groupedIngredients
@@ -123,8 +124,8 @@ UiStore = new class extends FluxStore
     @mixabilityFilters[filter] = not @mixabilityFilters[filter]
     @_persist()
 
-  'set-base-liquor-filter' : ({ baseLiquorFilter }) ->
-    @baseLiquorFilter = baseLiquorFilter
+  'set-base-liquor-filter' : ({ filter }) ->
+    @baseLiquorFilter = filter
     @_persist()
 
   'toggle-ingredient-group' : ({ group }) ->
@@ -171,6 +172,9 @@ RecipeStore = new class extends FluxStore
     @_updateDerivedRecipeLists()
 
   'toggle-mixability-filter' : ->
+    @_updateDerivedRecipeLists()
+
+  'set-base-liquor-filter' : ->
     @_updateDerivedRecipeLists()
 
   'search-recipes' : ({ searchTerm }) ->
@@ -224,9 +228,11 @@ RecipeStore = new class extends FluxStore
     return # for loop
 
   _updateSearchedRecipes : ->
+    AppDispatcher.waitFor [ UiStore.dispatchToken ]
+
     filteredRecipes = @alphabeticalRecipes
 
-    if UiStore.baseLiquorFilter
+    if UiStore.baseLiquorFilter and UiStore.baseLiquorFilter != 'all'
       filteredRecipes = @_nestedFilter filteredRecipes, { base : UiStore.baseLiquorFilter }
 
     ranges = _.chain UiStore.mixabilityFilters

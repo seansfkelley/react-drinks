@@ -1,5 +1,6 @@
 _              = require 'lodash'
 React          = require 'react/addons'
+classnames     = require 'classnames'
 ReactSwipeable = require 'react-swipeable'
 
 Swipable = React.createClass {
@@ -27,7 +28,7 @@ Swipable = React.createClass {
       onSwipingLeft={@_onSwipingLeft}
       onSwipingRight={@_onSwipingRight}
       onSwiped={@_onSwiped}
-      className='viewport-container'
+      className={classnames 'viewport-container', @props.className}
     >
       <div
         className='sliding-container'
