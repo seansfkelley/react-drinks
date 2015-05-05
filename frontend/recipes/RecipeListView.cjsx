@@ -176,12 +176,19 @@ RecipeList = React.createClass {
   mixins : [ PureRenderMixin ]
 
   render : ->
-    headeredNodes = []
+    recipeCount = _.chain @props.recipes
+      .pluck 'recipes'
+      .pluck 'length'
+      .reduce ((sum, l) -> sum + l), 0
+      .value()
+
+    listNodes = []
     absoluteIndex = 0
     for { key, recipes } in @props.recipes
-      headeredNodes.push @props.makeHeader(key, recipes)
+      if recipeCount > 6
+        listNodes.push @props.makeHeader(key, recipes)
       for r in recipes
-        headeredNodes.push @props.makeItem(key, r, {
+        listNodes.push @props.makeItem(key, r, {
           recipe     : r
           onTouchTap : _generateRecipeOpener @props.recipes, absoluteIndex
           onDelete   : if r.isCustom then _.partial(@_deleteRecipe, r.recipeId)
@@ -190,7 +197,7 @@ RecipeList = React.createClass {
         absoluteIndex += 1
 
     <List className={List.ClassNames.HEADERED}>
-      {headeredNodes}
+      {listNodes}
     </List>
 
   _deleteRecipe : (recipeId) ->
