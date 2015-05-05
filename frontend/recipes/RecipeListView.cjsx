@@ -51,13 +51,16 @@ RecipeListHeader = React.createClass {
         rightIconOnTouchTap={@_newRecipe}
         className='recipe-list-header'
       >
-        <form>
+        <div className='mixability-selector'>
           {for key, setting of @state.mixabilityFilters
-            <label className={classnames { 'selected' : setting }} key={key}>
-              <input type='checkbox' value={key} checked={setting} onChange={@_onMixabilityFilterChange}/>
-              <span>{MIXABILITY_FILTER_NAMES[key]}</span>
-            </label>}
-        </form>
+            <div
+              className={classnames 'option', { 'selected' : setting }}
+              onTouchTap={_.partial @_onMixabilityFilterChange, key}
+              key={key}
+            >
+              {MIXABILITY_FILTER_NAMES[key]}
+            </div>}
+        </div>
       </TitleBar>
       <Swipable
         className='base-liquor-container'
@@ -74,10 +77,10 @@ RecipeListHeader = React.createClass {
       </Swipable>
     </div>
 
-  _onMixabilityFilterChange : (e) ->
+  _onMixabilityFilterChange : (filter) ->
     AppDispatcher.dispatch {
       type   : 'toggle-mixability-filter'
-      filter : e.target.value
+      filter
     }
 
   _onBaseLiquorChange : (index) ->

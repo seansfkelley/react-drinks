@@ -4,14 +4,14 @@
 .title-bar.recipe-list-header
   font-size inherit
 
-  form
+  .mixability-selector
     display flex
 
     box-sizing border-box
     height title-bar-height
     padding 8px 0
 
-  form label
+  .mixability-selector .option
     flex 1
     text-align center
 
@@ -19,6 +19,8 @@
     font-size uppercase-font-size
     border 1px solid grey7
     color grey8
+    // I'm fucking sick of not being able to sanely and simply vertically-align things.
+    line-height (title-bar-height - 16px - 2px)
 
     &.selected
       color grey0
@@ -34,13 +36,6 @@
     &:last-child
       border-top-right-radius standard-border-radius
       border-bottom-right-radius standard-border-radius
-
-    span
-      // I'm fucking sick of not being able to sanely and simply vertically-align things.
-      line-height (title-bar-height - 16px - 2px)
-
-  form label input
-    display none
 
 .base-liquor-container
   height title-bar-height
