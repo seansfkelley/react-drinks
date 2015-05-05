@@ -1,6 +1,7 @@
 _     = require 'lodash'
 React = require 'react/addons'
-Swipe = require 'react-swipe'
+
+Swipable = require '../components/Swipable'
 
 RecipeView = require './RecipeView'
 
@@ -23,11 +24,14 @@ SwipableRecipeView = React.createClass {
 
     # We can trick the swipe into not using the full width, but is there any way to make
     # it not hide everything that's not the current slide so we can see the edges?
-    <Swipe continuous=false startSlide={@props.index} callback={@_onSwipe} ref='swipe'>
+    # <Swipe continuous=false startSlide={@props.index} callback={@_onSwipe} ref='swipe'>
+    #   {recipePages}
+    # </Swipe>
+    <Swipable initialIndex={@props.index} onSlideChange={@_onSlideChange}>
       {recipePages}
-    </Swipe>
+    </Swipable>
 
-  _onSwipe : (index) ->
+  _onSlideChange : (index) ->
     @setState { visibleIndex : index }
 }
 
