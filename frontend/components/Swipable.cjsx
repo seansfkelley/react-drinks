@@ -69,7 +69,7 @@ Swipable = React.createClass {
     @_finishSwipe _.indexOf(slidingContainer.children, target)
 
   _onSwipingLeft : (e, delta) ->
-    if @state.index == React.Children.count(@props.children)
+    if @state.index == React.Children.count(@props.children) - 1
       delta = @_addResistance delta
     @_startSwipe -delta
 

@@ -46,7 +46,11 @@ FavoritesList = React.createClass {
       Favorites
     </TitleBar>
 
-    recipes = _.filter @state.alphabeticalRecipes, (r) => @state.favoritedRecipes[r.recipeId]
+    recipes = _.chain @state.alphabeticalRecipes
+      .pluck 'recipes'
+      .flatten()
+      .filter (r) => @state.favoritedRecipes[r.recipeId]
+      .value()
 
     recipeNodes = _.map recipes, (r, i) -> <RecipeListItem recipes={recipes} index={i} key={r.recipeId}/>
 
