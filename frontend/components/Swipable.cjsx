@@ -9,13 +9,15 @@ Swipable = React.createClass {
     initialIndex  : React.PropTypes.number
     onSlideChange : React.PropTypes.func
 
-  getInitialState : -> {
-    index       : @props.initialIndex ? 0
-    itemWidths  : new Array(React.Children.count(@props.children))
-    itemOffsets : new Array(React.Children.count(@props.children))
-    delta       : 0
-    isDragging  : false
-  }
+  getInitialState : ->
+    zeroes = _.map _.range(React.Children.count(@props.children)), -> 0
+    return {
+      index       : @props.initialIndex ? 0
+      itemWidths  : zeroes
+      itemOffsets : zeroes
+      delta       : 0
+      isDragging  : false
+    }
 
   render : ->
     <ReactSwipeable
@@ -28,8 +30,10 @@ Swipable = React.createClass {
         className='sliding-container'
         ref='slidingContainer'
         style={{
-          'transition' : if not @state.isDragging then 'transform 0.2s'
-          'transform' : "translateX(#{@state.delta - @state.itemOffsets[@state.index]}px"
+          WebkitTransition : if not @state.isDragging then '-webkit-transform 0.2s'
+          WebkitTransform  : "translateX(#{@state.delta - @state.itemOffsets[@state.index]}px) translateZ(0)" # Hardware acceleration.
+          transition       : if not @state.isDragging then 'transform 0.2s'
+          transform        : "translateX(#{@state.delta - @state.itemOffsets[@state.index]}px)"
         }}
       >
         {@props.children}
@@ -48,7 +52,8 @@ Swipable = React.createClass {
     @setState { itemWidths, itemOffsets }
 
   _addResistance : (delta) ->
-    return delta * (1 - parseInt(Math.sqrt(Math.pow(delta, 2)), 10) / 500)
+    clampedDelta = Math.min Math.abs(delta), 500
+    return delta * (2 - Math.sqrt(clampedDelta / 500)) / 3
 
   _onSwipingLeft : (e, delta) ->
     if @state.index == React.Children.count(@props.children)
