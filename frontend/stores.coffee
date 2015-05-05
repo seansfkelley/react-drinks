@@ -233,7 +233,14 @@ RecipeStore = new class extends FluxStore
     filteredRecipes = @alphabeticalRecipes
 
     if UiStore.baseLiquorFilter and UiStore.baseLiquorFilter != 'all'
-      filteredRecipes = @_nestedFilter filteredRecipes, { base : UiStore.baseLiquorFilter }
+      filteredRecipes = @_nestedFilter filteredRecipes, (r) ->
+        if _.isString r.base
+          return r.base == UiStore.baseLiquorFilter
+        else if _.isArray r.base
+          return UiStore.baseLiquorFilter in r.base
+        else
+          log.warn "recipe '#{r.name}' has a non-string, non-array base: #{r.base}"
+          return false
 
     ranges = _.chain UiStore.mixabilityFilters
       .pick _.identity

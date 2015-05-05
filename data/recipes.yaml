@@ -43,7 +43,9 @@
     Strain into a cocktail glass and garnish with a twist of lime.
   source: "Saveur"
   url: "http://www.saveur.com/article/Recipes/The-Last-Word-Cocktail"
-  base: UNASSIGNED
+  base:
+    - gin
+    - liqueur
 -
   name: "Corpse Reviver #2"
   ingredients:
@@ -241,7 +243,7 @@
     Pour one jigger absinthe into a Champagne glass.
     Add iced Champagne until it attains the proper opalescent milkiness.
     Drink three to five of these slowly.
-  base: UNASSIGNED
+  base: liqueur
 -
   name: "Angostura Sour"
   ingredients:
@@ -509,7 +511,9 @@
   instructions: "Shake very hard over ice and strain into a chilled cocktail glass."
   source: "Sloshed!"
   url: "http://sloshed.hyperkinetic.org/2009/10/23/alamagoozlum-cocktail/"
-  base: UNASSIGNED
+  base:
+    - rum
+    - liqueur
 -
   name: "Martinez"
   ingredients:
@@ -665,7 +669,9 @@
     Garnish with a cherry.
   source: "Serious Eats"
   url: "http://www.seriouseats.com/recipes/2008/07/vieux-carre-recipe.html"
-  base: UNASSIGNED
+  base:
+    - whiskey
+    - brandy
 -
   name: "Sazerac #2"
   ingredients:

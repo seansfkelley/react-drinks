@@ -210,7 +210,9 @@
     instructions: "Pour all ingredients into shaker with ice cubes, shake, strain into chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: UNASSIGNED
+    base:
+      - rum
+      - brandy
 -
     name: "Black Russian"
     ingredients:
@@ -635,7 +637,9 @@
       Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: UNASSIGNED
+    base:
+      - brandy
+      - liqueur
 -
     name: "French Martini"
     ingredients:
@@ -709,7 +713,9 @@
       Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: UNASSIGNED
+    base:
+      - whiskey
+      - liqueur
 -
     name: "God Mother"
     ingredients:
@@ -728,7 +734,9 @@
       Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: UNASSIGNED
+    base:
+      - whiskey
+      - liqueur
 -
     name: "Golden Dream"
     ingredients:
@@ -941,7 +949,7 @@
     instructions: "Shake and strain into a chilled cocktail glass."
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: UNASSIGNED
+    base: vodka
 -
     name: "Kir"
     ingredients:
@@ -1302,7 +1310,9 @@
       Garnish with half orange slice.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: UNASSIGNED
+    base:
+      - gin
+      - liqueur
 -
     name: "Old Fashioned"
     ingredients:

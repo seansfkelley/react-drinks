@@ -8,6 +8,8 @@ normalization    = require '../shared/normalization'
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
+BASE_LIQUORS = [ 'gin', 'vodka', 'rum', 'whiskey', 'tequila', 'brandy', 'wine', 'liqueur', 'UNASSIGNED' ]
+
 RECIPE_SCHEMA = {
   type       : 'object'
   properties :
@@ -36,9 +38,15 @@ RECIPE_SCHEMA = {
     url : OPTIONAL_STRING
     # One of a few very broad ingredient categories that best describes the genre of this drink.
     base :
-      type     : 'string'
+      type     : [ 'array', 'string' ]
       required : true
-      enum     : [ 'gin', 'vodka', 'rum', 'whiskey', 'tequila', 'brandy', 'wine', 'liqueur', 'UNASSIGNED' ]
+      conform  : (strOrArray) ->
+        if _.isString strOrArray
+          return strOrArray in BASE_LIQUORS
+        else if _.isArray strOrArray
+          return _.all strOrArray, (base) -> base in BASE_LIQUORS
+        else
+          return false
 }
 
 IBA_RECIPES   = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/iba-recipes.yaml'))
@@ -47,6 +55,10 @@ OTHER_RECIPES = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/recipes.yaml
 RECIPES = _.sortBy IBA_RECIPES.concat(OTHER_RECIPES), 'name'
 
 log.info "loaded #{RECIPES.length} recipes"
+
+unassignedBases = _.where RECIPES, { base : 'UNASSIGNED' }
+if unassignedBases.length
+  log.warn "#{unassignedBases.length} recipes have an unassigned base liquor"
 
 revalidatorUtils.validateOrThrow RECIPES, {
   type  : 'array'
