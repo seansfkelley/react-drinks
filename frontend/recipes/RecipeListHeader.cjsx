@@ -13,7 +13,8 @@ AppDispatcher = require '../AppDispatcher'
 
 { UiStore, IngredientStore } = require '../stores'
 
-FavoritesList = require '../favorites/FavoritesList'
+EditableRecipeView = require './EditableRecipeView'
+FavoritesList      = require '../favorites/FavoritesList'
 
 MIXABILITY_FILTER_NAMES = {
   mixable          : 'Mixable'

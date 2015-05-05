@@ -18,7 +18,6 @@ stylingConstants = require '../stylingConstants'
 FavoritesList = require '../favorites/FavoritesList'
 
 SwipableRecipeView = require './SwipableRecipeView'
-EditableRecipeView = require './EditableRecipeView'
 RecipeListHeader   = require './RecipeListHeader'
 
 RecipeListItem = React.createClass {
