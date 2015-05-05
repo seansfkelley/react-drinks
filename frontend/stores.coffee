@@ -112,7 +112,7 @@ UiStore = new class extends FluxStore
     return _.extend {
       openIngredientGroups : {}
       favoritedRecipes     : {}
-      baseLiquorFilter     : null
+      baseLiquorFilter     : 'all'
       mixabilityFilters    :
         mixable          : true
         nearMixable      : true
