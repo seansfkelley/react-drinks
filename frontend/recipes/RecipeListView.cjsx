@@ -65,7 +65,12 @@ RecipeListHeader = React.createClass {
         onSlideChange={@_onBaseLiquorChange}
       >
         {for base in @state.baseLiquors
-          <div className='base-liquor-option' key={base}>{base}</div>}
+          <div
+            className={classnames 'base-liquor-option', { 'selected' : base == @state.baseLiquorFilter }}
+            key={base}
+          >
+            {base}
+          </div>}
       </Swipable>
     </div>
 
