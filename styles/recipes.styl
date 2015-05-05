@@ -1,60 +1,6 @@
 @require 'constants'
 @require 'mixins'
 
-.title-bar.recipe-list-header
-  font-size inherit
-
-  .mixability-selector
-    display flex
-
-    box-sizing border-box
-    height title-bar-height
-    padding 8px 0
-
-  .mixability-selector .option
-    flex 1
-    text-align center
-
-    text-transform uppercase
-    font-size uppercase-font-size
-    border 1px solid grey7
-    color grey8
-    // I'm fucking sick of not being able to sanely and simply vertically-align things.
-    line-height (title-bar-height - 16px - 2px)
-
-    &.selected
-      color grey0
-      background-color grey6
-
-    &:not(:first-child)
-      border-left none
-
-    &:first-child
-      border-top-left-radius standard-border-radius
-      border-bottom-left-radius standard-border-radius
-
-    &:last-child
-      border-top-right-radius standard-border-radius
-      border-bottom-right-radius standard-border-radius
-
-.base-liquor-container
-  height title-bar-height
-  width 100%
-  font-size title-font-size
-
-  .base-liquor-option
-    width 30%
-    text-transform uppercase
-    font-size uppercase-font-size
-    font-weight 600
-    text-align center
-
-    height 100%
-    line-height title-bar-height
-
-    &:not(.selected)
-      color grey3
-
 .swipable-padding-wrapper
   display inline-block
   box-sizing border-box
