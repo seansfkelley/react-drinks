@@ -18,15 +18,13 @@ SwipableRecipeView = React.createClass {
 
   render : ->
     recipePages = _.map @props.recipes, (r, i) =>
-      <div className='swipable-wrapper' key={r.recipeId}>
-        {if Math.abs(i - @state.visibleIndex) <= 1 then <RecipeView recipe={r}/>}
+      <div className='swipable-padding-wrapper' key={r.recipeId}>
+        {if Math.abs(i - @state.visibleIndex) <= 1
+          <div className='swipable-position-wrapper'>
+            <RecipeView recipe={r}/>
+          </div>}
       </div>
 
-    # We can trick the swipe into not using the full width, but is there any way to make
-    # it not hide everything that's not the current slide so we can see the edges?
-    # <Swipe continuous=false startSlide={@props.index} callback={@_onSwipe} ref='swipe'>
-    #   {recipePages}
-    # </Swipe>
     <Swipable initialIndex={@props.index} onSlideChange={@_onSlideChange}>
       {recipePages}
     </Swipable>

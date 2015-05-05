@@ -13,6 +13,7 @@ Swipable = React.createClass {
     zeroes = _.map _.range(React.Children.count(@props.children)), -> 0
     return {
       index       : @props.initialIndex ? 0
+      wrapperWidth: 0
       itemWidths  : zeroes
       itemOffsets : zeroes
       delta       : 0
@@ -20,6 +21,8 @@ Swipable = React.createClass {
     }
 
   render : ->
+    offset = @state.delta - @state.itemOffsets[@state.index] + (@state.wrapperWidth - @state.itemWidths[@state.index]) / 2
+
     <ReactSwipeable
       onSwipingLeft={@_onSwipingLeft}
       onSwipingRight={@_onSwipingRight}
@@ -31,9 +34,9 @@ Swipable = React.createClass {
         ref='slidingContainer'
         style={{
           WebkitTransition : if not @state.isDragging then '-webkit-transform 0.2s'
-          WebkitTransform  : "translateX(#{@state.delta - @state.itemOffsets[@state.index]}px) translateZ(0)" # Hardware acceleration.
+          WebkitTransform  : "translateX(#{offset}px) translateZ(0)" # Hardware acceleration.
           transition       : if not @state.isDragging then 'transform 0.2s'
-          transform        : "translateX(#{@state.delta - @state.itemOffsets[@state.index]}px)"
+          transform        : "translateX(#{offset}px)"
         }}
       >
         {@props.children}
@@ -41,15 +44,16 @@ Swipable = React.createClass {
     </ReactSwipeable>
 
   componentDidMount: ->
-    itemWidths = _.pluck React.findDOMNode(@refs.slidingContainer).children, 'offsetWidth'
-    itemOffsets = _.chain itemWidths
+    wrapperWidth = React.findDOMNode(@refs.slidingContainer).offsetWidth
+    itemWidths   = _.pluck React.findDOMNode(@refs.slidingContainer).children, 'offsetWidth'
+    itemOffsets  = _.chain itemWidths
       .reduce ((offsets, width) ->
         offsets.push _.last(offsets) + width
         return offsets
       ), [ 0 ]
       .initial()
       .value()
-    @setState { itemWidths, itemOffsets }
+    @setState { wrapperWidth, itemWidths, itemOffsets }
 
   _addResistance : (delta) ->
     clampedDelta = Math.min Math.abs(delta), 500
