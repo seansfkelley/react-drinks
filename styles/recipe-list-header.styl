@@ -1,5 +1,7 @@
 @require 'constants'
 
+vertical-padding = 6px
+
 .title-bar.recipe-list-header
   font-size inherit
 
@@ -8,7 +10,7 @@
 
     box-sizing border-box
     height title-bar-height
-    padding 8px 0
+    padding vertical-padding 0
 
   .mixability-selector .option
     flex 1
@@ -19,7 +21,10 @@
     border 1px solid grey7
     color grey8
     // I'm fucking sick of not being able to sanely and simply vertically-align things.
-    line-height (title-bar-height - 16px - 2px)
+    line-height (title-bar-height - (vertical-padding + 1px) * 2)
+
+    background-color transparent
+    transition background-color transition-duration-quick, color transition-duration-quick
 
     &.selected
       color grey0
