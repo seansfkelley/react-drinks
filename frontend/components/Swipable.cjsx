@@ -11,9 +11,9 @@ IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
 
   propTypes :
-    onSwiping         : React.PropTypes.func
-    onSwiped          : React.PropTypes.func
-    getProposedTarget : React.PropTypes.func
+    onSwiping   : React.PropTypes.func
+    onSwiped    : React.PropTypes.func
+    snapToDelta : React.PropTypes.func
 
   getInitialState : -> {
     startTime : null
@@ -53,6 +53,7 @@ IntertialSwipable = React.createClass {
       lastX : e.changedTouches[0].clientX
     }
 
+  # Clean this code the fuck up.
   _onTouchEnd : (e) ->
     if e.touches.length > 1
       return
@@ -65,12 +66,10 @@ IntertialSwipable = React.createClass {
     autoScrollStartTime = Date.now()
     amplitude           = 0.3 * velocity
 
-    if @props.getProposedTarget
-      amplitude = -@props.getProposedTarget(-amplitude)
+    if @props.snapToDelta
+      amplitude = -@props.snapToDelta(-amplitude)
 
     amplitude = Math.round amplitude
-
-    console.log { amplitude }
 
     lastDelta = -amplitude
     _step = =>
@@ -115,13 +114,14 @@ Swipable = React.createClass {
     return Math.max 0, _.sortedIndex(shiftedOffsets, delta) - 1
 
   render : ->
+    # TODO: Fixed these goddamned sign issues. What does this delta actually represent?!
     invertedDelta = _.last(@state.itemOffsets) - @state.delta
     offset = invertedDelta - (@state.wrapperWidth - @state.itemWidths[@_getIndexForDelta(invertedDelta)]) / 2
 
     <IntertialSwipable
       onSwiping={@_onSwiping}
       onSwiped={@_onSwiped}
-      getProposedTarget={@_getProposedTarget}
+      snapToDelta={@_snapToDelta}
       className={classnames 'viewport-container', @props.className}
     >
       <div
@@ -158,21 +158,18 @@ Swipable = React.createClass {
     @_finishSwipe _.indexOf(slidingContainer.children, target)
 
   _onSwiping : (delta) ->
-    console.log { delta : _clamp @state.delta + delta, 0, _.last(@state.itemOffsets) }
     @setState {
       delta : _clamp @state.delta + delta, 0, _.last(@state.itemOffsets)
     }
 
-  _getProposedTarget : (targetDelta) ->
+  _snapToDelta : (targetDelta) ->
     proposedTarget = @state.delta - targetDelta
     targetIndex = @_getIndexForDelta proposedTarget
     if targetIndex == -1
       targetIndex = 0
-    console.log { stateDelta : @state.delta, targetIndex, proposedTarget, targetDelta, result : @state.delta - @state.itemOffsets[targetIndex], itemOffsets : @state.itemOffsets }
     return @state.delta - @state.itemOffsets[targetIndex]
 
   _onSwiped : (delta) ->
-    console.log @state.itemOffsets
     console.log @_getIndexForDelta(_.last(@state.itemOffsets) - @state.delta)
 
   _finishSwipe : (index) ->
