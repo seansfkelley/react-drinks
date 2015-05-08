@@ -5,7 +5,7 @@ classnames = require 'classnames'
 _clamp = (x, min, max) ->
   return Math.max min, Math.min(x, max)
 
-TIME_CONSTANT = 325
+TIME_CONSTANT = 150
 
 IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
