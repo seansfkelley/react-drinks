@@ -1,10 +1,11 @@
-_              = require 'lodash'
-React          = require 'react/addons'
-classnames     = require 'classnames'
-ReactSwipeable = require 'react-swipeable'
+_          = require 'lodash'
+React      = require 'react/addons'
+classnames = require 'classnames'
 
 _clamp = (x, min, max) ->
   return Math.max min, Math.min(x, max)
+
+TIME_CONSTANT = 325
 
 IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
@@ -30,19 +31,12 @@ IntertialSwipable = React.createClass {
       {@props.children}
     </div>
 
-  _cancel : ->
-    if @_animFrame?
-      cancelAnimationFrame @_animFrame
-      @props.onSwiped
-      @_animFrame = null
-
-  _setStartTime : ->
-    if not @state.startTime?
-      @setState { startTime : Date.now() }
-
   _onTouchStart : (e) ->
     if e.touches.length > 1
       return
+
+    if @_animFrame?
+      cancelAnimationFrame @_animFrame
 
     @setState {
       startTime : Date.now()
@@ -54,43 +48,46 @@ IntertialSwipable = React.createClass {
     if e.touches.length > 1
       return
 
-    @props.onSwiping e.touches[0].clientX - @state.lastX
-
+    @props.onSwiping e.changedTouches[0].clientX - @state.lastX
     @setState {
-      lastX : e.touches[0].clientX
+      lastX : e.changedTouches[0].clientX
     }
 
   _onTouchEnd : (e) ->
     if e.touches.length > 1
       return
 
-    @props.onSwiping e.touches[0].clientX - @state.lastX
+    @props.onSwiping e.changedTouches[0].clientX - @state.lastX
 
+    totalSwipeDelta     = e.changedTouches[0].clientX - @state.startX
     # TODO: Compute the instantaneous velocity rather than the average.
-    velocity = 1000 * (e.touches[0].clientX - @state.startX) / (Date.now() - @state.startTime)
-
+    velocity            = 1000 * totalSwipeDelta / (Date.now() - @state.startTime)
     autoScrollStartTime = Date.now()
+    amplitude           = 0.3 * velocity
 
-    amplitude = 0.5 * velocity
-
-    targetOffset = -x + amplitude
     if @props.getProposedTarget
-      targetOffset = @props.getProposedTarget targetOffset
+      amplitude = -@props.getProposedTarget(-amplitude)
 
-    timeConstant = 325
+    amplitude = Math.round amplitude
 
+    console.log { amplitude }
+
+    lastDelta = -amplitude
     _step = =>
       elapsed = Date.now() - autoScrollStartTime
-      delta = -amplitude * Math.exp(-elapsed / timeConstant)
+      delta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
       if delta < -1 or delta > 1
-        @props.onSwiping delta
+        console.log { amplitudeDelta : delta - lastDelta }
+        @props.onSwiping delta - lastDelta
+        lastDelta = delta
         @_animFrame = requestAnimationFrame _step
       else
+        # @props.onSwiping targetOffset - lastX
         @props.onSwiped()
+        delete @_animFrame
 
     @_animFrame = requestAnimationFrame _step
     @setState @getInitialState()
-
 }
 
 Swipable = React.createClass {
@@ -103,23 +100,24 @@ Swipable = React.createClass {
   getInitialState : ->
     zeroes = _.map _.range(React.Children.count(@props.children)), -> 0
     return {
-      index       : @props.initialIndex ? 0
       wrapperWidth: 0
       itemWidths  : zeroes
       itemOffsets : zeroes
       delta       : 0
     }
 
-  render : ->
-    offset = -@state.itemOffsets[@state.index] + (@state.wrapperWidth - @state.itemWidths[@state.index]) / 2 + @state.delta
+  _getIndexForDelta : (delta) ->
+    shiftedOffsets = _.chain()
+      .range(@state.itemOffsets.length)
+      .map (i) => @state.itemOffsets[i] - @state.itemWidths[i] / 2
+      .value()
+    # Why is this -1 again?
+    return Math.max 0, _.sortedIndex(shiftedOffsets, delta) - 1
 
-    # <ReactSwipeable
-    #   onSwipingLeft={@_onSwipingLeft}
-    #   onSwipingRight={@_onSwipingRight}
-    #   onSwiped={@_onSwiped}
-    #   className={classnames 'viewport-container', @props.className}
-    # >
-    # </ReactSwipeable>
+  render : ->
+    invertedDelta = _.last(@state.itemOffsets) - @state.delta
+    offset = invertedDelta - (@state.wrapperWidth - @state.itemWidths[@_getIndexForDelta(invertedDelta)]) / 2
+
     <IntertialSwipable
       onSwiping={@_onSwiping}
       onSwiped={@_onSwiped}
@@ -131,8 +129,8 @@ Swipable = React.createClass {
         className='sliding-container'
         ref='slidingContainer'
         style={{
-          WebkitTransform : "translateX(#{offset}px) translateZ(0)" # Hardware acceleration.
-          transform       : "translateX(#{offset}px)"
+          WebkitTransform : "translateX(#{-offset}px) translateZ(0)" # Hardware acceleration.
+          transform       : "translateX(#{-offset}px)"
         }}
       >
         {@props.children}
@@ -149,11 +147,8 @@ Swipable = React.createClass {
       ), [ 0 ]
       .initial()
       .value()
-    @setState { wrapperWidth, itemWidths, itemOffsets }
-
-  # _addResistance : (delta) ->
-  #   clampedDelta = Math.min Math.abs(delta), 500
-  #   return delta * (2 - Math.sqrt(clampedDelta / 500)) / 3
+    delta = itemOffsets[@props.initialIndex ? 0]
+    @setState { wrapperWidth, itemWidths, itemOffsets, delta }
 
   _onTouchTap : (e) ->
     target = e.target
@@ -163,34 +158,22 @@ Swipable = React.createClass {
     @_finishSwipe _.indexOf(slidingContainer.children, target)
 
   _onSwiping : (delta) ->
-    currentBaseOffset = @state.itemOffsets[@state.index]
-    delta = _clamp delta, currentBaseOffset - _.last(@state.itemOffsets), currentBaseOffset
-    @setState { delta }
+    console.log { delta : _clamp @state.delta + delta, 0, _.last(@state.itemOffsets) }
+    @setState {
+      delta : _clamp @state.delta + delta, 0, _.last(@state.itemOffsets)
+    }
 
-  _getProposedTarget : (delta) ->
-    proposedTarget = @state.itemOffsets[@state.index] - delta
-    offsetTargets = _.chain()
-      .range(@state.itemOffsets.length)
-      .map (i) => @state.itemOffsets[i] - @state.itemWidths[i] / 2
-      .value()
-    # Erm, why is this -1?
-    targetIndex  = _.sortedIndex(offsetTargets, proposedTarget) - 1
+  _getProposedTarget : (targetDelta) ->
+    proposedTarget = @state.delta - targetDelta
+    targetIndex = @_getIndexForDelta proposedTarget
     if targetIndex == -1
       targetIndex = 0
-    return @state.itemOffsets[@state.index] - @state.itemOffsets[targetIndex]
+    console.log { stateDelta : @state.delta, targetIndex, proposedTarget, targetDelta, result : @state.delta - @state.itemOffsets[targetIndex], itemOffsets : @state.itemOffsets }
+    return @state.delta - @state.itemOffsets[targetIndex]
 
   _onSwiped : (delta) ->
-    proposedTarget = @state.itemOffsets[@state.index] - delta
-    offsetTargets = _.chain()
-      .range(@state.itemOffsets.length)
-      .map (i) => @state.itemOffsets[i] - @state.itemWidths[i] / 2
-      .value()
-    # Erm, why is this -1?
-    targetIndex  = _.sortedIndex(offsetTargets, proposedTarget) - 1
-    if targetIndex == -1
-      targetIndex = 0
-
-    @_finishSwipe targetIndex
+    console.log @state.itemOffsets
+    console.log @_getIndexForDelta(_.last(@state.itemOffsets) - @state.delta)
 
   _finishSwipe : (index) ->
     @setState {
