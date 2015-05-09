@@ -44,11 +44,7 @@ class IntertialSwipeLogicBox
     clearInterval @_interval
 
     @onTouchMove e
-    @_set {
-      lastX        : null
-      stashedTime  : null
-      stashedDelta : null
-    }
+    @_set { lastX : null }
 
     @_autoScrollToDerivedDelta()
 
@@ -112,6 +108,7 @@ class IntertialSwipeLogicBox
 
     if @_isInRange(target)
       target = @_snapToNearestOffset target
+      amplitude = target - @trueDelta
 
     @_animate {
       amplitude
@@ -127,21 +124,25 @@ class IntertialSwipeLogicBox
           return false
         else
           @_set { trueDelta, visibleDelta }
+
+      onFinish : =>
+        @_set {
+          trueDelta    : target
+          visibleDelta : target
+        }
+        @onFinish?()
     }
 
   _bounceBackIfNecessary : ->
     if @visibleDelta < 0
-      amplitude = -@visibleDelta
       target = 0
     else if @visibleDelta > _.last(@itemOffsets)
-      amplitude = -(@visibleDelta - _.last(@itemOffsets))
       target = _.last @itemOffsets
     else
-      @onFinish?()
-      return
+      target = @visibleDelta
 
     @_animate {
-      amplitude
+      amplitude : target - @visibleDelta
 
       onStep : (stepDelta) =>
         visibleDelta = target + stepDelta
