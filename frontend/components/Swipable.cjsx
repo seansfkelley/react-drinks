@@ -11,14 +11,14 @@ IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
 
   propTypes :
-    onSwiping   : React.PropTypes.func
-    onSwiped    : React.PropTypes.func
-    snapToDelta : React.PropTypes.func
+    onSwiping  : React.PropTypes.func
+    onSwiped   : React.PropTypes.func
+    fenceposts : React.PropTypes.array
 
   getInitialState : -> {
-    startTime : null
-    startX    : null
     lastX     : null
+    trueDelta : 0
+    delta     : 0
   }
 
   render : ->
@@ -39,54 +39,131 @@ IntertialSwipable = React.createClass {
       cancelAnimationFrame @_animFrame
 
     @setState {
-      startTime : Date.now()
-      startX    : e.touches[0].clientX
-      lastX     : e.touches[0].clientX
+      lastX        : e.touches[0].clientX
+      stashedTime  : Date.now()
+      stashedDelta : @state.delta
     }
+
+    @_interval = setInterval (=> @setState {
+      stashedTime  : Date.now()
+      stashedDelta : @state.delta
+    }), 150
 
   _onTouchMove : (e) ->
     if e.touches.length > 1
       return
 
-    @props.onSwiping e.changedTouches[0].clientX - @state.lastX
+    trueDelta = @state.trueDelta - (e.changedTouches[0].clientX - @state.lastX)
+    delta = @_computeResistance trueDelta
+
     @setState {
+      trueDelta
+      delta
       lastX : e.changedTouches[0].clientX
     }
+
+    console.log 'manual', {trueDelta,delta}
+
+    @props.onSwiping delta
+
+  _computeResistance : (trueDelta) ->
+    if trueDelta > _.last(@props.fenceposts)
+      delta = trueDelta - _.last(@props.fenceposts)
+      return _.last(@props.fenceposts) + Math.sqrt(delta) * 2
+    else if trueDelta < 0
+      delta = trueDelta
+      return -Math.sqrt(Math.abs(delta)) * 2
+    else
+      return trueDelta
+
+  _uncomputeResistance : (delta) ->
+    if delta > _.last(@props.fenceposts)
+      trueDelta = delta - _.last(@props.fenceposts)
+      return _.last(@props.fenceposts) + Math.pow(trueDelta / 2, 2)
+    else if delta < 0
+      trueDelta = delta
+      return -Math.pow(Math.abs(trueDelta) / 2, 2)
+    else
+      return delta
 
   # Clean this code the fuck up.
   _onTouchEnd : (e) ->
     if e.touches.length > 1
       return
 
-    @props.onSwiping e.changedTouches[0].clientX - @state.lastX
+    clearInterval @_interval
 
-    totalSwipeDelta     = e.changedTouches[0].clientX - @state.startX
-    # TODO: Compute the instantaneous velocity rather than the average.
-    velocity            = 1000 * totalSwipeDelta / (Date.now() - @state.startTime)
+    @_onTouchMove e
+    @setState {
+      lastX        : null
+      stashedTime  : null
+      stashedDelta : null
+    }
+
+    @_autoScrollToDerivedDelta()
+
+  _autoScrollToDerivedDelta : ->
+    velocity  = 1000 * (@state.delta - @state.stashedDelta) / (Date.now() - @state.stashedTime)
+    amplitude = 0.3 * velocity
+    target    = @state.trueDelta + amplitude
+
+    # console.log @state, {target,velocity,amplitude}
+
     autoScrollStartTime = Date.now()
-    amplitude           = 0.3 * velocity
-
-    if @props.snapToDelta
-      amplitude = -@props.snapToDelta(-amplitude)
-
-    amplitude = Math.round amplitude
-
-    lastDelta = -amplitude
     _step = =>
       elapsed = Date.now() - autoScrollStartTime
       delta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      if delta < -1 or delta > 1
-        console.log { amplitudeDelta : delta - lastDelta }
-        @props.onSwiping delta - lastDelta
-        lastDelta = delta
+      # console.log delta
+      # These numbers are chosen experimentally.
+      if -500 < delta < 500 and not (0 < @state.delta < _.last(@props.fenceposts))
+        delete @_animFrame
+        @_bounceBackIfNecessary()
+      else if delta < -1 or delta > 1
+        trueDelta = target + delta
+        delta = @_computeResistance trueDelta
+        @setState { trueDelta, delta }
+        console.log 'automatic1', {
+          trueDelta
+          delta
+        }
+        @props.onSwiping delta
         @_animFrame = requestAnimationFrame _step
       else
-        # @props.onSwiping targetOffset - lastX
-        @props.onSwiped()
         delete @_animFrame
 
     @_animFrame = requestAnimationFrame _step
-    @setState @getInitialState()
+
+  _bounceBackIfNecessary : ->
+    if @state.delta < 0
+      amplitude = -@state.delta
+      target = 0
+    else if @state.delta > _.last(@props.fenceposts)
+      amplitude = -(@state.delta - _.last(@props.fenceposts))
+      target = _.last @props.fenceposts
+    else
+      return
+
+    console.log {amplitude, target}
+
+    autoScrollStartTime = Date.now()
+    _step = =>
+      elapsed = Date.now() - autoScrollStartTime
+      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
+      # console.log delta
+      if delta2 < -2 or delta2 > 2
+        delta = target + delta2
+        trueDelta = @_uncomputeResistance delta
+        @setState { trueDelta, delta }
+        console.log 'automatic2', {
+          trueDelta
+          delta
+        }
+        @props.onSwiping delta
+        @_animFrame = requestAnimationFrame _step
+      else
+        delete @_animFrame
+
+    @_animFrame = requestAnimationFrame _step
 }
 
 Swipable = React.createClass {
@@ -106,6 +183,7 @@ Swipable = React.createClass {
     }
 
   _getIndexForDelta : (delta) ->
+    # return _.sortedIndex(@state.itemOffsets, delta)
     shiftedOffsets = _.chain()
       .range(@state.itemOffsets.length)
       .map (i) => @state.itemOffsets[i] - @state.itemWidths[i] / 2
@@ -115,13 +193,14 @@ Swipable = React.createClass {
 
   render : ->
     # TODO: Fixed these goddamned sign issues. What does this delta actually represent?!
-    invertedDelta = _.last(@state.itemOffsets) - @state.delta
-    offset = invertedDelta - (@state.wrapperWidth - @state.itemWidths[@_getIndexForDelta(invertedDelta)]) / 2
+    # invertedDelta = _.last(@state.itemOffsets) - @state.delta
+    # offset = invertedDelta - (@state.wrapperWidth - @state.itemWidths[@_getIndexForDelta(invertedDelta)]) / 2
+    offset = @state.delta
 
     <IntertialSwipable
       onSwiping={@_onSwiping}
       onSwiped={@_onSwiped}
-      snapToDelta={@_snapToDelta}
+      fenceposts={@state.itemOffsets}
       className={classnames 'viewport-container', @props.className}
     >
       <div
@@ -147,7 +226,7 @@ Swipable = React.createClass {
       ), [ 0 ]
       .initial()
       .value()
-    delta = itemOffsets[@props.initialIndex ? 0]
+    delta = 0 # itemOffsets[@props.initialIndex ? 0]
     @setState { wrapperWidth, itemWidths, itemOffsets, delta }
 
   _onTouchTap : (e) ->
@@ -158,9 +237,7 @@ Swipable = React.createClass {
     @_finishSwipe _.indexOf(slidingContainer.children, target)
 
   _onSwiping : (delta) ->
-    @setState {
-      delta : _clamp @state.delta + delta, 0, _.last(@state.itemOffsets)
-    }
+    @setState { delta }
 
   _snapToDelta : (targetDelta) ->
     proposedTarget = @state.delta - targetDelta
