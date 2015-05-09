@@ -79,6 +79,8 @@ Swipable = React.createClass {
     return Math.max 0, _.sortedIndex(shiftedOffsets, delta) - 1
 
   render : ->
+    offset = -@state.delta + (@state.wrapperWidth - @state.itemWidths[0]) / 2
+
     <IntertialSwipable
       onSwiping={@_onSwiping}
       onSwiped={@_onSwiped}
@@ -90,8 +92,8 @@ Swipable = React.createClass {
         className='sliding-container'
         ref='slidingContainer'
         style={{
-          WebkitTransform : "translateX(#{-@state.delta}px) translateZ(0)" # Hardware acceleration.
-          transform       : "translateX(#{-@state.delta}px)"
+          WebkitTransform : "translateX(#{offset}px) translateZ(0)" # Hardware acceleration.
+          transform       : "translateX(#{offset}px)"
         }}
       >
         {@props.children}

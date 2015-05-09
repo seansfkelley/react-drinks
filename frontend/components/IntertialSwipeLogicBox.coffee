@@ -4,7 +4,6 @@ assert = require '../../shared/tinyassert'
 
 TIME_CONSTANT = 150
 
-# TODO: Snap to nearest.
 class IntertialSwipeLogicBox
   constructor : ({ @itemOffsets, @onChangeDelta, @onFinish }) ->
     assert @itemOffsets
@@ -89,16 +88,30 @@ class IntertialSwipeLogicBox
     else
       return visibleDelta
 
-  _isVisibleDeltaInRange : =>
-    return 0 < @visibleDelta < _.last(@itemOffsets)
+  _isInRange: (value) =>
+    return 0 < value < _.last(@itemOffsets)
+
+  _snapToNearestOffset : (value) ->
+    i = _.sortedIndex @itemOffsets, value
+    if i == 0
+      return _.first @itemOffsets
+    else if i == @itemOffsets.length
+      return _.last @itemOffsets
+    else if Math.abs(value - @itemOffsets[i - 1]) < Math.abs(value - @itemOffsets[i])
+      return @itemOffsets[i - 1]
+    else
+      return @itemOffsets[i]
 
   _autoScrollToDerivedDelta : ->
-    if not @_isVisibleDeltaInRange()
+    if not @_isInRange(@visibleDelta)
       @_bounceBackIfNecessary()
       return
 
     amplitude = 0.3 * @lastTrackedVelocity
     target    = @trueDelta + amplitude
+
+    if @_isInRange(target)
+      target = @_snapToNearestOffset target
 
     @_animate {
       amplitude
@@ -107,7 +120,7 @@ class IntertialSwipeLogicBox
         trueDelta = target + stepDelta
         visibleDelta = @_computeResistance trueDelta
 
-        if Math.abs(visibleDelta - @visibleDelta) < 5 and not @_isVisibleDeltaInRange()
+        if Math.abs(visibleDelta - @visibleDelta) < 5 and not @_isInRange(@visibleDelta)
           @_set { trueDelta, visibleDelta }
           delete @_animFrame
           @_bounceBackIfNecessary()
