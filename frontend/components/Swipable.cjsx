@@ -102,24 +102,21 @@ class IntertialSwipeLogicBox
     amplitude = 0.3 * @lastTrackedVelocity
     target    = @trueDelta + amplitude
 
-    startTime = Date.now()
-    _step = =>
-      elapsed = Date.now() - startTime
-      stepDelta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      if stepDelta < -1 or stepDelta > 1
+    @_animate {
+      amplitude
+
+      onStep : (stepDelta) =>
         trueDelta = target + stepDelta
         visibleDelta = @_computeResistance trueDelta
+
         if Math.abs(visibleDelta - @visibleDelta) < 5 and not @_isVisibleDeltaInRange()
-          @_bounceBackIfNecessary()
+          @_set { trueDelta, visibleDelta }
           delete @_animFrame
+          @_bounceBackIfNecessary()
+          return false
         else
-          @_animFrame = requestAnimationFrame _step
-
-        @_set { trueDelta, visibleDelta }
-      else
-        delete @_animFrame
-
-    @_animFrame = requestAnimationFrame _step
+          @_set { trueDelta, visibleDelta }
+    }
 
   _bounceBackIfNecessary : ->
     if @visibleDelta < 0
@@ -131,20 +128,32 @@ class IntertialSwipeLogicBox
     else
       return
 
+    @_animate {
+      amplitude
+
+      onStep : (stepDelta) =>
+        visibleDelta = target + stepDelta
+        trueDelta = @_uncomputeResistance visibleDelta
+        @_set { trueDelta, visibleDelta }
+
+      onFinish : =>
+        @_set {
+          trueDelta    : target
+          visibleDelta : target
+        }
+    }
+
+  _animate : ({ amplitude, onStep, onFinish }) ->
     startTime = Date.now()
     _step = =>
       elapsed = Date.now() - startTime
       stepDelta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
       if stepDelta < -1 or stepDelta > 1
-        visibleDelta = target + stepDelta
-        trueDelta = @_uncomputeResistance visibleDelta
-        @_set { trueDelta, visibleDelta }
-        @_animFrame = requestAnimationFrame _step
+        # Must literally return false. Note that this will NOT call onFinish.
+        if onStep(stepDelta) != false
+          @_animFrame = requestAnimationFrame _step
       else
-        @_set {
-          trueDelta    : target
-          visibleDelta : target
-        }
+        onFinish?()
         delete @_animFrame
 
     @_animFrame = requestAnimationFrame _step
