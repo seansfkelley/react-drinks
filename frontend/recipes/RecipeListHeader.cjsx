@@ -77,6 +77,9 @@ RecipeListHeader = React.createClass {
     }
 
   _onBaseLiquorChange : (index) ->
+    if @state.baseLiquors[index] == UiStore.baseLiquorFilter
+      return
+
     AppDispatcher.dispatch {
       type   : 'set-base-liquor-filter'
       filter : @state.baseLiquors[index]

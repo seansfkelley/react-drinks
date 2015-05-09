@@ -64,10 +64,10 @@ IntertialSwipable = React.createClass {
     else if nextProps.initialDelta != @props.initialDelta
       @_logicBox?.setDeltaInstantly nextProps.initialDelta
 
-
   componentWillUnmount : ->
     @_logicBox?.destroy()
 }
+
 
 Swipable = React.createClass {
   displayName : 'Swipable'
@@ -140,15 +140,11 @@ Swipable = React.createClass {
 
   _onSwiping : (delta) ->
     @setState { delta }
+    @props.onSlideChange @_getIndexForDelta(delta)
 
-  _onSwiped : (delta) ->
-    @_finishSwipe @_getIndexForDelta(@state.delta)
-
-  _finishSwipe : (index) ->
-    @setState {
-      index
-      initialDelta : @state.itemOffsets[index]
-    }
+  _onSwiped : ->
+    index = @_getIndexForDelta @state.delta
+    @setState { initialDelta : @state.itemOffsets[index] }
     @props.onSlideChange index
 }
 
