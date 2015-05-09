@@ -14,7 +14,7 @@ class IntertialSwipeLogicBox
 
     _.extend @, {
       trueDelta           : 0
-      delta               : 0
+      visibleDelta        : 0
       lastX               : null
       lastTrackedTime     : Date.now()
       lastTrackedDelta    : 0
@@ -22,8 +22,8 @@ class IntertialSwipeLogicBox
     }
 
   _set : (fields) =>
-    if fields.delta? and fields.delta != @delta
-      @onChangeDelta fields.delta
+    if fields.visibleDelta? and fields.visibleDelta != @visibleDelta
+      @onChangeDelta fields.visibleDelta
 
     _.extend @, fields
 
@@ -34,7 +34,7 @@ class IntertialSwipeLogicBox
     @_set {
       lastX               : e.touches[0].clientX
       lastTrackedTime     : Date.now()
-      lastTrackedDelta    : @delta
+      lastTrackedDelta    : @visibleDelta
       lastTrackedVelocity : 0
     }
 
@@ -44,41 +44,39 @@ class IntertialSwipeLogicBox
     now = Date.now()
     elapsed = now - @lastTrackedTime
 
-    v = 1000 * (@delta - @lastTrackedDelta) / (1 + elapsed)
+    v = 1000 * (@visibleDelta - @lastTrackedDelta) / (1 + elapsed)
 
     @_set {
       lastTrackedTime     : now
-      lastTrackedDelta    : @delta
+      lastTrackedDelta    : @visibleDelta
       lastTrackedVelocity : 0.8 * v + 0.2 * @lastTrackedVelocity
     }
 
   _computeResistance : (trueDelta) =>
     if trueDelta > _.last(@itemOffsets)
-      delta = trueDelta - _.last(@itemOffsets)
-      return _.last(@itemOffsets) + Math.sqrt(delta) * 4
+      overflow = trueDelta - _.last(@itemOffsets)
+      return _.last(@itemOffsets) + Math.sqrt(overflow) * 4
     else if trueDelta < 0
-      delta = trueDelta
-      return -Math.sqrt(Math.abs(delta)) * 4
+      return -Math.sqrt(Math.abs(trueDelta)) * 4
     else
       return trueDelta
 
-  _uncomputeResistance : (delta) =>
-    if delta > _.last(@itemOffsets)
-      trueDelta = delta - _.last(@itemOffsets)
-      return _.last(@itemOffsets) + Math.pow(trueDelta / 4, 2)
-    else if delta < 0
-      trueDelta = delta
-      return -Math.pow(Math.abs(trueDelta) / 4, 2)
+  _uncomputeResistance : (visibleDelta) =>
+    if visibleDelta > _.last(@itemOffsets)
+      overflow = visibleDelta - _.last(@itemOffsets)
+      return _.last(@itemOffsets) + Math.pow(overflow / 4, 2)
+    else if visibleDelta < 0
+      return -Math.pow(Math.abs(visibleDelta) / 4, 2)
     else
-      return delta
+      return visibleDelta
 
   onTouchMove : (e) =>
     trueDelta = @trueDelta - (e.changedTouches[0].clientX - @lastX)
-    delta = @_computeResistance trueDelta
+    visibleDelta = @_computeResistance trueDelta
 
     @_set {
       trueDelta
-      delta
+      visibleDelta
       lastX : e.changedTouches[0].clientX
     }
 
@@ -94,73 +92,59 @@ class IntertialSwipeLogicBox
 
     @_autoScrollToDerivedDelta()
 
-  _deltaInRange : =>
-    return 0 < @delta < _.last(@itemOffsets)
+  _isVisibleDeltaInRange : =>
+    return 0 < @visibleDelta < _.last(@itemOffsets)
 
   _autoScrollToDerivedDelta : ->
-    if not @_deltaInRange()
+    if not @_isVisibleDeltaInRange()
       @_bounceBackIfNecessary()
       return
 
     amplitude = 0.3 * @lastTrackedVelocity
-    # console.log @state.lastTrackedVelocity
     target    = @trueDelta + amplitude
 
     autoScrollStartTime = Date.now()
     _step = =>
       elapsed = Date.now() - autoScrollStartTime
       delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      # console.log delta
       if delta2 < -1 or delta2 > 1
         trueDelta = target + delta2
-        delta = @_computeResistance trueDelta
-        # console.log 'automatic1', {
-        #   trueDelta
-        #   delta
-        # }
-        # console.log Math.abs(delta - @state.delta)
-        if Math.abs(delta - @delta) < 5 and not @_deltaInRange()
+        visibleDelta = @_computeResistance trueDelta
+        if Math.abs(visibleDelta - @visibleDelta) < 5 and not @_isVisibleDeltaInRange()
           @_bounceBackIfNecessary()
           delete @_animFrame
         else
           @_animFrame = requestAnimationFrame _step
 
-        @_set { trueDelta, delta }
+        @_set { trueDelta, visibleDelta }
       else
         delete @_animFrame
 
     @_animFrame = requestAnimationFrame _step
 
   _bounceBackIfNecessary : ->
-    if @delta < 0
-      amplitude = -@delta
+    if @visibleDelta < 0
+      amplitude = -@visibleDelta
       target = 0
-    else if @delta > _.last(@itemOffsets)
-      amplitude = -(@delta - _.last(@itemOffsets))
+    else if @visibleDelta > _.last(@itemOffsets)
+      amplitude = -(@visibleDelta - _.last(@itemOffsets))
       target = _.last @itemOffsets
     else
       return
-
-    # console.log {amplitude, target}
 
     autoScrollStartTime = Date.now()
     _step = =>
       elapsed = Date.now() - autoScrollStartTime
       delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      # console.log delta
       if delta2 < -1 or delta2 > 1
-        delta = target + delta2
-        trueDelta = @_uncomputeResistance delta
-        @_set { trueDelta, delta }
-        # console.log 'automatic2', {
-        #   trueDelta
-        #   delta
-        # }
+        visibleDelta = target + delta2
+        trueDelta = @_uncomputeResistance visibleDelta
+        @_set { trueDelta, visibleDelta }
         @_animFrame = requestAnimationFrame _step
       else
         @_set {
-          trueDelta : target
-          delta     : target
+          trueDelta    : target
+          visibleDelta : target
         }
         delete @_animFrame
 
@@ -247,9 +231,6 @@ Swipable = React.createClass {
     return Math.max 0, _.sortedIndex(shiftedOffsets, delta) - 1
 
   render : ->
-    # TODO: Fixed these goddamned sign issues. What does this delta actually represent?!
-    # invertedDelta = _.last(@state.itemOffsets) - @state.delta
-    # offset = invertedDelta - (@state.wrapperWidth - @state.itemWidths[@_getIndexForDelta(invertedDelta)]) / 2
     offset = @state.delta
 
     <IntertialSwipable
@@ -293,13 +274,6 @@ Swipable = React.createClass {
 
   _onSwiping : (delta) ->
     @setState { delta }
-
-  _snapToDelta : (targetDelta) ->
-    proposedTarget = @state.delta - targetDelta
-    targetIndex = @_getIndexForDelta proposedTarget
-    if targetIndex == -1
-      targetIndex = 0
-    return @state.delta - @state.itemOffsets[targetIndex]
 
   _onSwiped : (delta) ->
     console.log @_getIndexForDelta(_.last(@state.itemOffsets) - @state.delta)
