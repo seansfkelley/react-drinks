@@ -64,7 +64,7 @@ IntertialSwipable = React.createClass {
       lastTrackedVelocity : 0.8 * v + 0.2 * @state.lastTrackedVelocity
     }
 
-    console.log @state
+    # console.log @state
 
   _onTouchMove : (e) ->
     if e.touches.length > 1
@@ -79,7 +79,7 @@ IntertialSwipable = React.createClass {
       lastX : e.changedTouches[0].clientX
     }
 
-    console.log 'manual', {trueDelta,delta}
+    # console.log 'manual', {trueDelta,delta}
 
     @props.onSwiping delta
 
@@ -132,30 +132,30 @@ IntertialSwipable = React.createClass {
       return
 
     amplitude = 0.3 * @state.lastTrackedVelocity
-    console.log @state.lastTrackedVelocity
+    # console.log @state.lastTrackedVelocity
     target    = @state.trueDelta + amplitude
-
-    absAmp = Math.min Math.abs(amplitude), 600
 
     autoScrollStartTime = Date.now()
     _step = =>
       elapsed = Date.now() - autoScrollStartTime
-      delta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
+      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
       # console.log delta
-      if delta < -1 or delta > 1
-        trueDelta = target + delta
+      if delta2 < -1 or delta2 > 1
+        trueDelta = target + delta2
         delta = @_computeResistance trueDelta
-        @setState { trueDelta, delta }
-        console.log 'automatic1', {
-          trueDelta
-          delta
-        }
+        # console.log 'automatic1', {
+        #   trueDelta
+        #   delta
+        # }
         @props.onSwiping delta
-        if Math.abs(delta - @state.delta) < 1 and not @_deltaInRange()
+        console.log Math.abs(delta - @state.delta)
+        if Math.abs(delta - @state.delta) < 5 and not @_deltaInRange()
           @_bounceBackIfNecessary()
           delete @_animFrame
         else
           @_animFrame = requestAnimationFrame _step
+
+        @setState { trueDelta, delta }
       else
         delete @_animFrame
 
@@ -171,7 +171,7 @@ IntertialSwipable = React.createClass {
     else
       return
 
-    console.log {amplitude, target}
+    # console.log {amplitude, target}
 
     autoScrollStartTime = Date.now()
     _step = =>
@@ -182,10 +182,10 @@ IntertialSwipable = React.createClass {
         delta = target + delta2
         trueDelta = @_uncomputeResistance delta
         @setState { trueDelta, delta }
-        console.log 'automatic2', {
-          trueDelta
-          delta
-        }
+        # console.log 'automatic2', {
+        #   trueDelta
+        #   delta
+        # }
         @props.onSwiping delta
         @_animFrame = requestAnimationFrame _step
       else
