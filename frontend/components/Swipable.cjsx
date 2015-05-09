@@ -16,9 +16,12 @@ IntertialSwipable = React.createClass {
     fenceposts : React.PropTypes.array
 
   getInitialState : -> {
-    lastX     : null
-    trueDelta : 0
-    delta     : 0
+    trueDelta           : 0
+    delta               : 0
+    lastX               : null
+    lastTrackedTime     : Date.now()
+    lastTrackedDelta    : 0
+    lastTrackedVelocity : 0
   }
 
   render : ->
@@ -39,15 +42,29 @@ IntertialSwipable = React.createClass {
       cancelAnimationFrame @_animFrame
 
     @setState {
-      lastX        : e.touches[0].clientX
-      stashedTime  : Date.now()
-      stashedDelta : @state.delta
+      lastX               : e.touches[0].clientX
+      lastTrackedTime     : Date.now()
+      lastTrackedDelta    : @state.delta
+      lastTrackedVelocity : 0
     }
 
-    @_interval = setInterval (=> @setState {
-      stashedTime  : Date.now()
-      stashedDelta : @state.delta
-    }), 150
+    @_interval = setInterval @_trackVelocity, 50
+
+    e.preventDefault()
+
+  _trackVelocity : ->
+    now = Date.now()
+    elapsed = now - @state.lastTrackedTime
+
+    v = 1000 * (@state.delta - @state.lastTrackedDelta) / (1 + elapsed)
+
+    @setState {
+      lastTrackedTime     : now
+      lastTrackedDelta    : @state.delta
+      lastTrackedVelocity : 0.8 * v + 0.2 * @state.lastTrackedVelocity
+    }
+
+    console.log @state
 
   _onTouchMove : (e) ->
     if e.touches.length > 1
@@ -66,23 +83,25 @@ IntertialSwipable = React.createClass {
 
     @props.onSwiping delta
 
+    e.preventDefault()
+
   _computeResistance : (trueDelta) ->
     if trueDelta > _.last(@props.fenceposts)
       delta = trueDelta - _.last(@props.fenceposts)
-      return _.last(@props.fenceposts) + Math.sqrt(delta) * 2
+      return _.last(@props.fenceposts) + Math.sqrt(delta) * 4
     else if trueDelta < 0
       delta = trueDelta
-      return -Math.sqrt(Math.abs(delta)) * 2
+      return -Math.sqrt(Math.abs(delta)) * 4
     else
       return trueDelta
 
   _uncomputeResistance : (delta) ->
     if delta > _.last(@props.fenceposts)
       trueDelta = delta - _.last(@props.fenceposts)
-      return _.last(@props.fenceposts) + Math.pow(trueDelta / 2, 2)
+      return _.last(@props.fenceposts) + Math.pow(trueDelta / 4, 2)
     else if delta < 0
       trueDelta = delta
-      return -Math.pow(Math.abs(trueDelta) / 2, 2)
+      return -Math.pow(Math.abs(trueDelta) / 4, 2)
     else
       return delta
 
@@ -90,6 +109,8 @@ IntertialSwipable = React.createClass {
   _onTouchEnd : (e) ->
     if e.touches.length > 1
       return
+
+    e.preventDefault()
 
     clearInterval @_interval
 
@@ -102,23 +123,26 @@ IntertialSwipable = React.createClass {
 
     @_autoScrollToDerivedDelta()
 
+  _deltaInRange : ->
+    return 0 < @state.delta < _.last(@props.fenceposts)
+
   _autoScrollToDerivedDelta : ->
-    velocity  = 1000 * (@state.delta - @state.stashedDelta) / (Date.now() - @state.stashedTime)
-    amplitude = 0.3 * velocity
+    if not @_deltaInRange()
+      @_bounceBackIfNecessary()
+      return
+
+    amplitude = 0.3 * @state.lastTrackedVelocity
+    console.log @state.lastTrackedVelocity
     target    = @state.trueDelta + amplitude
 
-    # console.log @state, {target,velocity,amplitude}
+    absAmp = Math.min Math.abs(amplitude), 600
 
     autoScrollStartTime = Date.now()
     _step = =>
       elapsed = Date.now() - autoScrollStartTime
       delta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
       # console.log delta
-      # These numbers are chosen experimentally.
-      if -500 < delta < 500 and not (0 < @state.delta < _.last(@props.fenceposts))
-        delete @_animFrame
-        @_bounceBackIfNecessary()
-      else if delta < -1 or delta > 1
+      if delta < -1 or delta > 1
         trueDelta = target + delta
         delta = @_computeResistance trueDelta
         @setState { trueDelta, delta }
@@ -127,7 +151,11 @@ IntertialSwipable = React.createClass {
           delta
         }
         @props.onSwiping delta
-        @_animFrame = requestAnimationFrame _step
+        if Math.abs(delta - @state.delta) < 1 and not @_deltaInRange()
+          @_bounceBackIfNecessary()
+          delete @_animFrame
+        else
+          @_animFrame = requestAnimationFrame _step
       else
         delete @_animFrame
 
@@ -150,7 +178,7 @@ IntertialSwipable = React.createClass {
       elapsed = Date.now() - autoScrollStartTime
       delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
       # console.log delta
-      if delta2 < -2 or delta2 > 2
+      if delta2 < -1 or delta2 > 1
         delta = target + delta2
         trueDelta = @_uncomputeResistance delta
         @setState { trueDelta, delta }
@@ -161,6 +189,11 @@ IntertialSwipable = React.createClass {
         @props.onSwiping delta
         @_animFrame = requestAnimationFrame _step
       else
+        @setState {
+          trueDelta : target
+          delta     : target
+        }
+        @props.onSwiping target
         delete @_animFrame
 
     @_animFrame = requestAnimationFrame _step
