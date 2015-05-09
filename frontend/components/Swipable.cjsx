@@ -4,8 +4,7 @@ classnames = require 'classnames'
 
 assert = require '../../shared/tinyassert'
 
-_clamp = (x, min, max) ->
-  return Math.max min, Math.min(x, max)
+TIME_CONSTANT = 150
 
 class IntertialSwipeLogicBox
   constructor : ({ @itemOffsets, @onChangeDelta }) ->
@@ -40,6 +39,28 @@ class IntertialSwipeLogicBox
 
     @_interval = setInterval @_trackVelocity, 50
 
+  onTouchMove : (e) =>
+    trueDelta = @trueDelta - (e.changedTouches[0].clientX - @lastX)
+    visibleDelta = @_computeResistance trueDelta
+
+    @_set {
+      trueDelta
+      visibleDelta
+      lastX : e.changedTouches[0].clientX
+    }
+
+  onTouchEnd : (e) =>
+    clearInterval @_interval
+
+    @onTouchMove e
+    @_set {
+      lastX        : null
+      stashedTime  : null
+      stashedDelta : null
+    }
+
+    @_autoScrollToDerivedDelta()
+
   _trackVelocity : =>
     now = Date.now()
     elapsed = now - @lastTrackedTime
@@ -70,28 +91,6 @@ class IntertialSwipeLogicBox
     else
       return visibleDelta
 
-  onTouchMove : (e) =>
-    trueDelta = @trueDelta - (e.changedTouches[0].clientX - @lastX)
-    visibleDelta = @_computeResistance trueDelta
-
-    @_set {
-      trueDelta
-      visibleDelta
-      lastX : e.changedTouches[0].clientX
-    }
-
-  onTouchEnd : (e) =>
-    clearInterval @_interval
-
-    @onTouchMove e
-    @_set {
-      lastX        : null
-      stashedTime  : null
-      stashedDelta : null
-    }
-
-    @_autoScrollToDerivedDelta()
-
   _isVisibleDeltaInRange : =>
     return 0 < @visibleDelta < _.last(@itemOffsets)
 
@@ -103,12 +102,12 @@ class IntertialSwipeLogicBox
     amplitude = 0.3 * @lastTrackedVelocity
     target    = @trueDelta + amplitude
 
-    autoScrollStartTime = Date.now()
+    startTime = Date.now()
     _step = =>
-      elapsed = Date.now() - autoScrollStartTime
-      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      if delta2 < -1 or delta2 > 1
-        trueDelta = target + delta2
+      elapsed = Date.now() - startTime
+      stepDelta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
+      if stepDelta < -1 or stepDelta > 1
+        trueDelta = target + stepDelta
         visibleDelta = @_computeResistance trueDelta
         if Math.abs(visibleDelta - @visibleDelta) < 5 and not @_isVisibleDeltaInRange()
           @_bounceBackIfNecessary()
@@ -132,12 +131,12 @@ class IntertialSwipeLogicBox
     else
       return
 
-    autoScrollStartTime = Date.now()
+    startTime = Date.now()
     _step = =>
-      elapsed = Date.now() - autoScrollStartTime
-      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      if delta2 < -1 or delta2 > 1
-        visibleDelta = target + delta2
+      elapsed = Date.now() - startTime
+      stepDelta = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
+      if stepDelta < -1 or stepDelta > 1
+        visibleDelta = target + stepDelta
         trueDelta = @_uncomputeResistance visibleDelta
         @_set { trueDelta, visibleDelta }
         @_animFrame = requestAnimationFrame _step
@@ -154,8 +153,6 @@ class IntertialSwipeLogicBox
     cancelAnimationFrame @_animFrame
     clearInterval @_interval
 
-
-TIME_CONSTANT = 150
 
 IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
