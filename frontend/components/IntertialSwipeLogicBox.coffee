@@ -5,12 +5,14 @@ assert = require '../../shared/tinyassert'
 TIME_CONSTANT = 150
 
 class IntertialSwipeLogicBox
-  constructor : ({ @itemOffsets, @initialDelta, @onChangeDelta, @onFinish }) ->
+  constructor : ({ @itemOffsets, @initialDelta, @getNearestIndex, @onChangeDelta, @onFinish }) ->
     assert @itemOffsets
+    assert @getNearestIndex
 
     @_set {
       trueDelta           : @initialDelta ? 0
       visibleDelta        : @initialDelta ? 0
+      initialTouchX       : null
       lastX               : null
       lastTrackedTime     : null
       lastTrackedDelta    : null
@@ -22,6 +24,7 @@ class IntertialSwipeLogicBox
       cancelAnimationFrame @_animFrame
 
     @_set {
+      initialTouchX       : e.touches[0].clientX
       lastX               : e.touches[0].clientX
       lastTrackedTime     : Date.now()
       lastTrackedDelta    : @visibleDelta
@@ -44,9 +47,18 @@ class IntertialSwipeLogicBox
     clearInterval @_interval
 
     @onTouchMove e
-    @_set { lastX : null }
+    @_set {
+      lastX            : null
+      lastTrackedTime  : null
+      lastTrackedDelta : null
+    }
 
-    @_autoScrollToDerivedDelta()
+    distance = e.changedTouches[0].clientX - @initialTouchX
+    # Tap, rather than swipe.
+    if Math.abs(distance) < 10
+      @_autoScroll { target : @itemOffsets[@getNearestIndex(e)] }
+    else
+      @_autoScroll { amplitude : 0.3 * @lastTrackedVelocity }
 
   # TODO: We probably actually want to animate this.
   setDeltaInstantly : (delta) =>
@@ -107,17 +119,20 @@ class IntertialSwipeLogicBox
     else
       return @itemOffsets[i]
 
-  _autoScrollToDerivedDelta : ->
+  _autoScroll : ({ amplitude, target }) ->
+    assert amplitude? != target?, 'exactly one of amplitude or target must be specified'
+
     if not @_isInRange(@visibleDelta)
       @_bounceBackIfNecessary()
       return
 
-    amplitude = 0.3 * @lastTrackedVelocity
-    target    = @trueDelta + amplitude
+    if not target?
+      target = @trueDelta + amplitude
 
     if @_isInRange(target)
       target = @_snapToNearestOffset target
-      amplitude = target - @trueDelta
+
+    amplitude = target - @trueDelta
 
     @_animate {
       amplitude

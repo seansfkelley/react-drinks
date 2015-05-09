@@ -8,10 +8,11 @@ IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
 
   propTypes :
-    onSwiping    : React.PropTypes.func
-    onSwiped     : React.PropTypes.func
-    initialDelta : React.PropTypes.number
-    itemOffsets  : React.PropTypes.array.isRequired
+    onSwiping       : React.PropTypes.func
+    onSwiped        : React.PropTypes.func
+    initialDelta    : React.PropTypes.number
+    getNearestIndex : React.PropTypes.func
+    itemOffsets     : React.PropTypes.array.isRequired
 
   render : ->
     <div
@@ -43,20 +44,22 @@ IntertialSwipable = React.createClass {
 
   componentDidMount : ->
     @_logicBox = new IntertialSwipeLogicBox {
-      itemOffsets   : @props.itemOffsets
-      onChangeDelta : @props.onSwiping
-      onFinish      : @props.onSwiped
-      initialDelta  : @props.initialDelta
+      itemOffsets     : @props.itemOffsets
+      getNearestIndex : @props.getNearestIndex
+      onChangeDelta   : @props.onSwiping
+      onFinish        : @props.onSwiped
+      initialDelta    : @props.initialDelta
     }
 
   componentWillReceiveProps : (nextProps) ->
     if not _.isEqual(nextProps.itemOffsets, @props.itemOffsets)
       @_logicBox?.destroy()
       @_logicBox = new IntertialSwipeLogicBox {
-        itemOffsets   : nextProps.itemOffsets
-        onChangeDelta : nextProps.onSwiping
-        onFinish      : nextProps.onSwiped
-        initialDelta  : nextProps.initialDelta
+        itemOffsets     : nextProps.itemOffsets
+        getNearestIndex : @props.getNearestIndex
+        onChangeDelta   : nextProps.onSwiping
+        onFinish        : nextProps.onSwiped
+        initialDelta    : nextProps.initialDelta
       }
     else if nextProps.initialDelta != @props.initialDelta
       @_logicBox?.setDeltaInstantly nextProps.initialDelta
@@ -100,10 +103,10 @@ Swipable = React.createClass {
       onSwiped={@_onSwiped}
       itemOffsets={@state.itemOffsets}
       initialDelta={@state.initialDelta}
+      getNearestIndex={@_getNearestIndex}
       className={classnames 'viewport-container', @props.className}
     >
       <div
-        onTouchTap={@_onTouchTap}
         className='sliding-container'
         ref='slidingContainer'
         style={{
@@ -128,12 +131,12 @@ Swipable = React.createClass {
     initialDelta = itemOffsets[@props.initialIndex ? 0]
     @setState { wrapperWidth, itemWidths, itemOffsets, initialDelta }
 
-  _onTouchTap : (e) ->
+  _getNearestIndex : (e) ->
     target = e.target
     slidingContainer = React.findDOMNode @refs.slidingContainer
     while target.parentNode != slidingContainer
       target = target.parentNode
-    @_finishSwipe _.indexOf(slidingContainer.children, target)
+    return _.indexOf(slidingContainer.children, target)
 
   _onSwiping : (delta) ->
     @setState { delta }
