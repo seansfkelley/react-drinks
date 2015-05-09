@@ -8,9 +8,10 @@ IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
 
   propTypes :
-    onSwiping   : React.PropTypes.func
-    onSwiped    : React.PropTypes.func
-    itemOffsets : React.PropTypes.array.isRequired
+    onSwiping    : React.PropTypes.func
+    onSwiped     : React.PropTypes.func
+    initialDelta : React.PropTypes.number
+    itemOffsets  : React.PropTypes.array.isRequired
 
   render : ->
     <div
@@ -40,6 +41,14 @@ IntertialSwipable = React.createClass {
     e.preventDefault()
     @_logicBox.onTouchEnd e
 
+  componentDidMount : ->
+    @_logicBox = new IntertialSwipeLogicBox {
+      itemOffsets   : @props.itemOffsets
+      onChangeDelta : @props.onSwiping
+      onFinish      : @props.onSwiped
+      initialDelta  : @props.initialDelta
+    }
+
   componentWillReceiveProps : (nextProps) ->
     if not _.isEqual(nextProps.itemOffsets, @props.itemOffsets)
       @_logicBox?.destroy()
@@ -47,7 +56,11 @@ IntertialSwipable = React.createClass {
         itemOffsets   : nextProps.itemOffsets
         onChangeDelta : nextProps.onSwiping
         onFinish      : nextProps.onSwiped
+        initialDelta  : nextProps.initialDelta
       }
+    else if nextProps.initialDelta != @props.initialDelta
+      @_logicBox?.setDeltaInstantly nextProps.initialDelta
+
 
   componentWillUnmount : ->
     @_logicBox?.destroy()
@@ -63,10 +76,11 @@ Swipable = React.createClass {
   getInitialState : ->
     zeroes = _.map _.range(React.Children.count(@props.children)), -> 0
     return {
-      wrapperWidth: 0
-      itemWidths  : zeroes
-      itemOffsets : zeroes
-      delta       : 0
+      wrapperWidth : 0
+      itemWidths   : zeroes
+      itemOffsets  : zeroes
+      delta        : 0
+      initialDelta : 0
     }
 
   _getIndexForDelta : (delta) ->
@@ -85,6 +99,7 @@ Swipable = React.createClass {
       onSwiping={@_onSwiping}
       onSwiped={@_onSwiped}
       itemOffsets={@state.itemOffsets}
+      initialDelta={@state.initialDelta}
       className={classnames 'viewport-container', @props.className}
     >
       <div
@@ -110,8 +125,8 @@ Swipable = React.createClass {
       ), [ 0 ]
       .initial()
       .value()
-    delta = 0 # itemOffsets[@props.initialIndex ? 0]
-    @setState { wrapperWidth, itemWidths, itemOffsets, delta }
+    initialDelta = itemOffsets[@props.initialIndex ? 0]
+    @setState { wrapperWidth, itemWidths, itemOffsets, initialDelta }
 
   _onTouchTap : (e) ->
     target = e.target
@@ -124,12 +139,12 @@ Swipable = React.createClass {
     @setState { delta }
 
   _onSwiped : (delta) ->
-    console.log @_getIndexForDelta(_.last(@state.itemOffsets) - @state.delta)
+    @_finishSwipe @_getIndexForDelta(@state.delta)
 
   _finishSwipe : (index) ->
     @setState {
       index
-      delta : 0
+      initialDelta : @state.itemOffsets[index]
     }
     @props.onSlideChange index
 }

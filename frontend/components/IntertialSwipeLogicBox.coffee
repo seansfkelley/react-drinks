@@ -5,16 +5,16 @@ assert = require '../../shared/tinyassert'
 TIME_CONSTANT = 150
 
 class IntertialSwipeLogicBox
-  constructor : ({ @itemOffsets, @onChangeDelta, @onFinish }) ->
+  constructor : ({ @itemOffsets, @initialDelta, @onChangeDelta, @onFinish }) ->
     assert @itemOffsets
 
-    _.extend @, {
-      trueDelta           : 0
-      visibleDelta        : 0
+    @_set {
+      trueDelta           : @initialDelta ? 0
+      visibleDelta        : @initialDelta ? 0
       lastX               : null
-      lastTrackedTime     : Date.now()
-      lastTrackedDelta    : 0
-      lastTrackedVelocity : 0
+      lastTrackedTime     : null
+      lastTrackedDelta    : null
+      lastTrackedVelocity : null
     }
 
   onTouchStart : (e) =>
@@ -47,6 +47,15 @@ class IntertialSwipeLogicBox
     @_set { lastX : null }
 
     @_autoScrollToDerivedDelta()
+
+  # TODO: We probably actually want to animate this.
+  setDeltaInstantly : (delta) =>
+    assert @_isInRange(delta)
+
+    @_set {
+      visibleDelta : delta
+      trueDelta    : delta
+    }
 
   _set : (fields) =>
     if fields.visibleDelta? and fields.visibleDelta != @visibleDelta
@@ -85,7 +94,7 @@ class IntertialSwipeLogicBox
       return visibleDelta
 
   _isInRange: (value) =>
-    return 0 < value < _.last(@itemOffsets)
+    return 0 <= value <= _.last(@itemOffsets)
 
   _snapToNearestOffset : (value) ->
     i = _.sortedIndex @itemOffsets, value
