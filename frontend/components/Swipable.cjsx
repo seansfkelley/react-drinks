@@ -2,8 +2,174 @@ _          = require 'lodash'
 React      = require 'react/addons'
 classnames = require 'classnames'
 
+assert = require '../../shared/tinyassert'
+
 _clamp = (x, min, max) ->
   return Math.max min, Math.min(x, max)
+
+class IntertialSwipeLogicBox
+  constructor : ({ @itemOffsets, @onChangeDelta }) ->
+    assert @itemOffsets
+    assert @onChangeDelta
+
+    _.extend @, {
+      trueDelta           : 0
+      delta               : 0
+      lastX               : null
+      lastTrackedTime     : Date.now()
+      lastTrackedDelta    : 0
+      lastTrackedVelocity : 0
+    }
+
+  _set : (fields) =>
+    if fields.delta? and fields.delta != @delta
+      @onChangeDelta fields.delta
+
+    _.extend @, fields
+
+  onTouchStart : (e) =>
+    if @_animFrame?
+      cancelAnimationFrame @_animFrame
+
+    @_set {
+      lastX               : e.touches[0].clientX
+      lastTrackedTime     : Date.now()
+      lastTrackedDelta    : @delta
+      lastTrackedVelocity : 0
+    }
+
+    @_interval = setInterval @_trackVelocity, 50
+
+  _trackVelocity : =>
+    now = Date.now()
+    elapsed = now - @lastTrackedTime
+
+    v = 1000 * (@delta - @lastTrackedDelta) / (1 + elapsed)
+
+    @_set {
+      lastTrackedTime     : now
+      lastTrackedDelta    : @delta
+      lastTrackedVelocity : 0.8 * v + 0.2 * @lastTrackedVelocity
+    }
+
+  _computeResistance : (trueDelta) =>
+    if trueDelta > _.last(@itemOffsets)
+      delta = trueDelta - _.last(@itemOffsets)
+      return _.last(@itemOffsets) + Math.sqrt(delta) * 4
+    else if trueDelta < 0
+      delta = trueDelta
+      return -Math.sqrt(Math.abs(delta)) * 4
+    else
+      return trueDelta
+
+  _uncomputeResistance : (delta) =>
+    if delta > _.last(@itemOffsets)
+      trueDelta = delta - _.last(@itemOffsets)
+      return _.last(@itemOffsets) + Math.pow(trueDelta / 4, 2)
+    else if delta < 0
+      trueDelta = delta
+      return -Math.pow(Math.abs(trueDelta) / 4, 2)
+    else
+      return delta
+
+  onTouchMove : (e) =>
+    trueDelta = @trueDelta - (e.changedTouches[0].clientX - @lastX)
+    delta = @_computeResistance trueDelta
+
+    @_set {
+      trueDelta
+      delta
+      lastX : e.changedTouches[0].clientX
+    }
+
+  onTouchEnd : (e) =>
+    clearInterval @_interval
+
+    @onTouchMove e
+    @_set {
+      lastX        : null
+      stashedTime  : null
+      stashedDelta : null
+    }
+
+    @_autoScrollToDerivedDelta()
+
+  _deltaInRange : =>
+    return 0 < @delta < _.last(@itemOffsets)
+
+  _autoScrollToDerivedDelta : ->
+    if not @_deltaInRange()
+      @_bounceBackIfNecessary()
+      return
+
+    amplitude = 0.3 * @lastTrackedVelocity
+    # console.log @state.lastTrackedVelocity
+    target    = @trueDelta + amplitude
+
+    autoScrollStartTime = Date.now()
+    _step = =>
+      elapsed = Date.now() - autoScrollStartTime
+      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
+      # console.log delta
+      if delta2 < -1 or delta2 > 1
+        trueDelta = target + delta2
+        delta = @_computeResistance trueDelta
+        # console.log 'automatic1', {
+        #   trueDelta
+        #   delta
+        # }
+        # console.log Math.abs(delta - @state.delta)
+        if Math.abs(delta - @delta) < 5 and not @_deltaInRange()
+          @_bounceBackIfNecessary()
+          delete @_animFrame
+        else
+          @_animFrame = requestAnimationFrame _step
+
+        @_set { trueDelta, delta }
+      else
+        delete @_animFrame
+
+    @_animFrame = requestAnimationFrame _step
+
+  _bounceBackIfNecessary : ->
+    if @delta < 0
+      amplitude = -@delta
+      target = 0
+    else if @delta > _.last(@itemOffsets)
+      amplitude = -(@delta - _.last(@itemOffsets))
+      target = _.last @itemOffsets
+    else
+      return
+
+    # console.log {amplitude, target}
+
+    autoScrollStartTime = Date.now()
+    _step = =>
+      elapsed = Date.now() - autoScrollStartTime
+      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
+      # console.log delta
+      if delta2 < -1 or delta2 > 1
+        delta = target + delta2
+        trueDelta = @_uncomputeResistance delta
+        @_set { trueDelta, delta }
+        # console.log 'automatic2', {
+        #   trueDelta
+        #   delta
+        # }
+        @_animFrame = requestAnimationFrame _step
+      else
+        @_set {
+          trueDelta : target
+          delta     : target
+        }
+        delete @_animFrame
+
+    @_animFrame = requestAnimationFrame _step
+
+  destroy : ->
+    cancelAnimationFrame @_animFrame
+    clearInterval @_interval
+
 
 TIME_CONSTANT = 150
 
@@ -11,18 +177,9 @@ IntertialSwipable = React.createClass {
   displayName : 'IntertialSwipable'
 
   propTypes :
-    onSwiping  : React.PropTypes.func
-    onSwiped   : React.PropTypes.func
-    fenceposts : React.PropTypes.array
-
-  getInitialState : -> {
-    trueDelta           : 0
-    delta               : 0
-    lastX               : null
-    lastTrackedTime     : Date.now()
-    lastTrackedDelta    : 0
-    lastTrackedVelocity : 0
-  }
+    onSwiping   : React.PropTypes.func
+    onSwiped    : React.PropTypes.func
+    itemOffsets : React.PropTypes.array
 
   render : ->
     <div
@@ -37,166 +194,31 @@ IntertialSwipable = React.createClass {
   _onTouchStart : (e) ->
     if e.touches.length > 1
       return
-
-    if @_animFrame?
-      cancelAnimationFrame @_animFrame
-
-    @setState {
-      lastX               : e.touches[0].clientX
-      lastTrackedTime     : Date.now()
-      lastTrackedDelta    : @state.delta
-      lastTrackedVelocity : 0
-    }
-
-    @_interval = setInterval @_trackVelocity, 50
-
     e.preventDefault()
-
-  _trackVelocity : ->
-    now = Date.now()
-    elapsed = now - @state.lastTrackedTime
-
-    v = 1000 * (@state.delta - @state.lastTrackedDelta) / (1 + elapsed)
-
-    @setState {
-      lastTrackedTime     : now
-      lastTrackedDelta    : @state.delta
-      lastTrackedVelocity : 0.8 * v + 0.2 * @state.lastTrackedVelocity
-    }
-
-    # console.log @state
+    @_logicBox.onTouchStart e
 
   _onTouchMove : (e) ->
     if e.touches.length > 1
       return
-
-    trueDelta = @state.trueDelta - (e.changedTouches[0].clientX - @state.lastX)
-    delta = @_computeResistance trueDelta
-
-    @setState {
-      trueDelta
-      delta
-      lastX : e.changedTouches[0].clientX
-    }
-
-    # console.log 'manual', {trueDelta,delta}
-
-    @props.onSwiping delta
-
     e.preventDefault()
+    @_logicBox.onTouchMove e
 
-  _computeResistance : (trueDelta) ->
-    if trueDelta > _.last(@props.fenceposts)
-      delta = trueDelta - _.last(@props.fenceposts)
-      return _.last(@props.fenceposts) + Math.sqrt(delta) * 4
-    else if trueDelta < 0
-      delta = trueDelta
-      return -Math.sqrt(Math.abs(delta)) * 4
-    else
-      return trueDelta
-
-  _uncomputeResistance : (delta) ->
-    if delta > _.last(@props.fenceposts)
-      trueDelta = delta - _.last(@props.fenceposts)
-      return _.last(@props.fenceposts) + Math.pow(trueDelta / 4, 2)
-    else if delta < 0
-      trueDelta = delta
-      return -Math.pow(Math.abs(trueDelta) / 4, 2)
-    else
-      return delta
-
-  # Clean this code the fuck up.
   _onTouchEnd : (e) ->
     if e.touches.length > 1
       return
-
     e.preventDefault()
+    @_logicBox.onTouchEnd e
 
-    clearInterval @_interval
+  componentWillReceiveProps : (nextProps) ->
+    if not _.isEqual(nextProps.itemOffsets, @props.itemOffsets)
+      @_logicBox?.destroy()
+      @_logicBox = new IntertialSwipeLogicBox {
+        itemOffsets   : nextProps.itemOffsets
+        onChangeDelta : nextProps.onSwiping
+      }
 
-    @_onTouchMove e
-    @setState {
-      lastX        : null
-      stashedTime  : null
-      stashedDelta : null
-    }
-
-    @_autoScrollToDerivedDelta()
-
-  _deltaInRange : ->
-    return 0 < @state.delta < _.last(@props.fenceposts)
-
-  _autoScrollToDerivedDelta : ->
-    if not @_deltaInRange()
-      @_bounceBackIfNecessary()
-      return
-
-    amplitude = 0.3 * @state.lastTrackedVelocity
-    # console.log @state.lastTrackedVelocity
-    target    = @state.trueDelta + amplitude
-
-    autoScrollStartTime = Date.now()
-    _step = =>
-      elapsed = Date.now() - autoScrollStartTime
-      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      # console.log delta
-      if delta2 < -1 or delta2 > 1
-        trueDelta = target + delta2
-        delta = @_computeResistance trueDelta
-        # console.log 'automatic1', {
-        #   trueDelta
-        #   delta
-        # }
-        @props.onSwiping delta
-        console.log Math.abs(delta - @state.delta)
-        if Math.abs(delta - @state.delta) < 5 and not @_deltaInRange()
-          @_bounceBackIfNecessary()
-          delete @_animFrame
-        else
-          @_animFrame = requestAnimationFrame _step
-
-        @setState { trueDelta, delta }
-      else
-        delete @_animFrame
-
-    @_animFrame = requestAnimationFrame _step
-
-  _bounceBackIfNecessary : ->
-    if @state.delta < 0
-      amplitude = -@state.delta
-      target = 0
-    else if @state.delta > _.last(@props.fenceposts)
-      amplitude = -(@state.delta - _.last(@props.fenceposts))
-      target = _.last @props.fenceposts
-    else
-      return
-
-    # console.log {amplitude, target}
-
-    autoScrollStartTime = Date.now()
-    _step = =>
-      elapsed = Date.now() - autoScrollStartTime
-      delta2 = -amplitude * Math.exp(-elapsed / TIME_CONSTANT)
-      # console.log delta
-      if delta2 < -1 or delta2 > 1
-        delta = target + delta2
-        trueDelta = @_uncomputeResistance delta
-        @setState { trueDelta, delta }
-        # console.log 'automatic2', {
-        #   trueDelta
-        #   delta
-        # }
-        @props.onSwiping delta
-        @_animFrame = requestAnimationFrame _step
-      else
-        @setState {
-          trueDelta : target
-          delta     : target
-        }
-        @props.onSwiping target
-        delete @_animFrame
-
-    @_animFrame = requestAnimationFrame _step
+  componentWillUnmount : ->
+    @_logicBox?.destroy()
 }
 
 Swipable = React.createClass {
@@ -233,7 +255,7 @@ Swipable = React.createClass {
     <IntertialSwipable
       onSwiping={@_onSwiping}
       onSwiped={@_onSwiped}
-      fenceposts={@state.itemOffsets}
+      itemOffsets={@state.itemOffsets}
       className={classnames 'viewport-container', @props.className}
     >
       <div
