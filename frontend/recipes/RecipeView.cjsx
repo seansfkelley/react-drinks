@@ -1,5 +1,6 @@
 _     = require 'lodash'
 React = require 'react/addons'
+{ PureRenderMixin } = React.addons
 
 FluxMixin = require '../mixins/FluxMixin'
 
@@ -24,6 +25,8 @@ HUMAN_READABLE_CATEGORY_TITLE =
 SectionHeader = React.createClass {
   displayName : 'SectionHeader'
 
+  mixins : [ PureRenderMixin ]
+
   propTypes :
     text : React.PropTypes.string.isRequired
 
@@ -33,6 +36,8 @@ SectionHeader = React.createClass {
 
 IngredientView = React.createClass {
   displayName : 'IngredientView'
+
+  mixins : [ PureRenderMixin ]
 
   propTypes :
     displayAmount             : React.PropTypes.string
@@ -70,6 +75,7 @@ RecipeFooter = React.createClass {
     onClose              : React.PropTypes.func.isRequired
 
   mixins : [
+    PureRenderMixin
     FluxMixin UiStore, 'favoritedRecipes'
   ]
 
@@ -93,6 +99,8 @@ RecipeFooter = React.createClass {
 
 RecipeView = React.createClass {
   displayName : 'RecipeView'
+
+  mixins : [ PureRenderMixin ]
 
   propTypes :
     recipe : React.PropTypes.object.isRequired
