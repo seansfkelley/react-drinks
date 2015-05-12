@@ -26,21 +26,12 @@ IntertialSwipable = React.createClass {
     </div>
 
   _onTouchStart : (e) ->
-    if e.touches.length > 1
-      return
-    e.preventDefault()
     @_logicBox.onTouchStart e
 
   _onTouchMove : (e) ->
-    if e.touches.length > 1
-      return
-    e.preventDefault()
     @_logicBox.onTouchMove e
 
   _onTouchEnd : (e) ->
-    if e.touches.length > 1
-      return
-    e.preventDefault()
     @_logicBox.onTouchEnd e
 
   componentDidMount : ->

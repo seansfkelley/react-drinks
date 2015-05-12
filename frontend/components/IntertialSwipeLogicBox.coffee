@@ -4,6 +4,12 @@ assert = require '../../shared/tinyassert'
 
 TIME_CONSTANT = 150
 
+CaptureType = {
+  INDETERMINATE : -1
+  NO            : 0
+  YES           : 1
+}
+
 class IntertialSwipeLogicBox
   constructor : ({
       @itemOffsets
@@ -20,7 +26,9 @@ class IntertialSwipeLogicBox
       trueDelta           : @initialDelta ? 0
       visibleDelta        : @initialDelta ? 0
       amplitudeFactor     : @amplitudeFactor ? 0.5
+      captureType         : null
       initialTouchX       : null
+      initialTouchY       : null
       lastX               : null
       lastTrackedTime     : null
       lastTrackedDelta    : null
@@ -28,11 +36,16 @@ class IntertialSwipeLogicBox
     }
 
   onTouchStart : (e) =>
+    if e.touches.length > 1
+      return
+
     if @_animFrame?
       cancelAnimationFrame @_animFrame
 
     @_set {
+      captureType         : CaptureType.INDETERMINATE
       initialTouchX       : e.touches[0].clientX
+      initialTouchY       : e.touches[0].clientY
       lastX               : e.touches[0].clientX
       lastTrackedTime     : Date.now()
       lastTrackedDelta    : @visibleDelta
@@ -42,6 +55,20 @@ class IntertialSwipeLogicBox
     @_interval = setInterval @_trackVelocity, 50
 
   onTouchMove : (e) =>
+    if e.touches.length > 1 or @captureType == CaptureType.NO
+      return
+
+    if @captureType == CaptureType.INDETERMINATE
+      if Math.abs(@initialTouchX - e.changedTouches[0].clientX) < Math.abs(@initialTouchY - e.changedTouches[0].clientY)
+        @_set { captureType : CaptureType.NO }
+        clearInterval @_interval
+        return
+      else
+        @_set { captureType : CaptureType.YES }
+        # ...continue...
+
+    e.preventDefault()
+
     trueDelta = @trueDelta - (e.changedTouches[0].clientX - @lastX)
     visibleDelta = @_computeResistance trueDelta
 
@@ -52,6 +79,9 @@ class IntertialSwipeLogicBox
     }
 
   onTouchEnd : (e) =>
+    if e.touches.length > 1 or @captureType == CaptureType.NO
+      return
+
     clearInterval @_interval
 
     @onTouchMove e
