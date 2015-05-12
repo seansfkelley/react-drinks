@@ -78,7 +78,11 @@ class RecipeSearch
     exactlyAvailableIngredientsRaw = _.map ingredientTags, (tag) => @_ingredientsByTag[tag]
     exactlyAvailableIngredients = _.compact exactlyAvailableIngredientsRaw
     if exactlyAvailableIngredientsRaw.length != exactlyAvailableIngredients.length
-      log.warn "some tags that were searched are extraneous and will be ignored; all tags: #{JSON.stringify ingredientTags}"
+      extraneous = _.chain exactlyAvailableIngredientsRaw
+        .map (value, i) => if not value? then ingredientTags[i]
+        .compact()
+        .value()
+      log.warn "some tags that were searched are extraneous and will be ignored: #{JSON.stringify extraneous}"
 
     substitutionMap = @_computeSubstitutionMap exactlyAvailableIngredients
     allAvailableTagsWithGenerics = _.keys substitutionMap
