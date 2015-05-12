@@ -1,9 +1,15 @@
 @require 'constants'
+@require 'mixins'
 
 vertical-padding = 6px
 
 .title-bar.recipe-list-header
   font-size inherit
+
+  shadow('bottom', 2px)
+  // To see the shadow.
+  position relative
+  z-index 1
 
   .mixability-selector
     display flex
@@ -46,6 +52,8 @@ vertical-padding = 6px
   width 100%
   font-size title-font-size
 
+  background-color grey1
+
   .base-liquor-option
     width 25%
     text-transform uppercase
@@ -58,3 +66,21 @@ vertical-padding = 6px
 
     &:not(.selected)
       color grey3
+
+  // For the arrow.
+  position relative
+
+  // Arrow.
+  &:after
+    bottom 0
+    left 50%
+    border solid transparent
+    content ' '
+    height 0
+    width 0
+    position absolute
+    pointer-events none
+    border-color rgba(255, 255, 255, 0)
+    border-bottom-color grey0
+    border-width 8px
+    margin-left -8px
