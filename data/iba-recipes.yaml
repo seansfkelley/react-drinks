@@ -735,7 +735,7 @@
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
     base:
-      - whiskey
+      - vodka
       - liqueur
 -
     name: "Golden Dream"

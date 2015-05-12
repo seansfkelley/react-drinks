@@ -58,7 +58,7 @@ log.info "loaded #{RECIPES.length} recipes"
 
 unassignedBases = _.where RECIPES, { base : 'UNASSIGNED' }
 if unassignedBases.length
-  log.warn "#{unassignedBases.length} recipes have an unassigned base liquor"
+  log.warn "#{unassignedBases.length} recipes have an unassigned base liquor: #{_.pluck(unassignedBases, 'name').join ', '}"
 
 revalidatorUtils.validateOrThrow RECIPES, {
   type  : 'array'
