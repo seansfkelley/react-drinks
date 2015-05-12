@@ -13,6 +13,7 @@ IntertialSwipable = React.createClass {
     initialDelta    : React.PropTypes.number
     getNearestIndex : React.PropTypes.func
     itemOffsets     : React.PropTypes.array.isRequired
+    friction        : React.PropTypes.number
 
   render : ->
     <div
@@ -49,6 +50,7 @@ IntertialSwipable = React.createClass {
       onChangeDelta   : @props.onSwiping
       onFinish        : @props.onSwiped
       initialDelta    : @props.initialDelta
+      amplitudeFactor : if @props.friction then 1 - @props.friction
     }
 
   componentWillReceiveProps : (nextProps) ->
@@ -60,6 +62,7 @@ IntertialSwipable = React.createClass {
         onChangeDelta   : nextProps.onSwiping
         onFinish        : nextProps.onSwiped
         initialDelta    : nextProps.initialDelta
+        amplitudeFactor : if @props.friction then 1 - @props.friction
       }
     else if nextProps.initialDelta != @props.initialDelta
       @_logicBox?.setDeltaInstantly nextProps.initialDelta
@@ -75,6 +78,7 @@ Swipable = React.createClass {
   propTypes :
     initialIndex  : React.PropTypes.number
     onSlideChange : React.PropTypes.func
+    friction      : React.PropTypes.number
 
   getInitialState : ->
     zeroes = _.map _.range(React.Children.count(@props.children)), -> 0
@@ -104,6 +108,7 @@ Swipable = React.createClass {
       itemOffsets={@state.itemOffsets}
       initialDelta={@state.initialDelta}
       getNearestIndex={@_getNearestIndex}
+      friction={@props.friction}
       className={classnames 'viewport-container', @props.className}
     >
       <div

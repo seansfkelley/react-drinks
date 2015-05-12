@@ -59,6 +59,7 @@ RecipeListHeader = React.createClass {
         className='base-liquor-container'
         initialIndex={initialBaseLiquorIndex}
         onSlideChange={@_onBaseLiquorChange}
+        friction=0.7
       >
         {for base in @state.baseLiquors
           <div
