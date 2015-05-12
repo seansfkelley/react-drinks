@@ -44,11 +44,6 @@
     // the background coloration.
     margin-top 14px
     margin-right 12px
-
-  .mixability.mixable
-    //
-
-  .mixability.near-mixable
     padding 1px
 
     font-size 0.7em
@@ -56,11 +51,18 @@
     line-height 1em
     min-width 1em
 
-    border 1px solid theme-red
+    border 1px solid
     border-radius standard-border-radius
 
-    color theme-red
     text-align center
+
+  .mixability.mixable
+    border-color theme-green
+    color theme-green
+
+  .mixability.near-mixable
+    border-color theme-red
+    color theme-red
 
 // Okay this is not great, but it's probably marginally better than copy-pasting.
 .recipe-view, .editable-recipe-view
