@@ -18,7 +18,7 @@ FavoritesList      = require '../favorites/FavoritesList'
 
 MIXABILITY_FILTER_NAMES = {
   mixable          : 'Mixable'
-  nearMixable      : 'Nearly'
+  nearMixable      : '1-2 Missing'
   notReallyMixable : '3+ Missing'
 }
 
