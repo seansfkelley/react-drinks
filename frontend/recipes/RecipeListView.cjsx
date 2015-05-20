@@ -1,5 +1,6 @@
 _          = require 'lodash'
 React      = require 'react/addons'
+classnames = require 'classnames'
 
 { PureRenderMixin } = React.addons
 
@@ -32,16 +33,12 @@ RecipeListItem = React.createClass {
   mixins : [ PureRenderMixin ]
 
   render : ->
-    if @props.mixability == 0
-      mixabilityNode = <span className='mixability mixable'>
-        <i className='fa fa-check'/>
-      </span>
-    else if @props.mixability > 0
-      mixabilityNode = <span className='mixability near-mixable'>{@props.mixability}</span>
+    if @props.mixability > 0
+      mixabilityNode = <span className='mixability'>{@props.mixability}</span>
 
     ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
 
-    <ListItemClass className='recipe-list-item' onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
+    <ListItemClass className={classnames 'recipe-list-item', { 'is-mixable' : @props.mixability == 0 }} onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
       <span className='name'>{@props.recipe.name}</span>
       {mixabilityNode}
     </ListItemClass>

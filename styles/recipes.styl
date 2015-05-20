@@ -37,32 +37,26 @@
   &.incomplete
     padding-bottom 12px
 
+  &:not(.is-mixable)
+    color grey6
+    font-style italic
+
   .mixability
-    float right
-    // Unfortunately this magic constant has to stay -- normally line-height would take care of
-    // vertically centering things, but because we have to reduce the line height to not mess up
-    // the background coloration.
-    margin-top 14px
-    margin-right 12px
+    display inline-block
+    position relative
+    top -2px
+    margin-left 8px
     padding 1px
 
     font-size 0.7em
+    font-style normal
 
     line-height 1em
     min-width 1em
-
-    border 1px solid
-    border-radius standard-border-radius
-
     text-align center
 
-  .mixability.mixable
-    border-color theme-green
-    color theme-green
-
-  .mixability.near-mixable
-    border-color theme-red
-    color theme-red
+    border 1px solid grey6
+    border-radius standard-border-radius
 
 // Okay this is not great, but it's probably marginally better than copy-pasting.
 .recipe-view, .editable-recipe-view
