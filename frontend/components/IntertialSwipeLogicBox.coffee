@@ -61,7 +61,6 @@ class IntertialSwipeLogicBox
     if @captureType == CaptureType.INDETERMINATE
       if Math.abs(@initialTouchX - e.changedTouches[0].clientX) < Math.abs(@initialTouchY - e.changedTouches[0].clientY)
         @_set { captureType : CaptureType.NO }
-        clearInterval @_interval
         return
       else
         @_set { captureType : CaptureType.YES }
@@ -79,10 +78,14 @@ class IntertialSwipeLogicBox
     }
 
   onTouchEnd : (e) =>
-    if e.touches.length > 1 or @captureType == CaptureType.NO
+    if e.touches.length > 1
       return
 
     clearInterval @_interval
+
+    if @captureType == CaptureType.NO
+      @_autoScroll { target : @itemOffsets[@getNearestIndex(e)] }
+      return
 
     @onTouchMove e
     @_set {
