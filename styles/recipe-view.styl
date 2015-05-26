@@ -1,5 +1,8 @@
 @require 'constants'
 
+ingredient-height = list-item-height
+horizontal-padding = 12px
+
 .swipable-padding-wrapper
   display inline-block
   box-sizing border-box
@@ -25,49 +28,71 @@
   .fixed-header
     height title-bar-height
 
-  .recipe-description
-    // Make iPhone overscroll look less dumb.
-    > :first-child
-      border-top 1px solid grey2
-    // Ideally we could fill any remaining space with the last block's background color, but this will do.
-    > :not(:last-child), > :last-child:nth-child(odd)
-      border-bottom 1px solid grey2
+  .fixed-content-pane
+    padding 0 8px
 
-    .recipe-ingredients, .recipe-instructions, .recipe-notes
-      padding 0 20px 20px
+.recipe-view .recipe-instructions
+  padding-left 32px
+  padding-right horizontal-padding
+  margin 0
 
-    .recipe-section-header
-      font-size uppercase-font-size
+  .text-line:not(:last-child)
+    margin-bottom 6px
+
+.recipe-view .recipe-notes
+  padding 0 horizontal-padding
+
+.recipe-view .recipe-ingredients .measured-ingredient
+  font-weight 600
+  min-height ingredient-height
+  line-height (ingredient-height - 2px) // inline-block extra pixels bullshit
+  padding 0 horizontal-padding
+
+  &:nth-child(odd)
+    background-color grey1
+
+  &:nth-child(even)
+    background-color grey2
+
+  white-space nowrap
+
+  > *
+    display inline-block
+
+  .measure
+    min-width 25%
+    box-sizing border-box
+    padding-right 6px
+
+    .unit
+      font-size 0.75em
       text-transform uppercase
-      text-align center
 
-      padding 16px 0 16px
+  .ingredient
+    width 75%
 
-    .recipe-ingredients .measured-ingredient
-      font-weight 600
+  &.substituted, &.missing
+    .ingredient
+      font-style italic
+      color grey5
 
-      > *
-        display inline-block
+  &.substituted
+    .substitute-label, .substitute-content
+      font-size 0.8em
+      line-height (ingredient-height * 0.6)
 
-      .measure
-        width 30%
+    .substitute-label
+      color grey5
+      vertical-align top
+      margin-left 25%
+      margin-right 6px
 
-        .unit
-          font-size 0.75em
-          text-transform uppercase
+    .substitute-content
+      margin-bottom 8px
 
-      .ingredient
-        width 70%
+      :not(:first-child)
+        display block
 
-      .ingredient-subtitle
-        position relative
-        left 30%
-        width 70%
-
-        font-size 0.75em
-
-    .recipe-instructions .text .text-line:not(:last-child)
-      margin-bottom 6px
-
-    .recipe-notes
-      //
+.recipe-view
+  .recipe-instructions, .recipe-notes
+    margin-top 12px

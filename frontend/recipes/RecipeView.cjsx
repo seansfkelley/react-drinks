@@ -1,5 +1,6 @@
-_     = require 'lodash'
-React = require 'react/addons'
+_          = require 'lodash'
+React      = require 'react/addons'
+classnames = require 'classnames'
 { PureRenderMixin } = React.addons
 
 FluxMixin = require '../mixins/FluxMixin'
@@ -17,33 +18,20 @@ IngredientCategory =
   SUBSTITUTE : 'substitute'
   AVAILABLE  : 'available'
 
-HUMAN_READABLE_CATEGORY_TITLE =
-  missing    : 'You\'re Missing'
-  substitute : 'You Can Substitute'
-  available  : 'You Have'
-
-SectionHeader = React.createClass {
-  displayName : 'SectionHeader'
-
-  mixins : [ PureRenderMixin ]
-
-  propTypes :
-    text : React.PropTypes.string.isRequired
-
-  render : ->
-    <div className='recipe-section-header'>{@props.text}</div>
-}
-
 IngredientView = React.createClass {
   displayName : 'IngredientView'
 
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    displayAmount             : React.PropTypes.string
-    displayUnit               : React.PropTypes.string
-    displayIngredient         : React.PropTypes.string.isRequired
-    displayIngredientSubtitle : React.PropTypes.string
+    displayAmount      : React.PropTypes.string
+    displayUnit        : React.PropTypes.string
+    displayIngredient  : React.PropTypes.string.isRequired
+    displaySubstitutes : React.PropTypes.array
+
+  getDefaultProps : -> {
+    displaySubstitutes : []
+  }
 
   render : ->
     amount = utils.fractionify(@props.displayAmount ? '')
@@ -51,17 +39,18 @@ IngredientView = React.createClass {
     # The space is necessary to space out the spans from each other. Newlines are insufficient.
     # Include the keys only to keep React happy so that it warns us about significant uses of
     # arrays without key props.
-    <div className='measured-ingredient'>
+    <div className={classnames 'measured-ingredient', @props.className}>
       <span className='measure'>
         <span className='amount'>{amount}</span>
         {' '}
         <span className='unit'>{unit}</span>
       </span>
       <span className='ingredient'>{@props.displayIngredient}</span>
-      {if @props.displayIngredientSubtitle
+      {if @props.displaySubstitutes.length
         [
           <br key='br'/>
-          <span className='ingredient-subtitle' key='subtitle'>{@props.displayIngredientSubtitle}</span>
+          <span className='substitute-label' key='label'>try:</span>
+          <span className='substitute-content' key='content'>{@props.displaySubstitutes}</span>
         ]
       }
     </div>
@@ -116,27 +105,22 @@ RecipeView = React.createClass {
         .flatten()
         .value()
     else
-      ingredientNodes = [
-        <SectionHeader text='Ingredients' key={'header-' + IngredientCategory.AVAILABLE}/>
-      ].concat _.map @props.recipe.ingredients, (i) ->
+      ingredientNodes = _.map @props.recipe.ingredients, (i) ->
         <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
 
     if @props.recipe.notes?
       recipeNotes =
         <div className='recipe-notes'>
-          <SectionHeader text='Notes'/>
           <div className='text'>
-            {@props.recipe.notes}
+            {utils.fractionify @props.recipe.notes}
           </div>
         </div>
 
-    instructionLines = _.map @props.recipe.instructions.split('\n'), (l, i) ->
-      return <div className='text-line' key={i}>{l}</div>
-    recipeInstructions =
-      <div className='recipe-instructions'>
-        <SectionHeader text='Instructions'/>
-        <div className='text'>{instructionLines}</div>
-      </div>
+    instructionLines = _.chain @props.recipe.instructions.split('\n')
+      .compact()
+      .map (l, i) -> <li className='text-line' key={i}>{utils.fractionify l}</li>
+      .value()
+    recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
 
     <FixedHeaderFooter
       className='default-modal recipe-view'
@@ -156,16 +140,21 @@ RecipeView = React.createClass {
     if measuredIngredients.length == 0
       return []
     else
-      header = <SectionHeader text={HUMAN_READABLE_CATEGORY_TITLE[category]} key={'header-' + category}/>
       if category == IngredientCategory.SUBSTITUTE
         measuredIngredients = _.map measuredIngredients, (i) ->
           if i.have.length > 1
-            displayIngredientSubtitle = "(try: #{_.initial(i.have).join(', ')} or #{_.last(i.have)})"
+            displaySubstitute = "#{_.initial(i.have).join(', ')} or #{_.last(i.have)}"
           else
-            displayIngredientSubtitle = "(try: #{i.have[0]})"
-          return _.defaults { displayIngredientSubtitle }, i.need
-      ingredients = _.map measuredIngredients, (i) -> <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
-      return [ header ].concat ingredients
+            displaySubstitute = i.have[0]
+          return _.defaults {
+            className          : 'substituted'
+            displaySubstitutes : i.have
+          }, i.need
+      else if category == IngredientCategory.MISSING
+        measuredIngredients = _.map measuredIngredients, (i) ->
+          return _.defaults { className : 'missing' }, i
+
+      return _.map measuredIngredients, (i) -> <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
 
   _onClose : ->
     AppDispatcher.dispatch {

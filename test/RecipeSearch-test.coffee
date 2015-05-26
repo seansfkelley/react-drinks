@@ -274,7 +274,10 @@ describe 'RecipeSearch', ->
         '0' : [
           ingredients : [ ResultIngredient.A_CHILD_1 ]
           missing     : []
-          substitute  : [{ need : ResultIngredient.A_CHILD_1, have : [ ResultIngredient.A_CHILD_2.display ] }]
+          substitute  : [{
+            need : ResultIngredient.A_CHILD_1
+            have : [ ResultIngredient.A_CHILD_2.display ]
+          }]
           available   : []
         ]
       }
@@ -285,7 +288,10 @@ describe 'RecipeSearch', ->
         '0' : [
           ingredients : [ ResultIngredient.A_CHILD_1 ]
           missing     : []
-          substitute  : [ { need : ResultIngredient.A_CHILD_1, have : [ ResultIngredient.A_ROOT.display ] }]
+          substitute  : [{
+            need : ResultIngredient.A_CHILD_1
+            have : [ ResultIngredient.A_ROOT.display ]
+          }]
           available   : []
         ]
       }
