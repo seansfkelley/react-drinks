@@ -4,27 +4,21 @@ horizontal-spacing = 8px
 vertical-spacing = 8px
 
 .editable-recipe-view
-  .title-bar input
-    width 90%
-    height 100%
-
-    text-align center
-
+  .fixed-header
+    background-color grey8
     color grey0
-    font-weight 600
-    font-size title-font-size
 
-    background transparent
-    border none
-
-    &::-webkit-input-placeholder
-      color grey3
-      font-weight 600
-      font-size title-font-size
+    border-top-left-radius inherit
+    border-top-right-radius inherit
 
   // A bunch of this is copy-pasted from the regular recipe display. Can refactor together?
   .fixed-content-pane
     background-color grey0
+
+  .fixed-footer
+    border-bottom-left-radius inherit
+    border-bottom-right-radius inherit
+
 
   .recipe-description > :nth-child(odd)
     background-color grey1
@@ -43,6 +37,24 @@ vertical-spacing = 8px
       text-align center
 
       padding (2 * vertical-spacing) 0 (2 * vertical-spacing)
+
+.editable-recipe-view .title-bar input
+  width 90%
+  height 100%
+
+  text-align center
+
+  color grey0
+  font-weight 600
+  font-size title-font-size
+
+  background transparent
+  border none
+
+  &::-webkit-input-placeholder
+    color grey3
+    font-weight 600
+    font-size title-font-size
 
 .editable-recipe-view .recipe-ingredients .recipe-section-header + *
   margin-top 0
