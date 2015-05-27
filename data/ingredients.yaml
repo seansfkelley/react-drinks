@@ -121,7 +121,6 @@
   group      : syrup
 -
   display    : Honey Whiskey
-  generic    : whiskey
   group      : whiskey
 -
   display    : Lemon Juice
@@ -240,7 +239,6 @@
     - soda water
 -
   display    : Scotch
-  generic    : whiskey
   group      : whiskey
 -
   display    : Orange Juice
