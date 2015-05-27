@@ -14,7 +14,7 @@ AppDispatcher    = require '../AppDispatcher'
 utils            = require '../utils'
 stylingConstants = require '../stylingConstants'
 
-{ RecipeStore } = require '../stores'
+{ RecipeStore, UiStore } = require '../stores'
 
 SwipableRecipeView = require './SwipableRecipeView'
 RecipeListHeader   = require './RecipeListHeader'
@@ -133,6 +133,7 @@ RecipeListView = React.createClass {
       'filteredAlphabeticalRecipes'
       'mixabilityByRecipeId'
     )
+    FluxMixin UiStore, 'baseLiquorFilter'
     PureRenderMixin
   ]
 
@@ -158,8 +159,11 @@ RecipeListView = React.createClass {
     </FixedHeaderFooter>
 
   componentDidUpdate : (prevProps, prevState) ->
-    if not @refs.search.isFocused() and prevState.recipeSort != @state.recipeSort
-      @refs.container.scrollTo stylingConstants.RECIPE_LIST_ITEM_HEIGHT
+    if not @refs.search.isFocused() and prevState.baseLiquorFilter != @state.baseLiquorFilter
+      @_attemptScrollDown()
+
+  _attemptScrollDown : _.debounce ->
+    @refs.container.scrollTo stylingConstants.RECIPE_LIST_ITEM_HEIGHT - stylingConstants.RECIPE_LIST_HEADER_HEIGHT / 2
 
   _onSearch : (searchTerm) ->
     AppDispatcher.dispatch {
