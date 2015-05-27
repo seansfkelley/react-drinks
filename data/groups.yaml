@@ -50,7 +50,7 @@
     display : 'Other Mixers'
   -
     type    : 'fruit'
-    display : 'Fruit'
+    display : 'Fruits and Berries'
   -
     type    : 'vegetable'
     display : 'Vegetables'
