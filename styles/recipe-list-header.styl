@@ -1,15 +1,12 @@
 @require 'constants'
-@require 'mixins'
 
 vertical-padding = 6px
 
+.title-bar.recipe-list-header, .base-liquor-container
+  background-color grey7
+
 .title-bar.recipe-list-header
   font-size inherit
-
-  shadow('bottom', 2px)
-  // To see the shadow.
-  position relative
-  z-index 1
 
   .mixability-selector
     display flex
@@ -24,8 +21,8 @@ vertical-padding = 6px
 
     text-transform uppercase
     font-size uppercase-font-size - 0.1em
-    border 1px solid grey7
-    color grey8
+    border 1px solid grey5
+    color grey0
     // I'm fucking sick of not being able to sanely and simply vertically-align things.
     line-height (title-bar-height - (vertical-padding + 1px) * 2)
 
@@ -33,7 +30,6 @@ vertical-padding = 6px
     transition background-color transition-duration-quick, color transition-duration-quick
 
     &.selected
-      color grey0
       background-color grey6
 
     &:not(:first-child)
@@ -47,12 +43,13 @@ vertical-padding = 6px
       border-top-right-radius standard-border-radius
       border-bottom-right-radius standard-border-radius
 
+  i.fa
+    color grey0
+
 .base-liquor-container
   height title-bar-height
   width 100%
   font-size title-font-size
-
-  background-color grey1
 
   .base-liquor-option
     width 25%
@@ -63,6 +60,9 @@ vertical-padding = 6px
 
     height 100%
     line-height title-bar-height
+
+    &.selected
+      color grey0
 
     &:not(.selected)
       color grey3
