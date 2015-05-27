@@ -7,7 +7,6 @@ FluxMixin = require '../mixins/FluxMixin'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
-ButtonBar         = require '../components/ButtonBar'
 
 AppDispatcher = require '../AppDispatcher'
 utils         = require '../utils'
@@ -56,36 +55,6 @@ IngredientView = React.createClass {
     </div>
 }
 
-RecipeFooter = React.createClass {
-  displayName : 'RecipeFooter'
-
-  propTypes :
-    normalizedRecipeName : React.PropTypes.string.isRequired
-    onClose              : React.PropTypes.func.isRequired
-
-  mixins : [
-    PureRenderMixin
-    FluxMixin UiStore, 'favoritedRecipes'
-  ]
-
-  render : ->
-    if @state.favoritedRecipes[@props.normalizedRecipeName]?
-      saveIcon = 'fa-star'
-    else
-      saveIcon = 'fa-star-o'
-
-    <ButtonBar>
-      <ButtonBar.Button icon={saveIcon} label='Favorite' onTouchTap={@_saveTo}/>
-      <ButtonBar.Button icon='fa-times' label='Close' onTouchTap={@props.onClose}/>
-    </ButtonBar>
-
-  _saveTo : ->
-    AppDispatcher.dispatch {
-      type           : 'toggle-favorite-recipe'
-      recipeId : @props.normalizedRecipeName
-    }
-}
-
 RecipeView = React.createClass {
   displayName : 'RecipeView'
 
@@ -122,10 +91,13 @@ RecipeView = React.createClass {
       .value()
     recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
 
+    header = <TitleBar rightIcon='fa-times' rightIconOnTouchTap={@_closeModal}>
+      {@props.recipe.name}
+    </TitleBar>
+
     <FixedHeaderFooter
       className='default-modal recipe-view'
-      header={<TitleBar>{@props.recipe.name}</TitleBar>}
-      footer={<RecipeFooter normalizedRecipeName={@props.recipe.recipeId} onClose={@_onClose}/>}
+      header={header}
     >
       <div className='recipe-description'>
         <div className='recipe-ingredients'>
@@ -156,7 +128,7 @@ RecipeView = React.createClass {
 
       return _.map measuredIngredients, (i) -> <IngredientView {...i} key={i.tag ? i.displayIngredient}/>
 
-  _onClose : ->
+  _closeModal : ->
     AppDispatcher.dispatch {
       type : 'hide-modal'
     }

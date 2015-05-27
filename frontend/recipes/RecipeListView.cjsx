@@ -16,8 +16,6 @@ stylingConstants = require '../stylingConstants'
 
 { RecipeStore } = require '../stores'
 
-FavoritesList = require '../favorites/FavoritesList'
-
 SwipableRecipeView = require './SwipableRecipeView'
 RecipeListHeader   = require './RecipeListHeader'
 

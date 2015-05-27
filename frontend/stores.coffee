@@ -91,7 +91,7 @@ IngredientStore = new class extends FluxStore
         .value()
 
 UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
-UI_PERSISTABLE_FIELDS = [ 'mixabilityFilters', 'favoritedRecipes', 'baseLiquorFilter' ]
+UI_PERSISTABLE_FIELDS = [ 'mixabilityFilters', 'baseLiquorFilter' ]
 
 MIXABILITY_FILTER_RANGES = {
   mixable          : [ 0, 0 ]
@@ -111,7 +111,6 @@ UiStore = new class extends FluxStore
   fields : ->
     return _.extend {
       openIngredientGroups : {}
-      favoritedRecipes     : {}
       baseLiquorFilter     : 'all'
       mixabilityFilters    :
         mixable          : true
@@ -134,10 +133,6 @@ UiStore = new class extends FluxStore
     else
       @openIngredientGroups = {}
       @openIngredientGroups[group] = true
-
-  'toggle-favorite-recipe' : ({ recipeId }) ->
-    @favoritedRecipes = _toggleKey @favoritedRecipes, recipeId
-    @_persist()
 
   _persist : ->
     localStorage[UI_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, UI_PERSISTABLE_FIELDS)
@@ -288,4 +283,4 @@ module.exports = {
   UiStore
 }
 
-_.extend (window.debug ?= {}), module.exports
+_.extend window.debug, module.exports

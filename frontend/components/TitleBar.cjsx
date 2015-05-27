@@ -46,7 +46,7 @@ TitleBar = React.createClass {
   _stopTouchStart : (e) ->
     # This is hacky, but both of these are independently necessary.
     # 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
-    e.stopPropagation()
+    # e.stopPropagation()
     # 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
     e.preventDefault()
 }

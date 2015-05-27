@@ -14,7 +14,6 @@ AppDispatcher = require '../AppDispatcher'
 { UiStore, IngredientStore } = require '../stores'
 
 EditableRecipeView = require './EditableRecipeView'
-FavoritesList      = require '../favorites/FavoritesList'
 
 MIXABILITY_FILTER_NAMES = {
   mixable          : 'Mixable'
@@ -38,8 +37,6 @@ RecipeListHeader = React.createClass {
 
     <div>
       <TitleBar
-        leftIcon='fa-star'
-        leftIconOnTouchTap={@_openFavoritesList}
         rightIcon='fa-plus'
         rightIconOnTouchTap={@_newRecipe}
         className='recipe-list-header'
@@ -90,12 +87,6 @@ RecipeListHeader = React.createClass {
     AppDispatcher.dispatch {
       type      : 'show-modal'
       component : <EditableRecipeView/>
-    }
-
-  _openFavoritesList : ->
-    AppDispatcher.dispatch {
-      type      : 'show-pushover'
-      component : <FavoritesList/>
     }
 }
 

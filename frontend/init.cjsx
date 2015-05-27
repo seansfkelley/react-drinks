@@ -1,3 +1,5 @@
+window.debug = {}
+
 React = require 'react/addons'
 
 App                 = require './App'
