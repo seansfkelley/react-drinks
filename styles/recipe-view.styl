@@ -71,10 +71,9 @@ horizontal-padding = 12px
   .ingredient
     width 75%
 
-  &.substituted, &.missing
-    .ingredient
-      font-style italic
-      color grey5
+  &.missing .measure, &.missing .ingredient, &.substituted .ingredient
+    font-style italic
+    color grey5
 
   &.substituted
     .substitute-label, .substitute-content
