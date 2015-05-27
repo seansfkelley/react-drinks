@@ -3,7 +3,7 @@
 vertical-padding = 6px
 
 .title-bar.recipe-list-header, .base-liquor-container
-  background-color grey7
+  background-color grey3
 
 .title-bar.recipe-list-header
   font-size inherit
@@ -22,7 +22,7 @@ vertical-padding = 6px
     text-transform uppercase
     font-size uppercase-font-size - 0.1em
     border 1px solid grey5
-    color grey0
+    color grey10
     // I'm fucking sick of not being able to sanely and simply vertically-align things.
     line-height (title-bar-height - (vertical-padding + 1px) * 2)
 
@@ -30,7 +30,7 @@ vertical-padding = 6px
     transition background-color transition-duration-quick, color transition-duration-quick
 
     &.selected
-      background-color grey6
+      background-color grey4
 
     &:not(:first-child)
       border-left none
@@ -44,7 +44,7 @@ vertical-padding = 6px
       border-bottom-right-radius standard-border-radius
 
   i.fa
-    color grey0
+    color grey10
 
 .base-liquor-container
   height title-bar-height
@@ -62,10 +62,10 @@ vertical-padding = 6px
     line-height title-bar-height
 
     &.selected
-      color grey0
+      color grey10
 
     &:not(.selected)
-      color grey3
+      color grey6
 
   // For the arrow.
   position relative
@@ -81,6 +81,6 @@ vertical-padding = 6px
     position absolute
     pointer-events none
     border-color rgba(255, 255, 255, 0)
-    border-bottom-color grey0
+    border-bottom-color grey10
     border-width 8px
     margin-left -8px

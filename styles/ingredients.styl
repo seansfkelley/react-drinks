@@ -5,15 +5,15 @@ right-padding = 12px
 
 .title-bar.ingredients-footer
   shadow-inset('top', 3px)
-  background-color grey8a
-  color grey0
+  background-color grey1
+  color grey10
 
   .fa.float-left
-    border-right 1px solid grey7
+    border-right 1px solid grey3
 
   // There's no icon here yet.
   // .fa.float-right
-  //   border-left 1px solid grey7
+  //   border-left 1px solid grey3
 
   // Visual corrections.
   .fa.fa-square-o, .fa.fa-check-square-o
@@ -25,35 +25,35 @@ right-padding = 12px
     padding-right 10px
 
 .ingredient-selection-view
-  background-color grey8a
+  background-color grey1
 
   .title-bar
-    color grey0
+    color grey10
 
   .search-bar
     .fa, input
-      color grey2
+      color grey7
 
   .fixed-header
     // Use a non-alpha color so it looks better when it overlays lighter elements.
-    shadow('bottom', 2px, darken(grey8a, 25%))
+    shadow('bottom', 2px, darken(grey1, 25%))
     z-index 1 // To see the shadow.
 
 .list.ingredient-list.headered-list
-  background-color grey8a
+  background-color grey1
 
   .list-header, .list-item
     padding-left 16px
 
   .list-header
-    background-color grey8a
+    background-color grey1
     color grey5
     text-transform uppercase
     font-size uppercase-font-size
     line-height list-item-height
     font-weight 600
 
-    border-top 1px solid lighten(grey8a, 5%)
+    border-top 1px solid lighten(grey1, 5%)
 
     .count
       float right
@@ -66,7 +66,7 @@ right-padding = 12px
       line-height 1em
       min-width 1em
 
-      background-color grey8
+      background-color grey2
       border-radius standard-border-radius
 
       color grey5
@@ -84,8 +84,8 @@ right-padding = 12px
 
   .list-item
     line-height list-item-height
-    background-color grey8
-    color grey1
+    background-color grey2
+    color grey8
 
     .has-ingredient-icon
       display none
@@ -106,7 +106,7 @@ right-padding = 12px
       display inline-block
 
     &:not(:first-child)
-      border-top 1px solid darken(grey8, 5%)
+      border-top 1px solid darken(grey2, 5%)
 
   .empty-list-text
     color grey5

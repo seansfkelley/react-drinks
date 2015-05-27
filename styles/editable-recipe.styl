@@ -5,15 +5,15 @@ vertical-spacing = 8px
 
 .editable-recipe-view
   .fixed-header
-    background-color grey8
-    color grey0
+    background-color grey2
+    color grey10
 
     border-top-left-radius inherit
     border-top-right-radius inherit
 
   // A bunch of this is copy-pasted from the regular recipe display. Can refactor together?
   .fixed-content-pane
-    background-color grey0
+    background-color grey10
 
   .fixed-footer
     border-bottom-left-radius inherit
@@ -21,15 +21,15 @@ vertical-spacing = 8px
 
 
   .recipe-description > :nth-child(odd)
-    background-color grey1
+    background-color grey8
 
   .recipe-description
     // Make iPhone overscroll look less dumb.
     > :first-child
-      border-top 1px solid grey2
+      border-top 1px solid grey7
     // Ideally we could fill any remaining space with the last block's background color, but this will do.
     > :not(:last-child), > :last-child:nth-child(odd)
-      border-bottom 1px solid grey2
+      border-bottom 1px solid grey7
 
     .recipe-section-header
       font-size uppercase-font-size
@@ -44,7 +44,7 @@ vertical-spacing = 8px
 
   text-align center
 
-  color grey0
+  color grey10
   font-weight 600
   font-size title-font-size
 
@@ -52,7 +52,7 @@ vertical-spacing = 8px
   border none
 
   &::-webkit-input-placeholder
-    color grey3
+    color grey6
     font-weight 600
     font-size title-font-size
 
@@ -65,7 +65,7 @@ vertical-spacing = 8px
 
   border-radius standard-border-radius
   text-align center
-  background-color grey2
+  background-color grey7
 
 .editable-recipe-view .editable-ingredient
   padding-left horizontal-spacing
@@ -78,7 +78,7 @@ vertical-spacing = 8px
 
 .editable-recipe-view .editable-text-area
   border-radius standard-border-radius
-  border 1px solid grey2
+  border 1px solid grey7
   width "calc(100% - %s)" % (2 * horizontal-spacing)
   margin-left horizontal-spacing
   margin-bottom 2 * vertical-spacing
