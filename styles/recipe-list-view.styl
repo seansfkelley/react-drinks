@@ -12,7 +12,26 @@
       text-transform uppercase
       font-weight 600
 
-.recipe-list-view .recipe-list-item
+.recipe-list-view .list .list-header
+  color grey9
+
+  height 1px
+  background-color transparent
+  line-height 0
+  padding-left 6px
+
+  &:after
+    content ' '
+    height 1px
+    background-color grey5
+    width calc(100% - 14px - 8px) // 12 for margin (left); 8 for right
+    margin-left 14px
+    display block
+
+.recipe-list-view .list .list-item
+  padding-left 16px
+  border none
+
   &.incomplete
     padding-bottom 12px
 

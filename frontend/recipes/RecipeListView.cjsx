@@ -36,7 +36,7 @@ RecipeListItem = React.createClass {
 
     ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
 
-    <ListItemClass className={classnames 'recipe-list-item', { 'is-mixable' : @props.mixability == 0 }} onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
+    <ListItemClass className={classnames { 'is-mixable' : @props.mixability == 0 }} onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
       <span className='name'>{@props.recipe.name}</span>
       {mixabilityNode}
     </ListItemClass>
@@ -64,7 +64,7 @@ IncompleteRecipeListItem = React.createClass {
 
     ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
 
-    <ListItemClass className='recipe-list-item incomplete' onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
+    <ListItemClass className='incomplete' onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
       <div className='name'>{@props.recipe.name}</div>
       {missingIngredients}
     </ListItemClass>
