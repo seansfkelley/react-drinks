@@ -1,8 +1,6 @@
 React = require 'react/addons'
 
-FixedHeaderFooter = require './components/FixedHeaderFooter'
-RecipeListView    = require './recipes/RecipeListView'
-IngredientsFooter = require './ingredients/IngredientsFooter'
+RecipeListView = require './recipes/RecipeListView'
 
 App = React.createClass {
   displayName : 'App'
@@ -11,9 +9,7 @@ App = React.createClass {
 
   render : ->
     <div className='app-event-wrapper' onTouchStart={@_deselectActiveElement}>
-      <FixedHeaderFooter footer={<IngredientsFooter/>}>
-        <RecipeListView/>
-      </FixedHeaderFooter>
+      <RecipeListView/>
     </div>
 
   _deselectActiveElement : ->

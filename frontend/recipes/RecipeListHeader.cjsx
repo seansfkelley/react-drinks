@@ -13,7 +13,8 @@ AppDispatcher = require '../AppDispatcher'
 
 { UiStore, IngredientStore } = require '../stores'
 
-EditableRecipeView = require './EditableRecipeView'
+EditableRecipeView      = require './EditableRecipeView'
+IngredientSelectionView = require '../ingredients/IngredientSelectionView'
 
 MIXABILITY_FILTER_NAMES = {
   mixable          : 'Mixable'
@@ -37,6 +38,8 @@ RecipeListHeader = React.createClass {
 
     <div>
       <TitleBar
+        leftIcon='fa-pencil'
+        leftIconOnTouchTap={@_openIngredientPanel}
         rightIcon='fa-plus'
         rightIconOnTouchTap={@_newRecipe}
         className='recipe-list-header'
@@ -87,6 +90,12 @@ RecipeListHeader = React.createClass {
     AppDispatcher.dispatch {
       type      : 'show-modal'
       component : <EditableRecipeView/>
+    }
+
+  _openIngredientPanel : ->
+    AppDispatcher.dispatch {
+      type      : 'show-flyup'
+      component : <IngredientSelectionView/>
     }
 }
 
