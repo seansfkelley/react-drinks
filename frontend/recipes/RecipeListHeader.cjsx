@@ -88,7 +88,7 @@ RecipeListHeader = React.createClass {
 
   _newRecipe : ->
     AppDispatcher.dispatch {
-      type      : 'show-modal'
+      type      : 'show-flyup'
       component : <EditableRecipeView/>
     }
 

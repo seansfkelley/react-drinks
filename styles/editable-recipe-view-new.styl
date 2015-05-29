@@ -1,0 +1,53 @@
+@require 'constants'
+
+.editable-recipe-page
+  background-color grey10
+
+  .fixed-content-pane
+    display flex
+    justify-content center
+    align-items center
+
+.navigation-header
+  height title-bar-height
+
+  i.fa
+    height title-bar-height
+    line-height title-bar-height
+
+  i.fa.fa-times
+    width title-bar-height
+    text-align center
+
+  i.fa.fa-chevron-left
+    padding-right 8px
+
+  .back-button
+    display inline-block
+    padding 0 8px
+
+.editable-recipe-page .name-page
+  position relative
+  top (- title-bar-height / 2) // Make it look centered in the whole screen.
+  width 75%
+
+  input
+    width 100%
+    padding 10px
+
+    font-size title-font-size
+
+    border 1px solid grey8
+
+    &::-webkit-input-placeholder
+      font-size title-font-size
+
+  i.fa
+    font-size title-font-size
+    float right
+
+    height title-bar-height
+    width title-bar-height
+
+    text-align center
+    line-height title-bar-height
