@@ -5,6 +5,32 @@ FixedHeaderFooter = require '../components/FixedHeaderFooter'
 
 AppDispatcher = require '../AppDispatcher'
 
+MeasuredIngredient = require './MeasuredIngredient'
+
+store = {
+  name         : ''
+  ingredients  : [
+    isEditing : false
+    raw       : '1 oz gin'
+    display   :
+      displayAmount     : '1'
+      displayUnit       : 'oz'
+      displayIngredient : 'gin'
+  ,
+    isEditing : true
+    raw       : '1/2 oz Lillet'
+  ,
+    isEditing : false
+    raw       : '1/4 oz vodka'
+    display   :
+      displayAmount     : '1/4'
+      displayUnit       : 'oz'
+      displayIngredient : 'vodka'
+  ]
+  instructions : ''
+  notes        : ''
+}
+
 NavigationHeader = React.createClass {
   displayName : 'NavigationHeader'
 
@@ -26,15 +52,6 @@ NavigationHeader = React.createClass {
     AppDispatcher.dispatch {
       type : 'hide-flyup'
     }
-}
-
-
-
-store = {
-  name         : ''
-  ingredients  : []
-  instructions : ''
-  notes        : ''
 }
 
 EditableNamePage = React.createClass {
@@ -75,6 +92,32 @@ EditableNamePage = React.createClass {
     store.name = e.target.value
 }
 
+EditableIngredient = React.createClass {
+  displayName : 'EditableIngredient'
+
+  propTypes :
+    defaultValue : React.PropTypes.string
+
+  render : ->
+    <div className='editable-ingredient2'>
+      <input
+        type='text'
+        placeholder='ex: 1 oz gin'
+        autoCorrect='on'
+        autoCapitalize='off'
+        autoComplete='off'
+        spellCheck='false'
+        ref='input'
+        defaultValue={@props.defaultValue}
+        onChange={@_onChange}
+        onTouchTap={@focus}
+      />
+    </div>
+
+  focus : ->
+    @refs.input.getDOMNode().focus()
+}
+
 EditableIngredientsPage = React.createClass {
   displayName : 'EditableIngredientsPage'
 
@@ -83,11 +126,22 @@ EditableIngredientsPage = React.createClass {
     next : React.PropTypes.func.isRequired
 
   render : ->
+    ingredientNodes = _.map store.ingredients, (i) ->
+      if i.isEditing
+        return <EditableIngredient defaultValue={i.raw}/>
+      else
+        return <MeasuredIngredient {...i.display}/>
+
     <FixedHeaderFooter
       header={<NavigationHeader backTitle={'"' + store.name + '"'} goBack={@props.back}/>}
       className='editable-recipe-page'
     >
-      <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
+      <div className='ingredients-page'>
+        <div className='ingredients-list'>
+          {ingredientNodes}
+        </div>
+        <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
+      </div>
     </FixedHeaderFooter>
 }
 
@@ -156,82 +210,6 @@ AppDispatcher       = require '../AppDispatcher'
 stylingConstants    = require '../stylingConstants'
 utils               = require '../utils'
 { IngredientStore } = require '../stores'
-
-EditableIngredient = require './EditableIngredient'
-
-EditableTitleBar = React.createClass {
-  displayName : 'EditableTitleBar'
-
-  propTypes :
-    onChange : React.PropTypes.func
-
-  render : ->
-    <TitleBar>
-      <input
-        type='text'
-        placeholder='Recipe title...'
-        autoCorrect='off'
-        autoCapitalize='on'
-        autoComplete='off'
-        spellCheck='false'
-        ref='input'
-        onChange={@_onChange}
-        onTouchTap={@focus}
-      />
-    </TitleBar>
-
-  getText : ->
-    return @refs.input.getDOMNode().value
-
-  focus : ->
-    @refs.input.getDOMNode().focus()
-
-  _onChange : ->
-    @props.onChange?()
-}
-
-EditableFooter = React.createClass {
-  displayName : 'EditableFooter'
-
-  propTypes :
-    canSave : React.PropTypes.bool
-    save    : React.PropTypes.func.isRequired
-
-  getInitialState : ->
-    return {
-      confirmingClose : false
-    }
-
-  render : ->
-    if @state.confirmingClose
-      closeButton = <ButtonBar.Button icon='fa-exclamation-triangle' label='You Sure?' onTouchTap={@_close}/>
-    else
-      closeButton = <ButtonBar.Button icon='fa-times' label='Cancel' onTouchTap={@_confirmClose}/>
-
-    <ButtonBar>
-      <ButtonBar.Button icon='fa-save' label='Save' disabled={not @props.canSave} onTouchTap={@_save}/>
-      {closeButton}
-    </ButtonBar>
-
-  _save : (e) ->
-    return if not @props.canSave
-    @props.save()
-    e.stopPropagation()
-
-  _close : ->
-    clearTimeout @_confirmTimeout
-    AppDispatcher.dispatch {
-      type : 'hide-modal'
-    }
-
-  _confirmClose : ->
-    @setState { confirmingClose : true }
-    @_confirmTimeout = setTimeout @_resetConfirm, 2500
-
-  _resetConfirm : ->
-    clearTimeout @_confirmTimeout
-    @setState { confirmingClose : false }
-}
 
 EditableTextArea = React.createClass {
   displayName : 'EditableTextArea'

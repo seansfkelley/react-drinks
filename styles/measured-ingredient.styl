@@ -1,4 +1,5 @@
 @require 'constants'
+@require 'mixins'
 
 ingredient-height = list-item-height
 
@@ -8,11 +9,7 @@ ingredient-height = list-item-height
   line-height (ingredient-height - 2px) // inline-block extra pixels bullshit
   padding 0 12px
 
-  &:nth-child(odd)
-    background-color grey8
-
-  &:nth-child(even)
-    background-color grey7
+  zebra(grey8, grey7)
 
   white-space nowrap
 

@@ -1,4 +1,7 @@
 @require 'constants'
+@require 'mixins'
+
+ingredient-height = list-item-height
 
 .editable-recipe-page
   background-color grey10
@@ -26,6 +29,16 @@
     display inline-block
     padding 0 8px
 
+.editable-recipe-page i.fa.fa-arrow-right
+    font-size title-font-size
+    float right
+
+    height title-bar-height
+    width title-bar-height
+
+    text-align center
+    line-height title-bar-height
+
 .editable-recipe-page .name-page
   position relative
   top (- title-bar-height / 2) // Make it look centered in the whole screen.
@@ -42,12 +55,19 @@
     &::-webkit-input-placeholder
       font-size title-font-size
 
-  i.fa
-    font-size title-font-size
-    float right
+.editable-recipe-page .ingredients-page
+  box-sizing border-box
+  width 100%
+  padding 0 8px
 
-    height title-bar-height
-    width title-bar-height
+  .editable-ingredient2
+    zebra(grey8, grey7)
 
-    text-align center
-    line-height title-bar-height
+    input
+      width 100%
+      padding-left 12px
+
+      background-color transparent
+
+      height ingredient-height
+      line-height ingredient-height
