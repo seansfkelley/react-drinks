@@ -1,6 +1,9 @@
 _      = require 'lodash'
 React  = require 'react/addons'
 
+{ IngredientStore } = require '../stores'
+
+List              = require '../components/List'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 
 AppDispatcher = require '../AppDispatcher'
@@ -112,6 +115,14 @@ EditableIngredient = React.createClass {
         onChange={@_onChange}
         onTouchTap={@focus}
       />
+      <div className='ingredient-list-header'>A Type Of</div>
+      <List className='ingredient-group-list'>
+        {for group in _.pluck IngredientStore.groupedIngredients, 'name'
+          <List.Item>
+            {group}
+            <i className='fa fa-chevron-right'/>
+          </List.Item>}
+      </List>
     </div>
 
   focus : ->
