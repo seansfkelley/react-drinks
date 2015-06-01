@@ -61,23 +61,37 @@ list-padding = 12px
   width 100%
   padding 0 8px
 
-  .ingredients-list .deletable
+  .ingredients-list .deletable, .editable-ingredient2
     zebra(grey8, grey7)
 
-  .editable-ingredient2, .measured-ingredient
+  .measured-ingredient
     background-color transparent
 
   .editable-ingredient2
     padding-bottom list-padding
 
-    input
+    .input-line
       width 100%
       padding-left list-padding
+      display flex
+      box-sizing border-box
 
-      background-color transparent
+      input, .done-button
+        height ingredient-height
+        line-height ingredient-height
 
-      height ingredient-height
-      line-height ingredient-height
+      input
+        flex 1
+        background-color transparent
+
+      .done-button
+        width 80px
+        text-align center
+        text-transform uppercase
+        font-size uppercase-font-size
+        font-weight 600
+
+        background-color grey6
 
     .ingredient-list-header
       text-transform uppercase
@@ -95,12 +109,9 @@ list-padding = 12px
       .list-item
         padding-left 16px
 
-        background-color grey1
-        color grey5
-        text-transform uppercase
-        font-size uppercase-font-size
+        background-color grey2
+        color grey8
         line-height list-item-height
-        font-weight 600
 
         border-top 1px solid lighten(grey1, 5%)
 
@@ -108,3 +119,7 @@ list-padding = 12px
           float right
           line-height inherit
           padding-right 12px
+
+          color grey5
+
+          text-shadow 0px 0px 2px rgba(0, 0, 0, 0.5)

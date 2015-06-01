@@ -100,34 +100,54 @@ EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
 
   propTypes :
-    defaultValue : React.PropTypes.string
+    defaultValue  : React.PropTypes.string
+    addIngredient : React.PropTypes.func.isRequired
+
+  getInitialState : -> {
+    tag : null
+  }
 
   render : ->
+    if @state.tag?
+      ingredientSelector = <List.Item>
+        {IngredientStore.ingredientsByTag[@state.tag].display}
+        <i className='fa fa-check-circle'/>
+      </List.Item>
+    else
+      ingredientSelector = _.map IngredientStore.allAlphabeticalIngredients, ({ display, tag }) =>
+        <List.Item onTouchTap={@_tagSetter tag}>{display}</List.Item>
+
     <div className='editable-ingredient2'>
-      <input
-        type='text'
-        placeholder='ex: 1 oz gin'
-        autoCorrect='on'
-        autoCapitalize='off'
-        autoComplete='off'
-        spellCheck='false'
-        ref='input'
-        defaultValue={@props.defaultValue}
-        onChange={@_onChange}
-        onTouchTap={@focus}
-      />
+      <div className='input-line'>
+        <input
+          type='text'
+          placeholder='ex: 1 oz gin'
+          autoCorrect='on'
+          autoCapitalize='off'
+          autoComplete='off'
+          spellCheck='false'
+          ref='input'
+          defaultValue={@props.defaultValue}
+          onChange={@_onChange}
+          onTouchTap={@focus}
+        />
+        <div className='done-button' onTouchTap={@_commit}>Done</div>
+      </div>
       <div className='ingredient-list-header'>A Type Of</div>
       <List className='ingredient-group-list'>
-        {for group in _.pluck IngredientStore.groupedIngredients, 'name'
-          <List.Item>
-            {group}
-            <i className='fa fa-chevron-right'/>
-          </List.Item>}
+        {ingredientSelector}
       </List>
     </div>
 
   focus : ->
     @refs.input.getDOMNode().focus()
+
+  _tagSetter : (tag) ->
+    return =>
+      @setState { tag }
+
+  _commit : ->
+    @props.addIngredient @refs.input.getDOMNode().value, @state.tag
 }
 
 EditableIngredientsPage = React.createClass {
@@ -138,12 +158,13 @@ EditableIngredientsPage = React.createClass {
     next : React.PropTypes.func.isRequired
 
   render : ->
-    ingredientNodes = _.map store.ingredients, (i) ->
+    ingredientNodes = _.map store.ingredients, (i) =>
       if i.isEditing
-        ingredient = <EditableIngredient defaultValue={i.raw}/>
+        return <EditableIngredient defaultValue={i.raw} addIngredient={@_ingredientAdder i}/>
       else
-        ingredient = <MeasuredIngredient {...i.display}/>
-      return <Deletable onDelete={console.log.bind(console)}>{ingredient}</Deletable>
+        return <Deletable onDelete={@_ingredientDeleter i}>
+          <MeasuredIngredient {...i.display}/>
+        </Deletable>
 
 
     <FixedHeaderFooter
@@ -157,6 +178,26 @@ EditableIngredientsPage = React.createClass {
         <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
       </div>
     </FixedHeaderFooter>
+
+  _ingredientAdder : (i) ->
+    return (rawText, tag) =>
+      store.ingredients[i] = @_parseIngredient rawText, tag
+      @forceUpdate()
+
+  _parseIngredient : (rawText, tag) ->
+    return {
+      raw       : rawText
+      isEditing : false
+      display   :
+        displayAmount     : rawText.split(' ')[0]
+        displayUnit       : rawText.split(' ')[1]
+        displayIngredient : rawText.split(' ')[2..].join ' '
+    }
+
+  _ingredientDeleter : (i) ->
+    return =>
+      store.ingredients.splice i, 1
+      @forceUpdate()
 }
 
 
