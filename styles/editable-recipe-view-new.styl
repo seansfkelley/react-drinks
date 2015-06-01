@@ -2,6 +2,7 @@
 @require 'mixins'
 
 ingredient-height = list-item-height
+list-padding = 12px
 
 .editable-recipe-page
   background-color grey10
@@ -60,12 +61,18 @@ ingredient-height = list-item-height
   width 100%
   padding 0 8px
 
-  .editable-ingredient2
+  .ingredients-list .deletable
     zebra(grey8, grey7)
+
+  .editable-ingredient2, .measured-ingredient
+    background-color transparent
+
+  .editable-ingredient2
+    padding-bottom list-padding
 
     input
       width 100%
-      padding-left 12px
+      padding-left list-padding
 
       background-color transparent
 
@@ -80,7 +87,7 @@ ingredient-height = list-item-height
       padding-bottom 4px
 
     .ingredient-group-list
-      margin 0 12px
+      margin 0 list-padding
 
       max-height 200px
       overflow scroll

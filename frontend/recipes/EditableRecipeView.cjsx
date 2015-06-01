@@ -5,6 +5,7 @@ React  = require 'react/addons'
 
 List              = require '../components/List'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
+Deletable         = require '../components/Deletable'
 
 AppDispatcher = require '../AppDispatcher'
 
@@ -139,9 +140,11 @@ EditableIngredientsPage = React.createClass {
   render : ->
     ingredientNodes = _.map store.ingredients, (i) ->
       if i.isEditing
-        return <EditableIngredient defaultValue={i.raw}/>
+        ingredient = <EditableIngredient defaultValue={i.raw}/>
       else
-        return <MeasuredIngredient {...i.display}/>
+        ingredient = <MeasuredIngredient {...i.display}/>
+      return <Deletable onDelete={console.log.bind(console)}>{ingredient}</Deletable>
+
 
     <FixedHeaderFooter
       header={<NavigationHeader backTitle={'"' + store.name + '"'} goBack={@props.back}/>}
