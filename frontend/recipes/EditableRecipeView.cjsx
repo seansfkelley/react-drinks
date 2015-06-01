@@ -1,39 +1,17 @@
 _      = require 'lodash'
 React  = require 'react/addons'
 
-{ IngredientStore } = require '../stores'
+{ IngredientStore, EditableRecipeStore } = require '../stores'
 
 List              = require '../components/List'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 Deletable         = require '../components/Deletable'
 
+FluxMixin = require '../mixins/FluxMixin'
+
 AppDispatcher = require '../AppDispatcher'
 
 MeasuredIngredient = require './MeasuredIngredient'
-
-store = {
-  name         : ''
-  ingredients  : [
-    isEditing : false
-    raw       : '1 oz gin'
-    display   :
-      displayAmount     : '1'
-      displayUnit       : 'oz'
-      displayIngredient : 'gin'
-  ,
-    isEditing : true
-    raw       : '1/2 oz Lillet'
-  ,
-    isEditing : false
-    raw       : '1/4 oz vodka'
-    display   :
-      displayAmount     : '1/4'
-      displayUnit       : 'oz'
-      displayIngredient : 'vodka'
-  ]
-  instructions : ''
-  notes        : ''
-}
 
 NavigationHeader = React.createClass {
   displayName : 'NavigationHeader'
@@ -61,6 +39,10 @@ NavigationHeader = React.createClass {
 EditableNamePage = React.createClass {
   displayName : 'EditableNamePage'
 
+  mixins : [
+    FluxMixin EditableRecipeStore, 'name'
+  ]
+
   propTypes :
     next : React.PropTypes.func.isRequired
 
@@ -78,7 +60,7 @@ EditableNamePage = React.createClass {
           autoComplete='off'
           spellCheck='false'
           ref='input'
-          defaultValue={store.name}
+          defaultValue={@state.name}
           onChange={@_onChange}
           onTouchTap={@focus}
         />
@@ -93,7 +75,10 @@ EditableNamePage = React.createClass {
     @focus()
 
   _onChange : (e) ->
-    store.name = e.target.value
+    AppDispatcher.dispatch {
+      type : 'set-name'
+      name : e.target.value
+    }
 }
 
 EditableIngredient = React.createClass {
@@ -153,22 +138,32 @@ EditableIngredient = React.createClass {
 EditableIngredientsPage = React.createClass {
   displayName : 'EditableIngredientsPage'
 
+  mixins : [
+    FluxMixin EditableRecipeStore, 'name', 'ingredients'
+  ]
+
   propTypes :
     back : React.PropTypes.func.isRequired
     next : React.PropTypes.func.isRequired
 
   render : ->
-    ingredientNodes = _.map store.ingredients, (i) =>
-      if i.isEditing
-        return <EditableIngredient defaultValue={i.raw} addIngredient={@_ingredientAdder i}/>
+    ingredientNodes = _.map @state.ingredients, (ingredient, index) =>
+      if ingredient.isEditing
+        return <EditableIngredient
+          defaultValue={ingredient.raw}
+          addIngredient={@_ingredientAdder index}
+          key="index-#{index}"
+        />
       else
-        return <Deletable onDelete={@_ingredientDeleter i}>
-          <MeasuredIngredient {...i.display}/>
+        return <Deletable
+          onDelete={@_ingredientDeleter index}
+          key="tag-#{ingredient.tag}"
+        >
+          <MeasuredIngredient {...ingredient.display}/>
         </Deletable>
 
-
     <FixedHeaderFooter
-      header={<NavigationHeader backTitle={'"' + store.name + '"'} goBack={@props.back}/>}
+      header={<NavigationHeader backTitle={'"' + @state.name + '"'} goBack={@props.back}/>}
       className='editable-recipe-page'
     >
       <div className='ingredients-page'>
@@ -179,30 +174,30 @@ EditableIngredientsPage = React.createClass {
       </div>
     </FixedHeaderFooter>
 
-  _ingredientAdder : (i) ->
+  _ingredientAdder : (index) ->
     return (rawText, tag) =>
-      store.ingredients[i] = @_parseIngredient rawText, tag
-      @forceUpdate()
+      AppDispatcher.dispatch {
+        type : 'commit-ingredient'
+        index
+        rawText
+        tag
+      }
 
-  _parseIngredient : (rawText, tag) ->
-    return {
-      raw       : rawText
-      isEditing : false
-      display   :
-        displayAmount     : rawText.split(' ')[0]
-        displayUnit       : rawText.split(' ')[1]
-        displayIngredient : rawText.split(' ')[2..].join ' '
-    }
-
-  _ingredientDeleter : (i) ->
+  _ingredientDeleter : (index) ->
     return =>
-      store.ingredients.splice i, 1
-      @forceUpdate()
+      AppDispatcher.dispatch {
+        type : 'delete-ingredient'
+        index
+      }
 }
 
 
 EditableTextPage = React.createClass {
   displayName : 'EditableTextPage'
+
+  mixins : [
+    FluxMixin EditableRecipeStore, 'ingredients'
+  ]
 
   propTypes :
     back : React.PropTypes.func.isRequired
@@ -210,7 +205,7 @@ EditableTextPage = React.createClass {
 
   render : ->
     <FixedHeaderFooter
-      header={<NavigationHeader backTitle="#{store.ingredients.length} ingredients" goBack={@props.back}/>}
+      header={<NavigationHeader backTitle="#{@state.ingredients.length} ingredients" goBack={@props.back}/>}
       className='editable-recipe-page'
     >
       <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
@@ -255,16 +250,6 @@ EditableRecipeView = React.createClass {
 module.exports = EditableRecipeView
 
 return
-
-
-Deletable         = require '../components/Deletable'
-ButtonBar         = require '../components/ButtonBar'
-normalization     = require '../../shared/normalization'
-
-AppDispatcher       = require '../AppDispatcher'
-stylingConstants    = require '../stylingConstants'
-utils               = require '../utils'
-{ IngredientStore } = require '../stores'
 
 EditableTextArea = React.createClass {
   displayName : 'EditableTextArea'

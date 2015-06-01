@@ -9,6 +9,7 @@ normalization = require '../shared/normalization'
 AppDispatcher = require './AppDispatcher'
 RecipeSearch  = require './recipes/RecipeSearch'
 
+
 class FluxStore
   MicroEvent.mixin this
 
@@ -21,6 +22,8 @@ class FluxStore
         @trigger 'change'
 
       return true
+
+
 
 INGREDIENTS_KEY = 'drinks-app-ingredients'
 
@@ -90,6 +93,8 @@ IngredientStore = new class extends FluxStore
         .filter ({ ingredients }) -> ingredients.length > 0
         .value()
 
+
+
 UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
 UI_PERSISTABLE_FIELDS = [ 'mixabilityFilters', 'baseLiquorFilter' ]
 
@@ -136,6 +141,8 @@ UiStore = new class extends FluxStore
 
   _persist : ->
     localStorage[UI_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, UI_PERSISTABLE_FIELDS)
+
+
 
 FUZZY_MATCH = 2
 
@@ -264,6 +271,64 @@ RecipeStore = new class extends FluxStore
   _persist : ->
     localStorage[RECIPE_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, RECIPE_PERSISTABLE_FIELDS)
 
+
+
+EditableRecipeStore = new class extends FluxStore
+  fields : ->
+    name         : ''
+    ingredients  : [
+      isEditing : false
+      raw       : '1 oz gin'
+      tag       : 'gin'
+      display   :
+        displayAmount     : '1'
+        displayUnit       : 'oz'
+        displayIngredient : 'gin'
+    ,
+      isEditing : true
+      raw       : '1/2 oz Lillet'
+    ,
+      isEditing : false
+      raw       : '1/4 oz vodka'
+      tag       : 'vodka'
+      display   :
+        displayAmount     : '1/4'
+        displayUnit       : 'oz'
+        displayIngredient : 'vodka'
+    ]
+    instructions : ''
+    notes        : ''
+
+  'set-name' : ({ name }) ->
+    @name = name
+
+  'delete-ingredient' : ({ index }) ->
+    @ingredients.splice index, 1
+    @ingredients = _.clone @ingredients
+
+  'add-ingredient' : ->
+    @ingredients = @ingredients.concat [
+      isEditing : true
+      raw       : ''
+    ]
+
+  'commit-ingredient' : ({ index, rawText, tag }) ->
+    @ingredients[index] = @_parseIngredient rawText, tag
+    @ingredients = _.clone @ingredients
+
+  _parseIngredient : (rawText, tag) ->
+    return {
+      raw       : rawText
+      isEditing : false
+      tag       : tag
+      display   :
+        displayAmount     : rawText.split(' ')[0]
+        displayUnit       : rawText.split(' ')[1]
+        displayIngredient : rawText.split(' ')[2..].join ' '
+    }
+
+
+
 Promise.resolve $.get('/ingredients')
 .then (ingredients) =>
   AppDispatcher.dispatch _.extend {
@@ -281,6 +346,7 @@ module.exports = {
   IngredientStore
   RecipeStore
   UiStore
+  EditableRecipeStore
 }
 
 _.extend window.debug, module.exports
