@@ -170,9 +170,17 @@ EditableIngredientsPage = React.createClass {
         <div className='ingredients-list'>
           {ingredientNodes}
         </div>
+        <div className='new-ingredient-button' onTouchTap={@_addEmptyIngredient}>
+          <i className='fa fa-plus-circle'/>
+        </div>
         <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
       </div>
     </FixedHeaderFooter>
+
+  _addEmptyIngredient : ->
+    AppDispatcher.dispatch {
+      type : 'add-ingredient'
+    }
 
   _ingredientAdder : (index) ->
     return (rawText, tag) =>
@@ -196,7 +204,7 @@ EditableTextPage = React.createClass {
   displayName : 'EditableTextPage'
 
   mixins : [
-    FluxMixin EditableRecipeStore, 'ingredients'
+    FluxMixin EditableRecipeStore, 'ingredients', 'instructions', 'notes'
   ]
 
   propTypes :
@@ -208,8 +216,36 @@ EditableTextPage = React.createClass {
       header={<NavigationHeader backTitle="#{@state.ingredients.length} ingredients" goBack={@props.back}/>}
       className='editable-recipe-page'
     >
-      <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
+      <div className='text-page'>
+        <textarea
+          className='editable-text-area'
+          placeholder='Instructions...'
+          onChange={@_setInstructions}
+          value={@state.instructions}
+          ref='instructions'
+        />
+        <textarea
+          className='editable-text-area'
+          placeholder='Notes (optional)...'
+          onChange={@_setNotes}
+          value={@state.notes}
+          ref='notes'
+        />
+        <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
+      </div>
     </FixedHeaderFooter>
+
+  _setInstructions : (e) ->
+    AppDispatcher.dispatch {
+      type         : 'set-instructions'
+      instructions : e.target.value
+    }
+
+  _setNotes : (e) ->
+    AppDispatcher.dispatch {
+      type  : 'set-notes'
+      notes : e.target.value
+    }
 }
 
 EditableRecipePage =
@@ -249,147 +285,30 @@ EditableRecipeView = React.createClass {
 
 module.exports = EditableRecipeView
 
-return
+# _saveRecipe : ->
+#   # Well, doing two things here certainly seems weird. Time for an Action?
+#   AppDispatcher.dispatch {
+#     type : 'save-recipe'
+#     recipe : @_constructRecipe()
+#   }
+#   AppDispatcher.dispatch {
+#     type : 'hide-modal'
+#   }
 
-EditableTextArea = React.createClass {
-  displayName : 'EditableTextArea'
-
-  propTypes :
-    placeholder : React.PropTypes.string
-    onInput     : React.PropTypes.func
-
-  render : ->
-    <textarea
-      className='editable-text-area'
-      placeholder={@props.placeholder}
-      onInput={@_onInput}
-      ref='textarea'
-    />
-
-  getText : ->
-    return @refs.textarea.getDOMNode().value
-
-  componentDidMount : ->
-    @_sizeToFit()
-
-  # This is kind of crap:
-  #   1. Requires a reflow (seems to be the only way to be accurate, though:
-  #      https://github.com/andreypopp/react-textarea-autosize/blob/master/index.js)
-  #   2. Doesn't use state. Seems bad, but can't prove it.
-  _sizeToFit : _.throttle(->
-    # +2 is because of the border: avoids a scrollbar.
-    node = @getDOMNode()
-    node.style.height = 'auto'
-    node.style.height = node.scrollHeight + 2
-  ), 100
-
-  _onInput : ->
-    @_sizeToFit()
-    @props.onInput?()
-}
-
-EditableRecipeView = React.createClass {
-  displayName : 'EditableRecipeView'
-
-  propTypes : {}
-
-  getInitialState : ->
-    return {
-      ingredientIds      : [ @_newIngredientId() ]
-      saveable           : false
-      focusNewIngredient : false
-    }
-
-  render : ->
-    editableIngredients = _.map @state.ingredientIds, (id, i) =>
-      shouldGrabFocus = i == @state.ingredientIds.length - 1 and @state.focusNewIngredient
-      <div className='z-index-wrapper' style={{ zIndex : @state.ingredientIds.length - i }} key={id}>
-        <Deletable onDelete={@_generateDeleter(id)}>
-          <EditableIngredient shouldGrabFocus={shouldGrabFocus} ref={id}/>
-        </Deletable>
-      </div>
-
-    header = <EditableTitleBar ref='title' onChange={@_computeSaveable}/>
-    footer = <EditableFooter canSave={@state.saveable} save={@_saveRecipe}/>
-
-    <FixedHeaderFooter
-      className='default-modal editable-recipe-view'
-      header={header}
-      footer={footer}
-    >
-      <div className='recipe-description'>
-        <div className='recipe-ingredients'>
-          {editableIngredients}
-          <div className='new-ingredient-button' onTouchTap={@_newIngredient}>New Ingredient</div>
-        </div>
-        <div className='recipe-instructions'>
-          <div className='recipe-section-header'>Instructions</div>
-          <EditableTextArea placeholder='Required...' ref='instructions' onInput={@_computeSaveable}/>
-        </div>
-        <div className='recipe-notes'>
-          <div className='recipe-section-header'>Notes</div>
-          <EditableTextArea placeholder='Optional...' ref='notes'/>
-        </div>
-      </div>
-    </FixedHeaderFooter>
-
-  componentDidMount : ->
-    _.delay (=>
-      @refs.title.focus()
-    ), stylingConstants.TRANSITION_DURATION + 100
-
-  _newIngredient : ->
-    @setState {
-      ingredientIds     : @state.ingredientIds.concat [ @_newIngredientId() ]
-      focusNewIngredient : true
-    }
-
-  _generateDeleter : (id) ->
-    return =>
-      @setState {
-        ingredientIds : _.without @state.ingredientIds, id
-      }
-
-  _newIngredientId : ->
-    return _.uniqueId 'ingredient-'
-
-  _computeSaveable : ->
-    if not @isMounted()
-      saveable = false
-    else
-      saveable = !!(
-        @refs.title.getText().length and
-        @refs.instructions.getText().length and
-        @state.ingredientIds.length
-      )
-    @setState { saveable }
-
-  _saveRecipe : ->
-    # Well, doing two things here certainly seems weird. Time for an Action?
-    AppDispatcher.dispatch {
-      type : 'save-recipe'
-      recipe : @_constructRecipe()
-    }
-    AppDispatcher.dispatch {
-      type : 'hide-modal'
-    }
-
-  _constructRecipe : ->
-    ingredients = _.map @state.ingredientIds, (id) =>
-      { tag, measure, unit, description } = @refs[id].getIngredient()
-      return _.pick {
-        tag
-        displayAmount     : measure
-        displayUnit       : unit
-        displayIngredient : description
-      }, _.identity
-    return normalization.normalizeRecipe _.pick({
-      ingredients
-      name         : @refs.title.getText()
-      instructions : @refs.instructions.getText()
-      notes        : @refs.notes.getText()
-      isCustom     : true
-    }, _.identity)
-}
-
-module.exports = EditableRecipeView
+# _constructRecipe : ->
+#   ingredients = _.map @state.ingredientIds, (id) =>
+#     { tag, measure, unit, description } = @refs[id].getIngredient()
+#     return _.pick {
+#       tag
+#       displayAmount     : measure
+#       displayUnit       : unit
+#       displayIngredient : description
+#     }, _.identity
+#   return normalization.normalizeRecipe _.pick({
+#     ingredients
+#     name         : @refs.title.getText()
+#     instructions : @refs.instructions.getText()
+#     notes        : @refs.notes.getText()
+#     isCustom     : true
+#   }, _.identity)
+# }

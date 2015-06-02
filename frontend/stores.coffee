@@ -277,24 +277,26 @@ EditableRecipeStore = new class extends FluxStore
   fields : ->
     name         : ''
     ingredients  : [
-      isEditing : false
-      raw       : '1 oz gin'
-      tag       : 'gin'
-      display   :
-        displayAmount     : '1'
-        displayUnit       : 'oz'
-        displayIngredient : 'gin'
-    ,
       isEditing : true
-      raw       : '1/2 oz Lillet'
-    ,
-      isEditing : false
-      raw       : '1/4 oz vodka'
-      tag       : 'vodka'
-      display   :
-        displayAmount     : '1/4'
-        displayUnit       : 'oz'
-        displayIngredient : 'vodka'
+      raw       : ''
+    #   isEditing : false
+    #   raw       : '1 oz gin'
+    #   tag       : 'gin'
+    #   display   :
+    #     displayAmount     : '1'
+    #     displayUnit       : 'oz'
+    #     displayIngredient : 'gin'
+    # ,
+    #   isEditing : true
+    #   raw       : '1/2 oz Lillet'
+    # ,
+    #   isEditing : false
+    #   raw       : '1/4 oz vodka'
+    #   tag       : 'vodka'
+    #   display   :
+    #     displayAmount     : '1/4'
+    #     displayUnit       : 'oz'
+    #     displayIngredient : 'vodka'
     ]
     instructions : ''
     notes        : ''
@@ -315,6 +317,12 @@ EditableRecipeStore = new class extends FluxStore
   'commit-ingredient' : ({ index, rawText, tag }) ->
     @ingredients[index] = @_parseIngredient rawText, tag
     @ingredients = _.clone @ingredients
+
+  'set-instructions' : ({ instructions }) ->
+    @instructions = instructions
+
+  'set-notes' : ({ notes }) ->
+    @notes = notes
 
   _parseIngredient : (rawText, tag) ->
     return {
