@@ -2,6 +2,8 @@ _          = require 'lodash'
 React      = require 'react/addons'
 classnames = require 'classnames'
 
+normalization = require '../../shared/normalization'
+
 { IngredientStore, EditableRecipeStore } = require '../stores'
 
 List              = require '../components/List'
@@ -13,8 +15,10 @@ FluxMixin = require '../mixins/FluxMixin'
 AppDispatcher = require '../AppDispatcher'
 
 MeasuredIngredient = require './MeasuredIngredient'
+RecipeView         = require './RecipeView'
 
 # TODO: make IconButton class
+# TODO: chooser for base liquor
 
 NavigationHeader = React.createClass {
   displayName : 'NavigationHeader'
@@ -237,8 +241,12 @@ EditableTextPage = React.createClass {
     next : React.PropTypes.func.isRequired
 
   render : ->
+    backTitle = "#{@state.ingredients.length} ingredient"
+    if @state.ingredients.length != 1
+      backTitle += 's'
+
     <FixedHeaderFooter
-      header={<NavigationHeader backTitle="#{@state.ingredients.length} ingredients" goBack={@props.back}/>}
+      header={<NavigationHeader backTitle={backTitle} goBack={@props.back}/>}
       className='editable-recipe-page text-page'
     >
       <div className='page-content'>
@@ -256,9 +264,19 @@ EditableTextPage = React.createClass {
           value={@state.notes}
           ref='notes'
         />
-        <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
+        <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
+          <span className='next-text'>Next</span>
+          <i className='fa fa-arrow-right'/>
+        </div>
       </div>
     </FixedHeaderFooter>
+
+  _isEnabled : ->
+    return @state.instructions.length
+
+  _nextIfEnabled : ->
+    if @_isEnabled()
+      @props.next()
 
   _setInstructions : (e) ->
     AppDispatcher.dispatch {
@@ -273,10 +291,35 @@ EditableTextPage = React.createClass {
     }
 }
 
+
+PreviewPage = React.createClass {
+  displayName : 'PreviewPage'
+
+  propTypes :
+    back   : React.PropTypes.func.isRequired
+    next   : React.PropTypes.func.isRequired
+    recipe : React.PropTypes.object
+
+  render : ->
+    <FixedHeaderFooter
+      header={<NavigationHeader backTitle='Instructions' goBack={@props.back}/>}
+      className='editable-recipe-page preview-page'
+    >
+      <div className='page-content'>
+        <RecipeView recipe={@props.recipe}/>
+        <div className='next-button' onTouchTap={@props.next}>
+          <span className='next-text'>Done</span>
+          <i className='fa fa-check'/>
+        </div>
+      </div>
+    </FixedHeaderFooter>
+}
+
 EditableRecipePage =
   NAME        : 'name'
   INGREDIENTS : 'ingredients'
   TEXT        : 'text'
+  PREVIEW     : 'preview'
 
 EditableRecipeView = React.createClass {
   displayName : 'EditableRecipeView'
@@ -299,41 +342,38 @@ EditableRecipeView = React.createClass {
       when EditableRecipePage.TEXT
         <EditableTextPage
           back={@_makePageSwitcher(EditableRecipePage.INGREDIENTS)}
-          next={-> AppDispatcher.dispatch { type : 'hide-flyup' }}
+          next={@_makePageSwitcher(EditableRecipePage.PREVIEW)}
+        />
+      when EditableRecipePage.PREVIEW
+        <PreviewPage
+          back={@_makePageSwitcher(EditableRecipePage.TEXT)}
+          next={@_finish}
+          recipe={@_constructRecipe()}
         />
 
   _makePageSwitcher : (targetPage) ->
     return =>
       @setState { currentPage : targetPage }
 
+  _finish : ->
+    # Well, doing two things here certainly seems weird. Time for an Action?
+    AppDispatcher.dispatch {
+      type : 'hide-flyup'
+    }
+    AppDispatcher.dispatch {
+      type   : 'save-recipe'
+      recipe : @_constructRecipe()
+    }
+
+  _constructRecipe : ->
+    ingredients = _.map EditableRecipeStore.ingredients, (ingredient) =>
+      return _.pick _.extend({ tag : ingredient.tag }, ingredient.display), _.identity
+    recipe = _.chain EditableRecipeStore
+      .pick 'name', 'instructions', 'notes'
+      .extend { ingredients, isCustom : true }
+      .pick _.identity
+      .value()
+    return normalization.normalizeRecipe recipe
 }
 
 module.exports = EditableRecipeView
-
-# _saveRecipe : ->
-#   # Well, doing two things here certainly seems weird. Time for an Action?
-#   AppDispatcher.dispatch {
-#     type : 'save-recipe'
-#     recipe : @_constructRecipe()
-#   }
-#   AppDispatcher.dispatch {
-#     type : 'hide-modal'
-#   }
-
-# _constructRecipe : ->
-#   ingredients = _.map @state.ingredientIds, (id) =>
-#     { tag, measure, unit, description } = @refs[id].getIngredient()
-#     return _.pick {
-#       tag
-#       displayAmount     : measure
-#       displayUnit       : unit
-#       displayIngredient : description
-#     }, _.identity
-#   return normalization.normalizeRecipe _.pick({
-#     ingredients
-#     name         : @refs.title.getText()
-#     instructions : @refs.instructions.getText()
-#     notes        : @refs.notes.getText()
-#     isCustom     : true
-#   }, _.identity)
-# }

@@ -303,6 +303,9 @@ EditableRecipeStore = new class extends FluxStore
   'set-notes' : ({ notes }) ->
     @notes = notes
 
+  'save-recipe' : ->
+    _.extend @, @fields()
+
   _parseIngredient : (rawText, tag) ->
     return {
       raw       : rawText
