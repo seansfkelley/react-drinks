@@ -276,28 +276,7 @@ RecipeStore = new class extends FluxStore
 EditableRecipeStore = new class extends FluxStore
   fields : ->
     name         : ''
-    ingredients  : [
-      isEditing : true
-      raw       : ''
-    #   isEditing : false
-    #   raw       : '1 oz gin'
-    #   tag       : 'gin'
-    #   display   :
-    #     displayAmount     : '1'
-    #     displayUnit       : 'oz'
-    #     displayIngredient : 'gin'
-    # ,
-    #   isEditing : true
-    #   raw       : '1/2 oz Lillet'
-    # ,
-    #   isEditing : false
-    #   raw       : '1/4 oz vodka'
-    #   tag       : 'vodka'
-    #   display   :
-    #     displayAmount     : '1/4'
-    #     displayUnit       : 'oz'
-    #     displayIngredient : 'vodka'
-    ]
+    ingredients  : []
     instructions : ''
     notes        : ''
 

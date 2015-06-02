@@ -29,17 +29,37 @@ list-padding = 12px
     display inline-block
     padding 0 8px
 
-.editable-recipe-page i.fa.fa-arrow-right
-    font-size title-font-size
-    float right
+.editable-recipe-page .next-button
+  float right
+  font-size title-font-size
 
+  transition color transition-duration-quick-ish
+
+  &.disabled
+    color grey7
+
+  .next-text, i.fa
+    text-align right
     height title-bar-height
+    line-height title-bar-height
+
+  .next-text
+    text-transform uppercase
+    font-size uppercase-font-size
+
+  i.fa.fa-arrow-right
     width title-bar-height
 
     text-align center
-    line-height title-bar-height
 
-.editable-recipe-page .name-page
+.editable-recipe-page.name-page .fixed-content-pane
+  align-items center
+
+.editable-recipe-page.name-page .page-content
+  // Adjust to center.
+  top (- title-font-size / 2)
+  position relative
+
   width 75%
 
   input
@@ -53,7 +73,7 @@ list-padding = 12px
     &::-webkit-input-placeholder
       font-size title-font-size
 
-.editable-recipe-page .ingredients-page
+.editable-recipe-page.ingredients-page .page-content
   box-sizing border-box
   width 100%
   padding 0 8px
@@ -128,11 +148,13 @@ list-padding = 12px
     background-color grey2
     text-align center
 
-    i.fa
-      line-height ingredient-height
-      color grey5
+    color grey7
+    line-height ingredient-height
 
-.editable-recipe-page .text-page
+    span
+      margin-left 6px
+
+.editable-recipe-page.text-page .page-content
   box-sizing border-box
   width 100%
   padding 0 24px

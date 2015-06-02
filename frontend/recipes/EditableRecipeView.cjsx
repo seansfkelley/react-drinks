@@ -1,5 +1,6 @@
-_      = require 'lodash'
-React  = require 'react/addons'
+_          = require 'lodash'
+React      = require 'react/addons'
+classnames = require 'classnames'
 
 { IngredientStore, EditableRecipeStore } = require '../stores'
 
@@ -12,6 +13,8 @@ FluxMixin = require '../mixins/FluxMixin'
 AppDispatcher = require '../AppDispatcher'
 
 MeasuredIngredient = require './MeasuredIngredient'
+
+# TODO: make IconButton class
 
 NavigationHeader = React.createClass {
   displayName : 'NavigationHeader'
@@ -49,9 +52,9 @@ EditableNamePage = React.createClass {
   render : ->
     <FixedHeaderFooter
       header={<NavigationHeader/>}
-      className='editable-recipe-page'
+      className='editable-recipe-page name-page'
     >
-      <div className='name-page'>
+      <div className='page-content'>
         <input
           type='text'
           placeholder='Name...'
@@ -60,11 +63,14 @@ EditableNamePage = React.createClass {
           autoComplete='off'
           spellCheck='false'
           ref='input'
-          defaultValue={@state.name}
+          value={@state.name}
           onChange={@_onChange}
           onTouchTap={@focus}
         />
-        <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
+        <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
+          <span className='next-text'>Next</span>
+          <i className='fa fa-arrow-right'/>
+        </div>
       </div>
     </FixedHeaderFooter>
 
@@ -73,6 +79,14 @@ EditableNamePage = React.createClass {
 
   componentDidMount : ->
     @focus()
+
+  # mixin-ify this kind of stuff probably
+  _isEnabled : ->
+    return !!@state.name
+
+  _nextIfEnabled : ->
+    if @_isEnabled()
+      @props.next()
 
   _onChange : (e) ->
     AppDispatcher.dispatch {
@@ -164,18 +178,29 @@ EditableIngredientsPage = React.createClass {
 
     <FixedHeaderFooter
       header={<NavigationHeader backTitle={'"' + @state.name + '"'} goBack={@props.back}/>}
-      className='editable-recipe-page'
+      className='editable-recipe-page ingredients-page'
     >
-      <div className='ingredients-page'>
+      <div className='page-content'>
         <div className='ingredients-list'>
           {ingredientNodes}
         </div>
         <div className='new-ingredient-button' onTouchTap={@_addEmptyIngredient}>
           <i className='fa fa-plus-circle'/>
+          <span>Add Ingredient</span>
         </div>
-        <i className='fa fa-arrow-right' onTouchTap={@props.next}/>
+        <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
+          <span className='next-text'>Next</span>
+          <i className='fa fa-arrow-right'/>
+        </div>
       </div>
     </FixedHeaderFooter>
+
+  _isEnabled : ->
+    return @state.ingredients.length > 0 and not _.any(@state.ingredients, 'isEditing')
+
+  _nextIfEnabled : ->
+    if @_isEnabled()
+      @props.next()
 
   _addEmptyIngredient : ->
     AppDispatcher.dispatch {
@@ -214,9 +239,9 @@ EditableTextPage = React.createClass {
   render : ->
     <FixedHeaderFooter
       header={<NavigationHeader backTitle="#{@state.ingredients.length} ingredients" goBack={@props.back}/>}
-      className='editable-recipe-page'
+      className='editable-recipe-page text-page'
     >
-      <div className='text-page'>
+      <div className='page-content'>
         <textarea
           className='editable-text-area'
           placeholder='Instructions...'
