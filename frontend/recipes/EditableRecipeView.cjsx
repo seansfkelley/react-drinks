@@ -81,9 +81,6 @@ EditableNamePage = React.createClass {
   focus : ->
     @refs.input.getDOMNode().focus()
 
-  componentDidMount : ->
-    @focus()
-
   # mixin-ify this kind of stuff probably
   _isEnabled : ->
     return !!@state.name
