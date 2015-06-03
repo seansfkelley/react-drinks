@@ -18,8 +18,8 @@ IngredientSelectionView = require '../ingredients/IngredientSelectionView'
 
 MIXABILITY_FILTER_NAMES = {
   mixable          : 'Mixable'
-  nearMixable      : '1-2 Missing'
-  notReallyMixable : '3+ Missing'
+  nearMixable      : '1 Missing'
+  notReallyMixable : '2+ Missing'
 }
 
 RecipeListHeader = React.createClass {

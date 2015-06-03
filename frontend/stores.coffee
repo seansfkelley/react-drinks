@@ -100,8 +100,8 @@ UI_PERSISTABLE_FIELDS = [ 'mixabilityFilters', 'baseLiquorFilter' ]
 
 MIXABILITY_FILTER_RANGES = {
   mixable          : [ 0, 0 ]
-  nearMixable      : [ 1, 2 ]
-  notReallyMixable : [ 3, 100 ]
+  nearMixable      : [ 1, 1 ]
+  notReallyMixable : [ 2, 100 ]
 }
 
 _toggleKey = (object, key) ->
