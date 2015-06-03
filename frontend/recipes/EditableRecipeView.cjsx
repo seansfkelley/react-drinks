@@ -124,11 +124,11 @@ EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
 
   propTypes :
-    defaultValue  : React.PropTypes.string
     addIngredient : React.PropTypes.func.isRequired
 
   getInitialState : -> {
-    tag : null
+    tag   : null
+    value : ''
   }
 
   render : ->
@@ -151,11 +151,16 @@ EditableIngredient = React.createClass {
           autoComplete='off'
           spellCheck='false'
           ref='input'
-          defaultValue={@props.defaultValue}
+          value={@state.value}
           onChange={@_onChange}
           onTouchTap={@focus}
         />
-        <div className='done-button' onTouchTap={@_commit}>Done</div>
+        <div
+          className={classnames 'done-button', { 'disabled' : not @_isCommittable() }}
+          onTouchTap={@_commitIfAllowed}
+        >
+          Done
+        </div>
       </div>
       <div className='ingredient-list-header'>A Type Of</div>
       <List className='ingredient-group-list'>
@@ -170,8 +175,15 @@ EditableIngredient = React.createClass {
     return =>
       @setState { tag }
 
-  _commit : ->
-    @props.addIngredient @refs.input.getDOMNode().value, @state.tag
+  _isCommittable : ->
+    return !!@state.value.trim()
+
+  _commitIfAllowed : ->
+    @props.addIngredient @state.value.trim(), @state.tag
+
+  _onChange : (e) ->
+    @setState { value : e.target.value }
+
 }
 
 EditableIngredientsPage = React.createClass {
