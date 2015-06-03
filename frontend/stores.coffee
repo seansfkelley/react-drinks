@@ -319,7 +319,7 @@ EditableRecipeStore = new class extends FluxStore
   _clear : ->
     _.extend @, @fields()
 
-  COUNT_REGEX = /^(\d+([- \/]\d+)?)+/
+  COUNT_REGEX = /^[-. \/\d]+/
 
   MEASUREMENTS = [
     'ml'

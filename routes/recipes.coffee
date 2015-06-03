@@ -25,7 +25,7 @@ RECIPE_SCHEMA = {
           displayAmount     :
             type     : 'string'
             required : false
-            pattern  : /(\d+([- \/]\d+)?)+/
+            pattern  : /^[-. \/\d]+$/
           displayUnit       : OPTIONAL_STRING
           displayIngredient : REQUIRED_STRING
     # A string of one or more lines explaining how to make the drink.
