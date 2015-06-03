@@ -7,7 +7,6 @@ FluxMixin = require '../mixins/FluxMixin'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 
-AppDispatcher = require '../AppDispatcher'
 utils         = require '../utils'
 { UiStore }   = require '../stores'
 
@@ -24,7 +23,8 @@ RecipeView = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    recipe : React.PropTypes.object.isRequired
+    recipe  : React.PropTypes.object.isRequired
+    onClose : React.PropTypes.func
 
   render : ->
     # TODO: We're reusing this view for both types of recipes; seems bad.
@@ -54,12 +54,15 @@ RecipeView = React.createClass {
       .value()
     recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
 
-    header = <TitleBar rightIcon='fa-times' rightIconOnTouchTap={@_closeModal}>
-      {@props.recipe.name}
-    </TitleBar>
+    if @props.onClose?
+      header = <TitleBar rightIcon='fa-times' rightIconOnTouchTap={@props.onClose}>
+        {@props.recipe.name}
+      </TitleBar>
+    else
+      header = <TitleBar>{@props.recipe.name}</TitleBar>
 
     <FixedHeaderFooter
-      className='default-modal recipe-view'
+      className='recipe-view'
       header={header}
     >
       <div className='recipe-description'>
@@ -86,11 +89,6 @@ RecipeView = React.createClass {
           return _.defaults { isMissing : true }, i
 
       return _.map measuredIngredients, (i) -> <MeasuredIngredient {...i} key={i.tag ? i.displayIngredient}/>
-
-  _closeModal : ->
-    AppDispatcher.dispatch {
-      type : 'hide-modal'
-    }
 }
 
 module.exports = RecipeView

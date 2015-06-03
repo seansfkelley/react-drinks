@@ -3,6 +3,8 @@ React = require 'react/addons'
 
 Swipable = require '../components/Swipable'
 
+AppDispatcher = require '../AppDispatcher'
+
 RecipeView = require './RecipeView'
 
 SwipableRecipeView = React.createClass {
@@ -21,7 +23,7 @@ SwipableRecipeView = React.createClass {
       <div className='swipable-padding-wrapper' key={r.recipeId}>
         {if Math.abs(i - @state.visibleIndex) <= 1
           <div className='swipable-position-wrapper'>
-            <RecipeView recipe={r}/>
+            <RecipeView recipe={r} onClose={@_closeModal}/>
           </div>}
       </div>
 
@@ -36,6 +38,11 @@ SwipableRecipeView = React.createClass {
 
   _onSlideChange : (index) ->
     @setState { visibleIndex : index }
+
+  _closeModal : ->
+    AppDispatcher.dispatch {
+      type : 'hide-modal'
+    }
 }
 
 module.exports = SwipableRecipeView

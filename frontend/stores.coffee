@@ -306,15 +306,44 @@ EditableRecipeStore = new class extends FluxStore
   'save-recipe' : ->
     _.extend @, @fields()
 
+  COUNT_REGEX = /^(\d+([- \/]\d+)?)+/
+
+  MEASUREMENTS = [
+    'ml'
+    'oz'
+    'ounce'
+    'part'
+    'shot'
+    'tsp'
+    'teaspoon'
+    'tbsp'
+    'tablespoon'
+    'cup'
+    'bottle'
+    'barspoon'
+    'dash'
+    'dashes'
+  ]
+
   _parseIngredient : (rawText, tag) ->
+    text = rawText.trim()
+
+    if match = COUNT_REGEX.exec text
+      displayAmount = match[0]
+      text = text[displayAmount.length..].trim()
+
+    possibleUnit = text.split(' ')[0]
+    if possibleUnit in MEASUREMENTS or possibleUnit + 's' in MEASUREMENTS
+      displayUnit = possibleUnit
+      text = text[displayUnit.length..].trim()
+
+    displayIngredient = text
+
     return {
       raw       : rawText
       isEditing : false
       tag       : tag
-      display   :
-        displayAmount     : rawText.split(' ')[0]
-        displayUnit       : rawText.split(' ')[1]
-        displayIngredient : rawText.split(' ')[2..].join ' '
+      display   : _.pick { displayAmount, displayUnit, displayIngredient }, _.identity
     }
 
 

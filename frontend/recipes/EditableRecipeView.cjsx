@@ -173,7 +173,7 @@ EditableIngredientsPage = React.createClass {
       else
         return <Deletable
           onDelete={@_ingredientDeleter index}
-          key="tag-#{ingredient.tag}"
+          key="tag-#{ingredient.tag ? ingredient.raw}"
         >
           <MeasuredIngredient {...ingredient.display}/>
         </Deletable>
@@ -299,16 +299,17 @@ PreviewPage = React.createClass {
     recipe : React.PropTypes.object
 
   render : ->
+    footer = <div className='next-button' onTouchTap={@props.next}>
+      <span className='next-text'>Done</span>
+      <i className='fa fa-check'/>
+    </div>
     <FixedHeaderFooter
       header={<NavigationHeader backTitle='Instructions' goBack={@props.back}/>}
+      footer={footer}
       className='editable-recipe-page preview-page'
     >
       <div className='page-content'>
         <RecipeView recipe={@props.recipe}/>
-        <div className='next-button' onTouchTap={@props.next}>
-          <span className='next-text'>Done</span>
-          <i className='fa fa-check'/>
-        </div>
       </div>
     </FixedHeaderFooter>
 }
