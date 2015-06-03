@@ -17,8 +17,8 @@ AppDispatcher = require '../AppDispatcher'
 MeasuredIngredient = require './MeasuredIngredient'
 RecipeView         = require './RecipeView'
 
-# TODO: make IconButton class
-# TODO: chooser for base liquor
+# TODO: make IconButton class?
+# TODO: chooser for base liquor!
 
 NavigationHeader = React.createClass {
   displayName : 'NavigationHeader'
@@ -40,6 +40,9 @@ NavigationHeader = React.createClass {
   _closeFlyup : ->
     AppDispatcher.dispatch {
       type : 'hide-flyup'
+    }
+    AppDispatcher.dispatch {
+      type : 'clear-editable-recipe'
     }
 }
 

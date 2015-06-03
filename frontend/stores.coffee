@@ -304,6 +304,12 @@ EditableRecipeStore = new class extends FluxStore
     @notes = notes
 
   'save-recipe' : ->
+    @_clear()
+
+  'clear-editable-recipe' : ->
+    @_clear()
+
+  _clear : ->
     _.extend @, @fields()
 
   COUNT_REGEX = /^(\d+([- \/]\d+)?)+/
