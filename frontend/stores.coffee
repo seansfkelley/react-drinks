@@ -290,7 +290,6 @@ EditableRecipeStore = new class extends FluxStore
   'add-ingredient' : ->
     @ingredients = @ingredients.concat [
       isEditing : true
-      raw       : ''
     ]
 
   'commit-ingredient' : ({ index, rawText, tag }) ->

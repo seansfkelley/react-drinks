@@ -19,6 +19,12 @@ RecipeView         = require './RecipeView'
 
 # TODO: make IconButton class?
 # TODO: chooser for base liquor!
+# TODO: clicking back into ingredients to edit them
+# TODO: show what "type of" it is in the final display
+# TODO: deselect input when you scroll through to find the tag
+# TODO: "oh you put numbers in" (re: instructions); "I didn't know that it would do the numbers as you go in"
+# TODO: clicking on something to edit could be nice
+# TODO: "done" button is rather far away
 
 NavigationHeader = React.createClass {
   displayName : 'NavigationHeader'
@@ -91,6 +97,10 @@ EditableNamePage = React.createClass {
 
   _nextIfEnabled : ->
     if @_isEnabled()
+      AppDispatcher.dispatch {
+        type : 'set-name'
+        name : @state.name.trim()
+      }
       @props.next()
 
   _onChange : (e) ->
@@ -168,18 +178,16 @@ EditableIngredientsPage = React.createClass {
   render : ->
     ingredientNodes = _.map @state.ingredients, (ingredient, index) =>
       if ingredient.isEditing
-        return <EditableIngredient
-          defaultValue={ingredient.raw}
-          addIngredient={@_ingredientAdder index}
-          key="index-#{index}"
-        />
+        ingredientNode = <EditableIngredient addIngredient={@_ingredientAdder index}/>
       else
-        return <Deletable
-          onDelete={@_ingredientDeleter index}
-          key="tag-#{ingredient.tag ? ingredient.raw}"
-        >
-          <MeasuredIngredient {...ingredient.display}/>
-        </Deletable>
+        ingredientNode = <MeasuredIngredient {...ingredient.display}/>
+
+      return <Deletable
+        onDelete={@_ingredientDeleter index}
+        key="tag-#{ingredient.tag ? ingredient.display?.displayIngredient}"
+      >
+        {ingredientNode}
+      </Deletable>
 
     <FixedHeaderFooter
       header={<NavigationHeader backTitle={'"' + @state.name + '"'} goBack={@props.back}/>}
