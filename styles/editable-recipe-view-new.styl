@@ -107,10 +107,10 @@ full-width-with-padding(horizontal-padding)
       input, .done-button
         height ingredient-height
         line-height ingredient-height
+        background-color transparent
 
       input
         flex 1
-        background-color transparent
 
       .done-button
         width 80px
@@ -119,11 +119,11 @@ full-width-with-padding(horizontal-padding)
         font-size uppercase-font-size
         font-weight 600
 
-        background-color grey6
+        transition opacity transition-duration-quick-ish
+        opacity 1
 
         &.disabled
-          background-color grey8
-          color grey6
+          opacity 0
 
     .ingredient-list-header
       text-transform uppercase
