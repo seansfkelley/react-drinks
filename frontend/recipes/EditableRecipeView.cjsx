@@ -59,6 +59,7 @@ EditableNamePage = React.createClass {
       className='editable-recipe-page name-page'
     >
       <div className='page-content'>
+        <div className='add-a-recipe-title'>Add a Recipe</div>
         <input
           type='text'
           placeholder='Name...'

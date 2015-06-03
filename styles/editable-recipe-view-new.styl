@@ -57,10 +57,15 @@ list-padding = 12px
 
 .editable-recipe-page.name-page .page-content
   // Adjust to center.
-  top (- title-font-size / 2)
+  top (- title-bar-height / 2)
   position relative
 
   width 75%
+
+  .add-a-recipe-title
+    font-size title-font-size
+    padding-bottom 6px
+    border-bottom 1px solid transparent
 
   input
     width 100%
