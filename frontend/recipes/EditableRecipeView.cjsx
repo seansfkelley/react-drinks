@@ -219,9 +219,9 @@ EditableIngredientsPage = React.createClass {
         <div className='ingredients-list'>
           {ingredientNodes}
         </div>
-        <div className='new-ingredient-button' onTouchTap={@_addEmptyIngredient}>
+        <div className={classnames 'new-ingredient-button', { 'disabled' : @_anyAreEditing() }} onTouchTap={@_addEmptyIngredient}>
           <i className='fa fa-plus-circle'/>
-          <span>Add Ingredient</span>
+          <span>New Ingredient</span>
         </div>
         <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
           <span className='next-text'>Next</span>
@@ -229,6 +229,9 @@ EditableIngredientsPage = React.createClass {
         </div>
       </div>
     </FixedHeaderFooter>
+
+  _anyAreEditing : ->
+    return _.any @state.ingredients, 'isEditing'
 
   _isEnabled : ->
     return @state.ingredients.length > 0 and not _.any(@state.ingredients, 'isEditing')
@@ -238,6 +241,8 @@ EditableIngredientsPage = React.createClass {
       @props.next()
 
   _addEmptyIngredient : ->
+    return if @_anyAreEditing()
+
     AppDispatcher.dispatch {
       type : 'add-ingredient'
     }
