@@ -279,6 +279,7 @@ EditableRecipeStore = new class extends FluxStore
     ingredients  : []
     instructions : ''
     notes        : ''
+    base         : []
 
   'set-name' : ({ name }) ->
     @name = name
@@ -301,6 +302,13 @@ EditableRecipeStore = new class extends FluxStore
 
   'set-notes' : ({ notes }) ->
     @notes = notes
+
+  'toggle-base-liquor-tag' : ({ tag }) ->
+    if tag in @base
+      @base = _.without @base, tag
+    else
+      # concat, don't push, b/c PureRenderMixin.
+      @base = @base.concat [ tag ]
 
   'save-recipe' : ->
     @_clear()

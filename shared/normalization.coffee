@@ -26,6 +26,7 @@ normalizeRecipe = (r) ->
   # The reason it does this is because it avoids accidentally assigning the same ID to a default
   # recipe (which don't come with any) and a custom recipe (which should retain theirs forever).
   r.recipeId ?= md5 JSON.stringify(r)
+  r.base ?= []
   return r
 
 module.exports = { normalizeIngredient, normalizeRecipe }

@@ -5,6 +5,11 @@ ingredient-height = list-item-height
 list-padding = 12px
 input-border = 1px solid grey8
 
+full-width-with-padding(horizontal-padding)
+  box-sizing border-box
+  width 100%
+  padding 0 horizontal-padding
+
 .editable-recipe-page
   background-color grey10
 
@@ -53,6 +58,10 @@ input-border = 1px solid grey8
 
     text-align center
 
+.editable-recipe-page .page-content .page-title
+  font-size title-font-size
+  padding-bottom 6px
+
 .editable-recipe-page.name-page .fixed-content-pane
   align-items center
 
@@ -63,9 +72,7 @@ input-border = 1px solid grey8
 
   width 75%
 
-  .add-a-recipe-title
-    font-size title-font-size
-    padding-bottom 6px
+  .page-title
     border-bottom 1px solid transparent
 
   input
@@ -80,9 +87,7 @@ input-border = 1px solid grey8
       font-size title-font-size
 
 .editable-recipe-page.ingredients-page .page-content
-  box-sizing border-box
-  width 100%
-  padding 0 8px
+  full-width-with-padding(8px)
 
   .ingredients-list .deletable, .editable-ingredient2
     zebra(grey8, grey7)
@@ -160,10 +165,20 @@ input-border = 1px solid grey8
     span
       margin-left 6px
 
+.editable-recipe-page.base-tag-page .page-content
+  full-width-with-padding(8px)
+
+  .list-item
+    &:not(.is-selected) i.fa
+      display none
+
+    i.fa
+      float right
+      line-height inherit
+      padding-right 12px
+
 .editable-recipe-page.text-page .page-content
-  box-sizing border-box
-  width 100%
-  padding 0 24px
+  full-width-with-padding(24px)
 
   textarea
     display block

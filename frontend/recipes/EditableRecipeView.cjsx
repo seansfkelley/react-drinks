@@ -17,6 +17,16 @@ AppDispatcher = require '../AppDispatcher'
 MeasuredIngredient = require './MeasuredIngredient'
 RecipeView         = require './RecipeView'
 
+BASE_TAGS = {
+  'gin'     : 'Gin'
+  'vodka'   : 'Vodka'
+  'whiskey' : 'Whiskey'
+  'rum'     : 'Rum'
+  'brandy'  : 'Brandy/Cognac'
+  'tequila' : 'Tequila/Mezcal'
+  'liqueur' : 'Liqueur/Other'
+}
+
 # TODO: make IconButton class?
 # TODO: chooser for base liquor!
 # TODO: clicking back into ingredients to edit them
@@ -68,7 +78,7 @@ EditableNamePage = React.createClass {
       className='editable-recipe-page name-page'
     >
       <div className='page-content'>
-        <div className='add-a-recipe-title'>Add a Recipe</div>
+        <div className='page-title'>Add a Recipe</div>
         <input
           type='text'
           placeholder='Name...'
@@ -237,12 +247,11 @@ EditableIngredientsPage = React.createClass {
       }
 }
 
-
-EditableTextPage = React.createClass {
-  displayName : 'EditableTextPage'
+EditableBaseLiquorPage = React.createClass {
+  displayName : 'EditableBaseLiquorPage'
 
   mixins : [
-    FluxMixin EditableRecipeStore, 'ingredients', 'instructions', 'notes'
+    FluxMixin EditableRecipeStore, 'ingredients', 'base'
   ]
 
   propTypes :
@@ -253,6 +262,63 @@ EditableTextPage = React.createClass {
     backTitle = "#{@state.ingredients.length} ingredient"
     if @state.ingredients.length != 1
       backTitle += 's'
+
+    <FixedHeaderFooter
+      header={<NavigationHeader backTitle={backTitle} goBack={@props.back}/>}
+      className='editable-recipe-page base-tag-page'
+    >
+      <div className='page-content'>
+        <div className='page-title'>Base ingredient(s)</div>
+        <List>
+          {for tag, title of BASE_TAGS
+            <List.Item
+              className={classnames 'base-liquor-option', { 'is-selected' : tag in @state.base }}
+              onTouchTap={@_tagToggler tag}
+              key="tag-#{tag}"
+            >
+              {title}
+              <i className='fa fa-check-circle'/>
+            </List.Item>}
+        </List>
+        <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
+          <span className='next-text'>Next</span>
+          <i className='fa fa-arrow-right'/>
+        </div>
+      </div>
+    </FixedHeaderFooter>
+
+  _isEnabled : ->
+    return @state.base.length > 0
+
+  _nextIfEnabled : ->
+    if @_isEnabled()
+      @props.next()
+
+  _tagToggler : (tag) ->
+    return =>
+      AppDispatcher.dispatch {
+        type : 'toggle-base-liquor-tag'
+        tag
+      }
+}
+
+
+EditableTextPage = React.createClass {
+  displayName : 'EditableTextPage'
+
+  mixins : [
+    FluxMixin EditableRecipeStore, 'base', 'instructions', 'notes'
+  ]
+
+  propTypes :
+    back : React.PropTypes.func.isRequired
+    next : React.PropTypes.func.isRequired
+
+  render : ->
+    if @state.base.length == 1
+      backTitle = "#{BASE_TAGS[@state.base[0]]}-based"
+    else
+      backTitle = "#{@state.base.length} base liquors"
 
     <FixedHeaderFooter
       header={<NavigationHeader backTitle={backTitle} goBack={@props.back}/>}
@@ -329,6 +395,7 @@ EditableRecipePage =
   NAME        : 'name'
   INGREDIENTS : 'ingredients'
   TEXT        : 'text'
+  BASE        : 'base'
   PREVIEW     : 'preview'
 
 EditableRecipeView = React.createClass {
@@ -347,11 +414,16 @@ EditableRecipeView = React.createClass {
       when EditableRecipePage.INGREDIENTS
         <EditableIngredientsPage
           back={@_makePageSwitcher(EditableRecipePage.NAME)}
+          next={@_makePageSwitcher(EditableRecipePage.BASE)}
+        />
+      when EditableRecipePage.BASE
+        <EditableBaseLiquorPage
+          back={@_makePageSwitcher(EditableRecipePage.INGREDIENTS)}
           next={@_makePageSwitcher(EditableRecipePage.TEXT)}
         />
       when EditableRecipePage.TEXT
         <EditableTextPage
-          back={@_makePageSwitcher(EditableRecipePage.INGREDIENTS)}
+          back={@_makePageSwitcher(EditableRecipePage.BASE)}
           next={@_makePageSwitcher(EditableRecipePage.PREVIEW)}
         />
       when EditableRecipePage.PREVIEW
@@ -379,7 +451,7 @@ EditableRecipeView = React.createClass {
     ingredients = _.map EditableRecipeStore.ingredients, (ingredient) =>
       return _.pick _.extend({ tag : ingredient.tag }, ingredient.display), _.identity
     recipe = _.chain EditableRecipeStore
-      .pick 'name', 'instructions', 'notes'
+      .pick 'name', 'instructions', 'notes', 'base'
       .extend { ingredients, isCustom : true }
       .pick _.identity
       .value()
