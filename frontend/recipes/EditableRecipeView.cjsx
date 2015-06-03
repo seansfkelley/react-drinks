@@ -116,7 +116,7 @@ EditableIngredient = React.createClass {
       </List.Item>
     else
       ingredientSelector = _.map IngredientStore.allAlphabeticalIngredients, ({ display, tag }) =>
-        <List.Item onTouchTap={@_tagSetter tag}>{display}</List.Item>
+        <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{display}</List.Item>
 
     <div className='editable-ingredient2'>
       <div className='input-line'>
