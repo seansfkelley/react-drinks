@@ -3,6 +3,8 @@ React      = require 'react/addons'
 classnames = require 'classnames'
 
 normalization = require '../../shared/normalization'
+definitions   = require '../../shared/definitions'
+assert        = require '../../shared/tinyassert'
 
 { IngredientStore, EditableRecipeStore } = require '../stores'
 
@@ -17,15 +19,18 @@ AppDispatcher = require '../AppDispatcher'
 MeasuredIngredient = require './MeasuredIngredient'
 RecipeView         = require './RecipeView'
 
-BASE_TAGS = {
+BASE_TITLES_BY_TAG = {
   'gin'     : 'Gin'
   'vodka'   : 'Vodka'
   'whiskey' : 'Whiskey'
   'rum'     : 'Rum'
   'brandy'  : 'Brandy/Cognac'
   'tequila' : 'Tequila/Mezcal'
+  'wine'    : 'Wine/Champagne'
   'liqueur' : 'Liqueur/Other'
 }
+
+assert _.intersection(_.keys(BASE_TITLES_BY_TAG), definitions.BASE_LIQUORS).length == definitions.BASE_LIQUORS.length
 
 # TODO: make IconButton class?
 # TODO: clicking back into ingredients to edit them
@@ -289,13 +294,13 @@ EditableBaseLiquorPage = React.createClass {
       <div className='page-content'>
         <div className='page-title'>Base ingredient(s)</div>
         <List>
-          {for tag, title of BASE_TAGS
+          {for tag in definitions.BASE_LIQUORS
             <List.Item
               className={classnames 'base-liquor-option', { 'is-selected' : tag in @state.base }}
               onTouchTap={@_tagToggler tag}
               key="tag-#{tag}"
             >
-              {title}
+              {BASE_TITLES_BY_TAG[tag]}
               <i className='fa fa-check-circle'/>
             </List.Item>}
         </List>
@@ -335,7 +340,7 @@ EditableTextPage = React.createClass {
 
   render : ->
     if @state.base.length == 1
-      backTitle = "#{BASE_TAGS[@state.base[0]]}-based"
+      backTitle = "#{BASE_TITLES_BY_TAG[@state.base[0]]}-based"
     else
       backTitle = "#{@state.base.length} base liquors"
 

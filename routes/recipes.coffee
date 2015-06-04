@@ -4,11 +4,13 @@ yaml        = require 'js-yaml'
 revalidator = require 'revalidator'
 log         = require 'loglevel'
 
-normalization    = require '../shared/normalization'
+normalization = require '../shared/normalization'
+definitions   = require '../shared/definitions'
+
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
-BASE_LIQUORS = [ 'gin', 'vodka', 'rum', 'whiskey', 'tequila', 'brandy', 'wine', 'liqueur', 'UNASSIGNED' ]
+BASE_LIQUORS = [ 'UNASSIGNED' ].concat definitions.BASE_LIQUORS
 
 RECIPE_SCHEMA = {
   type       : 'object'

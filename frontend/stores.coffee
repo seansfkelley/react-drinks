@@ -5,6 +5,7 @@ MicroEvent = require 'microevent'
 Promise    = require 'bluebird'
 
 normalization = require '../shared/normalization'
+definitions   = require '../shared/definitions'
 
 AppDispatcher = require './AppDispatcher'
 RecipeSearch  = require './recipes/RecipeSearch'
@@ -40,7 +41,7 @@ IngredientStore = new class extends FluxStore
     searchedGroupedIngredients : []
     selectedIngredientTags     : {}
     ingredientsByTag           : {}
-    baseLiquors                : [ 'all', 'gin', 'vodka', 'whiskey', 'rum', 'brandy', 'tequila', 'liqueur' ]
+    baseLiquors                : [ 'all' ].concat definitions.BASE_LIQUORS
   }
 
   localStorageKey : 'drinks-app-ingredients'
