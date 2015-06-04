@@ -31,8 +31,6 @@ class FluxStore
 
 
 
-INGREDIENTS_KEY = 'drinks-app-ingredients'
-
 IngredientStore = new class extends FluxStore
   fields : -> {
     searchTerm                 : ''
@@ -145,11 +143,6 @@ UiStore = new class extends FluxStore
       @openIngredientGroups[group] = true
 
 
-
-FUZZY_MATCH = 2
-
-RECIPE_LOCALSTORAGE_KEY   =
-RECIPE_PERSISTABLE_FIELDS = 'customRecipes'
 
 RecipeStore = new class extends FluxStore
   fields : -> {
@@ -324,8 +317,12 @@ EditableRecipeStore = new class extends FluxStore
 
   MEASUREMENTS = [
     'ml'
+    'cl'
+    'l'
+    'liter'
     'oz'
     'ounce'
+    'pint'
     'part'
     'shot'
     'tsp'
@@ -337,6 +334,9 @@ EditableRecipeStore = new class extends FluxStore
     'barspoon'
     'dash'
     'dashes'
+    'drop'
+    'pinch'
+    'pinches'
   ]
 
   _parseIngredient : (rawText, tag) ->
