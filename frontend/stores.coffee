@@ -14,11 +14,17 @@ class FluxStore
   MicroEvent.mixin this
 
   constructor : ->
+    _persistable = !!@localStorageKey and !!@persistableFields
+
     _.extend @, _.result(@, 'fields')
+    if _persistable
+      _.extend @, _.pick(JSON.parse(localStorage[@localStorageKey] ? '{}'), @persistableFields)
 
     @dispatchToken = AppDispatcher.register (payload) =>
       if this[payload.type]?
         this[payload.type](payload)
+        if _persistable
+          localStorage[@localStorageKey] = JSON.stringify _.pick(@, @persistableFields)
         @trigger 'change'
 
       return true
@@ -28,15 +34,20 @@ class FluxStore
 INGREDIENTS_KEY = 'drinks-app-ingredients'
 
 IngredientStore = new class extends FluxStore
-  fields : ->
+  fields : -> {
     searchTerm                 : ''
     alphabeticalIngredients    : []
     allAlphabeticalIngredients : []
     groupedIngredients         : []
     searchedGroupedIngredients : []
-    selectedIngredientTags     : JSON.parse(localStorage[INGREDIENTS_KEY] ? 'null') ? {}
+    selectedIngredientTags     : {}
     ingredientsByTag           : {}
     baseLiquors                : [ 'all', 'gin', 'vodka', 'whiskey', 'rum', 'brandy', 'tequila', 'liqueur' ]
+  }
+
+  localStorageKey : 'drinks-app-ingredients'
+
+  persistableFields : [ 'selectedIngredientTags' ]
 
   'set-ingredients' : ({ groupedIngredients, intangibleIngredients, alphabeticalIngredientTags }) ->
     @groupedIngredients = groupedIngredients
@@ -70,7 +81,6 @@ IngredientStore = new class extends FluxStore
 
   'set-selected-ingredient-tags' : ({ selectedIngredientTags }) ->
     @selectedIngredientTags = selectedIngredientTags
-    localStorage[INGREDIENTS_KEY] = JSON.stringify @selectedIngredientTags
 
   'search-ingredients' : ({ searchTerm }) ->
     @searchTerm = searchTerm.toLowerCase()
@@ -95,42 +105,37 @@ IngredientStore = new class extends FluxStore
 
 
 
-UI_LOCALSTORAGE_KEY   = 'drinks-app-ui'
-UI_PERSISTABLE_FIELDS = [ 'mixabilityFilters', 'baseLiquorFilter' ]
-
 MIXABILITY_FILTER_RANGES = {
   mixable          : [ 0, 0 ]
   nearMixable      : [ 1, 1 ]
   notReallyMixable : [ 2, 100 ]
 }
 
-_toggleKey = (object, key) ->
-  if object[key]
-    delete object[key]
-  else
-    object[key] = true
-  # Cooperate with PureRenderMixin.
-  return _.clone object
-
 UiStore = new class extends FluxStore
-  fields : ->
-    return _.extend {
-      openIngredientGroups : {}
-      baseLiquorFilter     : 'all'
-      mixabilityFilters    :
-        mixable          : true
-        nearMixable      : true
-        notReallyMixable : false
-    }, _.pick(JSON.parse(localStorage[UI_LOCALSTORAGE_KEY] ? '{}'), UI_PERSISTABLE_FIELDS)
+  fields : -> {
+    finishedFtue         : false
+    openIngredientGroups : {}
+    baseLiquorFilter     : 'all'
+    mixabilityFilters    :
+      mixable          : true
+      nearMixable      : true
+      notReallyMixable : false
+  }
+
+  localStorageKey : 'drinks-app-ui'
+
+  persistableFields : [
+    'mixabilityFilters'
+    'baseLiquorFilter'
+    'finishedFtue'
+  ]
 
   'toggle-mixability-filter' : ({ filter }) ->
     @mixabilityFilters = _.clone @mixabilityFilters
     @mixabilityFilters[filter] = not @mixabilityFilters[filter]
-    @_persist()
 
   'set-base-liquor-filter' : ({ filter }) ->
     @baseLiquorFilter = filter
-    @_persist()
 
   'toggle-ingredient-group' : ({ group }) ->
     if @openIngredientGroups[group]?
@@ -139,29 +144,29 @@ UiStore = new class extends FluxStore
       @openIngredientGroups = {}
       @openIngredientGroups[group] = true
 
-  _persist : ->
-    localStorage[UI_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, UI_PERSISTABLE_FIELDS)
-
 
 
 FUZZY_MATCH = 2
 
-RECIPE_LOCALSTORAGE_KEY   = 'drinks-app-recipes'
+RECIPE_LOCALSTORAGE_KEY   =
 RECIPE_PERSISTABLE_FIELDS = 'customRecipes'
 
 RecipeStore = new class extends FluxStore
-  fields : ->
-    return _.extend {
-      searchTerm           : ''
-      mixabilityByRecipeId : {}
+  fields : -> {
+    searchTerm           : ''
+    mixabilityByRecipeId : {}
 
-      allRecipes     : []
-      defaultRecipes : []
-      customRecipes  : []
+    allRecipes     : []
+    defaultRecipes : []
+    customRecipes  : []
 
-      alphabeticalRecipes         : []
-      filteredAlphabeticalRecipes : []
-    }, _.pick(JSON.parse(localStorage[RECIPE_LOCALSTORAGE_KEY] ? '{}'), RECIPE_PERSISTABLE_FIELDS)
+    alphabeticalRecipes         : []
+    filteredAlphabeticalRecipes : []
+  }
+
+  localStorageKey : 'drinks-app-recipes'
+
+  persistableFields : [ 'customRecipes' ]
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     @_updateDerivedRecipeLists()
@@ -186,12 +191,10 @@ RecipeStore = new class extends FluxStore
   'save-recipe' : ({ recipe }) ->
     @customRecipes = @customRecipes.concat [ recipe ]
     @_refreshRecipes()
-    @_persist()
 
   'delete-recipe' : ({ recipeId }) ->
     @customRecipes = _.reject @customRecipes, { recipeId }
     @_refreshRecipes()
-    @_persist()
 
   _refreshRecipes : ->
     @allRecipes = @defaultRecipes.concat @customRecipes
@@ -268,18 +271,16 @@ RecipeStore = new class extends FluxStore
         filteredList.push { key, recipes }
     return filteredList
 
-  _persist : ->
-    localStorage[RECIPE_LOCALSTORAGE_KEY] = JSON.stringify _.pick(@, RECIPE_PERSISTABLE_FIELDS)
-
 
 
 EditableRecipeStore = new class extends FluxStore
-  fields : ->
+  fields : -> {
     name         : ''
     ingredients  : []
     instructions : ''
     notes        : ''
     base         : []
+  }
 
   'set-name' : ({ name }) ->
     @name = name
