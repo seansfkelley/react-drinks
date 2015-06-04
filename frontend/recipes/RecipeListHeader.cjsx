@@ -38,7 +38,7 @@ RecipeListHeader = React.createClass {
 
     <div>
       <TitleBar
-        leftIcon='fa-pencil'
+        leftIcon='/img/ingredients.svg'
         leftIconOnTouchTap={@_openIngredientPanel}
         rightIcon='fa-plus'
         rightIconOnTouchTap={@_newRecipe}

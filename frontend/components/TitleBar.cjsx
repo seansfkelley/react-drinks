@@ -17,18 +17,32 @@ TitleBar = React.createClass {
 
   render : ->
     if @props.leftIcon?
-      leftIcon = <i
-        className={'fa float-left ' + @props.leftIcon}
-        onTouchTap={@props.leftIconOnTouchTap}
-        onTouchStart={@_stopTouchStart}
-      />
+      if @props.leftIcon[0...2] == 'fa'
+        leftIcon = <i
+          className={'fa float-left ' + @props.leftIcon}
+          onTouchTap={@props.leftIconOnTouchTap}
+          onTouchStart={@_stopTouchStart}
+        />
+      else
+        leftIcon = <img
+          src={@props.leftIcon}
+          onTouchTap={@props.leftIconOnTouchTap}
+          onTouchStart={@_stopTouchStart}
+        />
 
     if @props.rightIcon?
-      rightIcon = <i
-        className={'fa float-right ' + @props.rightIcon}
-        onTouchTap={@props.rightIconOnTouchTap}
-        onTouchStart={@_stopTouchStart}
-      />
+      if @props.rightIcon[0...2] == 'fa'
+        rightIcon = <i
+          className={'fa float-right ' + @props.rightIcon}
+          onTouchTap={@props.rightIconOnTouchTap}
+          onTouchStart={@_stopTouchStart}
+        />
+      else
+        rightIcon = <img
+          src={@props.rightIcon}
+          onTouchTap={@props.rightIconOnTouchTap}
+          onTouchStart={@_stopTouchStart}
+        />
 
     showingIcons = @props.leftIcon? or @props.rightIcon?
 
