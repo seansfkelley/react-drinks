@@ -209,7 +209,7 @@ RecipeStore = new class extends FluxStore
     allMixableRecipes = @_recipeSearch.computeMixabilityForAll selectedTags
 
     @alphabeticalRecipes = _.chain allMixableRecipes
-      .map _.identity # map2array
+      .values()
       .flatten()
       .sortBy 'canonicalName'
       # group by should include a clause for numbers
