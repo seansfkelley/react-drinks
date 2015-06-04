@@ -48,8 +48,8 @@ TitleBar = React.createClass {
 
     if showingIcons
       # <i> doesn't work with the styling for some reason.
-      leftIcon  ?= <span className='fa float-left'/>
-      rightIcon ?= <span className='fa float-right'/>
+      leftIcon  ?= <span className='spacer float-left'/>
+      rightIcon ?= <span className='spacer float-right'/>
 
     <div className={classnames 'title-bar', @props.className} onTouchTap={@props.onTouchTap}>
       {leftIcon}
