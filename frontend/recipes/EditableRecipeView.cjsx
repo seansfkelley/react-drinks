@@ -180,7 +180,8 @@ EditableIngredient = React.createClass {
     return !!@state.value.trim()
 
   _commitIfAllowed : ->
-    @props.addIngredient @state.value.trim(), @state.tag
+    if @_isCommittable()
+      @props.addIngredient @state.value.trim(), @state.tag
 
   _onChange : (e) ->
     @setState { value : e.target.value }
