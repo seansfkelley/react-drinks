@@ -28,10 +28,8 @@ BASE_TAGS = {
 }
 
 # TODO: make IconButton class?
-# TODO: chooser for base liquor!
 # TODO: clicking back into ingredients to edit them
 # TODO: show what "type of" it is in the final display
-# TODO: deselect input when you scroll through to find the tag
 # TODO: "oh you put numbers in" (re: instructions); "I didn't know that it would do the numbers as you go in"
 # TODO: clicking on something to edit could be nice
 # TODO: "done" button is rather far away
@@ -89,7 +87,7 @@ EditableNamePage = React.createClass {
           ref='input'
           value={@state.name}
           onChange={@_onChange}
-          onTouchTap={@focus}
+          onTouchTap={@_focus}
         />
         <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
           <span className='next-text'>Next</span>
@@ -98,7 +96,7 @@ EditableNamePage = React.createClass {
       </div>
     </FixedHeaderFooter>
 
-  focus : ->
+  _focus : ->
     @refs.input.getDOMNode().focus()
 
   # mixin-ify this kind of stuff probably
@@ -153,7 +151,7 @@ EditableIngredient = React.createClass {
           ref='input'
           value={@state.value}
           onChange={@_onChange}
-          onTouchTap={@focus}
+          onTouchTap={@_focus}
         />
         <div
           className={classnames 'done-button', { 'disabled' : not @_isCommittable() }}
@@ -163,13 +161,16 @@ EditableIngredient = React.createClass {
         </div>
       </div>
       <div className='ingredient-list-header'>A Type Of</div>
-      <List className='ingredient-group-list'>
+      <List className='ingredient-group-list' onTouchStart={@_dismissKeyboard}>
         {ingredientSelector}
       </List>
     </div>
 
-  focus : ->
+  _focus : ->
     @refs.input.getDOMNode().focus()
+
+  _dismissKeyboard : ->
+    @refs.input.getDOMNode().blur()
 
   _tagSetter : (tag) ->
     return =>
