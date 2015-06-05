@@ -117,7 +117,7 @@ UiStore = new class extends FluxStore
     mixabilityFilters    :
       mixable          : true
       nearMixable      : true
-      notReallyMixable : false
+      notReallyMixable : true
   }
 
   localStorageKey : 'drinks-app-ui'
@@ -358,18 +358,20 @@ EditableRecipeStore = new class extends FluxStore
 
 
 seedStores = _.once ->
-  Promise.resolve $.get('/ingredients')
-  .then (ingredients) =>
-    AppDispatcher.dispatch _.extend {
-      type : 'set-ingredients'
-    }, ingredients
-
-  Promise.resolve $.get('/recipes')
-  .then (recipes) =>
-    AppDispatcher.dispatch {
-      type : 'set-default-recipes'
-      recipes
-    }
+  return Promise.all [
+    Promise.resolve $.get('/ingredients')
+    .then (ingredients) =>
+      AppDispatcher.dispatch _.extend {
+        type : 'set-ingredients'
+      }, ingredients
+  ,
+    Promise.resolve $.get('/recipes')
+    .then (recipes) =>
+      AppDispatcher.dispatch {
+        type : 'set-default-recipes'
+        recipes
+      }
+  ]
 
 module.exports = {
   seedStores

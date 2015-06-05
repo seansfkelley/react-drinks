@@ -1,4 +1,22 @@
 @require 'constants'
 
+list-border = 1px solid darken(grey10, 5%)
+
 .ftue-view
-  position relative
+  background-color grey10
+
+  .explanation
+    box-sizing border-box
+    padding 8px 16px
+
+  .fixed-header
+    border-bottom list-border
+
+  .fixed-footer
+    border-top list-border
+
+  i.fa.fa-check-circle
+    float right
+    line-height list-item-height
+    padding-right 12px
+    color grey2

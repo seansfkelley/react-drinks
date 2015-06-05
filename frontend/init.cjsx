@@ -8,7 +8,7 @@ webClipNotification = require './webClipNotification'
 
 # Initialize state.
 
-require('./stores').seedStores()
+initializationPromise = require('./stores').seedStores()
 
 if window.navigator.standalone
   document.body.setAttribute 'standalone', true
@@ -31,9 +31,14 @@ require('react-tap-event-plugin')()
 
 # Show views.
 
-React.render <App/>, document.querySelector('#app-root')
-webClipNotification.renderIfAppropriate()
-ftue.renderIfAppropriate()
+APP_DOM_ELEMENT = document.querySelector '#app-root'
+
+React.render <div className='loading-overlay'/>, APP_DOM_ELEMENT
+
+initializationPromise.then ->
+  React.render <App/>, APP_DOM_ELEMENT
+  webClipNotification.renderIfAppropriate()
+  ftue.renderIfAppropriate()
 
 # Debugging.
 
