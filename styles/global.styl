@@ -57,18 +57,33 @@ body[standalone]
     background-color grey3
 
 #main-loading-overlay
-  height 100%
-  width 100%
+  position absolute
+  top 0
+  left 0
+  right 0
+  bottom 0
 
-  background-color grey0
+  background-color grey10
 
   opacity 1
-  transition opacity transition-duration
   pointer-events auto
+
+  z-index 3
+
+  display flex
+  justify-content center
+  align-items center
 
   &.hidden
     opacity 0
     pointer-events none
+
+    transition opacity transition-duration
+    transition-delay transition-duration
+
+  i.fa
+    font-size 24px
+    color grey7
 
 .float-left
   float left
