@@ -56,6 +56,20 @@ body[standalone]
     width 100%
     background-color grey3
 
+#main-loading-overlay
+  height 100%
+  width 100%
+
+  background-color grey0
+
+  opacity 1
+  transition opacity transition-duration
+  pointer-events auto
+
+  &.hidden
+    opacity 0
+    pointer-events none
+
 .float-left
   float left
 

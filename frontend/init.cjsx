@@ -31,14 +31,14 @@ require('react-tap-event-plugin')()
 
 # Show views.
 
-APP_DOM_ELEMENT = document.querySelector '#app-root'
-
-React.render <div className='loading-overlay'/>, APP_DOM_ELEMENT
+LOADING_OVERLAY = document.querySelector '#main-loading-overlay'
 
 initializationPromise.then ->
-  React.render <App/>, APP_DOM_ELEMENT
+  React.render <App/>, document.querySelector('#app-root')
   webClipNotification.renderIfAppropriate()
   ftue.renderIfAppropriate()
+
+  LOADING_OVERLAY.classList.add 'hidden'
 
 # Debugging.
 
