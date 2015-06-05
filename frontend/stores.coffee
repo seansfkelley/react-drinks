@@ -112,7 +112,6 @@ MIXABILITY_FILTER_RANGES = {
 
 UiStore = new class extends FluxStore
   fields : -> {
-    finishedFtue         : false
     openIngredientGroups : {}
     baseLiquorFilter     : 'all'
     mixabilityFilters    :
@@ -123,11 +122,7 @@ UiStore = new class extends FluxStore
 
   localStorageKey : 'drinks-app-ui'
 
-  persistableFields : [
-    'mixabilityFilters'
-    'baseLiquorFilter'
-    'finishedFtue'
-  ]
+  persistableFields : [ 'mixabilityFilters', 'baseLiquorFilter' ]
 
   'toggle-mixability-filter' : ({ filter }) ->
     @mixabilityFilters = _.clone @mixabilityFilters
@@ -362,21 +357,23 @@ EditableRecipeStore = new class extends FluxStore
     }
 
 
+seedStores = _.once ->
+  Promise.resolve $.get('/ingredients')
+  .then (ingredients) =>
+    AppDispatcher.dispatch _.extend {
+      type : 'set-ingredients'
+    }, ingredients
 
-Promise.resolve $.get('/ingredients')
-.then (ingredients) =>
-  AppDispatcher.dispatch _.extend {
-    type : 'set-ingredients'
-  }, ingredients
-
-Promise.resolve $.get('/recipes')
-.then (recipes) =>
-  AppDispatcher.dispatch {
-    type : 'set-default-recipes'
-    recipes
-  }
+  Promise.resolve $.get('/recipes')
+  .then (recipes) =>
+    AppDispatcher.dispatch {
+      type : 'set-default-recipes'
+      recipes
+    }
 
 module.exports = {
+  seedStores
+
   IngredientStore
   RecipeStore
   UiStore
