@@ -5,8 +5,7 @@
   "scripts": {
     "start": "./node_modules/.bin/coffee index.coffee",
     "test": "multi=\"mocha-osx-reporter=- spec=-\" ./node_modules/.bin/mocha --reporter mocha-multi",
-    "dev": "./node_modules/.bin/nodemon index.coffee",
-    "install": "napa"
+    "dev": "./node_modules/.bin/nodemon index.coffee"
   },
   "repository": {
     "type": "git",
