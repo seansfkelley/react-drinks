@@ -11,6 +11,17 @@ FixedHeaderFooter = require './components/FixedHeaderFooter'
 AppDispatcher       = require './AppDispatcher'
 { IngredientStore } = require './stores'
 
+isMobileSafari = ->
+  return window.navigator.userAgent.indexOf('iPhone') != -1 and window.navigator.userAgent.indexOf('CriOS') == -1
+
+isWebClip = ->
+  return !!window.navigator.standalone
+
+# TODO: Three-part list:
+#  1. Web clip notification, if appropriate.
+#  2. Brief explanation of premise: mixability, substitutions.
+#  3. Ingredient selection (now that it's been explained why this is important).
+
 # This is kind of a clone of the default ingredient selection view.
 FtueView = React.createClass {
   displayName : 'FtueView'
@@ -18,8 +29,9 @@ FtueView = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    alphabeticalIngredients       : React.PropTypes.array
-    initialSelectedIngredientTags : React.PropTypes.object
+    alphabeticalIngredients       : React.PropTypes.array.isRequired
+    initialSelectedIngredientTags : React.PropTypes.object.isRequired
+    onComplete                    : React.PropTypes.func.isRequired
 
   getInitialState : -> {
     selectedIngredientTags : _.clone @props.initialSelectedIngredientTags
@@ -63,21 +75,7 @@ FtueView = React.createClass {
       type                   : 'set-selected-ingredient-tags'
       selectedIngredientTags : @state.selectedIngredientTags
     }
-    AppDispatcher.dispatch {
-      type : 'hide-modal'
-    }
+    @props.onComplete()
 }
 
-LOCALSTORAGE_KEY = 'drinks-app-ftue'
-
-module.exports = {
-  renderIfAppropriate : ->
-    if not localStorage[LOCALSTORAGE_KEY]
-      AppDispatcher.dispatch {
-        type      : 'show-modal'
-        component : <FtueView
-          alphabeticalIngredients={IngredientStore.alphabeticalIngredients}
-          initialSelectedIngredientTags={IngredientStore.selectedIngredientTags}
-        />
-      }
-}
+module.exports = FtueView

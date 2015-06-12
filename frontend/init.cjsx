@@ -2,13 +2,15 @@ window.debug = {}
 
 React = require 'react/addons'
 
-App                 = require './App'
-ftue                = require './ftue'
-webClipNotification = require './webClipNotification'
+App      = require './App'
+FtueView = require './FtueView'
+stores   = require './stores'
+
+{ UiStore, IngredientStore } = stores
 
 # Initialize state.
 
-initializationPromise = require('./stores').seedStores()
+initializationPromise = stores.seedStores()
 
 if window.navigator.standalone
   document.body.setAttribute 'standalone', true
@@ -32,13 +34,21 @@ require('react-tap-event-plugin')()
 # Show views.
 
 LOADING_OVERLAY = document.querySelector '#main-loading-overlay'
+FTUE_ROOT       = document.querySelector '#ftue-root'
+APP_ROOT        = document.querySelector '#app-root'
 
 initializationPromise.then ->
-  React.render <App/>, document.querySelector('#app-root')
-  webClipNotification.renderIfAppropriate()
-  ftue.renderIfAppropriate()
+  if not UiStore.completedFtue
+    FTUE_ROOT.classList.remove 'display-none'
+    React.render <FtueView
+      alphabeticalIngredients={IngredientStore.alphabeticalIngredients}
+      initialSelectedIngredientTags={IngredientStore.selectedIngredientTags}
+      onComplete={-> FTUE_ROOT.classList.add 'fade-out'}
+    />, FTUE_ROOT
 
-  LOADING_OVERLAY.classList.add 'hidden'
+  React.render <App/>, APP_ROOT
+
+  LOADING_OVERLAY.classList.add 'fade-out'
 
 # Debugging.
 

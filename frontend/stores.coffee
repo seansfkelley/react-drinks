@@ -114,6 +114,7 @@ UiStore = new class extends FluxStore
   fields : -> {
     openIngredientGroups : {}
     baseLiquorFilter     : 'all'
+    completedFtue        : false
     mixabilityFilters    :
       mixable          : true
       nearMixable      : true
@@ -122,7 +123,7 @@ UiStore = new class extends FluxStore
 
   localStorageKey : 'drinks-app-ui'
 
-  persistableFields : [ 'mixabilityFilters', 'baseLiquorFilter' ]
+  persistableFields : [ 'mixabilityFilters', 'baseLiquorFilter', 'completedFtue' ]
 
   'toggle-mixability-filter' : ({ filter }) ->
     @mixabilityFilters = _.clone @mixabilityFilters

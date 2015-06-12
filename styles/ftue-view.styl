@@ -1,10 +1,15 @@
 @require 'constants'
+@require 'mixins'
 
 list-border = 1px solid darken(grey10, 5%)
 
-.ftue-view
+#ftue-root
+  full-screen()
+  fade()
+
   background-color grey10
 
+.ftue-view
   .explanation
     box-sizing border-box
     padding 8px 16px
