@@ -31,6 +31,8 @@ class FluxStore
       return true
 
 
+ANY_BASE_LIQUOR = 'any'
+
 
 IngredientStore = new class extends FluxStore
   fields : -> {
@@ -41,7 +43,7 @@ IngredientStore = new class extends FluxStore
     searchedGroupedIngredients : []
     selectedIngredientTags     : {}
     ingredientsByTag           : {}
-    baseLiquors                : [ 'all' ].concat definitions.BASE_LIQUORS
+    baseLiquors                : [ ANY_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
   }
 
   localStorageKey : 'drinks-app-ingredients'
@@ -113,7 +115,7 @@ MIXABILITY_FILTER_RANGES = {
 UiStore = new class extends FluxStore
   fields : -> {
     openIngredientGroups : {}
-    baseLiquorFilter     : 'all'
+    baseLiquorFilter     : ANY_BASE_LIQUOR
     completedFtue        : false
     mixabilityFilters    :
       mixable          : true
@@ -227,7 +229,7 @@ RecipeStore = new class extends FluxStore
 
     filteredRecipes = @alphabeticalRecipes
 
-    if UiStore.baseLiquorFilter and UiStore.baseLiquorFilter != 'all'
+    if UiStore.baseLiquorFilter and UiStore.baseLiquorFilter != ANY_BASE_LIQUOR
       filteredRecipes = @_nestedFilter filteredRecipes, (r) ->
         if _.isString r.base
           return r.base == UiStore.baseLiquorFilter
