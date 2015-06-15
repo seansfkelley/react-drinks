@@ -3,22 +3,38 @@
 
 list-border = 1px solid darken(grey10, 5%)
 
+default-padding = 8px 16px
+
 #ftue-root
   full-screen()
   fade()
 
   background-color grey10
 
-.ftue-view
-  .explanation
-    box-sizing border-box
-    padding 8px 16px
-
+.ftue-page
   .fixed-header
     border-bottom list-border
 
   .fixed-footer
     border-top list-border
+
+.ftue-page.web-clip-page
+  .fixed-content-pane
+    box-sizing border-box
+    padding default-padding
+
+  img
+    height 1em
+
+.ftue-page.explanation-page
+  .fixed-content-pane
+    box-sizing border-box
+    padding default-padding
+
+.ftue-page.ingredients-page
+  .sub-header
+    box-sizing border-box
+    padding default-padding
 
   i.fa.fa-check-circle
     float right
