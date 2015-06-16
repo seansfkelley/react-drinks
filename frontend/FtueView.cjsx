@@ -44,15 +44,15 @@ WelcomePage = React.createClass {
   render : ->
     if @state.isMobileSafari
       webClipNotification = [
-        <h3>Protip!</h3>
-        <p className='explanation'>
+        <h3 key='protip'>Protip!</h3>
+        <p className='explanation' key='explanation'>
           If you want quicker access, you can tap <img src='/img/ios-export.png'/> at the bottom of the screen to save this to the home screen.
         </p>
       ]
     else if not @state.isWebClip
       webClipNotification = [
-        <h3>Protip:</h3>
-        <p className='explanation'>
+        <h3 key='protip'>Protip:</h3>
+        <p className='explanation' key='explanation'>
           You can save this to your home screen through Safari for quicker access.
           In Safari, tap <img src='/img/ios-export.png'/> at the bottom of the screen, then save to home screen.
         </p>
@@ -312,7 +312,11 @@ FtueView = React.createClass {
 
   render : ->
     PageClass = ORDERED_PAGE_CLASSES[@state.currentPageIndex]
-    return <PageClass {...@props} onComplete={_.partial @_goToPage, @state.currentPageIndex + 1}/>
+    if @state.currentPageIndex == ORDERED_PAGE_CLASSES.length - 1
+      onComplete = @props.onComplete
+    else
+      onComplete = _.partial @_goToPage, @state.currentPageIndex + 1
+    return <PageClass {...@props} onComplete={onComplete}/>
 
   _goToPage : (currentPageIndex) ->
     @setState { currentPageIndex }
