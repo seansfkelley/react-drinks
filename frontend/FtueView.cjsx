@@ -1,5 +1,6 @@
 _          = require 'lodash'
 React      = require 'react/addons'
+Isvg       = require 'react-inlinesvg'
 classnames = require 'classnames'
 
 { PureRenderMixin } = React.addons
@@ -214,7 +215,7 @@ MixabilityPage = React.createClass {
      >
       <h3>Mixability</h3>
       <p>
-        Once you've selected ingredients, you'll get a list of things you can make. You can even include things
+        Once you've selected ingredients, you'll get a list of things you can make. You can even include recipes
         missing an ingredient or two for those times you don't mind going to the corner store.
       </p>
       <p>
@@ -267,7 +268,7 @@ IngredientsPage = React.createClass {
     <FixedHeaderFooter
       className='ftue-page ingredients-page'
       header={header}
-      footer={<TitleBar onTouchTap={@_finish}>Finish</TitleBar>}
+      footer={<TitleBar onTouchTap={@_finish}>Continue</TitleBar>}
     >
       <List>
         {for ingredient in @props.alphabeticalIngredients
@@ -297,12 +298,43 @@ IngredientsPage = React.createClass {
     @props.onComplete()
 }
 
+SummaryPage = React.createClass {
+  displayName : 'SummaryPage'
+
+  mixins : [ PureRenderMixin ]
+
+  propTypes :
+    onComplete : React.PropTypes.func.isRequired
+
+  render : ->
+    <FixedHeaderFooter
+      className='ftue-page explanation-page summary-page'
+      header={<TitleBar>Spirit Guide</TitleBar>}
+      footer={<TitleBar onTouchTap={@props.onComplete}>Finish</TitleBar>}
+    >
+      <h3>Almost There!</h3>
+      <p>
+        Now that you've picked your ingredients, you're pretty much ready to go.
+      </p>
+      <p>
+        If you want to edit the list of ingredients you have, just tap <Isvg src='/img/ingredients.svg'/>.
+      </p>
+      <p>
+        You can add new recipes by tapping <i className='fa fa-plus'/>.
+      </p>
+      <h3>
+        Enjoy!
+      </h3>
+    </FixedHeaderFooter>
+}
+
 ORDERED_PAGE_CLASSES = [
   WelcomePage
   SampleIngredientPage
   MixabilityPage
   SubstitionPage
   IngredientsPage
+  SummaryPage
 ]
 
 FtueView = React.createClass {
