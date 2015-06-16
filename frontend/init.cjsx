@@ -2,9 +2,10 @@ window.debug = {}
 
 React = require 'react/addons'
 
-App      = require './App'
-FtueView = require './FtueView'
-stores   = require './stores'
+App           = require './App'
+FtueView      = require './FtueView'
+AppDispatcher = require './AppDispatcher'
+stores        = require './stores'
 
 { UiStore, IngredientStore } = stores
 
@@ -39,8 +40,14 @@ APP_ROOT        = document.querySelector '#app-root'
 
 initializationPromise.then ->
   if not UiStore.completedFtue
+    completeFtue = ->
+      FTUE_ROOT.classList.add 'fade-out'
+      AppDispatcher.dispatch {
+        type : 'completed-ftue'
+      }
+
     FTUE_ROOT.classList.remove 'display-none'
-    React.render <FtueView onComplete={-> FTUE_ROOT.classList.add 'fade-out'}/>, FTUE_ROOT
+    React.render <FtueView onComplete={completeFtue}/>, FTUE_ROOT
 
   React.render <App/>, APP_ROOT
 

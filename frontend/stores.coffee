@@ -133,6 +133,9 @@ UiStore = new class extends FluxStore
   'set-base-liquor-filter' : ({ filter }) ->
     @baseLiquorFilter = filter
 
+  'completed-ftue' : ->
+    @completedFtue = true
+
 RecipeStore = new class extends FluxStore
   fields : -> {
     searchTerm           : ''
