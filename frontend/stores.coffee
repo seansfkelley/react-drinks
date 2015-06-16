@@ -114,7 +114,6 @@ MIXABILITY_FILTER_RANGES = {
 
 UiStore = new class extends FluxStore
   fields : -> {
-    openIngredientGroups : {}
     baseLiquorFilter     : ANY_BASE_LIQUOR
     completedFtue        : false
     mixabilityFilters    :
@@ -133,15 +132,6 @@ UiStore = new class extends FluxStore
 
   'set-base-liquor-filter' : ({ filter }) ->
     @baseLiquorFilter = filter
-
-  'toggle-ingredient-group' : ({ group }) ->
-    if @openIngredientGroups[group]?
-      @openIngredientGroups = {}
-    else
-      @openIngredientGroups = {}
-      @openIngredientGroups[group] = true
-
-
 
 RecipeStore = new class extends FluxStore
   fields : -> {

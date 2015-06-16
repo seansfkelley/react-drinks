@@ -14,11 +14,13 @@ FixedHeaderFooter = require './components/FixedHeaderFooter'
 #  - Make a mention of the the ingredients button and add-recipe button
 #  - Add progress indicator dots at the bottom?
 
-MeasuredIngredient = require './recipes/MeasuredIngredient'
-MixabilityToggle   = require './recipes/MixabilityToggle'
-RecipeListItem     = require './recipes/RecipeListItem'
+MeasuredIngredient    = require './recipes/MeasuredIngredient'
+MixabilityToggle      = require './recipes/MixabilityToggle'
+RecipeListItem        = require './recipes/RecipeListItem'
+GroupedIngredientList = require './ingredients/GroupedIngredientList'
 
-AppDispatcher       = require './AppDispatcher'
+AppDispatcher = require './AppDispatcher'
+
 { IngredientStore } = require './stores'
 
 isMobileSafari = ->
@@ -46,7 +48,7 @@ WelcomePage = React.createClass {
       webClipNotification = [
         <h3 key='protip'>Protip!</h3>
         <p className='explanation' key='explanation'>
-          If you want quicker access, you can tap <img src='/img/ios-export.png'/> at the bottom of the screen to save this to the home screen.
+          If you want quicker access to Spirit Guide, you can tap <img src='/img/ios-export.png'/> at the bottom of the screen to save it to the home screen.
         </p>
       ]
     else if not @state.isWebClip
@@ -71,12 +73,17 @@ WelcomePage = React.createClass {
     </FixedHeaderFooter>
 }
 
-DUMMY_INGREDIENTS = [
-  'Gin'
-  'Vodka'
-  'Whiskey'
-  'Rum'
-  'Tequila'
+SAMPLE_INGREDIENT_TAGS = [
+  'gin'
+  'genever'
+  'bourbon'
+  'rye whiskey'
+  'blanco tequila'
+  'anejo tequila'
+  'white rum'
+  'dark rum'
+  'vodka'
+  'bison grass vodka'
 ]
 
 SampleIngredientPage = React.createClass {
@@ -85,46 +92,48 @@ SampleIngredientPage = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    onComplete : React.PropTypes.func.isRequired
+    groupedIngredients : React.PropTypes.array.isRequired
+    onComplete         : React.PropTypes.func.isRequired
 
-  getInitialState : -> {
-    selectedIngredients : []
-  }
+  getInitialState : ->
+    sampleGroupedIngredients = _.chain @props.groupedIngredients
+      .map ({ name, ingredients }) ->
+        return {
+          name
+          ingredients : _.filter ingredients, (i) -> i.tag in SAMPLE_INGREDIENT_TAGS
+        }
+      .filter ({ ingredients }) -> ingredients.length > 0
+      .value()
+    return { sampleGroupedIngredients }
 
   render : ->
     <FixedHeaderFooter
       className='ftue-page sample-ingredient-page explanation-page'
       header={<TitleBar>Spirit Guide</TitleBar>}
-      footer={<TitleBar onTouchTap={@props.onComplete}>Continue</TitleBar>}
+      footer={<TitleBar onTouchTap={@_onComplete}>Continue</TitleBar>}
     >
-      <h3>You Liquor Cabinet</h3>
+      <h3>Your Liquor Cabinet</h3>
       <p>
-        There's a list of ingredients you can pick from. Tap an ingredient to indicate you have it.
+        Here's a sample list of ingredients you can pick from. You'll be able to edit this list later.
       </p>
 
-      <List>
-        {_.map DUMMY_INGREDIENTS, (i) =>
-          return <List.Item onTouchTap={_.partial @_toggle, i} key={i}>
-            {i}
-            {if i in @state.selectedIngredients
-              <i className='fa fa-check-circle'/>
-            }
-          </List.Item>}
-      </List>
+      <GroupedIngredientList
+        groupedIngredients={@state.sampleGroupedIngredients}
+        initialSelectedIngredientTags={{}}
+        ref='ingredientList'
+      />
     </FixedHeaderFooter>
 
-  _toggle : (i) ->
-    if i in @state.selectedIngredients
-      @setState { selectedIngredients : _.without @state.selectedIngredients, i }
-    else
-      @setState { selectedIngredients : [ i ].concat(@state.selectedIngredients) }
+  _onComplete : ->
+    AppDispatcher.dispatch {
+      type                   : 'set-selected-ingredient-tags'
+      selectedIngredientTags : @refs.ingredientList.state.selectedIngredientTags
+    }
+    @props.onComplete()
 }
 
 
 DUMMY_RECIPES = [
-  recipeName : 'Aviation'
-  mixability : 2
-,
   recipeName : 'Gin & Tonic'
   mixability : 0
 ,
@@ -205,8 +214,8 @@ MixabilityPage = React.createClass {
      >
       <h3>Mixability</h3>
       <p>
-        If you're willing to take a trip to the corner store, you can make the search bring up recipes that
-        are missing one or more ingredients, too.
+        Once you've selected ingredients, you'll get a list of things you can make. You can even include things
+        missing an ingredient or two for those times you don't mind going to the corner store.
       </p>
       <p>
         Try tapping these:
@@ -239,12 +248,12 @@ IngredientsPage = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    alphabeticalIngredients       : React.PropTypes.array.isRequired
-    initialSelectedIngredientTags : React.PropTypes.object.isRequired
-    onComplete                    : React.PropTypes.func.isRequired
+    alphabeticalIngredients : React.PropTypes.array.isRequired
+    selectedIngredientTags  : React.PropTypes.object.isRequired
+    onComplete              : React.PropTypes.func.isRequired
 
   getInitialState : -> {
-    selectedIngredientTags : _.clone @props.initialSelectedIngredientTags
+    temporarySelectedIngredientTags : _.clone @props.selectedIngredientTags
   }
 
   render : ->
@@ -264,7 +273,7 @@ IngredientsPage = React.createClass {
         {for ingredient in @props.alphabeticalIngredients
           <List.Item key={ingredient.tag} onTouchTap={@_ingredientSelector ingredient.tag}>
             <span className='name'>{ingredient.display}</span>
-            {if @state.selectedIngredientTags[ingredient.tag]
+            {if @state.temporarySelectedIngredientTags[ingredient.tag]
               <i className='fa fa-check-circle'/>}
           </List.Item>}
       </List>
@@ -273,17 +282,17 @@ IngredientsPage = React.createClass {
   _ingredientSelector : (tag) ->
     return =>
       # It is VERY IMPORTANT that these create a new instance: this is how PureRenderMixin guarantees correctness.
-      if @state.selectedIngredientTags[tag]?
-        selectedIngredientTags = _.omit @state.selectedIngredientTags, tag
+      if @state.temporarySelectedIngredientTags[tag]?
+        temporarySelectedIngredientTags = _.omit @state.temporarySelectedIngredientTags, tag
       else
-        selectedIngredientTags = _.clone @state.selectedIngredientTags
-        selectedIngredientTags[tag] = true
-      @setState { selectedIngredientTags }
+        temporarySelectedIngredientTags = _.clone @state.temporarySelectedIngredientTags
+        temporarySelectedIngredientTags[tag] = true
+      @setState { temporarySelectedIngredientTags }
 
   _finish : ->
     AppDispatcher.dispatch {
       type                   : 'set-selected-ingredient-tags'
-      selectedIngredientTags : @state.selectedIngredientTags
+      selectedIngredientTags : @state.temporarySelectedIngredientTags
     }
     @props.onComplete()
 }
@@ -291,20 +300,21 @@ IngredientsPage = React.createClass {
 ORDERED_PAGE_CLASSES = [
   WelcomePage
   SampleIngredientPage
-  SubstitionPage
   MixabilityPage
+  SubstitionPage
   IngredientsPage
 ]
 
 FtueView = React.createClass {
   displayName : 'FtueView'
 
-  mixins : [ PureRenderMixin ]
+  mixins : [
+    PureRenderMixin
+    FluxMixin IngredientStore, 'alphabeticalIngredients', 'groupedIngredients', 'selectedIngredientTags'
+  ]
 
   propTypes :
-    alphabeticalIngredients       : React.PropTypes.array.isRequired
-    initialSelectedIngredientTags : React.PropTypes.object.isRequired
-    onComplete                    : React.PropTypes.func.isRequired
+    onComplete : React.PropTypes.func.isRequired
 
   getInitialState : -> {
     currentPageIndex : 0
@@ -316,7 +326,7 @@ FtueView = React.createClass {
       onComplete = @props.onComplete
     else
       onComplete = _.partial @_goToPage, @state.currentPageIndex + 1
-    return <PageClass {...@props} onComplete={onComplete}/>
+    return <PageClass {...@state} onComplete={onComplete}/>
 
   _goToPage : (currentPageIndex) ->
     @setState { currentPageIndex }

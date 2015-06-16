@@ -40,11 +40,7 @@ APP_ROOT        = document.querySelector '#app-root'
 initializationPromise.then ->
   if not UiStore.completedFtue
     FTUE_ROOT.classList.remove 'display-none'
-    React.render <FtueView
-      alphabeticalIngredients={IngredientStore.alphabeticalIngredients}
-      initialSelectedIngredientTags={IngredientStore.selectedIngredientTags}
-      onComplete={-> FTUE_ROOT.classList.add 'fade-out'}
-    />, FTUE_ROOT
+    React.render <FtueView onComplete={-> FTUE_ROOT.classList.add 'fade-out'}/>, FTUE_ROOT
 
   React.render <App/>, APP_ROOT
 
