@@ -19,7 +19,7 @@ FixedHeaderFooter = require './components/FixedHeaderFooter'
 #  - Refactor a bunch of this paging/navigation stuff so there's less repetition
 
 MeasuredIngredient = require './recipes/MeasuredIngredient'
-MixabilityToggle = React.createClass {render : -> <div/>}
+MixabilityToggle   = require './recipes/MixabilityToggle'
 
 AppDispatcher       = require './AppDispatcher'
 { IngredientStore } = require './stores'
@@ -78,6 +78,13 @@ ExplanationPage = React.createClass {
   propTypes :
     onComplete : React.PropTypes.func.isRequired
 
+  getInitialState : -> {
+    mixabilityToggles :
+      mixable          : true
+      nearMixable      : true
+      notReallyMixable : false
+  }
+
   render : ->
     <FixedHeaderFooter
       className='ftue-page explanation-page'
@@ -105,7 +112,10 @@ ExplanationPage = React.createClass {
         trip away. Try toggling these:
       </p>
 
-      <MixabilityToggle/>
+      <MixabilityToggle
+        mixabilityToggles={@state.mixabilityToggles}
+        onToggle={@_onMixabilityToggle}
+      />
 
       <p>
         And you'll see more or fewer recipes:
@@ -113,6 +123,10 @@ ExplanationPage = React.createClass {
 
       <List/>
     </FixedHeaderFooter>
+
+  _onMixabilityToggle : (setting) ->
+    @state.mixabilityToggles[setting] = not @state.mixabilityToggles[setting]
+    @setState { mixabilityToggles : _.clone @state.mixabilityToggles }
 }
 
 

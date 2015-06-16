@@ -1,47 +1,10 @@
 @require 'constants'
 
-vertical-padding = 6px
-
 .title-bar.recipe-list-header, .base-liquor-container
   background-color grey3
 
 .title-bar.recipe-list-header
   font-size inherit
-
-  .mixability-selector
-    display flex
-
-    box-sizing border-box
-    height title-bar-height
-    padding vertical-padding 0
-
-  .mixability-selector .option
-    flex 1
-    text-align center
-
-    text-transform uppercase
-    font-size uppercase-font-size - 0.1em
-    border 1px solid grey5
-    color grey10
-    // I'm fucking sick of not being able to sanely and simply vertically-align things.
-    line-height (title-bar-height - (vertical-padding + 1px) * 2)
-
-    background-color transparent
-    transition background-color transition-duration-quick, color transition-duration-quick
-
-    &.selected
-      background-color grey4
-
-    &:not(:first-child)
-      border-left none
-
-    &:first-child
-      border-top-left-radius standard-border-radius
-      border-bottom-left-radius standard-border-radius
-
-    &:last-child
-      border-top-right-radius standard-border-radius
-      border-bottom-right-radius standard-border-radius
 
   i.fa
     color grey10

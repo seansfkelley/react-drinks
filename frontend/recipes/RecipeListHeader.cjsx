@@ -14,13 +14,8 @@ AppDispatcher = require '../AppDispatcher'
 { UiStore, IngredientStore } = require '../stores'
 
 EditableRecipeView      = require './EditableRecipeView'
+MixabilityToggle        = require './MixabilityToggle'
 IngredientSelectionView = require '../ingredients/IngredientSelectionView'
-
-MIXABILITY_FILTER_NAMES = {
-  mixable          : 'Mixable'
-  nearMixable      : '1 Missing'
-  notReallyMixable : '2+ Missing'
-}
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
@@ -44,16 +39,10 @@ RecipeListHeader = React.createClass {
         rightIconOnTouchTap={@_newRecipe}
         className='recipe-list-header'
       >
-        <div className='mixability-selector'>
-          {for key, setting of @state.mixabilityFilters
-            <div
-              className={classnames 'option', { 'selected' : setting }}
-              onTouchTap={_.partial @_onMixabilityFilterChange, key}
-              key={key}
-            >
-              {MIXABILITY_FILTER_NAMES[key]}
-            </div>}
-        </div>
+        <MixabilityToggle
+          mixabilityToggles={@state.mixabilityFilters}
+          onToggle={@_onMixabilityFilterChange}
+        />
       </TitleBar>
       <Swipable
         className='base-liquor-container'
