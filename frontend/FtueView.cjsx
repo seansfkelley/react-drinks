@@ -28,13 +28,14 @@ isWebClip = ->
   return !!window.navigator.standalone
 
 FtuePage =
-  WEB_CLIP    : 'webclip'
-  EXPLANATION : 'explanation'
-  INGREDIENTS : 'ingredients'
+  WELCOME      : 'welcome'
+  SUBSTITUTION : 'substitution'
+  MIXABILITY   : 'mixability'
+  INGREDIENTS  : 'ingredients'
 
 
-WebClipPage = React.createClass {
-  displayName : 'WebClipPage'
+WelcomePage = React.createClass {
+  displayName : 'WelcomePage'
 
   mixins : [ PureRenderMixin ]
 
@@ -43,26 +44,36 @@ WebClipPage = React.createClass {
 
   getInitialState : -> {
     isMobileSafari : isMobileSafari()
+    isWebClip      : isWebClip()
   }
 
   render : ->
     if @state.isMobileSafari
-      text = <p className='explanation'>
-        If you want quicker access, you can tap <img src='/img/ios-export.png'/> at the bottom of the screen to save this to the home screen.
-      </p>
-    else
-      text = <p className='explanation'>
-        You can save this to your home screen through Safari for quicker access.
-        In Safari, tap <img src='/img/ios-export.png'/> at the bottom of the screen, then save to home screen.
-      </p>
+      webClipNotification = [
+        <h3>Protip!</h3>
+        <p className='explanation'>
+          If you want quicker access, you can tap <img src='/img/ios-export.png'/> at the bottom of the screen to save this to the home screen.
+        </p>
+      ]
+    else if not @state.isWebClip
+      webClipNotification = [
+        <h3>Protip:</h3>
+        <p className='explanation'>
+          You can save this to your home screen through Safari for quicker access.
+          In Safari, tap <img src='/img/ios-export.png'/> at the bottom of the screen, then save to home screen.
+        </p>
+      ]
 
     <FixedHeaderFooter
       className='ftue-page web-clip-page'
       header={<TitleBar>Spirit Guide</TitleBar>}
-      footer={<TitleBar onTouchTap={@props.onComplete}>Skip</TitleBar>}
+      footer={<TitleBar onTouchTap={@props.onComplete}>Continue</TitleBar>}
     >
-      <h3 className='intro'>Hey there first-timer!</h3>
-      {text}
+      <h3>Welcome!</h3>
+      <p>
+        Spirit Guide is an app that will tell you what cocktails you can make based on what's in your liquor cabinet.
+      </p>
+      {webClipNotification}
     </FixedHeaderFooter>
 }
 
@@ -91,8 +102,42 @@ _filterDummyListItems = (mixabilityToggles) ->
     allow.push [2, 3]...
   return _.filter DUMMY_LIST_ITEMS, ({ mixability }) -> mixability in allow
 
-ExplanationPage = React.createClass {
-  displayName : 'ExplanationPage'
+SubstitionPage = React.createClass {
+  displayName : 'SubstitionPage'
+
+  mixins : [ PureRenderMixin ]
+
+  propTypes :
+    onComplete : React.PropTypes.func.isRequired
+
+  render : ->
+    <FixedHeaderFooter
+      className='ftue-page explanation-page'
+      header={<TitleBar>Spirit Guide</TitleBar>}
+      footer={<TitleBar onTouchTap={@props.onComplete}>Continue</TitleBar>}
+    >
+      <h3>Substitutions</h3>
+
+      <p>
+        If an ingredient can be substituted with something else you have, recipes with that ingredient
+        will still show up.
+      </p>
+      <p>
+        Substitutes look like this:
+      </p>
+
+      <MeasuredIngredient
+        displayAmount='1'
+        displayUnit='oz'
+        displayIngredient='rye whiskey'
+        displaySubstitutes={[ 'bourbon' ]}
+        isSubstituted=true
+      />
+    </FixedHeaderFooter>
+}
+
+MixabilityPage = React.createClass {
+  displayName : 'MixabilityPage'
 
   mixins : [ PureRenderMixin ]
 
@@ -103,42 +148,23 @@ ExplanationPage = React.createClass {
     mixabilityToggles :
       mixable          : true
       nearMixable      : true
-      notReallyMixable : false
+      notReallyMixable : true
   }
 
   render : ->
     dummyRecipeNodes = _.map _filterDummyListItems(@state.mixabilityToggles), (props) ->
       return <RecipeListItem key={props.recipeName} {...props}/>
 
-    <FixedHeaderFooter
-      className='ftue-page explanation-page'
-      header={<TitleBar>Spirit Guide</TitleBar>}
-      footer={<TitleBar onTouchTap={@props.onComplete}>Continue</TitleBar>}
-    >
-      <h3>Welcome!</h3>
-
+     <FixedHeaderFooter
+       className='ftue-page explanation-page'
+       header={<TitleBar>Spirit Guide</TitleBar>}
+       footer={<TitleBar onTouchTap={@props.onComplete}>Continue</TitleBar>}
+     >
+      <h3>Mixability</h3>
       <p>
-        Spirit Guide is an app that will tell you what you can make based on what's in your liquor cabinet.
+        You can change how lenient the searching is, in case there are drinks that are just missing something
+        from the corner store.
       </p>
-      <p>
-        It understands similar ingredients, so if there's a drink with rye but you've only got bourbon, you'll
-        see this in your recipes:
-      </p>
-
-      <MeasuredIngredient
-        displayAmount='1'
-        displayUnit='oz'
-        displayIngredient='rye whiskey'
-        displaySubstitutes={[ 'bourbon' ]}
-        isSubstituted=true
-      />
-
-      <p>
-        It's also more lenient than most recipe-finding apps. If you want, Spirit Guide will also bring up
-        recipes for drinks that you almost have the right things to make, in case there's drinks that are
-        only a trip to the corner store away.
-      </p>
-
       <p>
         Try toggling these:
       </p>
@@ -231,16 +257,17 @@ FtueView = React.createClass {
     onComplete                    : React.PropTypes.func.isRequired
 
   getInitialState : -> {
-    isWebClip   : isWebClip()
-    currentPage : if isWebClip() then FtuePage.EXPLANATION else FtuePage.WEB_CLIP
+    currentPage : FtuePage.WELCOME
   }
 
   render : ->
     return switch @state.currentPage
-      when FtuePage.WEB_CLIP
-        <WebClipPage onComplete={@_makePageSwitcher(FtuePage.EXPLANATION)}/>
-      when FtuePage.EXPLANATION
-        <ExplanationPage onComplete={@_makePageSwitcher(FtuePage.INGREDIENTS)}/>
+      when FtuePage.WELCOME
+        <WelcomePage onComplete={@_makePageSwitcher(FtuePage.SUBSTITUTION)}/>
+      when FtuePage.SUBSTITUTION
+        <SubstitionPage onComplete={@_makePageSwitcher(FtuePage.MIXABILITY)}/>
+      when FtuePage.MIXABILITY
+        <MixabilityPage onComplete={@_makePageSwitcher(FtuePage.INGREDIENTS)}/>
       when FtuePage.INGREDIENTS
         <IngredientsPage
           alphabeticalIngredients={@props.alphabeticalIngredients}
