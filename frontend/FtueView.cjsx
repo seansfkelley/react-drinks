@@ -1,5 +1,7 @@
-_     = require 'lodash'
-React = require 'react/addons'
+_          = require 'lodash'
+React      = require 'react/addons'
+classnames = require 'classnames'
+
 { PureRenderMixin } = React.addons
 
 FluxMixin = require './mixins/FluxMixin'
@@ -10,9 +12,7 @@ FixedHeaderFooter = require './components/FixedHeaderFooter'
 
 # TODO:
 #  - Make a mention of the the ingredients button and add-recipe button
-#  - Should the explanation page be split in two?
 #  - Add progress indicator dots at the bottom?
-#  - Refactor a bunch of this paging/navigation stuff so there's less repetition
 
 MeasuredIngredient = require './recipes/MeasuredIngredient'
 MixabilityToggle   = require './recipes/MixabilityToggle'
@@ -26,12 +26,6 @@ isMobileSafari = ->
 
 isWebClip = ->
   return !!window.navigator.standalone
-
-FtuePage =
-  WELCOME      : 'welcome'
-  SUBSTITUTION : 'substitution'
-  MIXABILITY   : 'mixability'
-  INGREDIENTS  : 'ingredients'
 
 
 WelcomePage = React.createClass {
@@ -71,14 +65,63 @@ WelcomePage = React.createClass {
     >
       <h3>Welcome!</h3>
       <p>
-        Spirit Guide is an app that will tell you what cocktails you can make based on what's in your liquor cabinet.
+        Spirit Guide figures out what cocktails you can make based on what's in your liquor cabinet.
       </p>
       {webClipNotification}
     </FixedHeaderFooter>
 }
 
+DUMMY_INGREDIENTS = [
+  'Gin'
+  'Vodka'
+  'Whiskey'
+  'Rum'
+  'Tequila'
+]
 
-DUMMY_LIST_ITEMS = [
+SampleIngredientPage = React.createClass {
+  displayName : 'SampleIngredientPage'
+
+  mixins : [ PureRenderMixin ]
+
+  propTypes :
+    onComplete : React.PropTypes.func.isRequired
+
+  getInitialState : -> {
+    selectedIngredients : []
+  }
+
+  render : ->
+    <FixedHeaderFooter
+      className='ftue-page sample-ingredient-page explanation-page'
+      header={<TitleBar>Spirit Guide</TitleBar>}
+      footer={<TitleBar onTouchTap={@props.onComplete}>Continue</TitleBar>}
+    >
+      <h3>You Liquor Cabinet</h3>
+      <p>
+        There's a list of ingredients you can pick from. Tap an ingredient to indicate you have it.
+      </p>
+
+      <List>
+        {_.map DUMMY_INGREDIENTS, (i) =>
+          return <List.Item onTouchTap={_.partial @_toggle, i} key={i}>
+            {i}
+            {if i in @state.selectedIngredients
+              <i className='fa fa-check-circle'/>
+            }
+          </List.Item>}
+      </List>
+    </FixedHeaderFooter>
+
+  _toggle : (i) ->
+    if i in @state.selectedIngredients
+      @setState { selectedIngredients : _.without @state.selectedIngredients, i }
+    else
+      @setState { selectedIngredients : [ i ].concat(@state.selectedIngredients) }
+}
+
+
+DUMMY_RECIPES = [
   recipeName : 'Aviation'
   mixability : 2
 ,
@@ -92,7 +135,7 @@ DUMMY_LIST_ITEMS = [
   mixability : 1
 ]
 
-_filterDummyListItems = (mixabilityToggles) ->
+_getFilteredDummyRecipes = (mixabilityToggles) ->
   allow = []
   if mixabilityToggles.mixable
     allow.push 0
@@ -100,7 +143,7 @@ _filterDummyListItems = (mixabilityToggles) ->
     allow.push 1
   if mixabilityToggles.notReallyMixable
     allow.push [2, 3]...
-  return _.filter DUMMY_LIST_ITEMS, ({ mixability }) -> mixability in allow
+  return _.filter DUMMY_RECIPES, ({ mixability }) -> mixability in allow
 
 SubstitionPage = React.createClass {
   displayName : 'SubstitionPage'
@@ -119,11 +162,11 @@ SubstitionPage = React.createClass {
       <h3>Substitutions</h3>
 
       <p>
-        If an ingredient can be substituted with something else you have, recipes with that ingredient
-        will still show up.
+        If a recipe calls for an ingredient that you don't have but can substitute for, that recipe
+        will still show up in the results.
       </p>
       <p>
-        Substitutes look like this:
+        Substituted ingredients look like this:
       </p>
 
       <MeasuredIngredient
@@ -152,7 +195,7 @@ MixabilityPage = React.createClass {
   }
 
   render : ->
-    dummyRecipeNodes = _.map _filterDummyListItems(@state.mixabilityToggles), (props) ->
+    dummyRecipeNodes = _.map _getFilteredDummyRecipes(@state.mixabilityToggles), (props) ->
       return <RecipeListItem key={props.recipeName} {...props}/>
 
      <FixedHeaderFooter
@@ -162,11 +205,11 @@ MixabilityPage = React.createClass {
      >
       <h3>Mixability</h3>
       <p>
-        You can change how lenient the searching is, in case there are drinks that are just missing something
-        from the corner store.
+        If you're willing to take a trip to the corner store, you can make the search bring up recipes that
+        are missing one or more ingredients, too.
       </p>
       <p>
-        Try toggling these:
+        Try tapping these:
       </p>
 
       <MixabilityToggle
@@ -245,6 +288,13 @@ IngredientsPage = React.createClass {
     @props.onComplete()
 }
 
+ORDERED_PAGE_CLASSES = [
+  WelcomePage
+  SampleIngredientPage
+  SubstitionPage
+  MixabilityPage
+  IngredientsPage
+]
 
 FtueView = React.createClass {
   displayName : 'FtueView'
@@ -257,27 +307,15 @@ FtueView = React.createClass {
     onComplete                    : React.PropTypes.func.isRequired
 
   getInitialState : -> {
-    currentPage : FtuePage.WELCOME
+    currentPageIndex : 0
   }
 
   render : ->
-    return switch @state.currentPage
-      when FtuePage.WELCOME
-        <WelcomePage onComplete={@_makePageSwitcher(FtuePage.SUBSTITUTION)}/>
-      when FtuePage.SUBSTITUTION
-        <SubstitionPage onComplete={@_makePageSwitcher(FtuePage.MIXABILITY)}/>
-      when FtuePage.MIXABILITY
-        <MixabilityPage onComplete={@_makePageSwitcher(FtuePage.INGREDIENTS)}/>
-      when FtuePage.INGREDIENTS
-        <IngredientsPage
-          alphabeticalIngredients={@props.alphabeticalIngredients}
-          initialSelectedIngredientTags={@props.initialSelectedIngredientTags}
-          onComplete={@props.onComplete}
-        />
+    PageClass = ORDERED_PAGE_CLASSES[@state.currentPageIndex]
+    return <PageClass {...@props} onComplete={_.partial @_goToPage, @state.currentPageIndex + 1}/>
 
-  _makePageSwitcher : (targetPage) ->
-    return =>
-      @setState { currentPage : targetPage }
+  _goToPage : (currentPageIndex) ->
+    @setState { currentPageIndex }
 }
 
 module.exports = FtueView
