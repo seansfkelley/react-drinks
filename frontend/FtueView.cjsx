@@ -20,6 +20,7 @@ FixedHeaderFooter = require './components/FixedHeaderFooter'
 
 MeasuredIngredient = require './recipes/MeasuredIngredient'
 MixabilityToggle   = require './recipes/MixabilityToggle'
+RecipeListItem     = require './recipes/RecipeListItem'
 
 AppDispatcher       = require './AppDispatcher'
 { IngredientStore } = require './stores'
@@ -70,6 +71,30 @@ WebClipPage = React.createClass {
 }
 
 
+DUMMY_LIST_ITEMS = [
+  recipeName : 'Aviation'
+  mixability : 2
+,
+  recipeName : 'Gin & Tonic'
+  mixability : 0
+,
+  recipeName : 'Margarita'
+  mixability : 3
+,
+  recipeName : 'Whiskey Sour'
+  mixability : 1
+]
+
+_filterDummyListItems = (mixabilityToggles) ->
+  allow = []
+  if mixabilityToggles.mixable
+    allow.push 0
+  if mixabilityToggles.nearMixable
+    allow.push 1
+  if mixabilityToggles.notReallyMixable
+    allow.push [2, 3]...
+  return _.filter DUMMY_LIST_ITEMS, ({ mixability }) -> mixability in allow
+
 ExplanationPage = React.createClass {
   displayName : 'ExplanationPage'
 
@@ -86,6 +111,8 @@ ExplanationPage = React.createClass {
   }
 
   render : ->
+    dummyRecipeNodes = _.map _filterDummyListItems(@state.mixabilityToggles), (props) -> <RecipeListItem key={props.recipeName} {...props}/>
+
     <FixedHeaderFooter
       className='ftue-page explanation-page'
       header={<TitleBar>Spirit Guide</TitleBar>}
@@ -121,7 +148,9 @@ ExplanationPage = React.createClass {
         And you'll see more or fewer recipes:
       </p>
 
-      <List/>
+      <List>
+        {dummyRecipeNodes}
+      </List>
     </FixedHeaderFooter>
 
   _onMixabilityToggle : (setting) ->

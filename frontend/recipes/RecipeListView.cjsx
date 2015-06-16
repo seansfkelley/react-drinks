@@ -1,6 +1,5 @@
 _          = require 'lodash'
 React      = require 'react/addons'
-classnames = require 'classnames'
 
 { PureRenderMixin } = React.addons
 
@@ -17,58 +16,8 @@ stylingConstants = require '../stylingConstants'
 { RecipeStore, UiStore } = require '../stores'
 
 SwipableRecipeView = require './SwipableRecipeView'
+RecipeListItem     = require './RecipeListItem'
 RecipeListHeader   = require './RecipeListHeader'
-
-RecipeListItem = React.createClass {
-  displayName : 'RecipeListItem'
-
-  propTypes :
-    recipe     : React.PropTypes.object.isRequired
-    mixability : React.PropTypes.number
-    onTouchTap : React.PropTypes.func.isRequired
-    onDelete   : React.PropTypes.func
-
-  mixins : [ PureRenderMixin ]
-
-  render : ->
-    if @props.mixability > 0
-      mixabilityNode = <span className='mixability'>{@props.mixability}</span>
-
-    ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
-
-    <ListItemClass className={classnames { 'is-mixable' : @props.mixability == 0 }} onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
-      <span className='name'>{@props.recipe.name}</span>
-      {mixabilityNode}
-    </ListItemClass>
-}
-
-IncompleteRecipeListItem = React.createClass {
-  displayName : 'IncompleteRecipeListItem'
-
-  propTypes :
-    recipe     : React.PropTypes.object.isRequired
-    onTouchTap : React.PropTypes.func.isRequired
-    onDelete   : React.PropTypes.func
-
-  mixins : [ PureRenderMixin ]
-
-  render : ->
-    missingIngredients = _.map @props.recipe.missing, (m) ->
-      <div className='missing-ingredient' key={m.displayIngredient}>
-        <span className='amount'>{utils.fractionify(m.displayAmount ? '')}</span>
-        {' '}
-        <span className='unit'>{m.displayUnit ? ''}</span>
-        {' '}
-        <span className='ingredient'>{m.displayIngredient}</span>
-      </div>
-
-    ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
-
-    <ListItemClass className='incomplete' onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
-      <div className='name'>{@props.recipe.name}</div>
-      {missingIngredients}
-    </ListItemClass>
-}
 
 _generateRecipeOpener = (groupedRecipes, absoluteIndex) ->
   return ->
@@ -105,7 +54,6 @@ RecipeList = React.createClass {
         listNodes.push @props.makeHeader(key, recipes)
       for r in recipes
         listNodes.push @props.makeItem(key, r, {
-          recipe     : r
           onTouchTap : _generateRecipeOpener @props.recipes, absoluteIndex
           onDelete   : if r.isCustom then _.partial(@_deleteRecipe, r.recipeId)
           key        : r.recipeId
@@ -175,7 +123,7 @@ RecipeListView = React.createClass {
     return <List.Header title={key.toUpperCase()} key={'header-' + key}/>
 
   _alphabeticalListItem : (key, r, props) ->
-    return <RecipeListItem mixability={@state.mixabilityByRecipeId[r.recipeId]} {...props}/>
+    return <RecipeListItem mixability={@state.mixabilityByRecipeId[r.recipeId]} recipeName={r.name} {...props}/>
 }
 
 module.exports = RecipeListView
