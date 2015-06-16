@@ -9,10 +9,6 @@ TitleBar          = require './components/TitleBar'
 FixedHeaderFooter = require './components/FixedHeaderFooter'
 
 # TODO:
-#  - Factor out:
-#    - Mixability toggle
-#    - Ingredient list item result
-#  - Plug them into the explanation page
 #  - Make a mention of the the ingredients button and add-recipe button
 #  - Should the explanation page be split in two?
 #  - Add progress indicator dots at the bottom?
@@ -111,7 +107,8 @@ ExplanationPage = React.createClass {
   }
 
   render : ->
-    dummyRecipeNodes = _.map _filterDummyListItems(@state.mixabilityToggles), (props) -> <RecipeListItem key={props.recipeName} {...props}/>
+    dummyRecipeNodes = _.map _filterDummyListItems(@state.mixabilityToggles), (props) ->
+      return <RecipeListItem key={props.recipeName} {...props}/>
 
     <FixedHeaderFooter
       className='ftue-page explanation-page'
@@ -121,8 +118,11 @@ ExplanationPage = React.createClass {
       <h3>Welcome!</h3>
 
       <p>
-        Spirit Guide is an app that will tell you what you can make based on what's in your bar.
-        It also understands similar ingredients, so if there's a drink with rye but you've only got bourbon:
+        Spirit Guide is an app that will tell you what you can make based on what's in your liquor cabinet.
+      </p>
+      <p>
+        It understands similar ingredients, so if there's a drink with rye but you've only got bourbon, you'll
+        see this in your recipes:
       </p>
 
       <MeasuredIngredient
@@ -134,9 +134,13 @@ ExplanationPage = React.createClass {
       />
 
       <p>
-        Have you ever been suspicious that recipe-finding apps are being too strict? If you want, Spirit Guide
-        will also find recipes that you can nearly make, in case there's drinks that are only a corner store
-        trip away. Try toggling these:
+        It's also more lenient than most recipe-finding apps. If you want, Spirit Guide will also bring up
+        recipes for drinks that you almost have the right things to make, in case there's drinks that are
+        only a trip to the corner store away.
+      </p>
+
+      <p>
+        Try toggling these:
       </p>
 
       <MixabilityToggle
