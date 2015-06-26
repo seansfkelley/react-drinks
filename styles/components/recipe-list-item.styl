@@ -1,0 +1,28 @@
+.recipe-list-item
+  background: #fff
+  padding: 0 10px
+  margin: 0 0 1px 0
+
+  /.headered-list &
+    padding-left: 20px
+
+  &.deletable-list-item // TODO: change/fix
+    padding-right: 0
+
+  &:not(.is-mixable)
+    color: #888
+    font-style: italic
+
+  .mixability
+    display: inline-block
+    vertical-align: text-top
+    box-sizing: content-box
+    margin: 3px 0 0 8px
+    padding: 2px 1px
+    border: 1px solid #aaa
+    border-radius: 4px
+    font-style: normal
+    font-size: 0.7em
+    line-height: 1
+    min-width: 1em
+    text-align: center // TODO: there must be a simpler way to do this

@@ -1,0 +1,33 @@
+html, body
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+  width: 100%
+  height: 100%
+  overflow: hidden
+  font: $base-font-size/1 $base-font-family
+  color: #202020
+  -webkit-font-smoothing: antialiased
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+  user-select: none
+
+*, *:before, *:after
+  box-sizing: inherit
+
+input, textarea
+  font-family: inherit
+  font-size: inherit
+  line-height: normal // BUG: `line-height: 1` turns into `normal` regardless (though :placeholder stays at 1)
+  border: none
+  margin: 0
+  padding: 0
+  outline: none
+  background: none
+  appearance: none
+
+i.fa // TODO: move FA library styles ahead in all-styles.css, then "i" won't be necessary
+  text-align: center
+  line-height: inherit
+
+.display-none
+  display: none

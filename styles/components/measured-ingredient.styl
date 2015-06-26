@@ -1,0 +1,47 @@
+.measured-ingredient
+  display: table
+  width: 100%
+
+  /.recipe-ingredients & // TODO: find a better way to distinguish single vs. group difference/remove difference
+    display: table-row
+    background: #eee
+
+  &:nth-child(even)
+    background: #d8d8d8
+
+  > *
+    display: table-cell // on non-retina with *mobile* emulator, faint cell border appears (rounding bug)
+
+  .measure
+    padding: 0 0 0 12px
+    white-space: nowrap
+    width: 25% // TODO: get all instances to work with css table columns
+
+    .unit
+      text-transform: uppercase
+      font-size: 12px
+      font-weight: 600
+
+  .ingredient
+    padding: 6px 12px
+    font-weight: 600
+    line-height: 32px
+
+  &.missing, &.substituted .ingredient .name
+    color: #a6a6a6
+    font-style: italic
+
+  &.substituted
+    .ingredient
+      span
+        display: block
+
+      .substitute-label, .substitute-content
+        display: inline-block
+        vertical-align: top
+        font-size: 13px
+        line-height: 26px
+
+      .substitute-label
+        padding-right: 6px
+        font-weight: 400

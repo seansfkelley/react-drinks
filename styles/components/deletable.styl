@@ -1,0 +1,25 @@
+.deletable // RENAME: swipe-delete? TODO: if .draggable moved to the .deletable's contents, .delete-button wouldn't need any JS positioning or width
+  position: relative
+
+  &:not(.react-draggable-dragging)
+    transition: left $transition-duration
+
+    .delete-button
+      transition: width $transition-duration, right $transition-duration
+
+  .delete-button
+    position: absolute
+    top: 0
+    height: 100%
+    display: inline-block
+    background: #f43c50
+    color: #fff
+    text-align: center
+    font-weight: 600
+    overflow: hidden
+
+    &:before // HACK
+      content: ''
+      display: inline-block
+      height: 100%
+      vertical-align: middle

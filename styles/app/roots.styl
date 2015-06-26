@@ -1,0 +1,92 @@
+full-screen()
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+
+.fade // RENAME: .to-fade? TODO: should #modal-root use this?
+  opacity: 1
+  transition: opacity $transition-duration
+
+.fade-out
+  opacity: 0
+  pointer-events: none
+
+#main-loading-overlay, #ftue-root, #modal-root, #flyup-root, #pushover-root // TODO: maybe a .root class, or something?
+  full-screen()
+
+#main-loading-overlay // TODO: should this be moved to base.styl? or somewhere
+  z-index: 3
+  background: #fff
+  display: flex
+  justify-content: center // REMOVE .centering-wrapper
+  align-items: center
+
+  /body[standalone] & // iOS status bar
+    padding-top: 20px
+    background-image: linear-gradient(to bottom, #000 20px, transparent 20px)
+
+  .fa
+    color: #d8d8d8
+    font-size: 24px
+
+#ftue-root // TODO: should there be a fade-in/out root, or something?
+  z-index: 2
+
+#modal-root, #flyup-root, #pushover-root
+  z-index: 1
+  pointer-events: none
+
+  &.visible
+    pointer-events: auto // Makes only .visible views interactive (even if CSS transition/JS cleanup still in progress)
+
+  &.topmost
+    z-index: 2 // TODO: couldn't this go on the roots that need it?
+
+#modal-root
+  > *
+    opacity: 0
+    transition: opacity $transition-duration
+
+  &.visible > *
+    opacity: 1
+
+#flyup-root // TODO: fix bug wherein sometimes it doesn't animate (for new-recipe)
+  > *
+    transform: translate(0, 100%)
+    transition: transform $transition-duration
+
+  &.visible > *
+    transform: none
+
+  &:before // Fades out/in underlying content
+    z-index: -1
+    content: ''
+    full-screen()
+    background: rgba(0,0,0,0.5)
+    opacity: 0
+    transition: opacity $transition-duration
+
+  &.visible:before
+    opacity: 1
+
+#pushover-root
+  > *
+    width: 87%
+    transform: translate(-100%, 0) // If same as actual pushover width, the iPhone renders weird ugly artifacts.
+    transition: transform $transition-duration
+
+  &.visible > *
+    transform: none
+
+#app-root
+  transition: transform $transition-duration
+
+  &.showing-pushover
+    transform: translate(87%, 0)
+
+    &:after
+      content: ' '
+      full-screen()
+      box-shadow: inset 3px 0 3px 0 rgba(0,0,0,.25)
