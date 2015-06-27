@@ -339,7 +339,7 @@ EditableRecipeStore = new class extends FluxStore
       text = text[displayAmount.length..].trim()
 
     possibleUnit = text.split(' ')[0]
-    if possibleUnit in MEASUREMENTS or possibleUnit + 's' in MEASUREMENTS
+    if possibleUnit in MEASUREMENTS or _.any(MEASUREMENTS, (m) -> possibleUnit == m + 's')
       displayUnit = possibleUnit
       text = text[displayUnit.length..].trim()
 

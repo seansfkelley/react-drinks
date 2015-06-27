@@ -6,6 +6,7 @@ With two minor exceptions, all changes were to `/styles`:
 #### Structure
 
 Organized the styles by scope/function:
+
 - `_dependencies/` — variables, mixins (things that need to load first)
 - `app/` — defaults/resets + the underlying structure
 - `components/` — reusable components (except those that seemed more structural)
