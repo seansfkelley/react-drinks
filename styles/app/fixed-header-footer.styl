@@ -11,10 +11,10 @@ body[standalone] // iOS Status Bar: TODO: should be higher in stack, but has to 
   flex-direction: column
 
   .fixed-header, .fixed-footer
-    flex-shrink: 0 // TODO: not totally sure this is necessary
+    flex: none // TODO: not totally sure this is necessary
 
   .fixed-content-pane
-    flex-grow: 1
+    flex: 1
     overflow-y: scroll
     -webkit-overflow-scrolling: touch
 
