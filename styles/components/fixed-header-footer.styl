@@ -1,0 +1,22 @@
+body[standalone] // iOS Status Bar: TODO: should be higher in stack, but has to be subject to .*-views
+  .fixed-header-footer
+    padding-top: 20px
+
+  #modal-root .fixed-header-footer, .fixed-header-footer .fixed-header-footer // TODO: fix nesting problem
+    padding-top: inherit
+
+.fixed-header-footer
+  height: 100%
+  display: flex
+  flex-direction: column
+
+  .fixed-header, .fixed-footer
+    flex: none // TODO: not totally sure this is necessary
+
+  .fixed-content-pane
+    flex: 1
+    overflow-y: scroll
+    -webkit-overflow-scrolling: touch
+
+  .fixed-header-footer // for nested .fixed-header-footers TODO: maybe the root one should have its own name
+    height: auto

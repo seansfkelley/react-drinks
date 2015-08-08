@@ -36,14 +36,14 @@ MeasuredIngredient = React.createClass {
         {' '}
         <span className='unit'>{@props.displayUnit}</span>
       </span>
-      <span className='ingredient'>{@props.displayIngredient}</span>
+      <span className='ingredient'>
+          <span className='name'>{@props.displayIngredient}</span>
       {if @props.displaySubstitutes.length
         [
-          <br key='br'/>
           <span className='substitute-label' key='label'>try:</span>
           <span className='substitute-content' key='content'>{@props.displaySubstitutes}</span>
         ]
-      }
+      }</span>
     </div>
 }
 

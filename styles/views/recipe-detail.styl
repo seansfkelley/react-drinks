@@ -1,0 +1,44 @@
+body[standalone] .swipable-recipe-container
+  padding-top: 25px // iOS status-bar
+
+.swipable-recipe-container
+  height: 100%
+  padding: 10px 0
+  background: rgba(0,0,0,0.5)
+
+  .swipable-padding-wrapper // REMOVE: .swipable-positioning-wrapper
+    width: 94%
+    padding: 0 1% // TODO: if we add margin calc to Swipable, we could remove this too (put it all on .recipe-view)
+
+.recipe-view
+  background: #fff
+
+  .fixed-content-pane
+    padding: 0 8px
+    line-height: 1.25
+
+    .recipe-ingredients
+      display: table
+      width: 100%
+
+    .recipe-instructions
+      margin: 12px 0
+      padding: 0 18px 10px 2em
+      counter-reset: item
+      list-style: none
+
+      li // TODO: add hook for instructions that have only one step
+        margin: 0 0 10px 0
+
+        &:before // allows for colored numbers w/o extra element
+          margin-left: -1.25em
+          padding-right: 0.25em
+          content: counter(item) '. '
+          counter-increment: item
+          color: #999
+          font-weight: 600
+
+    .recipe-notes
+      margin: 5px
+      color: #444
+      font-style: italic

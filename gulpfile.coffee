@@ -26,17 +26,20 @@ LIBRARY_CSS_PATHS = [
 ]
 
 SRC_PATHS =
-  root    : [ './frontend/init.cjsx' ]
-  scripts : [ './frontend/**/*.coffee', './frontend/**/*.cjsx' ]
-  styles  : [
-    './styles/**/*.styl'
-    './styles/**/*.css'
+  scripts : [
+    './frontend/init.cjsx'
+  ]
+  styles : [
+    './styles/index.styl'
   ].concat _.map(LIBRARY_CSS_PATHS, (p) -> './node_modules/' + p)
-  fonts   : [
+  styleWatch : [
+    './styles/**/*.styl'
+  ]
+  fonts : [
     './fonts/**.*'
     './node_modules/font-awesome/fonts/**.*'
   ]
-  img     : [
+  img : [
     './img/**.*'
   ]
 
@@ -48,7 +51,7 @@ copyAssets = ->
     .pipe gulp.dest './.dist/img'
 
 buildScripts = (watch = false, dieOnError = false) ->
-  bundler = browserify SRC_PATHS.root, {
+  bundler = browserify SRC_PATHS.scripts, {
     extensions   : [ '.coffee', '.cjsx' ]
     debug        : true
     cache        : {}
@@ -90,12 +93,11 @@ buildScripts = (watch = false, dieOnError = false) ->
 buildStyles = ->
   gulp.src SRC_PATHS.styles
     .pipe sourcemaps.init { loadMaps : true }
-    .pipe stylus {
-      include : [ __dirname + '/styles' ]
-    }
+    .pipe stylus()
     # TODO: Why doesn't this abort the stream like the Browserify one does?
     .on 'error', notify.onError {
       title : 'Stylus Error'
+      sound : 'Sosumi'
     }
     .pipe postcss [
       autoprefixer()
@@ -106,6 +108,7 @@ buildStyles = ->
       title   : 'Finished compiling CSS'
       message : '<%= file.relative %>'
       wait    : true
+      sound   : 'Glass'
     }
     .pipe sourcemaps.write './'
     .pipe gulp.dest './.dist'
@@ -120,6 +123,6 @@ gulp.task 'watch', ->
   copyAssets()
   buildScripts(true, false)
   buildStyles()
-  gulp.watch SRC_PATHS.styles,  [ 'styles' ]
+  gulp.watch SRC_PATHS.styleWatch,  [ 'styles' ]
 gulp.task 'dist', [ 'scripts', 'styles', 'assets' ]
 gulp.task 'default', [ 'watch' ]

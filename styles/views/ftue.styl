@@ -1,0 +1,45 @@
+.ftue-page // RENAME: ftue is a bit awkward, no?
+  background: #fff
+
+  /body[standalone] & // iOS status bar
+    background-image: linear-gradient(to bottom, #000 20px, transparent 20px)
+
+  .fixed-header
+    border-bottom: 1px solid #f2f2f2
+
+  .fixed-content-pane, .sub-header
+    padding: 8px 16px
+    line-height: normal
+
+    img, svg
+      height: 1em
+      width: auto
+
+    svg path
+      fill: #202020
+
+  .fixed-footer
+    border-top: 1px solid #f2f2f2
+
+  &.sample-ingredient-page
+    .list.grouped-ingredient-list // TODO: remove specificity when .mixability-page is added (see below)
+      background: #434343
+
+  &.explanation-page // RENAME: .mixability-page?
+    .mixability-toggle
+      .option:not(.selected)
+        background: #676767
+
+    .list
+      background: #eee
+
+  &.ingredients-page
+    .fixed-content-pane
+      padding: 0
+
+      .list-item
+        padding: 0 12px
+        border-bottom: 1px solid #eee
+
+        .fa-check-circle // TODO: need to normalize this behavior (.is-selected vs. injecting icon)
+          display: inline-block

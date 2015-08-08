@@ -1,0 +1,45 @@
+@require '../shared/animation'
+
+.grouped-ingredient-list
+  .list-header
+    position: relative
+    margin: 1px 0 0 0
+    padding: 0 15px
+    background: #393939
+    color: #a8a8a8
+    font-size: 14px
+    font-weight: 600
+    text-transform: uppercase
+
+    .count
+      position: absolute
+      top: 13px
+      right: 13px
+      width: 18px
+      line-height: 18px
+      background: #4a4a4a
+      border-radius: 4px
+      font-size: 14px
+      font-weight: 700
+      text-align: center
+
+  .list-group
+    background: linear-gradient(to right, #4a4a4a 12px, #444 12px, #404040, #444 calc(100% - 12px), #4a4a4a calc(100% - 12px))
+    transition: height $transition-duration
+
+    .collapsed
+      transition: height $transition-duration
+
+  .list-item
+    margin: 0 0 1px 0
+    padding: 0 15px
+    background: #4a4a4a
+    color: #eee
+
+    .name // TODO: this should be a span (or removed, even)
+      display: inline
+
+    .fa-check-circle
+      color: #a8a8a8
+      font-size: 20px
+      text-shadow: 0 0 4px rgba(0,0,0,.25)

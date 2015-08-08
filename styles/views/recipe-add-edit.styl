@@ -1,0 +1,149 @@
+@require '../shared/animation'
+
+.editable-recipe-page
+  background: #fff
+
+  /body[standalone] & // iOS status bar
+    margin-top: 20px // could use a black bar, like FTUE, but it'd fly up from the bottom with it
+    height: calc(100% - 20px)
+    padding-top: 0
+
+  input
+    width: 100% // display: block doesn't do it (for some reason), and otherwise isn't necessary here
+
+  .navigation-header
+    display: flex
+    flex-direction: row
+    line-height: 44px
+
+    .fa-times
+      margin-left: auto
+      width: 44px
+
+    .back-button
+      flex-grow: 1
+      padding: 0 8px
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis // REMOVE: we should remove the quote marks from the code, do them with :pseudo-elements
+
+      .fa-chevron-left
+        margin-right: 8px
+
+  .fixed-content-pane // REMOVE: .page-content
+    padding: 0 8px
+
+    .page-title
+      font-size: 20px
+      margin: 8px 0
+
+  .next-button
+    float: right
+    padding: 0 12px
+    line-height: 44px
+    font-size: 18px
+    text-transform: uppercase
+    transition: color $transition-duration-quick-ish
+
+    &.disabled
+      color: #999
+
+    .fa
+      margin-left: 12px
+      font-size: 20px
+
+  &.name-page
+    .fixed-content-pane // REMOVE: .page-content div (its only function was the centering)
+      width: 80%
+      align-self: center
+      display: flex
+      flex-direction: column
+      justify-content: center
+      font-size: 20px
+      margin-bottom: 44px // adjusts center to account for top bar
+
+      input
+        border: 1px solid #eee
+        padding: 10px
+
+  &.ingredients-page
+    .ingredients-list
+      margin-bottom: 10px
+
+      .deletable // RENAME
+        background: #eee
+
+        &:nth-child(even)
+          background: #d8d8d8
+
+        .editable-ingredient2 // RENAME
+          padding: 0 12px 12px 12px
+          line-height: 44px
+
+          .input-line
+            display: flex
+            flex-direction: row
+
+            .done-button // TODO: separate from input
+              padding: 0 12px
+              text-transform: uppercase
+              font-size: 14px
+              font-weight: 600
+              transition: opacity $transition-duration-quick-ish
+
+              &.disabled
+                opacity: 1
+
+          .ingredient-list-header // TODO: associate with the list, somehow (:before?)
+            font-size: 11.2px
+            line-height: 18px
+            font-weight: 600
+            text-transform: uppercase;
+
+          .ingredient-group-list
+            background: #434343
+            max-height: 200px
+            overflow-y: scroll
+            -webkit-overflow-scrolling: touch
+
+            .list-item
+              margin-top: 1px
+              padding: 0 16px
+              background: #4a4a4a
+              color: #eee
+
+              .fa-check-circle // TODO: standardize behavior (.is-selected vs injected)
+                display: block
+                text-shadow: 0 0 4px rgba(0,0,0,.25)
+
+    .new-ingredient-button
+      background: #4a4a4a
+      line-height: 44px
+      text-align: center
+      color: #d8d8d8
+
+      &.disabled // TODO: maybe opacity instead?
+        color: #a8a8a8
+
+      .fa
+        margin-right: 6px
+
+  &.base-tag-page
+    .list-item
+      padding: 0 12px
+      border-bottom: 1px solid #f2f2f2
+
+      &:last-child
+        border: 0
+
+  &.text-page
+    .fixed-content-pane
+      padding: 0 24px
+
+      textarea
+        display: block
+        margin: 12px 0 0 0
+        width: 100%
+        height: 150px
+        padding: 6px
+        border: 1px solid #eee
