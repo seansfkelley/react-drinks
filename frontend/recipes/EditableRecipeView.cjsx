@@ -137,7 +137,7 @@ EditableIngredient = React.createClass {
 
   render : ->
     if @state.tag?
-      ingredientSelector = <List.Item>
+      ingredientSelector = <List.Item onTouchTap={@_unsetTag}>
         {IngredientStore.ingredientsByTag[@state.tag].display}
         <i className='fa fa-check-circle'/>
       </List.Item>
@@ -181,6 +181,9 @@ EditableIngredient = React.createClass {
   _tagSetter : (tag) ->
     return =>
       @setState { tag }
+
+  _unsetTag : ->
+    @setState { tag : null }
 
   _isCommittable : ->
     return !!@state.value.trim()
