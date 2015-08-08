@@ -1,5 +1,5 @@
 _          = require 'lodash'
-$          = require 'jquery'
+reqwest    = require 'reqwest'
 log        = require 'loglevel'
 MicroEvent = require 'microevent'
 Promise    = require 'bluebird'
@@ -355,13 +355,21 @@ EditableRecipeStore = new class extends FluxStore
 
 seedStores = _.once ->
   return Promise.all [
-    Promise.resolve $.get('/ingredients')
+    Promise.resolve reqwest({
+      url    : '/ingredients'
+      method : 'get'
+      type   : 'json'
+    })
     .then (ingredients) =>
       AppDispatcher.dispatch _.extend {
         type : 'set-ingredients'
       }, ingredients
   ,
-    Promise.resolve $.get('/recipes')
+    Promise.resolve reqwest({
+      url    : '/recipes'
+      method : 'get'
+      type   : 'json'
+    })
     .then (recipes) =>
       AppDispatcher.dispatch {
         type : 'set-default-recipes'
