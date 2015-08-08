@@ -11,6 +11,7 @@ SearchBar         = require '../components/SearchBar'
 
 AppDispatcher                = require '../AppDispatcher'
 stylingConstants             = require '../stylingConstants'
+overlayViews                 = require '../overlayViews'
 { IngredientStore, UiStore } = require '../stores'
 
 GroupedIngredientList = require './GroupedIngredientList'
@@ -64,9 +65,7 @@ IngredientSelectionView = React.createClass {
     }
 
   _onClose : ->
-    AppDispatcher.dispatch {
-      type : 'hide-flyup'
-    }
+    overlayViews.flyup.hide()
     AppDispatcher.dispatch {
       type       : 'search-ingredients'
       searchTerm : ''

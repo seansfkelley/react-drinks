@@ -10,6 +10,7 @@ TitleBar = require '../components/TitleBar'
 Swipable = require '../components/Swipable'
 
 AppDispatcher = require '../AppDispatcher'
+overlayViews  = require '../overlayViews'
 
 { UiStore, IngredientStore } = require '../stores'
 
@@ -76,16 +77,10 @@ RecipeListHeader = React.createClass {
     }
 
   _newRecipe : ->
-    AppDispatcher.dispatch {
-      type      : 'show-flyup'
-      component : <EditableRecipeView/>
-    }
+    overlayViews.flyup.show <EditableRecipeView/>
 
   _openIngredientPanel : ->
-    AppDispatcher.dispatch {
-      type      : 'show-flyup'
-      component : <IngredientSelectionView/>
-    }
+    overlayViews.flyup.show <IngredientSelectionView/>
 }
 
 module.exports = RecipeListHeader

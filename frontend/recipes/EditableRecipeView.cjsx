@@ -15,6 +15,7 @@ Deletable         = require '../components/Deletable'
 FluxMixin = require '../mixins/FluxMixin'
 
 AppDispatcher = require '../AppDispatcher'
+overlayViews  = require '../overlayViews'
 
 MeasuredIngredient = require './MeasuredIngredient'
 RecipeView         = require './RecipeView'
@@ -57,9 +58,7 @@ NavigationHeader = React.createClass {
     </div>
 
   _closeFlyup : ->
-    AppDispatcher.dispatch {
-      type : 'hide-flyup'
-    }
+    overlayViews.flyup.hide()
     AppDispatcher.dispatch {
       type : 'clear-editable-recipe'
     }
@@ -462,10 +461,7 @@ EditableRecipeView = React.createClass {
       @setState { currentPage : targetPage }
 
   _finish : ->
-    # Well, doing two things here certainly seems weird. Time for an Action?
-    AppDispatcher.dispatch {
-      type : 'hide-flyup'
-    }
+    overlayViews.flyup.hide()
     AppDispatcher.dispatch {
       type   : 'save-recipe'
       recipe : @_constructRecipe()

@@ -12,6 +12,7 @@ List               = require '../components/List'
 AppDispatcher    = require '../AppDispatcher'
 utils            = require '../utils'
 stylingConstants = require '../stylingConstants'
+overlayViews     = require '../overlayViews'
 
 { RecipeStore, UiStore } = require '../stores'
 
@@ -25,10 +26,7 @@ _generateRecipeOpener = (groupedRecipes, absoluteIndex) ->
       .pluck 'recipes'
       .flatten()
       .value()
-    AppDispatcher.dispatch {
-      type      : 'show-modal'
-      component : <SwipableRecipeView recipes={recipes} index={absoluteIndex}/>
-    }
+    overlayViews.modal.show <SwipableRecipeView recipes={recipes} index={absoluteIndex}/>
 
 RecipeList = React.createClass {
   displayName : 'RecipeList'

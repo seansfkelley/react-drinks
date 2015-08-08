@@ -4,6 +4,7 @@ React = require 'react/addons'
 Swipable = require '../components/Swipable'
 
 AppDispatcher = require '../AppDispatcher'
+overlayViews  = require '../overlayViews'
 
 RecipeView = require './RecipeView'
 
@@ -40,9 +41,7 @@ SwipableRecipeView = React.createClass {
     @setState { visibleIndex : index }
 
   _closeModal : ->
-    AppDispatcher.dispatch {
-      type : 'hide-modal'
-    }
+    overlayViews.modal.hide()
 }
 
 module.exports = SwipableRecipeView

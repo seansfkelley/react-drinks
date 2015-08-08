@@ -17,7 +17,6 @@ if window.navigator.standalone
   document.body.setAttribute 'standalone', true
 
 React.initializeTouchEvents true
-require('./overlayViews').attachOverlayViews()
 require('bluebird').longStackTraces()
 require('react-tap-event-plugin')()
 
