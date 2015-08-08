@@ -151,7 +151,7 @@ RecipeStore = new class extends FluxStore
 
   localStorageKey : 'drinks-app-recipes'
 
-  persistableFields : [ 'customRecipes' ]
+  persistableFields : [ 'customRecipes', 'searchTerm' ]
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     @_updateDerivedRecipeLists()

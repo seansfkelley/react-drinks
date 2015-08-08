@@ -80,6 +80,7 @@ RecipeListView = React.createClass {
     FluxMixin(RecipeStore,
       'filteredAlphabeticalRecipes'
       'mixabilityByRecipeId'
+      'searchTerm'
     )
     FluxMixin UiStore, 'baseLiquorFilter'
     PureRenderMixin
@@ -99,6 +100,7 @@ RecipeListView = React.createClass {
     >
       <SearchBar
         className='list-topper'
+        initialValue={@state.searchTerm}
         placeholder='Name or ingredient...'
         onChange={@_onSearch}
         ref='search'

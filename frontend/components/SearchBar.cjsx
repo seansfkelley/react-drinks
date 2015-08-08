@@ -7,13 +7,14 @@ SearchBar = React.createClass {
   displayName : 'SearchBar'
 
   propTypes :
-    onChange    : React.PropTypes.func.isRequired
-    placeholder : React.PropTypes.string
+    onChange     : React.PropTypes.func.isRequired
+    initialValue : React.PropTypes.string
+    placeholder  : React.PropTypes.string
 
   mixins : [ PureRenderMixin ]
 
   getInitialState : -> {
-    value : ''
+    value : @props.initialValue ? ''
   }
 
   render : ->
