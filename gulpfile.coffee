@@ -26,7 +26,9 @@ LIBRARY_CSS_PATHS = [
 ]
 
 SRC_PATHS =
-  scripts : [ './frontend/init.cjsx' ]
+  scripts : [
+    './frontend/init.cjsx'
+  ]
   styles : [
     './styles/index.styl'
   ].concat _.map(LIBRARY_CSS_PATHS, (p) -> './node_modules/' + p)
