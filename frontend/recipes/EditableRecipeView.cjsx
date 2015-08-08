@@ -1,3 +1,5 @@
+# TODO: This GIANT file needs to be broken up once it's clearer what's staying and what's not.
+
 _          = require 'lodash'
 React      = require 'react/addons'
 classnames = require 'classnames'
@@ -143,12 +145,12 @@ EditableIngredient = React.createClass {
       ingredientSelector = _.map IngredientStore.allAlphabeticalIngredients, ({ display, tag }) =>
         <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{display}</List.Item>
 
-    <div className='editable-ingredient2'>
+    <div className='editable-ingredient'>
       <div className='input-line'>
         <input
           type='text'
           placeholder='ex: 1 oz gin'
-          autoCorrect='on'
+          autoCorrect='off'
           autoCapitalize='off'
           autoComplete='off'
           spellCheck='false'
