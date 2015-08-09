@@ -1,7 +1,7 @@
 @require '../shared/animation'
 @require '../shared/mixins'
 
-#modal-root, #flyup-root, #pushover-root // TODO: maybe a .root class, or something?
+#modal-root, #flyup-root, #pushover-root
   abs-full-screen()
 
 #modal-root, #flyup-root, #pushover-root
@@ -9,7 +9,7 @@
   pointer-events: none
 
   &.visible
-    pointer-events: auto // Makes only .visible views interactive (even if CSS transition/JS cleanup still in progress)
+    pointer-events: auto
 
   &.topmost
     z-index: 2 // TODO: couldn't this go on the roots that need it?
@@ -22,7 +22,7 @@
   &.visible > *
     opacity: 1
 
-#flyup-root // TODO: fix bug wherein sometimes it doesn't animate (for new-recipe)
+#flyup-root
   > *
     transform: translate(0, 100%)
     transition: transform $transition-duration
@@ -45,7 +45,8 @@
 #pushover-root
   > *
     width: 87%
-    transform: translate(-100%, 0) // If same as actual pushover width, the iPhone renders weird ugly artifacts.
+    // If same as actual pushover width, the iPhone renders weird ugly artifacts.
+    transform: translate(-100%, 0)
     transition: transform $transition-duration
 
   &.visible > *
