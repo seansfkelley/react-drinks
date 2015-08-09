@@ -26,8 +26,10 @@ do ->
         appRootElement.classList.add "showing-#{type}"
         appRootElement.classList.add 'showing-overlay'
         domElement.classList.add 'topmost'
-        _.defer ->
-          domElement.classList.add 'visible'
+        # For some reason, this doesn't work for flyup when only done once. wtf.
+        requestAnimationFrame ->
+          requestAnimationFrame ->
+            domElement.classList.add 'visible'
 
       hide : ->
         appRootElement.classList.remove "showing-#{type}"
