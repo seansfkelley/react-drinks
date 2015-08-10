@@ -14,7 +14,7 @@ filter       = require 'gulp-filter'
 browserify   = require 'browserify'
 watchify     = require 'watchify'
 buffer       = require 'vinyl-buffer'
-source       = require 'vinyl-source-stream'
+sourceStream = require 'vinyl-source-stream'
 autoprefixer = require 'autoprefixer-core'
 
 IS_PROD = process.env.NODE_ENV == 'production'
@@ -27,7 +27,11 @@ LIBRARY_CSS_PATHS = [
 
 SRC_PATHS =
   scripts : [
-    './frontend/init.cjsx'
+    source      : './frontend/app-init.cjsx'
+    destination : 'app-init.js'
+  ,
+    source      : './frontend/recipe-init.cjsx'
+    destination : 'recipe-init.js'
   ]
   styles : [
     './styles/index.styl'
@@ -50,8 +54,8 @@ copyAssets = ->
   gulp.src SRC_PATHS.img
     .pipe gulp.dest './.dist/img'
 
-buildScripts = (watch = false, dieOnError = false) ->
-  bundler = browserify SRC_PATHS.scripts, {
+buildSingleScript  = ({ source, destination, watch, dieOnError }) ->
+  bundler = browserify source, {
     extensions   : [ '.coffee', '.cjsx' ]
     debug        : true
     cache        : {}
@@ -73,7 +77,7 @@ buildScripts = (watch = false, dieOnError = false) ->
       }
 
     return b
-      .pipe source 'all-scripts.js'
+      .pipe sourceStream destination
       .pipe buffer()
       .pipe sourcemaps.init { loadMaps : true }
       .pipe gulpif IS_PROD, uglify()
@@ -89,6 +93,11 @@ buildScripts = (watch = false, dieOnError = false) ->
 
   bundler.on 'update', rebundle
   rebundle()
+
+buildScripts = (watch = false, dieOnError = false) ->
+  for { source, destination } in SRC_PATHS.scripts
+    buildSingleScript { source, destination, watch, dieOnError }
+  return # for loop
 
 buildStyles = ->
   gulp.src SRC_PATHS.styles

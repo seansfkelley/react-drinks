@@ -1,6 +1,7 @@
 _       = require 'lodash'
 express = require 'express'
 log     = require 'loglevel'
+routes  = require './routes'
 
 # Logging.
 log.setLevel 'info'
@@ -13,8 +14,11 @@ app.set 'view engine', 'jade'
 
 # Routes.
 app.use '/', express.static(__dirname + '/.dist')
-for { method, route, handler } in require './routes'
-  app[method ? 'get'](route, handler)
+log.info "attaching #{routes.length} routes"
+for { method, route, handler } in routes
+  method ?= 'get'
+  log.info "#{method} #{route}"
+  app[method](route, handler)
 
 # Go.
 port = process.env.PORT ? 8080

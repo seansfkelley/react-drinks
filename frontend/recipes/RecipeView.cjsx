@@ -59,8 +59,8 @@ RecipeView = React.createClass {
 
     if IS_IPHONE_IOS_8
       shareButtonProps = {
-        # leftIcon           : 'fa-share-square-o'
-        # leftIconOnTouchTap : -> window.open "sms:&body=#{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
+        leftIcon           : 'fa-share-square-o'
+        leftIconOnTouchTap : => window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
       }
 
     if @props.onClose?
