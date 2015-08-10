@@ -33,9 +33,22 @@ RecipeImage = React.createClass {
     ))
 
   render : ->
+    maskTop  = "url(#{assetUrlFor(@props.glass, 'lt')})"
+    maskBody = "url(#{assetUrlFor(@props.glass, 'lb')})"
+
     layers = _.chain [
         imageConstants.BACKGROUND_KEY
         @props.ice
+        <div className='layer color' style={{
+          backgroundColor : 'rgba(0, 0, 255, 0.5)'
+          maskImage       : maskBody
+          WebkitMaskImage : maskBody
+        }}/>
+        <div className='layer color' style={{
+          backgroundColor : 'rgba(0, 0, 255, 0.5)'
+          maskImage       : maskTop
+          WebkitMaskImage : maskTop
+        }}/>
         imageConstants.FOREGROUND_KEY
         @props.extras
       ]
@@ -43,8 +56,13 @@ RecipeImage = React.createClass {
       .compact()
       .value()
 
+
     <div className='recipe-image'>
-      {_.map layers, (l) => <img src={assetUrlFor @props.glass, l} className='layer'/>}
+      {_.map layers, (layer) =>
+        if _.isString layer
+          <img src={assetUrlFor @props.glass, layer} className='layer'/>
+        else
+          layer}
     </div>
 }
 

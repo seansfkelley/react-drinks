@@ -1,5 +1,15 @@
+@require '../shared/mixins'
+
 .recipe-image
   position: relative
+  width: 200px
+  height: 200px
 
   .layer
     position: absolute
+    height: inherit
+
+    &.color
+      abs-full-screen()
+      mask-size: contain
+      mask-repeat: no-repeat
