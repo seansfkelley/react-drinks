@@ -1,4 +1,5 @@
 _           = require 'lodash'
+util        = require 'util'
 revalidator = require 'revalidator'
 
 _.extend revalidator.validate.defaults, {
@@ -19,5 +20,5 @@ module.exports = {
   validateOrThrow : (object, schema) ->
     validation = revalidator.validate object, schema
     if not validation.valid
-      throw new Error 'validation failed ' + JSON.stringify(validation.errors)
+      throw new Error 'validation failed: \n' + util.inspect(validation.errors)
 }

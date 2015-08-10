@@ -51,10 +51,19 @@ RECIPE_SCHEMA = {
           return false
 }
 
-IBA_RECIPES   = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/iba-recipes.yaml'))
-OTHER_RECIPES = yaml.safeLoad(fs.readFileSync(__dirname + '/../data/recipes.yaml'))
+RECIPE_FILES = [
+  'iba-recipes'
+  'recipes'
+]
 
-RECIPES = _.sortBy IBA_RECIPES.concat(OTHER_RECIPES), 'name'
+if '--custom-recipes' in process.argv
+  RECIPE_FILES.push 'custom-recipes'
+
+RECIPES = _.chain RECIPE_FILES
+  .map (f) -> yaml.safeLoad(fs.readFileSync("#{__dirname}/../data/#{f}.yaml"))
+  .flatten()
+  .sortBy 'name'
+  .value()
 
 log.info "loaded #{RECIPES.length} recipes"
 

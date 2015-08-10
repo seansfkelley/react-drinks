@@ -442,3 +442,9 @@
 -
   display    : Blueberry
   group      : fruit
+-
+  display    : Dark Beer
+  group      : beer
+-
+  display    : Light Beer
+  group      : beer

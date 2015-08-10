@@ -29,6 +29,7 @@
   notes: "Work in progress."
   instructions: ""
   source: "The Clover Club, NY"
+  base: tequila
 -
   name: "Ivy"
   ingredients:
@@ -61,6 +62,7 @@
     Shake all ingredients with ice for a long time.
     Strain into a chilled cocktail glass.
   source: "The Clover Club, NY"
+  base: gin
 -
   name: "Chateau Romani"
   ingredients:
@@ -87,6 +89,9 @@
     Strain into a small glass and fill with milk.
   source: "The Drunken Moogle"
   url: "http://www.thedrunkenmoogle.com/post/28337609182/expbaronline-chateau-romani-the-legend-of-zelda"
+  base:
+    - whiskey
+    - liqueur
 -
   name: "Brinstar"
   ingredients:
@@ -121,6 +126,7 @@
   notes: "Brinstar is a zone overgrown with vegetation. Having very recently been introduced to a lime-y cocktail known as a caipirinha, I decided to try combining it with another leafy drink - namely, a mojito. The resulting combination, plus a little extra, wound up being a tasty creation that I’m rather proud of."
   source: "The Drunken Moogle"
   url: "http://www.thedrunkenmoogle.com/post/36070643600/drinks-brinstar"
+  base: rum
 -
   name: "Perfect Margarita"
   ingredients:
@@ -160,3 +166,29 @@
     Rim a margarita glass with salt.
     Briefly shake all ingredients with ice and strain with a fine mesh strainer into the glass.
     Garnish with lime or a slice of jalapeño.
+  base: tequila
+-
+  name: "Dark Matter"
+  ingredients:
+    -
+      tag: "dark rum"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "spice-infused dark rhum"
+    -
+      tag: "simple syrup"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "simple syrup"
+    -
+      tag: "dark beer"
+      displayAmount: "2-4"
+      displayUnit: "oz"
+      displayIngredient: "stout beer"
+  instructions: |
+    Combine rhum, syrup, and ice in mixing tin.
+    Shake and strain into small wine or rocks glass, then top with stout.
+  notes: "To make the spiced rum for this cocktail, infuse 1 vanilla bean (split length-wise) and 5-8 cloves in a 750ml bottle of dark rum (e.g. Barbancourt 5 Star) for two days, shaking periodically."
+  source: "EatDrinkFilms"
+  url: "http://eatdrinkfilms.com/2015/03/06/shaken-stirred-a-stout-beer-cocktail-and-a-lesson-in-schooling/"
+  base: rum
