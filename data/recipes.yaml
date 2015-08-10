@@ -248,7 +248,7 @@
   name: "Angostura Sour"
   ingredients:
     -
-      tag: "egg white"
+      tag: "egg"
       displayAmount: "1"
       displayIngredient: "egg white"
     -
@@ -505,7 +505,7 @@
       displayUnit: "oz"
       displayIngredient: "Angostura bitters"
     -
-      tag: "egg white"
+      tag: "egg"
       displayAmount: "1/4"
       displayIngredient: "egg white"
   instructions: "Shake very hard over ice and strain into a chilled cocktail glass."

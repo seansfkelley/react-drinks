@@ -80,9 +80,6 @@
   tag        : dry vermouth
   group      : wine
 -
-  display    : Egg White
-  group      : dairy
--
   display    : Elderflower Liqueur
   group      : liqueur-herbal
   searchable :
@@ -358,7 +355,7 @@
   display    : Port
   group      : wine
 -
-  display    : Egg Yolk
+  display    : Egg
   group      : dairy
 -
   display    : Aperol

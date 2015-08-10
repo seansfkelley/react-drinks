@@ -394,7 +394,7 @@
         displayUnit: "oz"
         displayIngredient: "fresh lemon juice"
       -
-        tag: "egg white"
+        tag: "egg"
         displayIngredient: "a few drops of egg white"
     instructions: |
       Pour all ingredients into cocktail shaker filled with ice. Shake well.
@@ -1405,7 +1405,7 @@
         displayUnit: "oz"
         displayIngredient: "simple syrup"
       -
-        tag: "egg white"
+        tag: "egg"
         displayAmount: "1"
         displayIngredient: "small egg white"
     instructions: |
@@ -1472,7 +1472,7 @@
         displayUnit: "oz"
         displayIngredient: "red port"
       -
-        tag: "egg yolk"
+        tag: "egg"
         displayAmount: "1/3"
         displayUnit: "oz"
         displayIngredient: "egg yolk"
@@ -1512,7 +1512,7 @@
         displayUnit: "oz"
         displayIngredient: "cream"
       -
-        tag: "egg white"
+        tag: "egg"
         displayAmount: "1"
         displayIngredient: "egg white"
       -
