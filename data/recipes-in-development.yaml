@@ -1,0 +1,32 @@
+-
+  name: "Geek Squad"
+  ingredients:
+    -
+      tag: "mezcal"
+      displayAmount: "4"
+      displayUnit: "parts"
+      displayIngredient: "mezcal"
+    -
+      tag: "green chartreuse"
+      displayAmount: "2"
+      displayUnit: "parts"
+      displayIngredient: "green Chartreuse"
+    -
+      tag: "lime juice"
+      displayAmount: "4"
+      displayUnit: "parts"
+      displayIngredient: "lime juice"
+    -
+      tag: "simple syrup"
+      displayAmount: "1"
+      displayUnit: "part"
+      displayIngredient: "simple syrup"
+    -
+      tag: "cynar"
+      displayAmount: "0-1"
+      displayUnit: "part"
+      displayIngredient: "Cynar"
+  notes: "Work in progress."
+  instructions: ""
+  source: "The Clover Club, NY"
+  base: tequila
