@@ -13,7 +13,7 @@ app = express()
 app.set 'view engine', 'jade'
 
 # Routes.
-app.use '/', express.static(__dirname + '/.dist')
+app.use '/assets', express.static(__dirname + '/.dist')
 log.info "attaching #{routes.length} routes"
 for { method, route, handler } in routes
   method ?= 'get'

@@ -2,6 +2,7 @@ _            = require 'lodash'
 gulp         = require 'gulp'
 gulpif       = require 'gulp-if'
 rename       = require 'gulp-rename'
+replace      = require 'gulp-replace'
 stylus       = require 'gulp-stylus'
 postcss      = require 'gulp-postcss'
 sourcemaps   = require 'gulp-sourcemaps'
@@ -21,7 +22,6 @@ IS_PROD = process.env.NODE_ENV == 'production'
 
 LIBRARY_CSS_PATHS = [
   'font-awesome/css/font-awesome.css'
-  'react-select/dist/default.css'
   'react-draggable/lib/styles.css'
 ]
 
@@ -112,6 +112,7 @@ buildStyles = ->
       autoprefixer()
     ]
     .pipe concat 'all-styles.css'
+    .pipe replace '../fonts/', '/assets/fonts/'
     .pipe gulpif IS_PROD, minifyCss()
     .pipe notify {
       title   : 'Finished compiling CSS'

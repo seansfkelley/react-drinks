@@ -2,14 +2,14 @@ html
   include ./meta.jade
 
   head
-    link(rel="stylesheet", type="text/css", href="/all-styles.css")
+    link(rel="stylesheet", type="text/css", href="/assets/all-styles.css")
 
     link(rel="apple-touch-icon-precomposed",
-         href="/img/icon-120x120.png",
+         href="/assets/img/icon-120x120.png",
          sizes="120x120")
 
     link(rel="apple-touch-startup-image",
-         href="/img/startup-640x1096.png",
+         href="/assets/img/startup-640x1096.png",
          media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)")
 
     title Spirit Guide
@@ -25,4 +25,4 @@ html
       div(class="centering-wrapper")
         i(class="fa fa-refresh fa-spin")
     //- Note that this has to come last, so all the necessary containers exist.
-    script(type="text/javascript", src="app-init.js")
+    script(type="text/javascript", src="/assets/app-init.js")

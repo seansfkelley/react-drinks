@@ -49,7 +49,7 @@ WelcomePage = React.createClass {
       webClipNotification = [
         <h3 key='protip'>Protip!</h3>
         <p className='explanation' key='explanation'>
-          If you want quicker access to Spirit Guide, you can tap <img src='/img/ios-export.png'/> at the bottom of the screen to save it to the home screen.
+          If you want quicker access to Spirit Guide, you can tap <img src='/assets/img/ios-export.png'/> at the bottom of the screen to save it to the home screen.
         </p>
       ]
     else if not @state.isWebClip
@@ -57,7 +57,7 @@ WelcomePage = React.createClass {
         <h3 key='protip'>Protip:</h3>
         <p className='explanation' key='explanation'>
           You can save this to your home screen through Safari for quicker access.
-          In Safari, tap <img src='/img/ios-export.png'/> at the bottom of the screen, then save to home screen.
+          In Safari, tap <img src='/assets/img/ios-export.png'/> at the bottom of the screen, then save to home screen.
         </p>
       ]
 
@@ -317,7 +317,7 @@ SummaryPage = React.createClass {
         Now that you've picked your ingredients, you're pretty much ready to go.
       </p>
       <p>
-        If you want to edit the list of ingredients you have, just tap <Isvg src='/img/ingredients.svg'/>.
+        If you want to edit the list of ingredients you have, just tap <Isvg src='/assets/img/ingredients.svg'/>.
       </p>
       <p>
         You can add new recipes by tapping <i className='fa fa-plus'/>.
