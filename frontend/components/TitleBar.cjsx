@@ -47,9 +47,8 @@ TitleBar = React.createClass {
     showingIcons = @props.leftIcon? or @props.rightIcon?
 
     if showingIcons
-      # <i> doesn't work with the styling for some reason.
-      leftIcon  ?= <span className='spacer float-left'/>
-      rightIcon ?= <span className='spacer float-right'/>
+      leftIcon  ?= <span className='spacer float-left'>&nbsp;</span>
+      rightIcon ?= <span className='spacer float-right'>&nbsp;</span>
 
     <div className={classnames 'title-bar', @props.className} onTouchTap={@props.onTouchTap}>
       {leftIcon}
@@ -61,10 +60,7 @@ TitleBar = React.createClass {
     </div>
 
   _stopTouchStart : (e) ->
-    # This is hacky, but both of these are independently necessary.
-    # 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
-    # e.stopPropagation()
-    # 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
+    # Prevent default so that iOS doesn't reassign the active element and deselect the input.
     e.preventDefault()
 }
 
