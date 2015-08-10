@@ -25,6 +25,7 @@ module.exports = [
   method  : 'get'
   route   : '/recipe/:recipeId'
   handler : (req, res) ->
+    # TODO: Redirect to error page if this doesn't exist.
     recipe = _.findWhere RECIPES, { recipeId : req.params.recipeId }
     res.render 'recipe', { recipe }
 ]
