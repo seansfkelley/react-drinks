@@ -26,7 +26,41 @@
       displayAmount: "0-1"
       displayUnit: "part"
       displayIngredient: "Cynar"
-  notes: "Work in progress."
   instructions: ""
   source: "The Clover Club, NY"
   base: tequila
+-
+  name: "?-1"
+  ingredients:
+    -
+      tag: "plum wine"
+      displayAmount: "3"
+      displayUnit: "parts"
+      displayIngredient: "Choya plum wine"
+    -
+      tag: "cucumber" # juice?
+      displayAmount: "2"
+      displayUnit: "parts"
+      displayIngredient: "cucumber juice"
+  instructions: "shaken"
+  base: wine
+-
+  name: "?-2"
+  ingredients:
+    -
+      tag: "sake"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "unfiltered sake"
+    -
+      tag: "rum"
+      displayAmount: "1"
+      displayUnit: "oz"
+      displayIngredient: "10 Cane aged rum"
+    -
+      tag: "vanilla"
+      displayAmount: "< 1/2 oz"
+      displayUnit: "oz"
+      displayIngredient: "vanilla simple syrup"
+  instructions: "shaken/stirred?"
+  base: wine

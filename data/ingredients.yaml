@@ -405,7 +405,7 @@
   display    : Tea
   group      : mixer-other
 -
-  display    : Vanilla Extract
+  display    : Vanilla
   group      : other
 -
   display    : Strawberry
@@ -448,3 +448,9 @@
 -
   display    : Light Beer
   group      : beer
+-
+  display    : Sake
+  group      : wine
+-
+  display    : Plum Wine
+  group      : wine
