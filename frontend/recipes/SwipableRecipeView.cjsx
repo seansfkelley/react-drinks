@@ -32,7 +32,7 @@ SwipableRecipeView = React.createClass {
       className='swipable-recipe-container'
       initialIndex={@props.index}
       onSlideChange={@_onSlideChange}
-      friction=0.95
+      friction=0.9
     >
       {recipePages}
     </Swipable>
