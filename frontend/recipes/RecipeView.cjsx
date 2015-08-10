@@ -26,8 +26,14 @@ RecipeView = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    recipe  : React.PropTypes.object.isRequired
-    onClose : React.PropTypes.func
+    recipe    : React.PropTypes.object.isRequired
+    onClose   : React.PropTypes.func
+    shareable : React.PropTypes.bool
+
+  getDefaultProps : ->
+    return {
+      shareable : false
+    }
 
   render : ->
     # TODO: We're reusing this view for both types of recipes; seems bad.
@@ -57,7 +63,7 @@ RecipeView = React.createClass {
       .value()
     recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
 
-    if IS_IPHONE_IOS_8
+    if @props.shareable and IS_IPHONE_IOS_8
       shareButtonProps = {
         leftIcon           : 'fa-share-square-o'
         leftIconOnTouchTap : => window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
