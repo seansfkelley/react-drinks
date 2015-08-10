@@ -14,4 +14,4 @@ export NODE_ENV=production
 npm install
 gulp dist
 
-PORT=80 forever start -c ./node_modules/.bin/coffee index.coffee
+PORT=80 forever start -c ./node_modules/.bin/coffee index.coffee --custom-recipes
