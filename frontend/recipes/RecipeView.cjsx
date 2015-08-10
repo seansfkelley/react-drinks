@@ -11,6 +11,7 @@ FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 
 MeasuredIngredient = require './MeasuredIngredient'
+RecipeImage        = require './RecipeImage'
 
 IS_IPHONE_IOS_8 = window.navigator.userAgent.indexOf('iPhone OS 8') != -1
 
@@ -88,6 +89,7 @@ RecipeView = React.createClass {
       header={header}
     >
       <div className='recipe-description'>
+        <RecipeImage/>
         <div className='recipe-ingredients'>
           {ingredientNodes}
         </div>

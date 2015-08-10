@@ -44,7 +44,7 @@ SRC_PATHS =
     './node_modules/font-awesome/fonts/**.*'
   ]
   img : [
-    './img/**.*'
+    './img/**/*'
   ]
 
 copyAssets = ->
