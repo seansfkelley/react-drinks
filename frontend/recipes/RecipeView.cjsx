@@ -2,6 +2,8 @@ _          = require 'lodash'
 React      = require 'react/addons'
 { PureRenderMixin } = React.addons
 
+definitions = require '../../shared/definitions'
+
 FluxMixin = require '../mixins/FluxMixin'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
@@ -9,8 +11,9 @@ TitleBar          = require '../components/TitleBar'
 
 utils         = require '../utils'
 { UiStore }   = require '../stores'
-
 MeasuredIngredient = require './MeasuredIngredient'
+
+IS_IPHONE_IOS_8 = window.navigator.userAgent.indexOf('iPhone OS 8') != -1
 
 IngredientCategory =
   MISSING    : 'missing'
@@ -54,12 +57,18 @@ RecipeView = React.createClass {
       .value()
     recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
 
+    if IS_IPHONE_IOS_8
+      shareButtonProps = {
+        # leftIcon           : 'fa-share-square-o'
+        # leftIconOnTouchTap : -> window.open "sms:&body=#{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
+      }
+
     if @props.onClose?
-      header = <TitleBar rightIcon='fa-times' rightIconOnTouchTap={@props.onClose}>
+      header = <TitleBar rightIcon='fa-times' rightIconOnTouchTap={@props.onClose} {...shareButtonProps}>
         {@props.recipe.name}
       </TitleBar>
     else
-      header = <TitleBar>{@props.recipe.name}</TitleBar>
+      header = <TitleBar {...shareButtonProps}>{@props.recipe.name}</TitleBar>
 
     <FixedHeaderFooter
       className='recipe-view'
