@@ -2,6 +2,7 @@ _          = require 'lodash'
 React      = require 'react/addons'
 { PureRenderMixin } = React.addons
 
+utils       = require '../utils'
 definitions = require '../../shared/definitions'
 
 FluxMixin = require '../mixins/FluxMixin'
@@ -9,8 +10,6 @@ FluxMixin = require '../mixins/FluxMixin'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'
 
-utils         = require '../utils'
-{ UiStore }   = require '../stores'
 MeasuredIngredient = require './MeasuredIngredient'
 
 IS_IPHONE_IOS_8 = window.navigator.userAgent.indexOf('iPhone OS 8') != -1
