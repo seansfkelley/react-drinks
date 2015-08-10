@@ -89,7 +89,11 @@ RecipeView = React.createClass {
       header={header}
     >
       <div className='recipe-description'>
-        <RecipeImage/>
+        <RecipeImage
+          glass='col'
+          ice='icr'
+          extras={[ 'lep', 'cel' ]}
+        />
         <div className='recipe-ingredients'>
           {ingredientNodes}
         </div>
