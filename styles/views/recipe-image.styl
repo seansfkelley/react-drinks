@@ -2,14 +2,17 @@
 
 .recipe-image
   position: relative
-  width: 200px
   height: 200px
 
   .layer
+    height: 100%
+
+    // These four are centering black magic.
     position: absolute
-    height: inherit
+    left: 0
+    right: 0
+    margin: auto
 
     &.color
-      abs-full-screen()
       mask-size: contain
       mask-repeat: no-repeat

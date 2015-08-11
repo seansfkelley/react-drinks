@@ -39,12 +39,16 @@ RecipeImage = React.createClass {
     layers = _.chain [
         imageConstants.BACKGROUND_KEY
         @props.ice
-        <div className='layer color' style={{
+        # This stupid trick takes advantage of the fact that we have empty images of exactly the right size.
+        # Basically, it ensures that the mask is applied to an element that's the same size as the other
+        # images but without having to do any weird CSS bullshit (if it's even possible) or examine the size
+        # of the images in js.
+        <img className='layer color' src={assetUrlFor @props.glass, 'icrt'} style={{
           backgroundColor : 'rgba(0, 0, 255, 0.5)'
           maskImage       : maskBody
           WebkitMaskImage : maskBody
         }}/>
-        <div className='layer color' style={{
+        <img className='layer color' src={assetUrlFor @props.glass, 'icrt'} style={{
           backgroundColor : 'rgba(0, 0, 255, 0.5)'
           maskImage       : maskTop
           WebkitMaskImage : maskTop
