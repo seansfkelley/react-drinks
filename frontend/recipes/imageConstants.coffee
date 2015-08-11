@@ -10,8 +10,6 @@ _ = require 'lodash'
 #   extras
 
 # icrt = ??? some kind of ice probably, but doesn't appear in the UI and all the pictures are blank
-# lb = ??? something in the shape of the glass, maybe the mask for the color?
-# lt = ??? something in the shape of the top of the glass
 
 array2asset = (array, previewAssetSuffix) ->
   return _.map array, ([ display, assetKey, previewAssetName ]) ->
@@ -37,6 +35,8 @@ GLASSES = array2asset [
 
 BACKGROUND_KEY = 'gbk'
 FOREGROUND_KEY = 'gfg'
+MASK_BODY_KEY  = 'lb'
+MASK_TOP_KEY   = 'lt'
 
 ICE = array2asset [
   [ 'Huge', 'ihu' ]
@@ -82,4 +82,6 @@ module.exports = {
   EXTRAS
   BACKGROUND_KEY
   FOREGROUND_KEY
+  MASK_BODY_KEY
+  MASK_TOP_KEY
 }

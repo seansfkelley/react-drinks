@@ -37,8 +37,8 @@ RecipeImage = React.createClass {
     ))
 
   render : ->
-    maskTop  = "url(#{assetUrlFor(@props.glass, 'lt')})"
-    maskBody = "url(#{assetUrlFor(@props.glass, 'lb')})"
+    maskTop  = "url(#{assetUrlFor(@props.glass, imageConstants.MASK_TOP_KEY)})"
+    maskBody = "url(#{assetUrlFor(@props.glass, imageConstants.MASK_BODY_KEY)})"
     color = @props.color.replace '#', '0x'
     if @props.color.length == 8
       [ r, g, b ] = hex2rgb color
