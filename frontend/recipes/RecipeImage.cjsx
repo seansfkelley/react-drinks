@@ -17,6 +17,8 @@ assetKeysFor = (arrays...) ->
     .pluck 'assetKey'
     .value()
 
+hex2rgb = (hex) ->
+  return [ hex >> 16 & 0xff, hex >> 8 & 0xff, hex & 0xff ]
 
 RecipeImage = React.createClass {
   displayName : 'RecipeImage'
@@ -24,10 +26,12 @@ RecipeImage = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    glass      : React.PropTypes.oneOf(assetKeysFor(imageConstants.GLASSES)).isRequired
-    drinkColor : React.PropTypes.string # not yet required # hexcode, for now
-    ice        : React.PropTypes.oneOf assetKeysFor(imageConstants.ICE)
-    extras     : React.PropTypes.arrayOf(
+    glass  : React.PropTypes.oneOf(assetKeysFor(imageConstants.GLASSES)).isRequired
+    color  : (props, propName) ->
+      if not /^#[0-9a-fA-F]{6,8}$/.test props[propName]
+        return new Error('color prop should be a 6- or 8-digit hex number with leading #')
+    ice    : React.PropTypes.oneOf assetKeysFor(imageConstants.ICE)
+    extras : React.PropTypes.arrayOf(
       React.PropTypes.oneOf(
         assetKeysFor(imageConstants.CITRUS, imageConstants.GARNISH, imageConstants.EXTRAS)
     ))
@@ -35,6 +39,15 @@ RecipeImage = React.createClass {
   render : ->
     maskTop  = "url(#{assetUrlFor(@props.glass, 'lt')})"
     maskBody = "url(#{assetUrlFor(@props.glass, 'lb')})"
+    color = @props.color.replace '#', '0x'
+    if @props.color.length == 8
+      [ r, g, b ] = hex2rgb color
+      a = 0.5
+    else
+      [ r, g, b ] = hex2rgb color[0...8]
+      a = (color & 0xff) / 255
+
+    colorRgba = "rgba(#{r}, #{g}, #{b}, #{a})"
 
     layers = _.chain [
         imageConstants.BACKGROUND_KEY
@@ -44,12 +57,12 @@ RecipeImage = React.createClass {
         # images but without having to do any weird CSS bullshit (if it's even possible) or examine the size
         # of the images in js.
         <img className='layer color' src={assetUrlFor @props.glass, 'icrt'} style={{
-          backgroundColor : 'rgba(0, 0, 255, 0.5)'
+          backgroundColor : colorRgba
           maskImage       : maskBody
           WebkitMaskImage : maskBody
         }}/>
         <img className='layer color' src={assetUrlFor @props.glass, 'icrt'} style={{
-          backgroundColor : 'rgba(0, 0, 255, 0.5)'
+          backgroundColor : colorRgba
           maskImage       : maskTop
           WebkitMaskImage : maskTop
         }}/>

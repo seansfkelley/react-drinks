@@ -15,6 +15,11 @@
     Mix ingredients highball glass filled with ice.
     Garnish with a wedge of lime.
   base: gin
+  image:
+    glass: col
+    color: '#ffffff99'
+    ice: 'icu'
+    extras: [ 'lis', 'str' ]
 -
   name: "The Last Word"
   ingredients:

@@ -65,6 +65,9 @@ RecipeView = React.createClass {
         <i className='fa fa-external-link'/>
       </a>
 
+    if @props.recipe.image?
+      recipeImage = <RecipeImage {...@props.recipe.image}/>
+
     instructionLines = _.chain @props.recipe.instructions.split('\n')
       .compact()
       .map (l, i) -> <li className='text-line' key={i}>{utils.fractionify l}</li>
@@ -94,11 +97,7 @@ RecipeView = React.createClass {
         </div>
         {recipeInstructions}
         {recipeNotes}
-        <RecipeImage
-          glass='tro'
-          ice='icr'
-          extras={[ 'lep', 'cel' ]}
-        />
+        {recipeImage}
         {recipeUrl}
       </div>
     </FixedHeaderFooter>

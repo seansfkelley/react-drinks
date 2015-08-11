@@ -22,6 +22,7 @@ RECIPE_SCHEMA = {
       type       : 'array'
       required   : true
       items      :
+        type       : 'object'
         properties :
           tag               : OPTIONAL_STRING
           displayAmount     :
@@ -49,6 +50,21 @@ RECIPE_SCHEMA = {
           return _.all strOrArray, (base) -> base in BASE_LIQUORS
         else
           return false
+    image :
+      type       : 'object'
+      required   : false
+      properties :
+        glass : REQUIRED_STRING
+        color :
+          type     : 'string'
+          required : true
+          pattern  : /^#[0-9a-fA-F]{6,8}$/
+        ice : OPTIONAL_STRING
+        extras :
+          type     : 'array'
+          required : false
+          items    :
+            type : 'string'
 }
 
 RECIPE_FILES = [
