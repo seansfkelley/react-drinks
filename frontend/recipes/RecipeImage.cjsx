@@ -56,15 +56,23 @@ RecipeImage = React.createClass {
         # Basically, it ensures that the mask is applied to an element that's the same size as the other
         # images but without having to do any weird CSS bullshit (if it's even possible) or examine the size
         # of the images in js.
-        <img className='layer color' src={assetUrlFor @props.glass, 'icrt'} style={{
-          backgroundColor : colorRgba
-          maskImage       : maskBody
-          WebkitMaskImage : maskBody
+        <img
+          src={assetUrlFor @props.glass, 'icrt'}
+          className='layer color'
+          key='drink-body'
+          style={{
+            backgroundColor : colorRgba
+            maskImage       : maskBody
+            WebkitMaskImage : maskBody
         }}/>
-        <img className='layer color' src={assetUrlFor @props.glass, 'icrt'} style={{
-          backgroundColor : colorRgba
-          maskImage       : maskTop
-          WebkitMaskImage : maskTop
+        <img
+          src={assetUrlFor @props.glass, 'icrt'}
+          className='layer color'
+          key='drink-top'
+          style={{
+            backgroundColor : colorRgba
+            maskImage       : maskTop
+            WebkitMaskImage : maskTop
         }}/>
         imageConstants.FOREGROUND_KEY
         @props.extras
@@ -77,9 +85,9 @@ RecipeImage = React.createClass {
     <div className='recipe-image'>
       {_.map layers, (layer) =>
         if _.isString layer
-          <img src={assetUrlFor @props.glass, layer} className='layer'/>
+          return <img src={assetUrlFor @props.glass, layer} className='layer' key={layer}/>
         else
-          layer}
+          return layer}
     </div>
 }
 

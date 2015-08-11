@@ -50,6 +50,7 @@ RECIPE_SCHEMA = {
           return _.all strOrArray, (base) -> base in BASE_LIQUORS
         else
           return false
+    # A description of the programmatically-generated image to use.
     image :
       type       : 'object'
       required   : false
