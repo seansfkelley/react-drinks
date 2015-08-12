@@ -6,7 +6,7 @@ module.exports = {
   # These names are fucking terrible, but for now I just care that I can get something approximately
   # correct and that they have names at all (to prevent hexcodes everywhere).
   NAMED_COLORS :
-    clear     : '#d2d0ca'
+    clear     : '#ffffff99' # changed from original
     brown1    : '#a16131'
     brown2    : '#8c3e24'
     brown3    : '#732e0f'
