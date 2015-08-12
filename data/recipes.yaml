@@ -17,9 +17,11 @@
   base: gin
   image:
     glass: col
-    color: clear # '#ffffff99'
+    color: clear
     ice: icu
-    extras: [ 'lis', 'str' ]
+    extras:
+      - lis
+      - str
 -
   name: "The Last Word"
   ingredients:
@@ -51,6 +53,11 @@
   base:
     - gin
     - liqueur
+  image:
+    glass: cou
+    color: green1
+    extras:
+      - lit
 -
   name: "Corpse Reviver #2"
   ingredients:
@@ -83,6 +90,11 @@
     Shake ingredients together in a mixer with ice.
     Strain into chilled cocktail glass.
   base: gin
+  image:
+    glass: mar
+    color: white2
+    extras:
+      - che
 -
   name: "Improved Whiskey Cocktail"
   ingredients:
@@ -118,6 +130,12 @@
   source: "Cocktailia"
   url: "http://www.cocktailia.com/cocktail-recipes/improved-whiskey-cocktail"
   base: whiskey
+  image:
+    glass: roc
+    color: brown1
+    ice: ihu
+    extras:
+      - lep
 -
   name: "Mudslide"
   ingredients:
@@ -145,6 +163,11 @@
     Shake all ingredients with ice and pour over ice in a cocktail glass.
     Garnish with a little chocolate syrup on the inside of the glass.
   base: liqueur
+  image:
+    glass: mar
+    color: brown1
+    extras:
+      - whip
 -
   name: "Lumière"
   ingredients:
@@ -180,6 +203,11 @@
   source: "Saveur"
   url: "http://www.saveur.com/article/Recipes/The-Lumiere"
   base: gin
+  image:
+    glass: cou
+    color: green1
+    extras:
+      - lit
 -
   name: "Margarita #2"
   ingredients:
