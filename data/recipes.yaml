@@ -17,8 +17,8 @@
   base: gin
   image:
     glass: col
-    color: '#ffffff99'
-    ice: 'icu'
+    color: clear # '#ffffff99'
+    ice: icu
     extras: [ 'lis', 'str' ]
 -
   name: "The Last Word"

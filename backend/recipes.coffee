@@ -55,12 +55,10 @@ RECIPE_SCHEMA = {
       type       : 'object'
       required   : false
       properties :
-        glass : REQUIRED_STRING
-        color :
-          type     : 'string'
-          required : true
-          pattern  : /^#[0-9a-fA-F]{6,8}$/
-        ice : OPTIONAL_STRING
+        glass  : REQUIRED_STRING
+        # Hex string or color name.
+        color  : REQUIRED_STRING
+        ice    : OPTIONAL_STRING
         extras :
           type     : 'array'
           required : false

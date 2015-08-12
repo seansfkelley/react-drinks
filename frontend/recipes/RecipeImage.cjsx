@@ -3,6 +3,7 @@ React               = require 'react/addons'
 { PureRenderMixin } = React.addons
 
 imageConstants = require './imageConstants'
+definitions    = require '../../shared/definitions'
 
 ASSET_SHAPE = React.PropTypes.shape {
   assetKey : React.PropTypes.string.isRequired
@@ -20,6 +21,20 @@ assetKeysFor = (arrays...) ->
 hex2rgb = (hex) ->
   return [ hex >> 16 & 0xff, hex >> 8 & 0xff, hex & 0xff ]
 
+color2rgba = (color) ->
+  if color[0] != '#'
+    hex = definitions.NAMED_COLORS[color]
+
+  hex = hex.replace '#', '0x'
+  if hex.length == 8
+    [ r, g, b ] = hex2rgb hex
+    a = 0.7
+  else
+    [ r, g, b ] = hex2rgb hex[0...8]
+    a = (hex & 0xff) / 255
+
+  return "rgba(#{r}, #{g}, #{b}, #{a})"
+
 RecipeImage = React.createClass {
   displayName : 'RecipeImage'
 
@@ -28,8 +43,8 @@ RecipeImage = React.createClass {
   propTypes :
     glass  : React.PropTypes.oneOf(assetKeysFor(imageConstants.GLASSES)).isRequired
     color  : (props, propName) ->
-      if not /^#[0-9a-fA-F]{6,8}$/.test props[propName]
-        return new Error('color prop should be a 6- or 8-digit hex number with leading #')
+      if not definitions.NAMED_COLORS[props[propName]]? and not /^#[0-9a-fA-F]{6,8}$/.test(props[propName])
+        return new Error('color prop should be a 6- or 8-digit hex number with leading # or the name of a color')
     ice    : React.PropTypes.oneOf assetKeysFor(imageConstants.ICE)
     extras : React.PropTypes.arrayOf(
       React.PropTypes.oneOf(
@@ -39,15 +54,7 @@ RecipeImage = React.createClass {
   render : ->
     maskTop  = "url(#{assetUrlFor(@props.glass, imageConstants.MASK_TOP_KEY)})"
     maskBody = "url(#{assetUrlFor(@props.glass, imageConstants.MASK_BODY_KEY)})"
-    color = @props.color.replace '#', '0x'
-    if @props.color.length == 8
-      [ r, g, b ] = hex2rgb color
-      a = 0.5
-    else
-      [ r, g, b ] = hex2rgb color[0...8]
-      a = (color & 0xff) / 255
-
-    colorRgba = "rgba(#{r}, #{g}, #{b}, #{a})"
+    colorRgba = color2rgba @props.color
 
     layers = _.chain [
         imageConstants.BACKGROUND_KEY
