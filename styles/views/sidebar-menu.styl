@@ -1,0 +1,52 @@
+.sidebar-menu
+  background-color: #393939
+  color: #fff
+  height: 100%
+
+  // .ingredients-button
+
+  // .mixability-title
+
+  .mixability-options-container
+    display: flex
+
+    .input-wrapper
+      // Due to the weird sizing that happens when you rotate, force the expected size here.
+      height: 3 * 44px
+      width: 44px
+
+    input[type=range]
+      // http://stackoverflow.com/questions/24369879/styling-a-vertical-html5-range-input
+      // This also causes almost all the other styling rules to be flipped width-for-height.
+      transform: rotate(90deg)
+      transform-origin: 0 100%
+      -webkit-appearance: none
+
+      width: 3 * 44px
+      height: 44px
+      margin-top: -44px
+
+      &::-webkit-slider-runnable-track
+        height: 12px
+        margin: 16px 0
+        background-color: darken(#393939, 20%)
+
+      &::-webkit-slider-thumb
+        -webkit-appearance: none
+        width: 40px
+        height: 24px
+        margin-top: -6px
+        margin-left: 2px
+        background-color: #888
+        border-radius: 3px
+
+    .mixability-options
+      flex: 1
+
+      .option
+        height: 44px
+        line-height: 44px
+
+        &.is-selected
+          background-color: #555
+

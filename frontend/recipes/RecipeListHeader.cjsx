@@ -17,6 +17,7 @@ overlayViews  = require '../overlayViews'
 EditableRecipeView      = require './EditableRecipeView'
 MixabilityToggle        = require './MixabilityToggle'
 IngredientSelectionView = require '../ingredients/IngredientSelectionView'
+SidebarMenu             = require '../SidebarMenu'
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
@@ -32,10 +33,12 @@ RecipeListHeader = React.createClass {
     if initialBaseLiquorIndex == -1
       initialBaseLiquorIndex = 0
 
+        # leftIcon='/assets/img/ingredients.svg'
+        # leftIconOnTouchTap={@_openIngredientPanel}
     <div>
       <TitleBar
-        leftIcon='/assets/img/ingredients.svg'
-        leftIconOnTouchTap={@_openIngredientPanel}
+        leftIcon='fa-bars'
+        leftIconOnTouchTap={@_showSidebar}
         rightIcon='fa-plus'
         rightIconOnTouchTap={@_newRecipe}
         className='recipe-list-header'
@@ -75,6 +78,9 @@ RecipeListHeader = React.createClass {
       type   : 'set-base-liquor-filter'
       filter : @state.baseLiquors[index]
     }
+
+  _showSidebar : ->
+    overlayViews.pushover.show <SidebarMenu/>
 
   _newRecipe : ->
     overlayViews.flyup.show <EditableRecipeView/>
