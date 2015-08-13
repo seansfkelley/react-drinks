@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ -z "$1" ]
+then
+  echo "Usage: $0 <branch-name>"
+  exit 0
+fi
+
 # This may fail.
 forever stop index.coffee
 
