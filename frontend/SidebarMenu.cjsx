@@ -1,6 +1,7 @@
 _          = require 'lodash'
 React      = require 'react/addons'
 classnames = require 'classnames'
+Isvg       = require 'react-inlinesvg'
 
 SidebarMenu = React.createClass {
   displayName : 'SidebarMenu'
@@ -20,10 +21,10 @@ SidebarMenu = React.createClass {
   render : ->
     <div className='sidebar-menu'>
       <div className='ingredients-button'>
-        <img src='/assets/img/ingredients.svg'/>
+        <Isvg src='/assets/img/ingredients.svg'/>
         <span className='item-text'>Edit Ingredients</span>
       </div>
-      <div className='mixability-title'>Show:</div>
+      <div className='mixability-title'>Include</div>
       <div className='mixability-options-container'>
         <div className='input-wrapper'>
           <input type='range' min='0' max='2' value={@state.index} onChange={@_onSliderChange}/>
