@@ -1,10 +1,13 @@
 @require '../shared/animation'
 @require '../shared/mixins'
 
-#modal-root, #flyup-root, #pushover-root
-  abs-full-screen()
+$fade-color = rgba(0, 0, 0, 0.5)
+$pushover-width = 87%
 
-#modal-root, #flyup-root, #pushover-root
+// Overlay basics.
+
+.overlay
+  abs-full-screen()
   z-index: 1
   pointer-events: none
 
@@ -30,21 +33,9 @@
   &.visible > *
     transform: none
 
-  &:before // Fades out/in underlying content
-    abs-full-screen()
-
-    z-index: -1
-    content: ''
-    background: rgba(0, 0, 0, 0.5)
-    opacity: 0
-    transition: opacity $transition-duration
-
-  &.visible:before
-    opacity: 1
-
 #pushover-root
   > *
-    width: 87%
+    width: $pushover-width
     // If same as actual pushover width, the iPhone renders weird ugly artifacts.
     transform: translate(-100%, 0)
     transition: transform $transition-duration
@@ -52,13 +43,44 @@
   &.visible > *
     transform: none
 
+// Fade things that are not the overlay.
+
 #app-root
   transition: transform $transition-duration
 
-  &.showing-pushover
-    transform: translate(87%, 0)
+  &:after
+    content: ' '
+    abs-full-screen()
+    background: $fade-color
+    opacity: 0
+    transition: opacity $transition-duration
+    pointer-events: none
+    z-index: 1
 
+  /body.showing-overlay &
     &:after
-      content: ' '
-      abs-full-screen()
-      shadow-inset('left', 3px, rgb(0, 0, 0, 0.25))
+      pointer-events: auto
+      opacity: 1
+
+#iphone-status-bar-spacer
+  &:after
+    content: ' '
+    height: 20px
+    display: block
+    background: $fade-color
+    opacity: 0
+    transition: opacity $transition-duration
+    z-index: 1
+
+  /body.showing-overlay &
+    &:after
+      opacity: 1
+
+// #app-root needs to understand pushovers.
+
+body.showing-pushover #app-root
+  transform: translate($pushover-width, 0)
+
+  &:after
+    shadow-inset('left', 3px, rgb(0, 0, 0, 0.25))
+
