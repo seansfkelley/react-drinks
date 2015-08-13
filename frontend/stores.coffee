@@ -130,6 +130,9 @@ UiStore = new class extends FluxStore
     @mixabilityFilters = _.clone @mixabilityFilters
     @mixabilityFilters[filter] = not @mixabilityFilters[filter]
 
+  'set-mixability-filters' : ({ filters }) ->
+    @mixabilityFilters = _.pick filters, _.keys(@mixabilityFilters)
+
   'set-base-liquor-filter' : ({ filter }) ->
     @baseLiquorFilter = filter
 
@@ -164,6 +167,9 @@ RecipeStore = new class extends FluxStore
     @_updateDerivedRecipeLists()
 
   'toggle-mixability-filter' : ->
+    @_updateDerivedRecipeLists()
+
+  'set-mixability-filters' : ->
     @_updateDerivedRecipeLists()
 
   'set-base-liquor-filter' : ->

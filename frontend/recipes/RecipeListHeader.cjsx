@@ -15,7 +15,6 @@ overlayViews  = require '../overlayViews'
 { UiStore, IngredientStore } = require '../stores'
 
 EditableRecipeView      = require './EditableRecipeView'
-MixabilityToggle        = require './MixabilityToggle'
 IngredientSelectionView = require '../ingredients/IngredientSelectionView'
 SidebarMenu             = require '../SidebarMenu'
 
@@ -33,8 +32,6 @@ RecipeListHeader = React.createClass {
     if initialBaseLiquorIndex == -1
       initialBaseLiquorIndex = 0
 
-        # leftIcon='/assets/img/ingredients.svg'
-        # leftIconOnTouchTap={@_openIngredientPanel}
     <div>
       <TitleBar
         leftIcon='fa-bars'
@@ -43,10 +40,7 @@ RecipeListHeader = React.createClass {
         rightIconOnTouchTap={@_newRecipe}
         className='recipe-list-header'
       >
-        <MixabilityToggle
-          mixabilityToggles={@state.mixabilityFilters}
-          onToggle={@_onMixabilityFilterChange}
-        />
+        Spirit Guide
       </TitleBar>
       <Swipable
         className='base-liquor-container'
@@ -64,12 +58,6 @@ RecipeListHeader = React.createClass {
       </Swipable>
     </div>
 
-  _onMixabilityFilterChange : (filter) ->
-    AppDispatcher.dispatch {
-      type   : 'toggle-mixability-filter'
-      filter
-    }
-
   _onBaseLiquorChange : (index) ->
     if @state.baseLiquors[index] == UiStore.baseLiquorFilter
       return
@@ -80,7 +68,17 @@ RecipeListHeader = React.createClass {
     }
 
   _showSidebar : ->
-    overlayViews.pushover.show <SidebarMenu/>
+    if @state.mixabilityFilters.notReallyMixable
+      initialIndex = 2
+    else if @state.mixabilityFilters.nearMixable
+      initialIndex = 1
+    else
+      initialIndex = 0
+
+    overlayViews.pushover.show <SidebarMenu
+      initialIndex={initialIndex}
+      onClose={overlayViews.pushover.hide}
+    />
 
   _newRecipe : ->
     overlayViews.flyup.show <EditableRecipeView/>

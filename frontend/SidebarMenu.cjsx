@@ -3,10 +3,18 @@ React      = require 'react/addons'
 classnames = require 'classnames'
 Isvg       = require 'react-inlinesvg'
 
+{ PureRenderMixin } = React.addons
+
+AppDispatcher = require './AppDispatcher'
+
 SidebarMenu = React.createClass {
   displayName : 'SidebarMenu'
 
-  propTypes : {}
+  propTypes :
+    initialIndex : React.PropTypes.number.isRequired
+    onClose      : React.PropTypes.func.isRequired
+
+  mixins : [ PureRenderMixin ]
 
   getDefaultProps : ->
     return {
@@ -20,9 +28,13 @@ SidebarMenu = React.createClass {
 
   render : ->
     <div className='sidebar-menu'>
+      <div className='return-button' onTouchTap={@_closeMenu}>
+        <span className='text'>Return</span>
+        <i className='fa fa-chevron-right'/>
+      </div>
       <div className='ingredients-button'>
         <Isvg src='/assets/img/ingredients.svg'/>
-        <span className='item-text'>Edit Ingredients</span>
+        <span className='text'>Edit Ingredients</span>
       </div>
       <div className='mixability-title'>Include</div>
       <div className='mixability-options-container'>
@@ -50,6 +62,15 @@ SidebarMenu = React.createClass {
     return =>
       @setState { index }
 
+  _closeMenu : ->
+    AppDispatcher.dispatch {
+      type : 'set-mixability-filters'
+      filters :
+        mixable          : @state.index >= 0
+        nearMixable      : @state.index >= 1
+        notReallyMixable : @state.index >= 2
+    }
+    @props.onClose()
 }
 
 module.exports = SidebarMenu
