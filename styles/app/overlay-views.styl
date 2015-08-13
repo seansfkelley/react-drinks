@@ -1,6 +1,8 @@
 @require '../shared/animation'
 @require '../shared/mixins'
 
+$pushover-width = 86% // Looks nice. Odd numbers can cause rounding artifacts.
+
 #modal-root, #flyup-root, #pushover-root
   abs-full-screen()
 
@@ -44,7 +46,7 @@
 
 #pushover-root
   > *
-    width: 87%
+    width: $pushover-width
     // If same as actual pushover width, the iPhone renders weird ugly artifacts.
     transform: translate(-100%, 0)
     transition: transform $transition-duration
@@ -56,10 +58,18 @@
   transition: transform $transition-duration
 
   &.showing-pushover
-    transform: translate(87%, 0)
+    transform: translate($pushover-width, 0)
 
     &:after
-      content: ' '
-      abs-full-screen()
-      background-color: rgba(0, 0, 0, 0.25)
-      shadow-inset('left', 3px, rgba(0, 0, 0, 0.25))
+      pointer-events: auto
+      opacity: 1
+
+  &:after
+    content: ' '
+    abs-full-screen()
+    pointer-events: none
+    z-index: 1
+    opacity: 0
+    transition: opacity $transition-duration
+    background-color: rgba(0, 0, 0, 0.5)
+    shadow-inset('left', 3px, rgba(0, 0, 0, 0.5))
