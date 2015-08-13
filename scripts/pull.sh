@@ -7,11 +7,11 @@ forever stop index.coffee
 set -e
 
 git fetch
-git checkout origin/master
+git checkout "$1"
 
 export NODE_ENV=production
 
 npm install
 gulp dist
 
-PORT=80 forever start -c ./node_modules/.bin/coffee index.coffee --custom-recipes
+forever start -c ./node_modules/.bin/coffee index.coffee --custom-recipes
