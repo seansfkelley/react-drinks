@@ -156,6 +156,9 @@ GroupedIngredientList = React.createClass {
       {listNodes}
     </List>
 
+  getSelectedTags : ->
+    return @state.selectedIngredientTags
+
   _toggleGroup : (expandedGroupName) ->
     if @state.expandedGroupName == expandedGroupName
       @setState { expandedGroupName : null }

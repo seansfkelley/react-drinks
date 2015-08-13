@@ -1,4 +1,8 @@
+@require '../shared/animation'
+
 $slider-shrink = 6px
+$item-height = 44px
+$items-above-ingredients-list = 2
 
 .sidebar-menu
   background-color: #393939
@@ -6,8 +10,8 @@ $slider-shrink = 6px
   height: 100%
 
   .return-button, .ingredients-button, .mixability-title, .mixability-options .option
-    height: 44px
-    line-height: 44px
+    height: $item-height
+    line-height: $item-height
 
   .return-button, .ingredients-button
     border-bottom: 1px solid lighten(#393939, 10%)
@@ -37,6 +41,30 @@ $slider-shrink = 6px
     .text
       margin-left: 8px
 
+  .expanding-ingredients-wrapper
+    height: 0
+    overflow: scroll
+    transition: height $transition-duration
+    background: #434343
+    position: relative
+    -webkit-overflow-scrolling: touch
+
+    .search-bar
+      background: #393939
+      margin-bottom: 1px
+
+      .fa
+        color: #aaa
+
+      .search-input
+        color: #eee
+
+    .empty-list-text
+      color: #aaa
+
+    &.visible
+      height: "calc(100% - %s)" % ($items-above-ingredients-list * $item-height)
+
   .mixability-title
     text-transform: uppercase
     font-size: 0.9em
@@ -48,8 +76,8 @@ $slider-shrink = 6px
 
     .input-wrapper
       // Due to the weird sizing that happens when you rotate, force the expected size here.
-      // height: 3 * 44px
-      // width: 44px
+      // height: 3 * $item-height
+      // width: $item-height
       position: absolute
       left: 0
 
@@ -60,9 +88,9 @@ $slider-shrink = 6px
       transform-origin: 0 100%
       -webkit-appearance: none
 
-      width: 3 * 44px - ($slider-shrink * 2)
-      height: 44px
-      margin-top: -44px + $slider-shrink
+      width: 3 * $item-height - ($slider-shrink * 2)
+      height: $item-height
+      margin-top: (- $item-height) + $slider-shrink
 
       &::-webkit-slider-runnable-track
         height: 12px
@@ -71,7 +99,7 @@ $slider-shrink = 6px
 
       &::-webkit-slider-thumb
         -webkit-appearance: none
-        width: 44px - ($slider-shrink * 2)
+        width: $item-height - ($slider-shrink * 2)
         height: 24px
         margin-top: -6px
         background-color: #888
@@ -81,7 +109,7 @@ $slider-shrink = 6px
       width: 100%
 
       .option
-        padding-left: 44px
+        padding-left: $item-height
 
         &.is-selected
           background-color: #555

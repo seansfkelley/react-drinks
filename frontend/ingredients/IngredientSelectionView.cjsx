@@ -9,10 +9,10 @@ TitleBar          = require '../components/TitleBar'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 SearchBar         = require '../components/SearchBar'
 
-AppDispatcher                = require '../AppDispatcher'
-stylingConstants             = require '../stylingConstants'
-overlayViews                 = require '../overlayViews'
-{ IngredientStore, UiStore } = require '../stores'
+AppDispatcher       = require '../AppDispatcher'
+stylingConstants    = require '../stylingConstants'
+overlayViews        = require '../overlayViews'
+{ IngredientStore } = require '../stores'
 
 GroupedIngredientList = require './GroupedIngredientList'
 
@@ -46,7 +46,7 @@ IngredientSelectionView = React.createClass {
       header={<IngredientSelectionHeader onClose={@_onClose}/>}
       ref='container'
     >
-      <SearchBar className='list-topper' placeholder='Ingredient name...' onChange={@_onSearch}/>
+      <SearchBar placeholder='Ingredient name...' onChange={@_onSearch}/>
       <GroupedIngredientList
         groupedIngredients={@state.searchedGroupedIngredients}
         initialSelectedIngredientTags={@state.selectedIngredientTags}
@@ -72,7 +72,7 @@ IngredientSelectionView = React.createClass {
     }
     AppDispatcher.dispatch {
       type : 'set-selected-ingredient-tags'
-      selectedIngredientTags : @refs.ingredientList.state.selectedIngredientTags
+      selectedIngredientTags : @refs.ingredientList.getSelectedTags()
     }
 }
 
