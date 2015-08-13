@@ -9,7 +9,7 @@
   opacity: 0
   pointer-events: none
 
-#main-loading-overlay, #ftue-root
+.root
   abs-full-screen()
 
 #main-loading-overlay // TODO: should this be moved to base.styl? or somewhere
@@ -18,10 +18,6 @@
   display: flex
   justify-content: center // REMOVE .centering-wrapper
   align-items: center
-
-  /body[standalone] & // iOS status bar
-    padding-top: 20px
-    background-image: linear-gradient(to bottom, #000 20px, transparent 20px)
 
   .fa
     color: #d8d8d8

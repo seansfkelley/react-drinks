@@ -5,8 +5,6 @@ stylingConstants = require './stylingConstants'
 
 MODAL_TYPES = [ 'modal', 'flyup', 'pushover' ]
 
-appRootElement = document.querySelector '#app-root'
-
 overlayViews = {}
 
 do ->
@@ -23,8 +21,8 @@ do ->
         React.render component, domElement
         for e in allDomElements
           e.classList.remove 'topmost'
-        appRootElement.classList.add "showing-#{type}"
-        appRootElement.classList.add 'showing-overlay'
+        document.body.classList.add "showing-#{type}"
+        document.body.classList.add 'showing-overlay'
         domElement.classList.add 'topmost'
         # For some reason, this doesn't work for flyup when only done once. wtf.
         requestAnimationFrame ->
@@ -32,8 +30,8 @@ do ->
             domElement.classList.add 'visible'
 
       hide : ->
-        appRootElement.classList.remove "showing-#{type}"
-        appRootElement.classList.remove 'showing-overlay'
+        document.body.classList.remove "showing-#{type}"
+        document.body.classList.remove 'showing-overlay'
         domElement.classList.remove 'visible'
         # TODO: Fix this implementation; shouldHide is a hack.
         shouldHide = true

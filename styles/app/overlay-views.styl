@@ -1,12 +1,13 @@
 @require '../shared/animation'
 @require '../shared/mixins'
 
-$pushover-width = 86% // Looks nice. Odd numbers can cause rounding artifacts.
+$fade-color = rgba(0, 0, 0, 0.5)
+$pushover-width = 87%
 
-#modal-root, #flyup-root, #pushover-root
+// Overlay basics.
+
+.overlay
   abs-full-screen()
-
-#modal-root, #flyup-root, #pushover-root
   z-index: 1
   pointer-events: none
 
@@ -32,18 +33,6 @@ $pushover-width = 86% // Looks nice. Odd numbers can cause rounding artifacts.
   &.visible > *
     transform: none
 
-  &:before // Fades out/in underlying content
-    abs-full-screen()
-
-    z-index: -1
-    content: ''
-    background: rgba(0, 0, 0, 0.5)
-    opacity: 0
-    transition: opacity $transition-duration
-
-  &.visible:before
-    opacity: 1
-
 #pushover-root
   > *
     width: $pushover-width
@@ -54,22 +43,44 @@ $pushover-width = 86% // Looks nice. Odd numbers can cause rounding artifacts.
   &.visible > *
     transform: none
 
+// Fade things that are not the overlay.
+
 #app-root
   transition: transform $transition-duration
-
-  &.showing-pushover
-    transform: translate($pushover-width, 0)
-
-    &:after
-      pointer-events: auto
-      opacity: 1
 
   &:after
     content: ' '
     abs-full-screen()
-    pointer-events: none
-    z-index: 1
+    background: $fade-color
     opacity: 0
     transition: opacity $transition-duration
-    background-color: rgba(0, 0, 0, 0.5)
-    shadow-inset('left', 3px, rgba(0, 0, 0, 0.5))
+    pointer-events: none
+    z-index: 1
+
+  /body.showing-overlay &
+    &:after
+      pointer-events: auto
+      opacity: 1
+
+#iphone-status-bar-spacer
+  &:after
+    content: ' '
+    height: 20px
+    display: block
+    background: $fade-color
+    opacity: 0
+    transition: opacity $transition-duration
+    z-index: 1
+
+  /body.showing-overlay &
+    &:after
+      opacity: 1
+
+// #app-root needs to understand pushovers.
+
+body.showing-pushover #app-root
+  transform: translate($pushover-width, 0)
+
+  &:after
+    shadow-inset('left', 3px, rgb(0, 0, 0, 0.25))
+

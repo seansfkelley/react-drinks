@@ -14,4 +14,4 @@ then
   echo
 fi
 
-ssh root@104.236.188.87 'cd react-drinks ; ./scripts/pull.sh'
+ssh root@104.236.188.87 'cd react-drinks ; PORT=80 ./scripts/pull.sh origin/master'

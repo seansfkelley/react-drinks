@@ -1,4 +1,5 @@
 @require '../shared/typography'
+@require '../shared/mixins'
 
 html, body
   box-sizing: border-box
@@ -33,3 +34,20 @@ i.fa // TODO: move FA library styles ahead in all-styles.css, then "i" won't be 
 
 .display-none
   display: none
+
+body
+  display: flex
+  flex-direction: column
+
+#iphone-status-bar-spacer
+  display: none
+  background-color: #676767
+  height: 20px
+
+#iphone-status-bar-app-wrapper
+  flex: 1
+  position: relative
+
+body[standalone]
+  #iphone-status-bar-spacer
+    display: block
