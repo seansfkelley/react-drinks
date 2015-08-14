@@ -59,13 +59,20 @@ class IntertialSwipeLogicBox
       return
 
     if @captureType == CaptureType.INDETERMINATE
-      if Math.abs(@initialTouchX - e.changedTouches[0].clientX) < Math.abs(@initialTouchY - e.changedTouches[0].clientY)
+      dx = Math.abs @initialTouchX - e.changedTouches[0].clientX
+      dy = Math.abs @initialTouchY - e.changedTouches[0].clientY
+      if dx < 5
+        # Jitter, don't do anything yet cause it could be a tap.
+        return
+      else if dx < dy
+        # Obviously, this implies we can only swip horizontal. Fine for now.
         @_set { captureType : CaptureType.NO }
         return
       else
+        # Now we're swiping!
         @_set { captureType : CaptureType.YES }
-        # ...continue...
 
+    # Prevent scrolling: if you drag horizontally and then vertically in one motion, you'll scroll and swip.
     e.preventDefault()
 
     trueDelta = @trueDelta - (e.changedTouches[0].clientX - @lastX)
@@ -184,6 +191,7 @@ class IntertialSwipeLogicBox
 
         if Math.abs(visibleDelta - @visibleDelta) < 5 and not @_isInRange(@visibleDelta)
           @_set { trueDelta, visibleDelta }
+          # cancelAnimationFrame?
           delete @_animFrame
           @_bounceBackIfNecessary()
           return false

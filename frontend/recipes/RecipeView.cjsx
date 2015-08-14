@@ -56,6 +56,13 @@ RecipeView = React.createClass {
           </div>
         </div>
 
+    if @props.recipe.source? and @props.recipe.url?
+      recipeUrl = <a className='recipe-url' href={@props.recipe.url} target='_blank'>
+        <span className='lead-in'>source:</span>
+        {@props.recipe.source}
+        <i className='fa fa-external-link'/>
+      </a>
+
     instructionLines = _.chain @props.recipe.instructions.split('\n')
       .compact()
       .map (l, i) -> <li className='text-line' key={i}>{utils.fractionify l}</li>
@@ -85,6 +92,7 @@ RecipeView = React.createClass {
         </div>
         {recipeInstructions}
         {recipeNotes}
+        {recipeUrl}
       </div>
     </FixedHeaderFooter>
 
