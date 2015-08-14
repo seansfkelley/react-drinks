@@ -1,9 +1,13 @@
 @require '../shared/animation'
 @require '../shared/mixins'
 
-$slider-shrink = 6px
 $item-height = 44px
 $items-above-ingredients-list = 2
+
+$slider-thumb-shrink-height = 4px
+$slider-thumb-shrink-width = 10px
+$slider-thumb-width = $item-height
+$slider-track-width = 8px
 
 .sidebar-menu
   background-color: #393939
@@ -111,22 +115,23 @@ $items-above-ingredients-list = 2
       transform-origin: 0 100%
       -webkit-appearance: none
 
-      width: 3 * $item-height - ($slider-shrink * 2)
-      height: $item-height
-      margin-top: (- $item-height) + $slider-shrink
+      width: 3 * $item-height - ($slider-thumb-shrink-height * 2)
+      height: $slider-thumb-width
+      margin-top: (- $slider-thumb-width) + $slider-thumb-shrink-height
 
       &::-webkit-slider-runnable-track
-        height: 12px
-        margin: 16px 0
+        height: $slider-track-width
+        margin: ($slider-thumb-width - $slider-track-width) / 2 0
         background-color: darken(#393939, 20%)
+        border-radius: 4px
 
       &::-webkit-slider-thumb
         -webkit-appearance: none
-        width: $item-height - ($slider-shrink * 2)
-        height: 24px
-        margin-top: -6px
-        background-color: #888
-        border-radius: 2px
+        width: $item-height - ($slider-thumb-shrink-height * 2)
+        height: $slider-thumb-width - ($slider-thumb-shrink-width * 2)
+        margin-top: (- ($slider-thumb-width - $slider-track-width) / 2) + $slider-thumb-shrink-width
+        background-color: #999
+        border-radius: 18px
 
     .mixability-options
       width: 100%
