@@ -1,4 +1,5 @@
 @require '../shared/animation'
+@require '../shared/mixins'
 
 $slider-shrink = 6px
 $item-height = 44px
@@ -55,6 +56,13 @@ $items-above-ingredients-list = 2
       font-size: 14px
       font-weight: 700
       text-align: center
+
+    z-index: 1
+    box-shadow: none
+    transition: box-shadow $transition-duration
+
+    &.showing-list
+      shadow('bottom', 3px)
 
   .expanding-ingredients-wrapper
     height: 0
