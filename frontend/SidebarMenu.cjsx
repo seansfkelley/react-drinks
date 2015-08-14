@@ -31,14 +31,17 @@ SidebarMenu = React.createClass {
   }
 
   getInitialState : -> {
-    index              : @props.initialIndex
-    showingIngredients : false
+    index                   : @props.initialIndex
+    showingIngredients      : false
+    # This is a little sketch, since we shouldn't have to talk to the store directly
+    # because we have the mixin. But we can peek into @state to set @state.A
+    selectedIngredientCount : _.size IngredientStore.selectedIngredientTags
   }
 
   render : ->
     <div className='sidebar-menu'>
       <div className='return-button' onTouchTap={@_closeMenu}>
-        <span className='text'>Return</span>
+        <span className='text'>Drinks</span>
         <i className='fa fa-chevron-right'/>
       </div>
       <div
@@ -47,6 +50,8 @@ SidebarMenu = React.createClass {
       >
         <Isvg src='/assets/img/ingredients.svg'/>
         <span className='text'>Manage Ingredients</span>
+        {if @state.selectedIngredientCount > 0
+          <span className='count'>{@state.selectedIngredientCount}</span>}
       </div>
       <div
         className={classnames 'expanding-ingredients-wrapper', { 'visible' : @state.showingIngredients }}
@@ -56,6 +61,7 @@ SidebarMenu = React.createClass {
         <GroupedIngredientList
           groupedIngredients={@state.searchedGroupedIngredients}
           initialSelectedIngredientTags={@state.selectedIngredientTags}
+          onSelectionChange={@_onIngredientToggle}
           ref='ingredientList'
         />
       </div>
@@ -84,6 +90,9 @@ SidebarMenu = React.createClass {
 
   componentDidMount : ->
     @refs.ingredientsContainer.getDOMNode().scrollTop = stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT
+
+  _onIngredientToggle : (selectedTags) ->
+    @setState { selectedIngredientCount : _.size selectedTags }
 
   _toggleIngredients : ->
     @setState { showingIngredients : not @state.showingIngredients }

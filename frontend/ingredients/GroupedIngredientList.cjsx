@@ -79,6 +79,7 @@ GroupedIngredientList = React.createClass {
   propTypes :
     groupedIngredients            : React.PropTypes.array
     initialSelectedIngredientTags : React.PropTypes.object
+    onSelectionChange             : React.PropTypes.func
 
   mixins : [ PureRenderMixin ]
 
@@ -173,6 +174,7 @@ GroupedIngredientList = React.createClass {
       selectedIngredientTags = _.clone @state.selectedIngredientTags
       selectedIngredientTags[tag] = true
     @setState { selectedIngredientTags }
+    @props.onSelectionChange?(selectedIngredientTags)
 }
 
 module.exports = GroupedIngredientList

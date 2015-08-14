@@ -6,7 +6,7 @@ $items-above-ingredients-list = 2
 
 .sidebar-menu
   background-color: #393939
-  color: #fff
+  color: #ddd
   height: 100%
 
   .return-button, .ingredients-button, .mixability-title, .mixability-options .option
@@ -31,6 +31,8 @@ $items-above-ingredients-list = 2
       margin-right: 8px
 
   .ingredients-button
+    position: relative
+
     svg
       vertical-align: middle
       margin-top: -9px
@@ -40,6 +42,19 @@ $items-above-ingredients-list = 2
 
     .text
       margin-left: 8px
+
+    .count
+      padding: 0 4px
+      position: absolute
+      top: 13px
+      right: 13px
+      min-width: 18px
+      line-height: 18px
+      background: #4a4a4a
+      border-radius: 4px
+      font-size: 14px
+      font-weight: 700
+      text-align: center
 
   .expanding-ingredients-wrapper
     height: 0
@@ -109,7 +124,6 @@ $items-above-ingredients-list = 2
       width: 100%
 
       .option
-        color: #999
         padding-left: $item-height
 
         i.fa
@@ -118,11 +132,12 @@ $items-above-ingredients-list = 2
           font-weight: 400
 
         &:not(.is-selected)
+          color: #999
+
           .fa-check
             display: none
 
         &.is-selected
-          color: #ddd
           font-weight: 600
 
           .fa-times
