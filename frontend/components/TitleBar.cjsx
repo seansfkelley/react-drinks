@@ -21,13 +21,11 @@ TitleBar = React.createClass {
         leftIcon = <i
           className={'fa float-left ' + @props.leftIcon}
           onTouchTap={@props.leftIconOnTouchTap}
-          onTouchStart={@_stopTouchStart}
         />
       else
         leftIcon = <img
           src={@props.leftIcon}
           onTouchTap={@props.leftIconOnTouchTap}
-          onTouchStart={@_stopTouchStart}
         />
 
     if @props.rightIcon?
@@ -35,13 +33,11 @@ TitleBar = React.createClass {
         rightIcon = <i
           className={'fa float-right ' + @props.rightIcon}
           onTouchTap={@props.rightIconOnTouchTap}
-          onTouchStart={@_stopTouchStart}
         />
       else
         rightIcon = <img
           src={@props.rightIcon}
           onTouchTap={@props.rightIconOnTouchTap}
-          onTouchStart={@_stopTouchStart}
         />
 
     showingIcons = @props.leftIcon? or @props.rightIcon?
@@ -58,10 +54,6 @@ TitleBar = React.createClass {
         </div>}
       {rightIcon}
     </div>
-
-  _stopTouchStart : (e) ->
-    # Prevent default so that iOS doesn't reassign the active element and deselect the input.
-    e.preventDefault()
 }
 
 module.exports = TitleBar
