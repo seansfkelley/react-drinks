@@ -271,7 +271,7 @@
     Add the bitters and syrup, fill with ice and shake hard for another 30 seconds.
     Strain into a chilled cocktail glass.
   source: "NY Times"
-  url: "http://www.nytimes.com/2010/12/01/dining/01partiesrex3.html"
+  url: "http://cooking.nytimes.com/recipes/1013714-angostura-sour"
   base: UNASSIGNED
 -
   name: "Brooklyn"
@@ -509,8 +509,8 @@
       displayAmount: "1/4"
       displayIngredient: "egg white"
   instructions: "Shake very hard over ice and strain into a chilled cocktail glass."
-  source: "Sloshed!"
-  url: "http://sloshed.hyperkinetic.org/2009/10/23/alamagoozlum-cocktail/"
+  source: "Our Libatious Nature"
+  url: "http://ourlibatiousnature.com/2011/01/06/it-begins-the-alamagoozlum-cocktail/"
   base:
     - rum
     - liqueur
