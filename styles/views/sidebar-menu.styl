@@ -109,8 +109,24 @@ $items-above-ingredients-list = 2
       width: 100%
 
       .option
+        color: #999
         padding-left: $item-height
 
+        i.fa
+          float: right
+          margin-right: 16px
+          font-weight: 400
+
+        &:not(.is-selected)
+          .fa-check
+            display: none
+
         &.is-selected
-          background-color: #555
+          color: #ddd
+          font-weight: 600
+
+          .fa-times
+            display: none
+            font-weight: 400
+
 

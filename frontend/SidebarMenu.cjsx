@@ -65,17 +65,21 @@ SidebarMenu = React.createClass {
           <input type='range' min='0' max='2' value={@state.index} onChange={@_onSliderChange}/>
         </div>
         <div className='mixability-options'>
-          <div className={classnames 'option', { 'is-selected' : @state.index >= 0 }} onTouchTap={@_generateLabelTapper 0}>
-              Drinks I Can Make
-          </div>
-          <div className={classnames 'option', { 'is-selected' : @state.index >= 1 }} onTouchTap={@_generateLabelTapper 1}>
-              Drinks Missing 1 Ingredient
-          </div>
-          <div className={classnames 'option', { 'is-selected' : @state.index >= 2 }} onTouchTap={@_generateLabelTapper 2}>
-              All Drinks
-          </div>
+          {@_createOption 'Drinks I Can Make', 0}
+          {@_createOption 'Drinks Missing 1 Ingredient', 1}
+          {@_createOption 'All Drinks', 2}
         </div>
       </div>
+    </div>
+
+  _createOption : (text, value) ->
+    return <div
+      className={classnames 'option', { 'is-selected' : @state.index >= value }}
+      onTouchTap={@_generateLabelTapper value}
+    >
+        {text}
+        <i className='fa fa-check'/>
+        <i className='fa fa-times'/>
     </div>
 
   componentDidMount : ->
