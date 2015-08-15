@@ -20,8 +20,13 @@
     font-weight: 600
     overflow: hidden
 
-    &:before // HACK
-      content: ''
+    .text
+      float: right
       display: inline-block
-      height: 100%
       vertical-align: middle
+
+      &:before // HACK
+        content: ''
+        display: inline-block
+        height: 100%
+        vertical-align: middle
