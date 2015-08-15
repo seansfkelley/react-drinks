@@ -6,6 +6,8 @@ Swipable = require '../components/Swipable'
 AppDispatcher = require '../AppDispatcher'
 overlayViews  = require '../overlayViews'
 
+{ IngredientStore } = require '../stores'
+
 RecipeView = require './RecipeView'
 
 SwipableRecipeView = React.createClass {
@@ -28,7 +30,7 @@ SwipableRecipeView = React.createClass {
               recipe={r}
               onClose={@_closeModal}
               shareable={not r.isCustom}
-              ingredientEditable={true}
+              onAddRemove={@_onAddRemove}
             />
           </div>}
       </div>
@@ -47,6 +49,18 @@ SwipableRecipeView = React.createClass {
 
   _closeModal : ->
     overlayViews.modal.hide()
+
+  _onAddRemove : ({ tag }) ->
+    selectedIngredientTags = _.clone IngredientStore.selectedIngredientTags
+    if selectedIngredientTags[tag]
+      delete selectedIngredientTags[tag]
+    else
+      selectedIngredientTags[tag] = true
+
+    AppDispatcher.dispatch {
+      type : 'set-selected-ingredient-tags'
+      selectedIngredientTags
+    }
 }
 
 module.exports = SwipableRecipeView

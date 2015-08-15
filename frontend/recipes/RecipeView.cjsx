@@ -25,14 +25,13 @@ RecipeView = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    recipe             : React.PropTypes.object.isRequired
-    onClose            : React.PropTypes.func
-    shareable          : React.PropTypes.bool
-    ingredientEditable : React.PropTypes.bool
+    recipe      : React.PropTypes.object.isRequired
+    onClose     : React.PropTypes.func
+    shareable   : React.PropTypes.bool
+    onAddRemove : React.PropTypes.func
 
   getDefaultProps : -> {
-    shareable          : false
-    ingredientEditable : false
+    shareable : false
   }
 
   render : ->
@@ -47,8 +46,8 @@ RecipeView = React.createClass {
         .value()
     else
       ingredientNodes = _.map @props.recipe.ingredients, (i) =>
-        if @props.ingredientEditable
-          i = _.extend { onAddRemove : _.partial @_onAddRemove, i }, i
+        if @props.onAddRemove
+          i = _.extend { onAddRemove : _.partial @props.onAddRemove, i }, i
         <MeasuredIngredient {...i} key={i.tag ? i.displayIngredient}/>
 
     if @props.recipe.notes?
@@ -99,10 +98,6 @@ RecipeView = React.createClass {
       </div>
     </FixedHeaderFooter>
 
-  _onAddRemove : (ingredient) ->
-    console.log 'add-remove!'
-    console.log ingredient
-
   _renderCategory : (measuredIngredients, category) ->
     if measuredIngredients.length == 0
       return []
@@ -117,8 +112,8 @@ RecipeView = React.createClass {
         measuredIngredients = _.map measuredIngredients, (i) ->
           return _.defaults { isMissing : true }, i
 
-      if @props.ingredientEditable
-        _.each measuredIngredients, (i) => i.onAddRemove = _.partial @_onAddRemove, i
+      if @props.onAddRemove
+        _.each measuredIngredients, (i) => i.onAddRemove = _.partial @props.onAddRemove, i
 
       return _.map measuredIngredients, (i) -> <MeasuredIngredient {...i} key={i.tag ? i.displayIngredient}/>
 }
