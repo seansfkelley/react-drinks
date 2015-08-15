@@ -12,7 +12,7 @@ _ = require 'lodash'
 # icrt = ??? some kind of ice probably, but doesn't appear in the UI and all the pictures are blank
 
 array2asset = (array, previewAssetSuffix) ->
-  return _.map array, ([ display, assetKey, previewAssetName ]) ->
+  return _.map array, ([ display, assetKey ]) ->
     return { display, assetKey, previewAssetName : "#{assetKey}-#{previewAssetSuffix}" }
 
 GLASSES = array2asset [

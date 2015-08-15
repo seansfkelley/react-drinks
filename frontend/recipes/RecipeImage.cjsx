@@ -1,13 +1,10 @@
-_                   = require 'lodash'
-React               = require 'react/addons'
+_     = require 'lodash'
+React = require 'react/addons'
+
 { PureRenderMixin } = React.addons
 
 imageConstants = require './imageConstants'
 definitions    = require '../../shared/definitions'
-
-ASSET_SHAPE = React.PropTypes.shape {
-  assetKey : React.PropTypes.string.isRequired
-}
 
 assetUrlFor = (glassAssetKey, assetKey) ->
   return "/assets/img/drinks-parts/#{glassAssetKey}-#{assetKey}_420@2x.png"
