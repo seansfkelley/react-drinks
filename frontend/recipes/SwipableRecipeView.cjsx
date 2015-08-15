@@ -24,7 +24,12 @@ SwipableRecipeView = React.createClass {
       <div className='swipable-padding-wrapper' key={r.recipeId}>
         {if Math.abs(i - @state.visibleIndex) <= 1
           <div className='swipable-position-wrapper'>
-            <RecipeView recipe={r} onClose={@_closeModal} shareable={not r.isCustom}/>
+            <RecipeView
+              recipe={r}
+              onClose={@_closeModal}
+              shareable={not r.isCustom}
+              ingredientEditable={true}
+            />
           </div>}
       </div>
 

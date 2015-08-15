@@ -30,12 +30,10 @@ RecipeView = React.createClass {
     shareable          : React.PropTypes.bool
     ingredientEditable : React.PropTypes.bool
 
-  getDefaultProps : ->
-    return {
-      shareable          : false
-      # Should be false, but testing.
-      ingredientEditable : true
-    }
+  getDefaultProps : -> {
+    shareable          : false
+    ingredientEditable : false
+  }
 
   render : ->
     # TODO: We're reusing this view for both types of recipes; seems bad.
