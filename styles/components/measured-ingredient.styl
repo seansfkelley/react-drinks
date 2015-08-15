@@ -1,16 +1,11 @@
+@require '../shared/animation'
+
+$add-remove-button-width = 72px
+
 .measured-ingredient
   display: table
   width: 100%
-
-  /.recipe-ingredients & // TODO: find a better way to distinguish single vs. group difference/remove difference
-    display: table-row
-    background: #eee
-
-  &:nth-child(even)
-    background: #d8d8d8
-
-  > *
-    display: table-cell // on non-retina with *mobile* emulator, faint cell border appears (rounding bug)
+  position: relative
 
   .measure
     padding: 0 0 0 12px
@@ -26,6 +21,10 @@
     padding: 6px 12px
     font-weight: 600
     line-height: 32px
+
+  .ellipsis-button
+    width: 44px
+    color: #bbb
 
   &.missing, &.substituted .ingredient .name
     color: #a6a6a6
@@ -45,3 +44,55 @@
       .substitute-label
         padding-right: 6px
         font-weight: 400
+
+  &:nth-child(even) .slideover-wrapper
+    background: #d8d8d8
+
+  &:nth-child(odd) .slideover-wrapper
+    background: #eee
+
+  .slideover-wrapper
+    transition: transform $transition-duration-quick-ish
+    transform: none
+
+    /.recipe-ingredients & // TODO: find a better way to distinguish single vs. group difference/remove difference
+      display: table-row
+
+    > *
+      display: table-cell // on non-retina with *mobile* emulator, faint cell border appears (rounding bug)
+
+  .add-remove-button
+    position: absolute
+    top: 0
+    right: 0
+    width: 0
+    height: 100%
+    color: white
+    overflow: hidden
+    text-align: center
+    transition: width $transition-duration-quick-ish
+    font-weight: 600
+    font-style: normal
+
+    &.add
+      background-color: green
+
+    &.remove
+      background-color: red
+
+    .text
+      float: right
+      width: $add-remove-button-width
+
+      &:before // HACK
+        content: ''
+        display: inline-block
+        height: 100%
+        vertical-align: middle
+
+  &.is-slid-over
+    .slideover-wrapper
+      transform: translateX((- $add-remove-button-width))
+
+    .add-remove-button
+      width: $add-remove-button-width

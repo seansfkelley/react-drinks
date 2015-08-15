@@ -12,10 +12,9 @@ Deletable = React.createClass {
     onDelete : React.PropTypes.func.isRequired
     children : React.PropTypes.element.isRequired
 
-  getInitialState : ->
-    return {
-      left : 0
-    }
+  getInitialState : -> {
+    left : 0
+  }
 
   render : ->
     renderableProps = _.omit @props, 'onDelete'
