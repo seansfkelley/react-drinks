@@ -20,14 +20,6 @@ SwipableRecipeView = require './SwipableRecipeView'
 RecipeListItem     = require './RecipeListItem'
 RecipeListHeader   = require './RecipeListHeader'
 
-_generateRecipeOpener = (groupedRecipes, absoluteIndex) ->
-  return ->
-    recipes = _.chain groupedRecipes
-      .pluck 'recipes'
-      .flatten()
-      .value()
-    overlayViews.modal.show <SwipableRecipeView recipes={recipes} index={absoluteIndex}/>
-
 RecipeList = React.createClass {
   displayName : 'RecipeList'
 
@@ -52,7 +44,7 @@ RecipeList = React.createClass {
         listNodes.push @props.makeHeader(key, recipes)
       for r in recipes
         listNodes.push @props.makeItem(key, r, {
-          onTouchTap : _generateRecipeOpener @props.recipes, absoluteIndex
+          onTouchTap : SwipableRecipeView.showInModal.bind(null, @props.recipes, absoluteIndex)
           onDelete   : if r.isCustom then _.partial(@_deleteRecipe, r.recipeId)
           key        : r.recipeId
         })

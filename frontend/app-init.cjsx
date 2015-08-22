@@ -1,5 +1,6 @@
 require('./common-init')()
 
+_     = require 'lodash'
 React = require 'react/addons'
 
 App           = require './App'
@@ -7,7 +8,9 @@ FtueView      = require './FtueView'
 AppDispatcher = require './AppDispatcher'
 stores        = require './stores'
 
-{ UiStore, IngredientStore } = stores
+SwipableRecipeView = require './recipes/SwipableRecipeView'
+
+{ UiStore, RecipeStore } = stores
 
 # Initialize state.
 
@@ -32,5 +35,8 @@ initializationPromise.then ->
     React.render <FtueView onComplete={completeFtue}/>, FTUE_ROOT
 
   React.render <App/>, APP_ROOT
+
+  if UiStore.recipeViewingIndex?
+    SwipableRecipeView.showInModal RecipeStore.filteredAlphabeticalRecipes, UiStore.recipeViewingIndex
 
   LOADING_OVERLAY.classList.add 'fade-out'

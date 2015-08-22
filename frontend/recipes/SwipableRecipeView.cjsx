@@ -14,17 +14,30 @@ SwipableRecipeView = React.createClass {
   propTypes :
     recipes : React.PropTypes.array.isRequired
     index   : React.PropTypes.number.isRequired
+    onClose : React.PropTypes.func.isRequired
 
   getInitialState : -> {
     visibleIndex : @props.index
   }
+
+  statics :
+    showInModal : (groupedRecipes, initialIndex = 0) ->
+      recipes = _.chain groupedRecipes
+        .pluck 'recipes'
+        .flatten()
+        .value()
+      overlayViews.modal.show <SwipableRecipeView
+        recipes={recipes}
+        index={initialIndex}
+        onClose={overlayViews.modal.hide}
+      />
 
   render : ->
     recipePages = _.map @props.recipes, (r, i) =>
       <div className='swipable-padding-wrapper' key={r.recipeId}>
         {if Math.abs(i - @state.visibleIndex) <= 1
           <div className='swipable-position-wrapper'>
-            <RecipeView recipe={r} onClose={@_closeModal} shareable={not r.isCustom}/>
+            <RecipeView recipe={r} onClose={@_onClose} shareable={not r.isCustom}/>
           </div>}
       </div>
 
@@ -39,9 +52,17 @@ SwipableRecipeView = React.createClass {
 
   _onSlideChange : (index) ->
     @setState { visibleIndex : index }
+    AppDispatcher.dispatch {
+      type : 'set-recipe-viewing-index'
+      index
+    }
 
-  _closeModal : ->
-    overlayViews.modal.hide()
+  _onClose : ->
+    AppDispatcher.dispatch {
+      type  : 'set-recipe-viewing-index'
+      index : null
+    }
+    @props.onClose()
 }
 
 module.exports = SwipableRecipeView

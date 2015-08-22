@@ -135,13 +135,19 @@ Swipable = React.createClass {
     return _.indexOf(slidingContainer.children, target)
 
   _onSwiping : (delta) ->
+    oldIndex = @_getIndexForDelta @state.delta
+    newIndex = @_getIndexForDelta delta
     @setState { delta }
-    @props.onSlideChange @_getIndexForDelta(delta)
+    if oldIndex != newIndex
+      @props.onSlideChange newIndex
 
   _onSwiped : ->
     index = @_getIndexForDelta @state.delta
     @setState { initialDelta : @state.itemOffsets[index] }
-    @props.onSlideChange index
+    # Leaving this here for posterity, but, I think it's a safe bet
+    # that the index hasn't changed between the last onSwiping call
+    # and this, so don't call it twice in a row.
+    # @props.onSlideChange index
 }
 
 module.exports = Swipable
