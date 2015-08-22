@@ -22,6 +22,11 @@ normalizeRecipe = (r) ->
 
   r = _.clone r
   r.canonicalName = latinize(r.name).toLowerCase()
+  nameWords = r.canonicalName.split ' '
+  if nameWords[0] in [ 'a', 'the' ]
+    r.sortName = nameWords[1..].join ' '
+  else
+    r.sortName = r.canonicalName
   # So, we don't really care if this is a hash or not. It just needs to be sufficiently unique.
   # The reason it does this is because it avoids accidentally assigning the same ID to a default
   # recipe (which don't come with any) and a custom recipe (which should retain theirs forever).

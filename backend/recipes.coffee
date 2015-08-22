@@ -62,7 +62,7 @@ if '--custom-recipes' in process.argv
 RECIPES = _.chain RECIPE_FILES
   .map (f) -> yaml.safeLoad(fs.readFileSync("#{__dirname}/../data/#{f}.yaml"))
   .flatten()
-  .sortBy 'name'
+  .sortBy 'sortName'
   .value()
 
 log.info "loaded #{RECIPES.length} recipes"

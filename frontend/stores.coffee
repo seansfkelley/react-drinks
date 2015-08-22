@@ -194,7 +194,7 @@ RecipeStore = new class extends FluxStore
   _updateDerivedRecipeLists : ->
     AppDispatcher.waitFor [ IngredientStore.dispatchToken ]
 
-    alphabeticalRecipes = _.sortBy(@allRecipes, 'canonicalName')
+    alphabeticalRecipes = _.sortBy(@allRecipes, 'sortName')
     @_recipeSearch = new RecipeSearch IngredientStore.ingredientsByTag, alphabeticalRecipes
 
     @_updateMixableRecipes()
@@ -209,9 +209,9 @@ RecipeStore = new class extends FluxStore
     @alphabeticalRecipes = _.chain allMixableRecipes
       .values()
       .flatten()
-      .sortBy 'canonicalName'
+      .sortBy 'sortName'
       # group by should include a clause for numbers
-      .groupBy (r) -> r.canonicalName[0].toLowerCase()
+      .groupBy (r) -> r.sortName[0].toLowerCase()
       .map (recipes, key) -> { recipes, key }
       .sortBy 'key'
       .value()
