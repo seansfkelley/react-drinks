@@ -11,6 +11,9 @@ AppDispatcher = require './AppDispatcher'
 RecipeSearch  = require './recipes/RecipeSearch'
 
 
+ONE_MINUTE_MS = 1000 * 60
+LAST_PERSIST_KEY = 'drinks-app-persist-timestamp'
+
 class FluxStore
   MicroEvent.mixin this
 
@@ -19,13 +22,18 @@ class FluxStore
 
     _.extend @, _.result(@, 'fields')
     if _persistable
-      _.extend @, _.pick(JSON.parse(localStorage[@localStorageKey] ? '{}'), @persistableFields)
+      persistedFields = _.pick JSON.parse(localStorage[@localStorageKey] ? '{}'), @persistableFields
+      if localStorage[LAST_PERSIST_KEY]? and @persistenceTimeouts?
+        msSincePersistence = Date.now() - +localStorage[LAST_PERSIST_KEY]
+        persistedFields = _.pick persistedFields, (_, key) => msSincePersistence < (@persistenceTimeouts[key] ? Infinity)
+      _.extend @, persistedFields
 
     @dispatchToken = AppDispatcher.register (payload) =>
       if this[payload.type]?
         this[payload.type](payload)
         if _persistable
           localStorage[@localStorageKey] = JSON.stringify _.pick(@, @persistableFields)
+          localStorage[LAST_PERSIST_KEY] = Date.now()
         @trigger 'change'
 
       return true
@@ -127,6 +135,12 @@ UiStore = new class extends FluxStore
 
   persistableFields : [ 'mixabilityFilters', 'baseLiquorFilter', 'completedFtue', 'recipeViewingIndex' ]
 
+  persistenceTimeouts :
+    baseLiquorFilter   : ONE_MINUTE_MS * 15
+    # Since the current index is dependent on the filters (namely: mixability, keyword, base liquor),
+    # it has to have a timeout less than or equal to the minimum of those timeouts, here 5 minutes.
+    recipeViewingIndex : ONE_MINUTE_MS * 5
+
   'toggle-mixability-filter' : ({ filter }) ->
     @mixabilityFilters = _.clone @mixabilityFilters
     @mixabilityFilters[filter] = not @mixabilityFilters[filter]
@@ -159,6 +173,9 @@ RecipeStore = new class extends FluxStore
   localStorageKey : 'drinks-app-recipes'
 
   persistableFields : [ 'customRecipes', 'searchTerm' ]
+
+  persistenceTimeouts :
+    searchTerm : ONE_MINUTE_MS * 5
 
   'set-ingredients' : ({ alphabetical, grouped }) ->
     @_updateDerivedRecipeLists()

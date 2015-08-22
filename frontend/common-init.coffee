@@ -1,8 +1,7 @@
+_     = require 'lodash'
 React = require 'react'
 
 module.exports = ->
-  window.debug = {}
-
   if window.navigator.standalone
     document.body.setAttribute 'standalone', true
 
@@ -26,6 +25,15 @@ module.exports = ->
     jq.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js'
     document.getElementsByTagName('head')[0].appendChild jq
 
-  window.debug.log = require 'loglevel'
+  window.debug = {
+    log          : require 'loglevel'
+    localStorage : ->
+      return _.mapValues localStorage, (v) ->
+        try
+          return JSON.parse v
+        catch
+          return v
+  }
+
   # For devtools.
   window.React = React
