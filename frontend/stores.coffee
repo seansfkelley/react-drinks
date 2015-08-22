@@ -123,7 +123,6 @@ MIXABILITY_FILTER_RANGES = {
 UiStore = new class extends FluxStore
   fields : -> {
     baseLiquorFilter     : ANY_BASE_LIQUOR
-    completedFtue        : false
     recipeViewingIndex   : null
     mixabilityFilters    :
       mixable          : true
@@ -133,7 +132,7 @@ UiStore = new class extends FluxStore
 
   localStorageKey : 'drinks-app-ui'
 
-  persistableFields : [ 'mixabilityFilters', 'baseLiquorFilter', 'completedFtue', 'recipeViewingIndex' ]
+  persistableFields : [ 'mixabilityFilters', 'baseLiquorFilter', 'recipeViewingIndex' ]
 
   persistenceTimeouts :
     baseLiquorFilter   : ONE_MINUTE_MS * 15
@@ -150,9 +149,6 @@ UiStore = new class extends FluxStore
 
   'set-base-liquor-filter' : ({ filter }) ->
     @baseLiquorFilter = filter
-
-  'completed-ftue' : ->
-    @completedFtue = true
 
   'set-recipe-viewing-index' : ({ index }) ->
     @recipeViewingIndex = index
