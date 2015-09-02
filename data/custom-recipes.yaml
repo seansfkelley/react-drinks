@@ -160,3 +160,27 @@
   source: "EatDrinkFilms"
   url: "http://eatdrinkfilms.com/2015/03/06/shaken-stirred-a-stout-beer-cocktail-and-a-lesson-in-schooling/"
   base: rum
+-
+  name: "The Slowest Buffalo"
+  ingredients:
+    -
+      tag: "dark rum"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "Smith & Cross rum"
+    -
+      tag: "lime juice"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "lime juice"
+    -
+      tag: "molasses"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "molasses simple syrup"
+  instructions: |
+    Shake all ingredients with ice.
+    Strain into a rocks glass, add ice and garnish with a lime wedge.
+  notes: "To make the molasses simple syrup, use 2 parts molasses to 1 part water."
+  source: "Two Sisters Bar & Books"
+  base: rum

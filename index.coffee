@@ -1,10 +1,11 @@
+log = require 'loglevel'
+
+# Logging before all.
+log.setLevel 'debug'
+
 _       = require 'lodash'
 express = require 'express'
-log     = require 'loglevel'
 routes  = require './routes'
-
-# Logging.
-log.setLevel 'info'
 
 # Express.
 app = express()

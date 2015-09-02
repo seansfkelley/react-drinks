@@ -454,3 +454,6 @@
 -
   display    : Plum Wine
   group      : wine
+-
+  display    : Molasses
+  group      : syrup
