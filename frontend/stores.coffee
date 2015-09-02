@@ -352,6 +352,7 @@ EditableRecipeStore = new class extends FluxStore
     'drop'
     'pinch'
     'pinches'
+    'slice'
   ]
 
   _parseIngredient : (rawText, tag) ->

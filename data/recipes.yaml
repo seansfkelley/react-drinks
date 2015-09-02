@@ -825,3 +825,90 @@
     Float fresh cream on top and stir slowly.
   notes: "Replace the cream with Baileys to make a Blind Russian, so named because the drink is 100% alcohol."
   base: vodka
+-
+  name: "Dark Matter"
+  ingredients:
+    -
+      tag: "dark rum"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "spice-infused dark rhum"
+    -
+      tag: "simple syrup"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "simple syrup"
+    -
+      tag: "dark beer"
+      displayAmount: "2-4"
+      displayUnit: "oz"
+      displayIngredient: "stout beer"
+  instructions: |
+    Combine rhum, syrup, and ice in mixing tin.
+    Shake and strain into small wine or rocks glass, then top with stout.
+  notes: "To make the spiced rum for this cocktail, infuse 1 vanilla bean (split length-wise) and 5-8 cloves in a 750ml bottle of dark rum (e.g. Barbancourt 5 Star) for two days, shaking periodically."
+  source: "EatDrinkFilms"
+  url: "http://eatdrinkfilms.com/2015/03/06/shaken-stirred-a-stout-beer-cocktail-and-a-lesson-in-schooling/"
+  base: rum
+-
+  name: "The Slowest Buffalo"
+  ingredients:
+    -
+      tag: "dark rum"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "Smith & Cross rum"
+    -
+      tag: "lime juice"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "lime juice"
+    -
+      tag: "molasses"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "molasses simple syrup"
+  instructions: |
+    Shake all ingredients with ice.
+    Strain into a rocks glass, add ice and garnish with a lime wedge.
+  notes: "To make the molasses simple syrup, use 2 parts molasses to 1 part water."
+  source: "Two Sisters Bar & Books"
+  base: rum
+-
+  name: "Penicillin"
+  ingredients:
+    -
+      tag: "scotch"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "blended scotch"
+    -
+      tag: "lemon juice"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "fresh lime juice"
+    -
+      tag: "honey"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "honey syrup"
+    -
+      tag: "ginger"
+      displayAmount: "3"
+      displayUnit: "slices"
+      displayIngredient: "fresh ginger"
+    -
+      tag: "scotch"
+      displayAmount: "1/4"
+      displayUnit: "oz"
+      displayIngredient: "single malt Islay scotch"
+  instructions: |
+    Muddle the fresh ginger in the bottom of a cocktail shaker until it is well mashed
+    Add the blended scotch, lemon juice and honey syrup.
+    Shake until well-chilled and strain into an ice-filled rocks glass.
+    Float the Islay scotch on top.
+    Garnish with a piece of candied ginger.
+  notes: "To make honey syrup, use one part honey to one part water."
+  source: "Serious Eats"
+  url: "http://www.seriouseats.com/recipes/2009/11/time-for-a-drink-penicillin-cocktail.html"
+  base: rum

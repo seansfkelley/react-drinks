@@ -812,7 +812,8 @@
         displayIngredient: "orange juice"
     instructions: |
       Pour vodka and orange juice into a highball glass filled with ice.
-      Stir gently and float Galliano on top. Garnish with orange slices and cherry.
+      Stir gently and float Galliano on top.
+      Garnish with orange slices and cherry.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
     base: vodka
