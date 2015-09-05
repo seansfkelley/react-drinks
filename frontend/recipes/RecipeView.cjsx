@@ -46,7 +46,8 @@ RecipeView = React.createClass {
         .value()
     else
       ingredientNodes = _.map @props.recipe.ingredients, (i) ->
-        <MeasuredIngredient {...i} key={i.tag ? i.displayIngredient}/>
+        # This fucked-up key is because sometimes, the same tag will appear twice (e.g. Penicillin's two scotches).
+        <MeasuredIngredient {...i} key={"#{i.tag} #{i.displayIngredient}"}/>
 
     if @props.recipe.notes?
       recipeNotes =
@@ -110,7 +111,7 @@ RecipeView = React.createClass {
         measuredIngredients = _.map measuredIngredients, (i) ->
           return _.defaults { isMissing : true }, i
 
-      return _.map measuredIngredients, (i) -> <MeasuredIngredient {...i} key={i.tag ? i.displayIngredient}/>
+      return _.map measuredIngredients, (i) -> <MeasuredIngredient {...i} key={"#{i.tag} #{i.displayIngredient}"}/>
 }
 
 module.exports = RecipeView
