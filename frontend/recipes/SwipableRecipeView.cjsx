@@ -26,6 +26,10 @@ SwipableRecipeView = React.createClass {
         .pluck 'recipes'
         .flatten()
         .value()
+      AppDispatcher.dispatch {
+        type  : 'set-recipe-viewing-index'
+        index : initialIndex
+      }
       overlayViews.modal.show <SwipableRecipeView
         recipes={recipes}
         index={initialIndex}
