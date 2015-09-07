@@ -10,7 +10,7 @@ definitions   = require '../shared/definitions'
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
-BASE_LIQUORS = [ 'UNASSIGNED' ].concat definitions.BASE_LIQUORS
+BASE_LIQUORS = [ definitions.UNASSIGNED_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
 
 RECIPE_SCHEMA = {
   type       : 'object'
@@ -67,7 +67,7 @@ RECIPES = _.chain RECIPE_FILES
 
 log.info "loaded #{RECIPES.length} recipes"
 
-unassignedBases = _.where RECIPES, { base : 'UNASSIGNED' }
+unassignedBases = _.where RECIPES, { base : definitions.UNASSIGNED_BASE_LIQUOR }
 if unassignedBases.length
   log.warn "#{unassignedBases.length} recipes have an unassigned base liquor: #{_.pluck(unassignedBases, 'name').join ', '}"
 

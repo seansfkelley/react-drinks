@@ -140,10 +140,6 @@ UiStore = new class extends FluxStore
     # it has to have a timeout less than or equal to the minimum of those timeouts, here 5 minutes.
     recipeViewingIndex : ONE_MINUTE_MS * 5
 
-  'toggle-mixability-filter' : ({ filter }) ->
-    @mixabilityFilters = _.clone @mixabilityFilters
-    @mixabilityFilters[filter] = not @mixabilityFilters[filter]
-
   'set-mixability-filters' : ({ filters }) ->
     @mixabilityFilters = _.pick filters, _.keys(@mixabilityFilters)
 
@@ -181,9 +177,6 @@ RecipeStore = new class extends FluxStore
     @_refreshRecipes()
 
   'set-selected-ingredient-tags' : ->
-    @_updateDerivedRecipeLists()
-
-  'toggle-mixability-filter' : ->
     @_updateDerivedRecipeLists()
 
   'set-mixability-filters' : ->
