@@ -1,0 +1,73 @@
+NEW VERSION
+
+removed states
+  # these should be computed as necessary using a memoized function, as long as said function
+  # memoizes with deep equality, not reference equality
+  searchedGroupedIngredients
+  mixabilityByRecipeId
+  filteredAlphabeticalRecipes
+
+filters
+  recipeSearchTerm
+  ingredientSearchTerm
+  baseLiquorFilter
+  mixabilityFilters
+  selectedIngredientTags
+
+recipes
+  allRecipes
+  defaultRecipes
+  customRecipes
+  alphabeticalRecipes
+
+ingredients
+  alphabeticalIngredients # actual ingredients that exist
+  allAlphabeticalIngredients # include non-exitent classifications like "Chartreuse"
+  groupedIngredients
+  ingredientsByTag
+  baseLiquors # not sure why this exists, make it a constant?
+
+ui
+  recipeViewingIndex
+
+editable-recipe
+  name
+  ingredients
+  instructions
+  notes
+  base
+
+-----
+
+OLD VERSION
+
+recipe
+  searchTerm
+  mixabilityByRecipeId
+  allRecipes
+  defaultRecipes
+  customRecipes
+  alphabeticalRecipes
+  filteredAlphabeticalRecipes
+
+ingredients
+  searchTerm
+  alphabeticalIngredients
+  allAlphabeticalIngredients
+  groupedIngredients
+  searchedGroupedIngredients
+  selectedIngredientTags
+  ingredientsByTag
+  baseLiquors
+
+ui
+  baseLiquorFilter
+  recipeViewingIndex
+  mixabilityFilters
+
+editable-recipe
+  name
+  ingredients
+  instructions
+  notes
+  base
