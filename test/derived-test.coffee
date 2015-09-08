@@ -78,3 +78,12 @@ describe 'derived', ->
           searchable : [ 'a', '1', 'alpha' ]
         ]
       ]
+
+  describe '#mixabilityForAllRecipes', ->
+    xit 'needs tests'
+
+  describe '#mixabilityByRecipeId', ->
+    xit 'needs tests'
+
+  describe '#filteredGroupedAlphabeticalRecipes', ->
+    xit 'needs tests'
