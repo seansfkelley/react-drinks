@@ -47,7 +47,15 @@ MIXABILITY_FILTER_RANGES = {
   notReallyMixable : [ 2, 100 ]
 }
 
-filteredGroupedAlphabeticalRecipes = (ingredientsByTag, alphabeticalRecipes, selectedIngredientTags, baseLiquorFilter, recipeSearchTerm, mixabilityFilters) ->
+# TODO: Shape assertions?...!
+filteredGroupedAlphabeticalRecipes = (state) ->
+  { ingredientsByTag } = state.ingredients
+  { alphabeticalRecipes } = state.recipes
+  { selectedIngredientTags
+    baseLiquorFilter
+    recipeSearchTerm
+    mixabilityFilters } = state.filters
+
   mixableRecipes = mixabilityForAllRecipes ingredientsByTag, alphabeticalRecipes, selectedIngredientTags
   mixabilityById = mixabilityByRecipeId ingredientsByTag, alphabeticalRecipes, selectedIngredientTags
 

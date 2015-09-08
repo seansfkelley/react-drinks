@@ -6,17 +6,15 @@ React = require 'react/addons'
 App                 = require './App'
 webClipNotification = require './webClipNotification'
 
-AppDispatcher = require '../../AppDispatcher'
-stores        = require '../../stores'
+store   = require '../../store'
+derived = require '../../store/derived'
 
 SwipableRecipeView = require '../../recipes/SwipableRecipeView'
-
-{ UiStore, RecipeStore } = stores
 
 # Initialize state.
 
 require('bluebird').longStackTraces()
-initializationPromise = stores.seedStores()
+initializationPromise = require('../../store/init')()
 
 # Show views.
 
@@ -26,8 +24,13 @@ APP_ROOT        = document.querySelector '#app-root'
 initializationPromise.then ->
   React.render <App/>, APP_ROOT
 
-  if UiStore.recipeViewingIndex?
-    SwipableRecipeView.showInModal RecipeStore.filteredAlphabeticalRecipes, UiStore.recipeViewingIndex
+  state = store.getState()
+
+  if state.ui.recipeViewingIndex?
+    SwipableRecipeView.showInModal(
+      derived.filteredGroupedAlphabeticalRecipes(state)
+      state.ui.recipeViewingIndex
+    )
 
   LOADING_OVERLAY.classList.add 'fade-out'
 

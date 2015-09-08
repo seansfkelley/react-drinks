@@ -2,6 +2,7 @@ _     = require 'lodash'
 React = require 'react'
 
 # Probably not necessary for some views, but it's nice to have it here.
+store       = require '../store'
 persistence = require '../store/persistence'
 
 module.exports = ->
@@ -38,6 +39,8 @@ module.exports = ->
           return JSON.parse v
         catch
           return v
+    getState : ->
+      return store.getState()
   }
 
   # For devtools.

@@ -7,3 +7,4 @@
   - typescript might actually be handy here!
 - add unit tests for derived values
 - make RecipeSearch into (memoized!) utility functions since it doesn't need to do pre-processing anymore
+- replace revalidator with proptypes, if it's been separated out into a library...?
