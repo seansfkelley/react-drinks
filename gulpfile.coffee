@@ -74,6 +74,7 @@ buildSingleScript  = ({ source, destination, watch, dieOnError }) ->
     if not dieOnError
       b = b.on 'error', notify.onError {
         title : 'Browserify Error'
+        sound : 'Sosumi'
       }
 
     return b
