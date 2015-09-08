@@ -1,0 +1,9 @@
+- add actions
+- swap consumers of store over to using getState or whatever
+- test if memoization is necessary for derived values
+  - implement if so, obviously
+  - caveat: if they call each other, you'll have to "dependency inject" them into one another so the tests are not running with memoized functions or something similarly obnoxious most likely
+- consider changing signature of derived functions to take the root store and/or substores instead of direct values
+  - typescript might actually be handy here!
+- add unit tests for derived values
+- make RecipeSearch into (memoized!) utility functions since it doesn't need to do pre-processing anymore
