@@ -1,6 +1,6 @@
 { ANY_BASE_LIQUOR } = require '../../shared/definitions'
 
-module.exports = require('makeReducer') {
+module.exports = require('./makeReducer') {
   recipeSearchTerm       : ''
   ingredientSearchTerm   : ''
   selectedIngredientTags : {}

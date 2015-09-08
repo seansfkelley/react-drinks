@@ -1,6 +1,9 @@
 _     = require 'lodash'
 React = require 'react'
 
+# Probably not necessary for some views, but it's nice to have it here.
+persistence = require '../store/persistence'
+
 module.exports = ->
   if window.navigator.standalone
     document.body.setAttribute 'standalone', true
@@ -8,6 +11,8 @@ module.exports = ->
   React.initializeTouchEvents true
   require('react-tap-event-plugin')()
 
+  persistence.load()
+  persistence.watch()
 
   # if 'ontouchstart' of window
   #   kill = (type) ->
@@ -37,3 +42,5 @@ module.exports = ->
 
   # For devtools.
   window.React = React
+  # Becaues I use it a lot.
+  window._ = _

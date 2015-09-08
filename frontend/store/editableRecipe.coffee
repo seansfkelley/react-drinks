@@ -56,7 +56,7 @@ _createEmptyStore = -> {
   base         : []
 }
 
-module.exports = require('makeReducer') _createEmptyStore(), {
+module.exports = require('./makeReducer') _createEmptyStore(), {
   'set-name' : (state, { name }) ->
     return _.defaults { name }, state
 

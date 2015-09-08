@@ -1,6 +1,6 @@
 log = require 'loglevel'
 
-normalization       = require '../../shraed/normalization'
+normalization       = require '../../shared/normalization'
 { ANY_BASE_LIQUOR } = require '../../shared/definitions'
 
 _computeIngredientsByTag = (groupedIngredients, intangibleIngredients) ->
@@ -28,7 +28,7 @@ _computeIngredientsByTag = (groupedIngredients, intangibleIngredients) ->
 
   return ingredientsByTag
 
-module.exports = require('makeReducer') {
+module.exports = require('./makeReducer') {
   alphabeticalIngredients    : []
   allAlphabeticalIngredients : []
   groupedIngredients         : []

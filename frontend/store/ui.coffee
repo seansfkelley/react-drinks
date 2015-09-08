@@ -1,4 +1,4 @@
-module.exports = require('makeReducer') {
+module.exports = require('./makeReducer') {
   recipeViewingIndex : null
 }, {
   'set-recipe-viewing-index' : (state, { index }) ->

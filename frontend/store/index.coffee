@@ -5,7 +5,7 @@ rootReducer = redux.combineReducers {
   filters        : require './filters'
   ingredients    : require './ingredients'
   recipes        : require './recipes'
-  editableRecipe : require './editaleRecipe'
+  editableRecipe : require './editableRecipe'
 }
 
 createStore = redux.applyMiddleware(require('redux-thunk'))(redux.createStore)
