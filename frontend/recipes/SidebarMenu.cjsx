@@ -5,14 +5,14 @@ Isvg       = require 'react-inlinesvg'
 
 { PureRenderMixin } = React.addons
 
-FluxMixin = require './mixins/FluxMixin'
+FluxMixin = require '../mixins/FluxMixin'
 
-AppDispatcher       = require './AppDispatcher'
-{ IngredientStore } = require './stores'
-stylingConstants    = require './stylingConstants'
+AppDispatcher       = require '../AppDispatcher'
+{ IngredientStore } = require '../stores'
+stylingConstants    = require '../stylingConstants'
 
-SearchBar             = require './components/SearchBar'
-GroupedIngredientList = require './ingredients/GroupedIngredientList'
+SearchBar             = require '../components/SearchBar'
+GroupedIngredientList = require '../ingredients/GroupedIngredientList'
 
 SidebarMenu = React.createClass {
   displayName : 'SidebarMenu'

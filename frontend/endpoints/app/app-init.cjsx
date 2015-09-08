@@ -1,13 +1,14 @@
-require('./common-init')()
+require('../common-init')()
 
 _     = require 'lodash'
 React = require 'react/addons'
 
-App           = require './App'
-AppDispatcher = require './AppDispatcher'
-stores        = require './stores'
+App = require './App'
 
-SwipableRecipeView = require './recipes/SwipableRecipeView'
+AppDispatcher = require '../../AppDispatcher'
+stores        = require '../../stores'
+
+SwipableRecipeView = require '../../recipes/SwipableRecipeView'
 
 { UiStore, RecipeStore } = stores
 

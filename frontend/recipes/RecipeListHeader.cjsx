@@ -15,8 +15,8 @@ overlayViews  = require '../overlayViews'
 { UiStore, IngredientStore } = require '../stores'
 
 EditableRecipeView      = require './EditableRecipeView'
+SidebarMenu             = require './SidebarMenu'
 IngredientSelectionView = require '../ingredients/IngredientSelectionView'
-SidebarMenu             = require '../SidebarMenu'
 
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'

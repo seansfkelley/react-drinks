@@ -1,6 +1,6 @@
 React = require 'react/addons'
 
-RecipeListView = require './recipes/RecipeListView'
+RecipeListView = require '../../recipes/RecipeListView'
 
 App = React.createClass {
   displayName : 'App'

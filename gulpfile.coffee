@@ -27,10 +27,10 @@ LIBRARY_CSS_PATHS = [
 
 SRC_PATHS =
   scripts : [
-    source      : './frontend/app-init.cjsx'
+    source      : './frontend/endpoints/app/app-init.cjsx'
     destination : 'app-init.js'
   ,
-    source      : './frontend/recipe-init.cjsx'
+    source      : './frontend/endpoints/recipe/recipe-init.cjsx'
     destination : 'recipe-init.js'
   ]
   styles : [

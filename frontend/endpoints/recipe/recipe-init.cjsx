@@ -1,8 +1,8 @@
-require('./common-init')()
+require('../common-init')()
 
 React = require 'react/addons'
 
-RecipeView = require './recipes/RecipeView'
+RecipeView = require '../../recipes/RecipeView'
 
 APP_ROOT = document.querySelector '#app-root'
 
