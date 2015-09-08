@@ -1,7 +1,4 @@
-require('loglevel').setLevel 'silent'
-
-_      = require 'lodash'
-should = require('chai').should()
+_ = require 'lodash'
 
 utils = require '../frontend/utils'
 

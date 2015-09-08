@@ -1,7 +1,3 @@
-# Should figure out how to include this in all Mocha setup cleanly.
-require('loglevel').setLevel 'silent'
-require('chai').should()
-
 _ = require 'lodash'
 
 RecipeSearch = require '../frontend/recipes/RecipeSearch'

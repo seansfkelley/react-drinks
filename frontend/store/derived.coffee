@@ -7,6 +7,8 @@ searchedGroupedIngredients = (groupedIngredients, ingredientSearchTerm) ->
   if (ingredientSearchTerm?.trim() ? '') == ''
     return groupedIngredients
   else
+    ingredientSearchTerm = ingredientSearchTerm.toLowerCase()
+
     filterBySearchTerm = (i) ->
       for term in i.searchable
         if term.indexOf(ingredientSearchTerm) != -1
