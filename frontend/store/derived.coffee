@@ -5,10 +5,10 @@ definitions = require '../../shared/definitions'
 
 RecipeSearch = require '../recipes/RecipeSearch'
 
-searchedGroupedIngredients = (state) ->
-  { groupedIngredients } = state.ingredients
-  { ingredientSearchTerm } = state.filters
-
+searchedGroupedIngredients = ({
+  groupedIngredients
+  ingredientSearchTerm
+}) ->
   if (ingredientSearchTerm?.trim() ? '') == ''
     return groupedIngredients
   else
@@ -27,16 +27,20 @@ searchedGroupedIngredients = (state) ->
       .filter ({ ingredients }) -> ingredients.length > 0
       .value()
 
-mixabilityForAllRecipes = (state) ->
-  { ingredientsByTag } = state.ingredients
-  { alphabeticalRecipes } = state.recipes
-  { selectedIngredientTags } = state.filters
-
+mixabilityForAllRecipes = ({
+  ingredientsByTag
+  alphabeticalRecipes
+  selectedIngredientTags
+}) ->
   recipeSearch = new RecipeSearch ingredientsByTag, alphabeticalRecipes
   return recipeSearch.computeMixabilityForAll _.keys(selectedIngredientTags)
 
-mixabilityByRecipeId = (state) ->
-  mixableRecipes = mixabilityForAllRecipes state
+mixabilityByRecipeId = ({
+  ingredientsByTag
+  alphabeticalRecipes
+  selectedIngredientTags
+}) ->
+  mixableRecipes = mixabilityForAllRecipes { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
   return _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
     missing = +missing
     return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
@@ -56,16 +60,17 @@ MIXABILITY_FILTER_RANGES = {
   notReallyMixable : [ 2, 100 ]
 }
 
-# TODO: Shape assertions?...!
-filteredGroupedAlphabeticalRecipes = (state) ->
-  { ingredientsByTag } = state.ingredients
-  { alphabeticalRecipes } = state.recipes
-  { baseLiquorFilter
-    recipeSearchTerm
-    mixabilityFilters } = state.filters
+filteredGroupedAlphabeticalRecipes = ({
+  ingredientsByTag
+  alphabeticalRecipes
+  baseLiquorFilter
+  recipeSearchTerm
+  mixabilityFilters
+  selectedIngredientTags
+}) ->
 
-  mixableRecipes = mixabilityForAllRecipes state
-  mixabilityById = mixabilityByRecipeId state
+  mixableRecipes = mixabilityForAllRecipes { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
+  mixabilityById = mixabilityByRecipeId { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
 
   filteredRecipes = _.chain mixableRecipes
     .values()
@@ -105,9 +110,46 @@ filteredGroupedAlphabeticalRecipes = (state) ->
 
   return filteredRecipes
 
-module.exports = {
+DERIVED_FUNCTIONS = {
   searchedGroupedIngredients
   mixabilityForAllRecipes
   mixabilityByRecipeId
   filteredGroupedAlphabeticalRecipes
 }
+
+STORE_SELECTORS = {
+  searchedGroupedIngredients :
+    ingredients : 'groupedIngredients'
+    filters     : 'ingredientSearchTerm'
+  mixabilityForAllRecipes :
+    ingredients : 'ingredientsByTag'
+    recipes     : 'alphabeticalRecipes'
+    filters     : 'selectedIngredientTags'
+  mixabilityByRecipeId :
+    ingredients : 'ingredientsByTag'
+    recipes     : 'alphabeticalRecipes'
+    filters     : 'selectedIngredientTags'
+  filteredGroupedAlphabeticalRecipes :
+    ingredients : 'ingredientsByTag'
+    recipes     : 'alphabeticalRecipes'
+    filters     : [ 'baseLiquorFilter', 'recipeSearchTerm', 'mixabilityFilters', 'selectedIngredientTags' ]
+}
+
+destructuringMemoizedFunctions = _.mapValues STORE_SELECTORS, (selectors, fnName) ->
+  lastArg    = null
+  lastResult = null
+
+  return (state) ->
+    arg = _.extend {}, _.map(selectors, (fieldArrayOrString, storeName) ->
+      return _.pick state[storeName], fieldArrayOrString
+    )...
+    if _.all arg, ((value, key) -> lastArg?[key] == value)
+      return lastResult
+    else
+      lastArg = arg
+      lastResult = DERIVED_FUNCTIONS[fnName](arg)
+      return lastResult
+
+module.exports = _.extend {
+  __test : DERIVED_FUNCTIONS
+}, destructuringMemoizedFunctions

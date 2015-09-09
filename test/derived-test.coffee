@@ -1,4 +1,4 @@
-derived = require '../frontend/store/derived'
+derived = require('../frontend/store/derived').__test
 
 describe 'derived', ->
   describe '#searchedGroupedIngredients', ->
@@ -21,8 +21,8 @@ describe 'derived', ->
     ]
 
     toObjectArgs = (groupedIngredients, ingredientSearchTerm) -> {
-      ingredients : { groupedIngredients }
-      filters     : { ingredientSearchTerm }
+      groupedIngredients
+      ingredientSearchTerm
     }
 
     it 'should return grouped ingredients as-is when the search term is null', ->
