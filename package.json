@@ -56,7 +56,6 @@
     "redux": "^2.0.0",
     "redux-thunk": "^0.1.0",
     "reqwest": "^1.1.6",
-    "reselect": "^1.0.0-alpha2",
     "revalidator": "^0.3.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
