@@ -5,7 +5,7 @@ removed states
   # memoizes with deep equality, not reference equality
   searchedGroupedIngredients
   mixabilityByRecipeId
-  filteredAlphabeticalRecipes
+  filteredAlphabeticalRecipes (now filteredGroupedAlphabeticalRecipes)
 
 filters
   recipeSearchTerm
