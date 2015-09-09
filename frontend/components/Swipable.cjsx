@@ -2,6 +2,8 @@ _          = require 'lodash'
 React      = require 'react/addons'
 classnames = require 'classnames'
 
+{ PureRenderMixin } = React.addons
+
 IntertialSwipeLogicBox = require './IntertialSwipeLogicBox'
 
 IntertialSwipable = React.createClass {
@@ -14,6 +16,8 @@ IntertialSwipable = React.createClass {
     getNearestIndex : React.PropTypes.func
     itemOffsets     : React.PropTypes.array.isRequired
     friction        : React.PropTypes.number
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     <div
@@ -70,6 +74,8 @@ Swipable = React.createClass {
     initialIndex  : React.PropTypes.number
     onSlideChange : React.PropTypes.func
     friction      : React.PropTypes.number
+
+  mixins : [ PureRenderMixin ]
 
   getInitialState : ->
     zeroes = _.map _.range(React.Children.count(@props.children)), -> 0

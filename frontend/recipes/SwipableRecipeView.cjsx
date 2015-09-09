@@ -12,12 +12,12 @@ SwipableRecipeView = React.createClass {
   displayName : 'SwipableRecipeView'
 
   propTypes :
-    recipes : React.PropTypes.array.isRequired
-    index   : React.PropTypes.number.isRequired
-    onClose : React.PropTypes.func.isRequired
+    recipes      : React.PropTypes.array.isRequired
+    initialIndex : React.PropTypes.number.isRequired
+    onClose      : React.PropTypes.func.isRequired
 
   getInitialState : -> {
-    visibleIndex : @props.index
+    visibleIndex : @props.initialIndex
   }
 
   statics :
@@ -32,7 +32,7 @@ SwipableRecipeView = React.createClass {
       }
       overlayViews.modal.show <SwipableRecipeView
         recipes={recipes}
-        index={initialIndex}
+        initialIndex={initialIndex}
         onClose={overlayViews.modal.hide}
       />
 
@@ -47,7 +47,7 @@ SwipableRecipeView = React.createClass {
 
     <Swipable
       className='swipable-recipe-container'
-      initialIndex={@props.index}
+      initialIndex={@props.initialIndex}
       onSlideChange={@_onSlideChange}
       friction=0.9
     >
