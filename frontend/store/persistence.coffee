@@ -1,7 +1,5 @@
 _ = require 'lodash'
 
-store = require '.'
-
 ONE_MINUTE_MS    = 1000 * 60
 LOCALSTORAGE_KEY = 'drinks-app-persistence'
 PERSISTENCE_SPEC = {
@@ -16,19 +14,18 @@ PERSISTENCE_SPEC = {
     recipeViewingIndex : ONE_MINUTE_MS * 5
 }
 
-watch = ->
-  store.subscribe ->
+watch = (store) ->
+  store.subscribe _.debounce (->
     state = store.getState()
 
     data = _.mapValues PERSISTENCE_SPEC, (spec, storeName) ->
       return _.pick state[storeName], _.keys(spec)
 
-    console.log data
-
-    # localStorage[LOCALSTORAGE_KEY] = JSON.stringify {
-    #   data
-    #   timestamp : Date.now()
-    # }
+    localStorage[LOCALSTORAGE_KEY] = JSON.stringify {
+      data
+      timestamp : Date.now()
+    }
+  ), 1000
 
 load = ->
   { data, timestamp } = JSON.parse(localStorage[LOCALSTORAGE_KEY] ? '{}')
@@ -36,17 +33,10 @@ load = ->
   data ?= {}
   elapsedTime = Date.now() - +(timestamp ? 0)
 
-  payload = _.mapValues PERSISTENCE_SPEC, (spec, storeName) ->
+  return _.mapValues PERSISTENCE_SPEC, (spec, storeName) ->
     return _.chain data[storeName]
       .pick _.keys(spec)
       .pick (_, key) -> elapsedTime < spec[key]
       .value()
-
-  console.log payload
-
-  # store.dispatch {
-  #   type : 'load-persistence'
-  #   payload
-  # }
 
 module.exports = { watch, load }

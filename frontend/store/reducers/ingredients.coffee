@@ -1,3 +1,4 @@
+_   = require 'lodash'
 log = require 'loglevel'
 
 normalization       = require '../../../shared/normalization'
@@ -28,12 +29,12 @@ _computeIngredientsByTag = (groupedIngredients, intangibleIngredients) ->
 
   return ingredientsByTag
 
-module.exports = require('./makeReducer') {
+module.exports = require('./makeReducer') _.extend({
   alphabeticalIngredients    : []
   allAlphabeticalIngredients : []
   groupedIngredients         : []
   ingredientsByTag           : {}
-}, {
+}, require('../persistence').load().ingredients), {
   'set-ingredients' : (state, { groupedIngredients, intangibleIngredients, alphabeticalIngredientTags }) ->
     # We don't use state, this is a set-once kind of deal.
 

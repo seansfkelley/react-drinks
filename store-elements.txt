@@ -25,7 +25,6 @@ ingredients
   allAlphabeticalIngredients # include non-exitent classifications like "Chartreuse"
   groupedIngredients
   ingredientsByTag
-  baseLiquors # not sure why this exists, make it a constant?
 
 ui
   recipeViewingIndex

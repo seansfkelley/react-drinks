@@ -1,6 +1,8 @@
+_ = require 'lodash'
+
 { ANY_BASE_LIQUOR } = require '../../../shared/definitions'
 
-module.exports = require('./makeReducer') {
+module.exports = require('./makeReducer') _.extend({
   recipeSearchTerm       : ''
   ingredientSearchTerm   : ''
   selectedIngredientTags : {}
@@ -9,7 +11,7 @@ module.exports = require('./makeReducer') {
     mixable          : true
     nearMixable      : true
     notReallyMixable : true
-}, {
+}, require('../persistence').load().filters), {
   'set-recipe-search-term' : (state, { searchTerm }) ->
     return _.defaults { recipeSearchTerm : searchTerm }, state
 

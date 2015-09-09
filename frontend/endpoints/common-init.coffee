@@ -12,8 +12,7 @@ module.exports = ->
   React.initializeTouchEvents true
   require('react-tap-event-plugin')()
 
-  persistence.load()
-  persistence.watch()
+  persistence.watch store
 
   # if 'ontouchstart' of window
   #   kill = (type) ->

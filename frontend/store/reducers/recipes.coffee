@@ -9,12 +9,12 @@ _recomputeDerivedLists = (state) ->
     alphabeticalRecipes : _.sortBy allRecipes, 'sortName'
   }, state
 
-module.exports = require('./makeReducer') {
+module.exports = require('./makeReducer') _.extend({
   allRecipes          : []
   defaultRecipes      : []
   customRecipes       : []
   alphabeticalRecipes : []
-}, {
+}, require('../persistence').load().recipes), {
   'set-default-recipes' : (state, { recipes }) ->
     return _recomputeDerivedLists _.defaults({ defaultRecipes : recipes}, state)
 
