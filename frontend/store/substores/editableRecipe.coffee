@@ -1,4 +1,4 @@
-{ ANY_BASE_LIQUOR } = require '../../shared/definitions'
+{ ANY_BASE_LIQUOR } = require '../../../shared/definitions'
 
 COUNT_REGEX = /^[-. \/\d]+/
 

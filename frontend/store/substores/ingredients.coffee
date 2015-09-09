@@ -1,7 +1,7 @@
 log = require 'loglevel'
 
-normalization       = require '../../shared/normalization'
-{ ANY_BASE_LIQUOR } = require '../../shared/definitions'
+normalization       = require '../../../shared/normalization'
+{ ANY_BASE_LIQUOR } = require '../../../shared/definitions'
 
 _computeIngredientsByTag = (groupedIngredients, intangibleIngredients) ->
   ingredients = _.chain groupedIngredients
