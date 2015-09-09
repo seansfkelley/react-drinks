@@ -129,7 +129,9 @@ EditableIngredient = React.createClass {
   displayName : 'EditableIngredient'
 
   propTypes :
-    addIngredient : React.PropTypes.func.isRequired
+    addIngredient              : React.PropTypes.func.isRequired
+    ingredientsByTag           : React.PropTypes.object.isRequired
+    allAlphabeticalIngredients : React.PropTypes.array.isRequired
 
   getInitialState : -> {
     tag   : null
@@ -139,11 +141,11 @@ EditableIngredient = React.createClass {
   render : ->
     if @state.tag?
       ingredientSelector = <List.Item onTouchTap={@_unsetTag}>
-        {IngredientStore.ingredientsByTag[@state.tag].display}
+        {@props.ingredientsByTag[@state.tag].display}
         <i className='fa fa-check-circle'/>
       </List.Item>
     else
-      ingredientSelector = _.map IngredientStore.allAlphabeticalIngredients, ({ display, tag }) =>
+      ingredientSelector = _.map @props.allAlphabeticalIngredients, ({ display, tag }) =>
         <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{display}</List.Item>
 
     <div className='editable-ingredient'>
@@ -204,6 +206,7 @@ EditableIngredientsPage = React.createClass {
   mixins : [
     ReduxMixin {
       editableRecipe : [ 'name', 'ingredients' ]
+      ingredients    : [ 'ingredientsByTag', 'allAlphabeticalIngredients' ]
     }
   ]
 
@@ -214,7 +217,11 @@ EditableIngredientsPage = React.createClass {
   render : ->
     ingredientNodes = _.map @state.ingredients, (ingredient, index) =>
       if ingredient.isEditing
-        ingredientNode = <EditableIngredient addIngredient={@_ingredientAdder index}/>
+        ingredientNode = <EditableIngredient
+          addIngredient={@_ingredientAdder index}
+          ingredientsByTag={@state.ingredientsByTag}
+          allAlphabeticalIngredients={@state.allAlphabeticalIngredients}
+        />
       else
         ingredientNode = <MeasuredIngredient {...ingredient.display}/>
 
@@ -480,13 +487,17 @@ EditableRecipeView = React.createClass {
     }
 
   _constructRecipe : ->
-    ingredients = _.map EditableRecipeStore.ingredients, (ingredient) =>
+    editableRecipeState = store.getState().editableRecipe
+
+    ingredients = _.map editableRecipeState.ingredients, (ingredient) =>
       return _.pick _.extend({ tag : ingredient.tag }, ingredient.display), _.identity
-    recipe = _.chain EditableRecipeStore
+
+    recipe = _.chain editableRecipeState
       .pick 'name', 'instructions', 'notes', 'base'
       .extend { ingredients, isCustom : true }
       .pick _.identity
       .value()
+
     return normalization.normalizeRecipe recipe
 }
 

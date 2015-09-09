@@ -37,8 +37,8 @@ SidebarMenu = React.createClass {
     index                   : @props.initialIndex
     showingIngredients      : false
     # This is a little sketch, since we shouldn't have to talk to the store directly
-    # because we have the mixin. But we can peek into @state to set @state.A
-    selectedIngredientCount : _.size IngredientStore.selectedIngredientTags
+    # because we have the mixin. But we can't peek into @state to set @state.
+    selectedIngredientCount : _.size store.getState().filters.selectedIngredientTags
   }
 
   render : ->

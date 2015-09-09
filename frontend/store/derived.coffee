@@ -1,6 +1,8 @@
 _   = require 'lodash'
 log = require 'loglevel'
 
+definitions = require '../../shared/definitions'
+
 RecipeSearch = require '../recipes/RecipeSearch'
 
 searchedGroupedIngredients = (state) ->
@@ -65,7 +67,7 @@ filteredGroupedAlphabeticalRecipes = (state) ->
   mixableRecipes = mixabilityForAllRecipes state
   mixabilityById = mixabilityByRecipeId state
 
-  filteredRecipes = _.chain allMixableRecipes
+  filteredRecipes = _.chain mixableRecipes
     .values()
     .flatten()
     .sortBy 'sortName'
@@ -75,7 +77,7 @@ filteredGroupedAlphabeticalRecipes = (state) ->
     .sortBy 'key'
     .value()
 
-  if baseLiquorFilter and baseLiquorFilter != ANY_BASE_LIQUOR
+  if baseLiquorFilter and baseLiquorFilter != definitions.ANY_BASE_LIQUOR
     filteredRecipes = _nestedFilter filteredRecipes, (r) ->
       if _.isString r.base
         return r.base == baseLiquorFilter
