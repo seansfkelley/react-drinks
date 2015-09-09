@@ -7,7 +7,7 @@ _recomputeDerivedLists = (state) ->
   return _.defaults {
     allRecipes
     alphabeticalRecipes : _.sortBy allRecipes, 'sortName'
-  }
+  }, state
 
 module.exports = require('./makeReducer') {
   allRecipes          : []
