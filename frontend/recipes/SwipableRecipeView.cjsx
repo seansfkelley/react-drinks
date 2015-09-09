@@ -3,8 +3,8 @@ React = require 'react/addons'
 
 Swipable = require '../components/Swipable'
 
-AppDispatcher = require '../AppDispatcher'
-overlayViews  = require '../overlayViews'
+store        = require '../store'
+overlayViews = require '../overlayViews'
 
 RecipeView = require './RecipeView'
 
@@ -26,7 +26,7 @@ SwipableRecipeView = React.createClass {
         .pluck 'recipes'
         .flatten()
         .value()
-      AppDispatcher.dispatch {
+      store.dispatch {
         type  : 'set-recipe-viewing-index'
         index : initialIndex
       }
@@ -56,13 +56,13 @@ SwipableRecipeView = React.createClass {
 
   _onSlideChange : (index) ->
     @setState { visibleIndex : index }
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'set-recipe-viewing-index'
       index
     }
 
   _onClose : ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type  : 'set-recipe-viewing-index'
       index : null
     }

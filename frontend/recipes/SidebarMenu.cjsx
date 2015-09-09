@@ -7,9 +7,8 @@ Isvg       = require 'react-inlinesvg'
 
 FluxMixin = require '../mixins/FluxMixin'
 
-AppDispatcher       = require '../AppDispatcher'
-{ IngredientStore } = require '../stores'
-stylingConstants    = require '../stylingConstants'
+store            = require '../store'
+stylingConstants = require '../stylingConstants'
 
 SearchBar             = require '../components/SearchBar'
 GroupedIngredientList = require '../ingredients/GroupedIngredientList'
@@ -98,7 +97,7 @@ SidebarMenu = React.createClass {
     @setState { showingIngredients : not @state.showingIngredients }
 
   _onSearch : (searchTerm) ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'search-ingredients'
       searchTerm
     }
@@ -111,14 +110,14 @@ SidebarMenu = React.createClass {
       @setState { index }
 
   _closeMenu : ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'set-mixability-filters'
       filters :
         mixable          : @state.index >= 0
         nearMixable      : @state.index >= 1
         notReallyMixable : @state.index >= 2
     }
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'set-selected-ingredient-tags'
       selectedIngredientTags : @refs.ingredientList.getSelectedTags()
     }

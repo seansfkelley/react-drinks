@@ -9,10 +9,9 @@ TitleBar          = require '../components/TitleBar'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 SearchBar         = require '../components/SearchBar'
 
-AppDispatcher       = require '../AppDispatcher'
+store               = require '../store'
 stylingConstants    = require '../stylingConstants'
 overlayViews        = require '../overlayViews'
-{ IngredientStore } = require '../stores'
 
 GroupedIngredientList = require './GroupedIngredientList'
 
@@ -59,18 +58,18 @@ IngredientSelectionView = React.createClass {
 
   # In the future, this should pop up a loader and then throttle the number of filters performed.
   _onSearch : (searchTerm) ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'search-ingredients'
       searchTerm
     }
 
   _onClose : ->
     overlayViews.flyup.hide()
-    AppDispatcher.dispatch {
+    store.dispatch {
       type       : 'search-ingredients'
       searchTerm : ''
     }
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'set-selected-ingredient-tags'
       selectedIngredientTags : @refs.ingredientList.getSelectedTags()
     }

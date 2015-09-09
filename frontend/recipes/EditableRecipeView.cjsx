@@ -8,15 +8,13 @@ normalization = require '../../shared/normalization'
 definitions   = require '../../shared/definitions'
 assert        = require '../../shared/tinyassert'
 
-{ IngredientStore, EditableRecipeStore } = require '../stores'
-
 List              = require '../components/List'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 Deletable         = require '../components/Deletable'
 
 FluxMixin = require '../mixins/FluxMixin'
 
-AppDispatcher = require '../AppDispatcher'
+store         = require '../store'
 overlayViews  = require '../overlayViews'
 
 MeasuredIngredient = require './MeasuredIngredient'
@@ -61,7 +59,7 @@ NavigationHeader = React.createClass {
 
   _closeFlyup : ->
     overlayViews.flyup.hide()
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'clear-editable-recipe'
     }
 }
@@ -111,14 +109,14 @@ EditableNamePage = React.createClass {
 
   _nextIfEnabled : ->
     if @_isEnabled()
-      AppDispatcher.dispatch {
+      store.dispatch {
         type : 'set-name'
         name : @state.name.trim()
       }
       @props.next()
 
   _onChange : (e) ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'set-name'
       name : e.target.value
     }
@@ -254,13 +252,13 @@ EditableIngredientsPage = React.createClass {
   _addEmptyIngredient : ->
     return if @_anyAreEditing()
 
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'add-ingredient'
     }
 
   _ingredientAdder : (index) ->
     return (rawText, tag) =>
-      AppDispatcher.dispatch {
+      store.dispatch {
         type : 'commit-ingredient'
         index
         rawText
@@ -269,7 +267,7 @@ EditableIngredientsPage = React.createClass {
 
   _ingredientDeleter : (index) ->
     return =>
-      AppDispatcher.dispatch {
+      store.dispatch {
         type : 'delete-ingredient'
         index
       }
@@ -324,7 +322,7 @@ EditableBaseLiquorPage = React.createClass {
 
   _tagToggler : (tag) ->
     return =>
-      AppDispatcher.dispatch {
+      store.dispatch {
         type : 'toggle-base-liquor-tag'
         tag
       }
@@ -382,13 +380,13 @@ EditableTextPage = React.createClass {
       @props.next()
 
   _setInstructions : (e) ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type         : 'set-instructions'
       instructions : e.target.value
     }
 
   _setNotes : (e) ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type  : 'set-notes'
       notes : e.target.value
     }
@@ -467,7 +465,7 @@ EditableRecipeView = React.createClass {
 
   _finish : ->
     overlayViews.flyup.hide()
-    AppDispatcher.dispatch {
+    store.dispatch {
       type   : 'save-recipe'
       recipe : @_constructRecipe()
     }

@@ -9,12 +9,11 @@ SearchBar          = require '../components/SearchBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
 List               = require '../components/List'
 
-AppDispatcher    = require '../AppDispatcher'
+store            = require '../store'
 utils            = require '../utils'
 stylingConstants = require '../stylingConstants'
 overlayViews     = require '../overlayViews'
 
-{ RecipeStore, UiStore } = require '../stores'
 
 SwipableRecipeView = require './SwipableRecipeView'
 RecipeListItem     = require './RecipeListItem'
@@ -55,7 +54,7 @@ RecipeList = React.createClass {
     </List>
 
   _deleteRecipe : (recipeId) ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'delete-recipe'
       recipeId
     }
@@ -106,7 +105,7 @@ RecipeListView = React.createClass {
     @refs.container.scrollTo stylingConstants.RECIPE_LIST_ITEM_HEIGHT - stylingConstants.RECIPE_LIST_HEADER_HEIGHT / 2
 
   _onSearch : (searchTerm) ->
-    AppDispatcher.dispatch {
+    store.dispatch {
       type : 'search-recipes'
       searchTerm
     }

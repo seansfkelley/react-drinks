@@ -9,10 +9,8 @@ FluxMixin = require '../mixins/FluxMixin'
 TitleBar = require '../components/TitleBar'
 Swipable = require '../components/Swipable'
 
-AppDispatcher = require '../AppDispatcher'
+store         = require '../store'
 overlayViews  = require '../overlayViews'
-
-{ UiStore, IngredientStore } = require '../stores'
 
 EditableRecipeView      = require './EditableRecipeView'
 SidebarMenu             = require './SidebarMenu'
@@ -62,7 +60,7 @@ RecipeListHeader = React.createClass {
     if @state.baseLiquors[index] == UiStore.baseLiquorFilter
       return
 
-    AppDispatcher.dispatch {
+    store.dispatch {
       type   : 'set-base-liquor-filter'
       filter : @state.baseLiquors[index]
     }
