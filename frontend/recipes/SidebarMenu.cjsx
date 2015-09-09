@@ -123,7 +123,7 @@ SidebarMenu = React.createClass {
     }
     store.dispatch {
       type : 'set-selected-ingredient-tags'
-      selectedIngredientTags : @refs.ingredientList.getSelectedTags()
+      tags : @refs.ingredientList.getSelectedTags()
     }
     @props.onClose()
 }
