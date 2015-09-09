@@ -1,0 +1,102 @@
+@require 'constants'
+
+// This is kinda dumb, but we need to make this this is on top of everything, namely, the recipe header which has a z-index.
+z-index = 10
+arrow-size = 12px
+
+#web-clip-notification
+  &:before
+    content ' '
+
+    position absolute
+    top 0
+    left 0
+    right 0
+    bottom 0
+
+    background-color rgba(255, 255, 255, 0.75)
+
+    opacity 1
+    transition opacity transition-duration
+
+    z-index z-index
+
+  &.hidden
+    &:before
+      pointer-events none
+      opacity 0
+
+#web-clip-notification .web-clip-notification
+  z-index z-index
+
+  position absolute
+  bottom 2 * arrow-size + 1
+
+  width 80%
+  margin-left 10%
+  padding 10px
+  box-sizing border-box
+
+  background-color grey10
+  border-radius standard-border-radius
+
+  opacity 1
+  transition opacity transition-duration
+
+  &.hidden
+    opacity 0
+    transition opacity transition-duration
+
+  .request
+    .lead-in
+      font-size 18px
+
+      display block
+      padding-bottom 4px
+
+    font-size 16px
+    line-height 24px
+
+    img
+      height 24px
+      margin-bottom -3px
+
+  .dismiss
+    font-size 12px
+    color grey3
+
+    display block
+    padding-top 6px
+
+  .arrow
+    height 0
+    width 0
+    border-width 12px
+
+    border-top-color black
+
+.arrow-box
+  border 1px solid grey6
+
+.arrow-box:after, .arrow-box:before
+  top 100%
+  left 50%
+  border solid transparent
+  content ' '
+  height 0
+  width 0
+  position absolute
+  pointer-events none
+
+.arrow-box:after
+  border-color rgba(255, 255, 255, 0)
+  border-top-color grey10
+  border-width arrow-size
+  margin-left -(arrow-size)
+
+.arrow-box:before
+  border-color rgba(140, 140, 140, 0)
+  border-top-color grey6
+  border-width arrow-size + 1
+  margin-left -(arrow-size) - 1
+
