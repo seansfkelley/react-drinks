@@ -20,20 +20,25 @@ describe 'derived', ->
       ]
     ]
 
+    toObjectArgs = (groupedIngredients, ingredientSearchTerm) -> {
+      ingredients : { groupedIngredients }
+      filters     : { ingredientSearchTerm }
+    }
+
     it 'should return grouped ingredients as-is when the search term is null', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, null).should.deep.equal GROUPED_INGREDIENTS
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, null)).should.deep.equal GROUPED_INGREDIENTS
 
     it 'should return grouped ingredients as-is when the search term is the empty string', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, '').should.deep.equal GROUPED_INGREDIENTS
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, '')).should.deep.equal GROUPED_INGREDIENTS
 
     it 'should return grouped ingredients as-is when the search term is whitespace-only', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, ' \t').should.deep.equal GROUPED_INGREDIENTS
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, ' \t')).should.deep.equal GROUPED_INGREDIENTS
 
     it 'should return the empty list if nothing matches', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, 'fskjdhfk').should.deep.equal []
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, 'fskjdhfk')).should.deep.equal []
 
     it 'should return one group with one match when one ingredient matches', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, 'alpha').should.deep.equal [
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, 'alpha')).should.deep.equal [
         name        : 'A'
         ingredients : [
           searchable : [ 'a', '1', 'alpha' ]
@@ -41,7 +46,7 @@ describe 'derived', ->
       ]
 
     it 'should return multiple groups if there are matches in multiple groups', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, '1').should.deep.equal [
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, '1')).should.deep.equal [
         name        : 'A'
         ingredients : [
           searchable : [ 'a', '1', 'alpha' ]
@@ -54,7 +59,7 @@ describe 'derived', ->
       ]
 
     it 'should omit entire groups if they have no matching results', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, 'a').should.deep.equal [
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, 'a')).should.deep.equal [
         name        : 'A'
         ingredients : [
           searchable : [ 'a', '1', 'alpha' ]
@@ -64,7 +69,7 @@ describe 'derived', ->
       ]
 
     it 'should find the search term as a substring when matching', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, 'lph').should.deep.equal [
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, 'lph')).should.deep.equal [
         name        : 'A'
         ingredients : [
           searchable : [ 'a', '1', 'alpha' ]
@@ -72,7 +77,7 @@ describe 'derived', ->
       ]
 
     it 'should be case-insensitive when matching', ->
-      derived.searchedGroupedIngredients(GROUPED_INGREDIENTS, 'ALPHA').should.deep.equal [
+      derived.searchedGroupedIngredients(toObjectArgs(GROUPED_INGREDIENTS, 'ALPHA')).should.deep.equal [
         name        : 'A'
         ingredients : [
           searchable : [ 'a', '1', 'alpha' ]

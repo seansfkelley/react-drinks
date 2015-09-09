@@ -3,7 +3,10 @@ log = require 'loglevel'
 
 RecipeSearch = require '../recipes/RecipeSearch'
 
-searchedGroupedIngredients = (groupedIngredients, ingredientSearchTerm) ->
+searchedGroupedIngredients = (state) ->
+  { groupedIngredients } = state.ingredients
+  { ingredientSearchTerm } = state.filters
+
   if (ingredientSearchTerm?.trim() ? '') == ''
     return groupedIngredients
   else
@@ -22,12 +25,16 @@ searchedGroupedIngredients = (groupedIngredients, ingredientSearchTerm) ->
       .filter ({ ingredients }) -> ingredients.length > 0
       .value()
 
-mixabilityForAllRecipes = (ingredientsByTag, alphabeticalRecipes, selectedIngredientTags) ->
+mixabilityForAllRecipes = (state) ->
+  { ingredientsByTag } = state.ingredients
+  { alphabeticalRecipes } = state.recipes
+  { selectedIngredientTags } = state.filters
+
   recipeSearch = new RecipeSearch ingredientsByTag, alphabeticalRecipes
   return recipeSearch.computeMixabilityForAll _.keys(selectedIngredientTags)
 
-mixabilityByRecipeId = (ingredientsByTag, alphabeticalRecipes, selectedIngredientTags) ->
-  mixableRecipes = mixabilityForAllRecipes ingredientsByTag, alphabeticalRecipes, selectedIngredientTags
+mixabilityByRecipeId = (state) ->
+  mixableRecipes = mixabilityForAllRecipes state
   return _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
     missing = +missing
     return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
@@ -51,13 +58,12 @@ MIXABILITY_FILTER_RANGES = {
 filteredGroupedAlphabeticalRecipes = (state) ->
   { ingredientsByTag } = state.ingredients
   { alphabeticalRecipes } = state.recipes
-  { selectedIngredientTags
-    baseLiquorFilter
+  { baseLiquorFilter
     recipeSearchTerm
     mixabilityFilters } = state.filters
 
-  mixableRecipes = mixabilityForAllRecipes ingredientsByTag, alphabeticalRecipes, selectedIngredientTags
-  mixabilityById = mixabilityByRecipeId ingredientsByTag, alphabeticalRecipes, selectedIngredientTags
+  mixableRecipes = mixabilityForAllRecipes state
+  mixabilityById = mixabilityByRecipeId state
 
   filteredRecipes = _.chain allMixableRecipes
     .values()
