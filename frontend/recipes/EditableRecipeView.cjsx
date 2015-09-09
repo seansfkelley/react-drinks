@@ -4,6 +4,9 @@ _          = require 'lodash'
 React      = require 'react/addons'
 classnames = require 'classnames'
 
+ReduxMixin = require '../mixins/ReduxMixin'
+# DerivedValueMixins = require '../mixins/DerivedValueMixins'
+
 normalization = require '../../shared/normalization'
 definitions   = require '../../shared/definitions'
 assert        = require '../../shared/tinyassert'
@@ -11,8 +14,6 @@ assert        = require '../../shared/tinyassert'
 List              = require '../components/List'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 Deletable         = require '../components/Deletable'
-
-ReduxMixin = require '../mixins/ReduxMixin'
 
 store         = require '../store'
 overlayViews  = require '../overlayViews'
@@ -68,7 +69,9 @@ EditableNamePage = React.createClass {
   displayName : 'EditableNamePage'
 
   mixins : [
-    FluxMixin EditableRecipeStore, 'name'
+    ReduxMixin {
+      editableRecipe : 'name'
+    }
   ]
 
   propTypes :
@@ -199,7 +202,9 @@ EditableIngredientsPage = React.createClass {
   displayName : 'EditableIngredientsPage'
 
   mixins : [
-    FluxMixin EditableRecipeStore, 'name', 'ingredients'
+    ReduxMixin {
+      editableRecipe : [ 'name', 'ingredients' ]
+    }
   ]
 
   propTypes :
@@ -277,7 +282,9 @@ EditableBaseLiquorPage = React.createClass {
   displayName : 'EditableBaseLiquorPage'
 
   mixins : [
-    FluxMixin EditableRecipeStore, 'ingredients', 'base'
+    ReduxMixin {
+      editableRecipe : [ 'ingredients', 'base' ]
+    }
   ]
 
   propTypes :
@@ -333,7 +340,9 @@ EditableTextPage = React.createClass {
   displayName : 'EditableTextPage'
 
   mixins : [
-    FluxMixin EditableRecipeStore, 'base', 'instructions', 'notes'
+    ReduxMixin {
+      editableRecipe : [ 'base', 'instructions', 'notes' ]
+    }
   ]
 
   propTypes :

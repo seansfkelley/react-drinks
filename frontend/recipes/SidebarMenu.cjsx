@@ -5,7 +5,8 @@ Isvg       = require 'react-inlinesvg'
 
 { PureRenderMixin } = React.addons
 
-ReduxMixin = require '../mixins/ReduxMixin'
+ReduxMixin        = require '../mixins/ReduxMixin'
+DerivedValueMixin = require '../mixins/DerivedValueMixin'
 
 store            = require '../store'
 stylingConstants = require '../stylingConstants'
@@ -21,7 +22,10 @@ SidebarMenu = React.createClass {
     onClose      : React.PropTypes.func.isRequired
 
   mixins : [
-    FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
+    ReduxMixin {
+      filters : 'selectedIngredientTags'
+    }
+    DerivedValueMixin 'searchedGroupedIngredients'
     PureRenderMixin
   ]
 

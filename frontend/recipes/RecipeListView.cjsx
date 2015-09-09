@@ -3,7 +3,8 @@ React      = require 'react/addons'
 
 { PureRenderMixin } = React.addons
 
-ReduxMixin = require '../mixins/ReduxMixin'
+ReduxMixin        = require '../mixins/ReduxMixin'
+DerivedValueMixin = require '../mixins/DerivedValueMixin'
 
 SearchBar          = require '../components/SearchBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
@@ -13,7 +14,6 @@ store            = require '../store'
 utils            = require '../utils'
 stylingConstants = require '../stylingConstants'
 overlayViews     = require '../overlayViews'
-
 
 SwipableRecipeView = require './SwipableRecipeView'
 RecipeListItem     = require './RecipeListItem'
@@ -66,18 +66,19 @@ RecipeListView = React.createClass {
   propTypes : {}
 
   mixins : [
-    FluxMixin(RecipeStore,
-      'filteredAlphabeticalRecipes'
+    ReduxMixin {
+      filters : [ 'recipeSearchTerm', 'baseLiquorFilter' ]
+    }
+    DerivedValueMixin [
+      'filteredGroupedAlphabeticalRecipes'
       'mixabilityByRecipeId'
-      'searchTerm'
-    )
-    FluxMixin UiStore, 'baseLiquorFilter'
+    ]
     PureRenderMixin
   ]
 
   render : ->
     list = <RecipeList
-      recipes={@state.filteredAlphabeticalRecipes}
+      recipes={@state.filteredGroupedAlphabeticalRecipes}
       makeHeader={@_alphabeticalHeader}
       makeItem={@_alphabeticalListItem}
     />
@@ -89,7 +90,7 @@ RecipeListView = React.createClass {
     >
       <SearchBar
         className='list-topper'
-        initialValue={@state.searchTerm}
+        initialValue={@state.recipeSearchTerm}
         placeholder='Name or ingredient...'
         onChange={@_onSearch}
         ref='search'
@@ -106,7 +107,7 @@ RecipeListView = React.createClass {
 
   _onSearch : (searchTerm) ->
     store.dispatch {
-      type : 'search-recipes'
+      type : 'set-recipe-search-term'
       searchTerm
     }
 

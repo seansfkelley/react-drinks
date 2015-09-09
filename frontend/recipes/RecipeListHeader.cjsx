@@ -4,6 +4,8 @@ classnames = require 'classnames'
 
 { PureRenderMixin } = React.addons
 
+definitions = require '../../shared/definitions'
+
 ReduxMixin = require '../mixins/ReduxMixin'
 
 TitleBar = require '../components/TitleBar'
@@ -16,17 +18,20 @@ EditableRecipeView      = require './EditableRecipeView'
 SidebarMenu             = require './SidebarMenu'
 IngredientSelectionView = require '../ingredients/IngredientSelectionView'
 
+BASE_LIQUORS = [ definitions.ANY_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
+
 RecipeListHeader = React.createClass {
   displayName : 'RecipeListHeader'
 
   mixins : [
-    FluxMixin UiStore, 'mixabilityFilters', 'baseLiquorFilter'
-    FluxMixin IngredientStore, 'baseLiquors'
+    ReduxMixin {
+      filters : [ 'mixabilityFilters', 'baseLiquorFilter' ]
+    }
     PureRenderMixin
   ]
 
   render : ->
-    initialBaseLiquorIndex = _.indexOf @state.baseLiquors, @state.baseLiquorFilter
+    initialBaseLiquorIndex = _.indexOf BASE_LIQUORS, @state.baseLiquorFilter
     if initialBaseLiquorIndex == -1
       initialBaseLiquorIndex = 0
 
@@ -46,7 +51,7 @@ RecipeListHeader = React.createClass {
         onSlideChange={@_onBaseLiquorChange}
         friction=0.7
       >
-        {for base in @state.baseLiquors
+        {for base in BASE_LIQUORS
           <div
             className={classnames 'base-liquor-option', { 'selected' : base == @state.baseLiquorFilter }}
             key={base}
@@ -57,12 +62,9 @@ RecipeListHeader = React.createClass {
     </div>
 
   _onBaseLiquorChange : (index) ->
-    if @state.baseLiquors[index] == UiStore.baseLiquorFilter
-      return
-
     store.dispatch {
       type   : 'set-base-liquor-filter'
-      filter : @state.baseLiquors[index]
+      filter : BASE_LIQUORS[index]
     }
 
   _showSidebar : ->

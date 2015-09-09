@@ -6,18 +6,18 @@ ReduxMixin = (fieldsBySubstore) ->
   fnName = _.uniqueId '_onStoreChange_'
   getFlattenedFields = ->
     state = store.getState()
-    return _.extend {}, _.map(fieldsBySubstore, (fields, storeName) ->
-      return _.pick state[storeName], fields
+    return _.extend {}, _.map(fieldsBySubstore, (fieldArrayOrString, storeName) ->
+      return _.pick state[storeName], fieldArrayOrString
     )...
 
   mixin = {
     getInitialState : getFlattenedFields
 
     componentDidMount : ->
-      @_reduxUnsubscribe = store.subscribe @[fnName]
+      @_reduxMixin_unsubscribe = store.subscribe @[fnName]
 
     componentWillUnmount : ->
-      @_reduxUnsubscribe?()
+      @_reduxMixin_unsubscribe?()
   }
 
   mixin[fnName] = ->

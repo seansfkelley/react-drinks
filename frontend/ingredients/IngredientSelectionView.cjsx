@@ -3,7 +3,8 @@ React = require 'react/addons'
 
 { PureRenderMixin } = React.addons
 
-ReduxMixin = require '../mixins/ReduxMixin'
+ReduxMixin        = require '../mixins/ReduxMixin'
+DerivedValueMixin = require '../mixins/DerivedValueMixin'
 
 TitleBar          = require '../components/TitleBar'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
@@ -35,7 +36,10 @@ IngredientSelectionView = React.createClass {
   propTypes : {}
 
   mixins : [
-    FluxMixin IngredientStore, 'searchedGroupedIngredients', 'selectedIngredientTags'
+    ReduxMixin {
+      filters : 'selectedIngredientTags'
+    }
+    DerivedValueMixin 'searchedGroupedIngredients'
     PureRenderMixin
   ]
 
@@ -59,14 +63,14 @@ IngredientSelectionView = React.createClass {
   # In the future, this should pop up a loader and then throttle the number of filters performed.
   _onSearch : (searchTerm) ->
     store.dispatch {
-      type : 'search-ingredients'
+      type : 'set-ingredient-search-term'
       searchTerm
     }
 
   _onClose : ->
     overlayViews.flyup.hide()
     store.dispatch {
-      type       : 'search-ingredients'
+      type       : 'set-ingredient-search-term'
       searchTerm : ''
     }
     store.dispatch {
