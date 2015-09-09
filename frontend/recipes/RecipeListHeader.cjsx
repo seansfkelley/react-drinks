@@ -4,7 +4,7 @@ classnames = require 'classnames'
 
 { PureRenderMixin } = React.addons
 
-FluxMixin = require '../mixins/FluxMixin'
+ReduxMixin = require '../mixins/ReduxMixin'
 
 TitleBar = require '../components/TitleBar'
 Swipable = require '../components/Swipable'

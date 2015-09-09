@@ -5,7 +5,7 @@ React      = require 'react/addons'
 utils       = require '../utils'
 definitions = require '../../shared/definitions'
 
-FluxMixin = require '../mixins/FluxMixin'
+ReduxMixin = require '../mixins/ReduxMixin'
 
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 TitleBar          = require '../components/TitleBar'

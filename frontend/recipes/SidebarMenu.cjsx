@@ -5,7 +5,7 @@ Isvg       = require 'react-inlinesvg'
 
 { PureRenderMixin } = React.addons
 
-FluxMixin = require '../mixins/FluxMixin'
+ReduxMixin = require '../mixins/ReduxMixin'
 
 store            = require '../store'
 stylingConstants = require '../stylingConstants'

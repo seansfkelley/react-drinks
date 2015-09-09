@@ -12,7 +12,7 @@ List              = require '../components/List'
 FixedHeaderFooter = require '../components/FixedHeaderFooter'
 Deletable         = require '../components/Deletable'
 
-FluxMixin = require '../mixins/FluxMixin'
+ReduxMixin = require '../mixins/ReduxMixin'
 
 store         = require '../store'
 overlayViews  = require '../overlayViews'

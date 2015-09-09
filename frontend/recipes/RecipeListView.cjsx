@@ -3,7 +3,7 @@ React      = require 'react/addons'
 
 { PureRenderMixin } = React.addons
 
-FluxMixin = require '../mixins/FluxMixin'
+ReduxMixin = require '../mixins/ReduxMixin'
 
 SearchBar          = require '../components/SearchBar'
 FixedHeaderFooter  = require '../components/FixedHeaderFooter'
