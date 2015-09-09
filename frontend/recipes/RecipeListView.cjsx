@@ -43,6 +43,9 @@ RecipeList = React.createClass {
         listNodes.push @props.makeHeader(key, recipes)
       for r in recipes
         listNodes.push @props.makeItem(key, r, {
+          # TODO: This can acuse needless rerenders, especially when text-searching.
+          # PureRenderMixin is bypassed since .bind() returns a new function every time.
+          # Is there a way to always pass the same function and infer the index from the event?
           onTouchTap : SwipableRecipeView.showInModal.bind(null, @props.recipes, absoluteIndex)
           onDelete   : if r.isCustom then _.partial(@_deleteRecipe, r.recipeId)
           key        : r.recipeId
