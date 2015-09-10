@@ -19,9 +19,9 @@ describe 'searchedGroupedIngredients', ->
     ]
   ]
 
-  toObjectArgs = (groupedIngredients, ingredientSearchTerm) -> {
+  toObjectArgs = (groupedIngredients, searchTerm) -> {
     groupedIngredients
-    ingredientSearchTerm
+    searchTerm
   }
 
   it 'should return grouped ingredients as-is when the search term is null', ->

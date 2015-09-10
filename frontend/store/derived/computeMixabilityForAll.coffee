@@ -130,7 +130,7 @@ module.exports = _.extend computeMixabilityForAll, {
     computeMixabilityWithFuzziness
   }
   stateSelector :
-    ingredientsByTag       : 'ingredients.ingredientsByTag'
-    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
-    selectedIngredientTags : 'filters.selectedIngredientTags'
+    ingredientsByTag : 'ingredients.ingredientsByTag'
+    recipes          : 'recipes.alphabeticalRecipes'
+    ingredientTags   : 'filters.selectedIngredientTags'
 }

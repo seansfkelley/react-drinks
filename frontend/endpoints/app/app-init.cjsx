@@ -28,7 +28,7 @@ initializationPromise.then ->
 
   if state.ui.recipeViewingIndex?
     SwipableRecipeView.showInModal(
-      derived.filteredGroupedAlphabeticalRecipes(state)
+      derived.filteredGroupedRecipes(state)
       state.ui.recipeViewingIndex
     )
 

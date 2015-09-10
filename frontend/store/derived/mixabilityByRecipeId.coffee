@@ -6,14 +6,14 @@ computeMixabilityForAll = require './computeMixabilityForAll'
 
 mixabilityByRecipeId = ({
   ingredientsByTag
-  alphabeticalRecipes
-  selectedIngredientTags
+  recipes
+  ingredientTags
 }) ->
   assert ingredientsByTag
-  assert alphabeticalRecipes
-  assert selectedIngredientTags
+  assert recipes
+  assert ingredientTags
 
-  mixableRecipes = computeMixabilityForAll { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
+  mixableRecipes = computeMixabilityForAll { ingredientsByTag, recipes, ingredientTags }
   return _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
     missing = +missing
     return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
@@ -21,7 +21,7 @@ mixabilityByRecipeId = ({
 
 module.exports = _.extend mixabilityByRecipeId, {
   stateSelector :
-    ingredientsByTag       : 'ingredients.ingredientsByTag'
-    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
-    selectedIngredientTags : 'filters.selectedIngredientTags'
+    ingredientsByTag : 'ingredients.ingredientsByTag'
+    recipes          : 'recipes.alphabeticalRecipes'
+    ingredientTags   : 'filters.selectedIngredientTags'
 }

@@ -2,19 +2,19 @@ _ = require 'lodash'
 
 assert = require '../../../shared/tinyassert'
 
-searchedGroupedIngredients = ({ groupedIngredients, ingredientSearchTerm }) ->
-  ingredientSearchTerm ?= ''
+searchedGroupedIngredients = ({ groupedIngredients, searchTerm }) ->
+  searchTerm ?= ''
 
   assert groupedIngredients
 
-  if (ingredientSearchTerm.trim() ? '') == ''
+  if (searchTerm.trim() ? '') == ''
     return groupedIngredients
   else
-    ingredientSearchTerm = ingredientSearchTerm.toLowerCase()
+    searchTerm = searchTerm.toLowerCase()
 
     filterBySearchTerm = (i) ->
       for term in i.searchable
-        if term.indexOf(ingredientSearchTerm) != -1
+        if term.indexOf(searchTerm) != -1
           return true
       return false
 
@@ -27,6 +27,6 @@ searchedGroupedIngredients = ({ groupedIngredients, ingredientSearchTerm }) ->
 
 module.exports = _.extend searchedGroupedIngredients, {
   stateSelector :
-    groupedIngredients   : 'ingredients.groupedIngredients'
-    ingredientSearchTerm : 'filters.ingredientSearchTerm'
+    groupedIngredients : 'ingredients.groupedIngredients'
+    searchTerm         : 'filters.ingredientSearchTerm'
 }

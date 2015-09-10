@@ -22,23 +22,24 @@ MIXABILITY_FILTER_RANGES = {
   notReallyMixable : [ 2, 100 ]
 }
 
-filteredGroupedAlphabeticalRecipes = ({
+filteredGroupedRecipes = ({
   ingredientsByTag
-  alphabeticalRecipes
+  groupedRecipes
   baseLiquorFilter
-  recipeSearchTerm
+  searchTerm
   mixabilityFilters
-  selectedIngredientTags
+  ingredientTags
 }) ->
-  assert ingredientsByTag
-  assert alphabeticalRecipes
-  assert baseLiquorFilter
-  assert recipeSearchTerm
-  assert mixabilityFilters
-  assert selectedIngredientTags
+  searchTerm ?= ''
 
-  mixableRecipes = computeMixabilityForAll { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
-  mixabilityById = mixabilityByRecipeId { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
+  assert ingredientsByTag
+  assert groupedRecipes
+  assert baseLiquorFilter
+  assert mixabilityFilters
+  assert ingredientTags
+
+  mixableRecipes = computeMixabilityForAll { ingredientsByTag, recipes : groupedRecipes, ingredientTags }
+  mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes : groupedRecipes, ingredientTags }
 
   filteredRecipes = _.chain mixableRecipes
     .values()
@@ -71,22 +72,22 @@ filteredGroupedAlphabeticalRecipes = ({
         return true
     return false
 
-  if recipeSearchTerm
+  if searchTerm.trim()
     filteredRecipes = _nestedFilter filteredRecipes, (r) ->
       return recipeMatchesSearchTerm {
         recipe : r
-        searchTerm : recipeSearchTerm
+        searchTerm : searchTerm
         ingredientsByTag
       }
 
   return filteredRecipes
 
-module.exports = _.extend filteredGroupedAlphabeticalRecipes, {
+module.exports = _.extend filteredGroupedRecipes, {
   stateSelector :
-    ingredientsByTag       : 'ingredients.ingredientsByTag'
-    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
-    baseLiquorFilter       : 'filters.baseLiquorFilter'
-    recipeSearchTerm       : 'filters.recipeSearchTerm'
-    mixabilityFilters      : 'filters.mixabilityFilters'
-    selectedIngredientTags : 'filters.selectedIngredientTags'
+    ingredientsByTag  : 'ingredients.ingredientsByTag'
+    groupedRecipes    : 'recipes.alphabeticalRecipes'
+    baseLiquorFilter  : 'filters.baseLiquorFilter'
+    searchTerm        : 'filters.recipeSearchTerm'
+    mixabilityFilters : 'filters.mixabilityFilters'
+    ingredientTags    : 'filters.selectedIngredientTags'
 }

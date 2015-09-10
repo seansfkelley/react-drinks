@@ -73,7 +73,7 @@ RecipeListView = React.createClass {
       filters : [ 'recipeSearchTerm', 'baseLiquorFilter' ]
     }
     DerivedValueMixin [
-      'filteredGroupedAlphabeticalRecipes'
+      'filteredGroupedRecipes'
       'mixabilityByRecipeId'
     ]
     PureRenderMixin
@@ -81,7 +81,7 @@ RecipeListView = React.createClass {
 
   render : ->
     list = <RecipeList
-      recipes={@state.filteredGroupedAlphabeticalRecipes}
+      recipes={@state.filteredGroupedRecipes}
       makeHeader={@_alphabeticalHeader}
       makeItem={@_alphabeticalListItem}
     />
