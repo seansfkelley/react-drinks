@@ -1,6 +1,8 @@
 _   = require 'lodash'
 log = require 'loglevel'
 
+select = require './select'
+
 definitions = require '../../shared/definitions'
 
 RecipeSearch = require '../recipes/RecipeSearch'
@@ -119,30 +121,31 @@ DERIVED_FUNCTIONS = {
 
 STORE_SELECTORS = {
   searchedGroupedIngredients :
-    ingredients : 'groupedIngredients'
-    filters     : 'ingredientSearchTerm'
+    groupedIngredients   : 'ingredients.groupedIngredients'
+    ingredientSearchTerm : 'filters.ingredientSearchTerm'
   mixabilityForAllRecipes :
-    ingredients : 'ingredientsByTag'
-    recipes     : 'alphabeticalRecipes'
-    filters     : 'selectedIngredientTags'
+    ingredientsByTag       : 'ingredients.ingredientsByTag'
+    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
+    selectedIngredientTags : 'filters.selectedIngredientTags'
   mixabilityByRecipeId :
-    ingredients : 'ingredientsByTag'
-    recipes     : 'alphabeticalRecipes'
-    filters     : 'selectedIngredientTags'
+    ingredientsByTag       : 'ingredients.ingredientsByTag'
+    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
+    selectedIngredientTags : 'filters.selectedIngredientTags'
   filteredGroupedAlphabeticalRecipes :
-    ingredients : 'ingredientsByTag'
-    recipes     : 'alphabeticalRecipes'
-    filters     : [ 'baseLiquorFilter', 'recipeSearchTerm', 'mixabilityFilters', 'selectedIngredientTags' ]
+    ingredientsByTag       : 'ingredients.ingredientsByTag'
+    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
+    baseLiquorFilter       : 'filters.baseLiquorFilter'
+    recipeSearchTerm       : 'filters.recipeSearchTerm'
+    mixabilityFilters      : 'filters.mixabilityFilters'
+    selectedIngredientTags : 'filters.selectedIngredientTags'
 }
 
-destructuringMemoizedFunctions = _.mapValues STORE_SELECTORS, (selectors, fnName) ->
+destructuringMemoizedFunctions = _.mapValues STORE_SELECTORS, (selectorSpec, fnName) ->
   lastArg    = null
   lastResult = null
 
   return (state) ->
-    arg = _.extend {}, _.map(selectors, (fieldArrayOrString, storeName) ->
-      return _.pick state[storeName], fieldArrayOrString
-    )...
+    arg = select state, selectorSpec
     if _.all arg, ((value, key) -> lastArg?[key] == value)
       return lastResult
     else

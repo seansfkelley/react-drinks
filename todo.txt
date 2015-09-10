@@ -1,6 +1,3 @@
 - add unit tests for derived values
 - make RecipeSearch into (memoized!) utility functions since it doesn't need to do pre-processing anymore
 - replace revalidator with proptypes, if it's been separated out into a library...?
-- actually use persistence
-  - should probably load from old version of persisted data on first load, too
-- thoroughly test all functionality to ensure it survived the transition
