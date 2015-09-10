@@ -6,22 +6,62 @@ definitions = require '../../../shared/definitions'
 
 memoize                 = require './memoize'
 mixabilityByRecipeId    = require('./mixabilityByRecipeId').memoized
-mixabilityForAll        = require('./mixabilityForAll').memoized
 recipeMatchesSearchTerm = require('./recipeMatchesSearchTerm').memoized
-
-_nestedFilter = (list, filterFn) ->
-  filteredList = []
-  for { key, recipes } in list
-    recipes = _.filter recipes, filterFn
-    if recipes.length
-      filteredList.push { key, recipes }
-  return filteredList
 
 MIXABILITY_FILTER_RANGES = {
   mixable          : [ 0, 0 ]
   nearMixable      : [ 1, 1 ]
   notReallyMixable : [ 2, 100 ]
 }
+
+# hee hee
+nofilter = -> true
+
+_baseLiquorFilter = (baseLiquorFilter) ->
+  if baseLiquorFilter != definitions.ANY_BASE_LIQUOR
+    return (recipe) ->
+      if _.isString recipe.base
+        return recipe.base == baseLiquorFilter
+      else if _.isArray recipe.base
+        return baseLiquorFilter in recipe.base
+      else
+        log.warn "recipe '#{recipe.name}' has a non-string, non-array base: #{recipe.base}"
+        return false
+  else
+    return nofilter
+
+_mixabilityFilter = (mixabilityById, mixabilityFilters) ->
+  ranges = _.chain mixabilityFilters
+    .pick _.identity
+    .map (_, f) -> MIXABILITY_FILTER_RANGES[f]
+    .value()
+
+  return (recipe) ->
+    for [ min, max ] in ranges
+      if min <= mixabilityById[recipe.recipeId] <= max
+        return true
+    return false
+
+_searchTermFilter = (searchTerm, ingredientsByTag) ->
+  searchTerm = searchTerm.trim()
+  if searchTerm
+    return (recipe) ->
+      return recipeMatchesSearchTerm {
+        recipe
+        searchTerm
+        ingredientsByTag
+      }
+  else
+    return nofilter
+
+_sortAndGroupAlphabetical = (recipes) ->
+  return _.chain recipes
+    .sortBy 'sortName'
+    # group by should include a clause for numbers
+    .groupBy (r) -> r.sortName[0].toLowerCase()
+    .map (recipes, key) -> { recipes, key }
+    .sortBy 'key'
+    .value()
 
 filteredGroupedRecipes = ({
   ingredientsByTag
@@ -32,56 +72,29 @@ filteredGroupedRecipes = ({
   ingredientTags
 }) ->
   searchTerm ?= ''
+  baseLiquorFilter ?= definitions.ANY_BASE_LIQUOR
 
   assert ingredientsByTag
   assert recipes
-  assert baseLiquorFilter
   assert mixabilityFilters
   assert ingredientTags
 
   mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes, ingredientTags }
 
   filteredRecipes = _.chain recipes
-    .values()
-    .flatten()
-    .sortBy 'sortName'
-    # group by should include a clause for numbers
-    .groupBy (r) -> r.sortName[0].toLowerCase()
-    .map (recipes, key) -> { recipes, key }
-    .sortBy 'key'
+    .filter _baseLiquorFilter(baseLiquorFilter)
+    .filter _mixabilityFilter(mixabilityById, mixabilityFilters)
+    .filter _searchTermFilter(searchTerm, ingredientsByTag)
     .value()
 
-  if baseLiquorFilter and baseLiquorFilter != definitions.ANY_BASE_LIQUOR
-    filteredRecipes = _nestedFilter filteredRecipes, (r) ->
-      if _.isString r.base
-        return r.base == baseLiquorFilter
-      else if _.isArray r.base
-        return baseLiquorFilter in r.base
-      else
-        log.warn "recipe '#{r.name}' has a non-string, non-array base: #{r.base}"
-        return false
-
-  ranges = _.chain mixabilityFilters
-    .pick _.identity
-    .map (_, f) -> MIXABILITY_FILTER_RANGES[f]
-    .value()
-
-  filteredRecipes = _nestedFilter filteredRecipes, (r) =>
-    for [ min, max ] in ranges
-      if min <= mixabilityById[r.recipeId] <= max
-        return true
-    return false
-
-  if searchTerm.trim()
-    filteredRecipes = _nestedFilter filteredRecipes, (r) ->
-      return recipeMatchesSearchTerm {
-        recipe : r
-        searchTerm : searchTerm
-        ingredientsByTag
-      }
-
-  return filteredRecipes
+  return _sortAndGroupAlphabetical filteredRecipes
 
 module.exports = _.extend filteredGroupedRecipes, {
   memoized : memoize filteredGroupedRecipes
+  __test   : {
+    _baseLiquorFilter
+    _mixabilityFilter
+    _searchTermFilter
+    _sortAndGroupAlphabetical
+  }
 }
