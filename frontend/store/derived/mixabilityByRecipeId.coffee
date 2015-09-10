@@ -2,8 +2,8 @@ _   = require 'lodash'
 
 assert = require '../../../shared/tinyassert'
 
-memoize = require './memoize'
-computeMixabilityForAll = require('./computeMixabilityForAll').memoized
+memoize          = require './memoize'
+mixabilityForAll = require('./mixabilityForAll').memoized
 
 mixabilityByRecipeId = ({
   ingredientsByTag
@@ -14,16 +14,12 @@ mixabilityByRecipeId = ({
   assert recipes
   assert ingredientTags
 
-  mixableRecipes = computeMixabilityForAll { ingredientsByTag, recipes, ingredientTags }
+  mixableRecipes = mixabilityForAll { ingredientsByTag, recipes, ingredientTags }
   return _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
     missing = +missing
     return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
   )...
 
 module.exports = _.extend mixabilityByRecipeId, {
-  memoized      : memoize mixabilityByRecipeId
-  stateSelector :
-    ingredientsByTag : 'ingredients.ingredientsByTag'
-    recipes          : 'recipes.alphabeticalRecipes'
-    ingredientTags   : 'filters.selectedIngredientTags'
+  memoized : memoize mixabilityByRecipeId
 }

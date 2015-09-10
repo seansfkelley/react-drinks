@@ -6,7 +6,7 @@ definitions = require '../../../shared/definitions'
 
 memoize                 = require './memoize'
 mixabilityByRecipeId    = require('./mixabilityByRecipeId').memoized
-computeMixabilityForAll = require('./computeMixabilityForAll').memoized
+mixabilityForAll        = require('./mixabilityForAll').memoized
 recipeMatchesSearchTerm = require('./recipeMatchesSearchTerm').memoized
 
 _nestedFilter = (list, filterFn) ->
@@ -39,7 +39,7 @@ filteredGroupedRecipes = ({
   assert mixabilityFilters
   assert ingredientTags
 
-  mixableRecipes = computeMixabilityForAll { ingredientsByTag, recipes : groupedRecipes, ingredientTags }
+  mixableRecipes = mixabilityForAll { ingredientsByTag, recipes : groupedRecipes, ingredientTags }
   mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes : groupedRecipes, ingredientTags }
 
   filteredRecipes = _.chain mixableRecipes
@@ -84,12 +84,5 @@ filteredGroupedRecipes = ({
   return filteredRecipes
 
 module.exports = _.extend filteredGroupedRecipes, {
-  memoized      : memoize filteredGroupedRecipes
-  stateSelector :
-    ingredientsByTag  : 'ingredients.ingredientsByTag'
-    groupedRecipes    : 'recipes.alphabeticalRecipes'
-    baseLiquorFilter  : 'filters.baseLiquorFilter'
-    searchTerm        : 'filters.recipeSearchTerm'
-    mixabilityFilters : 'filters.mixabilityFilters'
-    ingredientTags    : 'filters.selectedIngredientTags'
+  memoized : memoize filteredGroupedRecipes
 }

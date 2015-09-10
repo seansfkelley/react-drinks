@@ -28,8 +28,5 @@ searchedGroupedIngredients = ({ groupedIngredients, searchTerm }) ->
       .value()
 
 module.exports = _.extend searchedGroupedIngredients, {
-  memoized      : memoize searchedGroupedIngredients
-  stateSelector :
-    groupedIngredients : 'ingredients.groupedIngredients'
-    searchTerm         : 'filters.ingredientSearchTerm'
+  memoized : memoize searchedGroupedIngredients
 }

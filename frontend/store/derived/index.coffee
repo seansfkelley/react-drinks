@@ -2,13 +2,30 @@ _ = require 'lodash'
 
 select = require './select'
 
-FUNCTIONS_BY_NAME = {
-  # Due to Browserify, these can't be dynamic requires. SADFACE.
-  computeMixabilityForAll    : require './computeMixabilityForAll'
-  filteredGroupedRecipes     : require './filteredGroupedRecipes'
-  mixabilityByRecipeId       : require './mixabilityByRecipeId'
-  searchedGroupedIngredients : require './searchedGroupedIngredients'
+DERIVED_FUNCTIONS = {
+  filteredGroupedRecipes :
+    fn            : require './filteredGroupedRecipes'
+    stateSelector :
+      ingredientsByTag  : 'ingredients.ingredientsByTag'
+      groupedRecipes    : 'recipes.alphabeticalRecipes'
+      baseLiquorFilter  : 'filters.baseLiquorFilter'
+      searchTerm        : 'filters.recipeSearchTerm'
+      mixabilityFilters : 'filters.mixabilityFilters'
+      ingredientTags    : 'filters.selectedIngredientTags'
+
+  mixabilityByRecipeId       :
+    fn            : require './mixabilityByRecipeId'
+    stateSelector :
+      ingredientsByTag : 'ingredients.ingredientsByTag'
+      recipes          : 'recipes.alphabeticalRecipes'
+      ingredientTags   : 'filters.selectedIngredientTags'
+
+  searchedGroupedIngredients :
+    fn            : require './searchedGroupedIngredients'
+    stateSelector :
+      groupedIngredients : 'ingredients.groupedIngredients'
+      searchTerm         : 'filters.ingredientSearchTerm'
 }
 
-module.exports = _.mapValues FUNCTIONS_BY_NAME, (fn) ->
-  return (state) -> fn.memoized select(state, fn.stateSelector)
+module.exports = _.mapValues DERIVED_FUNCTIONS, ({ fn, stateSelector }) ->
+  return (state) -> fn.memoized select(state, stateSelector)
