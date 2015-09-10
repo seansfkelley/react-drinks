@@ -3,9 +3,7 @@ log = require 'loglevel'
 
 select = require './select'
 
-definitions = require '../../shared/definitions'
-
-RecipeSearch = require '../recipes/RecipeSearch'
+definitions = require '../../../shared/definitions'
 
 searchedGroupedIngredients = ({
   groupedIngredients

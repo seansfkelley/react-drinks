@@ -1,4 +1,4 @@
-select = require '../frontend/store/select'
+select = require '../frontend/store/derived/select'
 
 describe 'select', ->
   it 'should shallowly select non-primitive items', ->
