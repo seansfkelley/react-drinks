@@ -1,7 +1,13 @@
 _ = require 'lodash'
 
+assert = require '../../../shared/tinyassert'
+
 searchedGroupedIngredients = ({ groupedIngredients, ingredientSearchTerm }) ->
-  if (ingredientSearchTerm?.trim() ? '') == ''
+  ingredientSearchTerm ?= ''
+
+  assert groupedIngredients
+
+  if (ingredientSearchTerm.trim() ? '') == ''
     return groupedIngredients
   else
     ingredientSearchTerm = ingredientSearchTerm.toLowerCase()

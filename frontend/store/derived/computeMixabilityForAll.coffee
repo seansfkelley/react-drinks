@@ -1,6 +1,8 @@
 _   = require 'lodash'
 log = require 'loglevel'
 
+assert = require '../../../shared/tinyassert'
+
 _countSubsetMissing = (small, large) ->
   missed = 0
   for s in small
@@ -71,6 +73,10 @@ computeMixabilityWithFuzziness = ({ recipes, ingredientsByTag, ingredientTags, f
     .value()
 
 computeMixabilityForAll = ({ recipes, ingredientsByTag, ingredientTags }) ->
+  assert recipes
+  assert ingredientsByTag
+  assert ingredientTags
+
   # Fucking hell I just want Set objects.
   if _.isPlainObject ingredientTags
     ingredientTags = _.keys ingredientTags

@@ -1,10 +1,12 @@
 _   = require 'lodash'
 log = require 'loglevel'
 
+assert      = require '../../../shared/tinyassert'
 definitions = require '../../../shared/definitions'
 
 mixabilityByRecipeId = require './mixabilityByRecipeId'
 computeMixabilityForAll = require './computeMixabilityForAll'
+recipeMatchesSearchTerm = require './recipeMatchesSearchTerm'
 
 _nestedFilter = (list, filterFn) ->
   filteredList = []
@@ -28,6 +30,12 @@ filteredGroupedAlphabeticalRecipes = ({
   mixabilityFilters
   selectedIngredientTags
 }) ->
+  assert ingredientsByTag
+  assert alphabeticalRecipes
+  assert baseLiquorFilter
+  assert recipeSearchTerm
+  assert mixabilityFilters
+  assert selectedIngredientTags
 
   mixableRecipes = computeMixabilityForAll { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
   mixabilityById = mixabilityByRecipeId { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
@@ -63,10 +71,13 @@ filteredGroupedAlphabeticalRecipes = ({
         return true
     return false
 
-  recipeSearch = new RecipeSearch ingredientsByTag, alphabeticalRecipes
-
   if recipeSearchTerm
-    filteredRecipes = _nestedFilter filteredRecipes, (r) -> recipeSearch.recipeMatchesSearchTerm r, recipeSearchTerm
+    filteredRecipes = _nestedFilter filteredRecipes, (r) ->
+      return recipeMatchesSearchTerm {
+        recipe : r
+        searchTerm : recipeSearchTerm
+        ingredientsByTag
+      }
 
   return filteredRecipes
 

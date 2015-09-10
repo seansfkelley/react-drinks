@@ -1,5 +1,7 @@
 _   = require 'lodash'
 
+assert = require '../../../shared/tinyassert'
+
 computeMixabilityForAll = require './computeMixabilityForAll'
 
 mixabilityByRecipeId = ({
@@ -7,6 +9,10 @@ mixabilityByRecipeId = ({
   alphabeticalRecipes
   selectedIngredientTags
 }) ->
+  assert ingredientsByTag
+  assert alphabeticalRecipes
+  assert selectedIngredientTags
+
   mixableRecipes = computeMixabilityForAll { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
   return _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
     missing = +missing

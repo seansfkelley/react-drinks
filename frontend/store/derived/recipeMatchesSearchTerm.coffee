@@ -1,10 +1,17 @@
 _ = require 'lodash'
 
+assert = require '../../../shared/tinyassert'
+
 WHITESPACE_REGEX = /\s+/g
 
 # SO INEFFICIENT.
 recipeMatchesSearchTerm = ({ recipe, searchTerm, ingredientsByTag }) ->
-  if not searchTerm?.trim()
+  searchTerm ?= ''
+
+  assert recipe
+  assert ingredientsByTag
+
+  if not searchTerm.trim()
     return false
 
   terms = _.compact searchTerm.trim().split(WHITESPACE_REGEX)
