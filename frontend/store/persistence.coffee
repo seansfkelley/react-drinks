@@ -30,13 +30,30 @@ watch = (store) ->
 load = ->
   { data, timestamp } = JSON.parse(localStorage[LOCALSTORAGE_KEY] ? '{}')
 
-  data ?= {}
-  elapsedTime = Date.now() - +(timestamp ? 0)
+  if not data?
+    # Legacy version.
+    ui          = JSON.parse(localStorage['drinks-app-ui'] ? '{}')
+    recipes     = JSON.parse(localStorage['drinks-app-recipes'] ? '{}')
+    ingredients = JSON.parse(localStorage['drinks-app-ingredients'] ? '{}')
 
-  return _.mapValues PERSISTENCE_SPEC, (spec, storeName) ->
-    return _.chain data[storeName]
-      .pick _.keys(spec)
-      .pick (_, key) -> elapsedTime < spec[key]
-      .value()
+    return {
+      filters :
+        recipeSearchTerm       : recipes.searchTerm
+        baseLiquorFilter       : ui.baseLiquorFilter
+        mixabilityFilters      : ui.mixabilityFilters
+        selectedIngredientTags : ingredients.selectedIngredientTags
+      recipes :
+        customRecipes : recipes.customRecipes
+      ui :
+        recipeViewingIndex : ui.recipeViewingIndex
+    }
+  else
+    elapsedTime = Date.now() - +(timestamp ? 0)
+
+    return _.mapValues PERSISTENCE_SPEC, (spec, storeName) ->
+      return _.chain data[storeName]
+        .pick _.keys(spec)
+        .pick (_, key) -> elapsedTime < spec[key]
+        .value()
 
 module.exports = { watch, load }
