@@ -7,7 +7,7 @@ DERIVED_FUNCTIONS = {
     fn            : require './filteredGroupedRecipes'
     stateSelector :
       ingredientsByTag  : 'ingredients.ingredientsByTag'
-      groupedRecipes    : 'recipes.alphabeticalRecipes'
+      recipes           : 'recipes.alphabeticalRecipes'
       baseLiquorFilter  : 'filters.baseLiquorFilter'
       searchTerm        : 'filters.recipeSearchTerm'
       mixabilityFilters : 'filters.mixabilityFilters'

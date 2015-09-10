@@ -25,7 +25,7 @@ MIXABILITY_FILTER_RANGES = {
 
 filteredGroupedRecipes = ({
   ingredientsByTag
-  groupedRecipes
+  recipes
   baseLiquorFilter
   searchTerm
   mixabilityFilters
@@ -34,13 +34,15 @@ filteredGroupedRecipes = ({
   searchTerm ?= ''
 
   assert ingredientsByTag
-  assert groupedRecipes
+  assert recipes
   assert baseLiquorFilter
   assert mixabilityFilters
   assert ingredientTags
 
-  mixableRecipes = mixabilityForAll { ingredientsByTag, recipes : groupedRecipes, ingredientTags }
-  mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes : groupedRecipes, ingredientTags }
+  mixableRecipes = mixabilityForAll { ingredientsByTag, recipes, ingredientTags }
+  mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes, ingredientTags }
+
+  filtered = _.chain(mixableRecipes).values().flatten().value()
 
   filteredRecipes = _.chain mixableRecipes
     .values()
