@@ -256,6 +256,18 @@ describe 'computeMixabilityForAll', ->
       result.should.have.all.keys [ '0' ]
       result['0'].should.be.an 'array'
 
+    it 'should accept ingredientTags as a map from strings to anything (i.e. a set)', ->
+      args = makeArgs(
+        [ IndexableIngredient.A_ROOT.tag ]
+        recipe(IndexableIngredient.A_ROOT)
+      )
+      args.ingredientTags = { "#{IndexableIngredient.A_ROOT.tag}" : true }
+
+      result = computeMixabilityWithFuzziness args
+
+      result.should.have.all.keys [ '0' ]
+      result['0'].should.be.an 'array'
+
     it 'should return a match for a recipe that matches exactly', ->
       computeMixabilityWithFuzziness(makeArgs(
         [ IndexableIngredient.A_ROOT.tag ]

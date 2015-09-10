@@ -5,42 +5,14 @@ select = require './select'
 
 definitions = require '../../../shared/definitions'
 
-searchedGroupedIngredients = ({
-  groupedIngredients
-  ingredientSearchTerm
-}) ->
-  if (ingredientSearchTerm?.trim() ? '') == ''
-    return groupedIngredients
-  else
-    ingredientSearchTerm = ingredientSearchTerm.toLowerCase()
-
-    filterBySearchTerm = (i) ->
-      for term in i.searchable
-        if term.indexOf(ingredientSearchTerm) != -1
-          return true
-      return false
-
-    return _.chain groupedIngredients
-      .map ({ name, ingredients }) ->
-        ingredients = _.filter ingredients, filterBySearchTerm
-        return { name, ingredients }
-      .filter ({ ingredients }) -> ingredients.length > 0
-      .value()
-
-mixabilityForAllRecipes = ({
-  ingredientsByTag
-  alphabeticalRecipes
-  selectedIngredientTags
-}) ->
-  recipeSearch = new RecipeSearch ingredientsByTag, alphabeticalRecipes
-  return recipeSearch.computeMixabilityForAll _.keys(selectedIngredientTags)
+computeMixabilityForAll = require './computeMixabilityForAll'
 
 mixabilityByRecipeId = ({
   ingredientsByTag
   alphabeticalRecipes
   selectedIngredientTags
 }) ->
-  mixableRecipes = mixabilityForAllRecipes { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
+  mixableRecipes = computeMixabilityForAll { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
   return _.extend {}, _.map(mixableRecipes, (recipes, missing) ->
     missing = +missing
     return _.reduce recipes, ((obj, r) -> obj[r.recipeId] = missing ; return obj), {}
@@ -69,7 +41,7 @@ filteredGroupedAlphabeticalRecipes = ({
   selectedIngredientTags
 }) ->
 
-  mixableRecipes = mixabilityForAllRecipes { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
+  mixableRecipes = computeMixabilityForAll { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
   mixabilityById = mixabilityByRecipeId { ingredientsByTag, alphabeticalRecipes, selectedIngredientTags }
 
   filteredRecipes = _.chain mixableRecipes
@@ -112,19 +84,12 @@ filteredGroupedAlphabeticalRecipes = ({
 
 DERIVED_FUNCTIONS = {
   searchedGroupedIngredients
-  mixabilityForAllRecipes
+  computeMixabilityForAll
   mixabilityByRecipeId
   filteredGroupedAlphabeticalRecipes
 }
 
 STORE_SELECTORS = {
-  searchedGroupedIngredients :
-    groupedIngredients   : 'ingredients.groupedIngredients'
-    ingredientSearchTerm : 'filters.ingredientSearchTerm'
-  mixabilityForAllRecipes :
-    ingredientsByTag       : 'ingredients.ingredientsByTag'
-    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
-    selectedIngredientTags : 'filters.selectedIngredientTags'
   mixabilityByRecipeId :
     ingredientsByTag       : 'ingredients.ingredientsByTag'
     alphabeticalRecipes    : 'recipes.alphabeticalRecipes'

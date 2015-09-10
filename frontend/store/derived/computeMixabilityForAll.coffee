@@ -71,6 +71,10 @@ computeMixabilityWithFuzziness = ({ recipes, ingredientsByTag, ingredientTags, f
     .value()
 
 computeMixabilityForAll = ({ recipes, ingredientsByTag, ingredientTags }) ->
+  # Fucking hell I just want Set objects.
+  if _.isPlainObject ingredientTags
+    ingredientTags = _.keys ingredientTags
+
   exactlyAvailableIngredientsRaw = _.map ingredientTags, (tag) -> ingredientsByTag[tag]
   exactlyAvailableIngredients = _.compact exactlyAvailableIngredientsRaw
   if exactlyAvailableIngredientsRaw.length != exactlyAvailableIngredients.length
@@ -119,4 +123,8 @@ module.exports = _.extend computeMixabilityForAll, {
     _generateSearchResult
     computeMixabilityWithFuzziness
   }
+  stateSelector :
+    ingredientsByTag       : 'ingredients.ingredientsByTag'
+    alphabeticalRecipes    : 'recipes.alphabeticalRecipes'
+    selectedIngredientTags : 'filters.selectedIngredientTags'
 }
