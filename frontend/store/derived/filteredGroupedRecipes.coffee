@@ -39,12 +39,9 @@ filteredGroupedRecipes = ({
   assert mixabilityFilters
   assert ingredientTags
 
-  mixableRecipes = mixabilityForAll { ingredientsByTag, recipes, ingredientTags }
   mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes, ingredientTags }
 
-  filtered = _.chain(mixableRecipes).values().flatten().value()
-
-  filteredRecipes = _.chain mixableRecipes
+  filteredRecipes = _.chain recipes
     .values()
     .flatten()
     .sortBy 'sortName'
