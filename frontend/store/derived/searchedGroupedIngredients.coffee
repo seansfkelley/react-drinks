@@ -2,6 +2,8 @@ _ = require 'lodash'
 
 assert = require '../../../shared/tinyassert'
 
+memoize = require './memoize'
+
 searchedGroupedIngredients = ({ groupedIngredients, searchTerm }) ->
   searchTerm ?= ''
 
@@ -26,6 +28,7 @@ searchedGroupedIngredients = ({ groupedIngredients, searchTerm }) ->
       .value()
 
 module.exports = _.extend searchedGroupedIngredients, {
+  memoized      : memoize searchedGroupedIngredients
   stateSelector :
     groupedIngredients : 'ingredients.groupedIngredients'
     searchTerm         : 'filters.ingredientSearchTerm'

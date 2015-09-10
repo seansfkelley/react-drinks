@@ -1,7 +1,8 @@
 _   = require 'lodash'
 log = require 'loglevel'
 
-assert = require '../../../shared/tinyassert'
+memoize = require './memoize'
+assert  = require '../../../shared/tinyassert'
 
 _countSubsetMissing = (small, large) ->
   missed = 0
@@ -129,6 +130,7 @@ module.exports = _.extend computeMixabilityForAll, {
     _generateSearchResult
     computeMixabilityWithFuzziness
   }
+  memoized      : memoize computeMixabilityForAll
   stateSelector :
     ingredientsByTag : 'ingredients.ingredientsByTag'
     recipes          : 'recipes.alphabeticalRecipes'

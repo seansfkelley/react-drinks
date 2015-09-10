@@ -2,6 +2,8 @@ _ = require 'lodash'
 
 assert = require '../../../shared/tinyassert'
 
+memoize = require './memoize'
+
 WHITESPACE_REGEX = /\s+/g
 
 # SO INEFFICIENT.
@@ -26,4 +28,6 @@ recipeMatchesSearchTerm = ({ recipe, searchTerm, ingredientsByTag }) ->
 
   return _.all terms, (t) -> _.any(searchable, (s) -> s.indexOf(t) != -1)
 
-module.exports = recipeMatchesSearchTerm
+module.exports = _.extend recipeMatchesSearchTerm, {
+  memoized : memoize recipeMatchesSearchTerm
+}

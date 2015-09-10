@@ -4,9 +4,10 @@ log = require 'loglevel'
 assert      = require '../../../shared/tinyassert'
 definitions = require '../../../shared/definitions'
 
-mixabilityByRecipeId = require './mixabilityByRecipeId'
-computeMixabilityForAll = require './computeMixabilityForAll'
-recipeMatchesSearchTerm = require './recipeMatchesSearchTerm'
+memoize                 = require './memoize'
+mixabilityByRecipeId    = require('./mixabilityByRecipeId').memoized
+computeMixabilityForAll = require('./computeMixabilityForAll').memoized
+recipeMatchesSearchTerm = require('./recipeMatchesSearchTerm').memoized
 
 _nestedFilter = (list, filterFn) ->
   filteredList = []
@@ -83,6 +84,7 @@ filteredGroupedRecipes = ({
   return filteredRecipes
 
 module.exports = _.extend filteredGroupedRecipes, {
+  memoized      : memoize filteredGroupedRecipes
   stateSelector :
     ingredientsByTag  : 'ingredients.ingredientsByTag'
     groupedRecipes    : 'recipes.alphabeticalRecipes'
