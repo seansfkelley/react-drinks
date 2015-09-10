@@ -27,7 +27,7 @@ MEASUREMENTS = [
   'slice'
 ]
 
-_parseIngredient : (rawText, tag) ->
+_parseIngredient = (rawText, tag) ->
   text = rawText.trim()
 
   if match = COUNT_REGEX.exec text
@@ -84,9 +84,10 @@ module.exports = require('./makeReducer') _createEmptyStore(), {
 
   'toggle-base-liquor-tag' : (state, { tag }) ->
     if tag in state.base
-      return _.without state.base, tag
+      base = _.without state.base, tag
     else
-      return state.base.concat [ tag ]
+      base = state.base.concat [ tag ]
+    return _.defaults { base }, state
 
   'save-recipe' : (state) ->
     return _createEmptyStore()

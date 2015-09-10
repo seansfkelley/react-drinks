@@ -24,11 +24,11 @@ module.exports = require('./makeReducer') _.extend({
   'save-recipe' : (state, { recipe }) ->
     return _recomputeDerivedLists _.defaults({
       customRecipes : state.customRecipes.concat [ recipe ]
-    }), state
+    }, state)
 
   'delete-recipe' : (state, { recipeId }) ->
     return _recomputeDerivedLists _.defaults({
       customRecipes : _.reject state.customRecipes, { recipeId }
-    }), state
+    }, state)
 
 }
