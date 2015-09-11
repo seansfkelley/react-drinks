@@ -239,31 +239,31 @@ describe 'mixabilityForAll', ->
     }
 
     it 'should return the empty object for no results', ->
-      mixabilityWithFuzziness(makeArgs([])).should.deep.equal {}
+      mixabilityWithFuzziness(makeArgs([])).should.be.empty
+
+    it 'should accept ingredientTags as an array of strings', ->
+      mixabilityWithFuzziness(makeArgs(
+        [ IndexableIngredient.A_ROOT.tag ]
+        recipe(IndexableIngredient.A_ROOT)
+      )).should.not.be.empty
+
+    it 'should accept ingredientTags as a map from strings to anything (i.e. a set)', ->
+      mixabilityWithFuzziness(makeArgs(
+        { "#{IndexableIngredient.A_ROOT.tag}" : true }
+        recipe(IndexableIngredient.A_ROOT)
+      )).should.not.be.empty
 
     # This is an upgrade consideration, if someone has a tag in localStorage but it's removed in later versions.
     it 'should should not throw an exception when given ingredients it doesn\'t understand', ->
-      mixabilityWithFuzziness(makeArgs([
-        IndexableIngredient.Z_ROOT.tag
-      ])).should.deep.equal {}
+      mixabilityWithFuzziness(makeArgs(
+        [ IndexableIngredient.Z_ROOT.tag ]
+      )).should.be.empty
 
     it 'should return results keyed by missing count', ->
       result = mixabilityWithFuzziness(makeArgs(
         [ IndexableIngredient.A_ROOT.tag ]
         recipe(IndexableIngredient.A_ROOT)
       ))
-
-      result.should.have.all.keys [ '0' ]
-      result['0'].should.be.an 'array'
-
-    it 'should accept ingredientTags as a map from strings to anything (i.e. a set)', ->
-      args = makeArgs(
-        [ IndexableIngredient.A_ROOT.tag ]
-        recipe(IndexableIngredient.A_ROOT)
-      )
-      args.ingredientTags = { "#{IndexableIngredient.A_ROOT.tag}" : true }
-
-      result = mixabilityWithFuzziness args
 
       result.should.have.all.keys [ '0' ]
       result['0'].should.be.an 'array'
