@@ -20,8 +20,8 @@ DERIVED_FUNCTIONS = {
       recipes          : 'recipes.alphabeticalRecipes'
       ingredientTags   : 'filters.selectedIngredientTags'
 
-  searchedGroupedIngredients :
-    fn            : require './searchedGroupedIngredients'
+  filteredGroupedIngredients :
+    fn            : require './filteredGroupedIngredients'
     stateSelector :
       groupedIngredients : 'ingredients.groupedIngredients'
       searchTerm         : 'filters.ingredientSearchTerm'

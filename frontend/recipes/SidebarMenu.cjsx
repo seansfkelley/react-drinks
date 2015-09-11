@@ -25,7 +25,7 @@ SidebarMenu = React.createClass {
     ReduxMixin {
       filters : 'selectedIngredientTags'
     }
-    DerivedValueMixin 'searchedGroupedIngredients'
+    DerivedValueMixin 'filteredGroupedIngredients'
     PureRenderMixin
   ]
 
@@ -62,7 +62,7 @@ SidebarMenu = React.createClass {
       >
         <SearchBar placeholder='Ingredient name...' onChange={@_onSearch}/>
         <GroupedIngredientList
-          groupedIngredients={@state.searchedGroupedIngredients}
+          groupedIngredients={@state.filteredGroupedIngredients}
           initialSelectedIngredientTags={@state.selectedIngredientTags}
           onSelectionChange={@_onIngredientToggle}
           ref='ingredientList'

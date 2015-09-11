@@ -4,7 +4,7 @@ assert = require '../../../shared/tinyassert'
 
 memoize = require './memoize'
 
-searchedGroupedIngredients = ({ groupedIngredients, searchTerm }) ->
+filteredGroupedIngredients = ({ groupedIngredients, searchTerm }) ->
   searchTerm ?= ''
 
   assert groupedIngredients
@@ -27,6 +27,6 @@ searchedGroupedIngredients = ({ groupedIngredients, searchTerm }) ->
       .filter ({ ingredients }) -> ingredients.length > 0
       .value()
 
-module.exports = _.extend searchedGroupedIngredients, {
-  memoized : memoize searchedGroupedIngredients
+module.exports = _.extend filteredGroupedIngredients, {
+  memoized : memoize filteredGroupedIngredients
 }
