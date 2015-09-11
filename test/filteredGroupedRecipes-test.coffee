@@ -134,8 +134,44 @@ describe 'filteredGroupedRecipes', ->
       _.filter(RECIPES, _searchTermFilter(' \t')).should.deep.equal RECIPES
 
   describe '#_sortAndGroupAlphabetical', ->
-    it 'should group recipes based on the first character of their "sortName" property'
+    RECIPE_A   = { sortName : 'a1' }
+    RECIPE_A_2 = { sortName : 'a2' }
+    RECIPE_B   = { sortName : 'b' }
+    RECIPE_1   = { sortName : '1' }
+    RECIPE_2   = { sortName : '2' }
 
-    it 'should group numerically-named recipes together'
+    it 'should group recipes based on the first character of their "sortName" property', ->
+      _sortAndGroupAlphabetical([
+        RECIPE_A
+        RECIPE_A_2
+        RECIPE_B
+      ]).should.deep.equal [
+        key     : 'a'
+        recipes : [ RECIPE_A, RECIPE_A_2 ]
+      ,
+        key     : 'b'
+        recipes : [ RECIPE_B ]
+      ]
 
-    it 'should sort the recipes in each group by their full "sortName" property'
+    it 'should group numerically-named recipes together', ->
+      _sortAndGroupAlphabetical([
+        RECIPE_A
+        RECIPE_1
+        RECIPE_2
+      ]).should.deep.equal [
+        key     : '#'
+        recipes : [ RECIPE_1, RECIPE_2 ]
+      ,
+        key     : 'a'
+        recipes : [ RECIPE_A ]
+      ]
+
+    it 'should sort the recipes in each group by their full "sortName" property', ->
+      _sortAndGroupAlphabetical([
+        # Note that the input order here is important!
+        RECIPE_A_2
+        RECIPE_A
+      ]).should.deep.equal [
+        key     : 'a'
+        recipes : [ RECIPE_A, RECIPE_A_2 ]
+      ]

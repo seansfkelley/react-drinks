@@ -57,8 +57,12 @@ _searchTermFilter = (searchTerm, ingredientsByTag) ->
 _sortAndGroupAlphabetical = (recipes) ->
   return _.chain recipes
     .sortBy 'sortName'
-    # group by should include a clause for numbers
-    .groupBy (r) -> r.sortName[0].toLowerCase()
+    .groupBy (r) ->
+      key = r.sortName[0].toLowerCase()
+      if /\d/.test key
+        return '#'
+      else
+        return key
     .map (recipes, key) -> { recipes, key }
     .sortBy 'key'
     .value()
