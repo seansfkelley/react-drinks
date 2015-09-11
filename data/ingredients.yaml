@@ -459,4 +459,7 @@
   group      : syrup
 -
   display    : Ginger
-  group      : vegetable # ?
+  group      : other
+-
+  display    : Sherry
+  group      : wine
