@@ -100,7 +100,7 @@ SidebarMenu = React.createClass {
 
   _onSearch : (searchTerm) ->
     store.dispatch {
-      type : 'search-ingredients'
+      type : 'set-ingredient-search-term'
       searchTerm
     }
 
