@@ -912,3 +912,38 @@
   source: "Serious Eats"
   url: "http://www.seriouseats.com/recipes/2009/11/time-for-a-drink-penicillin-cocktail.html"
   base: rum
+-
+  name: "Bourbon Brûlé"
+  ingredients:
+    -
+      tag: "bourbon"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "bourbon"
+    -
+      tag: "sherry"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "amontillado sherry"
+    -
+      tag: "ginger liqueur"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "ginger liqueur"
+    -
+      tag: "sugar"
+      displayAmount: "1"
+      displayUnit: "tsp"
+      displayIngredient: "sugar"
+    -
+      tag: "orange"
+      displayAmount: "1/2"
+      displayIngredient: "navel orange"
+  instructions: |
+    Cut a thin slice of orange (no more than 1/8 inch) from the wide end. Coat one side with the sugar.
+    Heat a small skillet on high. Place the orange slice, sugar-side down, in the skillet and sear for a couple of minutes, until lightly caramelized. Remove from pan and let cool, browned side up.
+    Juice the rest of the orange and combine with the liquor in a cocktail shaker with ice. Stir.
+    Strain over ice into a rock glass. Place the orange slice on top.
+  source: "NY Times"
+  url: "http://cooking.nytimes.com/recipes/1016279-bourbon-brule"
+  base: whiskey
