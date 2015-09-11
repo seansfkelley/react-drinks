@@ -87,8 +87,6 @@ SidebarMenu = React.createClass {
       onTouchTap={@_generateLabelTapper value}
     >
         {text}
-        <i className='fa fa-eye selected-icon'/>
-        <i className='fa fa-eye-slash not-selected-icon'/>
     </div>
 
   componentDidMount : ->

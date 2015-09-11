@@ -13,7 +13,7 @@ DERIVED_FUNCTIONS = {
       mixabilityFilters : 'filters.mixabilityFilters'
       ingredientTags    : 'filters.selectedIngredientTags'
 
-  mixabilityByRecipeId       :
+  mixabilityByRecipeId :
     fn            : require './mixabilityByRecipeId'
     stateSelector :
       ingredientsByTag : 'ingredients.ingredientsByTag'
