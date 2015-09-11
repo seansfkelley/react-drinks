@@ -127,9 +127,11 @@ describe 'filteredGroupedRecipes', ->
 
 
   describe '#_searchTermFilter', ->
+    RECIPES = [ 'a', 'b', 'c' ]
     # Other filtering behavior is tested by the recipeMatchesSearchTerm tests.
     # Perhaps that file should be inlined into this file?
-    it 'should return the list as-is when the search term is all whitespace'
+    it 'should return the list as-is when the search term is all whitespace', ->
+      _.filter(RECIPES, _searchTermFilter(' \t')).should.deep.equal RECIPES
 
   describe '#_sortAndGroupAlphabetical', ->
     it 'should group recipes based on the first character of their "sortName" property'
