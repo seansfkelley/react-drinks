@@ -14,9 +14,8 @@ Swipable = require '../components/Swipable'
 store         = require '../store'
 overlayViews  = require '../overlayViews'
 
-EditableRecipeView      = require './EditableRecipeView'
-SidebarMenu             = require './SidebarMenu'
-IngredientSelectionView = require '../ingredients/IngredientSelectionView'
+SidebarMenu        = require './SidebarMenu'
+EditableRecipeView = require './EditableRecipeView'
 
 BASE_LIQUORS = [ definitions.ANY_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
 
@@ -82,9 +81,6 @@ RecipeListHeader = React.createClass {
 
   _newRecipe : ->
     overlayViews.flyup.show <EditableRecipeView/>
-
-  _openIngredientPanel : ->
-    overlayViews.flyup.show <IngredientSelectionView/>
 }
 
 module.exports = RecipeListHeader
