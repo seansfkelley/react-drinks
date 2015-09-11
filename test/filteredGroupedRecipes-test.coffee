@@ -6,17 +6,68 @@ filteredGroupedRecipes = require '../frontend/store/derived/filteredGroupedRecip
   _searchTermFilter
   _sortAndGroupAlphabetical } = filteredGroupedRecipes.__test
 
+{ ANY_BASE_LIQUOR } = require '../shared/definitions'
+
 describe 'filteredGroupedRecipes', ->
   describe '#_baseLiquorFilter', ->
-    it 'should return the list as-is is the filter is "any"'
+    RECIPE_A   = { base : [ 'a' ] }
+    RECIPE_B   = { base : [ 'b' ] }
+    RECIPE_A_B = { base : [ 'a', 'b' ] }
 
-    it 'should filter recipes properly when their "base" property is a string'
+    RECIPE_A_STRING = { base : 'a' }
+    RECIPE_B_STRING = { base : 'b' }
 
-    it 'should filter recipes properly when their "base" property is an array of string'
+    RECIPE_NULL = {}
+    RECIPE_OBJECT = { base : {} }
 
-    it 'should filter out recipes with no "base" property'
+    it 'should return the list as-is if the filter is ANY_BASE_LIQUOR', ->
+      _.filter([
+        RECIPE_A
+        RECIPE_B
+      ], _baseLiquorFilter(ANY_BASE_LIQUOR)).should.deep.equal [
+        RECIPE_A
+        RECIPE_B
+      ]
 
-    it 'should filter out recipes with a non-string, non-array "base" property'
+    it 'should filter recipes properly when their "base" property is a string', ->
+      _.filter([
+        RECIPE_A_STRING
+        RECIPE_B_STRING
+      ], _baseLiquorFilter('a')).should.deep.equal [
+        RECIPE_A_STRING
+      ]
+
+    it 'should filter recipes properly when their "base" property is an array of strings', ->
+      _.filter([
+        RECIPE_A
+        RECIPE_B
+      ], _baseLiquorFilter('a')).should.deep.equal [
+        RECIPE_A
+      ]
+
+    it 'should filter out recipes with no "base" property', ->
+      _.filter([
+        RECIPE_A
+        RECIPE_NULL
+      ], _baseLiquorFilter('a')).should.deep.equal [
+        RECIPE_A
+      ]
+
+    it 'should filter out recipes with a non-string, non-array "base" property', ->
+      _.filter([
+        RECIPE_A
+        RECIPE_OBJECT
+      ], _baseLiquorFilter('a')).should.deep.equal [
+        RECIPE_A
+      ]
+
+    it 'should retain recipes if any "base" matches when it\'s an array of strings', ->
+      _.filter([
+        RECIPE_A
+        RECIPE_A_B
+      ], _baseLiquorFilter('b')).should.deep.equal [
+        RECIPE_A_B
+      ]
 
   describe '#_mixabilityFilter', ->
     FILTER_FIELD_NAMES = [ 'mixable', 'nearMixable', 'notReallyMixable' ]
