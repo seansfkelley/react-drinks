@@ -72,30 +72,44 @@ describe 'filteredGroupedRecipes', ->
   describe '#_mixabilityFilter', ->
     FILTER_FIELD_NAMES = [ 'mixable', 'nearMixable', 'notReallyMixable' ]
 
+    MIXABILITY_BY_ID = {
+      'a' : 0
+      'b' : 1
+      'c' : 2
+    }
+
+    RECIPES = [
+      recipeId : 'a'
+    ,
+      recipeId : 'b'
+    ,
+      recipeId : 'c'
+    ]
+
     TEST_CASES = [
       inputFilters : []
       outputIds    : []
     ,
       inputFilters : [ 'mixable' ]
-      outputIds    : []
+      outputIds    : [ 'a' ]
     ,
       inputFilters : [ 'nearMixable' ]
-      outputIds    : []
+      outputIds    : [ 'b' ]
     ,
       inputFilters : [ 'notReallyMixable' ]
-      outputIds    : []
+      outputIds    : [ 'c' ]
     ,
       inputFilters : [ 'mixable', 'nearMixable' ]
-      outputIds    : []
+      outputIds    : [ 'a', 'b' ]
     ,
       inputFilters : [ 'mixable', 'notReallyMixable' ]
-      outputIds    : []
+      outputIds    : [ 'a', 'c' ]
     ,
       inputFilters : [ 'nearMixable', 'notReallyMixable' ]
-      outputIds    : []
+      outputIds    : [ 'b', 'c' ]
     ,
       inputFilters : [ 'mixable', 'nearMixable', 'notReallyMixable' ]
-      outputIds    : []
+      outputIds    : [ 'a', 'b', 'c' ]
     ]
 
     _.each TEST_CASES, ({ inputFilters, outputIds }) ->
@@ -104,7 +118,13 @@ describe 'filteredGroupedRecipes', ->
         when 1 then "'#{inputFilters[0]}' is set"
         when 2 then "'#{inputFilters[0]}' and '#{inputFilters[1]}' are set"
         when 3 then "'#{inputFilters[0]}', '#{inputFilters[1]}' and '#{inputFilters[2]}' are set"
-      it "should properly filter when #{filterString}"
+      mixabilityFilters =_.extend _.map(FILTER_FIELD_NAMES, (field) ->
+        return { "#{field}" : _.contains(inputFilters, field) }
+      )...
+      outputRecipes = _.filter RECIPES, (r) -> _.contains outputIds, r.recipeId
+      it "should properly filter when #{filterString}", ->
+        _.filter(RECIPES, _mixabilityFilter(MIXABILITY_BY_ID, mixabilityFilters)).should.deep.equal outputRecipes
+
 
   describe '#_searchTermFilter', ->
     # Other filtering behavior is tested by the recipeMatchesSearchTerm tests.
