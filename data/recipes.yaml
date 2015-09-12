@@ -947,3 +947,32 @@
   source: "NY Times"
   url: "http://cooking.nytimes.com/recipes/1016279-bourbon-brule"
   base: whiskey
+-
+  name: "Corn 'n Oil"
+  ingredients:
+    -
+      tag: "dark rum"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "Cruzan blackstrap rum"
+    -
+      tag: "velvet falernum"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "John D. Taylor’s Velvet Falernum"
+    -
+      tag: "lime juice"
+      displayAmount: "1/3"
+      displayUnit: "oz"
+      displayIngredient: "lime juice"
+    -
+      tag: "angostura bitters"
+      displayAmount: "2-3"
+      displayUnit: "dashes"
+      displayIngredient: "Angostura bitters"
+  instructions: |
+    Fill an old-fashioned glass with crushed ice.
+    Add the ingredients and stir until well chilled. Add the lime garnish and serve.
+  source: "Putney Farm"
+  url: "http://putneyfarm.com/2012/08/18/weekly-cocktail-25-corn-n-oil/"
+  base: rum
