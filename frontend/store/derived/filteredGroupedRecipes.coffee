@@ -5,7 +5,7 @@ assert      = require '../../../shared/tinyassert'
 definitions = require '../../../shared/definitions'
 
 memoize                 = require './memoize'
-mixabilityForAll        = require('./mixabilityForAll').memoized
+mixabilityByRecipeId2   = require('./mixabilityByRecipeId2').memoized
 mixabilityByRecipeId    = require('./mixabilityByRecipeId').memoized
 recipeMatchesSearchTerm = require('./recipeMatchesSearchTerm').memoized
 
@@ -84,7 +84,7 @@ filteredGroupedRecipes = ({
   assert mixabilityFilters
   assert ingredientTags
 
-  recipesWithMixability = mixabilityForAll { ingredientsByTag, recipes, ingredientTags }
+  recipesWithMixability = mixabilityByRecipeId2 { ingredientsByTag, recipes, ingredientTags }
   mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes, ingredientTags }
 
   filteredRecipes = _.chain recipesWithMixability

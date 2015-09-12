@@ -63,18 +63,9 @@ _generateSearchResult = ({ recipe, substitutionMap, ingredientsByTag }) ->
       if not currentTag?
         missing.push ingredient
 
-  return _.defaults { missing, available, substitute }, recipe
+  return { recipeId : recipe.recipeId, missing, available, substitute }
 
-mixabilityWithFuzziness = ({ recipes, ingredientsByTag, ingredientTags, fuzzyMatchThreshold }) ->
-  fuzzyMatchThreshold ?= 0
-  return _.chain mixabilityForAll({ recipes, ingredientsByTag, ingredientTags })
-    .pick (results, missing) -> +missing <= fuzzyMatchThreshold
-    .mapValues (results) -> _.filter results, (r) -> r.available.length or r.substitute.length
-    .pick (results) -> results.length
-    .value()
-
-# TODO: These two main functions should probably be merged together.
-mixabilityForAll = ({ recipes, ingredientsByTag, ingredientTags }) ->
+mixabilityByRecipeId = ({ recipes, ingredientsByTag, ingredientTags }) ->
   assert recipes
   assert ingredientsByTag
   assert ingredientTags
@@ -119,17 +110,16 @@ mixabilityForAll = ({ recipes, ingredientsByTag, ingredientTags }) ->
         ingredientsByTag
       }
     .compact()
-    .groupBy (result) -> result.missing.length
+    .reduce ((obj, result) -> obj[result.recipeId] = _.omit(result, 'recipeId') ; return obj), {}
     .value()
 
-module.exports = _.extend mixabilityForAll, {
+module.exports = _.extend mixabilityByRecipeId, {
   __test : {
     _countSubsetMissing
     _includeAllGenerics
     _toMostGenericTags
     _computeSubstitutionMap
     _generateSearchResult
-    mixabilityWithFuzziness
   }
-  memoized : memoize mixabilityForAll
+  memoized : memoize mixabilityByRecipeId
 }
