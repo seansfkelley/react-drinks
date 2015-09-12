@@ -1,12 +1,12 @@
 _ = require 'lodash'
 
-mixabilityByRecipeId = require '../frontend/store/derived/mixabilityByRecipeId2'
+ingredientSplitsByRecipeId = require '../frontend/store/derived/ingredientSplitsByRecipeId'
 
 { _countSubsetMissing
   _includeAllGenerics
   _toMostGenericTags
   _computeSubstitutionMap
-  _generateSearchResult } = mixabilityByRecipeId.__test
+  _generateSearchResult } = ingredientSplitsByRecipeId.__test
 
 makeIngredientsByTag = (array) ->
   ingredientsByTag = {}
@@ -31,7 +31,7 @@ IndexableIngredient = {
 
 ResultIngredient = _.mapValues IndexableIngredient, (i) -> _.omit i, 'generic'
 
-describe 'mixabilityByRecipeId', ->
+describe 'ingredientSplitsByRecipeId', ->
   describe '#_includeAllGenerics', ->
     ingredientsByTag = makeIngredientsByTag [
       IndexableIngredient.A_ROOT
@@ -240,34 +240,34 @@ describe 'mixabilityByRecipeId', ->
     }
 
   it 'should return the empty object when no recipes are given', ->
-    mixabilityByRecipeId(makeArgs([])).should.be.empty
+    ingredientSplitsByRecipeId(makeArgs([])).should.be.empty
 
   it 'should accept ingredientTags as an array of strings', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_ROOT.tag ]
       recipe(null, IndexableIngredient.A_ROOT)
     )).should.not.be.empty
 
   it 'should accept ingredientTags as a map from strings to anything (i.e. a set)', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       { "#{IndexableIngredient.A_ROOT.tag}" : true }
       recipe(null, IndexableIngredient.A_ROOT)
     )).should.not.be.empty
 
   # This is an upgrade consideration, if someone has a tag in localStorage but it's removed in later versions.
   it 'should should not throw an exception when given ingredients it doesn\'t understand', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.Z_ROOT.tag ]
     )).should.be.empty
 
   it 'should return results keyed by recipe ID', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_ROOT.tag ]
       recipe('abc', IndexableIngredient.A_ROOT)
     )).should.have.all.keys [ 'abc' ]
 
   it 'should return a match for a recipe that matches exactly', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_ROOT.tag ]
       recipe(1, IndexableIngredient.A_ROOT)
     )).should.deep.equal {
@@ -278,7 +278,7 @@ describe 'mixabilityByRecipeId', ->
     }
 
   it 'should consider ingredients without tags always available', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_ROOT.tag ]
       recipe(1, IndexableIngredient.A_ROOT, IndexableIngredient.NULL)
     )).should.deep.equal {
@@ -288,35 +288,14 @@ describe 'mixabilityByRecipeId', ->
         available  : [ ResultIngredient.A_ROOT, ResultIngredient.NULL ]
     }
 
-  xit 'should return a fuzzy match for a recipe (within 1) if there is at least one matching tag', ->
-    args = makeArgs(
-      [ IndexableIngredient.A_ROOT.tag ]
-      recipe(1, IndexableIngredient.A_ROOT, IndexableIngredient.B_ROOT)
-    )
-    args.fuzzyMatchThreshold = 1
-    mixabilityByRecipeId(args).should.deep.equal {
-      '1' :
-        missing    : [ ResultIngredient.B_ROOT ]
-        substitute : []
-        available  : [ ResultIngredient.A_ROOT ]
-    }
-
-  xit 'should not return a fuzzy match for a 1-ingredient recipe (within 1) if there are no matching tags', ->
-    args = makeArgs(
-      [ IndexableIngredient.B_ROOT.tag ]
-      recipe(1, IndexableIngredient.A_ROOT)
-    )
-    args.fuzzyMatchThreshold = 1
-    mixabilityByRecipeId(args).should.deep.equal {}
-
   it 'should silently ignore input ingredients with no tags', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_ROOT.tag ]
       recipe(1, IndexableIngredient.A_ROOT, IndexableIngredient.NULL)
     )).should.have.all.keys [ '1' ]
 
   it 'should return an available match for a recipe if it calls for a parent (less specific) ingredient', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_CHILD_2.tag ]
       recipe(1, IndexableIngredient.A_ROOT)
     )).should.deep.equal {
@@ -327,7 +306,7 @@ describe 'mixabilityByRecipeId', ->
     }
 
   it 'should return a substitutable match for a recipe if it calls for a sibling (equally specific) ingredient', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_CHILD_2.tag ]
       recipe(1, IndexableIngredient.A_CHILD_1)
     )).should.deep.equal {
@@ -341,7 +320,7 @@ describe 'mixabilityByRecipeId', ->
     }
 
   it 'should return a substitutable match for a recipe if it calls for a child (more specific) ingredient', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_ROOT.tag ]
       recipe(1, IndexableIngredient.A_CHILD_1)
     )).should.deep.equal {
@@ -355,7 +334,7 @@ describe 'mixabilityByRecipeId', ->
     }
 
   it 'should return multiple substitutable matches for a recipe (with sibling ingredients)', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_CHILD_2.tag, IndexableIngredient.A_CHILD_3.tag ]
       recipe(1, IndexableIngredient.A_CHILD_1)
     )).should.deep.equal {
@@ -369,7 +348,7 @@ describe 'mixabilityByRecipeId', ->
     }
 
   it 'should count unknown recipe ingredients as missing', ->
-    mixabilityByRecipeId(makeArgs(
+    ingredientSplitsByRecipeId(makeArgs(
       [ IndexableIngredient.A_ROOT.tag ]
       recipe(1, IndexableIngredient.Z_ROOT, IndexableIngredient.A_ROOT)
     )).should.deep.equal {

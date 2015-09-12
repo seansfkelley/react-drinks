@@ -13,11 +13,11 @@ DERIVED_FUNCTIONS = {
       mixabilityFilters : 'filters.mixabilityFilters'
       ingredientTags    : 'filters.selectedIngredientTags'
 
-  mixabilityByRecipeId :
-    fn            : require './mixabilityByRecipeId'
+  ingredientSplitsByRecipeId :
+    fn            : require './ingredientSplitsByRecipeId'
     stateSelector :
-      ingredientsByTag : 'ingredients.ingredientsByTag'
       recipes          : 'recipes.alphabeticalRecipes'
+      ingredientsByTag : 'ingredients.ingredientsByTag'
       ingredientTags   : 'filters.selectedIngredientTags'
 
   filteredGroupedIngredients :

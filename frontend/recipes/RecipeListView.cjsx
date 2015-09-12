@@ -74,7 +74,7 @@ RecipeListView = React.createClass {
     }
     DerivedValueMixin [
       'filteredGroupedRecipes'
-      'mixabilityByRecipeId'
+      'ingredientSplitsByRecipeId'
     ]
     PureRenderMixin
   ]
@@ -118,7 +118,7 @@ RecipeListView = React.createClass {
     return <List.Header title={key.toUpperCase()} key={'header-' + key}/>
 
   _alphabeticalListItem : (key, r, props) ->
-    return <RecipeListItem mixability={@state.mixabilityByRecipeId[r.recipeId]} recipeName={r.name} {...props}/>
+    return <RecipeListItem mixability={@state.ingredientSplitsByRecipeId[r.recipeId].missing.length} recipeName={r.name} {...props}/>
 }
 
 module.exports = RecipeListView

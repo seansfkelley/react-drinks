@@ -4,10 +4,9 @@ log = require 'loglevel'
 assert      = require '../../../shared/tinyassert'
 definitions = require '../../../shared/definitions'
 
-memoize                 = require './memoize'
-mixabilityByRecipeId2   = require('./mixabilityByRecipeId2').memoized
-mixabilityByRecipeId    = require('./mixabilityByRecipeId').memoized
-recipeMatchesSearchTerm = require('./recipeMatchesSearchTerm').memoized
+memoize                    = require './memoize'
+ingredientSplitsByRecipeId = require('./ingredientSplitsByRecipeId').memoized
+recipeMatchesSearchTerm    = require('./recipeMatchesSearchTerm').memoized
 
 MIXABILITY_FILTER_RANGES = {
   mixable          : [ 0, 0 ]
@@ -84,12 +83,10 @@ filteredGroupedRecipes = ({
   assert mixabilityFilters
   assert ingredientTags
 
-  recipesWithMixability = mixabilityByRecipeId2 { ingredientsByTag, recipes, ingredientTags }
-  mixabilityById = mixabilityByRecipeId { ingredientsByTag, recipes, ingredientTags }
+  ingredientSplits = ingredientSplitsByRecipeId { ingredientsByTag, recipes, ingredientTags }
+  mixabilityById = _.mapValues ingredientSplits, (splits) -> splits.missing.length
 
-  filteredRecipes = _.chain recipesWithMixability
-    .values()
-    .flatten()
+  filteredRecipes = _.chain recipes
     .filter _baseLiquorFilter(baseLiquorFilter)
     .filter _mixabilityFilter(mixabilityById, mixabilityFilters)
     .filter _searchTermFilter(searchTerm, ingredientsByTag)

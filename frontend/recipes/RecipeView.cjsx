@@ -25,9 +25,10 @@ RecipeView = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    recipe    : React.PropTypes.object.isRequired
-    onClose   : React.PropTypes.func
-    shareable : React.PropTypes.bool
+    recipe           : React.PropTypes.object.isRequired
+    ingredientSplits : React.PropTypes.object
+    onClose          : React.PropTypes.func
+    shareable        : React.PropTypes.bool
 
   getDefaultProps : ->
     return {

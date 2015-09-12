@@ -175,24 +175,3 @@ describe 'filteredGroupedRecipes', ->
         key     : 'a'
         recipes : [ RECIPE_A, RECIPE_A_2 ]
       ]
-
-  # I don't like this contract very much -- this function should only filter, not attach
-  # random metadata. Perhaps another derived property that maps from ID to missing (etc.),
-  # just like mixability by ID is computed?
-  it 'should return recipes with "available", "substitute" and "missing" fields', ->
-    recipe = filteredGroupedRecipes({
-      ingredientsByTag  : {}
-      recipes           : [
-        ingredients : []
-        sortName    : 'a'
-      ]
-      ingredientTags    : []
-      mixabilityFilters :
-        mixable          : true
-        nearMixable      : true
-        notReallyMixable : true
-    })[0].recipes[0]
-
-    recipe.should.have.property 'available'
-    recipe.should.have.property 'substitute'
-    recipe.should.have.property 'missing'

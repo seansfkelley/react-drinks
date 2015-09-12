@@ -65,7 +65,7 @@ _generateSearchResult = ({ recipe, substitutionMap, ingredientsByTag }) ->
 
   return { recipeId : recipe.recipeId, missing, available, substitute }
 
-mixabilityByRecipeId = ({ recipes, ingredientsByTag, ingredientTags }) ->
+ingredientSplitsByRecipeId = ({ recipes, ingredientsByTag, ingredientTags }) ->
   assert recipes
   assert ingredientsByTag
   assert ingredientTags
@@ -113,7 +113,7 @@ mixabilityByRecipeId = ({ recipes, ingredientsByTag, ingredientTags }) ->
     .reduce ((obj, result) -> obj[result.recipeId] = _.omit(result, 'recipeId') ; return obj), {}
     .value()
 
-module.exports = _.extend mixabilityByRecipeId, {
+module.exports = _.extend ingredientSplitsByRecipeId, {
   __test : {
     _countSubsetMissing
     _includeAllGenerics
@@ -121,5 +121,5 @@ module.exports = _.extend mixabilityByRecipeId, {
     _computeSubstitutionMap
     _generateSearchResult
   }
-  memoized : memoize mixabilityByRecipeId
+  memoized : memoize ingredientSplitsByRecipeId
 }
