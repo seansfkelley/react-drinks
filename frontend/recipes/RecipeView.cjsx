@@ -36,11 +36,10 @@ RecipeView = React.createClass {
     }
 
   render : ->
-    # TODO: We're reusing this view for both types of recipes; seems bad.
-    if @props.recipe.missing? and (@props.recipe.missing.length > 0 or @props.recipe.substitute.length > 0)
+    if @props.ingredientSplits?
       ingredientNodes = _.chain IngredientCategory
         .invert()
-        .mapValues (_, key) => @props.recipe[key]
+        .mapValues (_, key) => @props.ingredientSplits[key]
         # TODO: The order these sections end up in is arbitrary; we should enforce it.
         .map @_renderCategory
         .flatten()

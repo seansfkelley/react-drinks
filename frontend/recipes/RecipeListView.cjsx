@@ -23,9 +23,10 @@ RecipeList = React.createClass {
   displayName : 'RecipeList'
 
   propTypes :
-    recipes    : React.PropTypes.array.isRequired
-    makeHeader : React.PropTypes.func.isRequired
-    makeItem   : React.PropTypes.func.isRequired
+    recipes                    : React.PropTypes.array.isRequired
+    makeHeader                 : React.PropTypes.func.isRequired
+    makeItem                   : React.PropTypes.func.isRequired
+    ingredientSplitsByRecipeId : React.PropTypes.object.isRequired
 
   mixins : [ PureRenderMixin ]
 
@@ -46,7 +47,7 @@ RecipeList = React.createClass {
           # TODO: This can acuse needless rerenders, especially when text-searching.
           # PureRenderMixin is bypassed since .bind() returns a new function every time.
           # Is there a way to always pass the same function and infer the index from the event?
-          onTouchTap : SwipableRecipeView.showInModal.bind(null, @props.recipes, absoluteIndex)
+          onTouchTap : SwipableRecipeView.showInModal.bind(null, @props.recipes, @props.ingredientSplitsByRecipeId, absoluteIndex)
           onDelete   : if r.isCustom then _.partial(@_deleteRecipe, r.recipeId)
           key        : r.recipeId
         })
@@ -84,6 +85,7 @@ RecipeListView = React.createClass {
       recipes={@state.filteredGroupedRecipes}
       makeHeader={@_alphabeticalHeader}
       makeItem={@_alphabeticalListItem}
+      ingredientSplitsByRecipeId={@state.ingredientSplitsByRecipeId}
     />
 
     <FixedHeaderFooter
