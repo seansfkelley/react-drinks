@@ -1,0 +1,35 @@
+@require '../shared/animation'
+
+$switch-width = 44px
+$switch-height = 24px
+$handle-inset = 1px
+$border-width = 1px
+
+input[type=checkbox].switch
+  background-color: #ddd
+  width: $switch-width
+  height: $switch-height
+  border-radius: ($switch-height / 2)
+  transition: background-color $transition-duration
+  border: $border-width solid #ccc
+
+  &:after
+    content: ' '
+    display: block
+    background-color: white
+    width: $switch-height - ($handle-inset * 2)
+    height: $switch-height - ($handle-inset * 2)
+    margin-top: $handle-inset - $border-width
+    margin-left: $handle-inset - $border-width
+    border-radius: ($switch-height / 2) - $handle-inset
+
+    position: relative
+    left: $handle-inset - $border-width
+    transition: left $transition-duration
+
+  &:checked
+    background-color: #0f0
+
+    &:after
+      left: $switch-width - $switch-height - $handle-inset + $border-width
+
