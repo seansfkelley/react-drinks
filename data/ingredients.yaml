@@ -93,6 +93,9 @@
   generic    : rum
   group      : rum
   difficulty : easy
+  searchable :
+    - captain morgan
+    - sailor jerry
 -
   display    : Vermouth (dry)
   tag        : dry vermouth
