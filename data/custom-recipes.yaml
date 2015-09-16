@@ -99,7 +99,7 @@
   name: "Smoky Margarita"
   ingredients:
     -
-      tag: "reposado tequila"
+      tag: "tequila"
       displayAmount: "1"
       displayUnit: "part"
       displayIngredient: "reposado tequila"

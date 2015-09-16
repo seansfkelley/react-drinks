@@ -135,19 +135,8 @@
   display    : Maraschino Liqueur
   group      : liqueur-fruit
 -
-  display    : Mezcal (blanco)
-  tag        : blanco mezcal
-  generic    : mezcal
-  group      : tequila
--
-  display    : Mezcal (reposado)
-  tag        : reposado mezcal
-  generic    : mezcal
-  group      : tequila
--
-  display    : Mezcal (añejo)
-  tag        : anejo mezcal
-  generic    : mezcal
+  display    : Mezcal
+  generic    : tequila-like
   group      : tequila
 -
   display    : Milk
@@ -191,21 +180,6 @@
   display    : Vermouth (sweet)
   tag        : sweet vermouth
   group      : wine
--
-  display    : Tequila (blanco)
-  tag        : blanco tequila
-  generic    : tequila
-  group      : tequila
--
-  display    : Tequila (reposado)
-  tag        : reposado tequila
-  generic    : tequila
-  group      : tequila
--
-  display    : Tequila (añejo)
-  tag        : anejo tequila
-  generic    : tequila
-  group      : tequila
 -
   display    : Tonic
   group      : mixer-soda
@@ -398,9 +372,9 @@
   tag        : whiskey
   tangible   : false
 -
-  display    : Tequila (any)
-  tag        : tequila
-  tangible   : false
+  display    : Tequila
+  generic    : tequila-like
+  group      : tequila
 -
   display    : Tea
   group      : mixer-other

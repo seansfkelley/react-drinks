@@ -1902,7 +1902,7 @@
     name: "Vampiro"
     ingredients:
       -
-        tag: "blanco tequila"
+        tag: "tequila"
         displayAmount: "1 2/3"
         displayUnit: "oz"
         displayIngredient: "blanco tequila"

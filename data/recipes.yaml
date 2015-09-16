@@ -179,7 +179,7 @@
   name: "Margarita #2"
   ingredients:
     -
-      tag: "blanco tequila"
+      tag: "tequila"
       displayAmount: "1"
       displayUnit: "part"
       displayIngredient: "blanco tequila"
