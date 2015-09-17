@@ -14,10 +14,11 @@ MeasuredIngredient = require './MeasuredIngredient'
 
 IS_IPHONE_IOS_8 = window.navigator.userAgent.indexOf('iPhone OS 8') != -1
 
-IngredientCategory =
+IngredientCategory = {
   MISSING    : 'missing'
   SUBSTITUTE : 'substitute'
   AVAILABLE  : 'available'
+}
 
 RecipeView = React.createClass {
   displayName : 'RecipeView'

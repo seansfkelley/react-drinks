@@ -12,4 +12,10 @@ getHardest = (difficulties) ->
   else
     return _.max difficulties, (d) -> _.indexOf ORDERED_DIFFICULTIES, d
 
+getEasiest = (difficulties) ->
+  if not difficulties or not difficulties.length
+    return Difficulty.EASY
+  else
+    return _.min difficulties, (d) -> _.indexOf ORDERED_DIFFICULTIES, d
+
 module.exports = _.extend Difficulty, { getHardest }
