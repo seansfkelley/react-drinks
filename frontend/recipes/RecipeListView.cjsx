@@ -14,6 +14,7 @@ store            = require '../store'
 utils            = require '../utils'
 stylingConstants = require '../stylingConstants'
 overlayViews     = require '../overlayViews'
+Difficulty       = require '../Difficulty'
 
 SwipableRecipeView = require './SwipableRecipeView'
 RecipeListItem     = require './RecipeListItem'
@@ -71,7 +72,8 @@ RecipeListView = React.createClass {
 
   mixins : [
     ReduxMixin {
-      filters : [ 'recipeSearchTerm', 'baseLiquorFilter' ]
+      filters     : [ 'recipeSearchTerm', 'baseLiquorFilter' ]
+      ingredients : 'ingredientsByTag'
     }
     DerivedValueMixin [
       'filteredGroupedRecipes'
@@ -120,7 +122,15 @@ RecipeListView = React.createClass {
     return <List.Header title={key.toUpperCase()} key={'header-' + key}/>
 
   _alphabeticalListItem : (key, r, props) ->
-    return <RecipeListItem mixability={@state.ingredientSplitsByRecipeId[r.recipeId].missing.length} recipeName={r.name} {...props}/>
+    ingredientDifficulties = _.chain @state.ingredientSplitsByRecipeId[r.recipeId].missing
+      .pluck 'tag'
+      .map (tag) => @state.ingredientsByTag[tag]
+      .pluck 'difficulty'
+      .value()
+    return <RecipeListItem
+      difficulty={if ingredientDifficulties.length then Difficulty.getHardest(ingredientDifficulties)}
+      recipeName={r.name}
+      {...props}/> # Gotta keep this on the same line cause the cjsx compiler has some bugs...
 }
 
 module.exports = RecipeListView
