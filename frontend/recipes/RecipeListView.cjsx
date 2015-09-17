@@ -122,13 +122,19 @@ RecipeListView = React.createClass {
     return <List.Header title={key.toUpperCase()} key={'header-' + key}/>
 
   _alphabeticalListItem : (key, r, props) ->
-    ingredientDifficulties = _.chain @state.ingredientSplitsByRecipeId[r.recipeId].missing
-      .pluck 'tag'
-      .map (tag) => @state.ingredientsByTag[tag]
-      .pluck 'difficulty'
-      .value()
+    missingIngredients = @state.ingredientSplitsByRecipeId[r.recipeId].missing
+    if missingIngredients.length
+      isMixable = false
+      difficulty = Difficulty.getHardest(_.chain missingIngredients
+        .pluck 'tag'
+        .map (tag) => @state.ingredientsByTag[tag]
+        .pluck 'difficulty'
+        .value()
+      )
+
     return <RecipeListItem
-      difficulty={if ingredientDifficulties.length then Difficulty.getHardest(ingredientDifficulties)}
+      difficulty={difficulty}
+      isMixable={isMixable}
       recipeName={r.name}
       {...props}
     /> # Gotta keep this on the same line cause the cjsx compiler has some bugs...
