@@ -68,7 +68,7 @@ filteredGroupedRecipes = ({
 
   assert ingredientsByTag
   assert recipes
-  assert mixabilityFilters
+  assert includeAllDrinks?
   assert ingredientTags
 
   ingredientSplits = ingredientSplitsByRecipeId { ingredientsByTag, recipes, ingredientTags }

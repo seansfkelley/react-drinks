@@ -64,27 +64,16 @@ SidebarMenu = React.createClass {
           ref='ingredientList'
         />
       </div>
-      <div className='mixability-title'>Include</div>
-      <div className='mixability-options-container'>
+      <div className='include-all-drinks' onTouchTap={@_onIncludeAllChange}>
+        <div className='title'>Include All Drinks</div>
+        <input
+          type='checkbox'
+          className='switch'
+          checked={@state.includeAllDrinks}
+          onChange={->}
+        />
       </div>
     </div>
-    # Replace this with a pretty checkbox.
-        # <div className='input-wrapper'>
-        #   <input type='range' min='0' max='2' value={@state.index} onChange={@_onSliderChange}/>
-        # </div>
-        # <div className='mixability-options'>
-        #   {@_createOption 'Drinks I Can Make', 0}
-        #   {@_createOption 'Drinks Missing 1 Ingredient', 1}
-        #   {@_createOption 'All Drinks', 2}
-        # </div>
-
-  # _createOption : (text, value) ->
-  #   return <div
-  #     className={classnames 'option', { 'is-selected' : @state.index >= value }}
-  #     onTouchTap={@_generateLabelTapper value}
-  #   >
-  #       {text}
-  #   </div>
 
   componentDidMount : ->
     @refs.ingredientsContainer.getDOMNode().scrollTop = stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT
@@ -101,8 +90,8 @@ SidebarMenu = React.createClass {
       searchTerm
     }
 
-  _onSliderChange : (e) ->
-    @setState { index : _.parseInt(e.target.value) }
+  _onIncludeAllChange : ->
+    @setState { includeAllDrinks : not @state.includeAllDrinks }
 
   _generateLabelTapper : (index) ->
     return =>
