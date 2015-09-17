@@ -130,7 +130,8 @@ RecipeListView = React.createClass {
     return <RecipeListItem
       difficulty={if ingredientDifficulties.length then Difficulty.getHardest(ingredientDifficulties)}
       recipeName={r.name}
-      {...props}/> # Gotta keep this on the same line cause the cjsx compiler has some bugs...
+      {...props}
+    /> # Gotta keep this on the same line cause the cjsx compiler has some bugs...
 }
 
 module.exports = RecipeListView

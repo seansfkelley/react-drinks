@@ -8,9 +8,9 @@ List = require '../components/List'
 Difficulty = require '../Difficulty'
 
 HUMAN_READABLE_DIFFICULTIES = {
-  "#{difficulty.Difficulty.EASY}"   : 'Easy'
-  "#{difficulty.Difficulty.MEDIUM}" : 'Medium'
-  "#{difficulty.Difficulty.HARD}"   : 'Hard'
+  "#{Difficulty.EASY}"   : 'Easy'
+  "#{Difficulty.MEDIUM}" : 'Medium'
+  "#{Difficulty.HARD}"   : 'Hard'
 }
 
 RecipeListItem = React.createClass {
@@ -26,7 +26,7 @@ RecipeListItem = React.createClass {
 
   render : ->
     if @props.difficulty
-      difficultyNode = <span className='difficulty'>{@props.mixability}</span>
+      difficultyNode = <span className='difficulty'>{HUMAN_READABLE_DIFFICULTIES[@props.difficulty]}</span>
 
     ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
 
