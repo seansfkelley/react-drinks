@@ -71,7 +71,12 @@ RecipeList = React.createClass {
       # TODO: This can acuse needless rerenders, especially when text-searching.
       # PureRenderMixin is bypassed since .bind() returns a new function every time.
       # Is there a way to always pass the same function and infer the index from the event?
-      onTouchTap={SwipableRecipeView.showInModal.bind(null, @props.recipes, @props.ingredientSplitsByRecipeId, absoluteIndex)}
+      onTouchTap={SwipableRecipeView.showInModal.bind(null, {
+        groupedRecipes             : @props.recipes
+        ingredientsByTag           : @props.ingredientsByTag
+        ingredientSplitsByRecipeId : @props.ingredientSplitsByRecipeId
+        initialIndex               : absoluteIndex
+      })}
       onDelete={if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)}
       key={r.recipeId}
     />

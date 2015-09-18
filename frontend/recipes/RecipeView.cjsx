@@ -28,6 +28,7 @@ RecipeView = React.createClass {
   propTypes :
     recipe           : React.PropTypes.object.isRequired
     ingredientSplits : React.PropTypes.object
+    ingredientsByTag : React.PropTypes.object
     onClose          : React.PropTypes.func
     shareable        : React.PropTypes.bool
 
@@ -109,8 +110,11 @@ RecipeView = React.createClass {
             displaySubstitutes : i.have
           }, i.need
       else if category == IngredientCategory.MISSING
-        measuredIngredients = _.map measuredIngredients, (i) ->
-          return _.defaults { isMissing : true }, i
+        measuredIngredients = _.map measuredIngredients, (i) =>
+          return _.defaults {
+            isMissing  : true
+            difficulty : @props.ingredientsByTag[i.tag].difficulty
+          }, i
 
       return _.map measuredIngredients, (i) -> <MeasuredIngredient {...i} key={"#{i.tag} #{i.displayIngredient}"}/>
 }

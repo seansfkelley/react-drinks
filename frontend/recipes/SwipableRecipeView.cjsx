@@ -15,6 +15,7 @@ SwipableRecipeView = React.createClass {
     recipes                    : React.PropTypes.array.isRequired
     initialIndex               : React.PropTypes.number.isRequired
     onClose                    : React.PropTypes.func.isRequired
+    ingredientsByTag           : React.PropTypes.object
     ingredientSplitsByRecipeId : React.PropTypes.object
 
   getInitialState : -> {
@@ -22,7 +23,11 @@ SwipableRecipeView = React.createClass {
   }
 
   statics :
-    showInModal : (groupedRecipes, ingredientSplitsByRecipeId = null, initialIndex = 0) ->
+    showInModal : ({ groupedRecipes, ingredientsByTag, ingredientSplitsByRecipeId, initialIndex }) ->
+      initialIndex ?= 0
+      ingredientsByTag ?= null # Ugh, I mean, optional.
+      ingredientSplitsByRecipeId ?= null
+
       recipes = _.chain groupedRecipes
         .pluck 'recipes'
         .flatten()
@@ -34,6 +39,7 @@ SwipableRecipeView = React.createClass {
       overlayViews.modal.show <SwipableRecipeView
         recipes={recipes}
         initialIndex={initialIndex}
+        ingredientsByTag={ingredientsByTag}
         ingredientSplitsByRecipeId={ingredientSplitsByRecipeId}
         onClose={overlayViews.modal.hide}
       />
@@ -47,6 +53,7 @@ SwipableRecipeView = React.createClass {
               recipe={r}
               onClose={@_onClose}
               shareable={not r.isCustom}
+              ingredientsByTag={@props.ingredientsByTag}
               ingredientSplits={@props.ingredientSplitsByRecipeId?[r.recipeId]}
             />
           </div>}
