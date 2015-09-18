@@ -25,8 +25,7 @@ RecipeList = React.createClass {
 
   propTypes :
     recipes                    : React.PropTypes.array.isRequired
-    makeHeader                 : React.PropTypes.func.isRequired
-    makeItem                   : React.PropTypes.func.isRequired
+    ingredientsByTag           : React.PropTypes.object.isRequired
     ingredientSplitsByRecipeId : React.PropTypes.object.isRequired
 
   mixins : [ PureRenderMixin ]
@@ -42,21 +41,40 @@ RecipeList = React.createClass {
     absoluteIndex = 0
     for { key, recipes } in @props.recipes
       if recipeCount > 6
-        listNodes.push @props.makeHeader(key, recipes)
+        listNodes.push @_makeHeader(key, recipes)
       for r in recipes
-        listNodes.push @props.makeItem(key, r, {
-          # TODO: This can acuse needless rerenders, especially when text-searching.
-          # PureRenderMixin is bypassed since .bind() returns a new function every time.
-          # Is there a way to always pass the same function and infer the index from the event?
-          onTouchTap : SwipableRecipeView.showInModal.bind(null, @props.recipes, @props.ingredientSplitsByRecipeId, absoluteIndex)
-          onDelete   : if r.isCustom then _.partial(@_deleteRecipe, r.recipeId)
-          key        : r.recipeId
-        })
+        listNodes.push @_makeItem(key, r, absoluteIndex)
         absoluteIndex += 1
 
     <List className={List.ClassNames.HEADERED}>
       {listNodes}
     </List>
+
+  _makeHeader : (groupKey, recipes) ->
+    return <List.Header title={groupKey.toUpperCase()} key={'header-' + groupKey}/>
+
+  _makeItem : (groupKey, r, absoluteIndex) ->
+    missingIngredients = @props.ingredientSplitsByRecipeId[r.recipeId].missing
+    if missingIngredients.length
+      isMixable = false
+      difficulty = Difficulty.getHardest(_.chain missingIngredients
+        .pluck 'tag'
+        .map (tag) => @props.ingredientsByTag[tag]
+        .pluck 'difficulty'
+        .value()
+      )
+
+    return <RecipeListItem
+      difficulty={difficulty}
+      isMixable={isMixable}
+      recipeName={r.name}
+      # TODO: This can acuse needless rerenders, especially when text-searching.
+      # PureRenderMixin is bypassed since .bind() returns a new function every time.
+      # Is there a way to always pass the same function and infer the index from the event?
+      onTouchTap={SwipableRecipeView.showInModal.bind(null, @props.recipes, @props.ingredientSplitsByRecipeId, absoluteIndex)}
+      onDelete={if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)}
+      key={r.recipeId}
+    />
 
   _deleteRecipe : (recipeId) ->
     store.dispatch {
@@ -85,8 +103,7 @@ RecipeListView = React.createClass {
   render : ->
     list = <RecipeList
       recipes={@state.filteredGroupedRecipes}
-      makeHeader={@_alphabeticalHeader}
-      makeItem={@_alphabeticalListItem}
+      ingredientsByTag={@state.ingredientsByTag}
       ingredientSplitsByRecipeId={@state.ingredientSplitsByRecipeId}
     />
 
@@ -118,26 +135,6 @@ RecipeListView = React.createClass {
       searchTerm
     }
 
-  _alphabeticalHeader : (key) ->
-    return <List.Header title={key.toUpperCase()} key={'header-' + key}/>
-
-  _alphabeticalListItem : (key, r, props) ->
-    missingIngredients = @state.ingredientSplitsByRecipeId[r.recipeId].missing
-    if missingIngredients.length
-      isMixable = false
-      difficulty = Difficulty.getHardest(_.chain missingIngredients
-        .pluck 'tag'
-        .map (tag) => @state.ingredientsByTag[tag]
-        .pluck 'difficulty'
-        .value()
-      )
-
-    return <RecipeListItem
-      difficulty={difficulty}
-      isMixable={isMixable}
-      recipeName={r.name}
-      {...props}
-    /> # Gotta keep this on the same line cause the cjsx compiler has some bugs...
 }
 
 module.exports = RecipeListView
