@@ -100,7 +100,7 @@
   display    : Vermouth (dry)
   tag        : dry vermouth
   group      : wine
-  difficulty : easy
+  difficulty : medium
 -
   display    : Elderflower Liqueur
   group      : liqueur-herbal
@@ -226,7 +226,7 @@
   display    : Vermouth (sweet)
   tag        : sweet vermouth
   group      : wine
-  difficulty : easy
+  difficulty : medium
 -
   display    : Tonic
   group      : mixer-soda
