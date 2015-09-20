@@ -70,61 +70,43 @@ describe 'filteredGroupedRecipes', ->
       ]
 
   describe '#_mixabilityFilter', ->
-    FILTER_FIELD_NAMES = [ 'mixable', 'nearMixable', 'notReallyMixable' ]
+    RECIPE_A = { recipeId : 'a' }
+    RECIPE_B = { recipeId : 'b' }
 
-    MIXABILITY_BY_ID = {
-      'a' : 0
-      'b' : 1
-      'c' : 2
-    }
+    it 'should return the list as-is if includeAllDrinks is true', ->
+      _.filter([
+        RECIPE_A
+        RECIPE_B
+      ], _mixabilityFilter(true, {})).should.deep.equal [
+        RECIPE_A
+        RECIPE_B
+      ]
 
-    RECIPES = [
-      recipeId : 'a'
-    ,
-      recipeId : 'b'
-    ,
-      recipeId : 'c'
-    ]
+    it 'should filter out recipes if its splits include any missing ingredients', ->
+      splits = {
+        'a' :
+          missing    : [ 'ingredient-1' ]
+          substitute : [ 'ingredient-2' ]
+          available  : [ 'ingredient-3' ]
+      }
 
-    TEST_CASES = [
-      inputFilters : []
-      outputIds    : []
-    ,
-      inputFilters : [ 'mixable' ]
-      outputIds    : [ 'a' ]
-    ,
-      inputFilters : [ 'nearMixable' ]
-      outputIds    : [ 'b' ]
-    ,
-      inputFilters : [ 'notReallyMixable' ]
-      outputIds    : [ 'c' ]
-    ,
-      inputFilters : [ 'mixable', 'nearMixable' ]
-      outputIds    : [ 'a', 'b' ]
-    ,
-      inputFilters : [ 'mixable', 'notReallyMixable' ]
-      outputIds    : [ 'a', 'c' ]
-    ,
-      inputFilters : [ 'nearMixable', 'notReallyMixable' ]
-      outputIds    : [ 'b', 'c' ]
-    ,
-      inputFilters : [ 'mixable', 'nearMixable', 'notReallyMixable' ]
-      outputIds    : [ 'a', 'b', 'c' ]
-    ]
+      _.filter([
+        RECIPE_A
+      ], _mixabilityFilter(false, splits)).should.deep.equal []
 
-    _.each TEST_CASES, ({ inputFilters, outputIds }) ->
-      filterString = switch inputFilters.length
-        when 0 then 'no filters are set'
-        when 1 then "'#{inputFilters[0]}' is set"
-        when 2 then "'#{inputFilters[0]}' and '#{inputFilters[1]}' are set"
-        when 3 then "'#{inputFilters[0]}', '#{inputFilters[1]}' and '#{inputFilters[2]}' are set"
-      mixabilityFilters =_.extend _.map(FILTER_FIELD_NAMES, (field) ->
-        return { "#{field}" : _.contains(inputFilters, field) }
-      )...
-      outputRecipes = _.filter RECIPES, (r) -> _.contains outputIds, r.recipeId
-      it "should properly filter when #{filterString}", ->
-        _.filter(RECIPES, _mixabilityFilter(MIXABILITY_BY_ID, mixabilityFilters)).should.deep.equal outputRecipes
+    it 'should not filter recipes out if its splits contain substitutes but no missing ingredients', ->
+      splits = {
+        'a' :
+          missing    : []
+          substitute : [ 'ingredient-1' ]
+          available  : [ 'ingredient-2' ]
+      }
 
+      _.filter([
+        RECIPE_A
+      ], _mixabilityFilter(false, splits)).should.deep.equal [
+        RECIPE_A
+      ]
 
   describe '#_searchTermFilter', ->
     RECIPES = [ 'a', 'b', 'c' ]

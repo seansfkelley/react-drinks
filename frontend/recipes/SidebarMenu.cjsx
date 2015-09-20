@@ -18,8 +18,8 @@ SidebarMenu = React.createClass {
   displayName : 'SidebarMenu'
 
   propTypes :
-    initialIndex : React.PropTypes.number.isRequired
-    onClose      : React.PropTypes.func.isRequired
+    initialIncludeAllDrinks : React.PropTypes.bool.isRequired
+    onClose                 : React.PropTypes.func.isRequired
 
   mixins : [
     ReduxMixin {
@@ -29,12 +29,8 @@ SidebarMenu = React.createClass {
     PureRenderMixin
   ]
 
-  getDefaultProps : -> {
-    initialIndex : 0
-  }
-
   getInitialState : -> {
-    index                   : @props.initialIndex
+    includeAllDrinks        : @props.initialIncludeAllDrinks
     showingIngredients      : false
     # This is a little sketch, since we shouldn't have to talk to the store directly
     # because we have the mixin. But we can't peek into @state to set @state.
@@ -68,25 +64,15 @@ SidebarMenu = React.createClass {
           ref='ingredientList'
         />
       </div>
-      <div className='mixability-title'>Include</div>
-      <div className='mixability-options-container'>
-        <div className='input-wrapper'>
-          <input type='range' min='0' max='2' value={@state.index} onChange={@_onSliderChange}/>
-        </div>
-        <div className='mixability-options'>
-          {@_createOption 'Drinks I Can Make', 0}
-          {@_createOption 'Drinks Missing 1 Ingredient', 1}
-          {@_createOption 'All Drinks', 2}
-        </div>
+      <div className='include-all-drinks' onTouchTap={@_onIncludeAllChange}>
+        <div className='title'>Include All Drinks</div>
+        <input
+          type='checkbox'
+          className='switch'
+          checked={@state.includeAllDrinks}
+          onChange={->}
+        />
       </div>
-    </div>
-
-  _createOption : (text, value) ->
-    return <div
-      className={classnames 'option', { 'is-selected' : @state.index >= value }}
-      onTouchTap={@_generateLabelTapper value}
-    >
-        {text}
     </div>
 
   componentDidMount : ->
@@ -104,8 +90,8 @@ SidebarMenu = React.createClass {
       searchTerm
     }
 
-  _onSliderChange : (e) ->
-    @setState { index : _.parseInt(e.target.value) }
+  _onIncludeAllChange : ->
+    @setState { includeAllDrinks : not @state.includeAllDrinks }
 
   _generateLabelTapper : (index) ->
     return =>
@@ -113,11 +99,8 @@ SidebarMenu = React.createClass {
 
   _closeMenu : ->
     store.dispatch {
-      type : 'set-mixability-filters'
-      filters :
-        mixable          : @state.index >= 0
-        nearMixable      : @state.index >= 1
-        notReallyMixable : @state.index >= 2
+      type    : 'set-include-all-drinks'
+      include : @state.includeAllDrinks
     }
     store.dispatch {
       type : 'set-selected-ingredient-tags'

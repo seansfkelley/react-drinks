@@ -6,7 +6,7 @@ PERSISTENCE_SPEC = {
   filters :
     recipeSearchTerm       : ONE_MINUTE_MS * 5
     baseLiquorFilter       : ONE_MINUTE_MS * 15
-    mixabilityFilters      : Infinity
+    includeAllDrinks       : Infinity
     selectedIngredientTags : Infinity
   recipes :
     customRecipes : Infinity
@@ -40,7 +40,6 @@ load = ->
       filters :
         recipeSearchTerm       : recipes.searchTerm
         baseLiquorFilter       : ui.baseLiquorFilter
-        mixabilityFilters      : ui.mixabilityFilters
         selectedIngredientTags : ingredients.selectedIngredientTags
       recipes :
         customRecipes : recipes.customRecipes

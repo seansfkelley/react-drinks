@@ -11,6 +11,7 @@ normalizeIngredient = (i) ->
   i.tag        ?= i.display.toLowerCase()
   i.searchable ?= []
   i.searchable.push latinize(i.display).toLowerCase()
+  i.searchable.push i.tag
   i.tangible ?= true
   # TODO: Add display for generic to here.
   # if i.generic and not _.contains i.searchable, i.generic

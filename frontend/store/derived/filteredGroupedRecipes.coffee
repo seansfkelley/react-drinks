@@ -8,12 +8,6 @@ memoize                    = require './memoize'
 ingredientSplitsByRecipeId = require('./ingredientSplitsByRecipeId').memoized
 recipeMatchesSearchTerm    = require('./recipeMatchesSearchTerm').memoized
 
-MIXABILITY_FILTER_RANGES = {
-  mixable          : [ 0, 0 ]
-  nearMixable      : [ 1, 1 ]
-  notReallyMixable : [ 2, 100 ]
-}
-
 # hee hee
 nofilter = -> true
 
@@ -30,17 +24,11 @@ _baseLiquorFilter = (baseLiquorFilter) ->
   else
     return nofilter
 
-_mixabilityFilter = (mixabilityById, mixabilityFilters) ->
-  ranges = _.chain mixabilityFilters
-    .pick _.identity
-    .map (_, f) -> MIXABILITY_FILTER_RANGES[f]
-    .value()
-
-  return (recipe) ->
-    for [ min, max ] in ranges
-      if min <= mixabilityById[recipe.recipeId] <= max
-        return true
-    return false
+_mixabilityFilter = (includeAllDrinks, ingredientSplitsByRecipeId) ->
+  if not includeAllDrinks
+    return (recipe) -> ingredientSplitsByRecipeId[recipe.recipeId].missing.length == 0
+  else
+    return nofilter
 
 _searchTermFilter = (searchTerm, ingredientsByTag) ->
   searchTerm = searchTerm.trim()
@@ -72,7 +60,7 @@ filteredGroupedRecipes = ({
   recipes
   baseLiquorFilter
   searchTerm
-  mixabilityFilters
+  includeAllDrinks
   ingredientTags
 }) ->
   searchTerm ?= ''
@@ -80,15 +68,14 @@ filteredGroupedRecipes = ({
 
   assert ingredientsByTag
   assert recipes
-  assert mixabilityFilters
+  assert includeAllDrinks?
   assert ingredientTags
 
   ingredientSplits = ingredientSplitsByRecipeId { ingredientsByTag, recipes, ingredientTags }
-  mixabilityById = _.mapValues ingredientSplits, (splits) -> splits.missing.length
 
   filteredRecipes = _.chain recipes
     .filter _baseLiquorFilter(baseLiquorFilter)
-    .filter _mixabilityFilter(mixabilityById, mixabilityFilters)
+    .filter _mixabilityFilter(includeAllDrinks, ingredientSplits)
     .filter _searchTermFilter(searchTerm, ingredientsByTag)
     .value()
 

@@ -27,11 +27,12 @@ initializationPromise.then ->
   state = store.getState()
 
   if state.ui.recipeViewingIndex?
-    SwipableRecipeView.showInModal(
-      derived.filteredGroupedRecipes(state)
-      derived.ingredientSplitsByRecipeId(state)
-      state.ui.recipeViewingIndex
-    )
+    SwipableRecipeView.showInModal {
+      groupedRecipes             : derived.filteredGroupedRecipes(state)
+      ingredientsByTag           : state.ingredients.ingredientsByTag
+      ingredientSplitsByRecipeId : derived.ingredientSplitsByRecipeId(state)
+      initialIndex               : state.ui.recipeViewingIndex
+    }
 
   LOADING_OVERLAY.classList.add 'fade-out'
 

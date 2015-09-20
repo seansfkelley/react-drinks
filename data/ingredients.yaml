@@ -1,55 +1,68 @@
 -
   display    : Absinthe
   group      : spirit-other
+  difficulty : medium
 -
   display    : Agave Nectar
   group      : syrup
+  difficulty : medium
 -
   display    : Amaretto
   group      : liqueur-other
+  difficulty : medium
   searchable :
     - disaronno
 -
   display    : Angostura Bitters
   generic    : bitters
   group      : bitters
+  difficulty : easy
 -
   display    : Peychaud's Bitters
   tag        : peychauds bitters
   generic    : bitters
   group      : bitters
+  difficulty : easy
 -
   display    : Orange Bitters
   generic    : bitters
   group      : bitters
+  difficulty : easy
 -
   display    : Applejack
   generic    : apple-brandy
   group      : brandy
+  difficulty : medium
 -
   display    : Calvados
   generic    : apple-brandy
   group      : brandy
+  difficulty : hard
 -
   display    : Irish Cream
   group      : liqueur-other
+  difficulty : easy
   searchable :
     - baileys
 -
   display    : Bénédictine
   tag        : benedictine
   group      : liqueur-herbal
+  difficulty : hard
 -
   display    : Bourbon
   generic    : whiskey
   group      : whiskey
+  difficulty : easy
 -
   display    : Cachaça
   tag        : cachaca
   group      : rum
+  difficulty : medium
 -
   display    : Coffee Liqueur
   group      : liqueur-other
+  difficulty : easy
   searchable :
     - kahlua
     - tia maria
@@ -57,9 +70,11 @@
   display    : Cointreau
   generic    : triple sec
   group      : liqueur-fruit
+  difficulty : easy
 -
   display    : Cola
   group      : mixer-soda
+  difficulty : easy
   searchable :
     - coke
     - coca cola
@@ -67,35 +82,47 @@
 -
   display    : Cognac
   group      : brandy
+  difficulty : medium
 -
   display    : Cynar
   group      : liqueur-herbal
+  difficulty : hard
 -
   display    : Rum (dark)
   tag        : dark rum
   generic    : rum
   group      : rum
+  difficulty : easy
+  searchable :
+    - captain morgan
+    - sailor jerry
 -
   display    : Vermouth (dry)
   tag        : dry vermouth
   group      : wine
+  difficulty : medium
 -
   display    : Elderflower Liqueur
   group      : liqueur-herbal
+  difficulty : medium
   searchable :
    - st germain
 -
   display    : Genever
   group      : gin
+  difficulty : hard
 -
   display    : Gin
   group      : gin
+  difficulty : easy
 -
   display    : Ginger Beer
   group      : mixer-soda
+  difficulty : easy
 -
   display    : Ginger Liqueur
   group      : liqueur-herbal
+  difficulty : medium
   searchable :
     - domaine de canton
     - kings ginger
@@ -103,50 +130,64 @@
   display    : Grand Marnier
   generic    : triple sec
   group      : liqueur-fruit
+  difficulty : medium
 -
   display    : Chartreuse (green)
   tag        : green chartreuse
   generic    : chartreuse
   group      : liqueur-herbal
+  difficulty : medium
 -
   display    : Chartreuse (yellow)
   tag        : yellow chartreuse
   generic    : chartreuse
   group      : liqueur-herbal
+  difficulty : medium
 -
   display    : Grenadine
   group      : syrup
+  difficulty : medium
 -
   display    : Honey Whiskey
   group      : whiskey
+  difficulty : medium
 -
   display    : Lemon Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Lillet
   group      : wine
+  difficulty : medium
 -
   display    : Lime
   group      : fruit
+  difficulty : easy
 -
   display    : Lime Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Maraschino Liqueur
   group      : liqueur-fruit
+  difficulty : hard
 -
   display    : Mezcal
   generic    : tequila-like
   group      : tequila
+  difficulty : hard
 -
   display    : Milk
   group      : dairy
+  difficulty : easy
 -
   display    : Mint
   group      : herb
+  difficulty : easy
 -
   display    : Hazelnut Liqueur
   group      : liqueur-herbal
+  difficulty : medium
   searchable :
     - noisette
     - frangelico
@@ -154,13 +195,16 @@
   display    : Rye Whiskey
   generic    : whiskey
   group      : whiskey
+  difficulty : easy
 -
   display    : Simple Syrup
   generic    : simple-syrup-like
   group      : syrup
+  difficulty : easy
 -
   display    : Sparkling Wine
   group      : wine
+  difficulty : medium
   searchable :
     - champagne
     - prosecco
@@ -169,181 +213,231 @@
   tag        : spiced rum
   generic    : rum
   group      : rum
+  difficulty : easy
   searchable :
     - kraken
 -
   display    : Sugar
   group      : other
+  difficulty : easy
   searchable :
     - sugar cube
 -
   display    : Vermouth (sweet)
   tag        : sweet vermouth
   group      : wine
+  difficulty : medium
 -
   display    : Tonic
   group      : mixer-soda
+  difficulty : easy
 -
   display    : Triple Sec
   group      : liqueur-fruit
+  difficulty : easy
 -
   display    : Vodka
   group      : vodka
+  difficulty : easy
 -
   display    : Irish Whiskey
   generic    : whiskey
   group      : whiskey
+  difficulty : easy
 -
   display    : Rum (white)
   tag        : white rum
   generic    : rum
   group      : rum
+  difficulty : easy
 -
   display    : Vermouth (white)
   tag        : white vermouth
   group      : wine
+  difficulty : medium
 -
   display    : Club Soda
   group      : mixer-soda
+  difficulty : easy
   searchable :
     - seltzer
     - soda water
 -
   display    : Scotch
   group      : whiskey
+  difficulty : medium
 -
   display    : Orange Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Pimm's No. 1
   tag        : pimms
   group      : liqueur-other
+  difficulty : hard
 -
   display    : Rosemary
   group      : herb
+  difficulty : easy
 -
   display    : Basil
   group      : herb
+  difficulty : easy
 -
   display    : Shiso
   group      : herb
+  difficulty : hard
 -
   display    : Cucumber
   group      : vegetable
+  difficulty : easy
 -
   display    : Thyme
   group      : herb
+  difficulty : easy
 -
   display    : Lemon
   group      : fruit
+  difficulty : easy
 -
   display    : Drambuie
   generic    : honey whiskey
   group      : whiskey
+  difficulty : medium
 -
   display    : Tennessee Whiskey
   generic    : whiskey
   group      : whiskey
+  difficulty : easy
 -
   display    : Peach
   group      : fruit
+  difficulty : easy
 -
   display    : Crème de Cacao
   tag        : creme de cacao
   group      : liqueur-other
+  difficulty : hard
 -
   display    : Cream
   group      : dairy
+  difficulty : easy
 -
   display    : Campari
   generic    : campari-like
   group      : liqueur-herbal
+  difficulty : hard
 -
   display    : Brandy
   group      : brandy
+  difficulty : medium
 -
   display    : Gomme Syrup
   generic    : simple-syrup-like
   group      : syrup
+  difficulty : hard
 -
   display    : Galliano
   group      : liqueur-herbal
+  difficulty : hard
 -
   display    : Rum (gold)
   tag        : gold rum
   generic    : rum
   group      : rum
+  difficulty : medium
 -
   display    : Pineapple Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Tomato Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Worcestershire Sauce
   tag        : worcestershire
   group      : other
+  difficulty : easy
 -
   display    : Tabasco Sauce
   tag        : tabasco
   group      : other
+  difficulty : easy
 -
   display    : Cranberry Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Olive Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Pickle Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Coffee
   group      : mixer-other
+  difficulty : easy
 -
   display    : Crème de Menthe
   tag        : creme de menthe
   group      : liqueur-herbal
+  difficulty : hard
   searchable :
     - mint
 -
   display    : Grapefruit Juice
   group      : mixer-juice
+  difficulty : easy
 -
   display    : Ginger Ale
   group      : mixer-soda
+  difficulty : easy
 -
   display    : White Wine
   group      : wine
+  difficulty : easy
 -
   display    : Crème de Cassis
   tag        : creme de cassis
   group      : liqueur-other
+  difficulty : hard
 -
   display    : Orgeat Syrup
   generic    : simple-syrup-like
   group      : syrup
+  difficulty : hard
 -
   display    : Pisco
   group      : brandy
+  difficulty : medium
 -
   display    : Port
   group      : wine
+  difficulty : hard
 -
   display    : Egg
   group      : dairy
+  difficulty : easy
 -
   display    : Aperol
   generic    : campari-like
   group      : liqueur-herbal
+  difficulty : hard
 -
   display    : Honey
   group      : other
+  difficulty : easy
 -
   display    : Onion
   group      : vegetable
+  difficulty : easy
 -
   display    : Hot Pepper
   group      : vegetable
+  difficulty : easy
   searchable :
     - jalapeno
     - habanero
@@ -351,95 +445,130 @@
 -
   display    : Peach Schnapps
   group      : liqueur-fruit
+  difficulty : medium
 -
   display    : Apricot Brandy
   group      : brandy
+  difficulty : medium
 -
   display    : Bison Grass Vodka
   group      : vodka
+  difficulty : medium
   searchable :
     - zubrowka
 -
   display    : Chartreuse (any)
   tag        : chartreuse
   tangible   : false
+  difficulty : medium
 -
   display    : Rum (any)
   tag        : rum
   tangible   : false
+  difficulty : easy
 -
   display    : Whiskey (any)
   tag        : whiskey
   tangible   : false
+  difficulty : easy
 -
   display    : Tequila
   generic    : tequila-like
   group      : tequila
+  difficulty : easy
 -
   display    : Tea
   group      : mixer-other
+  difficulty : easy
 -
   display    : Vanilla
   group      : other
+  difficulty : easy
 -
   display    : Strawberry
   group      : fruit
+  difficulty : easy
 -
   display    : Raspberry
   group      : fruit
+  difficulty : easy
 -
   display    : Cherry
   group      : fruit
+  difficulty : easy
 -
   display    : Blackberry
   group      : fruit
+  difficulty : easy
 -
   display    : Coconut Milk
   group      : mixer-other
+  difficulty : easy
 -
   display    : Raspberry Liqueur
   group      : liqueur-fruit
+  difficulty : hard
   searchable :
     - chambord
 -
   display    : Cherry Liqueur
   group      : liqueur-fruit
+  difficulty : hard
 -
   display    : Blackberry Liqueur
   group      : liqueur-fruit
+  difficulty : hard
 -
   display    : Orange Flower Water
   group      : other
+  difficulty : hard
 -
   display    : Rose Water
   group      : other
+  difficulty : hard
 -
   display    : Blueberry
   group      : fruit
+  difficulty : easy
 -
   display    : Dark Beer
   group      : beer
+  difficulty : easy
 -
   display    : Light Beer
   group      : beer
+  difficulty : easy
 -
   display    : Sake
   group      : wine
+  difficulty : medium
 -
   display    : Plum Wine
   group      : wine
+  difficulty : medium
 -
   display    : Molasses
   group      : syrup
+  difficulty : easy
 -
   display    : Ginger
   group      : other
+  difficulty : easy
 -
   display    : Sherry
   group      : wine
+  difficulty : medium
 -
   display    : Orange
   group      : fruit
+  difficulty : easy
 -
   display    : Velvet Falernum
   group      : spirit-other
+  difficulty : hard
+-
+  display    : Curaçao
+  tag        : curacao
+  generic    : triple sec
+  group      : liqueur-fruit
+  difficulty : medium

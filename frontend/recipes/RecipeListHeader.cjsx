@@ -24,7 +24,7 @@ RecipeListHeader = React.createClass {
 
   mixins : [
     ReduxMixin {
-      filters : [ 'mixabilityFilters', 'baseLiquorFilter' ]
+      filters : [ 'includeAllDrinks', 'baseLiquorFilter' ]
     }
     PureRenderMixin
   ]
@@ -67,15 +67,8 @@ RecipeListHeader = React.createClass {
     }
 
   _showSidebar : ->
-    if @state.mixabilityFilters.notReallyMixable
-      initialIndex = 2
-    else if @state.mixabilityFilters.nearMixable
-      initialIndex = 1
-    else
-      initialIndex = 0
-
     overlayViews.pushover.show <SidebarMenu
-      initialIndex={initialIndex}
+      initialIncludeAllDrinks={@state.includeAllDrinks}
       onClose={overlayViews.pushover.hide}
     />
 

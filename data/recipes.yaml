@@ -390,7 +390,7 @@
       displayUnit: "oz"
       displayIngredient: "white vermouth"
     -
-      tag: "triple sec"
+      tag: "curacao"
       displayAmount: "1/2"
       displayUnit: "oz"
       displayIngredient: "orange curaçao"
@@ -495,7 +495,7 @@
       displayUnit: "oz"
       displayIngredient: "simple syrup"
     -
-      tag: "triple sec"
+      tag: "curacao"
       displayAmount: "1/4"
       displayUnit: "oz"
       displayIngredient: "orange curaçao"

@@ -5,26 +5,39 @@ classnames = require 'classnames'
 
 List = require '../components/List'
 
+Difficulty = require '../Difficulty'
+
 RecipeListItem = React.createClass {
   displayName : 'RecipeListItem'
 
   propTypes :
     recipeName : React.PropTypes.string.isRequired
-    mixability : React.PropTypes.number
+    difficulty : React.PropTypes.string
+    isMixable  : React.PropTypes.bool
     onTouchTap : React.PropTypes.func
     onDelete   : React.PropTypes.func
 
   mixins : [ PureRenderMixin ]
 
+  getDefaultProps : -> {
+    isMixable : true
+  }
+
   render : ->
-    if @props.mixability > 0
-      mixabilityNode = <span className='mixability'>{@props.mixability}</span>
+    if @props.difficulty
+      difficultyNode = <span className={classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty]}>
+        {Difficulty.HUMAN_READABLE[@props.difficulty]}
+      </span>
 
     ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
 
-    <ListItemClass className={classnames 'recipe-list-item', { 'is-mixable' : @props.mixability == 0 }} onTouchTap={@props.onTouchTap} onDelete={@props.onDelete}>
+    <ListItemClass
+      className={classnames 'recipe-list-item', { 'is-mixable' : @props.isMixable }}
+      onTouchTap={@props.onTouchTap}
+      onDelete={@props.onDelete}
+    >
       <span className='name'>{@props.recipeName}</span>
-      {mixabilityNode}
+      {difficultyNode}
     </ListItemClass>
 }
 

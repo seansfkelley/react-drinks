@@ -4,6 +4,8 @@ classnames = require 'classnames'
 
 utils = require '../utils'
 
+Difficulty = require '../Difficulty'
+
 MeasuredIngredient = React.createClass {
   displayName : 'MeasuredIngredient'
 
@@ -16,6 +18,7 @@ MeasuredIngredient = React.createClass {
     displaySubstitutes : React.PropTypes.array
     isMissing          : React.PropTypes.bool
     isSubstituted      : React.PropTypes.bool
+    difficulty         : React.PropTypes.string
 
   getDefaultProps : -> {
     displayAmount      : ''
@@ -37,13 +40,17 @@ MeasuredIngredient = React.createClass {
         <span className='unit'>{@props.displayUnit}</span>
       </span>
       <span className='ingredient'>
-          <span className='name'>{@props.displayIngredient}</span>
+        <span className='name'>{@props.displayIngredient}</span>
       {if @props.displaySubstitutes.length
         [
           <span className='substitute-label' key='label'>try:</span>
           <span className='substitute-content' key='content'>{@props.displaySubstitutes}</span>
-        ]
-      }</span>
+        ]}
+      {if @props.difficulty
+        <span className={classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty]}>
+          {Difficulty.HUMAN_READABLE[@props.difficulty]}
+        </span>}
+      </span>
     </div>
 }
 

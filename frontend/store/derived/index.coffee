@@ -10,7 +10,7 @@ DERIVED_FUNCTIONS = {
       recipes           : 'recipes.alphabeticalRecipes'
       baseLiquorFilter  : 'filters.baseLiquorFilter'
       searchTerm        : 'filters.recipeSearchTerm'
-      mixabilityFilters : 'filters.mixabilityFilters'
+      includeAllDrinks  : 'filters.includeAllDrinks'
       ingredientTags    : 'filters.selectedIngredientTags'
 
   ingredientSplitsByRecipeId :
