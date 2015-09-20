@@ -566,3 +566,9 @@
   display    : Velvet Falernum
   group      : spirit-other
   difficulty : hard
+-
+  display    : Curaçao
+  tag        : curacao
+  generic    : triple sec
+  group      : liqueur-fruit
+  difficulty : medium
