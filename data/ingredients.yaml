@@ -572,3 +572,11 @@
   generic    : triple sec
   group      : liqueur-fruit
   difficulty : medium
+-
+  display    : Pear Liqueur
+  group      : liqueur-fruit
+  difficulty : hard
+-
+  display    : Cinnamon
+  group      : other
+  difficulty : easy

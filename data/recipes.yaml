@@ -1017,3 +1017,40 @@
   base:
     - tequila
     - rum
+-
+  name: "Stache"
+  ingredients:
+    -
+      tag: "rye whiskey"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "rye whiskey"
+    -
+      tag: "pear liqueur"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "St. George pear liqueur"
+    -
+      tag: "lemon juice"
+      displayAmount: "1"
+      displayUnit: "oz"
+      displayIngredient: "lemon juice"
+    -
+      tag: "cinnamon"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "cinnamon syrup"
+    -
+      tag: "angostura bitters"
+      displayAmount: "2"
+      displayUnit: "dashes"
+      displayIngredient: "Angostura bitters (garnish)"
+    -
+      tag: "egg"
+      displayAmount: "1"
+      displayIngredient: "egg white"
+  instructions: |
+    Dry shake, shake, strain, up, garnish, sip, give yourself a 'stache.
+  source: "Gaz Regan"
+  url: "http://www.gazregan.com/2015/03/101-best-new-cocktails/101-best-new-cocktails-stache-by-charles-joly-world-class-bartender-of-the-year-2014/"
+  base: whiskey
