@@ -1040,41 +1040,41 @@
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
     base: UNASSIGNED
--
-    name: "Mai-Tai"
-    ingredients:
-      -
-        tag: "white rum"
-        displayAmount: "1 1/3"
-        displayUnit: "oz"
-        displayIngredient: "white rum"
-      -
-        tag: "dark rum"
-        displayAmount: "2/3"
-        displayUnit: "oz"
-        displayIngredient: "dark rum"
-      -
-        tag: "curacao"
-        displayAmount: "1/2"
-        displayUnit: "oz"
-        displayIngredient: "orange curaçao"
-      -
-        tag: "orgeat syrup"
-        displayAmount: "1/2"
-        displayUnit: "oz"
-        displayIngredient: "orgeat syrup"
-      -
-        tag: "lime juice"
-        displayAmount: "1/3"
-        displayUnit: "oz"
-        displayIngredient: "fresh lime juice"
-    instructions: |
-      Shake and strain into highball glass.
-      Garnish with pineapple spear, mint leaves and lime peel.
-      Serve with straw.
-    source: "IBA"
-    url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: rum
+# -
+#     name: "Mai-Tai"
+#     ingredients:
+#       -
+#         tag: "white rum"
+#         displayAmount: "1 1/3"
+#         displayUnit: "oz"
+#         displayIngredient: "white rum"
+#       -
+#         tag: "dark rum"
+#         displayAmount: "2/3"
+#         displayUnit: "oz"
+#         displayIngredient: "dark rum"
+#       -
+#         tag: "curacao"
+#         displayAmount: "1/2"
+#         displayUnit: "oz"
+#         displayIngredient: "orange curaçao"
+#       -
+#         tag: "orgeat syrup"
+#         displayAmount: "1/2"
+#         displayUnit: "oz"
+#         displayIngredient: "orgeat syrup"
+#       -
+#         tag: "lime juice"
+#         displayAmount: "1/3"
+#         displayUnit: "oz"
+#         displayIngredient: "fresh lime juice"
+#     instructions: |
+#       Shake and strain into highball glass.
+#       Garnish with pineapple spear, mint leaves and lime peel.
+#       Serve with straw.
+#     source: "IBA"
+#     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
+#     base: rum
 -
     name: "Manhattan"
     ingredients:

@@ -1054,3 +1054,42 @@
   source: "Gaz Regan"
   url: "http://www.gazregan.com/2015/03/101-best-new-cocktails/101-best-new-cocktails-stache-by-charles-joly-world-class-bartender-of-the-year-2014/"
   base: whiskey
+-
+  name: "Mai-Tai"
+  ingredients:
+    -
+      tag: "white rum"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "white rum"
+    -
+      tag: "gold rum"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "gold rum"
+    -
+      tag: "dark rum"
+      displayAmount: "1"
+      displayUnit: "oz"
+      displayIngredient: "dark rum"
+    -
+      tag: "curacao"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "orange curaçao"
+    -
+      tag: "orgeat syrup"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "orgeat syrup"
+    -
+      tag: "lime juice"
+      displayAmount: "1"
+      displayUnit: "oz"
+      displayIngredient: "fresh lime juice"
+  instructions: |
+    Shake and strain into highball glass.
+    Garnish with mint leaves or a spent lime peel.
+  source: "Punch"
+  url: "http://punchdrink.com/recipes/mai-tai/"
+  base: rum
