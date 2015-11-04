@@ -1,8 +1,8 @@
-_          = require 'lodash'
-React      = require 'react/addons'
-classnames = require 'classnames'
-
-{ PureRenderMixin } = React.addons
+_               = require 'lodash'
+React           = require 'react'
+ReactDom        = require 'react-dom'
+classnames      = require 'classnames'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 IntertialSwipeLogicBox = require './IntertialSwipeLogicBox'
 
@@ -121,8 +121,8 @@ Swipable = React.createClass {
     </IntertialSwipable>
 
   componentDidMount: ->
-    wrapperWidth = React.findDOMNode(@refs.slidingContainer).offsetWidth
-    itemWidths   = _.pluck React.findDOMNode(@refs.slidingContainer).children, 'offsetWidth'
+    wrapperWidth = ReactDom.findDOMNode(@refs.slidingContainer).offsetWidth
+    itemWidths   = _.pluck ReactDom.findDOMNode(@refs.slidingContainer).children, 'offsetWidth'
     itemOffsets  = _.chain itemWidths
       .reduce ((offsets, width) ->
         offsets.push _.last(offsets) + width
@@ -135,7 +135,7 @@ Swipable = React.createClass {
 
   _getNearestIndex : (e) ->
     target = e.target
-    slidingContainer = React.findDOMNode @refs.slidingContainer
+    slidingContainer = ReactDom.findDOMNode @refs.slidingContainer
     while target.parentNode != slidingContainer
       target = target.parentNode
     return _.indexOf(slidingContainer.children, target)

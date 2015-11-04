@@ -1,7 +1,6 @@
-_          = require 'lodash'
-React      = require 'react/addons'
-
-{ PureRenderMixin } = React.addons
+_               = require 'lodash'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 ReduxMixin        = require '../mixins/ReduxMixin'
 DerivedValueMixin = require '../mixins/DerivedValueMixin'

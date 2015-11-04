@@ -1,5 +1,5 @@
-_     = require 'lodash'
-React = require 'react/addons'
+_        = require 'lodash'
+ReactDom = require 'react-dom'
 
 stylingConstants = require './stylingConstants'
 
@@ -18,7 +18,7 @@ do ->
     overlayViews[type] = {
       show : (component) ->
         shouldHide = false
-        React.render component, domElement
+        ReactDom.render component, domElement
         for e in allDomElements
           e.classList.remove 'topmost'
         document.body.classList.add "showing-#{type}"
@@ -37,7 +37,7 @@ do ->
         shouldHide = true
         _.delay (->
           if shouldHide
-            React.unmountComponentAtNode domElement
+            ReactDom.unmountComponentAtNode domElement
         ), stylingConstants.TRANSITION_DURATION
     }
 

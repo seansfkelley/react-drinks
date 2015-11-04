@@ -1,7 +1,7 @@
 require('../common-init')()
 
-_     = require 'lodash'
-React = require 'react/addons'
+_        = require 'lodash'
+ReactDom = require 'react-dom'
 
 App                 = require './App'
 webClipNotification = require './webClipNotification'
@@ -22,7 +22,7 @@ LOADING_OVERLAY = document.querySelector '#main-loading-overlay'
 APP_ROOT        = document.querySelector '#app-root'
 
 initializationPromise.then ->
-  React.render <App/>, APP_ROOT
+  ReactDom.render <App/>, APP_ROOT
 
   state = store.getState()
 

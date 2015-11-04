@@ -1,9 +1,8 @@
-_          = require 'lodash'
-React      = require 'react/addons'
-classnames = require 'classnames'
-Isvg       = require 'react-inlinesvg'
-
-{ PureRenderMixin } = React.addons
+_               = require 'lodash'
+React           = require 'react'
+classnames      = require 'classnames'
+Isvg            = require 'react-inlinesvg'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 ReduxMixin        = require '../mixins/ReduxMixin'
 DerivedValueMixin = require '../mixins/DerivedValueMixin'

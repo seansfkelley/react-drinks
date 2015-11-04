@@ -1,4 +1,4 @@
-React      = require 'react/addons'
+React      = require 'react'
 classnames = require 'classnames'
 
 TitleBar = React.createClass {

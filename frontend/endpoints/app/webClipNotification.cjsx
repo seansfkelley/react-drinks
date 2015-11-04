@@ -1,5 +1,6 @@
-_     = require 'lodash'
-React = require 'react/addons'
+_        = require 'lodash'
+React    = require 'react'
+ReactDom = require 'react-dom'
 
 stylingConstants = require '../../stylingConstants'
 
@@ -25,13 +26,13 @@ WebClipNotification = React.createClass {
 
   componentDidMount : ->
     _.defer =>
-      React.findDOMNode(@).classList.remove 'hidden'
+      ReactDom.findDOMNode(@).classList.remove 'hidden'
 
   _dismiss : ->
-    React.findDOMNode(@).classList.add 'hidden'
+    ReactDom.findDOMNode(@).classList.add 'hidden'
     DOM_NODE.classList.add 'hidden'
     _.delay (=>
-      React.unmountComponentAtNode DOM_NODE
+      ReactDom.unmountComponentAtNode DOM_NODE
     ), stylingConstants.TRANSITION_DURATION
 
 }
@@ -44,5 +45,5 @@ module.exports = {
     if IS_IPHONE and not localStorage[LOCALSTORAGE_KEY] and not window.navigator.standalone
       localStorage[LOCALSTORAGE_KEY] = true
       DOM_NODE.classList.remove 'hidden'
-      React.render <WebClipNotification/>, DOM_NODE
+      ReactDom.render <WebClipNotification/>, DOM_NODE
 }

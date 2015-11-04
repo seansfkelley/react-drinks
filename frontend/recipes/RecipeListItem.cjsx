@@ -1,7 +1,6 @@
-React      = require 'react/addons'
-classnames = require 'classnames'
-
-{ PureRenderMixin } = React.addons
+React           = require 'react'
+classnames      = require 'classnames'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 List = require '../components/List'
 

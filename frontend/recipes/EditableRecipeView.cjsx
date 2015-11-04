@@ -1,7 +1,7 @@
 # TODO: This GIANT file needs to be broken up once it's clearer what's staying and what's not.
 
 _          = require 'lodash'
-React      = require 'react/addons'
+React      = require 'react'
 classnames = require 'classnames'
 
 ReduxMixin = require '../mixins/ReduxMixin'

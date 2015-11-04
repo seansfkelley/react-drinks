@@ -1,5 +1,5 @@
 _          = require 'lodash'
-React      = require 'react/addons'
+React      = require 'react'
 Draggable  = require 'react-draggable'
 classnames = require 'classnames'
 

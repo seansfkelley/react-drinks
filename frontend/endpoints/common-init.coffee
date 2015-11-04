@@ -9,7 +9,6 @@ module.exports = ->
   if window.navigator.standalone
     document.body.setAttribute 'standalone', true
 
-  React.initializeTouchEvents true
   require('react-tap-event-plugin')()
 
   persistence.watch store

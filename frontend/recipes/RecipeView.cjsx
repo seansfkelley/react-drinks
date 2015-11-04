@@ -1,6 +1,6 @@
-_          = require 'lodash'
-React      = require 'react/addons'
-{ PureRenderMixin } = React.addons
+_               = require 'lodash'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 utils       = require '../utils'
 definitions = require '../../shared/definitions'
