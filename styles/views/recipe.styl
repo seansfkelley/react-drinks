@@ -6,6 +6,13 @@
     width: 94%
     padding: 0 1% // TODO: if we add margin calc to Swipable, we could remove this too (put it all on .recipe-view)
 
+// Apple what the fuck, why does the iPhone 6 have an odd number of pixels? This causes rounding issues
+// where the CSS has accurate half-pixel widths, but the javascript controlling the swiping is receiving
+// rounded-up values, causing the spacing/translation to eventually diverge.
+@media only screen and (width: 375px)
+  .swipable-recipe-container .swipable-padding-wrapper
+    width: calc(94% - 0.5px)
+
 .recipe-view
   background: #fff
 
