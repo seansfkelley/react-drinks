@@ -1093,3 +1093,33 @@
   source: "Punch"
   url: "http://punchdrink.com/recipes/mai-tai/"
   base: rum
+-
+  name: "Tequila and Sage Smash"
+  ingredients:
+    -
+      tag: "lemon"
+      displayAmount: "1/2"
+      displayIngredient: "lemon, cut into wedges"
+    -
+      tag: "sage"
+      displayAmount: "6"
+      displayIngredient: "fresh sage leaves"
+    -
+      tag: "tequila"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "añejo tequila"
+    -
+      tag: "honey"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "honey syrup"
+  instructions: |
+    Muddle the lemon in a shaker.
+    Add the sage and gently muddle.
+    Add remaining ingredients with ice and shake.
+    Double strain into an ice-filled glass and garnish with sage sprig.
+  notes: "To make honey syrup, use one part honey to one part water."
+  source: "imbibe"
+  url: "http://imbibemagazine.com/tequila-and-sage-smash-recipe/"
+  base: tequila

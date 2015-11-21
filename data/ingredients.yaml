@@ -580,3 +580,7 @@
   display    : Cinnamon
   group      : other
   difficulty : easy
+-
+  display    : Sage
+  group      : herb
+  difficulty : easy
