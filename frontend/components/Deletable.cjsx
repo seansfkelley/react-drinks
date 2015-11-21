@@ -14,18 +14,28 @@ Deletable = React.createClass {
 
   getInitialState : ->
     return {
-      left : 0
+      initialX       : 0
+      deltaX         : 0
+      checkFirstMove : true
+      ignoreDrag     : false
     }
 
   render : ->
     renderableProps = _.omit @props, 'onDelete'
     left = DELETABLE_WIDTH - Math.abs(@state.left)
-    <Draggable axis='x' onDrag={@_clampDrag} onStop={@_onDragEnd} ref='draggable'>
+    <Draggable
+      axis='x'
+      bounds={{ left : -DELETABLE_WIDTH, right : 0 }}
+      onStart={@_onDragStart}
+      onDrag={@_onDrag}
+      onStop={@_onDragEnd}
+      ref='draggable'
+    >
       <div className={classnames 'deletable', @props.className}>
         {@props.children}
         <div
           className='delete-button'
-          style={{ width : Math.abs(@state.left), right : @state.left }}
+          style={{ width : Math.abs(@state.deltaX), right : @state.deltaX }}
           onTouchTap={@_onDelete}
         >
           <span className='text' style={{ width : DELETABLE_WIDTH }}>Delete</span>
@@ -37,23 +47,27 @@ Deletable = React.createClass {
     e.stopPropagation()
     @props.onDelete()
 
-  _clampDrag : (event, { position }) ->
-    if position.left > 0
-      @refs.draggable.setState { clientX : 0 }
-      @setState { left : 0 }
-    else if position.left < -DELETABLE_WIDTH
-      @refs.draggable.setState { clientX : -DELETABLE_WIDTH }
-      @setState { left : -DELETABLE_WIDTH }
+  _onDragStart : (e, { position }) ->
+    # Do NOT reset deltaX -- it may be dragged open already.
+    @setState { initialX : position.left, checkFirstMove : true, ignoreDrag : false }
+
+  _onDrag : (event, { deltaX, deltaY }) ->
+    if @state.ignoreDrag
+      return false
+    else if @state.checkFirstMove and Math.abs(deltaY) > Math.abs(deltaX)
+      @setState { ignoreDrag : true }
+      return false
     else
-      @setState { left : position.left }
+      @setState { deltaX : Math.min(Math.max(@state.deltaX + deltaX, -DELETABLE_WIDTH), 0) }
+    @setState { checkFirstMove : false }
 
   _onDragEnd : (event, { position }) ->
-    if position.left < -DELETABLE_WIDTH / 2
-      @refs.draggable.setState { clientX : -DELETABLE_WIDTH }
-      @setState { left : -DELETABLE_WIDTH }
+    if @state.deltaX < -DELETABLE_WIDTH / 2
+      @refs.draggable.setState { clientX :  -DELETABLE_WIDTH }
+      @setState { deltaX : -DELETABLE_WIDTH }
     else
       @refs.draggable.setState { clientX : 0 }
-      @setState { left : 0 }
+      @setState { deltaX : 0 }
 }
 
 module.exports = Deletable

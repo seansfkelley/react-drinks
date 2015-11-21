@@ -50,7 +50,7 @@
     "react": "^0.14.2",
     "react-addons-pure-render-mixin": "^0.14.2",
     "react-dom": "^0.14.2",
-    "react-draggable": "git://github.com/seansfkelley/react-draggable.git#3c091cb9b1310e06ca3df720c85b4665c8d4fd30",
+    "react-draggable": "^1.1.1",
     "react-inlinesvg": "^0.4.1",
     "react-swipeable": "^3.0.2",
     "react-tap-event-plugin": "^0.2.1",
