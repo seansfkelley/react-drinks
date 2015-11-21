@@ -75,7 +75,7 @@ SidebarMenu = React.createClass {
     </div>
 
   componentDidMount : ->
-    @refs.ingredientsContainer.getDOMNode().scrollTop = stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT
+    @refs.ingredientsContainer.scrollTop = stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT
 
   _onIngredientToggle : (selectedTags) ->
     @setState { selectedIngredientCount : _.size selectedTags }

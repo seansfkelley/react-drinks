@@ -104,7 +104,7 @@ EditableNamePage = React.createClass {
     </FixedHeaderFooter>
 
   _focus : ->
-    @refs.input.getDOMNode().focus()
+    @refs.input.focus()
 
   # mixin-ify this kind of stuff probably
   _isEnabled : ->
@@ -176,10 +176,10 @@ EditableIngredient = React.createClass {
     </div>
 
   _focus : ->
-    @refs.input.getDOMNode().focus()
+    @refs.input.focus()
 
   _dismissKeyboard : ->
-    @refs.input.getDOMNode().blur()
+    @refs.input.blur()
 
   _tagSetter : (tag) ->
     return =>

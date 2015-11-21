@@ -18,7 +18,7 @@ FixedHeaderFooter = React.createClass {
     </div>
 
   scrollTo : (offset) ->
-    @refs.content.getDOMNode().scrollTop = offset
+    @refs.content.scrollTop = offset
 
   _wrapIfDefined : (element, className) ->
     if element?
