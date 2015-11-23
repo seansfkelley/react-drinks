@@ -1,0 +1,175 @@
+-
+  name: "Two Sisters"
+  ingredients:
+    -
+      tag: "rye whiskey"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "Templeton rye"
+    -
+      tag: "cynar"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "Cynar"
+    -
+      tag: "sweet vermouth"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "Punt e Mes"
+    -
+      tag: "bitters"
+      displayAmount: "1"
+      displayUnit: "dash"
+      displayIngredient: "Fee Brothers Barrel Aged Old Fashioned Bitters"
+  instructions: |
+    Combine rye, Cynar, Punt e Mes, bitters with ice and stir.
+    Strain into chilled martini glass.
+    Garnish with cherry.
+  source: "Two Sisters Bar & Books"
+  base: whiskey
+-
+  name: "Chamomile Old Fashioned"
+  ingredients:
+    -
+      tag: "bourbon"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "chamomile-infused bourbon"
+    -
+      tag: "honey"
+      displayAmount: "1/2"
+      displayUnit: "oz"
+      displayIngredient: "honey simple syrup"
+    -
+      tag: "orange bitters"
+      displayAmount: "1"
+      displayUnit: "dash"
+      displayIngredient: "orange bitters"
+    -
+      tag: "angostura bitters"
+      displayAmount: "4"
+      displayUnit: "dashes"
+      displayIngredient: "Angostura bitters"
+  instructions: |
+    Combine ingredients in tin, add ice, shake & strain into rocks glass.
+    Add ice, then garnish with lemon twist.
+  notes: |
+    To make chamomile-infused bourbon, use either 1/4 cup or 3 tea bags chamomile per liter of bourbon. Steep 72 hours, then strain.
+  source: "Two Sisters Bar & Books"
+  base: whiskey
+-
+  name: "Apple 125"
+  ingredients:
+    -
+      tag: "apple-brandy"
+      displayAmount: "1"
+      displayUnit: "oz"
+      displayIngredient: "Laird's apple brandy"
+    -
+      tag: "lime juice"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "fresh lime juice"
+    -
+      tag: "simple syrup"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "simple syrup"
+    -
+      tag: "bitters"
+      displayAmount: "1"
+      displayUnit: "dash"
+      displayIngredient: "Fee Brothers Old Fashioned Bitters"
+    -
+      tag: "sparkling wine"
+      displayIngredient: "dry bubbly"
+  instructions: |
+    Combine brandy, lime, simple syrup, bitters, and ice in pint glass/mixing tin.
+    Shake & strain into glass, top with bubbly.
+  source: "Two Sisters Bar & Books"
+  base:
+    - brandy
+    - wine
+-
+  name: "The Slowest Buffalo"
+  ingredients:
+    -
+      tag: "dark rum"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "Smith & Cross rum"
+    -
+      tag: "lime juice"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "lime juice"
+    -
+      tag: "molasses"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "molasses simple syrup"
+  instructions: |
+    Shake all ingredients with ice.
+    Strain into a rocks glass, add ice and garnish with a lime wedge.
+  notes: "To make the molasses simple syrup, use 2 parts molasses to 1 part water."
+  source: "Two Sisters Bar & Books"
+  base: rum
+-
+  name: "Grape Sazerac"
+  ingredients:
+    -
+      tag: "grape"
+      displayAmount: "6"
+      displayIngredient: "Concord grapes"
+    -
+      tag: "sugar"
+      displayAmount: "1/2"
+      displayUnit: "barspoon"
+      displayIngredient: "sugar"
+    -
+      tag: "absinthe"
+      displayAmount: "2"
+      displayUnit: "dashes"
+      displayIngredient: "absinthe"
+    -
+      tag: "peychauds bitters"
+      displayAmount: "2"
+      displayUnit: "dashes"
+      displayIngredient: "Peychaud's bitters"
+    -
+      tag: "scotch"
+      displayAmount: "1 1/2"
+      displayUnit: "oz"
+      displayIngredient: "blended scotch"
+  instructions: |
+    In mixing tin or pint glass muddle grapes and sugar until grapes are juiced and skins crushed.
+    Add Peychaud's, absinthe, scotch and ice, shake & strain into chilled rocks glass.
+  source: "Two Sisters Bar & Books"
+  base: whiskey
+-
+  name: "The Back 40"
+  ingredients:
+    -
+      tag: "tennessee whiskey"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "Tennessee whiskey"
+    -
+      tag: "lemon juice"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "lemon juice"
+    -
+      tag: "maple syrup"
+      displayAmount: "3/4"
+      displayUnit: "oz"
+      displayIngredient: "maple simple syrup"
+    -
+      tag: "orange bitters"
+      displayAmount: "2"
+      displayUnit: "dashes"
+      displayIngredient: "orange bitters"
+  instructions: |
+    Combine all ingredients and ice, shake & strain into rocks glass. Fill with fresh ice.
+  source: "Two Sisters Bar & Books"
+  base: whiskey

@@ -584,3 +584,11 @@
   display    : Sage
   group      : herb
   difficulty : easy
+-
+  display    : Grape
+  group      : fruit
+  difficulty : easy
+-
+  display    : Maple Syrup
+  group      : syrup
+  difficulty : easy

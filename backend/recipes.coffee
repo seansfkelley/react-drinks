@@ -58,6 +58,7 @@ RECIPE_FILES = [
 
 if '--custom-recipes' in process.argv
   RECIPE_FILES.push 'custom-recipes'
+  RECIPE_FILES.push 'michael-cecconi'
 
 RECIPES = _.chain RECIPE_FILES
   .map (f) -> yaml.safeLoad(fs.readFileSync("#{__dirname}/../data/#{f}.yaml"))
