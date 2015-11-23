@@ -42,11 +42,13 @@ RecipeView = React.createClass {
     ingredientSplits : React.PropTypes.object
     ingredientsByTag : React.PropTypes.object
     onClose          : React.PropTypes.func
-    shareable        : React.PropTypes.bool
+    onFavorite       : React.PropTypes.func
+    isFavorited      : React.PropTypes.bool
+    isShareable      : React.PropTypes.bool
 
   getDefaultProps : ->
     return {
-      shareable : false
+      isShareable : false
     }
 
   render : ->
@@ -91,6 +93,22 @@ RecipeView = React.createClass {
     else
       header = <TitleBar className='fixed-header'>{@props.recipe.name}</TitleBar>
 
+    footerButtons = []
+    if @props.isShareable
+      footerButtons.push <IconButton
+        key='share'
+        icon='fa-share-square-o'
+        text='Share'
+        onTouchTap={@_share}
+      />
+    if @props.onFavorite
+      footerButtons.push <IconButton
+        key='favorite'
+        icon={classnames { 'fa-star' : @props.isFavorited, 'fa-star-o' : not @props.isFavorited }}
+        text='Favorite'
+        onTouchTap={@_favorite}
+      />
+
     <div className='recipe-view fixed-header-footer'>
       {header}
       <div className='recipe-description fixed-content-pane'>
@@ -101,17 +119,14 @@ RecipeView = React.createClass {
         {recipeNotes}
         {recipeUrl}
       </div>
-      <div className='fixed-footer'>
-        <IconButton icon='fa-share-square-o' text='Share' onTouchTap={@_share}/>
-        <IconButton icon='fa-star' text='Favorite' onTouchTap={@_favorite}/>
-      </div>
+      {if footerButtons.length then <div className='fixed-footer'>{footerButtons}</div>}
     </div>
 
   _share : ->
     window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
 
   _favorite : ->
-    console.log 'favorited'
+    @props.onFavorite(@props.recipe, not @props.isFavorited)
 
   _renderCategory : (measuredIngredients, category) ->
     if measuredIngredients.length == 0

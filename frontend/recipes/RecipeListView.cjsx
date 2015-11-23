@@ -25,6 +25,7 @@ RecipeList = React.createClass {
   propTypes :
     recipes                    : React.PropTypes.array.isRequired
     ingredientsByTag           : React.PropTypes.object.isRequired
+    favoritedRecipeIds         : React.PropTypes.array.isRequired
     ingredientSplitsByRecipeId : React.PropTypes.object.isRequired
 
   mixins : [ PureRenderMixin ]
@@ -67,15 +68,10 @@ RecipeList = React.createClass {
       difficulty={difficulty}
       isMixable={isMixable}
       recipeName={r.name}
-      # TODO: This can acuse needless rerenders, especially when text-searching.
+      # TODO: This can cause needless rerenders, especially when text-searching.
       # PureRenderMixin is bypassed since .bind() returns a new function every time.
       # Is there a way to always pass the same function and infer the index from the event?
-      onTouchTap={SwipableRecipeView.showInModal.bind(null, {
-        groupedRecipes             : @props.recipes
-        ingredientsByTag           : @props.ingredientsByTag
-        ingredientSplitsByRecipeId : @props.ingredientSplitsByRecipeId
-        initialIndex               : absoluteIndex
-      })}
+      onTouchTap={SwipableRecipeView.showInModal.bind null, absoluteIndex}
       onDelete={if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)}
       key={r.recipeId}
     />
@@ -96,6 +92,7 @@ RecipeListView = React.createClass {
     ReduxMixin {
       filters     : [ 'recipeSearchTerm', 'baseLiquorFilter' ]
       ingredients : 'ingredientsByTag'
+      ui          : 'favoritedRecipeIds'
     }
     DerivedValueMixin [
       'filteredGroupedRecipes'
@@ -109,6 +106,7 @@ RecipeListView = React.createClass {
       recipes={@state.filteredGroupedRecipes}
       ingredientsByTag={@state.ingredientsByTag}
       ingredientSplitsByRecipeId={@state.ingredientSplitsByRecipeId}
+      favoritedRecipeIds={@state.favoritedRecipeIds}
     />
 
     <FixedHeaderFooter
