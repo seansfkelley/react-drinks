@@ -1,14 +1,14 @@
 _               = require 'lodash'
 React           = require 'react'
 PureRenderMixin = require 'react-addons-pure-render-mixin'
+classnames      = require 'classnames'
 
 utils       = require '../utils'
 definitions = require '../../shared/definitions'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-FixedHeaderFooter = require '../components/FixedHeaderFooter'
-TitleBar          = require '../components/TitleBar'
+TitleBar = require '../components/TitleBar'
 
 MeasuredIngredient = require './MeasuredIngredient'
 
@@ -18,6 +18,18 @@ IngredientCategory = {
   MISSING    : 'missing'
   SUBSTITUTE : 'substitute'
   AVAILABLE  : 'available'
+}
+
+IconButton = ({ icon, text, onTouchTap }) ->
+  <div className='icon-button' onTouchTap={onTouchTap}>
+    <i className={classnames 'fa', icon}/>
+    <div className='label'>{text}</div>
+  </div>
+
+IconButton.propTypes = {
+  icon       : React.PropTypes.string
+  text       : React.PropTypes.string
+  onTouchTap : React.PropTypes.func
 }
 
 RecipeView = React.createClass {
@@ -72,24 +84,16 @@ RecipeView = React.createClass {
       .value()
     recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
 
-    if @props.shareable and IS_IPHONE_IOS_8
-      shareButtonProps = {
-        leftIcon           : 'fa-share-square-o'
-        leftIconOnTouchTap : => window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
-      }
-
     if @props.onClose?
-      header = <TitleBar rightIcon='fa-times' rightIconOnTouchTap={@props.onClose} {...shareButtonProps}>
+      header = <TitleBar className='fixed-header' rightIcon='fa-times' rightIconOnTouchTap={@props.onClose}>
         {@props.recipe.name}
       </TitleBar>
     else
-      header = <TitleBar {...shareButtonProps}>{@props.recipe.name}</TitleBar>
+      header = <TitleBar className='fixed-header'>{@props.recipe.name}</TitleBar>
 
-    <FixedHeaderFooter
-      className='recipe-view'
-      header={header}
-    >
-      <div className='recipe-description'>
+    <div className='recipe-view fixed-header-footer'>
+      {header}
+      <div className='recipe-description fixed-content-pane'>
         <div className='recipe-ingredients'>
           {ingredientNodes}
         </div>
@@ -97,7 +101,17 @@ RecipeView = React.createClass {
         {recipeNotes}
         {recipeUrl}
       </div>
-    </FixedHeaderFooter>
+      <div className='fixed-footer'>
+        <IconButton icon='fa-share-square-o' text='Share' onTouchTap={@_share}/>
+        <IconButton icon='fa-star' text='Favorite' onTouchTap={@_favorite}/>
+      </div>
+    </div>
+
+  _share : ->
+    window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
+
+  _favorite : ->
+    console.log 'favorited'
 
   _renderCategory : (measuredIngredients, category) ->
     if measuredIngredients.length == 0
