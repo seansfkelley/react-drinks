@@ -3,7 +3,7 @@ _ = require 'lodash'
 # These two should probably be memoized functions, but because they're really
 # just set once at the beginning I'm gonna ignore it for now.
 _recomputeDerivedLists = (state) ->
-  allRecipes = state.customRecipes.concat state.defaultRecipes
+  allRecipes = (state.customRecipes ? []).concat (state.defaultRecipes ? [])
   return _.defaults {
     allRecipes
     alphabeticalRecipes : _.sortBy allRecipes, 'sortName'
