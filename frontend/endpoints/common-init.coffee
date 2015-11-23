@@ -1,5 +1,6 @@
-_     = require 'lodash'
-React = require 'react'
+_         = require 'lodash'
+React     = require 'react'
+ReactPerf = require 'react-addons-perf'
 
 # Probably not necessary for some views, but it's nice to have it here.
 store       = require '../store'
@@ -29,6 +30,8 @@ module.exports = ->
     jq.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js'
     document.getElementsByTagName('head')[0].appendChild jq
 
+  window.reactPerf = ReactPerf
+
   window.debug = {
     log          : require 'loglevel'
     localStorage : ->
@@ -39,6 +42,12 @@ module.exports = ->
           return v
     getState : ->
       return store.getState()
+    reactPerf : (timeout = 2000) ->
+      ReactPerf.start()
+      setTimeout (->
+        ReactPerf.stop()
+        ReactPerf.printWasted()
+      ), timeout
   }
 
   # For devtools.
