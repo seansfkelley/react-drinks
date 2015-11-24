@@ -44,8 +44,8 @@ RecipeListHeader = React.createClass {
         className='recipe-list-header'
         onTouchTap={@_showListSelector}
       >
-        <span className='title'>{definitions.RECIPE_LIST_NAMES[@state.selectedRecipeList]}</span>
-        <span className='fa fa-chevron-down'/>
+        {definitions.RECIPE_LIST_NAMES[@state.selectedRecipeList]}
+        <i className='fa fa-chevron-down'/>
       </TitleBar>
       <Swipable
         className='base-liquor-container'
@@ -77,6 +77,7 @@ RecipeListHeader = React.createClass {
 
   _showListSelector : ->
     overlayViews.modal.show <RecipeListSelector
+      currentType={@state.selectedRecipeList}
       onClose={overlayViews.modal.hide}
     />
 

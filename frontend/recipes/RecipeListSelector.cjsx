@@ -7,26 +7,25 @@ store = require '../store'
 
 definitions = require '../../shared/definitions'
 
-ReduxMixin = require '../mixins/ReduxMixin'
-
 RecipeListSelector = React.createClass {
   displayName : 'RecipeListSelector'
 
   propTypes :
-    onClose : React.PropTypes.func
+    currentType : React.PropTypes.string
+    onClose     : React.PropTypes.func
 
-  mixins : [
-    ReduxMixin {
-      ui : 'selectedRecipeList'
-    }
-    PureRenderMixin
-  ]
+  mixins : [ PureRenderMixin ]
 
   render : ->
-    options = _.map definitions.RECIPE_LIST_TYPES, (type) =>
+    reorderedOptions = _.flatten [
+      @props.currentType
+      _.without definitions.RECIPE_LIST_TYPES, @props.currentType
+    ]
+
+    options = _.map reorderedOptions, (type) =>
       <div
         key={type}
-        className={classnames 'option', { 'is-selected' : type == @state.selectedRecipeList }}
+        className={classnames 'option', { 'is-selected' : type == @props.currentType }}
         onTouchTap={@_onOptionSelect.bind(null, type)}
       >
         <span className='label'>{definitions.RECIPE_LIST_NAMES[type]}</span>
