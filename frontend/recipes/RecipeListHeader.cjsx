@@ -15,6 +15,7 @@ overlayViews  = require '../overlayViews'
 
 SidebarMenu        = require './SidebarMenu'
 EditableRecipeView = require './EditableRecipeView'
+RecipeListSelector = require './RecipeListSelector'
 
 BASE_LIQUORS = [ definitions.ANY_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
 
@@ -24,6 +25,7 @@ RecipeListHeader = React.createClass {
   mixins : [
     ReduxMixin {
       filters : [ 'includeAllDrinks', 'baseLiquorFilter' ]
+      ui      : 'selectedRecipeList'
     }
     PureRenderMixin
   ]
@@ -40,8 +42,10 @@ RecipeListHeader = React.createClass {
         rightIcon='fa-plus'
         rightIconOnTouchTap={@_newRecipe}
         className='recipe-list-header'
+        onTouchTap={@_showListSelector}
       >
-        Spirit Guide
+        <span className='title'>{definitions.RECIPE_LIST_NAMES[@state.selectedRecipeList]}</span>
+        <span className='fa fa-chevron-down'/>
       </TitleBar>
       <Swipable
         className='base-liquor-container'
@@ -69,6 +73,11 @@ RecipeListHeader = React.createClass {
     overlayViews.pushover.show <SidebarMenu
       initialIncludeAllDrinks={@state.includeAllDrinks}
       onClose={overlayViews.pushover.hide}
+    />
+
+  _showListSelector : ->
+    overlayViews.modal.show <RecipeListSelector
+      onClose={overlayViews.modal.hide}
     />
 
   _newRecipe : ->

@@ -13,6 +13,7 @@ PERSISTENCE_SPEC = {
   ui :
     recipeViewingIndex : ONE_MINUTE_MS * 5
     favoritedRecipeIds : Infinity
+    selectedRecipeList : ONE_MINUTE_MS * 60
 }
 
 watch = (store) ->

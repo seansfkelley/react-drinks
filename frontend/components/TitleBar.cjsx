@@ -6,10 +6,7 @@ TitleBar = React.createClass {
 
   propTypes :
     leftIcon            : React.PropTypes.string
-    children            : React.PropTypes.oneOfType([
-      React.PropTypes.element
-      React.PropTypes.string
-    ])
+    children            : React.PropTypes.node
     rightIcon           : React.PropTypes.string
     leftIconOnTouchTap  : React.PropTypes.func
     onTouchTap          : React.PropTypes.func
@@ -46,10 +43,10 @@ TitleBar = React.createClass {
       leftIcon  ?= <span className='spacer float-left'>&nbsp;</span>
       rightIcon ?= <span className='spacer float-right'>&nbsp;</span>
 
-    <div className={classnames 'title-bar', @props.className} onTouchTap={@props.onTouchTap}>
+    <div className={classnames 'title-bar', @props.className}>
       {leftIcon}
       {if React.Children.count(@props.children) > 0
-        <div className={classnames 'title', { 'showing-icons' : showingIcons }}>
+        <div className={classnames 'title', { 'showing-icons' : showingIcons }} onTouchTap={@props.onTouchTap}>
           {@props.children}
         </div>}
       {rightIcon}
