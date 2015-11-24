@@ -5,9 +5,8 @@ PureRenderMixin = require 'react-addons-pure-render-mixin'
 ReduxMixin        = require '../mixins/ReduxMixin'
 DerivedValueMixin = require '../mixins/DerivedValueMixin'
 
-SearchBar          = require '../components/SearchBar'
-FixedHeaderFooter  = require '../components/FixedHeaderFooter'
-List               = require '../components/List'
+SearchBar = require '../components/SearchBar'
+List      = require '../components/List'
 
 store            = require '../store'
 utils            = require '../utils'
@@ -102,34 +101,34 @@ RecipeListView = React.createClass {
   ]
 
   render : ->
-    list = <RecipeList
-      recipes={@state.filteredGroupedRecipes}
-      ingredientsByTag={@state.ingredientsByTag}
-      ingredientSplitsByRecipeId={@state.ingredientSplitsByRecipeId}
-      favoritedRecipeIds={@state.favoritedRecipeIds}
-    />
+    <div className='recipe-list-view fixed-header-footer'>
+      <RecipeListHeader/>
+      <div className='fixed-content-pane' ref='content'>
+        <SearchBar
+          className='list-topper'
+          initialValue={@state.recipeSearchTerm}
+          placeholder='Name or ingredient...'
+          onChange={@_onSearch}
+          ref='search'
+        />
+        <RecipeList
+          recipes={@state.filteredGroupedRecipes}
+          ingredientsByTag={@state.ingredientsByTag}
+          ingredientSplitsByRecipeId={@state.ingredientSplitsByRecipeId}
+          favoritedRecipeIds={@state.favoritedRecipeIds}
+        />
+      </div>
+    </div>
 
-    <FixedHeaderFooter
-      header={<RecipeListHeader/>}
-      className='recipe-list-view'
-      ref='container'
-    >
-      <SearchBar
-        className='list-topper'
-        initialValue={@state.recipeSearchTerm}
-        placeholder='Name or ingredient...'
-        onChange={@_onSearch}
-        ref='search'
-      />
-      {list}
-    </FixedHeaderFooter>
+  componentDidMount : ->
+    @_attemptScrollDown()
 
   componentDidUpdate : (prevProps, prevState) ->
     if not @refs.search.isFocused() and prevState.baseLiquorFilter != @state.baseLiquorFilter
       @_attemptScrollDown()
 
   _attemptScrollDown : _.debounce ->
-    @refs.container.scrollTo stylingConstants.RECIPE_LIST_ITEM_HEIGHT - stylingConstants.RECIPE_LIST_HEADER_HEIGHT / 2
+    @refs.content.scrollTop = stylingConstants.RECIPE_LIST_ITEM_HEIGHT - stylingConstants.RECIPE_LIST_HEADER_HEIGHT / 2
 
   _onSearch : (searchTerm) ->
     store.dispatch {

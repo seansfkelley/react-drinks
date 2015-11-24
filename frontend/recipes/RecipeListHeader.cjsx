@@ -33,7 +33,7 @@ RecipeListHeader = React.createClass {
     if initialBaseLiquorIndex == -1
       initialBaseLiquorIndex = 0
 
-    <div>
+    <div className='recipe-list-header fixed-header'>
       <TitleBar
         leftIcon='fa-bars'
         leftIconOnTouchTap={@_showSidebar}
