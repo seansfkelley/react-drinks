@@ -1,10 +1,8 @@
-_           = require 'lodash'
-definitions = require '../../../shared/definitions'
+_ = require 'lodash'
 
 module.exports = require('./makeReducer') _.extend({
   recipeViewingIndex : null
   favoritedRecipeIds : []
-  selectedRecipeList : definitions.RECIPE_LIST_TYPES[0]
 }, require('../persistence').load().ui), {
   'set-recipe-viewing-index' : (state, { index }) ->
     return _.defaults { recipeViewingIndex : index }, state
@@ -14,7 +12,4 @@ module.exports = require('./makeReducer') _.extend({
 
   'unfavorite-recipe' : (state, { recipeId }) ->
     return _.defaults { favoritedRecipeIds : _.without state.favoritedRecipeIds, recipeId }, state
-
-  'set-selected-recipe-list' : (state, { listType }) ->
-    return _.defaults { selectedRecipeList : listType }, state
 }

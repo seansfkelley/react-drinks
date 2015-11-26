@@ -8,12 +8,12 @@ PERSISTENCE_SPEC = {
     baseLiquorFilter       : ONE_MINUTE_MS * 15
     includeAllDrinks       : Infinity
     selectedIngredientTags : Infinity
+    selectedRecipeList     : ONE_MINUTE_MS * 60
   recipes :
     customRecipes : Infinity
   ui :
     recipeViewingIndex : ONE_MINUTE_MS * 5
     favoritedRecipeIds : Infinity
-    selectedRecipeList : ONE_MINUTE_MS * 60
 }
 
 watch = (store) ->

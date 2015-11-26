@@ -24,8 +24,7 @@ RecipeListHeader = React.createClass {
 
   mixins : [
     ReduxMixin {
-      filters : [ 'includeAllDrinks', 'baseLiquorFilter' ]
-      ui      : 'selectedRecipeList'
+      filters : [ 'includeAllDrinks', 'baseLiquorFilter', 'selectedRecipeList' ]
     }
     PureRenderMixin
   ]
