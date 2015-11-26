@@ -26,8 +26,8 @@ initializationPromise.then ->
 
   state = store.getState()
 
-  if state.ui.recipeViewingIndex?
-    SwipableRecipeView.showInModal state.ui.recipeViewingIndex
+  # if state.ui.recipeViewingIndex?
+    # SwipableRecipeView.showInModal state.ui.recipeViewingIndex
 
   LOADING_OVERLAY.classList.add 'fade-out'
 

@@ -36,13 +36,18 @@ RecipeList = React.createClass {
       .reduce ((sum, l) -> sum + l), 0
       .value()
 
+    orderedRecipes = _.chain @props.recipes
+      .pluck 'recipes'
+      .flatten()
+      .value()
+
     listNodes = []
     absoluteIndex = 0
     for { key, recipes } in @props.recipes
       if recipeCount > 6
         listNodes.push @_makeHeader(key, recipes)
       for r in recipes
-        listNodes.push @_makeItem(key, r, absoluteIndex)
+        listNodes.push @_makeItem(key, r, orderedRecipes, absoluteIndex)
         absoluteIndex += 1
 
     <List className={List.ClassNames.HEADERED}>
@@ -52,7 +57,7 @@ RecipeList = React.createClass {
   _makeHeader : (groupKey, recipes) ->
     return <List.Header title={groupKey.toUpperCase()} key={'header-' + groupKey}/>
 
-  _makeItem : (groupKey, r, absoluteIndex) ->
+  _makeItem : (groupKey, r, orderedRecipes, absoluteIndex) ->
     missingIngredients = @props.ingredientSplitsByRecipeId[r.recipeId].missing
     if missingIngredients.length
       isMixable = false
@@ -70,7 +75,7 @@ RecipeList = React.createClass {
       difficulty={difficulty}
       isMixable={isMixable}
       recipeName={r.name}
-      onTouchTap={SwipableRecipeView.showInModal.bind null, absoluteIndex}
+      onTouchTap={SwipableRecipeView.showInModal.bind null, orderedRecipes, absoluteIndex}
       onDelete={if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)}
       key={r.recipeId}
     />

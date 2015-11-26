@@ -16,8 +16,9 @@ SwipableRecipeView = React.createClass {
   displayName : 'SwipableRecipeView'
 
   propTypes :
-    initialIndex : React.PropTypes.number.isRequired
-    onClose      : React.PropTypes.func.isRequired
+    orderedRecipes : React.PropTypes.array.isRequired
+    initialIndex   : React.PropTypes.number.isRequired
+    onClose        : React.PropTypes.func.isRequired
 
   mixins : [
     ReduxMixin {
@@ -25,7 +26,6 @@ SwipableRecipeView = React.createClass {
       ui          : 'favoritedRecipeIds'
     }
     DerivedValueMixin [
-      'filteredGroupedRecipes'
       'ingredientSplitsByRecipeId'
     ]
     PureRenderMixin
@@ -36,24 +36,20 @@ SwipableRecipeView = React.createClass {
   }
 
   statics :
-    showInModal : (initialIndex = 0) ->
+    showInModal : (orderedRecipes, initialIndex = 0) ->
       store.dispatch {
         type  : 'set-recipe-viewing-index'
         index : initialIndex
       }
 
       overlayViews.modal.show <SwipableRecipeView
+        orderedRecipes={orderedRecipes}
         initialIndex={initialIndex}
         onClose={overlayViews.modal.hide}
       />
 
   render : ->
-    recipes = _.chain @state.filteredGroupedRecipes
-      .pluck 'recipes'
-      .flatten()
-      .value()
-
-    recipePages = _.map recipes, (r, i) =>
+    recipePages = _.map @props.orderedRecipes, (r, i) =>
       <div className='swipable-padding-wrapper' key={r.recipeId}>
         {if Math.abs(i - @state.visibleIndex) <= 1
           <div className='swipable-position-wrapper'>
