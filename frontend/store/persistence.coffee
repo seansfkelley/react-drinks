@@ -38,7 +38,7 @@ load = ->
     recipes     = JSON.parse(localStorage['drinks-app-recipes'] ? '{}')
     ingredients = JSON.parse(localStorage['drinks-app-ingredients'] ? '{}')
 
-    return {
+    return _.mapValues {
       filters :
         recipeSearchTerm       : recipes.searchTerm
         baseLiquorFilter       : ui.baseLiquorFilter
@@ -47,7 +47,7 @@ load = ->
         customRecipes : recipes.customRecipes
       ui :
         recipeViewingIndex : ui.recipeViewingIndex
-    }
+    }, (store) -> _.omit store, _.isUndefined
   else
     elapsedTime = Date.now() - +(timestamp ? 0)
 
@@ -55,6 +55,7 @@ load = ->
       return _.chain data[storeName]
         .pick _.keys(spec)
         .pick (_, key) -> elapsedTime < spec[key]
+        .omit _.isUndefined
         .value()
 
 module.exports = { watch, load }
