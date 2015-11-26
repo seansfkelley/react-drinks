@@ -42,6 +42,12 @@ _searchTermFilter = (searchTerm, ingredientsByTag) ->
   else
     return nofilter
 
+_recipeListFilter = (listType, favoritedRecipeIds) ->
+  return switch listType
+    when 'all' then nofilter
+    when 'favorites' then (recipe) -> _.contains favoritedRecipeIds, recipe.recipeId
+    when 'custom' then (recipe) -> !!recipe.isCustom
+
 _sortAndGroupAlphabetical = (recipes) ->
   return _.chain recipes
     .sortBy 'sortName'
@@ -62,6 +68,8 @@ filteredGroupedRecipes = ({
   searchTerm
   includeAllDrinks
   ingredientTags
+  favoritedRecipeIds
+  selectedRecipeList
 }) ->
   searchTerm ?= ''
   baseLiquorFilter ?= definitions.ANY_BASE_LIQUOR
@@ -70,12 +78,15 @@ filteredGroupedRecipes = ({
   assert recipes
   assert includeAllDrinks?
   assert ingredientTags
+  assert favoritedRecipeIds
+  assert selectedRecipeList
 
   ingredientSplits = ingredientSplitsByRecipeId { ingredientsByTag, recipes, ingredientTags }
 
   filteredRecipes = _.chain recipes
     .filter _baseLiquorFilter(baseLiquorFilter)
     .filter _mixabilityFilter(includeAllDrinks, ingredientSplits)
+    .filter _recipeListFilter(selectedRecipeList, favoritedRecipeIds)
     .filter _searchTermFilter(searchTerm, ingredientsByTag)
     .value()
 
@@ -87,6 +98,7 @@ module.exports = _.extend filteredGroupedRecipes, {
     _baseLiquorFilter
     _mixabilityFilter
     _searchTermFilter
+    _recipeListFilter
     _sortAndGroupAlphabetical
   }
 }

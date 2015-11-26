@@ -4,6 +4,7 @@ filteredGroupedRecipes = require '../frontend/store/derived/filteredGroupedRecip
 { _baseLiquorFilter
   _mixabilityFilter
   _searchTermFilter
+  _recipeListFilter
   _sortAndGroupAlphabetical } = filteredGroupedRecipes.__test
 
 { ANY_BASE_LIQUOR } = require '../shared/definitions'
@@ -114,6 +115,23 @@ describe 'filteredGroupedRecipes', ->
     # Perhaps that file should be inlined into this file?
     it 'should return the list as-is when the search term is all whitespace', ->
       _.filter(RECIPES, _searchTermFilter(' \t')).should.deep.equal RECIPES
+
+  describe '#_recipeListFilter', ->
+    RECIPE_A = { recipeId : 'a', isCustom : true }
+    RECIPE_B = { recipeId: 'b' }
+    RECIPES = [ RECIPE_A, RECIPE_B ]
+
+    it 'should return the list as-is when set to filter \'all\'', ->
+      _.filter(RECIPES, _recipeListFilter('all')).should.deep.equal RECIPES
+
+    it 'should return an empty list when filtering on \'favorites\' with no favorites', ->
+      _.filter(RECIPES, _recipeListFilter('favorites', [])).should.deep.equal []
+
+    it 'should return any recipes that match on the recipeId field when filtering on \'favorites\'', ->
+      _.filter(RECIPES, _recipeListFilter('favorites', [ 'b' ])).should.deep.equal [ RECIPE_B ]
+
+    it 'should return any recipes with isCustom set when filtering on \'custom\'', ->
+      _.filter(RECIPES, _recipeListFilter('custom')).should.deep.equal [ RECIPE_A ]
 
   describe '#_sortAndGroupAlphabetical', ->
     RECIPE_A   = { sortName : 'a1' }

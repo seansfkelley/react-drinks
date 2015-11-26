@@ -6,12 +6,14 @@ DERIVED_FUNCTIONS = {
   filteredGroupedRecipes :
     fn            : require './filteredGroupedRecipes'
     stateSelector :
-      ingredientsByTag  : 'ingredients.ingredientsByTag'
-      recipes           : 'recipes.alphabeticalRecipes'
-      baseLiquorFilter  : 'filters.baseLiquorFilter'
-      searchTerm        : 'filters.recipeSearchTerm'
-      includeAllDrinks  : 'filters.includeAllDrinks'
-      ingredientTags    : 'filters.selectedIngredientTags'
+      ingredientsByTag   : 'ingredients.ingredientsByTag'
+      recipes            : 'recipes.alphabeticalRecipes'
+      baseLiquorFilter   : 'filters.baseLiquorFilter'
+      searchTerm         : 'filters.recipeSearchTerm'
+      includeAllDrinks   : 'filters.includeAllDrinks'
+      ingredientTags     : 'filters.selectedIngredientTags'
+      selectedRecipeList : 'filters.selectedRecipeList'
+      favoritedRecipeIds : 'ui.favoritedRecipeIds'
 
   ingredientSplitsByRecipeId :
     fn            : require './ingredientSplitsByRecipeId'
