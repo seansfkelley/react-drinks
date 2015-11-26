@@ -42,6 +42,11 @@ SwipableRecipeView = React.createClass {
         index : initialIndex
       }
 
+      store.dispatch {
+        type      : 'set-recipe-viewing-ids'
+        recipeIds : _.pluck orderedRecipes, 'recipeId'
+      }
+
       overlayViews.modal.show <SwipableRecipeView
         orderedRecipes={orderedRecipes}
         initialIndex={initialIndex}
@@ -86,6 +91,12 @@ SwipableRecipeView = React.createClass {
       type  : 'set-recipe-viewing-index'
       index : null
     }
+
+    store.dispatch {
+      type      : 'set-recipe-viewing-ids'
+      recipeIds : null
+    }
+
     @props.onClose()
 
   _onFavorite : (recipe, shouldFavorite) ->

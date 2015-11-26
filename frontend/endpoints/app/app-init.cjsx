@@ -26,8 +26,11 @@ initializationPromise.then ->
 
   state = store.getState()
 
-  # if state.ui.recipeViewingIndex?
-    # SwipableRecipeView.showInModal state.ui.recipeViewingIndex
+  { recipeViewingIndex, currentlyViewedRecipeIds } = state.ui
+
+  if recipeViewingIndex? and currentlyViewedRecipeIds?
+    orderedRecipes = _.map currentlyViewedRecipeIds, (recipeId) -> _.find state.recipes.allRecipes, { recipeId }
+    SwipableRecipeView.showInModal orderedRecipes, recipeViewingIndex
 
   LOADING_OVERLAY.classList.add 'fade-out'
 
