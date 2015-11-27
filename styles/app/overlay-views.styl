@@ -7,11 +7,10 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
 // Overlay basics.
 
 .overlay
-  abs-full-screen()
   z-index: 1
   pointer-events: none
 
-  &.visible
+  &.visible > *
     pointer-events: auto
 
   &.topmost
@@ -48,8 +47,7 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
 #app-root
   transition: transform $transition-duration
 
-  &:after
-    content: ' '
+  .overlay-background
     abs-full-screen()
     background: $fade-color
     opacity: 0
@@ -58,7 +56,7 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
     z-index: 1
 
   /body.showing-overlay &
-    &:after
+    .overlay-background
       pointer-events: auto
       opacity: 1
 
