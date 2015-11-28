@@ -3,13 +3,13 @@
   display: flex
   flex-direction: column
 
-  .fixed-header, .fixed-footer
+  > .fixed-header, > .fixed-footer
     flex: none // TODO: not totally sure this is necessary
 
-  .fixed-content-pane
+  > .fixed-content-pane
     flex: 1
     overflow-y: scroll
     -webkit-overflow-scrolling: touch
 
-  .fixed-header-footer // for nested .fixed-header-footers TODO: maybe the root one should have its own name
+  > .fixed-header-footer // for nested .fixed-header-footers TODO: maybe the root one should have its own name
     height: auto

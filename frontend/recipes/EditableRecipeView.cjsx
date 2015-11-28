@@ -11,9 +11,8 @@ normalization = require '../../shared/normalization'
 definitions   = require '../../shared/definitions'
 assert        = require '../../shared/tinyassert'
 
-List              = require '../components/List'
-FixedHeaderFooter = require '../components/FixedHeaderFooter'
-Deletable         = require '../components/Deletable'
+List      = require '../components/List'
+Deletable = require '../components/Deletable'
 
 store         = require '../store'
 # overlayViews  = require '../overlayViews'
@@ -50,7 +49,7 @@ NavigationHeader = React.createClass {
     goBack    : React.PropTypes.func
 
   render : ->
-    <div className='navigation-header'>
+    <div className='navigation-header fixed-header'>
       {if @props.backTitle
         <div className='back-button float-left' onTouchTap={@props.goBack}>
           <i className='fa fa-chevron-left'/>
@@ -81,11 +80,9 @@ EditableNamePage = React.createClass {
     next    : React.PropTypes.func.isRequired
 
   render : ->
-    <FixedHeaderFooter
-      header={<NavigationHeader onClose={@props.onClose}/>}
-      className='editable-recipe-page name-page'
-    >
-      <div className='page-content'>
+    <div className='editable-recipe-page name-page fixed-header-footer'>
+      <NavigationHeader onClose={@props.onClose}/>
+      <div className='fixed-content-pane'>
         <div className='page-title'>Add a Recipe</div>
         <input
           type='text'
@@ -104,7 +101,7 @@ EditableNamePage = React.createClass {
           <i className='fa fa-arrow-right'/>
         </div>
       </div>
-    </FixedHeaderFooter>
+    </div>
 
   _focus : ->
     @refs.input.focus()
@@ -236,11 +233,9 @@ EditableIngredientsPage = React.createClass {
         {ingredientNode}
       </Deletable>
 
-    <FixedHeaderFooter
-      header={<NavigationHeader onClose={@props.onClose} backTitle={'"' + @state.name + '"'} goBack={@props.back}/>}
-      className='editable-recipe-page ingredients-page'
-    >
-      <div className='page-content'>
+    <div className='editable-recipe-page ingredients-page fixed-header-footer'>
+      <NavigationHeader onClose={@props.onClose} backTitle={'"' + @state.name + '"'} goBack={@props.back}/>
+      <div className='fixed-content-pane'>
         <div className='ingredients-list'>
           {ingredientNodes}
         </div>
@@ -253,7 +248,7 @@ EditableIngredientsPage = React.createClass {
           <i className='fa fa-arrow-right'/>
         </div>
       </div>
-    </FixedHeaderFooter>
+    </div>
 
   _anyAreEditing : ->
     return _.any @state.ingredients, 'isEditing'
@@ -308,11 +303,9 @@ EditableBaseLiquorPage = React.createClass {
     if @state.ingredients.length != 1
       backTitle += 's'
 
-    <FixedHeaderFooter
-      header={<NavigationHeader onClose={@props.onClose} backTitle={backTitle} goBack={@props.back}/>}
-      className='editable-recipe-page base-tag-page'
-    >
-      <div className='page-content'>
+    <div className='editable-recipe-page base-tag-page fixed-header-footer'>
+      <NavigationHeader onClose={@props.onClose} backTitle={backTitle} goBack={@props.back}/>
+      <div className='fixed-content-pane'>
         <div className='page-title'>Base ingredient(s)</div>
         <List>
           {for tag in definitions.BASE_LIQUORS
@@ -330,7 +323,7 @@ EditableBaseLiquorPage = React.createClass {
           <i className='fa fa-arrow-right'/>
         </div>
       </div>
-    </FixedHeaderFooter>
+    </div>
 
   _isEnabled : ->
     return @state.base.length > 0
@@ -367,12 +360,9 @@ EditableTextPage = React.createClass {
       backTitle = "#{BASE_TITLES_BY_TAG[@state.base[0]]}-based"
     else
       backTitle = "#{@state.base.length} base liquors"
-
-    <FixedHeaderFooter
-      header={<NavigationHeader onClose={@props.onClose} backTitle={backTitle} goBack={@props.back}/>}
-      className='editable-recipe-page text-page'
-    >
-      <div className='page-content'>
+    <div className='editable-recipe-page text-page fixed-header-footer'>
+      <NavigationHeader onClose={@props.onClose} backTitle={backTitle} goBack={@props.back}/>
+      <div className='fixed-content-pane'>
         <textarea
           className='editable-text-area'
           placeholder='Instructions...'
@@ -392,7 +382,7 @@ EditableTextPage = React.createClass {
           <i className='fa fa-arrow-right'/>
         </div>
       </div>
-    </FixedHeaderFooter>
+    </div>
 
   _isEnabled : ->
     return @state.instructions.length
@@ -425,19 +415,16 @@ PreviewPage = React.createClass {
     recipe  : React.PropTypes.object
 
   render : ->
-    footer = <div className='next-button' onTouchTap={@props.next}>
-      <span className='next-text'>Done</span>
-      <i className='fa fa-check'/>
-    </div>
-    <FixedHeaderFooter
-      header={<NavigationHeader onClose={@props.onClose} backTitle='Instructions' goBack={@props.back}/>}
-      footer={footer}
-      className='editable-recipe-page preview-page'
-    >
-      <div className='page-content'>
+    <div className='editable-recipe-page preview-page fixed-header-footer'>
+      <NavigationHeader onClose={@props.onClose} backTitle='Instructions' goBack={@props.back}/>
+      <div className='fixed-content-pane'>
         <RecipeView recipe={@props.recipe}/>
       </div>
-    </FixedHeaderFooter>
+      <div className='next-button fixed-footer' onTouchTap={@props.next}>
+        <span className='next-text'>Done</span>
+        <i className='fa fa-check'/>
+      </div>
+    </div>
 }
 
 EditableRecipePage =
@@ -499,6 +486,9 @@ EditableRecipeView = React.createClass {
       type   : 'save-recipe'
       recipe : @_constructRecipe()
     }
+
+    # TODO: Push this up to store state.
+    @setState { currentPage : EditableRecipePage.NAME }
 
     @props.onClose()
 
