@@ -28,8 +28,13 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
     transform: none
     shadow('right', 3px)
 
-// .overlay.flyup
+.overlay.flyup
+  transform: translateY(100%)
+  transition: transform $transition-duration
 
+  &.visible
+    transform: none
+    shadow('top', 3px)
 
 .overlay-background
   abs-full-screen()

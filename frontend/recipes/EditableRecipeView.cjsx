@@ -45,6 +45,7 @@ NavigationHeader = React.createClass {
   displayName : 'NavigationHeader'
 
   propTypes :
+    onClose   : React.PropTypes.func.isRequired
     backTitle : React.PropTypes.string
     goBack    : React.PropTypes.func
 
@@ -55,14 +56,15 @@ NavigationHeader = React.createClass {
           <i className='fa fa-chevron-left'/>
           <span className='back-button-label'>{@props.backTitle}</span>
         </div>}
-      <i className='fa fa-times float-right' onTouchTap={@_closeFlyup}/>
+      <i className='fa fa-times float-right' onTouchTap={@_close}/>
     </div>
 
-  _closeFlyup : ->
-    # overlayViews.flyup.hide()
+  _close : ->
     store.dispatch {
       type : 'clear-editable-recipe'
     }
+
+    @props.onClose()
 }
 
 EditableNamePage = React.createClass {
@@ -75,11 +77,12 @@ EditableNamePage = React.createClass {
   ]
 
   propTypes :
-    next : React.PropTypes.func.isRequired
+    onClose : React.PropTypes.func.isRequired
+    next    : React.PropTypes.func.isRequired
 
   render : ->
     <FixedHeaderFooter
-      header={<NavigationHeader/>}
+      header={<NavigationHeader onClose={@props.onClose}/>}
       className='editable-recipe-page name-page'
     >
       <div className='page-content'>
@@ -211,8 +214,9 @@ EditableIngredientsPage = React.createClass {
   ]
 
   propTypes :
-    back : React.PropTypes.func.isRequired
-    next : React.PropTypes.func.isRequired
+    onClose : React.PropTypes.func.isRequired
+    back    : React.PropTypes.func.isRequired
+    next    : React.PropTypes.func.isRequired
 
   render : ->
     ingredientNodes = _.map @state.ingredients, (ingredient, index) =>
@@ -233,7 +237,7 @@ EditableIngredientsPage = React.createClass {
       </Deletable>
 
     <FixedHeaderFooter
-      header={<NavigationHeader backTitle={'"' + @state.name + '"'} goBack={@props.back}/>}
+      header={<NavigationHeader onClose={@props.onClose} backTitle={'"' + @state.name + '"'} goBack={@props.back}/>}
       className='editable-recipe-page ingredients-page'
     >
       <div className='page-content'>
@@ -295,8 +299,9 @@ EditableBaseLiquorPage = React.createClass {
   ]
 
   propTypes :
-    back : React.PropTypes.func.isRequired
-    next : React.PropTypes.func.isRequired
+    onClose : React.PropTypes.func.isRequired
+    back    : React.PropTypes.func.isRequired
+    next    : React.PropTypes.func.isRequired
 
   render : ->
     backTitle = "#{@state.ingredients.length} ingredient"
@@ -304,7 +309,7 @@ EditableBaseLiquorPage = React.createClass {
       backTitle += 's'
 
     <FixedHeaderFooter
-      header={<NavigationHeader backTitle={backTitle} goBack={@props.back}/>}
+      header={<NavigationHeader onClose={@props.onClose} backTitle={backTitle} goBack={@props.back}/>}
       className='editable-recipe-page base-tag-page'
     >
       <div className='page-content'>
@@ -353,8 +358,9 @@ EditableTextPage = React.createClass {
   ]
 
   propTypes :
-    back : React.PropTypes.func.isRequired
-    next : React.PropTypes.func.isRequired
+    onClose : React.PropTypes.func.isRequired
+    back    : React.PropTypes.func.isRequired
+    next    : React.PropTypes.func.isRequired
 
   render : ->
     if @state.base.length == 1
@@ -363,7 +369,7 @@ EditableTextPage = React.createClass {
       backTitle = "#{@state.base.length} base liquors"
 
     <FixedHeaderFooter
-      header={<NavigationHeader backTitle={backTitle} goBack={@props.back}/>}
+      header={<NavigationHeader onClose={@props.onClose} backTitle={backTitle} goBack={@props.back}/>}
       className='editable-recipe-page text-page'
     >
       <div className='page-content'>
@@ -413,9 +419,10 @@ PreviewPage = React.createClass {
   displayName : 'PreviewPage'
 
   propTypes :
-    back   : React.PropTypes.func.isRequired
-    next   : React.PropTypes.func.isRequired
-    recipe : React.PropTypes.object
+    onClose : React.PropTypes.func.isRequired
+    back    : React.PropTypes.func.isRequired
+    next    : React.PropTypes.func.isRequired
+    recipe  : React.PropTypes.object
 
   render : ->
     footer = <div className='next-button' onTouchTap={@props.next}>
@@ -423,7 +430,7 @@ PreviewPage = React.createClass {
       <i className='fa fa-check'/>
     </div>
     <FixedHeaderFooter
-      header={<NavigationHeader backTitle='Instructions' goBack={@props.back}/>}
+      header={<NavigationHeader onClose={@props.onClose} backTitle='Instructions' goBack={@props.back}/>}
       footer={footer}
       className='editable-recipe-page preview-page'
     >
@@ -443,6 +450,9 @@ EditableRecipePage =
 EditableRecipeView = React.createClass {
   displayName : 'EditableRecipeView'
 
+  propTypes :
+    onClose : React.PropTypes.func.isRequired
+
   getInitialState : -> {
     currentPage : EditableRecipePage.NAME
   }
@@ -452,26 +462,31 @@ EditableRecipeView = React.createClass {
       when EditableRecipePage.NAME
         <EditableNamePage
           next={@_makePageSwitcher(EditableRecipePage.INGREDIENTS)}
+          onClose={@props.onClose}}
         />
       when EditableRecipePage.INGREDIENTS
         <EditableIngredientsPage
           back={@_makePageSwitcher(EditableRecipePage.NAME)}
           next={@_makePageSwitcher(EditableRecipePage.BASE)}
+          onClose={@props.onClose}}
         />
       when EditableRecipePage.BASE
         <EditableBaseLiquorPage
           back={@_makePageSwitcher(EditableRecipePage.INGREDIENTS)}
           next={@_makePageSwitcher(EditableRecipePage.TEXT)}
+          onClose={@props.onClose}}
         />
       when EditableRecipePage.TEXT
         <EditableTextPage
           back={@_makePageSwitcher(EditableRecipePage.BASE)}
           next={@_makePageSwitcher(EditableRecipePage.PREVIEW)}
+          onClose={@props.onClose}}
         />
       when EditableRecipePage.PREVIEW
         <PreviewPage
           back={@_makePageSwitcher(EditableRecipePage.TEXT)}
           next={@_finish}
+          onClose={@props.onClose}}
           recipe={@_constructRecipe()}
         />
 
@@ -480,11 +495,12 @@ EditableRecipeView = React.createClass {
       @setState { currentPage : targetPage }
 
   _finish : ->
-    # overlayViews.flyup.hide()
     store.dispatch {
       type   : 'save-recipe'
       recipe : @_constructRecipe()
     }
+
+    @props.onClose()
 
   _constructRecipe : ->
     editableRecipeState = store.getState().editableRecipe

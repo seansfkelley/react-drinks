@@ -12,10 +12,6 @@ Swipable = require '../components/Swipable'
 
 store = require '../store'
 
-SidebarMenu        = require './SidebarMenu'
-EditableRecipeView = require './EditableRecipeView'
-RecipeListSelector = require './RecipeListSelector'
-
 BASE_LIQUORS = [ definitions.ANY_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
 
 RecipeListHeader = React.createClass {
@@ -73,13 +69,11 @@ RecipeListHeader = React.createClass {
     }
 
   _showListSelector : ->
-  #   overlayViews.modal.show <RecipeListSelector
-  #     currentType={@state.selectedRecipeList}
-  #     onClose={overlayViews.modal.hide}
-  #   />
 
   _newRecipe : ->
-    # overlayViews.flyup.show <EditableRecipeView/>
+    store.dispatch {
+      type : 'show-recipe-editor'
+    }
 }
 
 module.exports = RecipeListHeader
