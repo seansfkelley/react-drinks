@@ -8,45 +8,17 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
 
 .overlay
   z-index: 1
+  opacity: 0
   pointer-events: none
+  transition: opacity $transition-duration
 
-  &.visible > *
-    pointer-events: auto
-
-  &.topmost
-    z-index: 2 // TODO: couldn't this go on the roots that need it?
-
-#modal-root
-  > *
-    opacity: 0
-    transition: opacity $transition-duration
-
-  &.visible > *
+  &.visible
     opacity: 1
-
-#flyup-root
-  > *
-    transform: translate(0, 100%)
-    transition: transform $transition-duration
-
-  &.visible > *
-    transform: none
-
-#pushover-root
-  > *
-    width: $pushover-width
-    // If same as actual pushover width, the iPhone renders weird ugly artifacts.
-    transform: translate(-100%, 0)
-    transition: transform $transition-duration
-
-  &.visible > *
-    transform: none
+    pointer-events: auto
 
 // Fade things that are not the overlay.
 
-#app-root
-  transition: transform $transition-duration
-
+.app-event-wrapper
   .overlay-background
     abs-full-screen()
     background: $fade-color
@@ -55,8 +27,7 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
     pointer-events: none
     z-index: 1
 
-  /body.showing-overlay &
-    .overlay-background
+    &.visible
       pointer-events: auto
       opacity: 1
 
@@ -73,12 +44,3 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
   /body.showing-overlay &
     &:after
       opacity: 1
-
-// #app-root needs to understand pushovers.
-
-body.showing-pushover #app-root
-  transform: translate($pushover-width, 0)
-
-  &:after
-    shadow-inset('left', 3px, rgb(0, 0, 0, 0.25))
-

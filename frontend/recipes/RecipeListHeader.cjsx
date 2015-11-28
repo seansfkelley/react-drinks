@@ -11,7 +11,7 @@ TitleBar = require '../components/TitleBar'
 Swipable = require '../components/Swipable'
 
 store         = require '../store'
-overlayViews  = require '../overlayViews'
+# overlayViews  = require '../overlayViews'
 
 SidebarMenu        = require './SidebarMenu'
 EditableRecipeView = require './EditableRecipeView'
@@ -69,19 +69,19 @@ RecipeListHeader = React.createClass {
     }
 
   _showSidebar : ->
-    overlayViews.pushover.show <SidebarMenu
-      initialIncludeAllDrinks={@state.includeAllDrinks}
-      onClose={overlayViews.pushover.hide}
-    />
+    # overlayViews.pushover.show <SidebarMenu
+    #   initialIncludeAllDrinks={@state.includeAllDrinks}
+    #   onClose={overlayViews.pushover.hide}
+    # />
 
   _showListSelector : ->
-    overlayViews.modal.show <RecipeListSelector
-      currentType={@state.selectedRecipeList}
-      onClose={overlayViews.modal.hide}
-    />
+  #   overlayViews.modal.show <RecipeListSelector
+  #     currentType={@state.selectedRecipeList}
+  #     onClose={overlayViews.modal.hide}
+  #   />
 
   _newRecipe : ->
-    overlayViews.flyup.show <EditableRecipeView/>
+    # overlayViews.flyup.show <EditableRecipeView/>
 }
 
 module.exports = RecipeListHeader

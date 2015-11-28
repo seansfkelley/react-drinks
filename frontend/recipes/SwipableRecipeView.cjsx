@@ -7,8 +7,7 @@ DerivedValueMixin = require '../mixins/DerivedValueMixin'
 
 Swipable = require '../components/Swipable'
 
-store        = require '../store'
-overlayViews = require '../overlayViews'
+store = require '../store'
 
 RecipeView = require './RecipeView'
 
@@ -16,12 +15,13 @@ SwipableRecipeView = React.createClass {
   displayName : 'SwipableRecipeView'
 
   propTypes :
-    orderedRecipes : React.PropTypes.array.isRequired
-    initialIndex   : React.PropTypes.number.isRequired
-    onClose        : React.PropTypes.func.isRequired
+    recipeIds : React.PropTypes.array.isRequired
+    index     : React.PropTypes.number.isRequired
+    onClose   : React.PropTypes.func.isRequired
 
   mixins : [
     ReduxMixin {
+      recipes     : 'allRecipes'
       ingredients : 'ingredientsByTag'
       ui          : 'favoritedRecipeIds'
     }
@@ -31,56 +31,37 @@ SwipableRecipeView = React.createClass {
     PureRenderMixin
   ]
 
-  getInitialState : -> {
-    visibleIndex : @props.initialIndex
-  }
-
-  statics :
-    showInModal : (orderedRecipes, initialIndex = 0) ->
-      store.dispatch {
-        type  : 'set-recipe-viewing-index'
-        index : initialIndex
-      }
-
-      store.dispatch {
-        type      : 'set-recipe-viewing-ids'
-        recipeIds : _.pluck orderedRecipes, 'recipeId'
-      }
-
-      overlayViews.modal.show <SwipableRecipeView
-        orderedRecipes={orderedRecipes}
-        initialIndex={initialIndex}
-        onClose={overlayViews.modal.hide}
-      />
-
   render : ->
-    recipePages = _.map @props.orderedRecipes, (r, i) =>
-      <div className='swipable-padding-wrapper' key={r.recipeId}>
-        {if Math.abs(i - @state.visibleIndex) <= 1
-          <div className='swipable-position-wrapper'>
-            <RecipeView
-              recipe={r}
-              ingredientsByTag={@state.ingredientsByTag}
-              ingredientSplits={@state.ingredientSplitsByRecipeId?[r.recipeId]}
-              onClose={@_onClose}
-              onFavorite={@_onFavorite}
-              isFavorited={r.recipeId in @state.favoritedRecipeIds}
-              isShareable={not r.isCustom}
-            />
-          </div>}
-      </div>
+    if @props.recipeIds.length == 0
+      return <div/>
+    else
+      recipePages = _.map @props.recipeIds, (recipeId, i) =>
+        <div className='swipable-padding-wrapper' key={recipeId}>
+          {if Math.abs(i - @props.index) <= 1
+            recipe = _.find @state.allRecipes, { recipeId }
+            <div className='swipable-position-wrapper'>
+              <RecipeView
+                recipe={recipe}
+                ingredientsByTag={@state.ingredientsByTag}
+                ingredientSplits={@state.ingredientSplitsByRecipeId?[recipeId]}
+                onClose={@_onClose}
+                onFavorite={@_onFavorite}
+                isFavorited={recipeId in @state.favoritedRecipeIds}
+                isShareable={not recipe.isCustom}
+              />
+            </div>}
+        </div>
 
-    <Swipable
-      className='swipable-recipe-container'
-      initialIndex={@props.initialIndex}
-      onSlideChange={@_onSlideChange}
-      friction=0.9
-    >
-      {recipePages}
-    </Swipable>
+      <Swipable
+        className='swipable-recipe-container'
+        initialIndex={@props.index}
+        onSlideChange={@_onSlideChange}
+        friction=0.9
+      >
+        {recipePages}
+      </Swipable>
 
   _onSlideChange : (index) ->
-    @setState { visibleIndex : index }
     store.dispatch {
       type : 'set-recipe-viewing-index'
       index
@@ -89,12 +70,7 @@ SwipableRecipeView = React.createClass {
   _onClose : ->
     store.dispatch {
       type  : 'set-recipe-viewing-index'
-      index : null
-    }
-
-    store.dispatch {
-      type      : 'set-recipe-viewing-ids'
-      recipeIds : null
+      index : 0
     }
 
     @props.onClose()

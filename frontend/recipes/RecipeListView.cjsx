@@ -11,7 +11,6 @@ List      = require '../components/List'
 store            = require '../store'
 utils            = require '../utils'
 stylingConstants = require '../stylingConstants'
-overlayViews     = require '../overlayViews'
 Difficulty       = require '../Difficulty'
 
 SwipableRecipeView = require './SwipableRecipeView'
@@ -36,18 +35,13 @@ RecipeList = React.createClass {
       .reduce ((sum, l) -> sum + l), 0
       .value()
 
-    orderedRecipes = _.chain @props.recipes
-      .pluck 'recipes'
-      .flatten()
-      .value()
-
     listNodes = []
     absoluteIndex = 0
     for { key, recipes } in @props.recipes
       if recipeCount > 6
         listNodes.push @_makeHeader(key, recipes)
       for r in recipes
-        listNodes.push @_makeItem(key, r, orderedRecipes, absoluteIndex)
+        listNodes.push @_makeItem(key, r, absoluteIndex)
         absoluteIndex += 1
 
     <List className={List.ClassNames.HEADERED}>
@@ -57,7 +51,7 @@ RecipeList = React.createClass {
   _makeHeader : (groupKey, recipes) ->
     return <List.Header title={groupKey.toUpperCase()} key={'header-' + groupKey}/>
 
-  _makeItem : (groupKey, r, orderedRecipes, absoluteIndex) ->
+  _makeItem : (groupKey, r, absoluteIndex) ->
     missingIngredients = @props.ingredientSplitsByRecipeId[r.recipeId].missing
     if missingIngredients.length
       isMixable = false
@@ -75,10 +69,23 @@ RecipeList = React.createClass {
       difficulty={difficulty}
       isMixable={isMixable}
       recipeName={r.name}
-      onTouchTap={SwipableRecipeView.showInModal.bind null, orderedRecipes, absoluteIndex}
+      onTouchTap={@_showRecipeViewer.bind this, absoluteIndex}
       onDelete={if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)}
       key={r.recipeId}
     />
+
+  _showRecipeViewer : (index) ->
+    recipeIds = _.chain @props.recipes
+      .pluck 'recipes'
+      .flatten()
+      .pluck 'recipeId'
+      .value()
+
+    store.dispatch {
+      type : 'show-recipe-viewer'
+      recipeIds
+      index
+    }
 
   _deleteRecipe : (recipeId) ->
     store.dispatch {

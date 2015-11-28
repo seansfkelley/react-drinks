@@ -24,13 +24,13 @@ APP_ROOT        = document.querySelector '#app-root'
 initializationPromise.then ->
   ReactDom.render <App/>, APP_ROOT
 
-  state = store.getState()
+  # state = store.getState()
 
-  { recipeViewingIndex, currentlyViewedRecipeIds } = state.ui
+  # { recipeViewingIndex, currentlyViewedRecipeIds } = state.ui
 
-  if recipeViewingIndex? and currentlyViewedRecipeIds?
-    orderedRecipes = _.map currentlyViewedRecipeIds, (recipeId) -> _.find state.recipes.allRecipes, { recipeId }
-    SwipableRecipeView.showInModal orderedRecipes, recipeViewingIndex
+  # if recipeViewingIndex? and currentlyViewedRecipeIds?
+  #   orderedRecipes = _.map currentlyViewedRecipeIds, (recipeId) -> _.find state.recipes.allRecipes, { recipeId }
+  #   SwipableRecipeView.showInModal orderedRecipes, recipeViewingIndex
 
   LOADING_OVERLAY.classList.add 'fade-out'
 

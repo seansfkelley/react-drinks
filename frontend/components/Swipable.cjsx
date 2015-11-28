@@ -120,7 +120,13 @@ Swipable = React.createClass {
       </div>
     </IntertialSwipable>
 
+  # componentDidUpdate : ->
+  #   @_computeCachedState()
+
   componentDidMount: ->
+    @_computeCachedState()
+
+  _computeCachedState : ->
     wrapperWidth = ReactDom.findDOMNode(@refs.slidingContainer).offsetWidth
     itemWidths   = _.pluck ReactDom.findDOMNode(@refs.slidingContainer).children, 'offsetWidth'
     itemOffsets  = _.chain itemWidths

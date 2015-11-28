@@ -16,7 +16,7 @@ FixedHeaderFooter = require '../components/FixedHeaderFooter'
 Deletable         = require '../components/Deletable'
 
 store         = require '../store'
-overlayViews  = require '../overlayViews'
+# overlayViews  = require '../overlayViews'
 
 MeasuredIngredient = require './MeasuredIngredient'
 RecipeView         = require './RecipeView'
@@ -59,7 +59,7 @@ NavigationHeader = React.createClass {
     </div>
 
   _closeFlyup : ->
-    overlayViews.flyup.hide()
+    # overlayViews.flyup.hide()
     store.dispatch {
       type : 'clear-editable-recipe'
     }
@@ -480,7 +480,7 @@ EditableRecipeView = React.createClass {
       @setState { currentPage : targetPage }
 
   _finish : ->
-    overlayViews.flyup.hide()
+    # overlayViews.flyup.hide()
     store.dispatch {
       type   : 'save-recipe'
       recipe : @_constructRecipe()
