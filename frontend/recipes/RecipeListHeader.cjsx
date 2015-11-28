@@ -10,8 +10,7 @@ ReduxMixin = require '../mixins/ReduxMixin'
 TitleBar = require '../components/TitleBar'
 Swipable = require '../components/Swipable'
 
-store         = require '../store'
-# overlayViews  = require '../overlayViews'
+store = require '../store'
 
 SidebarMenu        = require './SidebarMenu'
 EditableRecipeView = require './EditableRecipeView'
@@ -24,7 +23,7 @@ RecipeListHeader = React.createClass {
 
   mixins : [
     ReduxMixin {
-      filters : [ 'includeAllDrinks', 'baseLiquorFilter', 'selectedRecipeList' ]
+      filters : [ 'baseLiquorFilter', 'selectedRecipeList' ]
     }
     PureRenderMixin
   ]
@@ -69,10 +68,9 @@ RecipeListHeader = React.createClass {
     }
 
   _showSidebar : ->
-    # overlayViews.pushover.show <SidebarMenu
-    #   initialIncludeAllDrinks={@state.includeAllDrinks}
-    #   onClose={overlayViews.pushover.hide}
-    # />
+    store.dispatch {
+      type : 'show-sidebar'
+    }
 
   _showListSelector : ->
   #   overlayViews.modal.show <RecipeListSelector

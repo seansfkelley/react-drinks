@@ -39,8 +39,8 @@ SidebarMenu = React.createClass {
   render : ->
     <div className='sidebar-menu'>
       <div className='return-button' onTouchTap={@_closeMenu}>
-        <span className='text'>Drinks</span>
-        <i className='fa fa-chevron-right'/>
+        <i className='fa fa-chevron-left'/>
+        <span className='text'>Hide</span>
       </div>
       <div
         className={classnames 'ingredients-button', { 'showing-list' : @state.showingIngredients }}

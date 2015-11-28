@@ -1,0 +1,45 @@
+@require '../shared/animation'
+@require '../shared/mixins'
+
+$fade-color = rgba(0, 0, 0, 0.5)
+$pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
+
+.overlay
+  abs-full-screen()
+  z-index: 1
+  pointer-events: none
+
+  &.visible
+    pointer-events: auto
+
+.overlay.modal
+  opacity: 0
+  transition: opacity $transition-duration
+
+  &.visible
+    opacity: 1
+
+.overlay.pushover
+  transform: translateX(-100%)
+  width: $pushover-width
+  transition: transform $transition-duration
+
+  &.visible
+    transform: none
+    shadow('right', 3px)
+
+// .overlay.flyup
+
+
+.overlay-background
+  abs-full-screen()
+  background: $fade-color
+  opacity: 0
+  transition: opacity $transition-duration
+  pointer-events: none
+  z-index: 1
+
+  &.visible
+    pointer-events: auto
+    opacity: 1
+

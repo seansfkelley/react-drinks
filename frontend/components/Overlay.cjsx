@@ -11,7 +11,7 @@ Overlay = React.createClass {
     children  : React.PropTypes.element
 
   render : ->
-    <div className={classnames 'root overlay', { 'visible' : @props.isVisible }, @props.type}>
+    <div className={classnames 'overlay', { 'visible' : @props.isVisible }, @props.type}>
       {@props.children}
     </div>
 }
