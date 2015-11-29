@@ -8,6 +8,7 @@ module.exports = require('./makeReducer') _.extend({
   showingRecipeViewer      : false
   showingRecipeEditor      : false
   showingSidebar           : false
+  showingListSelector      : false
 }, require('../persistence').load().ui), {
   'set-recipe-viewing-index' : (state, { index }) ->
     return _.defaults { recipeViewingIndex : index }, state
@@ -47,4 +48,9 @@ module.exports = require('./makeReducer') _.extend({
   'hide-sidebar' : (state) ->
     return _.defaults { showingSidebar : false }, state
 
+  'show-list-selector' : (state) ->
+    return _.defaults { showingListSelector : true }, state
+
+  'hide-list-selector' : (state) ->
+    return _.defaults { showingListSelector : false }, state
 }

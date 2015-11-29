@@ -9,6 +9,7 @@ RecipeListView     = require '../../recipes/RecipeListView'
 SwipableRecipeView = require '../../recipes/SwipableRecipeView'
 SidebarMenu        = require '../../recipes/SidebarMenu'
 EditableRecipeView = require '../../recipes/EditableRecipeView'
+RecipeListSelector = require '../../recipes/RecipeListSelector'
 
 Overlay = require '../../components/Overlay'
 
@@ -20,7 +21,10 @@ App = React.createClass {
   mixins : [
     ReduxMixin {
       recipes : 'allRecipes'
-      filters : 'includeAllDrinks'
+      filters : [
+        'includeAllDrinks'
+        'selectedRecipeList'
+      ]
       ui      : [
         'recipeViewingIndex'
         'currentlyViewedRecipeIds'
@@ -28,12 +32,18 @@ App = React.createClass {
         'showingRecipeViewer'
         'showingRecipeEditor'
         'showingSidebar'
+        'showingListSelector'
       ]
     }
   ]
 
   render : ->
-    anyOverlayVisible = _.any [ @state.showingRecipeViewer, @state.showingRecipeEditor, @state.showingSidebar ]
+    anyOverlayVisible = _.any [
+      @state.showingRecipeViewer
+      @state.showingRecipeEditor
+      @state.showingSidebar
+      @state.showingListSelector
+    ]
 
     <div className='app-event-wrapper' onTouchStart={@_deselectActiveElement}>
       <RecipeListView/>
@@ -56,6 +66,12 @@ App = React.createClass {
           onClose={@_hideRecipeEditor}
         />
       </Overlay>
+      <Overlay type='modal' isVisible={@state.showingListSelector}>
+        <RecipeListSelector
+          currentType={@state.selectedRecipeList}
+          onClose={@_hideListSelector}
+        />
+      </Overlay>
     </div>
 
   _deselectActiveElement : ->
@@ -76,10 +92,16 @@ App = React.createClass {
       type : 'hide-recipe-editor'
     }
 
+  _hideListSelector : ->
+    store.dispatch {
+      type : 'hide-list-selector'
+    }
+
   _closeOverlays : ->
     @_hideRecipeViewer()
     @_hideSidebar()
     @_hideRecipeEditor()
+    @_hideListSelector()
 
 }
 

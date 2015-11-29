@@ -69,6 +69,9 @@ RecipeListHeader = React.createClass {
     }
 
   _showListSelector : ->
+    store.dispatch {
+      type : 'show-list-selector'
+    }
 
   _newRecipe : ->
     store.dispatch {
