@@ -1,6 +1,6 @@
 _ = require 'lodash'
 
-EditableRecipePage = require '../../EditableRecipePage'
+EditableRecipePageType = require '../../EditableRecipePageType'
 
 { ANY_BASE_LIQUOR } = require '../../../shared/definitions'
 
@@ -53,7 +53,7 @@ _parseIngredient = (rawText, tag) ->
   }
 
 _createEmptyStore = -> {
-  currentPage  : EditableRecipePage.NAME
+  currentPage  : EditableRecipePageType.NAME
   name         : ''
   ingredients  : []
   instructions : ''

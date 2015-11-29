@@ -7,14 +7,18 @@ store = require '../store'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
+definitions = require '../../shared/definitions'
+
+List = require '../components/List'
+
 EditableRecipePage = require './EditableRecipePage'
 
-EditableNamePage = React.createClass {
-  displayName : 'EditableNamePage'
+EditableBaseLiquorPage = React.createClass {
+  displayName : 'EditableBaseLiquorPage'
 
   mixins : [
     ReduxMixin {
-      editableRecipe : 'name'
+      editableRecipe : 'base'
     }
     PureRenderMixin
   ]
@@ -27,25 +31,24 @@ EditableNamePage = React.createClass {
 
   render : ->
     <EditableRecipePage
-      className='name-page'
+      className='base-tag-page'
       onClose={@props.onClose}
       onPrevious={@props.onPrevious}
       previousTitle={@props.previousTitle}
     >
       <div className='fixed-content-pane'>
-        <div className='page-title'>Add a Recipe</div>
-        <input
-          type='text'
-          placeholder='Name...'
-          autoCorrect='off'
-          autoCapitalize='on'
-          autoComplete='off'
-          spellCheck='false'
-          ref='input'
-          value={@state.name}
-          onChange={@_onChange}
-          onTouchTap={@_focus}
-        />
+        <div className='page-title'>Base ingredient(s)</div>
+        <List>
+          {for tag in definitions.BASE_LIQUORS
+            <List.Item
+              className={classnames 'base-liquor-option', { 'is-selected' : tag in @state.base }}
+              onTouchTap={@_tagToggler tag}
+              key="tag-#{tag}"
+            >
+              {definitions.BASE_TITLES_BY_TAG[tag]}
+              <i className='fa fa-check-circle'/>
+            </List.Item>}
+        </List>
         <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
           <span className='next-text'>Next</span>
           <i className='fa fa-arrow-right'/>
@@ -53,26 +56,19 @@ EditableNamePage = React.createClass {
       </div>
     </EditableRecipePage>
 
-  _focus : ->
-    @refs.input.focus()
-
-  # mixin-ify this kind of stuff probably
   _isEnabled : ->
-    return !!@state.name
+    return @state.base.length > 0
 
   _nextIfEnabled : ->
     if @_isEnabled()
-      store.dispatch {
-        type : 'set-name'
-        name : @state.name.trim()
-      }
       @props.onNext()
 
-  _onChange : (e) ->
-    store.dispatch {
-      type : 'set-name'
-      name : e.target.value
-    }
+  _tagToggler : (tag) ->
+    return =>
+      store.dispatch {
+        type : 'toggle-base-liquor-tag'
+        tag
+      }
 }
 
-module.exports = EditableNamePage
+module.exports = EditableBaseLiquorPage

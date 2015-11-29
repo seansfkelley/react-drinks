@@ -1,6 +1,6 @@
-_          = require 'lodash'
-React      = require 'react'
-classnames = require 'classnames'
+React           = require 'react'
+classnames      = require 'classnames'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 store = require '../store'
 
@@ -11,6 +11,10 @@ NavigationHeader = React.createClass {
     onClose       : React.PropTypes.func.isRequired
     previousTitle : React.PropTypes.string
     onPrevious    : React.PropTypes.func
+
+  mixins : [
+    PureRenderMixin
+  ]
 
   render : ->
     <div className='navigation-header fixed-header'>

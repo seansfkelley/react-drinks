@@ -1,4 +1,3 @@
-_               = require 'lodash'
 React           = require 'react'
 classnames      = require 'classnames'
 PureRenderMixin = require 'react-addons-pure-render-mixin'
@@ -9,14 +8,13 @@ ReduxMixin = require '../mixins/ReduxMixin'
 
 EditableRecipePage = require './EditableRecipePage'
 
-EditableNamePage = React.createClass {
-  displayName : 'EditableNamePage'
+EditableTextPage = React.createClass {
+  displayName : 'EditableTextPage'
 
   mixins : [
     ReduxMixin {
-      editableRecipe : 'name'
+      editableRecipe : [ 'instructions', 'notes' ]
     }
-    PureRenderMixin
   ]
 
   propTypes :
@@ -27,24 +25,25 @@ EditableNamePage = React.createClass {
 
   render : ->
     <EditableRecipePage
-      className='name-page'
+      className='text-page'
       onClose={@props.onClose}
       onPrevious={@props.onPrevious}
       previousTitle={@props.previousTitle}
     >
       <div className='fixed-content-pane'>
-        <div className='page-title'>Add a Recipe</div>
-        <input
-          type='text'
-          placeholder='Name...'
-          autoCorrect='off'
-          autoCapitalize='on'
-          autoComplete='off'
-          spellCheck='false'
-          ref='input'
-          value={@state.name}
-          onChange={@_onChange}
-          onTouchTap={@_focus}
+        <textarea
+          className='editable-text-area'
+          placeholder='Instructions...'
+          onChange={@_setInstructions}
+          value={@state.instructions}
+          ref='instructions'
+        />
+        <textarea
+          className='editable-text-area'
+          placeholder='Notes (optional)...'
+          onChange={@_setNotes}
+          value={@state.notes}
+          ref='notes'
         />
         <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
           <span className='next-text'>Next</span>
@@ -53,26 +52,24 @@ EditableNamePage = React.createClass {
       </div>
     </EditableRecipePage>
 
-  _focus : ->
-    @refs.input.focus()
-
-  # mixin-ify this kind of stuff probably
   _isEnabled : ->
-    return !!@state.name
+    return @state.instructions.length
 
   _nextIfEnabled : ->
     if @_isEnabled()
-      store.dispatch {
-        type : 'set-name'
-        name : @state.name.trim()
-      }
       @props.onNext()
 
-  _onChange : (e) ->
+  _setInstructions : (e) ->
     store.dispatch {
-      type : 'set-name'
-      name : e.target.value
+      type         : 'set-instructions'
+      instructions : e.target.value
+    }
+
+  _setNotes : (e) ->
+    store.dispatch {
+      type  : 'set-notes'
+      notes : e.target.value
     }
 }
 
-module.exports = EditableNamePage
+module.exports = EditableTextPage
