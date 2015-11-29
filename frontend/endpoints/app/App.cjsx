@@ -8,8 +8,8 @@ ReduxMixin = require '../../mixins/ReduxMixin'
 RecipeListView     = require '../../recipes/RecipeListView'
 SwipableRecipeView = require '../../recipes/SwipableRecipeView'
 SidebarMenu        = require '../../recipes/SidebarMenu'
-EditableRecipeView = require '../../recipes/EditableRecipeView'
 RecipeListSelector = require '../../recipes/RecipeListSelector'
+EditableRecipeView = require '../../recipe-editor/EditableRecipeView'
 
 Overlay = require '../../components/Overlay'
 

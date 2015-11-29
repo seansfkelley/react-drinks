@@ -16,8 +16,8 @@ Deletable = require '../components/Deletable'
 store              = require '../store'
 EditableRecipePage = require '../EditableRecipePage'
 
-MeasuredIngredient = require './MeasuredIngredient'
-RecipeView         = require './RecipeView'
+MeasuredIngredient = require '../recipes/MeasuredIngredient'
+RecipeView         = require '../recipes/RecipeView'
 
 BASE_TITLES_BY_TAG = {
   'gin'     : 'Gin'
@@ -63,65 +63,6 @@ NavigationHeader = React.createClass {
     }
 
     @props.onClose()
-}
-
-EditableNamePage = React.createClass {
-  displayName : 'EditableNamePage'
-
-  mixins : [
-    ReduxMixin {
-      editableRecipe : 'name'
-    }
-  ]
-
-  propTypes :
-    onClose : React.PropTypes.func.isRequired
-    next    : React.PropTypes.func.isRequired
-
-  render : ->
-    <div className='editable-recipe-page name-page fixed-header-footer'>
-      <NavigationHeader onClose={@props.onClose}/>
-      <div className='fixed-content-pane'>
-        <div className='page-title'>Add a Recipe</div>
-        <input
-          type='text'
-          placeholder='Name...'
-          autoCorrect='off'
-          autoCapitalize='on'
-          autoComplete='off'
-          spellCheck='false'
-          ref='input'
-          value={@state.name}
-          onChange={@_onChange}
-          onTouchTap={@_focus}
-        />
-        <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
-          <span className='next-text'>Next</span>
-          <i className='fa fa-arrow-right'/>
-        </div>
-      </div>
-    </div>
-
-  _focus : ->
-    @refs.input.focus()
-
-  # mixin-ify this kind of stuff probably
-  _isEnabled : ->
-    return !!@state.name
-
-  _nextIfEnabled : ->
-    if @_isEnabled()
-      store.dispatch {
-        type : 'set-name'
-        name : @state.name.trim()
-      }
-      @props.next()
-
-  _onChange : (e) ->
-    store.dispatch {
-      type : 'set-name'
-      name : e.target.value
-    }
 }
 
 EditableIngredient = React.createClass {
