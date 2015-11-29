@@ -5,7 +5,6 @@ React      = require 'react'
 classnames = require 'classnames'
 
 ReduxMixin = require '../mixins/ReduxMixin'
-# DerivedValueMixins = require '../mixins/DerivedValueMixins'
 
 normalization = require '../../shared/normalization'
 definitions   = require '../../shared/definitions'
@@ -14,8 +13,8 @@ assert        = require '../../shared/tinyassert'
 List      = require '../components/List'
 Deletable = require '../components/Deletable'
 
-store         = require '../store'
-# overlayViews  = require '../overlayViews'
+store              = require '../store'
+EditableRecipePage = require '../EditableRecipePage'
 
 MeasuredIngredient = require './MeasuredIngredient'
 RecipeView         = require './RecipeView'
@@ -427,22 +426,17 @@ PreviewPage = React.createClass {
     </div>
 }
 
-EditableRecipePage =
-  NAME        : 'name'
-  INGREDIENTS : 'ingredients'
-  TEXT        : 'text'
-  BASE        : 'base'
-  PREVIEW     : 'preview'
-
 EditableRecipeView = React.createClass {
   displayName : 'EditableRecipeView'
 
   propTypes :
     onClose : React.PropTypes.func.isRequired
 
-  getInitialState : -> {
-    currentPage : EditableRecipePage.NAME
-  }
+  mixins : [
+    ReduxMixin {
+      editableRecipe : 'currentPage'
+    }
+  ]
 
   render : ->
     return switch @state.currentPage
@@ -477,18 +471,18 @@ EditableRecipeView = React.createClass {
           recipe={@_constructRecipe()}
         />
 
-  _makePageSwitcher : (targetPage) ->
+  _makePageSwitcher : (page) ->
     return =>
-      @setState { currentPage : targetPage }
+      store.dispatch {
+        type : 'set-editable-recipe-page'
+        page
+      }
 
   _finish : ->
     store.dispatch {
       type   : 'save-recipe'
       recipe : @_constructRecipe()
     }
-
-    # TODO: Push this up to store state.
-    @setState { currentPage : EditableRecipePage.NAME }
 
     @props.onClose()
 

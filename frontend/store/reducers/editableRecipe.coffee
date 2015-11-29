@@ -1,3 +1,7 @@
+_ = require 'lodash'
+
+EditableRecipePage = require '../../EditableRecipePage'
+
 { ANY_BASE_LIQUOR } = require '../../../shared/definitions'
 
 COUNT_REGEX = /^[-. \/\d]+/
@@ -49,6 +53,7 @@ _parseIngredient = (rawText, tag) ->
   }
 
 _createEmptyStore = -> {
+  currentPage  : EditableRecipePage.NAME
   name         : ''
   ingredients  : []
   instructions : ''
@@ -56,7 +61,13 @@ _createEmptyStore = -> {
   base         : []
 }
 
-module.exports = require('./makeReducer') _createEmptyStore(), {
+module.exports = require('./makeReducer') _.extend(
+  _createEmptyStore(),
+  require('../persistence').load().editableRecipe
+), {
+  'set-editable-recipe-page' : (state, { page }) ->
+    return _.defaults { currentPage : page }, state
+
   'set-name' : (state, { name }) ->
     return _.defaults { name }, state
 

@@ -16,9 +16,17 @@ PERSISTENCE_SPEC = {
     currentlyViewedRecipeIds : ONE_MINUTE_MS * 5
     favoritedRecipeIds       : Infinity
     showingRecipeViewer      : ONE_MINUTE_MS * 5
-    # Should support this, eventually.
-    # showingRecipeEditor      : ONE_MINUTE_MS * 5
+    showingRecipeEditor      : ONE_MINUTE_MS * 5
     showingSidebar           : ONE_MINUTE_MS * 5
+    showingListSelector      : ONE_MINUTE_MS
+  editableRecipe :
+    currentPage  : Infinity
+    name         : Infinity
+    ingredients  : Infinity
+    instructions : Infinity
+    notes        : Infinity
+    base         : Infinity
+
 }
 
 watch = (store) ->
