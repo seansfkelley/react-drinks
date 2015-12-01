@@ -42,7 +42,7 @@ watch = (store) ->
     }
   ), 1000
 
-load = ->
+load = _.once ->
   { data, timestamp } = JSON.parse(localStorage[LOCALSTORAGE_KEY] ? '{}')
 
   if not data?

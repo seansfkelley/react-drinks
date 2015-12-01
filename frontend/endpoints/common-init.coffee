@@ -2,17 +2,11 @@ _         = require 'lodash'
 React     = require 'react'
 ReactPerf = require 'react-addons-perf'
 
-# Probably not necessary for some views, but it's nice to have it here.
-store       = require '../store'
-persistence = require '../store/persistence'
-
 module.exports = ->
   if window.navigator.standalone
     document.body.setAttribute 'standalone', true
 
   require('react-tap-event-plugin')()
-
-  persistence.watch store
 
   # if 'ontouchstart' of window
   #   kill = (type) ->

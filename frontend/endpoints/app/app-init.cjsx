@@ -6,10 +6,9 @@ ReactDom = require 'react-dom'
 App                 = require './App'
 webClipNotification = require './webClipNotification'
 
-store   = require '../../store'
-derived = require '../../store/derived'
-
-SwipableRecipeView = require '../../recipes/SwipableRecipeView'
+store       = require '../../store'
+derived     = require '../../store/derived'
+persistence = require '../../store/persistence'
 
 # Initialize state.
 
@@ -22,6 +21,8 @@ LOADING_OVERLAY = document.querySelector '#main-loading-overlay'
 APP_ROOT        = document.querySelector '#app-root'
 
 initializationPromise.then ->
+  persistence.watch store
+
   ReactDom.render <App/>, APP_ROOT
 
   LOADING_OVERLAY.classList.add 'fade-out'
