@@ -77,4 +77,22 @@ revalidatorUtils.validateOrThrow RECIPES, {
   items : RECIPE_SCHEMA
 }
 
-module.exports = _.map RECIPES, normalization.normalizeRecipe
+BUILTIN_RECIPES = _.map RECIPES, normalization.normalizeRecipe
+
+savedCustomRecipes = {}
+
+save = (recipe) ->
+  recipeId = { recipe }
+  if not recipeId
+    throw new Error('no recipeId provided')
+  else if _.findWhere(BUILTIN_RECIPES, { recipeId }) or _.findWhere(savedCustomRecipes, { recipeId })
+    throw new Error('recipeId conflicts with existing recipe, panic!')
+
+load = (recipeId) ->
+
+
+module.exports = {
+  save
+  load
+  BUILTIN_RECIPES
+}

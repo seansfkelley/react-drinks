@@ -1,8 +1,9 @@
 _ = require 'lodash'
 
-RECIPES = require './backend/recipes'
+recipes     = require './recipes'
+ingredients = require './ingredients'
 
-{ ALPHABETICAL_INGREDIENTS, GROUPED_INGREDIENTS } = require './backend/ingredients'
+{ ALPHABETICAL_INGREDIENTS, GROUPED_INGREDIENTS } = ingredients
 
 module.exports = [
   method  : 'get'
@@ -20,12 +21,18 @@ module.exports = [
 ,
   method  : 'get'
   route   : '/recipes'
-  handler : (req, res) -> res.json RECIPES
+  handler : (req, res) ->
+    res.json recipes.BUILTIN_RECIPES
 ,
   method  : 'get'
   route   : '/recipe/:recipeId'
   handler : (req, res) ->
     # TODO: Redirect to error page if this doesn't exist.
-    recipe = _.findWhere RECIPES, { recipeId : req.params.recipeId }
-    res.render 'recipe', { recipe }
+    res.render 'recipe', { recipe : recipes.load req.params.recipeId }
+,
+  method  : 'post'
+  route   : '/recipe'
+  handler : (req, res) ->
+    recipes.save req.body
+    res.send()
 ]

@@ -1,6 +1,7 @@
 _         = require 'lodash'
 React     = require 'react'
 ReactPerf = require 'react-addons-perf'
+reqwest   = require 'reqwest'
 
 module.exports = ->
   if window.navigator.standalone
@@ -46,5 +47,6 @@ module.exports = ->
 
   # For devtools.
   window.React = React
-  # Becaues I use it a lot.
+  # Because I use these a lot.
   window._ = _
+  window.reqwest = reqwest
