@@ -1,23 +1,23 @@
 // Need to do awkward thing to negate variables: https://github.com/LearnBoost/stylus/issues/980
 shadow(position, size, color = rgba(0, 0, 0, 0.25))
   if position == 'top'
-    box-shadow 0px (- (size + 4px)) (size + 4px) -4px color
+    box-shadow 0px (- (size + 2px)) (size + 2px) -2px color
   else if position == 'bottom'
-    box-shadow 0px (size + 4px) (size + 4px) -4px color
+    box-shadow 0px (size + 2px) (size + 2px) -2px color
   else if position == 'left'
-    box-shadow (- (size + 4px)) 0px (size + 4px) -4px color
+    box-shadow (- (size + 2px)) 0px (size + 2px) -2px color
   else if position == 'right'
-    box-shadow (size + 4px) 0px (size + 4px) -4px color
+    box-shadow (size + 2px) 0px (size + 2px) -2px color
 
 shadow-inset(position, size, color = rgba(0, 0, 0, 0.25))
   if position == 'top'
-    box-shadow inset 0px (size + 4px) (size + 4px) -4px color
+    box-shadow inset 0px (size + 2px) (size + 2px) -2px color
   else if position == 'bottom'
-    box-shadow inset 0px (- (size + 4px)) (size + 4px) -4px color
+    box-shadow inset 0px (- (size + 2px)) (size + 2px) -2px color
   else if position == 'left'
-    box-shadow inset (size + 4px) 0px (size + 4px) -4px color
+    box-shadow inset (size + 2px) 0px (size + 2px) -2px color
   else if position == 'right'
-    box-shadow inset (- (size + 4px)) 0px (size + 4px) -4px color
+    box-shadow inset (- (size + 2px)) 0px (size + 2px) -2px color
 
 abs-full-screen()
   position: absolute
