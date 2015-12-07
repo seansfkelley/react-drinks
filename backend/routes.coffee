@@ -8,7 +8,8 @@ ingredients = require './ingredients'
 module.exports = [
   method  : 'get'
   route   : '/'
-  handler : (req, res) -> res.render 'app'
+  handler : (req, res) ->
+    res.render 'app', { defaultRecipeIds : _.pluck recipes.BUILTIN_RECIPES, 'recipeId' }
 ,
   method  : 'get'
   route   : '/ingredients'
@@ -23,6 +24,11 @@ module.exports = [
   route   : '/recipes'
   handler : (req, res) ->
     res.json recipes.BUILTIN_RECIPES
+,
+  method  : 'post'
+  route   : '/recipes'
+  handler : (req, res) ->
+    res.json recipes.bulkLoad(req.body.recipeIds)
 ,
   method  : 'get'
   route   : '/recipe/:recipeId'

@@ -15,7 +15,7 @@ start = ->
   app.set 'view engine', 'jade'
 
   # Middleware.
-  app.use require('body-parser').urlencoded({ extended : false })
+  app.use require('body-parser').urlencoded({ extended : true })
 
   # Routes.
   app.use '/assets', express.static(__dirname + '/../.dist')

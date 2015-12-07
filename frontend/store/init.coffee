@@ -3,6 +3,8 @@ reqwest = require 'reqwest'
 
 store = require '.'
 
+recipeLoader = require './recipeLoader'
+
 module.exports = _.once ->
   return Promise.all [
     Promise.resolve reqwest({
@@ -15,14 +17,15 @@ module.exports = _.once ->
         type : 'set-ingredients'
       }, ingredients
   ,
-    Promise.resolve reqwest({
-      url    : '/recipes'
-      method : 'get'
-      type   : 'json'
-    })
-    .then (recipes) =>
-      store.dispatch {
-        type : 'set-default-recipes'
-        recipes
-      }
+    recipeLoader(window.defaultRecipeIds)
+    # Promise.resolve reqwest({
+    #   url    : '/recipes'
+    #   method : 'get'
+    #   type   : 'json'
+    # })
+    # .then (recipes) =>
+    #   store.dispatch {
+    #     type : 'set-default-recipes'
+    #     recipes
+    #   }
   ]

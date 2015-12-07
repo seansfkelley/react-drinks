@@ -79,7 +79,7 @@ revalidatorUtils.validateOrThrow RECIPES, {
 
 BUILTIN_RECIPES = _.map RECIPES, normalization.normalizeRecipe
 
-savedCustomRecipes = {}
+savedCustomRecipes = []
 
 save = (recipe) ->
   recipeId = { recipe }
@@ -90,9 +90,14 @@ save = (recipe) ->
 
 load = (recipeId) ->
 
+bulkLoad = (recipeIds) ->
+  return []
+    .concat _.filter(BUILTIN_RECIPES, ({ recipeId }) -> recipeId in recipeIds)
+    .concat _.filter(savedCustomRecipes, ({ recipeId }) -> recipeId in recipeIds)
 
 module.exports = {
   save
   load
+  bulkLoad
   BUILTIN_RECIPES
 }
