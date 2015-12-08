@@ -20,13 +20,8 @@ module.exports = [
       alphabeticalIngredientTags : _.pluck ALPHABETICAL_INGREDIENTS, 'tag'
     }
 ,
-  method  : 'get'
-  route   : '/recipes'
-  handler : (req, res) ->
-    res.json recipes.BUILTIN_RECIPES
-,
   method  : 'post'
-  route   : '/recipes'
+  route   : '/recipes/bulk'
   handler : (req, res) ->
     res.json recipes.bulkLoad(req.body.recipeIds)
 ,

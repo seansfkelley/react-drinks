@@ -6,7 +6,7 @@ CACHE            = JSON.parse(localStorage[LOCALSTORAGE_KEY] ? '{}')
 
 load = (recipeIds) ->
   return Promise.resolve reqwest({
-    url    : '/recipes'
+    url    : '/recipes/bulk'
     method : 'post'
     type   : 'json'
     data   : { recipeIds }
