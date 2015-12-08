@@ -91,9 +91,10 @@ save = (recipe) ->
 load = (recipeId) ->
 
 bulkLoad = (recipeIds) ->
-  return []
+  recipes = []
     .concat _.filter(BUILTIN_RECIPES, ({ recipeId }) -> recipeId in recipeIds)
     .concat _.filter(savedCustomRecipes, ({ recipeId }) -> recipeId in recipeIds)
+  return _.indexBy recipes, 'recipeId'
 
 module.exports = {
   save

@@ -28,15 +28,18 @@ module.exports = ->
   window.reactPerf = ReactPerf
 
   window.debug = {
-    log          : require 'loglevel'
+    log : require 'loglevel'
+
     localStorage : ->
       return _.mapValues localStorage, (v) ->
         try
           return JSON.parse v
         catch
           return v
+
     getState : ->
-      return store.getState()
+      return require('../store').getState()
+
     reactPerf : (timeout = 2000) ->
       ReactPerf.start()
       setTimeout (->

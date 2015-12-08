@@ -11,8 +11,7 @@ load = (recipeIds) ->
     type   : 'json'
     data   : { recipeIds }
   })
-  .then (recipes) -> _.indexBy(recipes, 'recipeId')
-  .tap (recipes) ->
-    _.extend CACHE, recipes
+  .tap (recipesById) ->
+    _.extend CACHE, recipesById
 
 module.exports = load

@@ -21,7 +21,7 @@ module.exports = _.once ->
         type : 'set-ingredients'
       }, ingredients
   ,
-    recipeLoader(window.defaultRecipeIds)
+    recipeLoader(idsToLoad)
     .then (recipesById) ->
       store.dispatch {
         type : 'recipes-loaded'
