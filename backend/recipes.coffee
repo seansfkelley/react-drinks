@@ -79,16 +79,20 @@ revalidatorUtils.validateOrThrow RECIPES, {
 
 BUILTIN_RECIPES = _.map RECIPES, normalization.normalizeRecipe
 
-savedCustomRecipes = []
+try
+  savedCustomRecipes = require '../data/saved-custom-recipes.json'
+catch
+  savedCustomRecipes = {}
 
 save = (recipe) ->
-  recipeId = { recipe }
+  { recipeId } = recipe
   if not recipeId
     throw new Error('no recipeId provided')
   else if _.findWhere(BUILTIN_RECIPES, { recipeId }) or _.findWhere(savedCustomRecipes, { recipeId })
     throw new Error('recipeId conflicts with existing recipe, panic!')
 
   savedCustomRecipes[recipeId] = recipe
+  fs.writeFileSync './data/saved-custom-recipes.json', JSON.stringify(savedCustomRecipes), 'utf8'
 
 load = (recipeId) ->
   return BUILTIN_RECIPES[recipeId] ? savedCustomRecipes[recipeId] ? null
