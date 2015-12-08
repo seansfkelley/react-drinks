@@ -34,6 +34,10 @@ module.exports = [
   method  : 'post'
   route   : '/recipe'
   handler : (req, res) ->
-    recipes.save req.body
+    recipe = req.body
+    # This is actually already passed, but it's a string, and that seems bad,
+    # so we might as well just set it unconditionally here.
+    recipe.isCustom = true
+    recipes.save recipe
     res.send()
 ]

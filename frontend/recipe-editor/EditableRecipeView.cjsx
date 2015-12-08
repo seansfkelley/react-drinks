@@ -1,5 +1,6 @@
-_     = require 'lodash'
-React = require 'react'
+_       = require 'lodash'
+React   = require 'react'
+reqwest = require 'reqwest'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
@@ -92,9 +93,18 @@ EditableRecipeView = React.createClass {
       }
 
   _finish : ->
+    recipe = @_constructRecipe()
+
     store.dispatch {
-      type   : 'save-recipe'
-      recipe : @_constructRecipe()
+      type : 'save-recipe'
+      recipe
+    }
+
+    reqwest {
+      url    : '/recipe'
+      method : 'post'
+      type   : 'json'
+      data   : recipe
     }
 
     @props.onClose()

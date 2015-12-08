@@ -88,6 +88,11 @@ save = (recipe) ->
   else if _.findWhere(BUILTIN_RECIPES, { recipeId }) or _.findWhere(savedCustomRecipes, { recipeId })
     throw new Error('recipeId conflicts with existing recipe, panic!')
 
+  savedCustomRecipes[recipeId] = recipe
+
+load = (recipeId) ->
+  return BUILTIN_RECIPES[recipeId] ? savedCustomRecipes[recipeId] ? null
+
 bulkLoad = (recipeIds) ->
   recipes = []
     .concat _.filter(BUILTIN_RECIPES, ({ recipeId }) -> recipeId in recipeIds)
@@ -96,6 +101,7 @@ bulkLoad = (recipeIds) ->
 
 module.exports = {
   save
+  load
   bulkLoad
   BUILTIN_RECIPES
 }
