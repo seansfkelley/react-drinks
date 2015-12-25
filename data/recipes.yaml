@@ -1099,3 +1099,23 @@
   source: "imbibe"
   url: "http://imbibemagazine.com/tequila-and-sage-smash-recipe/"
   base: tequila
+-
+  name: "Ciderhouse Whiskey"
+  ingredients:
+    -
+      tag: "bourbon"
+      displayAmount: "2"
+      displayUnit: "oz"
+      displayIngredient: "bourbon"
+    -
+      tag: "apple juice"
+      displayAmount: "1"
+      displayUnit: "oz"
+      displayIngredient: "apple cider syrup"
+  instructions: |
+    Combine bourbon and boiled cider over ice and stir gently.
+    Twist lemon zest and drop into drink, stir again, and serve.
+  notes: "To make apple cider syrup, boil apple cider for 1-2 hours until reduced to about 1/8 the original volume."
+  source: "Saveur"
+  url: "http://www.saveur.com/article/Recipes/Ciderhouse-Whiskey-Cocktail"
+  base: whiskey

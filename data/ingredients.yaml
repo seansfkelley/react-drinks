@@ -592,3 +592,8 @@
   display    : Maple Syrup
   group      : syrup
   difficulty : easy
+-
+  display    : Apple Juice/Cider
+  tag        : apple juice
+  group      : mixer-juice
+  difficulty : easy
