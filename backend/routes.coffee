@@ -3,8 +3,6 @@ _ = require 'lodash'
 recipes     = require './recipes'
 ingredients = require './ingredients'
 
-{ ALPHABETICAL_INGREDIENTS, GROUPED_INGREDIENTS } = ingredients
-
 module.exports = [
   method  : 'get'
   route   : '/'
@@ -15,9 +13,11 @@ module.exports = [
   route   : '/ingredients'
   handler : (req, res) ->
     res.json {
-      groupedIngredients         : GROUPED_INGREDIENTS
-      intangibleIngredients      : _.reject ALPHABETICAL_INGREDIENTS, 'tangible'
-      alphabeticalIngredientTags : _.pluck ALPHABETICAL_INGREDIENTS, 'tag'
+      groups      : ingredients.getGroups()
+      ingredients : ingredients.getIngredients()
+      # groupedIngredients         : GROUPED_INGREDIENTS
+      # intangibleIngredients      : _.reject ALPHABETICAL_INGREDIENTS, 'tangible'
+      # alphabeticalIngredientTags : _.pluck ALPHABETICAL_INGREDIENTS, 'tag'
     }
 ,
   method  : 'post'
