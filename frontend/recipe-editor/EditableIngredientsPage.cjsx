@@ -29,9 +29,9 @@ EditableIngredient = React.createClass {
 
   render : ->
     if @state.tag?
-      ingredientSelector = <List.Item onTouchTap={@_unsetTag}>
+      ingredientSelector = <List.Item>
         {@props.ingredientsByTag[@state.tag].display}
-        <i className='fa fa-check-circle'/>
+        <i className='fa fa-times-circle' onTouchTap={@_unsetTag}/>
       </List.Item>
     else
       ingredientSelector = _.map @props.allAlphabeticalIngredients, ({ display, tag }) =>
@@ -56,6 +56,7 @@ EditableIngredient = React.createClass {
           onTouchTap={@_commitIfAllowed}
         >
           Done
+          <i className='fa fa-check-circle'/>
         </div>
       </div>
       <div className='ingredient-list-header'>A Type Of</div>
