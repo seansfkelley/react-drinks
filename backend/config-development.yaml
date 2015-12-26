@@ -1,0 +1,4 @@
+---
+couchDbUrl   : 'http://localhost:5984/'
+recipeDbName : 'dev-recipes'
+configDbName : 'dev-config'
