@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 log = require 'loglevel'
-log.setLevel 'debug'
+log.setLevel 'info'
 
 startTime = Date.now()
 
@@ -13,10 +13,27 @@ config   = require('../backend/config').get()
 recipeDb = new PouchDB config.couchDbUrl + config.recipeDbName
 configDb = new PouchDB config.couchDbUrl + config.configDbName
 
-DEFAULT_RECIPE_LIST_DOC_ID = 'default-recipe-list'
-{ BUILTIN_RECIPES } = require '../backend/recipes'
+{ loadRecipeFile } = require '../backend/defaultDataLoaders'
 
-recipesWithId = _.map BUILTIN_RECIPES, (r) -> _.extend { _id : r.recipeId }, _.omit(r, 'recipeId')
+DEFAULT_RECIPE_LIST_DOC_ID = 'default-recipe-list'
+
+recipeFilesToLoad = [
+  'iba-recipes'
+  'recipes'
+]
+
+if '--include-custom-recipes' in process.argv
+  recipeFilesToLoad.push 'custom-recipes'
+  recipeFilesToLoad.push 'michael-cecconi'
+
+log.debug "will load recipes from files: #{recipeFilesToLoad.join ', '}"
+
+recipesWithId = _.chain(recipeFilesToLoad)
+  .map loadRecipeFile
+  .flatten()
+  .map (r) -> _.extend { _id : r.recipeId }, _.omit(r, 'recipeId')
+  .value()
+
 log.info "#{recipesWithId.length} recipes to be inserted"
 
 Promise.resolve()
