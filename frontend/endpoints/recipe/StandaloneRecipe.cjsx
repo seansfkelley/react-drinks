@@ -20,8 +20,14 @@ StandaloneRecipeView = React.createClass {
           <i className='fa fa-chevron-right'/>
         </TitleBar>
       </a>
-      <RecipeView recipe={@props.recipe}/>
+      <RecipeView
+        recipe={@props.recipe}
+        onCustomAdd={if @props.recipe.isCustom then @_customAdd}
+      />
     </div>
+
+  _customAdd : (recipeId) ->
+
 }
 
 module.exports = StandaloneRecipeView

@@ -45,6 +45,7 @@ RecipeView = React.createClass {
     onFavorite       : React.PropTypes.func
     isFavorited      : React.PropTypes.bool
     isShareable      : React.PropTypes.bool
+    onCustomAdd      : React.PropTypes.func
 
   getDefaultProps : ->
     return {
@@ -108,6 +109,13 @@ RecipeView = React.createClass {
         text='Favorite'
         onTouchTap={@_favorite}
       />
+    if @props.onCustomAdd
+      footerButtons.push <IconButton
+        key='custom-add'
+        icon='fa-plus'
+        text='Add to Library'
+        onTouchTap={@_addCustom}
+      />
 
     <div className='recipe-view fixed-header-footer'>
       {header}
@@ -126,7 +134,10 @@ RecipeView = React.createClass {
     window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
 
   _favorite : ->
-    @props.onFavorite(@props.recipe, not @props.isFavorited)
+    @props.onFavorite @props.recipe, not @props.isFavorited
+
+  _addCustom : ->
+    @props.onCustomAdd @props.recipe.recipeId
 
   _renderCategory : (measuredIngredients, category) ->
     if measuredIngredients.length == 0
