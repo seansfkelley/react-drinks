@@ -53,7 +53,7 @@ RECIPE_SCHEMA = {
 
 loadRecipeFile = _.memoize (filename) ->
   log.debug "loading recipes from #{filename}"
-  recipes = yaml.safeLoad fs.readFileSync("#{__dirname}/../data/#{filename}.yaml")
+  recipes = yaml.safeLoad fs.readFileSync("#{__dirname}/data/#{filename}.yaml")
   log.debug "loaded #{recipes.length} recipe(s) from #{filename}"
 
   unassignedBases = _.where recipes, { base : definitions.UNASSIGNED_BASE_LIQUOR }

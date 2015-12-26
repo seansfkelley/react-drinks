@@ -13,7 +13,7 @@ config   = require('../backend/config').get()
 recipeDb = new PouchDB config.couchDbUrl + config.recipeDbName
 configDb = new PouchDB config.couchDbUrl + config.configDbName
 
-{ loadRecipeFile } = require '../backend/defaultDataLoaders'
+{ loadRecipeFile } = require '../default-data/loaders'
 
 DEFAULT_RECIPE_LIST_DOC_ID = 'default-recipe-list'
 
