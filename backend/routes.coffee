@@ -38,6 +38,7 @@ module.exports = [
     # This is actually already passed, but it's a string, and that seems bad,
     # so we might as well just set it unconditionally here.
     recipe.isCustom = true
-    recipes.save recipe
-    res.send()
+    res.json {
+      ackRecipeId : recipes.save recipe
+    }
 ]

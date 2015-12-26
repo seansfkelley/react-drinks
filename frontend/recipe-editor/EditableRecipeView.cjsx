@@ -1,6 +1,5 @@
 _       = require 'lodash'
 React   = require 'react'
-reqwest = require 'reqwest'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
@@ -16,6 +15,8 @@ EditableIngredientsPage = require './EditableIngredientsPage'
 EditableBaseLiquorPage  = require './EditableBaseLiquorPage'
 EditableTextPage        = require './EditableTextPage'
 PreviewPage             = require './PreviewPage'
+
+editableRecipeActions = require './editableRecipeActions'
 
 # TODO: make IconButton class?
 # TODO: clicking back into ingredients to edit them
@@ -93,20 +94,7 @@ EditableRecipeView = React.createClass {
       }
 
   _finish : ->
-    recipe = @_constructRecipe()
-
-    store.dispatch {
-      type : 'save-recipe'
-      recipe
-    }
-
-    reqwest {
-      url    : '/recipe'
-      method : 'post'
-      type   : 'json'
-      data   : recipe
-    }
-
+    store.dispatch editableRecipeActions.saveRecipe(@_constructRecipe())
     @props.onClose()
 
   _constructRecipe : ->

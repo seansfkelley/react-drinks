@@ -3,6 +3,7 @@ fs          = require 'fs'
 yaml        = require 'js-yaml'
 revalidator = require 'revalidator'
 log         = require 'loglevel'
+md5         = require 'MD5'
 
 normalization = require '../shared/normalization'
 definitions   = require '../shared/definitions'
@@ -86,18 +87,28 @@ catch
 
 save = (recipe) ->
   { recipeId } = recipe
-  if not recipeId
-    throw new Error('no recipeId provided')
-  else if _.findWhere(BUILTIN_RECIPES, { recipeId }) or _.findWhere(savedCustomRecipes, { recipeId })
-    throw new Error('recipeId conflicts with existing recipe, panic!')
+  console.log "attempting to save recipe with given ID '#{recipeId}'"
+
+  while (not recipeId or _.findWhere(BUILTIN_RECIPES, { recipeId }) or _.findWhere(savedCustomRecipes, { recipeId }))
+    console.log "given recipe ID '#{recipeId}' is missing or in use, randomly generating new one..."
+    recipeId = md5 Math.random().toString()
+    console.log "generated new recipe ID '#{recipeId}'"
+
+  recipe = _.defaults { recipeId }, recipe
 
   savedCustomRecipes[recipeId] = recipe
   fs.writeFileSync './data/saved-custom-recipes.json', JSON.stringify(savedCustomRecipes), 'utf8'
 
+  console.log "successfully saved new recipe with ID '#{recipeId}'"
+
+  return recipeId
+
 load = (recipeId) ->
+  console.log "loading recipe with ID '#{recipeId}'"
   return BUILTIN_RECIPES[recipeId] ? savedCustomRecipes[recipeId] ? null
 
 bulkLoad = (recipeIds) ->
+  console.log "bulk-loading #{recipeIds.length} recipes"
   recipes = []
     .concat _.filter(BUILTIN_RECIPES, ({ recipeId }) -> recipeId in recipeIds)
     .concat _.filter(savedCustomRecipes, ({ recipeId }) -> recipeId in recipeIds)
