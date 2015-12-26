@@ -5,6 +5,8 @@ PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 store = require '../store'
 
+{ parseIngredientFromText } = require '../utils'
+
 ReduxMixin = require '../mixins/ReduxMixin'
 
 EditableRecipePage = require './EditableRecipePage'
@@ -23,8 +25,9 @@ EditableIngredient = React.createClass {
     allAlphabeticalIngredients : React.PropTypes.array.isRequired
 
   getInitialState : -> {
-    tag   : null
-    value : ''
+    tag         : null
+    value       : ''
+    guessedTags : []
   }
 
   render : ->
@@ -34,8 +37,18 @@ EditableIngredient = React.createClass {
         <i className='fa fa-times-circle' onTouchTap={@_unsetTag}/>
       </List.Item>
     else
-      ingredientSelector = _.map @props.allAlphabeticalIngredients, ({ display, tag }) =>
-        <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{display}</List.Item>
+      ingredientSelector = _.map @state.guessedTags, (tag) =>
+        <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{@props.ingredientsByTag[tag].display}</List.Item>
+
+      if ingredientSelector.length
+        ingredientSelector.push <div className='section-separator' key='separator'/>
+
+      ingredientSelector = ingredientSelector.concat(_.chain(@props.allAlphabeticalIngredients)
+        .filter ({ tag }) => tag not in @state.guessedTags
+        .map ({ display, tag }) =>
+          <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{display}</List.Item>
+        .value()
+      )
 
     <div className='editable-ingredient'>
       <div className='input-line'>
@@ -65,6 +78,9 @@ EditableIngredient = React.createClass {
       </List>
     </div>
 
+  componentDidMount : ->
+    @_guessTags = _.throttle @_guessTags, 250
+
   _focus : ->
     @refs.input.focus()
 
@@ -87,6 +103,21 @@ EditableIngredient = React.createClass {
 
   _onChange : (e) ->
     @setState { value : e.target.value }
+    @_guessTags e.target.value
+
+  _guessTags : (value) ->
+    { displayIngredient } = parseIngredientFromText value
+    if not displayIngredient
+      @setState { guessedTags : [] }
+    else
+      # This is probably dumb slow.
+      words = displayIngredient.split ' '
+      guessedTags = _.chain(@props.allAlphabeticalIngredients)
+        .filter ({ display }) -> _.any words, (w) -> display.toLowerCase().indexOf(w) != -1
+        .pluck 'tag'
+        .value()
+
+      @setState { guessedTags }
 
 }
 

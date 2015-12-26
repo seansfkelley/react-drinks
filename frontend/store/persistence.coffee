@@ -16,7 +16,7 @@ PERSISTENCE_SPEC = {
     currentlyViewedRecipeIds : ONE_MINUTE_MS * 5
     favoritedRecipeIds       : Infinity
     showingRecipeViewer      : ONE_MINUTE_MS * 5
-    showingRecipeEditor      : ONE_MINUTE_MS * 5
+    showingRecipeEditor      : Infinity
     showingSidebar           : ONE_MINUTE_MS * 5
     showingListSelector      : ONE_MINUTE_MS
   editableRecipe :
