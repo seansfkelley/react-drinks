@@ -28,6 +28,7 @@
     "coffee-reactify": "^4.0.0",
     "coffee-script": "^1.9.3",
     "express": "^4.11.2",
+    "express-promise": "^0.4.0",
     "fbjs": "^0.4.0",
     "font-awesome": "^4.3.0",
     "gulp": "^3.8.11",
