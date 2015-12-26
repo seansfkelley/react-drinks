@@ -21,7 +21,7 @@ SwipableRecipeView = React.createClass {
 
   mixins : [
     ReduxMixin {
-      recipes     : 'allRecipes'
+      recipes     : 'recipesById'
       ingredients : 'ingredientsByTag'
       ui          : 'favoritedRecipeIds'
     }
@@ -38,7 +38,7 @@ SwipableRecipeView = React.createClass {
       recipePages = _.map @props.recipeIds, (recipeId, i) =>
         <div className='swipable-padding-wrapper' key={recipeId}>
           {if Math.abs(i - @props.index) <= 1
-            recipe = _.find @state.allRecipes, { recipeId }
+            recipe = @state.recipesById[recipeId]
             <div className='swipable-position-wrapper'>
               <RecipeView
                 recipe={recipe}
@@ -47,7 +47,7 @@ SwipableRecipeView = React.createClass {
                 onClose={@_onClose}
                 onFavorite={@_onFavorite}
                 isFavorited={recipeId in @state.favoritedRecipeIds}
-                isShareable={not recipe.isCustom}
+                isShareable={true}
               />
             </div>}
         </div>

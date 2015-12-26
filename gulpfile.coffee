@@ -85,7 +85,6 @@ buildSingleScript  = ({ source, destination, watch, dieOnError }) ->
       .pipe notify {
         title   : 'Finished compiling Javascript'
         message : '<%= file.relative %>'
-        wait    : true
       }
       .pipe sourcemaps.write './'
       .pipe gulp.dest './.dist'
@@ -118,7 +117,6 @@ buildStyles = ->
     .pipe notify {
       title   : 'Finished compiling CSS'
       message : '<%= file.relative %>'
-      wait    : true
       sound   : 'Glass'
     }
     .pipe sourcemaps.write './'

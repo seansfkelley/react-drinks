@@ -10,7 +10,7 @@ PERSISTENCE_SPEC = {
     selectedIngredientTags : Infinity
     selectedRecipeList     : ONE_MINUTE_MS * 60
   recipes :
-    customRecipes : Infinity
+    customRecipeIds : Infinity
   ui :
     recipeViewingIndex       : ONE_MINUTE_MS * 5
     currentlyViewedRecipeIds : ONE_MINUTE_MS * 5

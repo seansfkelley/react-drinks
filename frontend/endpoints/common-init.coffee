@@ -1,6 +1,7 @@
 _         = require 'lodash'
 React     = require 'react'
 ReactPerf = require 'react-addons-perf'
+reqwest   = require 'reqwest'
 
 module.exports = ->
   if window.navigator.standalone
@@ -27,15 +28,18 @@ module.exports = ->
   window.reactPerf = ReactPerf
 
   window.debug = {
-    log          : require 'loglevel'
+    log : require 'loglevel'
+
     localStorage : ->
       return _.mapValues localStorage, (v) ->
         try
           return JSON.parse v
         catch
           return v
+
     getState : ->
-      return store.getState()
+      return require('../store').getState()
+
     reactPerf : (timeout = 2000) ->
       ReactPerf.start()
       setTimeout (->
@@ -46,5 +50,6 @@ module.exports = ->
 
   # For devtools.
   window.React = React
-  # Becaues I use it a lot.
+  # Because I use these a lot.
   window._ = _
+  window.reqwest = reqwest

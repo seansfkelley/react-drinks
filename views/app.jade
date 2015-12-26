@@ -23,4 +23,6 @@ html
           i(class="fa fa-refresh fa-spin")
       //- Note that this has to come last, so all the necessary containers exist.
       div(id="web-clip-notification" class="hidden")
+    script(type="text/javascript").
+      window.defaultRecipeIds = !{JSON.stringify(defaultRecipeIds)};
     script(type="text/javascript", src="/assets/app-init.js")
