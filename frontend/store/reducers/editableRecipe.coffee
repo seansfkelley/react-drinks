@@ -1,56 +1,8 @@
 _ = require 'lodash'
 
+{ parseIngredientFromText } = require '../../utils'
+
 EditableRecipePageType = require '../../EditableRecipePageType'
-
-{ ANY_BASE_LIQUOR } = require '../../../shared/definitions'
-
-COUNT_REGEX = /^[-. \/\d]+/
-
-MEASUREMENTS = [
-  'ml'
-  'cl'
-  'l'
-  'liter'
-  'oz'
-  'ounce'
-  'pint'
-  'part'
-  'shot'
-  'tsp'
-  'teaspoon'
-  'tbsp'
-  'tablespoon'
-  'cup'
-  'bottle'
-  'barspoon'
-  'dash'
-  'dashes'
-  'drop'
-  'pinch'
-  'pinches'
-  'slice'
-]
-
-_parseIngredient = (rawText, tag) ->
-  text = rawText.trim()
-
-  if match = COUNT_REGEX.exec text
-    displayAmount = match[0]
-    text = text[displayAmount.length..].trim()
-
-  possibleUnit = text.split(' ')[0]
-  if possibleUnit in MEASUREMENTS or _.any(MEASUREMENTS, (m) -> possibleUnit == m + 's')
-    displayUnit = possibleUnit
-    text = text[displayUnit.length..].trim()
-
-  displayIngredient = text
-
-  return {
-    raw       : rawText
-    isEditing : false
-    tag       : tag
-    display   : _.pick { displayAmount, displayUnit, displayIngredient }, _.identity
-  }
 
 _createEmptyStore = -> {
   currentPage  : EditableRecipePageType.NAME
@@ -84,7 +36,12 @@ module.exports = require('./makeReducer') _.extend(
 
   'commit-ingredient' : (state, { index, rawText, tag }) ->
     ingredients = _.clone state.ingredients
-    ingredients[index] = _parseIngredient rawText, tag
+    ingredients[index] = {
+      tag
+      rawText
+      isEditing : false
+      display   : parseIngredientFromText rawText, tag
+    }
     return _.defaults { ingredients }, state
 
   'set-instructions' : (state, { instructions }) ->

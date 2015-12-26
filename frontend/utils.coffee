@@ -35,4 +35,52 @@ splitMeasure = (s) ->
   else
     return { unit : s ? '' }
 
-module.exports = { fractionify, defractionify, splitMeasure }
+COUNT_REGEX = /^[-. \/\d]+/
+
+MEASUREMENTS = [
+  'ml'
+  'cl'
+  'l'
+  'liter'
+  'oz'
+  'ounce'
+  'pint'
+  'part'
+  'shot'
+  'tsp'
+  'teaspoon'
+  'tbsp'
+  'tablespoon'
+  'cup'
+  'bottle'
+  'barspoon'
+  'dash'
+  'dashes'
+  'drop'
+  'pinch'
+  'pinches'
+  'slice'
+]
+
+parseIngredientFromText = (rawText) ->
+  text = rawText.trim()
+
+  if match = COUNT_REGEX.exec text
+    displayAmount = match[0]
+    text = text[displayAmount.length..].trim()
+
+  possibleUnit = text.split(' ')[0]
+  if possibleUnit in MEASUREMENTS or _.any(MEASUREMENTS, (m) -> possibleUnit == m + 's')
+    displayUnit = possibleUnit
+    text = text[displayUnit.length..].trim()
+
+  displayIngredient = text
+
+  return _.pick { displayAmount, displayUnit, displayIngredient }, _.identity
+
+module.exports = {
+  fractionify
+  defractionify
+  splitMeasure
+  parseIngredientFromText
+}
