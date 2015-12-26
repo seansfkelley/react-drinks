@@ -113,7 +113,10 @@ EditableIngredient = React.createClass {
       # This is probably dumb slow.
       words = displayIngredient.split ' '
       guessedTags = _.chain(@props.allAlphabeticalIngredients)
-        .filter ({ display }) -> _.any words, (w) -> display.toLowerCase().indexOf(w) != -1
+        .filter ({ searchable }) ->
+          _.any words, (w) ->
+            _.any searchable, (s) ->
+              s.indexOf(w) != -1
         .pluck 'tag'
         .value()
 
