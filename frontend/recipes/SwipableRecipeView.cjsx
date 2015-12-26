@@ -47,7 +47,7 @@ SwipableRecipeView = React.createClass {
                 onClose={@_onClose}
                 onFavorite={@_onFavorite}
                 isFavorited={recipeId in @state.favoritedRecipeIds}
-                isShareable={not recipe.isCustom}
+                isShareable={true}
               />
             </div>}
         </div>
