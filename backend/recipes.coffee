@@ -87,28 +87,28 @@ catch
 
 save = (recipe) ->
   { recipeId } = recipe
-  console.log "attempting to save recipe with given ID '#{recipeId}'"
+  log.debug "attempting to save recipe with given ID '#{recipeId}'"
 
   while (not recipeId or _.findWhere(BUILTIN_RECIPES, { recipeId }) or _.findWhere(savedCustomRecipes, { recipeId }))
-    console.log "given recipe ID '#{recipeId}' is missing or in use, randomly generating new one..."
+    log.debug "given recipe ID '#{recipeId}' is missing or in use, randomly generating new one..."
     recipeId = md5 Math.random().toString()
-    console.log "generated new recipe ID '#{recipeId}'"
+    log.debug "generated new recipe ID '#{recipeId}'"
 
   recipe = _.defaults { recipeId }, recipe
 
   savedCustomRecipes[recipeId] = recipe
   fs.writeFileSync './data/saved-custom-recipes.json', JSON.stringify(savedCustomRecipes), 'utf8'
 
-  console.log "successfully saved new recipe with ID '#{recipeId}'"
+  log.info "successfully saved new recipe with ID '#{recipeId}'"
 
   return recipeId
 
 load = (recipeId) ->
-  console.log "loading recipe with ID '#{recipeId}'"
+  log.debug "loading recipe with ID '#{recipeId}'"
   return BUILTIN_RECIPES[recipeId] ? savedCustomRecipes[recipeId] ? null
 
 bulkLoad = (recipeIds) ->
-  console.log "bulk-loading #{recipeIds.length} recipes"
+  log.debug "bulk-loading #{recipeIds.length} recipes"
   recipes = []
     .concat _.filter(BUILTIN_RECIPES, ({ recipeId }) -> recipeId in recipeIds)
     .concat _.filter(savedCustomRecipes, ({ recipeId }) -> recipeId in recipeIds)

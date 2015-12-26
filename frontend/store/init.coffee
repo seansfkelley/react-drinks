@@ -1,5 +1,6 @@
 Promise = require 'bluebird'
 reqwest = require 'reqwest'
+log     = require 'loglevel'
 
 store = require '.'
 
@@ -9,7 +10,7 @@ module.exports = _.once ->
   customRecipeIds  = store.getState().recipes.customRecipeIds
   defaultRecipeIds = window.defaultRecipeIds
 
-  console.log "loading #{defaultRecipeIds.length} default recipe(s) and #{customRecipeIds.length} custom recipe(s)"
+  log.info "loading #{defaultRecipeIds.length} default recipe(s) and #{customRecipeIds.length} custom recipe(s)"
 
   return Promise.all [
     Promise.resolve reqwest({
