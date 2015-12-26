@@ -48,112 +48,119 @@
       margin-left: 12px
       font-size: 20px
 
-  &.name-page
-    .fixed-content-pane
-      width: 80%
-      align-self: center
+
+.editable-recipe-page.name-page
+  .fixed-content-pane
+    width: 80%
+    align-self: center
+    display: flex
+    flex-direction: column
+    justify-content: center
+    font-size: 20px
+    margin-bottom: 44px // adjusts center to account for top bar
+
+    input
+      border: 1px solid #eee
+      padding: 10px
+
+
+.editable-recipe-page.ingredients-page
+  .ingredients-list
+    margin-bottom: 10px
+
+    // Unfortunate: deletable, arguably rightfully, doesn't promote the class names of the things is wraps,
+    // but to make nth-child work, we need to select it explicitly. Ah well. :(
+    > .deletable
+      background: #eee
+
+      &:nth-child(even)
+        background: #d8d8d8
+
+  .editable-ingredient
+    padding: 0 12px 12px 12px
+    line-height: 44px
+
+    .input-line
       display: flex
-      flex-direction: column
-      justify-content: center
-      font-size: 20px
-      margin-bottom: 44px // adjusts center to account for top bar
+      flex-direction: row
 
-      input
-        border: 1px solid #eee
-        padding: 10px
+      .done-button // TODO: separate from input
+        padding: 0 12px
+        text-transform: uppercase
+        font-size: 14px
+        font-weight: 600
+        opacity: 1
+        transition: opacity $transition-duration-quick-ish
 
-  &.ingredients-page
-    .ingredients-list
-      margin-bottom: 10px
+        &.disabled
+          opacity: 0
 
-      .deletable // RENAME
-        background: #eee
+        i.fa
+          padding-left: 6px
 
-        &:nth-child(even)
-          background: #d8d8d8
+    .ingredient-list-header // TODO: associate with the list, somehow (:before?)
+      font-size: 11.2px
+      line-height: 18px
+      font-weight: 600
+      text-transform: uppercase;
 
-        .editable-ingredient // RENAME
-          padding: 0 12px 12px 12px
-          line-height: 44px
+    .ingredient-group-list
+      background: #ccc
+      max-height: 200px
+      overflow-y: scroll
+      -webkit-overflow-scrolling: touch
 
-          .input-line
-            display: flex
-            flex-direction: row
+      .list-item
+        margin-top: 1px
+        padding-left: 16px
+        background: #ddd
+        color: #555
 
-            .done-button // TODO: separate from input
-              padding: 0 12px
-              text-transform: uppercase
-              font-size: 14px
-              font-weight: 600
-              opacity: 1
-              transition: opacity $transition-duration-quick-ish
+        .fa-times-circle // TODO: standardize behavior (.is-selected vs injected)
+          text-shadow: 0 0 4px rgba(0,0,0,.25)
+          float: right
+          display: block
+          width: 44px
 
-              &.disabled
-                opacity: 0
+  .new-ingredient-button
+    background: #4a4a4a
+    line-height: 44px
+    text-align: center
+    color: #d8d8d8
 
-              i.fa
-                padding-left: 6px
+    &.disabled // TODO: maybe opacity instead?
+      color: #a8a8a8
 
-          .ingredient-list-header // TODO: associate with the list, somehow (:before?)
-            font-size: 11.2px
-            line-height: 18px
-            font-weight: 600
-            text-transform: uppercase;
+    .fa
+      margin-right: 6px
 
-          .ingredient-group-list
-            background: #ccc
-            max-height: 200px
-            overflow-y: scroll
-            -webkit-overflow-scrolling: touch
 
-            .list-item
-              margin-top: 1px
-              padding-left: 16px
-              background: #ddd
-              color: #555
+.editable-recipe-page.base-tag-page
+  .list-item
+    padding: 0 12px
+    border-bottom: 1px solid #f2f2f2
 
-              .fa-times-circle // TODO: standardize behavior (.is-selected vs injected)
-                text-shadow: 0 0 4px rgba(0,0,0,.25)
-                float: right
-                display: block
-                width: 44px
+    &:last-child
+      border: 0
 
-    .new-ingredient-button
-      background: #4a4a4a
-      line-height: 44px
-      text-align: center
-      color: #d8d8d8
 
-      &.disabled // TODO: maybe opacity instead?
-        color: #a8a8a8
+.editable-recipe-page.text-page
+  .fixed-content-pane
+    padding: 0 24px
 
-      .fa
-        margin-right: 6px
+    textarea
+      display: block
+      margin: 12px 0 0 0
+      width: 100%
+      height: 150px
+      padding: 6px
+      border: 1px solid #eee
 
-  &.base-tag-page
-    .list-item
-      padding: 0 12px
-      border-bottom: 1px solid #f2f2f2
 
-      &:last-child
-        border: 0
+.editable-recipe-page.preview-page
+  > .fixed-content-pane
+    display: flex
 
-  &.text-page
-    .fixed-content-pane
-      padding: 0 24px
-
-      textarea
-        display: block
-        margin: 12px 0 0 0
-        width: 100%
-        height: 150px
-        padding: 6px
-        border: 1px solid #eee
-
-  &.preview-page
-    > .fixed-content-pane
-      display: flex
-
-      .recipe-view
-        height: auto
-        flex: 1
+    .recipe-view
+      height: auto
+      flex: 1
