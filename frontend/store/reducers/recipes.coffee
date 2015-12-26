@@ -47,7 +47,8 @@ module.exports = require('./makeReducer') _.extend({
 
   'delete-recipe' : (state, { recipeId }) ->
     return _recomputeDerivedLists _.defaults({
-      customRecipes : _.without state.customRecipeIds, recipeId
+      customRecipeIds : _.without state.customRecipeIds, recipeId
+      recipesById     : _.omit state.recipesById, recipeId
     }, state)
 
 }
