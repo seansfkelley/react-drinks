@@ -3,6 +3,10 @@
 log = require 'loglevel'
 log.setLevel 'info'
 
+if '--force' not in process.argv
+  log.info 'ERROR: will not reseed database unless --force is applied'
+  process.exit 1
+
 startTime = Date.now()
 
 _       = require 'lodash'
@@ -76,7 +80,7 @@ Promise.resolve()
 
   .then (_rev) ->
     return configDb.put {
-      _id        : 'default-recipe-list'
+      _id        : DEFAULT_RECIPE_LIST_DOC_ID
       _rev
       defaultIds : _.pluck(recipesWithId, '_id')
     }
