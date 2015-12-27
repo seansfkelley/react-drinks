@@ -1,5 +1,4 @@
-_   = require 'lodash'
-md5 = require 'MD5'
+_ = require 'lodash'
 
 assert   = require './tinyassert'
 latinize = require './latinize'
@@ -28,10 +27,6 @@ normalizeRecipe = (r) ->
     r.sortName = nameWords[1..].join ' '
   else
     r.sortName = r.canonicalName
-  # So, we don't really care if this is a hash or not. It just needs to be sufficiently unique.
-  # The reason it does this is because it avoids accidentally assigning the same ID to a default
-  # recipe (which don't come with any) and a custom recipe (which should retain theirs forever).
-  r.recipeId ?= md5 JSON.stringify(r)
   r.base ?= []
   return r
 

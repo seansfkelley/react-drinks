@@ -16,6 +16,8 @@ start = ->
 
   # Middleware.
   app.use require('body-parser').urlencoded({ extended : true })
+  app.use require('morgan')('dev')
+  app.use require('express-promise')()
 
   # Routes.
   app.use '/assets', express.static(__dirname + '/../.dist')

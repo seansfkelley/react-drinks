@@ -3,21 +3,18 @@ _ = require 'lodash'
 recipes     = require './recipes'
 ingredients = require './ingredients'
 
-{ ALPHABETICAL_INGREDIENTS, GROUPED_INGREDIENTS } = ingredients
-
 module.exports = [
   method  : 'get'
   route   : '/'
   handler : (req, res) ->
-    res.render 'app', { defaultRecipeIds : _.pluck recipes.BUILTIN_RECIPES, 'recipeId' }
+    res.render 'app', { defaultRecipeIds : recipes.getDefaultRecipeIds() }
 ,
   method  : 'get'
   route   : '/ingredients'
   handler : (req, res) ->
     res.json {
-      groupedIngredients         : GROUPED_INGREDIENTS
-      intangibleIngredients      : _.reject ALPHABETICAL_INGREDIENTS, 'tangible'
-      alphabeticalIngredientTags : _.pluck ALPHABETICAL_INGREDIENTS, 'tag'
+      ingredients : ingredients.getIngredients()
+      groups      : ingredients.getGroups()
     }
 ,
   method  : 'post'
@@ -28,7 +25,6 @@ module.exports = [
   method  : 'get'
   route   : '/recipe/:recipeId'
   handler : (req, res) ->
-    # TODO: Redirect to error page if this doesn't exist.
     res.render 'recipe', { recipe : recipes.load req.params.recipeId }
 ,
   method  : 'post'
@@ -38,7 +34,5 @@ module.exports = [
     # This is actually already passed, but it's a string, and that seems bad,
     # so we might as well just set it unconditionally here.
     recipe.isCustom = true
-    res.json {
-      ackRecipeId : recipes.save recipe
-    }
+    res.json { ackRecipeId : recipes.save recipe }
 ]

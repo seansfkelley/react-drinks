@@ -109,6 +109,8 @@ EditableRecipeView = React.createClass {
       .pick _.identity
       .value()
 
+    recipe.recipeId = "temp-id-#{Math.floor(Math.random() * 1e16)}"
+
     return normalization.normalizeRecipe recipe
 }
 

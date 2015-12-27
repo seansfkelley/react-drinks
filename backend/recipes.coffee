@@ -1,122 +1,51 @@
-_           = require 'lodash'
-fs          = require 'fs'
-yaml        = require 'js-yaml'
-revalidator = require 'revalidator'
-log         = require 'loglevel'
-md5         = require 'MD5'
+_       = require 'lodash'
+log     = require 'loglevel'
+Promise = require 'bluebird'
 
-normalization = require '../shared/normalization'
-definitions   = require '../shared/definitions'
+{ recipeDb, configDb } = require('./database').get()
 
-revalidatorUtils = require './revalidator-utils'
-{ REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
-
-BASE_LIQUORS = [ definitions.UNASSIGNED_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
-
-RECIPE_SCHEMA = {
-  type       : 'object'
-  properties :
-    # The display name of the recipe.
-    name : REQUIRED_STRING
-    # The measured ingredients for how to mix this recipe.
-    ingredients :
-      type       : 'array'
-      required   : true
-      items      :
-        properties :
-          tag               : OPTIONAL_STRING
-          displayAmount     :
-            type     : 'string'
-            required : false
-            pattern  : /^[-. \/\d]+$/
-          displayUnit       : OPTIONAL_STRING
-          displayIngredient : REQUIRED_STRING
-    # A string of one or more lines explaining how to make the drink.
-    instructions : REQUIRED_STRING
-    # A string of one or more lines with possibly interesting suggestions or historical notes.
-    notes : OPTIONAL_STRING
-    # The display name for the source of this recipe.
-    source : OPTIONAL_STRING
-    # The full URL to the source page for this recipe.
-    url : OPTIONAL_STRING
-    # One of a few very broad ingredient categories that best describes the genre of this drink.
-    base :
-      type     : [ 'array', 'string' ]
-      required : true
-      conform  : (strOrArray) ->
-        if _.isString strOrArray
-          return strOrArray in BASE_LIQUORS
-        else if _.isArray strOrArray
-          return _.all strOrArray, (base) -> base in BASE_LIQUORS
-        else
-          return false
-}
-
-RECIPE_FILES = [
-  'iba-recipes'
-  'recipes'
-]
-
-if '--custom-recipes' in process.argv
-  RECIPE_FILES.push 'custom-recipes'
-  RECIPE_FILES.push 'michael-cecconi'
-
-RECIPES = _.chain RECIPE_FILES
-  .map (f) -> yaml.safeLoad(fs.readFileSync("#{__dirname}/../data/#{f}.yaml"))
-  .flatten()
-  .sortBy 'sortName'
-  .value()
-
-log.info "loaded #{RECIPES.length} recipes"
-
-unassignedBases = _.where RECIPES, { base : definitions.UNASSIGNED_BASE_LIQUOR }
-if unassignedBases.length
-  log.warn "#{unassignedBases.length} recipes have an unassigned base liquor: #{_.pluck(unassignedBases, 'name').join ', '}"
-
-revalidatorUtils.validateOrThrow RECIPES, {
-  type  : 'array'
-  items : RECIPE_SCHEMA
-}
-
-BUILTIN_RECIPES = _.map RECIPES, normalization.normalizeRecipe
-
-try
-  savedCustomRecipes = require '../data/saved-custom-recipes.json'
-catch
-  savedCustomRecipes = {}
+getDefaultRecipeIds = ->
+  return Promise.resolve configDb.get('default-recipe-list')
+  .then ({ defaultIds }) -> defaultIds
 
 save = (recipe) ->
-  { recipeId } = recipe
-  log.debug "attempting to save recipe with given ID '#{recipeId}'"
-
-  while (not recipeId or _.findWhere(BUILTIN_RECIPES, { recipeId }) or _.findWhere(savedCustomRecipes, { recipeId }))
-    log.debug "given recipe ID '#{recipeId}' is missing or in use, randomly generating new one..."
-    recipeId = md5 Math.random().toString()
-    log.debug "generated new recipe ID '#{recipeId}'"
-
-  recipe = _.defaults { recipeId }, recipe
-
-  savedCustomRecipes[recipeId] = recipe
-  fs.writeFileSync './data/saved-custom-recipes.json', JSON.stringify(savedCustomRecipes), 'utf8'
-
-  log.info "successfully saved new recipe with ID '#{recipeId}'"
-
-  return recipeId
+  return Promise.resolve recipeDb.post(recipe)
+  .then ({ ok, id, rev }) ->
+    log.info "saved new recipe with ID #{id}"
+    return id
 
 load = (recipeId) ->
-  log.debug "loading recipe with ID '#{recipeId}'"
-  return BUILTIN_RECIPES[recipeId] ? savedCustomRecipes[recipeId] ? null
+  return Promise.resolve recipeDb.get(recipeId)
+  .then (recipe) ->
+    if recipe
+      return _.extend { recipeId }, _.omit(recipe, '_id')
+    else
+      log.info "failed to find recipe with ID '#{recipeId}'"
 
 bulkLoad = (recipeIds) ->
-  log.debug "bulk-loading #{recipeIds.length} recipes"
-  recipes = []
-    .concat _.filter(BUILTIN_RECIPES, ({ recipeId }) -> recipeId in recipeIds)
-    .concat _.filter(savedCustomRecipes, ({ recipeId }) -> recipeId in recipeIds)
-  return _.indexBy recipes, 'recipeId'
+  return Promise.resolve recipeDb.allDocs({
+    keys         : recipeIds
+    include_docs : true
+  })
+  .then ({ total_rows, offset, rows }) ->
+    # rows -> { id, key, value: { rev }, doc: { ... }}
+    recipes = _.chain(rows)
+      .pluck 'doc'
+      .compact()
+      .indexBy '_id'
+      .mapValues (r) -> _.omit r, '_id', '_rev'
+      .value()
+
+    loadedIds = _.keys recipes
+    missingIds = _.difference recipeIds, loadedIds
+    if missingIds.length
+      log.warn "failed to bulk-load some recipes: #{missingIds.join ', '}"
+
+    return recipes
 
 module.exports = {
+  getDefaultRecipeIds
   save
   load
   bulkLoad
-  BUILTIN_RECIPES
 }

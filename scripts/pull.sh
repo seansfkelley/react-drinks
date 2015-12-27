@@ -20,4 +20,4 @@ export NODE_ENV=production
 npm install
 gulp dist
 
-forever start -c ./node_modules/.bin/coffee index.coffee --custom-recipes
+forever start -c ./node_modules/.bin/coffee index.coffee
