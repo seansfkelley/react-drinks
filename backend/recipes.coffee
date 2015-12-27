@@ -1,4 +1,5 @@
 _       = require 'lodash'
+log     = require 'loglevel'
 Promise = require 'bluebird'
 PouchDB = require 'pouchdb'
 
@@ -35,7 +36,7 @@ bulkLoad = (recipeIds) ->
     # rows -> { id, key, value: { rev }, doc: { ... }}
     recipes = _.chain(rows)
       .pluck 'doc'
-      .indexBy '_id'
+      .compact()
       .map (r) -> _.extend { recipeId : r._id }, _.omit(r, '_id', '_rev')
       .indexBy 'recipeId'
       .value()
