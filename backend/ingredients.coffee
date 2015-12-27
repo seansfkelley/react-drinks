@@ -4,8 +4,8 @@ PouchDB = require 'pouchdb'
 
 config = require('../backend/config').get()
 
-ingredientDb = new PouchDB config.couchDbUrl + config.ingredientDbName
-configDb     = new PouchDB config.couchDbUrl + config.configDbName
+ingredientDb = new PouchDB config.couchDb.url + config.couchDb.ingredientDbName
+configDb     = new PouchDB config.couchDb.url + config.couchDb.configDbName
 
 getIngredients = ->
   return Promise.resolve ingredientDb.allDocs({

@@ -4,8 +4,8 @@ Promise = require 'bluebird'
 PouchDB = require 'pouchdb'
 
 config   = require('../backend/config').get()
-recipeDb = new PouchDB config.couchDbUrl + config.recipeDbName
-configDb = new PouchDB config.couchDbUrl + config.configDbName
+recipeDb = new PouchDB config.couchDb.url + config.couchDb.recipeDbName
+configDb = new PouchDB config.couchDb.url + config.couchDb.configDbName
 
 getDefaultRecipeIds = ->
   return Promise.resolve configDb.get('default-recipe-list')

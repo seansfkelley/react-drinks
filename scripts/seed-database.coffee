@@ -11,9 +11,9 @@ PouchDB = require 'pouchdb'
 
 config = require('../backend/config').get()
 
-recipeDb     = new PouchDB config.couchDbUrl + config.recipeDbName
-configDb     = new PouchDB config.couchDbUrl + config.configDbName
-ingredientDb = new PouchDB config.couchDbUrl + config.ingredientDbName
+recipeDb     = new PouchDB config.couchDb.url + config.couchDb.recipeDbName
+configDb     = new PouchDB config.couchDb.url + config.couchDb.configDbName
+ingredientDb = new PouchDB config.couchDb.url + config.couchDb.ingredientDbName
 
 defaultDataLoaders = require '../default-data/loaders'
 
