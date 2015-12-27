@@ -8,6 +8,7 @@ startTime = Date.now()
 _       = require 'lodash'
 Promise = require 'bluebird'
 
+config = require '../backend/config'
 { recipeDb, ingredientDb, configDb } = require('../backend/database').get()
 
 defaultDataLoaders = require '../default-data/loaders'
@@ -34,6 +35,8 @@ logAttemptedOverwriteResult = (result, docType = 'entries') ->
 
 Promise.resolve()
 .then ->
+  log.info "seeding database at #{config.couchDb.url}"
+
   recipeFilesToLoad = [
     'iba-recipes'
     'recipes'
