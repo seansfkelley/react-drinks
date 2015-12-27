@@ -5,19 +5,30 @@ _ = require 'lodash'
 EditableRecipePageType = require '../../EditableRecipePageType'
 
 _createEmptyStore = -> {
-  currentPage  : EditableRecipePageType.NAME
-  name         : ''
-  ingredients  : []
-  instructions : ''
-  notes        : ''
-  base         : []
-  saving       : false
+  originalRecipeId : null
+  currentPage      : EditableRecipePageType.NAME
+  name             : ''
+  ingredients      : []
+  instructions     : ''
+  notes            : ''
+  base             : []
+  saving           : false
 }
 
 module.exports = require('./makeReducer') _.extend(
   _createEmptyStore(),
   require('../persistence').load().editableRecipe
 ), {
+  'seed-recipe-editor' : (state, { recipe }) ->
+    return _.defaults {
+      originalRecipeId : recipe.recipeId
+      ingredients      : _.map recipe.ingredients, (i) -> {
+        tag       : i.tag
+        isEditing : false
+        display   : _.pick i, 'displayAmount', 'displayUnit', 'displayIngredient'
+      }
+    }, _.pick(recipe, 'name', 'instructions', 'notes', 'base')
+
   'set-editable-recipe-page' : (state, { page }) ->
     return _.defaults { currentPage : page }, state
 
@@ -39,7 +50,6 @@ module.exports = require('./makeReducer') _.extend(
     ingredients = _.clone state.ingredients
     ingredients[index] = {
       tag
-      rawText
       isEditing : false
       display   : parseIngredientFromText rawText, tag
     }

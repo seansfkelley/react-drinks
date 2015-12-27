@@ -106,12 +106,10 @@ EditableRecipeView = React.createClass {
       return _.pick _.extend({ tag : ingredient.tag }, ingredient.display), _.identity
 
     recipe = _.chain editableRecipeState
-      .pick 'name', 'instructions', 'notes', 'base'
+      .pick 'name', 'instructions', 'notes', 'base', 'originalRecipeId'
       .extend { ingredients, isCustom : true }
       .pick _.identity
       .value()
-
-    recipe.recipeId = "temp-id-#{Math.floor(Math.random() * 1e16)}"
 
     return normalization.normalizeRecipe recipe
 }

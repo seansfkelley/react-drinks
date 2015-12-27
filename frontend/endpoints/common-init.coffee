@@ -37,6 +37,12 @@ module.exports = ->
         catch
           return v
 
+    clearLocalStorage : ({ force } = { force : false })->
+      if not force
+        console.error 'pass the \'force\' option if you really mean it'
+      else
+        delete localStorage['drinks-app-persistence']
+
     getState : ->
       return require('../store').getState()
 

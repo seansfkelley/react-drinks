@@ -13,7 +13,6 @@ utils            = require '../utils'
 stylingConstants = require '../stylingConstants'
 Difficulty       = require '../Difficulty'
 
-SwipableRecipeView = require './SwipableRecipeView'
 RecipeListItem     = require './RecipeListItem'
 RecipeListHeader   = require './RecipeListHeader'
 

@@ -10,6 +10,21 @@ module.exports = require('./makeReducer') _.extend({
   showingSidebar           : false
   showingListSelector      : false
 }, require('../persistence').load().ui), {
+  'rewrite-recipe-id' : (state, { from, to }) ->
+    { currentlyViewedRecipeIds, favoritedRecipeIds } = state
+
+    i = _.indexOf currentlyViewedRecipeIds, from
+    if i != -1
+      currentlyViewedRecipeIds = _.clone currentlyViewedRecipeIds
+      currentlyViewedRecipeIds[i] = to
+
+    i = _.indexOf favoritedRecipeIds, from
+    if i != -1
+      favoritedRecipeIds = _.clone favoritedRecipeIds
+      favoritedRecipeIds[i] = to
+
+    return _.defaults { currentlyViewedRecipeIds, favoritedRecipeIds }, state
+
   'set-recipe-viewing-index' : (state, { index }) ->
     return _.defaults { recipeViewingIndex : index }, state
 

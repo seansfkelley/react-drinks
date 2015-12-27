@@ -26,8 +26,6 @@ App = React.createClass {
         'selectedRecipeList'
       ]
       ui      : [
-        'recipeViewingIndex'
-        'currentlyViewedRecipeIds'
         'favoritedRecipeIds'
         'showingRecipeViewer'
         'showingRecipeEditor'
@@ -50,8 +48,6 @@ App = React.createClass {
       <div className={classnames 'overlay-background', { 'visible' : anyOverlayVisible}} onTouchStart={@_closeOverlays}/>
       <Overlay type='modal' isVisible={@state.showingRecipeViewer}>
         <SwipableRecipeView
-          recipeIds={@state.currentlyViewedRecipeIds}
-          index={@state.recipeViewingIndex}
           onClose={@_hideRecipeViewer}
         />
       </Overlay>

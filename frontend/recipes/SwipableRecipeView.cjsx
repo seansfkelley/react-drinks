@@ -15,15 +15,13 @@ SwipableRecipeView = React.createClass {
   displayName : 'SwipableRecipeView'
 
   propTypes :
-    recipeIds : React.PropTypes.array.isRequired
-    index     : React.PropTypes.number.isRequired
-    onClose   : React.PropTypes.func.isRequired
+    onClose : React.PropTypes.func.isRequired
 
   mixins : [
     ReduxMixin {
       recipes     : 'recipesById'
       ingredients : 'ingredientsByTag'
-      ui          : 'favoritedRecipeIds'
+      ui          : [ 'favoritedRecipeIds', 'currentlyViewedRecipeIds', 'recipeViewingIndex' ]
     }
     DerivedValueMixin [
       'ingredientSplitsByRecipeId'
@@ -32,12 +30,12 @@ SwipableRecipeView = React.createClass {
   ]
 
   render : ->
-    if @props.recipeIds.length == 0
+    if @state.currentlyViewedRecipeIds.length == 0
       return <div/>
     else
-      recipePages = _.map @props.recipeIds, (recipeId, i) =>
+      recipePages = _.map @state.currentlyViewedRecipeIds, (recipeId, i) =>
         <div className='swipable-padding-wrapper' key={recipeId}>
-          {if Math.abs(i - @props.index) <= 1
+          {if Math.abs(i - @state.recipeViewingIndex) <= 1
             recipe = @state.recipesById[recipeId]
             <div className='swipable-position-wrapper'>
               <RecipeView
@@ -46,6 +44,7 @@ SwipableRecipeView = React.createClass {
                 ingredientSplits={@state.ingredientSplitsByRecipeId?[recipeId]}
                 onClose={@_onClose}
                 onFavorite={@_onFavorite}
+                onEdit={if recipe.isCustom then @_onEdit}
                 isFavorited={recipeId in @state.favoritedRecipeIds}
                 isShareable={true}
               />
@@ -54,7 +53,7 @@ SwipableRecipeView = React.createClass {
 
       <Swipable
         className='swipable-recipe-container'
-        initialIndex={@props.index}
+        initialIndex={@state.recipeViewingIndex}
         onSlideChange={@_onSlideChange}
         friction=0.9
       >
@@ -74,6 +73,16 @@ SwipableRecipeView = React.createClass {
     }
 
     @props.onClose()
+
+  _onEdit : (recipe) ->
+    store.dispatch {
+      type : 'seed-recipe-editor'
+      recipe
+    }
+
+    store.dispatch {
+      type : 'show-recipe-editor'
+    }
 
   _onFavorite : (recipe, shouldFavorite) ->
     if shouldFavorite

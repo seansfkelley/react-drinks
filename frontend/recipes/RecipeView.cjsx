@@ -43,6 +43,7 @@ RecipeView = React.createClass {
     ingredientsByTag : React.PropTypes.object
     onClose          : React.PropTypes.func
     onFavorite       : React.PropTypes.func
+    onEdit           : React.PropTypes.func
     isFavorited      : React.PropTypes.bool
     isShareable      : React.PropTypes.bool
 
@@ -94,6 +95,14 @@ RecipeView = React.createClass {
       header = <TitleBar className='fixed-header'>{@props.recipe.name}</TitleBar>
 
     footerButtons = []
+
+    if @props.onEdit
+      footerButtons.push <IconButton
+        key='edit'
+        icon='fa-pencil-square-o'
+        text='Edit'
+        onTouchTap={@_edit}
+      />
     if @props.isShareable
       footerButtons.push <IconButton
         key='share'
@@ -122,11 +131,14 @@ RecipeView = React.createClass {
       {if footerButtons.length then <div className='fixed-footer'>{footerButtons}</div>}
     </div>
 
+  _edit : ->
+    @props.onEdit @props.recipe
+
   _share : ->
     window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
 
   _favorite : ->
-    @props.onFavorite(@props.recipe, not @props.isFavorited)
+    @props.onFavorite @props.recipe, not @props.isFavorited
 
   _renderCategory : (measuredIngredients, category) ->
     if measuredIngredients.length == 0
