@@ -45,6 +45,7 @@ RecipeView = React.createClass {
     onFavorite       : React.PropTypes.func
     isFavorited      : React.PropTypes.bool
     isShareable      : React.PropTypes.bool
+    isCustomAdded    : React.PropTypes.bool
     onCustomAdd      : React.PropTypes.func
 
   getDefaultProps : ->
@@ -110,12 +111,19 @@ RecipeView = React.createClass {
         onTouchTap={@_favorite}
       />
     if @props.onCustomAdd
-      footerButtons.push <IconButton
-        key='custom-add'
-        icon='fa-plus'
-        text='Add to Library'
-        onTouchTap={@_addCustom}
-      />
+      if @props.isCustomAdded
+        footerButtons.push <IconButton
+          key='custom-add'
+          icon='fa-check'
+          text='Added to Library'
+        />
+      else
+        footerButtons.push <IconButton
+          key='custom-add'
+          icon='fa-plus'
+          text='Add to Library'
+          onTouchTap={@_addCustom}
+        />
 
     <div className='recipe-view fixed-header-footer'>
       {header}
