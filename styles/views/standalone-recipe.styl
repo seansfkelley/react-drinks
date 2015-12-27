@@ -1,15 +1,20 @@
 @require '../shared/mixins'
 
-.standalone-recipe .homepage-link
-  display: block
+.standalone-recipe
+  height: 100%
+  display: flex
+  flex-direction: column
 
-  background-color: #676767
-  color: #eee
-  shadow('bottom', 1px)
-  position: relative
+  .homepage-link
+    display: block
 
-  padding-left: 30px
+    background-color: #676767
+    color: #eee
+    shadow('bottom', 1px)
+    position: relative
 
-  i.fa
-    font-size: 14px
-    width: 30px
+    padding-left: 30px
+
+    i.fa
+      font-size: 14px
+      width: 30px
