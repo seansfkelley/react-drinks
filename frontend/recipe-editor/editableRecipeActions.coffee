@@ -4,21 +4,20 @@ reqwest = require 'reqwest'
 saveRecipe = (recipe) ->
   return (dispatch, getState) ->
     dispatch {
-      type : 'save-recipe'
-      recipe
+      type : 'saving-recipe'
     }
 
-    Promise.resolve reqwest({
+    recipeNoId = _.omit recipe, 'recipeId'
+    return Promise.resolve reqwest({
       url    : '/recipe'
       method : 'post'
       type   : 'json'
-      data   : _.omit recipe, 'recipeId'
+      data   : recipeNoId
     })
-    .done ({ ackRecipeId }) ->
+    .then ({ ackRecipeId }) ->
       dispatch {
-        type : 'rewrite-recipe-id'
-        from : recipe.recipeId
-        to   : ackRecipeId
+        type   : 'saved-recipe'
+        recipe : _.extend { recipeId : ackRecipeId }, recipeNoId
       }
 
 module.exports = {

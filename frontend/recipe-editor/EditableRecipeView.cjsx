@@ -33,7 +33,7 @@ EditableRecipeView = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'currentPage', 'ingredients', 'name', 'base' ]
+      editableRecipe : [ 'currentPage', 'ingredients', 'name', 'base', 'saving' ]
     }
   ]
 
@@ -84,6 +84,7 @@ EditableRecipeView = React.createClass {
           onNext={@_finish}
           onClose={@props.onClose}}
           recipe={@_constructRecipe()}
+          isSaving={@state.saving}
         />
 
   _makePageSwitcher : (page) ->
@@ -95,7 +96,8 @@ EditableRecipeView = React.createClass {
 
   _finish : ->
     store.dispatch editableRecipeActions.saveRecipe(@_constructRecipe())
-    @props.onClose()
+    .then =>
+      @props.onClose()
 
   _constructRecipe : ->
     editableRecipeState = store.getState().editableRecipe

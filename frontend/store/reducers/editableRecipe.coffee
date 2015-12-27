@@ -11,6 +11,7 @@ _createEmptyStore = -> {
   instructions : ''
   notes        : ''
   base         : []
+  saving       : false
 }
 
 module.exports = require('./makeReducer') _.extend(
@@ -57,7 +58,10 @@ module.exports = require('./makeReducer') _.extend(
       base = state.base.concat [ tag ]
     return _.defaults { base }, state
 
-  'save-recipe' : (state) ->
+  'saving-recipe' : (state) ->
+    return _.defaults { saving : true }, state
+
+  'saved-recipe' : (state) ->
     return _createEmptyStore()
 
   'clear-editable-recipe' : (state) ->

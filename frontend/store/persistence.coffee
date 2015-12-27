@@ -26,6 +26,7 @@ PERSISTENCE_SPEC = {
     instructions : Infinity
     notes        : Infinity
     base         : Infinity
+    saving       : 0
 
 }
 

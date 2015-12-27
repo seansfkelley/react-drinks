@@ -83,6 +83,9 @@ EditableIngredient = React.createClass {
   componentDidMount : ->
     @_guessTags = _.throttle @_guessTags, 250
 
+  componentWillUnmount : ->
+    @_guessTags.cancel()
+
   _focus : ->
     @refs.input.focus()
 

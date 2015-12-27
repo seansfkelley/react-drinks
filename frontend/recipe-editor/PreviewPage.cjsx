@@ -14,12 +14,24 @@ PreviewPage = React.createClass {
     onPrevious    : React.PropTypes.func
     previousTitle : React.PropTypes.string
     recipe        : React.PropTypes.object
+    isSaving      : React.PropTypes.bool
 
   mixins : [
     PureRenderMixin
   ]
 
   render : ->
+    if @props.isSaving
+      nextButton = <div className='next-button fixed-footer'>
+        <span className='next-text'>Saving</span>
+        <i className='fa fa-refresh fa-spin'/>
+      </div>
+    else
+      nextButton = <div className='next-button fixed-footer' onTouchTap={@props.onNext}>
+        <span className='next-text'>Done</span>
+        <i className='fa fa-check'/>
+      </div>
+
     <EditableRecipePage
       className='preview-page'
       onClose={@props.onClose}
@@ -29,10 +41,7 @@ PreviewPage = React.createClass {
       <div className='fixed-content-pane'>
         <RecipeView recipe={@props.recipe}/>
       </div>
-      <div className='next-button fixed-footer' onTouchTap={@props.onNext}>
-        <span className='next-text'>Done</span>
-        <i className='fa fa-check'/>
-      </div>
+      {nextButton}
     </EditableRecipePage>
 }
 
