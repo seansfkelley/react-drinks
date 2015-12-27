@@ -20,4 +20,4 @@ then
   echo
 fi
 
-ssh root@104.236.188.87 "cd react-drinks-staging ; PORT=8080 ./scripts/pull.sh 'origin/$1'"
+ssh root@104.236.188.87 "cd react-drinks-staging ; PORT=8080 NODE_ENV=staging ./scripts/pull.sh 'origin/$1'"

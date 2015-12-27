@@ -3,6 +3,8 @@ log = require 'loglevel'
 # Logging before all.
 log.setLevel 'debug'
 
+log.info "starting spirit guide with PORT=#{process.env.PORT} and NODE_ENV=#{process.env.NODE_ENV}"
+
 _       = require 'lodash'
 express = require 'express'
 routes  = require './routes'
