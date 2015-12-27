@@ -1,11 +1,8 @@
 _       = require 'lodash'
 log     = require 'loglevel'
 Promise = require 'bluebird'
-PouchDB = require 'pouchdb'
 
-config   = require('../backend/config').get()
-recipeDb = new PouchDB config.couchDb.url + config.couchDb.recipeDbName
-configDb = new PouchDB config.couchDb.url + config.couchDb.configDbName
+{ recipeDb, configDb } = require('./database').get()
 
 getDefaultRecipeIds = ->
   return Promise.resolve configDb.get('default-recipe-list')

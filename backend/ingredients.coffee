@@ -2,10 +2,7 @@ _       = require 'lodash'
 Promise = require 'bluebird'
 PouchDB = require 'pouchdb'
 
-config = require('../backend/config').get()
-
-ingredientDb = new PouchDB config.couchDb.url + config.couchDb.ingredientDbName
-configDb     = new PouchDB config.couchDb.url + config.couchDb.configDbName
+{ ingredientDb, configDb } = require('./database').get()
 
 getIngredients = ->
   return Promise.resolve ingredientDb.allDocs({

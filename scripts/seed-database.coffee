@@ -7,13 +7,8 @@ startTime = Date.now()
 
 _       = require 'lodash'
 Promise = require 'bluebird'
-PouchDB = require 'pouchdb'
 
-config = require('../backend/config').get()
-
-recipeDb     = new PouchDB config.couchDb.url + config.couchDb.recipeDbName
-configDb     = new PouchDB config.couchDb.url + config.couchDb.configDbName
-ingredientDb = new PouchDB config.couchDb.url + config.couchDb.ingredientDbName
+{ recipeDb, ingredientDb, configDb } = require('../backend/database').get()
 
 defaultDataLoaders = require '../default-data/loaders'
 
