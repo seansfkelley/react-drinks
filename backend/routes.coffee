@@ -13,11 +13,8 @@ module.exports = [
   route   : '/ingredients'
   handler : (req, res) ->
     res.json {
-      groups      : ingredients.getGroups()
       ingredients : ingredients.getIngredients()
-      # groupedIngredients         : GROUPED_INGREDIENTS
-      # intangibleIngredients      : _.reject ALPHABETICAL_INGREDIENTS, 'tangible'
-      # alphabeticalIngredientTags : _.pluck ALPHABETICAL_INGREDIENTS, 'tag'
+      groups      : ingredients.getGroups()
     }
 ,
   method  : 'post'

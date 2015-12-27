@@ -123,29 +123,6 @@ loadIngredients = _.once ->
 
   return _.map ingredients, normalization.normalizeIngredient
 
-  # alphabeticalIngredients = _.chain INGREDIENTS
-  #   .map normalization.normalizeIngredient
-  #   .sortBy 'display'
-  #   .value()
-
-  # groupedIngredients = _.chain ALPHABETICAL_INGREDIENTS
-  #   .filter 'tangible'
-  #   .sortBy (i) -> i.display.toLowerCase()
-  #   .groupBy 'group'
-  #   .map (ingredients, groupTag) ->
-  #     return {
-  #       name : _.findWhere(GROUPS, { type : groupTag }).display
-  #       ingredients
-  #     }
-  #   .sortBy ({ name }) -> _.findIndex GROUPS, { display : name }
-  #   .value()
-
-  # return {
-  #   groups
-  #   alphabeticalIngredients
-  #   groupedIngredients
-  # }
-
 
 module.exports = {
   loadRecipeFile
