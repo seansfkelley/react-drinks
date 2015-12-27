@@ -26,7 +26,7 @@ module.exports = _.once ->
     recipeLoader([].concat(customRecipeIds).concat(defaultRecipeIds))
     .then (recipesById) ->
       store.dispatch {
-        type : 'recipes-loaded'
-        recipesById
+        type        : 'recipes-loaded'
+        recipesById : _.mapValues recipesById, (recipe, recipeId) -> _.extend { recipeId }, recipe
       }
   ]

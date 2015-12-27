@@ -9,8 +9,6 @@ getDefaultRecipeIds = ->
   .then ({ defaultIds }) -> defaultIds
 
 save = (recipe) ->
-  recipe = _.omit recipe, 'recipeId'
-
   return Promise.resolve recipeDb.post(recipe)
   .then ({ ok, id, rev }) ->
     log.info "saved new recipe with ID #{id}"
@@ -34,8 +32,8 @@ bulkLoad = (recipeIds) ->
     recipes = _.chain(rows)
       .pluck 'doc'
       .compact()
-      .map (r) -> _.extend { recipeId : r._id }, _.omit(r, '_id', '_rev')
-      .indexBy 'recipeId'
+      .indexBy '_id'
+      .mapValues (r) -> _.omit r, '_id', '_rev'
       .value()
 
     loadedIds = _.keys recipes

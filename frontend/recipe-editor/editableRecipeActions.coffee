@@ -12,7 +12,7 @@ saveRecipe = (recipe) ->
       url    : '/recipe'
       method : 'post'
       type   : 'json'
-      data   : recipe
+      data   : _.omit recipe, 'recipeId'
     })
     .done ({ ackRecipeId }) ->
       dispatch {

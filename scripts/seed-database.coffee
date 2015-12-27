@@ -11,6 +11,7 @@ startTime = Date.now()
 
 _       = require 'lodash'
 Promise = require 'bluebird'
+md5     = require 'md5'
 
 config = require '../backend/config'
 { recipeDb, ingredientDb, configDb } = require('../backend/database').get()
@@ -55,7 +56,10 @@ Promise.resolve()
   recipesWithId = _.chain(recipeFilesToLoad)
     .map defaultDataLoaders.loadRecipeFile
     .flatten()
-    .map (r) -> _.extend { _id : r.recipeId }, _.omit(r, 'recipeId')
+    # So, we don't really care if this is a hash or not. It just needs to be sufficiently unique.
+    # The reason it does this is because it avoids accidentally assigning the same ID to a default
+    # recipe (which don't come with any) and a custom recipe (which should retain theirs forever).
+    .map (r) -> _.extend { _id : md5 JSON.stringify(r) }, r
     .value()
 
   log.info "#{recipesWithId.length} recipes to be inserted"
