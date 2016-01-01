@@ -208,6 +208,7 @@
   searchable :
     - champagne
     - prosecco
+    - cava
 -
   display    : Rum (spiced)
   tag        : spiced rum

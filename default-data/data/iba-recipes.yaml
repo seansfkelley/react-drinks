@@ -618,7 +618,9 @@
       Top up with champagne. Stir gently.
     source: "IBA"
     url: "http://www.iba-world.com/index.php?option=com_content&view=article&id=88"
-    base: gin
+    base:
+      - gin
+      - wine
 -
     name: "French Connection"
     ingredients:
