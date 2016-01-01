@@ -11,7 +11,7 @@ startTime = Date.now()
 
 _       = require 'lodash'
 Promise = require 'bluebird'
-md5     = require 'md5'
+md5     = require 'MD5'
 
 config = require '../backend/config'
 { recipeDb, ingredientDb, configDb } = require('../backend/database').get()
