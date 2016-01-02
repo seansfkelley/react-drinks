@@ -21,17 +21,15 @@ EditableNamePage = React.createClass {
   ]
 
   propTypes :
-    onClose       : React.PropTypes.func.isRequired
-    onNext        : React.PropTypes.func
-    onPrevious    : React.PropTypes.func
-    previousTitle : React.PropTypes.string
+    onClose      : React.PropTypes.func.isRequired
+    onCreateNew  : React.PropTypes.func
+    onEnterProse : React.PropTypes.func
+    onEnterId    : React.PropTypes.func
 
   render : ->
     <EditableRecipePage
-      className='name-page'
+      className='landing-page'
       onClose={@props.onClose}
-      onPrevious={@props.onPrevious}
-      previousTitle={@props.previousTitle}
     >
       <div className='fixed-content-pane'>
         <div className='add-recipe-section new-recipe'>
@@ -54,7 +52,7 @@ EditableNamePage = React.createClass {
           />
         </div>
         <div className='add-recipe-section add-prose'>
-          <div className='section-title'>From Text</div>
+          <div className='section-title'>Recipe from Text</div>
           <textarea
             placeholder='Recipe text...'
             autoCorrect='off'
