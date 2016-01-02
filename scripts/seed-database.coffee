@@ -89,8 +89,8 @@ Promise.resolve()
       defaultIds : _.pluck(recipesWithId, '_id')
     }
 
-.then ->
-  log.info 'successfully updated list of default recipe IDs'
+  .then ->
+    log.info "successfully updated list of default recipe IDs (new count: #{recipesWithId.length})"
 
 .then ->
   ingredients = defaultDataLoaders.loadIngredients()

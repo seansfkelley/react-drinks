@@ -1,4 +1,5 @@
-_ = require 'lodash'
+_   = require 'lodash'
+log = require 'loglevel'
 
 ONE_MINUTE_MS    = 1000 * 60
 LOCALSTORAGE_KEY = 'drinks-app-persistence'
@@ -37,10 +38,10 @@ watch = (store) ->
     data = _.mapValues PERSISTENCE_SPEC, (spec, storeName) ->
       return _.pick state[storeName], _.keys(spec)
 
-    localStorage[LOCALSTORAGE_KEY] = JSON.stringify {
-      data
-      timestamp : Date.now()
-    }
+    timestamp = Date.now()
+    localStorage[LOCALSTORAGE_KEY] = JSON.stringify { data, timestamp }
+
+    log.debug "persisted data at t=#{timestamp}"
   ), 1000
 
 load = _.once ->
