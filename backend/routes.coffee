@@ -1,4 +1,5 @@
-_ = require 'lodash'
+_   = require 'lodash'
+log = require 'loglevel'
 
 recipes     = require './recipes'
 ingredients = require './ingredients'
@@ -35,4 +36,26 @@ module.exports = [
     # so we might as well just set it unconditionally here.
     recipe.isCustom = true
     res.json { ackRecipeId : recipes.save recipe }
+,
+  method  : 'all'
+  route   : '*'
+  handler : (error, req, res, next) ->
+    if error
+      log.error error
+      res.status 500
+      if req.get('Content-Type') == 'application/json'
+        res.send()
+      else
+        res.render 'fail-whale'
+    else
+      next()
+,
+  method  : 'all'
+  route   : '*'
+  handler : (req, res, next) ->
+    res.status 404
+    if req.get('Content-Type') == 'application/json'
+      res.send()
+    else
+      res.render 'fail-whale'
 ]

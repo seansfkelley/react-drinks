@@ -14,9 +14,10 @@ module.exports = _.once ->
 
   return Promise.all [
     Promise.resolve reqwest({
-      url    : '/ingredients'
-      method : 'get'
-      type   : 'json'
+      url         : '/ingredients'
+      method      : 'get'
+      type        : 'json'
+      contentType : 'application/json'
     })
     .then (ingredients) ->
       store.dispatch _.extend {

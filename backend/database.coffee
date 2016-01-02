@@ -1,4 +1,5 @@
 _       = require 'lodash'
+log     = require 'loglevel'
 PouchDB = require 'pouchdb'
 Promise = require 'bluebird'
 
