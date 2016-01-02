@@ -26,7 +26,7 @@ start = ->
   log.info "attaching #{routes.length} routes"
   for { method, route, handler } in routes
     method ?= 'get'
-    log.info "#{method} #{route}"
+    log.info "#{method.toUpperCase()} #{route}"
     app[method](route, handler)
 
   # Go.

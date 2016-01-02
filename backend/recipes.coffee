@@ -1,21 +1,20 @@
-_       = require 'lodash'
-log     = require 'loglevel'
-Promise = require 'bluebird'
+_   = require 'lodash'
+log = require 'loglevel'
 
 { recipeDb, configDb } = require('./database').get()
 
 getDefaultRecipeIds = ->
-  return Promise.resolve configDb.get('default-recipe-list')
+  return configDb.get('default-recipe-list')
   .then ({ defaultIds }) -> defaultIds
 
 save = (recipe) ->
-  return Promise.resolve recipeDb.post(recipe)
+  return recipeDb.post(recipe)
   .then ({ ok, id, rev }) ->
     log.info "saved new recipe with ID #{id}"
     return id
 
 load = (recipeId) ->
-  return Promise.resolve recipeDb.get(recipeId)
+  return recipeDb.get(recipeId)
   .then (recipe) ->
     if recipe
       return _.extend { recipeId }, _.omit(recipe, '_id')
@@ -23,7 +22,7 @@ load = (recipeId) ->
       log.info "failed to find recipe with ID '#{recipeId}'"
 
 bulkLoad = (recipeIds) ->
-  return Promise.resolve recipeDb.allDocs({
+  return recipeDb.allDocs({
     keys         : recipeIds
     include_docs : true
   })

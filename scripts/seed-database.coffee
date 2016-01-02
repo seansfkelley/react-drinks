@@ -64,12 +64,12 @@ Promise.resolve()
 
   log.info "#{recipesWithId.length} recipes to be inserted"
 
-  return Promise.resolve recipeDb.bulkDocs(recipesWithId)
+  return recipeDb.bulkDocs(recipesWithId)
   .then (result) ->
     logAttemptedOverwriteResult result, 'recipes'
 
   .then ->
-    return Promise.resolve configDb.get(DEFAULT_RECIPE_LIST_DOC_ID)
+    return configDb.get(DEFAULT_RECIPE_LIST_DOC_ID)
     .catch (err) ->
       if err?.name == 'not_found'
         return undefined
@@ -104,7 +104,7 @@ Promise.resolve()
   logAttemptedOverwriteResult result, 'ingredients'
 
 .then ->
-  return Promise.resolve configDb.get(INGREDIENT_GROUP_DOC_ID)
+  return configDb.get(INGREDIENT_GROUP_DOC_ID)
   .catch (err) ->
     if err?.name == 'not_found'
       return undefined

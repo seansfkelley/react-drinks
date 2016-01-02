@@ -1,11 +1,9 @@
-_       = require 'lodash'
-Promise = require 'bluebird'
-PouchDB = require 'pouchdb'
+_ = require 'lodash'
 
 { ingredientDb, configDb } = require('./database').get()
 
 getIngredients = ->
-  return Promise.resolve ingredientDb.allDocs({
+  return ingredientDb.allDocs({
     include_docs : true
   })
   .then ({ total_rows, offset, rows }) ->
@@ -16,7 +14,7 @@ getIngredients = ->
       .value()
 
 getGroups = ->
-  return Promise.resolve configDb.get('ingredient-groups')
+  return configDb.get('ingredient-groups')
   .then ({ orderedGroups }) -> orderedGroups
 
 module.exports = {
