@@ -1,4 +1,5 @@
 module.exports =
+  LANDING     : 'landing'
   NAME        : 'name'
   INGREDIENTS : 'ingredients'
   TEXT        : 'text'

@@ -3,13 +3,12 @@ React   = require 'react'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-normalization = require '../../shared/normalization'
-
 store                  = require '../store'
 EditableRecipePageType = require '../EditableRecipePageType'
 
 definitions = require '../../shared/definitions'
 
+EditorLandingPage       = require './EditorLandingPage'
 EditableNamePage        = require './EditableNamePage'
 EditableIngredientsPage = require './EditableIngredientsPage'
 EditableBaseLiquorPage  = require './EditableBaseLiquorPage'
@@ -17,6 +16,7 @@ EditableTextPage        = require './EditableTextPage'
 PreviewPage             = require './PreviewPage'
 
 editableRecipeActions = require './editableRecipeActions'
+recipeFromStore       = require './recipeFromStore'
 
 # TODO: make IconButton class?
 # TODO: clicking back into ingredients to edit them
@@ -24,6 +24,42 @@ editableRecipeActions = require './editableRecipeActions'
 # TODO: "oh you put numbers in" (re: instructions); "I didn't know that it would do the numbers as you go in"
 # TODO: clicking on something to edit could be nice
 # TODO: "done" button is rather far away
+
+
+###
+possible flows are as follows:
+
+landing
+  (new)
+  -> name -> ingredients -> base -> text -> preview -> (done)
+
+  (prose)
+  -> preview
+    -> (done)
+    -> prose-retry -> preview...
+    -> name -> ingredients -> base -> text -> preview -> (done)
+
+  (id)
+  -> preview -> (done)
+  -> id-retry
+    -> id-retry ...
+    -> preview ...
+
+proposed component hierarchy:
+
+RecipeEditor
+  WorkflowChooser
+    - use when no workflow is selected
+  CreateNewWorkflow
+    - no back button
+    - doubles as editing interface
+  FromProseWorkflow
+    - no back button
+  FromIdWorkflow
+    - no back button
+###
+
+
 
 EditableRecipeView = React.createClass {
   displayName : 'EditableRecipeView'
@@ -83,7 +119,7 @@ EditableRecipeView = React.createClass {
           onPrevious={@_makePageSwitcher(EditableRecipePageType.TEXT)}
           onNext={@_finish}
           onClose={@props.onClose}}
-          recipe={@_constructRecipe()}
+          recipe={recipeFromStore store.getState().editableRecipe}
           isSaving={@state.saving}
         />
 
@@ -95,23 +131,10 @@ EditableRecipeView = React.createClass {
       }
 
   _finish : ->
-    store.dispatch editableRecipeActions.saveRecipe(@_constructRecipe())
+    recipe = recipeFromStore store.getState().editableRecipe
+    store.dispatch editableRecipeActions.saveRecipe(recipe)
     .then =>
       @props.onClose()
-
-  _constructRecipe : ->
-    editableRecipeState = store.getState().editableRecipe
-
-    ingredients = _.map editableRecipeState.ingredients, (ingredient) =>
-      return _.pick _.extend({ tag : ingredient.tag }, ingredient.display), _.identity
-
-    recipe = _.chain editableRecipeState
-      .pick 'name', 'instructions', 'notes', 'base', 'originalRecipeId'
-      .extend { ingredients, isCustom : true }
-      .pick _.identity
-      .value()
-
-    return normalization.normalizeRecipe recipe
 }
 
 module.exports = EditableRecipeView

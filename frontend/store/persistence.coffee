@@ -22,6 +22,7 @@ PERSISTENCE_SPEC = {
     showingListSelector      : ONE_MINUTE_MS
   editableRecipe :
     originalRecipeId : Infinity
+    chosenWorkflow   : Infinity
     currentPage      : Infinity
     name             : Infinity
     ingredients      : Infinity
