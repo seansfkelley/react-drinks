@@ -8,7 +8,6 @@ EditableRecipePageType = require '../EditableRecipePageType'
 
 definitions = require '../../shared/definitions'
 
-EditorLandingPage       = require './EditorLandingPage'
 EditableNamePage        = require './EditableNamePage'
 EditableIngredientsPage = require './EditableIngredientsPage'
 EditableBaseLiquorPage  = require './EditableBaseLiquorPage'
@@ -17,14 +16,6 @@ PreviewPage             = require './PreviewPage'
 
 editableRecipeActions = require './editableRecipeActions'
 recipeFromStore       = require './recipeFromStore'
-
-# TODO: make IconButton class?
-# TODO: clicking back into ingredients to edit them
-# TODO: show what "type of" it is in the final display
-# TODO: "oh you put numbers in" (re: instructions); "I didn't know that it would do the numbers as you go in"
-# TODO: clicking on something to edit could be nice
-# TODO: "done" button is rather far away
-
 
 ###
 possible flows are as follows:
@@ -39,42 +30,40 @@ landing
     -> prose-retry -> preview...
     -> name -> ingredients -> base -> text -> preview...
 
-  (id)
-  -> preview -> (done)
-  -> id-retry
-    -> id-retry ...
-    -> preview ...
-
-proposed component hierarchy:
-
-RecipeEditor
-  WorkflowChooser
-    - use when no workflow is selected
-  CreateNewWorkflow
-    - no back button
-    - doubles as editing interface
-  FromProseWorkflow
-    - no back button
-  FromIdWorkflow
-    - no back button
 ###
 
-
-
-EditableRecipeView = React.createClass {
-  displayName : 'EditableRecipeView'
+FromProseWorkflow = React.createClass {
+  displayName : 'FromProseWorkflow'
 
   propTypes :
     onClose : React.PropTypes.func.isRequired
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'currentPage', 'ingredients', 'name', 'base', 'saving' ]
+      editableRecipe : [ 'currentPage', 'ingredients', 'name', 'base', 'saving', 'originalProse' ]
     }
   ]
 
   render : ->
     return switch @state.currentPage
+
+      when EditableRecipePageType.PROSE
+        # ...
+
+      # TODO: This is kind of wonky; we want two buttons on the preview page.
+      # Suggested resolution: tool around with the design a bit; I suspect the
+      # "text + fat arrow" is not the best way to make a button, and I further
+      # suspect that the new versions of the buttons will be more amenable to
+      # factoring-out.
+      when EditableRecipePageType.PROSE_PREVIEW
+        <PreviewPage
+          previousTitle='Instructions'
+          onPrevious={@_makePageSwitcher(EditableRecipePageType.PROSE)}
+          # Hm, want two of these...
+          onNext={@_finish}
+          onClose={@props.onClose}}
+          recipe={recipeFromStore store.getState().editableRecipe}
+        />
 
       when EditableRecipePageType.NAME
         <EditableNamePage
@@ -123,6 +112,7 @@ EditableRecipeView = React.createClass {
           isSaving={@state.saving}
         />
 
+
   _makePageSwitcher : (page) ->
     return =>
       store.dispatch {
@@ -137,4 +127,4 @@ EditableRecipeView = React.createClass {
       @props.onClose()
 }
 
-module.exports = EditableRecipeView
+module.exports = FromProseWorkflow

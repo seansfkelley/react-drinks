@@ -8,7 +8,6 @@ EditableRecipePageType = require '../EditableRecipePageType'
 
 definitions = require '../../shared/definitions'
 
-EditorLandingPage       = require './EditorLandingPage'
 EditableNamePage        = require './EditableNamePage'
 EditableIngredientsPage = require './EditableIngredientsPage'
 EditableBaseLiquorPage  = require './EditableBaseLiquorPage'
@@ -18,51 +17,8 @@ PreviewPage             = require './PreviewPage'
 editableRecipeActions = require './editableRecipeActions'
 recipeFromStore       = require './recipeFromStore'
 
-# TODO: make IconButton class?
-# TODO: clicking back into ingredients to edit them
-# TODO: show what "type of" it is in the final display
-# TODO: "oh you put numbers in" (re: instructions); "I didn't know that it would do the numbers as you go in"
-# TODO: clicking on something to edit could be nice
-# TODO: "done" button is rather far away
-
-
-###
-possible flows are as follows:
-
-landing
-  (new)
-  -> name -> ingredients -> base -> text -> preview -> (done)
-
-  (prose)
-  -> preview
-    -> (done)
-    -> prose-retry -> preview...
-    -> name -> ingredients -> base -> text -> preview...
-
-  (id)
-  -> preview -> (done)
-  -> id-retry
-    -> id-retry ...
-    -> preview ...
-
-proposed component hierarchy:
-
-RecipeEditor
-  WorkflowChooser
-    - use when no workflow is selected
-  CreateNewWorkflow
-    - no back button
-    - doubles as editing interface
-  FromProseWorkflow
-    - no back button
-  FromIdWorkflow
-    - no back button
-###
-
-
-
-EditableRecipeView = React.createClass {
-  displayName : 'EditableRecipeView'
+CreateNewWorkflow = React.createClass {
+  displayName : 'CreateNewWorkflow'
 
   propTypes :
     onClose : React.PropTypes.func.isRequired
@@ -137,4 +93,4 @@ EditableRecipeView = React.createClass {
       @props.onClose()
 }
 
-module.exports = EditableRecipeView
+module.exports = CreateNewWorkflow

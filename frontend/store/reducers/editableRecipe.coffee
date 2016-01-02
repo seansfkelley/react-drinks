@@ -8,6 +8,7 @@ _createEmptyStore = -> {
   originalRecipeId : null
   chosenWorkflow   : null
   currentPage      : EditableRecipePageType.NAME
+  originalProse    : ''
   name             : ''
   ingredients      : []
   instructions     : ''
