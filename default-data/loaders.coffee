@@ -86,6 +86,13 @@ RECIPE_SCHEMA = {
           return false
 }
 
+INGREDIENT_GROUP_SCHEMA = {
+  type       : 'object'
+  properties :
+    type    : REQUIRED_STRING
+    display : REQUIRED_STRING
+}
+
 loadRecipeFile = _.memoize (filename) ->
   log.debug "loading recipes from #{filename}"
   recipes = yaml.safeLoad fs.readFileSync("#{__dirname}/data/#{filename}.yaml")
@@ -107,7 +114,10 @@ loadIngredientGroups = _.once ->
   groups = yaml.safeLoad fs.readFileSync("#{__dirname}/data/groups.yaml")
   log.debug "loaded #{groups.length} groups"
 
-  # TODO: revalidator
+  revalidatorUtils.validateOrThrow groups, {
+    type  : 'array'
+    items : INGREDIENT_GROUP_SCHEMA
+  }
 
   return groups
 

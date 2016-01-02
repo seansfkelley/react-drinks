@@ -118,14 +118,15 @@ Promise.resolve()
       return undefined
 
 .then (_rev) ->
+  orderedGroups = defaultDataLoaders.loadIngredientGroups()
+
   return configDb.put {
     _id           : INGREDIENT_GROUP_DOC_ID
     _rev
-    orderedGroups : defaultDataLoaders.loadIngredientGroups()
+    orderedGroups
   }
-
-.then ->
-  log.info 'successfully updated list of ordered groups'
+  .then ->
+    log.info "successfully updated list of ordered groups (new count: #{orderedGroups.length})"
 
 .catch (err) ->
   log.error err?.stack ? err ? 'unknown error'
