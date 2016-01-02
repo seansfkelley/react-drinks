@@ -61,7 +61,6 @@
     "react-inlinesvg": "^0.4.1",
     "react-swipeable": "^3.0.2",
     "react-tap-event-plugin": "^0.2.1",
-    "react-typeahead": "git://github.com/seansfkelley/react-typeahead.git#515f0ed6bf3930bf2a5b99d603cfbb1b623ed6c3",
     "redux": "^2.0.0",
     "redux-thunk": "^0.1.0",
     "reqwest": "^1.1.6",
