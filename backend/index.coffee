@@ -5,9 +5,11 @@ log.setLevel 'debug'
 
 log.info "starting spirit guide with PORT=#{process.env.PORT} and NODE_ENV=#{process.env.NODE_ENV}"
 
-_       = require 'lodash'
-express = require 'express'
-routes  = require './routes'
+_        = require 'lodash'
+express  = require 'express'
+notifier = require 'node-notifier'
+
+routes = require './routes'
 
 start = ->
   # Express.
@@ -33,5 +35,10 @@ start = ->
   port = process.env.PORT ? 8080
   app.listen port
   log.info "listening on localhost:#{port}"
+
+  notifier.notify {
+    title   : 'Server started'
+    message : "localhost:#{port}"
+  }
 
 module.exports = { start }
