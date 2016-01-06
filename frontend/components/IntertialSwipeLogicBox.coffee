@@ -75,6 +75,8 @@ class IntertialSwipeLogicBox
     # Prevent scrolling: if you drag horizontally and then vertically in one motion, you'll scroll and swip.
     e.preventDefault()
 
+    console.log e.changedTouches[0].clientX
+
     trueDelta = @trueDelta - (e.changedTouches[0].clientX - @lastX)
     visibleDelta = @_computeResistance trueDelta
 
