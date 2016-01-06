@@ -30,6 +30,17 @@ landing
     -> prose-retry -> preview...
     -> name -> ingredients -> base -> text -> preview...
 
+refactor *Pages to just be the main content
+refactor store to just be a currentWorkflow and workflowData
+
+component structure:
+
+RecipeEditor
+  FromProseWorkflow
+    NavigationHeader
+    [page body]
+    Footer
+
 ###
 
 FromProseWorkflow = React.createClass {
