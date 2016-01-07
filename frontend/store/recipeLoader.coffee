@@ -17,9 +17,7 @@ load = (recipeIds) ->
       url         : '/recipes/bulk'
       method      : 'post'
       type        : 'json'
-      contentType : 'application/json'
-      data        :
-        recipeIds : uncachedRecipeIds
+      data        : { recipeIds : uncachedRecipeIds }
     })
     .tap (recipesById) ->
       log.debug "caching #{_.size(recipesById)} recipes"
@@ -27,7 +25,6 @@ load = (recipeIds) ->
       window.response = recipesById
       localStorage[LOCALSTORAGE_KEY] = JSON.stringify(CACHE)
     .then (recipesById) ->
-      # TODO: Shouldn't really need to do this, but the backend currenly dumps the entire DB to us. Oops.
-      return _.extend _.pick(recipesById, recipesById), cachedRecipes
+      return _.extend {}, recipesById, cachedRecipes
 
 module.exports = load
