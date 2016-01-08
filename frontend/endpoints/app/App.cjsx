@@ -9,7 +9,7 @@ RecipeListView     = require '../../recipes/RecipeListView'
 SwipableRecipeView = require '../../recipes/SwipableRecipeView'
 SidebarMenu        = require '../../recipes/SidebarMenu'
 RecipeListSelector = require '../../recipes/RecipeListSelector'
-EditableRecipeView = require '../../recipe-editor/EditableRecipeView'
+RecipeEditorView   = require '../../recipe-editor/RecipeEditorView'
 
 Overlay = require '../../components/Overlay'
 
@@ -58,7 +58,7 @@ App = React.createClass {
         />
       </Overlay>
       <Overlay type='flyup' isVisible={@state.showingRecipeEditor}>
-        <EditableRecipeView
+        <RecipeEditorView
           onClose={@_hideRecipeEditor}
         />
       </Overlay>

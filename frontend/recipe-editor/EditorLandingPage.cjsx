@@ -7,7 +7,7 @@ store = require '../store'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-EditableRecipePage = require './EditableRecipePage'
+NavigationHeader   = require './NavigationHeader'
 NextButton         = require './NextButton'
 
 EditableNamePage = React.createClass {
@@ -27,10 +27,8 @@ EditableNamePage = React.createClass {
     onEnterId    : React.PropTypes.func
 
   render : ->
-    <EditableRecipePage
-      className='landing-page'
-      onClose={@props.onClose}
-    >
+    <div className='editor-landing-page fixed-header-footer'>
+      <NavigationHeader onClose={@props.onClose} className='fixed-header'/>
       <div className='fixed-content-pane'>
         <div className='add-recipe-section new-recipe'>
           <div className='section-title'>Create New Drink</div>
@@ -82,7 +80,7 @@ EditableNamePage = React.createClass {
           />
         </div>
       </div>
-    </EditableRecipePage>
+    </div>
 
   _focus : ->
     @refs.input.focus()

@@ -43,6 +43,10 @@ module.exports = ->
       else
         delete localStorage['drinks-app-persistence']
 
+    # TODO: These pull in all of the reducer code for recipe-init, etc.
+    dispatch : ->
+      return require('../store').dispatch(arguments...)
+
     getState : ->
       return require('../store').getState()
 

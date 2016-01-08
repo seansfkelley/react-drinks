@@ -1,5 +1,6 @@
-_       = require 'lodash'
-React   = require 'react'
+_          = require 'lodash'
+React      = require 'react'
+classnames = require 'classnames'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
@@ -8,6 +9,7 @@ store = require '../store'
 definitions = require '../../shared/definitions'
 
 NavigationHeader = require './NavigationHeader'
+RecipeView       = require '../recipes/RecipeView'
 
 editableRecipeActions = require './editableRecipeActions'
 recipeFromStore       = require './recipeFromStore'
@@ -63,7 +65,8 @@ FromProseWorkflow = React.createClass {
   displayName : 'FromProseWorkflow'
 
   propTypes :
-    onClose : React.PropTypes.func.isRequired
+    onClose   : React.PropTypes.func.isRequired
+    className : React.PropTypes.string
 
   mixins : [
     ReduxMixin {
@@ -72,7 +75,7 @@ FromProseWorkflow = React.createClass {
   ]
 
   render : ->
-    <div className='fixed-header-footer'>
+    <div className={classnames 'fixed-header-footer', @props.className}>
       {@_getNavigationHeader()}
       {@_getPageContent()}
       {@_getFooterButtons()}
@@ -92,6 +95,9 @@ FromProseWorkflow = React.createClass {
     />
 
   _getPageContent : ->
+    return switch @state.currentPage
+      when WorkflowStep.INITIAL_PREVIEW, WorkflowStep.PROSE_PREVIEW, WorkflowStep.REGULAR_PREVIEW
+        <RecipeView recipe={recipeFromStore store}/>
 
   _getFooterButtons : ->
 

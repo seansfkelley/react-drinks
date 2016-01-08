@@ -6,7 +6,7 @@ EditableRecipePageType = require '../../EditableRecipePageType'
 
 _createEmptyStore = -> {
   originalRecipeId : null
-  chosenWorkflow   : null
+  currentWorkflow  : null
   currentPage      : EditableRecipePageType.NAME
   originalProse    : ''
   name             : ''
@@ -32,7 +32,7 @@ module.exports = require('./makeReducer') _.extend(
     }, _.pick(recipe, 'name', 'instructions', 'notes', 'base')
 
   'set-recipe-editor-workflow' : (state, { workflow }) ->
-    return _.defaults { chosenWorkflow : workflow }, state
+    return _.defaults { currentWorkflow : workflow }, state
 
   'set-editable-recipe-page' : (state, { page }) ->
     return _.defaults { currentPage : page }, state
