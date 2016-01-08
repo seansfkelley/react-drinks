@@ -16,13 +16,11 @@ html
 
   body
     include ./landscape-error-overlay.jade
-    div(id="iphone-status-bar-spacer")
-    div(id="iphone-status-bar-app-wrapper")
-      div(id="app-root")
-      div(id="main-loading-overlay" class="fade-in")
-        div(class="centering-wrapper")
-          i(class="fa fa-refresh fa-spin")
-      div(id="web-clip-notification" class="hidden")
+    div(id="app-root")
+    div(id="main-loading-overlay" class="fade-in")
+      div(class="centering-wrapper")
+        i(class="fa fa-refresh fa-spin")
+    div(id="web-clip-notification" class="hidden")
 
     //- Note that this has to come last, so all the necessary containers exist.
     script(type="text/javascript").

@@ -1,8 +1,9 @@
 @require '../shared/typography'
 @require '../shared/mixins'
+@require '../shared/colors'
 
 html, body
-  // Hardware-accerlated as fuck
+  // Hardware-accelerated as fuck
   transform: translateZ(0)
 
   box-sizing: border-box
@@ -13,6 +14,7 @@ html, body
   overflow: hidden
   font: $base-font-size/1 $base-font-family
   color: #202020
+  background-color: $header-background-color
   -webkit-font-smoothing: antialiased
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
   user-select: none
@@ -34,26 +36,10 @@ input, textarea
 a, a:hover, a:focus, a:active
   text-decoration: none
 
-i.fa // TODO: move FA library styles ahead in all-styles.css, then "i" won't be necessary
+i.fa
   text-align: center
   line-height: inherit
-
-.display-none
-  display: none
 
 body
   display: flex
   flex-direction: column
-
-#iphone-status-bar-spacer
-  display: none
-  background-color: #676767
-  height: 20px
-
-#iphone-status-bar-app-wrapper
-  flex: 1
-  position: relative
-
-body[standalone]
-  #iphone-status-bar-spacer
-    display: block

@@ -11,6 +11,7 @@
 
 #app-root
   abs-full-screen()
+  pad-top-for-iphone-status-bar()
 
   .app-event-wrapper
     height: 100%
@@ -29,20 +30,6 @@
     color: #d8d8d8
     font-size: 24px
 
-#iphone-status-bar-spacer
-  &:after
-    content: ' '
-    height: 20px
-    display: block
-    background: $fade-color
-    opacity: 0
-    transition: opacity $transition-duration
-    z-index: 1
-
-  /body.showing-overlay &
-    &:after
-      opacity: 1
-
 #landscape-error-overlay
   abs-full-screen()
   z-index: 1
@@ -56,14 +43,8 @@
     margin-left: 8px
 
 @media (orientation: landscape)
-  body
-    // Near the edge of the screen, it pulls some of the blur color from the body background.
-    background-color: #555
-
   #landscape-error-overlay
     display: flex
-    pointer-events: auto
 
-  #iphone-status-bar-spacer, #iphone-status-bar-app-wrapper
-    background-color: black
-    filter: blur(3px)
+  #app-root
+    filter: blur(10px)
