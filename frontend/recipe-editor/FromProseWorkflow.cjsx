@@ -3,45 +3,61 @@ React   = require 'react'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-store                  = require '../store'
-EditableRecipePageType = require '../EditableRecipePageType'
+store = require '../store'
 
 definitions = require '../../shared/definitions'
 
-EditableNamePage        = require './EditableNamePage'
-EditableIngredientsPage = require './EditableIngredientsPage'
-EditableBaseLiquorPage  = require './EditableBaseLiquorPage'
-EditableTextPage        = require './EditableTextPage'
-PreviewPage             = require './PreviewPage'
+NavigationHeader = require './NavigationHeader'
 
 editableRecipeActions = require './editableRecipeActions'
 recipeFromStore       = require './recipeFromStore'
 
 ###
-possible flows are as follows:
-
-landing
-  (new)
-  -> name -> ingredients -> base -> text -> preview -> (done)
-
-  (prose)
+(prose)
   -> preview
     -> (done)
     -> prose-retry -> preview...
-    -> name -> ingredients -> base -> text -> preview...
+    -> name -> ingredients -> base -> text -> preview -> (done)
 
 refactor *Pages to just be the main content
 refactor store to just be a currentWorkflow and workflowData
-
-component structure:
-
-RecipeEditor
-  FromProseWorkflow
-    NavigationHeader
-    [page body]
-    Footer
+- or or or, it should be a nested store with three other reducers
 
 ###
+
+WorkflowStep =
+  # Landing page for this workflow.
+  INITIAL_PREVIEW : 'initial-preview'
+
+  # Fork 1.
+  PROSE           : 'prose'
+  PROSE_PREVIEW   : 'prose-preview'
+
+  # Fork 2.
+  NAME            : 'name'
+  INGREDIENTS     : 'ingredients'
+  BASE            : 'base'
+  TEXT            : 'text'
+  REGULAR_PREVIEW : 'regular-preview'
+
+PREVIOUS_STEPS =
+  "#{WorkflowStep.PROSE_PREVIEW}"   : WorkflowStep.PROSE
+  "#{WorkflowStep.INGREDIENTS}"     : WorkflowStep.NAME
+  "#{WorkflowStep.BASE}"            : WorkflowStep.INGREDIENTS
+  "#{WorkflowStep.TEXT}"            : WorkflowStep.BASE
+  "#{WorkflowStep.REGULAR_PREVIEW}" : WorkflowStep.TEXT
+
+PREVIOUS_TEXT_FOR =
+  "#{WorkflowStep.PROSE}"       : (state) -> 'Text...'
+  "#{WorkflowStep.NAME}"        : (state) -> "\"#{state.name}\""
+  "#{WorkflowStep.INGREDIENTS}" : (state) ->
+    return "#{state.ingredients.length} ingredient#{if state.ingredients.length == 0 then '' else 's'}"
+  "#{WorkflowStep.BASE}"        : (state) ->
+    if state.base.length == 1
+      return "#{definitions.BASE_TITLES_BY_TAG[state.base[0]]}-based"
+    else
+      return "#{@state.base.length} base liquors"
+  "#{WorkflowStep.TEXT}"        : (state) -> 'Instructions'
 
 FromProseWorkflow = React.createClass {
   displayName : 'FromProseWorkflow'
@@ -56,73 +72,32 @@ FromProseWorkflow = React.createClass {
   ]
 
   render : ->
-    return switch @state.currentPage
+    <div className='fixed-header-footer'>
+      {@_getNavigationHeader()}
+      {@_getPageContent()}
+      {@_getFooterButtons()}
+    </div>
 
-      when EditableRecipePageType.PROSE
-        # ...
+  _getNavigationHeader : ->
+    previousPage = PREVIOUS_STEPS[@state.currentPage]
+    if previousPage
+      onPrevious    = _makePageSwitcher previousPage
+      previousTitle = PREVIOUS_TEXT_FOR[previousPage](@state)
 
-      # TODO: This is kind of wonky; we want two buttons on the preview page.
-      # Suggested resolution: tool around with the design a bit; I suspect the
-      # "text + fat arrow" is not the best way to make a button, and I further
-      # suspect that the new versions of the buttons will be more amenable to
-      # factoring-out.
-      when EditableRecipePageType.PROSE_PREVIEW
-        <PreviewPage
-          previousTitle='Instructions'
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.PROSE)}
-          # Hm, want two of these...
-          onNext={@_finish}
-          onClose={@props.onClose}}
-          recipe={recipeFromStore store.getState().editableRecipe}
-        />
+    return <NavigationHeader
+      onClose={@_onClose}
+      onPrevious={onPrevious}
+      previousTitle={previousTitle}
+      className='fixed-header'
+    />
 
-      when EditableRecipePageType.NAME
-        <EditableNamePage
-          onNext={@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)}
-          onClose={@props.onClose}}
-        />
+  _getPageContent : ->
 
-      when EditableRecipePageType.INGREDIENTS
-        <EditableIngredientsPage
-          previousTitle={'"' + @state.name + '"'}
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.NAME)}
-          onNext={@_makePageSwitcher(EditableRecipePageType.BASE)}
-          onClose={@props.onClose}}
-        />
+  _getFooterButtons : ->
 
-      when EditableRecipePageType.BASE
-        previousTitle = "#{@state.ingredients.length} ingredient"
-        if @state.ingredients.length != 1
-          previousTitle += 's'
-        <EditableBaseLiquorPage
-          previousTitle={previousTitle}
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)}
-          onNext={@_makePageSwitcher(EditableRecipePageType.TEXT)}
-          onClose={@props.onClose}}
-        />
-
-      when EditableRecipePageType.TEXT
-        if @state.base.length == 1
-          previousTitle = "#{definitions.BASE_TITLES_BY_TAG[@state.base[0]]}-based"
-        else
-          previousTitle = "#{@state.base.length} base liquors"
-        <EditableTextPage
-          previousTitle={previousTitle}
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.BASE)}
-          onNext={@_makePageSwitcher(EditableRecipePageType.PREVIEW)}
-          onClose={@props.onClose}}
-        />
-
-      when EditableRecipePageType.PREVIEW
-        <PreviewPage
-          previousTitle='Instructions'
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.TEXT)}
-          onNext={@_finish}
-          onClose={@props.onClose}}
-          recipe={recipeFromStore store.getState().editableRecipe}
-          isSaving={@state.saving}
-        />
-
+  _onClose : ->
+    # Clear the store!
+    @props.onClose()
 
   _makePageSwitcher : (page) ->
     return =>
