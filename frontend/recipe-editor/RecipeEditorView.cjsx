@@ -8,7 +8,7 @@ store = require '../store'
 definitions = require '../../shared/definitions'
 
 EditorLandingPage = require './EditorLandingPage'
-FromProseWorkflow = require './FromProseWorkflow'
+ProseWorkflow = require './ProseWorkflow'
 
 EditorWorkflow        = require './EditorWorkflow'
 editableRecipeActions = require './editableRecipeActions'
@@ -49,9 +49,9 @@ RecipeEditor
   CreateNewWorkflow
     - no back button
     - doubles as editing interface
-  FromProseWorkflow
+  ProseWorkflow
     - no back button
-  FromIdWorkflow
+  RecipeIdWorkflow
     - no back button
 ###
 
@@ -75,8 +75,8 @@ RecipeEditorView = React.createClass {
       className : 'recipe-editor'
 
     return switch @state.currentWorkflow
-      when EditorWorkflow.FROM_PROSE
-        <FromProseWorkflow {...childProps}/>
+      when EditorWorkflow.PROSE
+        <ProseWorkflow {...childProps}/>
       else
         <EditorLandingPage {...childProps}/>
 

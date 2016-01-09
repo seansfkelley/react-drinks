@@ -10,9 +10,9 @@ ReduxMixin = require '../mixins/ReduxMixin'
 NavigationHeader   = require './NavigationHeader'
 NextButton         = require './NextButton'
 
-GuidedWorkflow    = require './GuidedWorkflow'
-FromProseWorkflow = require './FromProseWorkflow'
-FromIdWorkflow    = require './FromIdWorkflow'
+GuidedWorkflow   = require './GuidedWorkflow'
+ProseWorkflow    = require './ProseWorkflow'
+RecipeIdWorkflow = require './RecipeIdWorkflow'
 
 EditableNamePage = React.createClass {
   displayName : 'EditableNamePage'
@@ -115,7 +115,7 @@ EditableNamePage = React.createClass {
   _goToProse : ->
     store.dispatch {
       type      : 'start-prose-workflow'
-      firstStep : FromProseWorkflow.FIRST_STEP
+      firstStep : ProseWorkflow.FIRST_STEP
     }
 
   _onChangeProvidedId : (e) ->
@@ -127,7 +127,7 @@ EditableNamePage = React.createClass {
   _goToId : ->
     store.dispatch {
       type      : 'start-id-workflow'
-      firstStep : FromIdWorkflow.FIRST_STEP
+      firstStep : RecipeIdWorkflow.FIRST_STEP
     }
 
 }

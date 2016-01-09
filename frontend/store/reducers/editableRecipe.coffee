@@ -57,7 +57,7 @@ module.exports = require('./makeReducer') _.extend(
 
     return _.defaults {
       currentStep     : firstStep
-      currentWorkflow : EditorWorkflow.FROM_PROSE
+      currentWorkflow : EditorWorkflow.PROSE
       ingredients     : _.map parsedRecipe.ingredients, (i) -> {
         tag       : null
         isEditing : false
@@ -69,7 +69,7 @@ module.exports = require('./makeReducer') _.extend(
     # TODO: Load the ID here.
     return _.defaults {
       currentStep     : firstStep
-      currentWorkflow : EditorWorkflow.FROM_ID
+      currentWorkflow : EditorWorkflow.RECIPE_ID
     }, state
 
   'set-recipe-editor-workflow' : (state, { workflow }) ->

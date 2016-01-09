@@ -62,8 +62,8 @@ PREVIOUS_TEXT_FOR =
       return "#{@state.base.length} base liquors"
   "#{WorkflowStep.TEXT}"        : (state) -> 'Instructions'
 
-FromProseWorkflow = React.createClass {
-  displayName : 'FromProseWorkflow'
+ProseWorkflow = React.createClass {
+  displayName : 'ProseWorkflow'
 
   propTypes :
     onClose   : React.PropTypes.func.isRequired
@@ -133,6 +133,6 @@ FromProseWorkflow = React.createClass {
       @props.onClose()
 }
 
-FromProseWorkflow.FIRST_STEP = WorkflowStep.INITIAL_PREVIEW
+ProseWorkflow.FIRST_STEP = WorkflowStep.INITIAL_PREVIEW
 
-module.exports = FromProseWorkflow
+module.exports = ProseWorkflow

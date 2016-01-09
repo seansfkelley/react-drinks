@@ -1,4 +1,4 @@
 module.exports =
-  GUIDED     : 'guided'
-  FROM_PROSE : 'from-prose'
-  FROM_ID    : 'from-id'
+  GUIDED    : 'guided'
+  PROSE     : 'prose'
+  RECIPE_ID : 'recipe-id'
