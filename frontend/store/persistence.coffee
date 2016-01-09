@@ -22,7 +22,7 @@ PERSISTENCE_SPEC = {
     showingListSelector      : ONE_MINUTE_MS
   editableRecipe :
     currentWorkflow  : Infinity
-    currentPage      : Infinity
+    currentStep      : Infinity
     editingRecipeId  : Infinity
     isSaving         : 0
     name             : Infinity

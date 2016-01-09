@@ -10,6 +10,7 @@ definitions = require '../../shared/definitions'
 
 NavigationHeader = require './NavigationHeader'
 RecipeView       = require '../recipes/RecipeView'
+ButtonBar        = require '../components/ButtonBar'
 
 editableRecipeActions = require './editableRecipeActions'
 recipeFromStore       = require './recipeFromStore'
@@ -70,19 +71,19 @@ FromProseWorkflow = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'currentPage', 'ingredients', 'name', 'base', 'saving', 'originalProse' ]
+      editableRecipe : [ 'currentStep', 'ingredients', 'name', 'base', 'saving', 'originalProse' ]
     }
   ]
 
   render : ->
-    <div className={classnames 'fixed-header-footer', @props.className}>
+    <div className={classnames 'fixed-header-footer prose-workflow', @props.className}>
       {@_getNavigationHeader()}
       {@_getPageContent()}
       {@_getFooterButtons()}
     </div>
 
   _getNavigationHeader : ->
-    previousPage = PREVIOUS_STEPS[@state.currentPage]
+    previousPage = PREVIOUS_STEPS[@state.currentStep]
     if previousPage
       onPrevious    = _makePageSwitcher previousPage
       previousTitle = PREVIOUS_TEXT_FOR[previousPage](@state)
@@ -95,21 +96,34 @@ FromProseWorkflow = React.createClass {
     />
 
   _getPageContent : ->
-    return switch @state.currentPage
+    return switch @state.currentStep
       when WorkflowStep.INITIAL_PREVIEW, WorkflowStep.PROSE_PREVIEW, WorkflowStep.REGULAR_PREVIEW
         <RecipeView recipe={recipeFromStore store}/>
 
   _getFooterButtons : ->
+    buttons = switch @state.currentStep
+      when WorkflowStep.INITIAL_PREVIEW, WorkflowStep.PROSE_PREVIEW
+        buttons = [
+          icon       : 'fa-pencil-square-o'
+          text       : 'Edit Text'
+          onTouchTap : @_makePageSwitcher WorkflowStep.PROSE
+        ,
+          icon       : 'fa-check'
+          text       : 'Save'
+          onTouchTap : @_finish
+        ]
+
+    return <ButtonBar buttons={buttons}/>
 
   _onClose : ->
     # Clear the store!
     @props.onClose()
 
-  _makePageSwitcher : (page) ->
-    return =>
+  _makePageSwitcher : _.memoize (step) ->
+    return ->
       store.dispatch {
-        type : 'set-editable-recipe-page'
-        page
+        type : 'set-editable-recipe-step'
+        step
       }
 
   _finish : ->
@@ -119,6 +133,6 @@ FromProseWorkflow = React.createClass {
       @props.onClose()
 }
 
-FromProseWorkflow.FIRST_PAGE = WorkflowStep.INITIAL_PREVIEW
+FromProseWorkflow.FIRST_STEP = WorkflowStep.INITIAL_PREVIEW
 
 module.exports = FromProseWorkflow

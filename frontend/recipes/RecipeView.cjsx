@@ -38,7 +38,14 @@ RecipeView = React.createClass {
   mixins : [ PureRenderMixin ]
 
   propTypes :
-    recipe           : React.PropTypes.object.isRequired
+    recipe           : React.PropTypes.shape({
+      name         : React.PropTypes.string.isRequired
+      ingredients  : React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+      instructions : React.PropTypes.string
+      notes        : React.PropTypes.string
+      source       : React.PropTypes.string
+      url          : React.PropTypes.string
+    }).isRequired
     ingredientSplits : React.PropTypes.object
     ingredientsByTag : React.PropTypes.object
     onClose          : React.PropTypes.func
@@ -81,11 +88,12 @@ RecipeView = React.createClass {
         <i className='fa fa-external-link'/>
       </a>
 
-    instructionLines = _.chain @props.recipe.instructions.split('\n')
-      .compact()
-      .map (l, i) -> <li className='text-line' key={i}>{utils.fractionify l}</li>
-      .value()
-    recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
+    if @props.recipe.instructions
+      instructionLines = _.chain @props.recipe.instructions.split('\n')
+        .compact()
+        .map (l, i) -> <li className='text-line' key={i}>{utils.fractionify l}</li>
+        .value()
+      recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
 
     if @props.onClose?
       header = <TitleBar className='fixed-header' rightIcon='fa-times' rightIconOnTouchTap={@props.onClose}>

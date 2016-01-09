@@ -2,7 +2,8 @@ _ = require 'lodash'
 
 EditorWorkflow = require '../../recipe-editor/EditorWorkflow'
 
-{ parseIngredientFromText } = require '../../utils'
+{ parseIngredientFromText
+  parsePartialRecipeFromText } = require '../../utils'
 
 _createEmptyStore = -> {
   currentWorkflow  : null
@@ -52,11 +53,17 @@ module.exports = require('./makeReducer') _.extend(
     }, state
 
   'start-prose-workflow' : (state, { firstStep }) ->
-    # TODO: Seed the other parts of the store here.
+    parsedRecipe = parsePartialRecipeFromText state.providedProse
+
     return _.defaults {
       currentStep     : firstStep
       currentWorkflow : EditorWorkflow.FROM_PROSE
-    }, state
+      ingredients     : _.map parsedRecipe.ingredients, (i) -> {
+        tag       : null
+        isEditing : false
+        display   : i
+      }
+    }, _.omit(parsedRecipe, 'ingredients'), state
 
   'start-id-workflow' : (state, { firstStep }) ->
     # TODO: Load the ID here.
@@ -68,7 +75,7 @@ module.exports = require('./makeReducer') _.extend(
   'set-recipe-editor-workflow' : (state, { workflow }) ->
     return _.defaults { currentWorkflow : workflow }, state
 
-  'set-editable-recipe-page' : (state, { page }) ->
+  'set-editable-recipe-step' : (state, { page }) ->
     return _.defaults { currentStep : page }, state
 
   'set-name' : (state, { name }) ->

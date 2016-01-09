@@ -80,7 +80,7 @@ RecipeEditorView = React.createClass {
       else
         <EditorLandingPage {...childProps}/>
 
-    # return switch @state.currentPage
+    # return switch @state.currentStep
 
     #   when EditableRecipePageType.NAME
     #     <EditableNamePage
@@ -132,7 +132,7 @@ RecipeEditorView = React.createClass {
   _makePageSwitcher : (page) ->
     return =>
       store.dispatch {
-        type : 'set-editable-recipe-page'
+        type : 'set-editable-recipe-step'
         page
       }
 

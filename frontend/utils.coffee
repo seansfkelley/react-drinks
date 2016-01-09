@@ -62,6 +62,7 @@ MEASUREMENTS = [
   'slice'
 ]
 
+# TODO: Unit tests.
 parseIngredientFromText = (rawText) ->
   text = rawText.trim()
 
@@ -78,9 +79,32 @@ parseIngredientFromText = (rawText) ->
 
   return _.pick { displayAmount, displayUnit, displayIngredient }, _.identity
 
+# TODO: Unit tests.
+parsePartialRecipeFromText = (rawText) ->
+  [ rawName, rawIngredients, instructions, notes ] = _.invoke rawText.replace(/\n\n+/g, '\n\n').split('\n\n'), 'trim'
+
+  if not rawName
+    return {}
+
+  name = _.chain rawName
+      .split ' '
+      .invoke 'trim'
+      .compact()
+      .map _.capitalize
+      .join ' '
+      .value()
+
+  if not rawIngredients
+    return { name }
+
+  ingredients = _.map rawIngredients.split('\n'), parseIngredientFromText
+
+  return { name, ingredients, instructions, notes }
+
 module.exports = {
   fractionify
   defractionify
   splitMeasure
   parseIngredientFromText
+  parsePartialRecipeFromText
 }
