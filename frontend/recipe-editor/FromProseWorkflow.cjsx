@@ -119,4 +119,6 @@ FromProseWorkflow = React.createClass {
       @props.onClose()
 }
 
+FromProseWorkflow.FIRST_PAGE = WorkflowStep.INITIAL_PREVIEW
+
 module.exports = FromProseWorkflow

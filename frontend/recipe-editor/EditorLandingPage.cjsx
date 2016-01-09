@@ -10,21 +10,22 @@ ReduxMixin = require '../mixins/ReduxMixin'
 NavigationHeader   = require './NavigationHeader'
 NextButton         = require './NextButton'
 
+GuidedWorkflow    = require './GuidedWorkflow'
+FromProseWorkflow = require './FromProseWorkflow'
+FromIdWorkflow    = require './FromIdWorkflow'
+
 EditableNamePage = React.createClass {
   displayName : 'EditableNamePage'
 
   mixins : [
     ReduxMixin {
-      editableRecipe : 'name'
+      editableRecipe : [ 'name', 'providedProse', 'providedRecipeId' ]
     }
     PureRenderMixin
   ]
 
   propTypes :
-    onClose      : React.PropTypes.func.isRequired
-    onCreateNew  : React.PropTypes.func
-    onEnterProse : React.PropTypes.func
-    onEnterId    : React.PropTypes.func
+    onClose : React.PropTypes.func.isRequired
 
   render : ->
     <div className='editor-landing-page fixed-header-footer'>
@@ -39,14 +40,14 @@ EditableNamePage = React.createClass {
             autoCapitalize='on'
             autoComplete='off'
             spellCheck='false'
-            ref='input'
+            ref='nameInput'
             value={@state.name}
-            onChange={@_onChange}
-            onTouchTap={@_focus}
+            onChange={@_onChangeName}
+            onTouchTap={@_makeFocuser 'nameInput'}
           />
           <NextButton
-            isEnabled={@_isEnabled()}
-            onNext={@_onNext}
+            isEnabled={!!@state.name}
+            onNext={@_goToGuided}
           />
         </div>
         <div className='add-recipe-section add-prose'>
@@ -57,10 +58,14 @@ EditableNamePage = React.createClass {
             autoCapitalize='on'
             autoComplete='off'
             spellCheck='false'
+            ref='proseInput'
+            value={@state.providedProse}
+            onChange={@_onChangeProse}
+            onTouchTap={@_makeFocuser 'proseInput'}
           />
           <NextButton
-            isEnabled={@_isEnabled()}
-            onNext={@_onNext}
+            isEnabled={!!@state.providedProse}
+            onNext={@_goToProse}
           />
         </div>
         <div className='add-recipe-section add-id'>
@@ -69,38 +74,62 @@ EditableNamePage = React.createClass {
             type='text'
             placeholder='Code...'
             autoCorrect='off'
-            autoCapitalize='on'
+            autoCapitalize='off'
             autoComplete='off'
             spellCheck='false'
+            ref='idInput'
+            value={@state.providedRecipeId}
+            onChange={@_onChangeProvidedId}
+            onTouchTap={@_makeFocuser 'idInput'}
           />
           <NextButton
-            isEnabled={@_isEnabled()}
-            onNext={@_onNext}
-            text='Save'
+            isEnabled={!!@state.providedRecipeId}
+            onNext={@_goToId}
+            text='Fetch'
           />
         </div>
       </div>
     </div>
 
-  _focus : ->
-    @refs.input.focus()
+  _makeFocuser : _.memoize (refName) ->
+    return (-> @refs[refName].focus()).bind(@)
 
-  # mixin-ify this kind of stuff probably
-  _isEnabled : ->
-    return !!@state.name
-
-  _onNext : ->
-    store.dispatch {
-      type : 'set-name'
-      name : @state.name.trim()
-    }
-    @props.onNext()
-
-  _onChange : (e) ->
+  _onChangeName : (e) ->
     store.dispatch {
       type : 'set-name'
       name : e.target.value
     }
+
+  _goToGuided : ->
+    store.dispatch {
+      type      : 'start-guided-workflow'
+      firstStep : GuidedWorkflow.FIRST_STEP
+    }
+
+  _onChangeProse : (e) ->
+    store.dispatch {
+      type : 'set-prose'
+      text : e.target.value
+    }
+
+  _goToProse : ->
+    store.dispatch {
+      type      : 'start-prose-workflow'
+      firstStep : FromProseWorkflow.FIRST_STEP
+    }
+
+  _onChangeProvidedId : (e) ->
+    store.dispatch {
+      type     : 'set-provided-recipe-id'
+      recipeId : e.target.value
+    }
+
+  _goToId : ->
+    store.dispatch {
+      type      : 'start-id-workflow'
+      firstStep : FromIdWorkflow.FIRST_STEP
+    }
+
 }
 
 module.exports = EditableNamePage

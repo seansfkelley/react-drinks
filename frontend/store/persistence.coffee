@@ -21,15 +21,17 @@ PERSISTENCE_SPEC = {
     showingSidebar           : ONE_MINUTE_MS * 5
     showingListSelector      : ONE_MINUTE_MS
   editableRecipe :
-    originalRecipeId : Infinity
     currentWorkflow  : Infinity
     currentPage      : Infinity
+    editingRecipeId  : Infinity
+    isSaving         : 0
     name             : Infinity
     ingredients      : Infinity
     instructions     : Infinity
     notes            : Infinity
     base             : Infinity
-    saving           : 0
+    providedProse    : Infinity
+    providedRecipeId : Infinity
 }
 
 watch = (store) ->

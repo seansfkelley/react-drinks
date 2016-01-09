@@ -1,26 +1,41 @@
 _ = require 'lodash'
 
+EditorWorkflow = require '../../recipe-editor/EditorWorkflow'
+
 { parseIngredientFromText } = require '../../utils'
 
 EditableRecipePageType = require '../../EditableRecipePageType'
 
 _createEmptyStore = -> {
-  originalRecipeId : null
   currentWorkflow  : null
-  currentPage      : EditableRecipePageType.NAME
-  originalProse    : ''
+  currentStep      : null
+  editingRecipeId  : null
+  isSaving         : false
+
+  # guided/editing/prose
   name             : ''
   ingredients      : []
   instructions     : ''
   notes            : ''
   base             : []
-  saving           : false
+
+  # prose
+  providedProse    : null
+
+  # id
+  providedRecipeId : null
 }
 
 module.exports = require('./makeReducer') _.extend(
   _createEmptyStore(),
   require('../persistence').load().editableRecipe
 ), {
+  'set-prose' : (state, { text }) ->
+    return _.defaults { providedProse : text }, state
+
+  'set-provided-recipe-id' : (state, { recipeId }) ->
+    return _.defaults { providedRecipeId : recipeId }, state
+
   'seed-recipe-editor' : (state, { recipe }) ->
     return _.defaults {
       originalRecipeId : recipe.recipeId
@@ -31,11 +46,32 @@ module.exports = require('./makeReducer') _.extend(
       }
     }, _.pick(recipe, 'name', 'instructions', 'notes', 'base')
 
+  'start-guided-workflow' : (state, { firstStep }) ->
+    return _.defaults {
+      currentStep     : firstStep
+      currentWorkflow : EditorWorkflow.GUIDED
+      name            : state.name.trim()
+    }, state
+
+  'start-prose-workflow' : (state, { firstStep }) ->
+    # TODO: Seed the other parts of the store here.
+    return _.defaults {
+      currentStep     : firstStep
+      currentWorkflow : EditorWorkflow.FROM_PROSE
+    }, state
+
+  'start-id-workflow' : (state, { firstStep }) ->
+    # TODO: Load the ID here.
+    return _.defaults {
+      currentStep     : firstStep
+      currentWorkflow : EditorWorkflow.FROM_ID
+    }, state
+
   'set-recipe-editor-workflow' : (state, { workflow }) ->
     return _.defaults { currentWorkflow : workflow }, state
 
   'set-editable-recipe-page' : (state, { page }) ->
-    return _.defaults { currentPage : page }, state
+    return _.defaults { currentStep : page }, state
 
   'set-name' : (state, { name }) ->
     return _.defaults { name }, state
@@ -74,7 +110,7 @@ module.exports = require('./makeReducer') _.extend(
     return _.defaults { base }, state
 
   'saving-recipe' : (state) ->
-    return _.defaults { saving : true }, state
+    return _.defaults { isSaving : true }, state
 
   'saved-recipe' : (state) ->
     return _createEmptyStore()
