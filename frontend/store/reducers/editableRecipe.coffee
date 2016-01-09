@@ -4,8 +4,6 @@ EditorWorkflow = require '../../recipe-editor/EditorWorkflow'
 
 { parseIngredientFromText } = require '../../utils'
 
-EditableRecipePageType = require '../../EditableRecipePageType'
-
 _createEmptyStore = -> {
   currentWorkflow  : null
   currentStep      : null

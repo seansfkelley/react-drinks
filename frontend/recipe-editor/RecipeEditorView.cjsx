@@ -3,8 +3,7 @@ React   = require 'react'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-store                  = require '../store'
-EditableRecipePageType = require '../EditableRecipePageType'
+store = require '../store'
 
 definitions = require '../../shared/definitions'
 
