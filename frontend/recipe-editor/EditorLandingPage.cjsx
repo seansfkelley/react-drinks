@@ -7,12 +7,13 @@ store = require '../store'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-NavigationHeader   = require './NavigationHeader'
-NextButton         = require './NextButton'
-
+NavigationHeader = require './NavigationHeader'
+NextButton       = require './NextButton'
 GuidedWorkflow   = require './GuidedWorkflow'
 ProseWorkflow    = require './ProseWorkflow'
 RecipeIdWorkflow = require './RecipeIdWorkflow'
+
+{ loadRecipe } = require './editableRecipeActions'
 
 EditableNamePage = React.createClass {
   displayName : 'EditableNamePage'
@@ -129,6 +130,7 @@ EditableNamePage = React.createClass {
       type      : 'start-id-workflow'
       firstStep : RecipeIdWorkflow.FIRST_STEP
     }
+    store.dispatch loadRecipe(@state.providedRecipeId.trim())
 
 }
 

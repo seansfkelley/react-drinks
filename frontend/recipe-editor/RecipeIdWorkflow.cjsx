@@ -1,5 +1,7 @@
 React = require 'react'
 
+ReduxMixin = require '../mixins/ReduxMixin'
+
 WorkflowStep =
   ID      : 'id'
   PREVIEW : 'preview'
@@ -7,7 +9,15 @@ WorkflowStep =
 RecipeIdWorkflow = React.createClass {
   displayName : 'RecipeIdWorkflow'
 
-  propTypes : {}
+  propTypes :
+    onClose   : React.PropTypes.func.isRequired
+    className : React.PropTypes.string
+
+  mixins : [
+    ReduxMixin {
+      editableRecipe : [ 'currentStep', 'providedRecipeId', 'isLoadingRecipe', 'loadedRecipe', 'recipeLoadFailed' ]
+    }
+  ]
 
   render : ->
     <div/>

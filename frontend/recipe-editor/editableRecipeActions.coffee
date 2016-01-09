@@ -32,6 +32,28 @@ saveRecipe = (recipe) ->
           recipeId : recipe.originalRecipeId
         }
 
+loadRecipe = (recipeId) ->
+  return (dispatch, getState) ->
+    dispatch {
+      type : 'loading-recipe'
+    }
+
+    return Promise.resolve reqwest({
+      url    : "recipe/#{recipeId}"
+      method : 'get'
+      type   : 'json'
+    })
+    .then (recipe) ->
+      dispatch {
+        type : 'loaded-provided-recipe'
+        recipe
+      }
+    .catch ->
+      dispatch {
+        type : 'loaded-provided-recipe-failed'
+      }
+
 module.exports = {
   saveRecipe
+  loadRecipe
 }

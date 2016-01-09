@@ -1,18 +1,12 @@
-_       = require 'lodash'
-React   = require 'react'
+React = require 'react'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-store = require '../store'
-
-definitions = require '../../shared/definitions'
-
 EditorLandingPage = require './EditorLandingPage'
-ProseWorkflow = require './ProseWorkflow'
-
-EditorWorkflow        = require './EditorWorkflow'
-editableRecipeActions = require './editableRecipeActions'
-recipeFromStore       = require './recipeFromStore'
+EditorWorkflow    = require './EditorWorkflow'
+ProseWorkflow     = require './ProseWorkflow'
+RecipeIdWorkflow  = require './RecipeIdWorkflow'
+GuidedWorkflow    = require './GuidedWorkflow'
 
 # TODO: make IconButton class?
 # TODO: clicking back into ingredients to edit them
@@ -70,77 +64,20 @@ RecipeEditorView = React.createClass {
   ]
 
   render : ->
-    childProps =
-      onClose   : this.props.onClose
+    childProps = {
+      onClose   : @props.onClose
       className : 'recipe-editor'
+    }
 
     return switch @state.currentWorkflow
+      when EditorWorkflow.GUIDED
+        <GuidedWorkflow {...childProps}/>
       when EditorWorkflow.PROSE
         <ProseWorkflow {...childProps}/>
+      when EditorWorkflow.RECIPE_ID
+        <RecipeIdWorkflow {...childProps}/>
       else
         <EditorLandingPage {...childProps}/>
-
-    # return switch @state.currentStep
-
-    #   when EditableRecipePageType.NAME
-    #     <EditableNamePage
-    #       onNext={@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)}
-    #       onClose={@props.onClose}}
-    #     />
-
-    #   when EditableRecipePageType.INGREDIENTS
-    #     <EditableIngredientsPage
-    #       previousTitle={'"' + @state.name + '"'}
-    #       onPrevious={@_makePageSwitcher(EditableRecipePageType.NAME)}
-    #       onNext={@_makePageSwitcher(EditableRecipePageType.BASE)}
-    #       onClose={@props.onClose}}
-    #     />
-
-    #   when EditableRecipePageType.BASE
-    #     previousTitle = "#{@state.ingredients.length} ingredient"
-    #     if @state.ingredients.length != 1
-    #       previousTitle += 's'
-    #     <EditableBaseLiquorPage
-    #       previousTitle={previousTitle}
-    #       onPrevious={@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)}
-    #       onNext={@_makePageSwitcher(EditableRecipePageType.TEXT)}
-    #       onClose={@props.onClose}}
-    #     />
-
-    #   when EditableRecipePageType.TEXT
-    #     if @state.base.length == 1
-    #       previousTitle = "#{definitions.BASE_TITLES_BY_TAG[@state.base[0]]}-based"
-    #     else
-    #       previousTitle = "#{@state.base.length} base liquors"
-    #     <EditableTextPage
-    #       previousTitle={previousTitle}
-    #       onPrevious={@_makePageSwitcher(EditableRecipePageType.BASE)}
-    #       onNext={@_makePageSwitcher(EditableRecipePageType.PREVIEW)}
-    #       onClose={@props.onClose}}
-    #     />
-
-    #   when EditableRecipePageType.PREVIEW
-    #     <PreviewPage
-    #       previousTitle='Instructions'
-    #       onPrevious={@_makePageSwitcher(EditableRecipePageType.TEXT)}
-    #       onNext={@_finish}
-    #       onClose={@props.onClose}}
-    #       recipe={recipeFromStore store.getState().editableRecipe}
-    #       isSaving={@state.saving}
-    #     />
-
-  _makePageSwitcher : (page) ->
-    return =>
-      store.dispatch {
-        type : 'set-editable-recipe-step'
-        page
-      }
-
-  _finish : ->
-    recipe = recipeFromStore store.getState().editableRecipe
-    store.dispatch editableRecipeActions.saveRecipe(recipe)
-    .then =>
-      @props.onClose()
 }
 
 module.exports = RecipeEditorView

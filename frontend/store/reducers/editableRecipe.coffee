@@ -23,6 +23,9 @@ _createEmptyStore = -> {
 
   # id
   providedRecipeId : null
+  isLoadingRecipe  : false
+  loadedRecipe     : null
+  recipeLoadFailed : false
 }
 
 module.exports = require('./makeReducer') _.extend(
@@ -119,6 +122,25 @@ module.exports = require('./makeReducer') _.extend(
 
   'saved-recipe' : (state) ->
     return _createEmptyStore()
+
+  'loading-recipe' : (state) ->
+    return _.defaults {
+      isLoadingRecipe  : true
+      recipeLoadFailed : false
+      loadedRecipe     : null
+    }, state
+
+  'loaded-provided-recipe' : (state, { recipe }) ->
+    return _.defaults {
+      isLoadingRecipe  : false
+      loadedRecipe     : recipe
+    }, state
+
+  'loaded-provided-recipe-failed' : (state) ->
+    return _.defaults {
+      isLoadingRecipe  : false
+      recipeLoadFailed : true
+    }, state
 
   'clear-editable-recipe' : (state) ->
     return _createEmptyStore()
