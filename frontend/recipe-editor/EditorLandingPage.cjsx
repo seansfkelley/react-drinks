@@ -126,12 +126,17 @@ EditableNamePage = React.createClass {
     }
 
   _goToId : ->
-    store.dispatch {
-      type      : 'start-id-workflow'
-      firstStep : RecipeIdWorkflow.FIRST_STEP
-    }
     store.dispatch loadRecipe(@state.providedRecipeId.trim())
-
+    .then ->
+      store.dispatch {
+        type      : 'start-id-workflow'
+        firstStep : RecipeIdWorkflow.FIRST_STEP_SUCCESS
+      }
+    .catch ->
+      store.dispatch {
+        type      : 'start-id-workflow'
+        firstStep : RecipeIdWorkflow.FIRST_STEP_FAIL
+      }
 }
 
 module.exports = EditableNamePage

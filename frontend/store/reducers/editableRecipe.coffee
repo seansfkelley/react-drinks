@@ -78,8 +78,8 @@ module.exports = require('./makeReducer') _.extend(
   'set-recipe-editor-workflow' : (state, { workflow }) ->
     return _.defaults { currentWorkflow : workflow }, state
 
-  'set-editable-recipe-step' : (state, { page }) ->
-    return _.defaults { currentStep : page }, state
+  'set-recipe-editor-step' : (state, { step }) ->
+    return _.defaults { currentStep : step }, state
 
   'set-name' : (state, { name }) ->
     return _.defaults { name }, state

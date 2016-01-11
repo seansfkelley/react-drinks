@@ -53,6 +53,7 @@ RecipeView = React.createClass {
     onEdit           : React.PropTypes.func
     isFavorited      : React.PropTypes.bool
     isShareable      : React.PropTypes.bool
+    className        : React.PropTypes.string
 
   getDefaultProps : ->
     return {
@@ -126,7 +127,7 @@ RecipeView = React.createClass {
         onTouchTap={@_favorite}
       />
 
-    <div className='recipe-view fixed-header-footer'>
+    <div className={classnames 'recipe-view fixed-header-footer', @props.className}>
       {header}
       <div className='recipe-description fixed-content-pane'>
         <div className='recipe-ingredients'>

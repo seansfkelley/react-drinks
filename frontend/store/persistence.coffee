@@ -21,6 +21,7 @@ PERSISTENCE_SPEC = {
     showingSidebar           : ONE_MINUTE_MS * 5
     showingListSelector      : ONE_MINUTE_MS
   editableRecipe :
+    # This is super tedious. Maybe everything should default to Infinity unless otherwise specified?
     currentWorkflow  : Infinity
     currentStep      : Infinity
     editingRecipeId  : Infinity
@@ -32,6 +33,9 @@ PERSISTENCE_SPEC = {
     base             : Infinity
     providedProse    : Infinity
     providedRecipeId : Infinity
+    isLoadingRecipe  : Infinity
+    loadedRecipe     : Infinity
+    recipeLoadFailed : Infinity
 }
 
 watch = (store) ->

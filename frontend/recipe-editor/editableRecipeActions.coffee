@@ -39,19 +39,22 @@ loadRecipe = (recipeId) ->
     }
 
     return Promise.resolve reqwest({
-      url    : "recipe/#{recipeId}"
-      method : 'get'
+      url    : 'recipes/bulk'
+      method : 'post'
       type   : 'json'
+      data   : { recipeIds : [ recipeId ] }
     })
-    .then (recipe) ->
-      dispatch {
-        type : 'loaded-provided-recipe'
-        recipe
-      }
-    .catch ->
-      dispatch {
-        type : 'loaded-provided-recipe-failed'
-      }
+    .then (recipesById) ->
+      if _.size(recipesById) == 1
+        dispatch {
+          type   : 'loaded-provided-recipe'
+          recipe : _.values(recipesById)[0]
+        }
+      else
+        dispatch {
+          type : 'loaded-provided-recipe-failed'
+        }
+        throw new Error "expected one result for id '#{recipeId}' but got #{_.size recipesById}"
 
 module.exports = {
   saveRecipe

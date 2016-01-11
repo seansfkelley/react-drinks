@@ -102,16 +102,15 @@ ProseWorkflow = React.createClass {
 
   _getFooterButtons : ->
     buttons = switch @state.currentStep
-      when WorkflowStep.INITIAL_PREVIEW, WorkflowStep.PROSE_PREVIEW
-        buttons = [
-          icon       : 'fa-pencil-square-o'
-          text       : 'Edit Text'
-          onTouchTap : @_makePageSwitcher WorkflowStep.PROSE
-        ,
-          icon       : 'fa-check'
-          text       : 'Save'
-          onTouchTap : @_finish
-        ]
+      when WorkflowStep.INITIAL_PREVIEW, WorkflowStep.PROSE_PREVIEW then [
+        icon       : 'fa-pencil-square-o'
+        text       : 'Edit Text'
+        onTouchTap : @_makePageSwitcher WorkflowStep.PROSE
+      ,
+        icon       : 'fa-check'
+        text       : 'Save'
+        onTouchTap : @_finish
+      ]
 
     return <ButtonBar buttons={buttons}/>
 
@@ -122,7 +121,7 @@ ProseWorkflow = React.createClass {
   _makePageSwitcher : _.memoize (step) ->
     return ->
       store.dispatch {
-        type : 'set-editable-recipe-step'
+        type : 'set-recipe-editor-step'
         step
       }
 
