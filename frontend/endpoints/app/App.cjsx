@@ -1,5 +1,6 @@
-React      = require 'react'
-classnames = require 'classnames'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
+classnames      = require 'classnames'
 
 store = require '../../store'
 
@@ -35,6 +36,7 @@ App = React.createClass {
         'showingListSelector'
       ]
     }
+    PureRenderMixin
   ]
 
   render : ->

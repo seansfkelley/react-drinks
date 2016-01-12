@@ -1,5 +1,6 @@
-React      = require 'react'
-classnames = require 'classnames'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
+classnames      = require 'classnames'
 
 IdEntry = React.createClass {
   displayName : 'IdEntry'
@@ -10,6 +11,8 @@ IdEntry = React.createClass {
     isValid   : React.PropTypes.bool.isRequired
     isLoading : React.PropTypes.bool.isRequired
     className : React.PropTypes.string
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     <div className={classnames 'id-entry', @props.className}>

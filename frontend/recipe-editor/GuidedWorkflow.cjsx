@@ -1,4 +1,5 @@
-React = require 'react'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 WorkflowStep =
   NAME        : 'name'
@@ -11,6 +12,8 @@ GuidedWorkflow = React.createClass {
   displayName : 'GuidedWorkflow'
 
   propTypes : {}
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     <div/>

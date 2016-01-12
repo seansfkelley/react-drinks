@@ -1,6 +1,7 @@
-_          = require 'lodash'
-React      = require 'react'
-classnames = require 'classnames'
+_               = require 'lodash'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
+classnames      = require 'classnames'
 
 ButtonBar = React.createClass {
   displayName : 'ButtonBar'
@@ -13,6 +14,8 @@ ButtonBar = React.createClass {
       enabled    : React.PropTypes.bool
     })).isRequired
     className : React.PropTypes.string
+
+  mixins : [ PureRenderMixin ]
 
   render : ->
     buttons = _.map @props.buttons, (button, i) =>

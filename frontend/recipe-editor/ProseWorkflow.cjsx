@@ -1,6 +1,7 @@
-_          = require 'lodash'
-React      = require 'react'
-classnames = require 'classnames'
+_               = require 'lodash'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
+classnames      = require 'classnames'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
@@ -73,6 +74,7 @@ ProseWorkflow = React.createClass {
     ReduxMixin {
       editableRecipe : [ 'currentStep', 'ingredients', 'name', 'base', 'saving', 'originalProse' ]
     }
+    PureRenderMixin
   ]
 
   render : ->

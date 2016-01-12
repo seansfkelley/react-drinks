@@ -1,5 +1,6 @@
-React      = require 'react'
-classnames = require 'classnames'
+React           = require 'react'
+PureRenderMixin = require 'react-addons-pure-render-mixin'
+classnames      = require 'classnames'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
@@ -28,6 +29,7 @@ RecipeIdWorkflow = React.createClass {
     ReduxMixin {
       editableRecipe : [ 'currentStep', 'providedRecipeId', 'isLoadingRecipe', 'loadedRecipe', 'recipeLoadFailed' ]
     }
+    PureRenderMixin
   ]
 
   render : ->
@@ -71,7 +73,7 @@ RecipeIdWorkflow = React.createClass {
         icon       : if @state.isLoadingRecipe then 'fa-refresh fa-spin' else 'fa-download'
         text       : 'Get Recipe'
         onTouchTap : @_tryLoad
-        enabled    : not @state.isLoadingRecipe
+        enabled    : not @state.isLoadingRecipe and @state.providedRecipeId.length == 32 # md5
       ]
       when WorkflowStep.PREVIEW then [
         icon       : 'fa-check'
