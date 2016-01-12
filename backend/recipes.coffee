@@ -24,6 +24,8 @@ load = (recipeId) ->
 
 bulkLoad = (recipeIds) ->
   if recipeIds?.length
+    log.debug "bulk-loading #{recipeIds.length} recipes"
+
     return recipeDb.allDocs({
       keys         : recipeIds
       include_docs : true
@@ -44,6 +46,7 @@ bulkLoad = (recipeIds) ->
 
       return recipes
   else
+    log.debug "bulk-load requested to load nothing; parameter was #{JSON.stringify recipeIds}"
     return Promise.resolve {}
 
 module.exports = {
