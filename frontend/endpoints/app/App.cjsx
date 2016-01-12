@@ -13,6 +13,8 @@ RecipeEditorView   = require '../../recipe-editor/RecipeEditorView'
 
 Overlay = require '../../components/Overlay'
 
+stylingConstants = require '../../stylingConstants'
+
 App = React.createClass {
   displayName : 'App'
 
@@ -87,6 +89,12 @@ App = React.createClass {
     store.dispatch {
       type : 'hide-recipe-editor'
     }
+    # Definitely a hack, but we don't want to rerender the default page until it's not visible.
+    _.delay (->
+      store.dispatch {
+        type : 'clear-editable-recipe'
+      }
+    ), stylingConstants.TRANSITION_DURATION
 
   _hideListSelector : ->
     store.dispatch {
