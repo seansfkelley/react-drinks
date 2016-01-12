@@ -13,14 +13,14 @@ GuidedWorkflow   = require './GuidedWorkflow'
 ProseWorkflow    = require './ProseWorkflow'
 RecipeIdWorkflow = require './RecipeIdWorkflow'
 
-{ loadRecipe } = require './editableRecipeActions'
+{ loadRecipe } = require './recipeEditorActions'
 
 EditableNamePage = React.createClass {
   displayName : 'EditableNamePage'
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'name', 'providedProse', 'providedRecipeId' ]
+      recipeEditor : [ 'name', 'providedProse', 'providedRecipeId' ]
     }
     PureRenderMixin
   ]

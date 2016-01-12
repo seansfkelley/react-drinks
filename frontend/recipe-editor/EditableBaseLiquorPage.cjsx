@@ -18,7 +18,7 @@ EditableBaseLiquorPage = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : 'base'
+      recipeEditor : 'base'
     }
     PureRenderMixin
   ]

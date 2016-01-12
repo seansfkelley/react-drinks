@@ -30,7 +30,7 @@ _createEmptyStore = -> {
 
 module.exports = require('./makeReducer') _.extend(
   _createEmptyStore(),
-  require('../persistence').load().editableRecipe
+  require('../persistence').load().recipeEditor
 ), {
   'set-prose' : (state, { text }) ->
     return _.defaults { providedProse : text }, state

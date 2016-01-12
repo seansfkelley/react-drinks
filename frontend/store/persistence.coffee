@@ -20,7 +20,7 @@ PERSISTENCE_SPEC = {
     showingRecipeEditor      : Infinity
     showingSidebar           : ONE_MINUTE_MS * 5
     showingListSelector      : ONE_MINUTE_MS
-  editableRecipe :
+  recipeEditor :
     # This is super tedious. Maybe everything should default to Infinity unless otherwise specified?
     currentWorkflow  : Infinity
     currentStep      : Infinity

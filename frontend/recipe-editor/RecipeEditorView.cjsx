@@ -3,8 +3,8 @@ PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 ReduxMixin = require '../mixins/ReduxMixin'
 
-EditorLandingPage = require './EditorLandingPage'
 EditorWorkflow    = require './EditorWorkflow'
+EditorLandingPage = require './EditorLandingPage'
 ProseWorkflow     = require './ProseWorkflow'
 RecipeIdWorkflow  = require './RecipeIdWorkflow'
 GuidedWorkflow    = require './GuidedWorkflow'
@@ -60,7 +60,7 @@ RecipeEditorView = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'currentWorkflow' ]
+      recipeEditor : [ 'currentWorkflow' ]
     }
     PureRenderMixin
   ]

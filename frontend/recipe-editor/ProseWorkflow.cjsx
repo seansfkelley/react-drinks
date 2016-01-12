@@ -13,7 +13,7 @@ NavigationHeader = require './NavigationHeader'
 RecipeView       = require '../recipes/RecipeView'
 ButtonBar        = require '../components/ButtonBar'
 
-editableRecipeActions = require './editableRecipeActions'
+recipeEditorActions = require './recipeEditorActions'
 recipeFromStore       = require './recipeFromStore'
 
 ###
@@ -72,7 +72,7 @@ ProseWorkflow = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'currentStep', 'ingredients', 'name', 'base', 'saving', 'originalProse' ]
+      recipeEditor : [ 'currentStep', 'ingredients', 'name', 'base', 'saving', 'originalProse' ]
     }
     PureRenderMixin
   ]
@@ -128,8 +128,8 @@ ProseWorkflow = React.createClass {
       }
 
   _finish : ->
-    recipe = recipeFromStore store.getState().editableRecipe
-    store.dispatch editableRecipeActions.saveRecipe(recipe)
+    recipe = recipeFromStore store.getState().recipeEditor
+    store.dispatch recipeEditorActions.saveRecipe(recipe)
     .then =>
       @props.onClose()
 }

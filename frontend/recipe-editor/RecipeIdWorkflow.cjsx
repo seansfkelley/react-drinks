@@ -12,7 +12,7 @@ IdEntry          = require './IdEntry'
 RecipeView = require '../recipes/RecipeView'
 ButtonBar  = require '../components/ButtonBar'
 
-{ loadRecipe } = require './editableRecipeActions'
+{ loadRecipe } = require './recipeEditorActions'
 
 WorkflowStep =
   ID      : 'id'
@@ -27,7 +27,7 @@ RecipeIdWorkflow = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'currentStep', 'providedRecipeId', 'isLoadingRecipe', 'loadedRecipe', 'recipeLoadFailed' ]
+      recipeEditor : [ 'currentStep', 'providedRecipeId', 'isLoadingRecipe', 'loadedRecipe', 'recipeLoadFailed' ]
     }
     PureRenderMixin
   ]

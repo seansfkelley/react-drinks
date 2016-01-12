@@ -13,7 +13,7 @@ EditableTextPage = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : [ 'instructions', 'notes' ]
+      recipeEditor : [ 'instructions', 'notes' ]
     }
   ]
 

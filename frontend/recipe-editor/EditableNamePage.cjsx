@@ -14,7 +14,7 @@ EditableNamePage = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : 'name'
+      recipeEditor : 'name'
     }
     PureRenderMixin
   ]

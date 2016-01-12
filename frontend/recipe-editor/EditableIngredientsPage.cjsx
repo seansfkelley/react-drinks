@@ -134,7 +134,7 @@ EditableIngredientsPage = React.createClass {
 
   mixins : [
     ReduxMixin {
-      editableRecipe : 'ingredients'
+      recipeEditor : 'ingredients'
       ingredients    : [ 'ingredientsByTag', 'allAlphabeticalIngredients' ]
     }
     PureRenderMixin
