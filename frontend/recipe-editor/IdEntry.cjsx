@@ -25,11 +25,11 @@ IdEntry = React.createClass {
         value={@props.value}
         onChange={@_onChange}
         onTouchTap={@_focus}
+        disabled={@props.isLoading}
       />
-      {if @props.isLoading
-        <i className='fa fa-spin fa-refresh'/>}
-      {if not @props.isValid
-        <div className='invalid-message'>Oops! Looks like that code doesn't exist.</div>}
+      <div className={classnames 'invalid-message', { 'visible' : not @props.isValid }}>
+        Oops! Looks like that code doesn't exist.
+      </div>
     </div>
 
   _onChange : (e) ->

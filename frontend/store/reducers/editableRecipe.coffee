@@ -142,6 +142,9 @@ module.exports = require('./makeReducer') _.extend(
       recipeLoadFailed : true
     }, state
 
+  'clear-load-failure-flag' : (state) ->
+    return _.defaults { recipeLoadFailed : false }, state
+
   'clear-editable-recipe' : (state) ->
     return _createEmptyStore()
 }

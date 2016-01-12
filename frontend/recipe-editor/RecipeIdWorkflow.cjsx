@@ -68,9 +68,10 @@ RecipeIdWorkflow = React.createClass {
   _getFooterButtons : ->
     buttons = switch @state.currentStep
       when WorkflowStep.ID then [
-        icon       : 'fa-download'
+        icon       : if @state.isLoadingRecipe then 'fa-refresh fa-spin' else 'fa-download'
         text       : 'Get Recipe'
         onTouchTap : @_tryLoad
+        enabled    : not @state.isLoadingRecipe
       ]
       when WorkflowStep.PREVIEW then [
         icon       : 'fa-check'
@@ -91,6 +92,16 @@ RecipeIdWorkflow = React.createClass {
     store.dispatch {
       type : 'set-provided-recipe-id'
       recipeId
+    }
+
+    store.dispatch {
+      type : 'clear-load-failure-flag'
+    }
+
+  _goToIdStep : ->
+    store.dispatch {
+      type : 'set-recipe-editor-step'
+      step : WorkflowStep.ID
     }
 
   _tryLoad : ->

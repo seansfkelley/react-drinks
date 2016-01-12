@@ -44,6 +44,7 @@ loadRecipe = (recipeId) ->
       type   : 'json'
       data   : { recipeIds : [ recipeId ] }
     })
+    .delay 300 # Just enough to be able to see the spinner.
     .then (recipesById) ->
       if _.size(recipesById) == 1
         dispatch {

@@ -16,7 +16,7 @@ ButtonBar = React.createClass {
 
   render : ->
     buttons = _.map @props.buttons, (button, i) =>
-      <div className={classnames 'button', { disabled : not (button.enabled ? true) }} onTouchTap={@_makeOnTouchTap i} key={i}>
+      <div className={classnames 'button', { enabled : button.enabled ? true }} onTouchTap={@_makeOnTouchTap i} key={i}>
         <i className={classnames 'fa', button.icon}/>
         <div className='text'>{button.text}</div>
       </div>
