@@ -17,11 +17,14 @@ ReduxMixin = (fieldsBySubstore) ->
       @_reduxMixin_unsubscribe = store.subscribe @[fnName]
 
     componentWillUnmount : ->
-      @_reduxMixin_unsubscribe?()
+      @_reduxMixin_unsubscribe()
+      # See https://github.com/rackt/redux/issues/1180
+      @_reduxMixin_hack_isUnsubscribed = true
   }
 
   mixin[fnName] = ->
-    @setState getFlattenedFields()
+    if not @_reduxMixin_hack_isUnsubscribed
+      @setState getFlattenedFields()
 
   return mixin
 

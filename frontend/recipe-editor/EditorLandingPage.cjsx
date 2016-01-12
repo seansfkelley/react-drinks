@@ -15,8 +15,8 @@ RecipeIdWorkflow = require './RecipeIdWorkflow'
 
 { loadRecipe } = require './recipeEditorActions'
 
-EditableNamePage = React.createClass {
-  displayName : 'EditableNamePage'
+EditorLandingPage = React.createClass {
+  displayName : 'EditorLandingPage'
 
   mixins : [
     ReduxMixin {
@@ -139,4 +139,4 @@ EditableNamePage = React.createClass {
       }
 }
 
-module.exports = EditableNamePage
+module.exports = EditorLandingPage
