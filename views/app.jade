@@ -18,8 +18,11 @@ html
     include ./landscape-error-overlay.jade
     div(id="app-root")
     div(id="main-loading-overlay" class="fade-in")
-      div(class="centering-wrapper")
-        i(class="fa fa-refresh fa-spin")
+      div(class="waiting-text-spacer")
+        | &nbsp;
+      i(class="fa fa-refresh fa-spin")
+      div(class="waiting-text")
+        | Hang on, this is taking a little longer than usual...
     div(id="web-clip-notification" class="hidden")
 
     //- Note that this has to come last, so all the necessary containers exist.

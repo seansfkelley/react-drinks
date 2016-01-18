@@ -3,6 +3,8 @@ React     = require 'react'
 ReactPerf = require 'react-addons-perf'
 reqwest   = require 'reqwest'
 
+require('bluebird').longStackTraces()
+
 module.exports = ->
   if window.navigator.standalone
     document.body.setAttribute 'standalone', true
