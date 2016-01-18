@@ -1,6 +1,7 @@
 _ = require 'lodash'
 
 module.exports = require('./makeReducer') _.extend({
+  errorMessage             : null
   recipeViewingIndex       : 0
   currentlyViewedRecipeIds : []
   favoritedRecipeIds       : []
@@ -68,4 +69,7 @@ module.exports = require('./makeReducer') _.extend({
 
   'hide-list-selector' : (state) ->
     return _.defaults { showingListSelector : false }, state
+
+  'error-message' : (state, { message }) ->
+    return _.defaults { errorMessage : message }, state
 }
