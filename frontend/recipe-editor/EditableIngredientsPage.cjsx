@@ -3,8 +3,6 @@ React           = require 'react'
 classnames      = require 'classnames'
 PureRenderMixin = require 'react-addons-pure-render-mixin'
 
-latinize = require '../../shared/latinize'
-
 store = require '../store'
 
 { parseIngredientFromText } = require '../utils'
@@ -116,7 +114,7 @@ EditableIngredient = React.createClass {
       @setState { guessedTags : [] }
     else
       # This is probably dumb slow.
-      words = latinize(displayIngredient).split ' '
+      words = _.deburr(displayIngredient).split ' '
       guessedTags = _.chain(@props.allAlphabeticalIngredients)
         .filter ({ searchable }) ->
           _.any words, (w) ->

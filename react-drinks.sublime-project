@@ -9,8 +9,7 @@
         ".dist"
       ],
       "file_exclude_patterns": [
-        "*.sublime-workspace",
-        "shared/latinize.coffee"
+        "*.sublime-workspace"
       ]
 		}
 	]
