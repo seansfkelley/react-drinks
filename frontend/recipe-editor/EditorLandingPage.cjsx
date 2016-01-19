@@ -92,8 +92,12 @@ EditorLandingPage = React.createClass {
       </div>
     </div>
 
-  _makeFocuser : _.memoize (refName) ->
-    return (-> @refs[refName].focus()).bind(@)
+  componentWillMount : ->
+    @_makeFocuser = _.memoize @_makeFocuser
+
+  _makeFocuser :(refName) ->
+    return =>
+      @refs[refName].focus()
 
   _onChangeName : (e) ->
     store.dispatch {

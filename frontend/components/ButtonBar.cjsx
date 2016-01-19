@@ -28,12 +28,15 @@ ButtonBar = React.createClass {
       {buttons}
     </div>
 
-  _makeOnTouchTap : _.memoize (i) ->
-    return (->
+
+  componentWillMount : ->
+    @_makeOnTouchTap = _.memoize @_makeOnTouchTap
+
+  _makeOnTouchTap : (i) ->
+    return =>
       enabled = @props.buttons[i].enabled
       if enabled ? true
         @props.buttons[i].onTouchTap()
-    ).bind(@)
 }
 
 module.exports = ButtonBar
