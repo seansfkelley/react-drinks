@@ -29,9 +29,6 @@ module.exports = require('./makeReducer') _.extend({
   'set-recipe-viewing-index' : (state, { index }) ->
     return _.defaults { recipeViewingIndex : index }, state
 
-  'set-recipe-viewing-ids' : (state, { recipeIds }) ->
-    throw new Error
-
   'favorite-recipe' : (state, { recipeId }) ->
     return _.defaults { favoritedRecipeIds : _.union state.favoritedRecipeIds, [ recipeId ] }, state
 
