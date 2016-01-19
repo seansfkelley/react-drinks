@@ -8,6 +8,7 @@ log.info "starting spirit guide with PORT=#{process.env.PORT} and NODE_ENV=#{pro
 _        = require 'lodash'
 express  = require 'express'
 notifier = require 'node-notifier'
+assert   = require '../shared/tinyassert'
 
 routes = require './routes'
 
@@ -27,8 +28,10 @@ start = ->
   app.use '/assets', express.static(__dirname + '/../.dist')
   log.info "attaching #{routes.length} routes"
   for { method, route, handler } in routes
-    method ?= 'get'
-    log.info "#{method.toUpperCase()} #{route}"
+    assert method
+    assert route
+    assert handler
+    log.info "  #{method.toUpperCase()} #{route}"
     app[method](route, handler)
 
   # Go.
