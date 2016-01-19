@@ -25,10 +25,29 @@
   display: flex
   justify-content: center
   align-items: center
+  flex-direction: column
 
   .fa
     color: #d8d8d8
     font-size: 24px
+
+  // This goofy shit is to make sure the spinner stays centered in the screen;
+  // without it, the text would push it up a bit and then I wouldn't like how it looks.
+  .waiting-text-spacer
+    margin-bottom: 24px
+
+  .waiting-text
+    transition: opacity $transition-duration-quick-ish
+    opacity: 0
+    color: #777
+    margin-top: 24px
+
+  &.show-waiting-text .waiting-text
+    opacity: 1
+
+#error-message-root
+  z-index: 3
+  pointer-events: none
 
 #landscape-error-overlay
   abs-full-screen()

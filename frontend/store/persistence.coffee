@@ -13,6 +13,7 @@ PERSISTENCE_SPEC = {
   recipes :
     customRecipeIds : Infinity
   ui :
+    errorMessage             : 0
     recipeViewingIndex       : ONE_MINUTE_MS * 5
     currentlyViewedRecipeIds : ONE_MINUTE_MS * 5
     favoritedRecipeIds       : Infinity
