@@ -1,3 +1,13 @@
 {
-  "ignore" : [ "default-data/data", "frontend", "styles", "views" ]
+  "ignore" : [
+    "default-data",
+    "fonts",
+    "frontend",
+    "hooks",
+    "img",
+    "scripts",
+    "styles",
+    "test" ,
+    "views"
+  ]
 }
