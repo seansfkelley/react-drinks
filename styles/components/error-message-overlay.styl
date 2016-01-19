@@ -10,9 +10,11 @@ $error-color = #ed4a4a
   border-radius: 2px
   border: 1px solid $error-color
   box-shadow 0 1px 2px 2px rgba(0, 0, 0, 0.25)
+  pointer-events: none
 
   &.visible
     opacity: 1
+    pointer-events: auto
 
   .error-message
     display: flex
