@@ -1,6 +1,6 @@
 _               = require 'lodash'
 React           = require 'react'
-ReactDom        = require 'react-dom'
+ReactDOM        = require 'react-dom'
 classnames      = require 'classnames'
 PureRenderMixin = require 'react-addons-pure-render-mixin'
 
@@ -128,8 +128,8 @@ Swipable = React.createClass {
     @_computeCachedState()
 
   _computeCachedState : ->
-    wrapperWidth = ReactDom.findDOMNode(@refs.slidingContainer).offsetWidth
-    itemWidths   = _.pluck ReactDom.findDOMNode(@refs.slidingContainer).children, 'offsetWidth'
+    wrapperWidth = @refs.slidingContainer.offsetWidth
+    itemWidths   = _.pluck @refs.slidingContainer.children, 'offsetWidth'
     itemOffsets  = _.chain itemWidths
       .reduce ((offsets, width) ->
         offsets.push _.last(offsets) + width
@@ -147,7 +147,7 @@ Swipable = React.createClass {
     if target
       return _.indexOf(@refs.slidingContainer.children, target)
     else
-      { offsetLeft, offsetWidth } = ReactDom.findDOMNode @refs.inertialSwipable
+      { offsetLeft, offsetWidth } = ReactDOM.findDOMNode @refs.inertialSwipable
       if (e.changedTouches[0].clientX - offsetLeft) < offsetWidth / 2
         return 0
       else
