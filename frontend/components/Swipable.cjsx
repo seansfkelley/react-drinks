@@ -1,13 +1,13 @@
 _               = require 'lodash'
 React           = require 'react'
-ReactDom        = require 'react-dom'
+ReactDOM        = require 'react-dom'
 classnames      = require 'classnames'
 PureRenderMixin = require 'react-addons-pure-render-mixin'
 
 IntertialSwipeLogicBox = require './IntertialSwipeLogicBox'
 
-IntertialSwipable = React.createClass {
-  displayName : 'IntertialSwipable'
+InertialSwipable = React.createClass {
+  displayName : 'InertialSwipable'
 
   propTypes :
     onSwiping       : React.PropTypes.func
@@ -99,7 +99,7 @@ Swipable = React.createClass {
   render : ->
     offset = -@state.delta + (@state.wrapperWidth - @state.itemWidths[0]) / 2
 
-    <IntertialSwipable
+    <InertialSwipable
       onSwiping={@_onSwiping}
       onSwiped={@_onSwiped}
       itemOffsets={@state.itemOffsets}
@@ -107,6 +107,7 @@ Swipable = React.createClass {
       getNearestIndex={@_getNearestIndex}
       friction={@props.friction}
       className={classnames 'viewport-container', @props.className}
+      ref='inertialSwipable'
     >
       <div
         className='sliding-container'
@@ -118,7 +119,7 @@ Swipable = React.createClass {
       >
         {@props.children}
       </div>
-    </IntertialSwipable>
+    </InertialSwipable>
 
   # componentDidUpdate : ->
   #   @_computeCachedState()
@@ -127,8 +128,8 @@ Swipable = React.createClass {
     @_computeCachedState()
 
   _computeCachedState : ->
-    wrapperWidth = ReactDom.findDOMNode(@refs.slidingContainer).offsetWidth
-    itemWidths   = _.pluck ReactDom.findDOMNode(@refs.slidingContainer).children, 'offsetWidth'
+    wrapperWidth = @refs.slidingContainer.offsetWidth
+    itemWidths   = _.pluck @refs.slidingContainer.children, 'offsetWidth'
     itemOffsets  = _.chain itemWidths
       .reduce ((offsets, width) ->
         offsets.push _.last(offsets) + width
@@ -141,10 +142,16 @@ Swipable = React.createClass {
 
   _getNearestIndex : (e) ->
     target = e.target
-    slidingContainer = ReactDom.findDOMNode @refs.slidingContainer
-    while target.parentNode != slidingContainer
+    while target? and target.parentNode != @refs.slidingContainer
       target = target.parentNode
-    return _.indexOf(slidingContainer.children, target)
+    if target
+      return _.indexOf(@refs.slidingContainer.children, target)
+    else
+      { offsetLeft, offsetWidth } = ReactDOM.findDOMNode @refs.inertialSwipable
+      if (e.changedTouches[0].clientX - offsetLeft) < offsetWidth / 2
+        return 0
+      else
+        return @refs.slidingContainer.children.length - 1
 
   _onSwiping : (delta) ->
     oldIndex = @_getIndexForDelta @state.delta
