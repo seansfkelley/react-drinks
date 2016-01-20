@@ -28,11 +28,19 @@ EditorLandingPage = React.createClass {
   propTypes :
     onClose : React.PropTypes.func.isRequired
 
+  getInitialState : -> {
+    focusedInput : null
+  }
+
   render : ->
-    <div className='editor-landing-page fixed-header-footer'>
+    <div className={classnames 'editor-landing-page fixed-header-footer', {
+      'is-any-expanded' : !!@state.focusedInput
+    }} ref='container'>
       <NavigationHeader onClose={@props.onClose} className='fixed-header'/>
       <div className='fixed-content-pane'>
-        <div className='add-recipe-section new-recipe'>
+        <div className={classnames 'add-recipe-section new-recipe', {
+          'is-expanded' : @state.focusedInput == 'nameInput'
+        }}>
           <div className='section-title'>Create New Drink</div>
           <input
             type='text'
@@ -45,13 +53,17 @@ EditorLandingPage = React.createClass {
             value={@state.name}
             onChange={@_onChangeName}
             onTouchTap={@_makeFocuser 'nameInput'}
+            onFocus={@_makeOnFocus 'nameInput'}
+            onBlur={@_onBlur}
           />
           <NextButton
             isEnabled={!!@state.name}
             onNext={@_goToGuided}
           />
         </div>
-        <div className='add-recipe-section add-prose'>
+        <div className={classnames 'add-recipe-section add-prose', {
+          'is-expanded' : @state.focusedInput == 'proseInput'
+        }}>
           <div className='section-title'>Recipe from Text</div>
           <textarea
             placeholder='Recipe text...'
@@ -63,13 +75,17 @@ EditorLandingPage = React.createClass {
             value={@state.providedProse}
             onChange={@_onChangeProse}
             onTouchTap={@_makeFocuser 'proseInput'}
+            onFocus={@_makeOnFocus 'proseInput'}
+            onBlur={@_onBlur}
           />
           <NextButton
             isEnabled={!!@state.providedProse}
             onNext={@_goToProse}
           />
         </div>
-        <div className='add-recipe-section add-id'>
+        <div className={classnames 'add-recipe-section add-id', {
+          'is-expanded' : @state.focusedInput == 'idInput'
+        }}>
           <div className='section-title'>Use Code</div>
           <input
             type='text'
@@ -82,6 +98,8 @@ EditorLandingPage = React.createClass {
             value={@state.providedRecipeId}
             onChange={@_onChangeProvidedId}
             onTouchTap={@_makeFocuser 'idInput'}
+            onFocus={@_makeOnFocus 'idInput'}
+            onBlur={@_onBlur}
           />
           <NextButton
             isEnabled={!!@state.providedRecipeId}
@@ -94,10 +112,23 @@ EditorLandingPage = React.createClass {
 
   componentWillMount : ->
     @_makeFocuser = _.memoize @_makeFocuser
+    @_makeOnFocus = _.memoize @_makeOnFocus
 
-  _makeFocuser :(refName) ->
+  _makeFocuser : (refName) ->
     return =>
       @refs[refName].focus()
+
+  _makeOnFocus : (refName) ->
+    return =>
+      @setState { focusedInput : refName }
+
+  _onBlur : ->
+    activeElement = document.activeElement
+    thisElement = @refs.container
+    while activeElement? and activeElement != thisElement
+      activeElement = activeElement.parentNode
+    if not activeElement
+      @setState { focusedInput : null }
 
   _onChangeName : (e) ->
     store.dispatch {
