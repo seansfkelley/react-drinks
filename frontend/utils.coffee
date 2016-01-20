@@ -76,15 +76,14 @@ parseIngredientFromText = (rawText) ->
 
   return _.pick { displayAmount, displayUnit, displayIngredient }, _.identity
 
-# TODO: Unit tests.
 parsePartialRecipeFromText = (rawText) ->
-  [ rawName, rawIngredients, instructions, notes ] = _.invoke rawText.replace(/\n\n+/g, '\n\n').split('\n\n'), 'trim'
-
-  if not rawName
+  if not rawText?.trim()
     return {}
 
+  [ rawName, rawIngredients, instructions, notes ] = _.invoke rawText.replace(/\n\n+/g, '\n\n').split('\n\n'), 'trim'
+
   name = _.chain rawName
-      .split ' '
+      .split /\s+/
       .invoke 'trim'
       .compact()
       .map _.capitalize
@@ -96,7 +95,7 @@ parsePartialRecipeFromText = (rawText) ->
 
   ingredients = _.map rawIngredients.split('\n'), parseIngredientFromText
 
-  return { name, ingredients, instructions, notes }
+  return _.pick { name, ingredients, instructions, notes }, _.identity
 
 module.exports = {
   fractionify
