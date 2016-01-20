@@ -22,22 +22,9 @@ fractionify = (s) ->
 defractionify = (s) ->
   return s?.replace(ENTITY_FRACTION_REGEX, (m) -> ENTITY_TO_ASCII[m])
 
-# This does not account for fractionified strings!
-MEASURE_AMOUNT_REGEX = /^(\d[- \/\d]*)(.*)$/
-
-splitMeasure = (s) ->
-  s = s?.trim()
-  if match = MEASURE_AMOUNT_REGEX.exec(s)
-    return {
-      measure : match[1].trim()
-      unit    : match[2].trim()
-    }
-  else
-    return { unit : s ? '' }
-
 COUNT_REGEX = /^[-. \/\d]+/
 
-MEASUREMENTS = [
+MEASUREMENTS = _.chain [
   'ml'
   'cl'
   'l'
@@ -60,19 +47,29 @@ MEASUREMENTS = [
   'pinch'
   'pinches'
   'slice'
+  'scoop'
+  'leaf'
+  'leaves'
+  'sprig'
 ]
+.map (unit) -> [ unit, unit + 's' ]
+.flatten()
+.uniq()
+.value()
 
-# TODO: Unit tests.
 parseIngredientFromText = (rawText) ->
+  if not rawText
+    return {}
+
   text = rawText.trim()
 
   if match = COUNT_REGEX.exec text
-    displayAmount = match[0]
+    displayAmount = match[0].trim()
     text = text[displayAmount.length..].trim()
 
   possibleUnit = text.split(' ')[0]
-  if possibleUnit in MEASUREMENTS or _.any(MEASUREMENTS, (m) -> possibleUnit == m + 's')
-    displayUnit = possibleUnit
+  if possibleUnit in MEASUREMENTS
+    displayUnit = possibleUnit.trim()
     text = text[displayUnit.length..].trim()
 
   displayIngredient = text
@@ -104,7 +101,6 @@ parsePartialRecipeFromText = (rawText) ->
 module.exports = {
   fractionify
   defractionify
-  splitMeasure
   parseIngredientFromText
   parsePartialRecipeFromText
 }

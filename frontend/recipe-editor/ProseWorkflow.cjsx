@@ -14,7 +14,7 @@ RecipeView       = require '../recipes/RecipeView'
 ButtonBar        = require '../components/ButtonBar'
 
 recipeEditorActions = require './recipeEditorActions'
-recipeFromStore       = require './recipeFromStore'
+recipeFromStore     = require './recipeFromStore'
 
 ###
 (prose)
@@ -117,7 +117,6 @@ ProseWorkflow = React.createClass {
     return <ButtonBar buttons={buttons}/>
 
   _onClose : ->
-    # Clear the store!
     @props.onClose()
 
   _makePageSwitcher : _.memoize (step) ->

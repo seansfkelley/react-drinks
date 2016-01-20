@@ -87,7 +87,6 @@ RecipeIdWorkflow = React.createClass {
     />
 
   _onClose : ->
-    # Clear the store!
     @props.onClose()
 
   _onIdChange : (recipeId) ->
