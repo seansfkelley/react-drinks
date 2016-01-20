@@ -11,6 +11,7 @@ definitions = require '../../shared/definitions'
 
 NavigationHeader = require './NavigationHeader'
 RecipeView       = require '../recipes/RecipeView'
+TextEntry        = require './TextEntry'
 ButtonBar        = require '../components/ButtonBar'
 
 recipeEditorActions = require './recipeEditorActions'
@@ -72,7 +73,7 @@ ProseWorkflow = React.createClass {
 
   mixins : [
     ReduxMixin {
-      recipeEditor : [ 'currentStep', 'ingredients', 'name', 'base', 'saving', 'originalProse' ]
+      recipeEditor : [ 'currentStep', 'ingredients', 'name', 'base', 'saving', 'providedProse' ]
     }
     PureRenderMixin
   ]
@@ -87,7 +88,7 @@ ProseWorkflow = React.createClass {
   _getNavigationHeader : ->
     previousPage = PREVIOUS_STEPS[@state.currentStep]
     if previousPage
-      onPrevious    = _makePageSwitcher previousPage
+      onPrevious    = @_makePageSwitcher previousPage
       previousTitle = PREVIOUS_TEXT_FOR[previousPage](@state)
 
     return <NavigationHeader
@@ -101,6 +102,14 @@ ProseWorkflow = React.createClass {
     return switch @state.currentStep
       when WorkflowStep.INITIAL_PREVIEW, WorkflowStep.PROSE_PREVIEW, WorkflowStep.REGULAR_PREVIEW
         <RecipeView recipe={recipeFromStore store}/>
+      when WorkflowStep.PROSE
+        <TextEntry
+          value={@state.providedProse}
+          onChange={@_onProseChange}
+          instruction='Enter Recipe Text'
+          placeholder='Text...'
+          className='fixed-content-pane'
+        />
 
   _getFooterButtons : ->
     buttons = switch @state.currentStep
@@ -113,8 +122,29 @@ ProseWorkflow = React.createClass {
         text       : 'Save'
         onTouchTap : @_finish
       ]
+      when WorkflowStep.PROSE then [
+        icon       : 'fa-align-left'
+        text       : 'Convert Text'
+        onTouchTap : @_parseProse
+      ]
 
     return <ButtonBar buttons={buttons}/>
+
+  _onProseChange : (prose) ->
+    store.dispatch {
+      type : 'set-provided-prose'
+      prose
+    }
+
+  _parseProse : ->
+    store.dispatch {
+      type : 'compute-recipe-components-from-prose'
+    }
+
+    store.dispatch {
+      type : 'set-recipe-editor-step'
+      step : WorkflowStep.PROSE_PREVIEW
+    }
 
   _onClose : ->
     @props.onClose()

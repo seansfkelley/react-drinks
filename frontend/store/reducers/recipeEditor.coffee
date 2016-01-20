@@ -5,18 +5,19 @@ EditorWorkflow = require '../../recipe-editor/EditorWorkflow'
 { parseIngredientFromText
   parsePartialRecipeFromText } = require '../../utils'
 
-_createEmptyStore = -> {
-  currentWorkflow  : null
-  currentStep      : null
-  editingRecipeId  : null
-  isSaving         : false
-
-  # guided/editing/prose
+_createDefaultRecipeComponents = -> {
   name             : ''
   ingredients      : []
   instructions     : ''
   notes            : ''
   base             : []
+}
+
+_createEmptyStore = -> _.extend {
+  currentWorkflow  : null
+  currentStep      : null
+  editingRecipeId  : null
+  isSaving         : false
 
   # prose
   providedProse    : null
@@ -26,7 +27,16 @@ _createEmptyStore = -> {
   isLoadingRecipe  : false
   loadedRecipe     : null
   recipeLoadFailed : false
-}
+
+  # guided/editing/prose
+}, _createDefaultRecipeComponents()
+
+_convertParsedProseIngredients = (ingredients) ->
+  return _.map ingredients, (i) -> {
+    tag       : null
+    isEditing : false
+    display   : i
+  }
 
 module.exports = require('./makeReducer') _.extend(
   _createEmptyStore(),
@@ -61,11 +71,7 @@ module.exports = require('./makeReducer') _.extend(
     return _.defaults {
       currentStep     : firstStep
       currentWorkflow : EditorWorkflow.PROSE
-      ingredients     : _.map parsedRecipe.ingredients, (i) -> {
-        tag       : null
-        isEditing : false
-        display   : i
-      }
+      ingredients     : _convertParsedProseIngredients parsedRecipe.ingredients
     }, _.omit(parsedRecipe, 'ingredients'), state
 
   'start-id-workflow' : (state, { firstStep }) ->
@@ -80,6 +86,18 @@ module.exports = require('./makeReducer') _.extend(
 
   'set-recipe-editor-step' : (state, { step }) ->
     return _.defaults { currentStep : step }, state
+
+  'set-provided-prose' : (state, { prose }) ->
+    return _.defaults {
+      providedProse : prose
+    }, _createDefaultRecipeComponents(), state
+
+  'compute-recipe-components-from-prose' : (state) ->
+    parsedRecipe = parsePartialRecipeFromText state.providedProse
+
+    return _.defaults {
+      ingredients : _convertParsedProseIngredients parsedRecipe.ingredients
+    }, _.omit(parsedRecipe, 'ingredients'), state
 
   'set-name' : (state, { name }) ->
     return _.defaults { name }, state
