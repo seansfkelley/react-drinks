@@ -7,7 +7,6 @@ PERSISTENCE_SPEC = {
   filters :
     recipeSearchTerm       : ONE_MINUTE_MS * 5
     baseLiquorFilter       : ONE_MINUTE_MS * 15
-    includeAllDrinks       : Infinity
     selectedIngredientTags : Infinity
     selectedRecipeList     : ONE_MINUTE_MS * 60
   recipes :

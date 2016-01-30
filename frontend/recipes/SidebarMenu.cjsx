@@ -17,8 +17,7 @@ SidebarMenu = React.createClass {
   displayName : 'SidebarMenu'
 
   propTypes :
-    initialIncludeAllDrinks : React.PropTypes.bool.isRequired
-    onClose                 : React.PropTypes.func.isRequired
+    onClose : React.PropTypes.func.isRequired
 
   mixins : [
     ReduxMixin {
@@ -29,7 +28,6 @@ SidebarMenu = React.createClass {
   ]
 
   getInitialState : -> {
-    includeAllDrinks        : @props.initialIncludeAllDrinks
     showingIngredients      : false
     # This is a little sketch, since we shouldn't have to talk to the store directly
     # because we have the mixin. But we can't peek into @state to set @state.
@@ -63,15 +61,6 @@ SidebarMenu = React.createClass {
           ref='ingredientList'
         />
       </div>
-      <div className='include-all-drinks' onTouchTap={@_onIncludeAllChange}>
-        <div className='title'>Include All Drinks</div>
-        <input
-          type='checkbox'
-          className='switch'
-          checked={@state.includeAllDrinks}
-          onChange={->}
-        />
-      </div>
     </div>
 
   componentDidMount : ->
@@ -89,18 +78,11 @@ SidebarMenu = React.createClass {
       searchTerm
     }
 
-  _onIncludeAllChange : ->
-    @setState { includeAllDrinks : not @state.includeAllDrinks }
-
   _generateLabelTapper : (index) ->
     return =>
       @setState { index }
 
   _closeMenu : ->
-    store.dispatch {
-      type    : 'set-include-all-drinks'
-      include : @state.includeAllDrinks
-    }
     store.dispatch {
       type : 'set-selected-ingredient-tags'
       tags : @refs.ingredientList.getSelectedTags()

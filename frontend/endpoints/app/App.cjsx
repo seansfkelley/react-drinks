@@ -22,7 +22,6 @@ App = React.createClass {
     ReduxMixin {
       recipes : 'allRecipes'
       filters : [
-        'includeAllDrinks'
         'selectedRecipeList'
       ]
       ui      : [
@@ -53,7 +52,6 @@ App = React.createClass {
       </Overlay>
       <Overlay type='pushover' isVisible={@state.showingSidebar}>
         <SidebarMenu
-          initialIncludeAllDrinks={@state.includeAllDrinks}
           onClose={@_hideSidebar}
         />
       </Overlay>
