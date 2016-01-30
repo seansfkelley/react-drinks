@@ -1,5 +1,6 @@
-_   = require 'lodash'
-log = require 'loglevel'
+_       = require 'lodash'
+log     = require 'loglevel'
+Promise = require 'bluebird'
 
 { recipeDb, configDb } = require('./database').get()
 
@@ -22,25 +23,28 @@ load = (recipeId) ->
       log.info "failed to find recipe with ID '#{recipeId}'"
 
 bulkLoad = (recipeIds) ->
-  return recipeDb.allDocs({
-    keys         : recipeIds
-    include_docs : true
-  })
-  .then ({ total_rows, offset, rows }) ->
-    # rows -> { id, key, value: { rev }, doc: { ... }}
-    recipes = _.chain(rows)
-      .pluck 'doc'
-      .compact()
-      .indexBy '_id'
-      .mapValues (r) -> _.omit r, '_id', '_rev'
-      .value()
+  if not recipeIds?.length
+    return Promise.resolve {}
+  else
+    return recipeDb.allDocs({
+      keys         : recipeIds
+      include_docs : true
+    })
+    .then ({ total_rows, offset, rows }) ->
+      # rows -> { id, key, value: { rev }, doc: { ... }}
+      recipes = _.chain(rows)
+        .pluck 'doc'
+        .compact()
+        .indexBy '_id'
+        .mapValues (r) -> _.omit r, '_id', '_rev'
+        .value()
 
-    loadedIds = _.keys recipes
-    missingIds = _.difference recipeIds, loadedIds
-    if missingIds.length
-      log.warn "failed to bulk-load some recipes: #{missingIds.join ', '}"
+      loadedIds = _.keys recipes
+      missingIds = _.difference recipeIds, loadedIds
+      if missingIds.length
+        log.warn "failed to bulk-load some recipes: #{missingIds.join ', '}"
 
-    return recipes
+      return recipes
 
 module.exports = {
   getDefaultRecipeIds
