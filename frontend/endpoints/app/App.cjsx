@@ -7,7 +7,7 @@ ReduxMixin = require '../../mixins/ReduxMixin'
 
 RecipeListView     = require '../../recipes/RecipeListView'
 SwipableRecipeView = require '../../recipes/SwipableRecipeView'
-SidebarMenu        = require '../../recipes/SidebarMenu'
+IngredientsSidebar = require '../../recipes/IngredientsSidebar'
 RecipeListSelector = require '../../recipes/RecipeListSelector'
 EditableRecipeView = require '../../recipe-editor/EditableRecipeView'
 
@@ -51,8 +51,9 @@ App = React.createClass {
         />
       </Overlay>
       <Overlay type='pushover' isVisible={@state.showingSidebar}>
-        <SidebarMenu
+        <IngredientsSidebar
           onClose={@_hideSidebar}
+          ref='ingredientsSidebar'
         />
       </Overlay>
       <Overlay type='flyup' isVisible={@state.showingRecipeEditor}>
@@ -92,8 +93,8 @@ App = React.createClass {
     }
 
   _closeOverlays : ->
+    @refs.ingredientsSidebar.forceClose()
     @_hideRecipeViewer()
-    @_hideSidebar()
     @_hideRecipeEditor()
     @_hideListSelector()
 
