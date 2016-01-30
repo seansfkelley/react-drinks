@@ -23,9 +23,11 @@ load = (recipeId) ->
       log.info "failed to find recipe with ID '#{recipeId}'"
 
 bulkLoad = (recipeIds) ->
-  if recipeIds?.length
+  if not recipeIds?.length
+    log.debug "bulk-load requested to load nothing; parameter was #{JSON.stringify recipeIds}"
+    return Promise.resolve {}
+  else
     log.debug "bulk-loading #{recipeIds.length} recipes"
-
     return recipeDb.allDocs({
       keys         : recipeIds
       include_docs : true
@@ -45,9 +47,6 @@ bulkLoad = (recipeIds) ->
         log.warn "failed to bulk-load some recipes: #{missingIds.join ', '}"
 
       return recipes
-  else
-    log.debug "bulk-load requested to load nothing; parameter was #{JSON.stringify recipeIds}"
-    return Promise.resolve {}
 
 module.exports = {
   getDefaultRecipeIds

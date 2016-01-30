@@ -8,7 +8,7 @@ ReduxMixin = require '../../mixins/ReduxMixin'
 
 RecipeListView     = require '../../recipes/RecipeListView'
 SwipableRecipeView = require '../../recipes/SwipableRecipeView'
-SidebarMenu        = require '../../recipes/SidebarMenu'
+IngredientsSidebar = require '../../recipes/IngredientsSidebar'
 RecipeListSelector = require '../../recipes/RecipeListSelector'
 RecipeEditorView   = require '../../recipe-editor/RecipeEditorView'
 
@@ -25,7 +25,6 @@ App = React.createClass {
     ReduxMixin {
       recipes : 'allRecipes'
       filters : [
-        'includeAllDrinks'
         'selectedRecipeList'
       ]
       ui      : [
@@ -56,9 +55,9 @@ App = React.createClass {
         />
       </Overlay>
       <Overlay type='pushover' isVisible={@state.showingSidebar}>
-        <SidebarMenu
-          initialIncludeAllDrinks={@state.includeAllDrinks}
+        <IngredientsSidebar
           onClose={@_hideSidebar}
+          ref='ingredientsSidebar'
         />
       </Overlay>
       <Overlay type='flyup' isVisible={@state.showingRecipeEditor}>
@@ -104,8 +103,8 @@ App = React.createClass {
     }
 
   _closeOverlays : ->
+    @refs.ingredientsSidebar.forceClose()
     @_hideRecipeViewer()
-    @_hideSidebar()
     @_hideRecipeEditor()
     @_hideListSelector()
 

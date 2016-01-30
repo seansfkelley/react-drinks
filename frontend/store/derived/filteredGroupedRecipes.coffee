@@ -24,12 +24,6 @@ _baseLiquorFilter = (baseLiquorFilter) ->
   else
     return nofilter
 
-_mixabilityFilter = (includeAllDrinks, ingredientSplitsByRecipeId) ->
-  if not includeAllDrinks
-    return (recipe) -> ingredientSplitsByRecipeId[recipe.recipeId].missing.length == 0
-  else
-    return nofilter
-
 _searchTermFilter = (searchTerm, ingredientsByTag) ->
   searchTerm = searchTerm.trim()
   if searchTerm
@@ -42,9 +36,10 @@ _searchTermFilter = (searchTerm, ingredientsByTag) ->
   else
     return nofilter
 
-_recipeListFilter = (listType, favoritedRecipeIds) ->
+_recipeListFilter = (listType, ingredientSplits, favoritedRecipeIds) ->
   return switch listType
     when 'all' then nofilter
+    when 'mixable' then (recipe) -> ingredientSplits[recipe.recipeId].missing.length == 0
     when 'favorites' then (recipe) -> _.contains favoritedRecipeIds, recipe.recipeId
     when 'custom' then (recipe) -> !!recipe.isCustom
 
@@ -66,7 +61,6 @@ filteredGroupedRecipes = ({
   recipes
   baseLiquorFilter
   searchTerm
-  includeAllDrinks
   ingredientTags
   favoritedRecipeIds
   selectedRecipeList
@@ -76,7 +70,6 @@ filteredGroupedRecipes = ({
 
   assert ingredientsByTag
   assert recipes
-  assert includeAllDrinks?
   assert ingredientTags
   assert favoritedRecipeIds
   assert selectedRecipeList
@@ -85,8 +78,7 @@ filteredGroupedRecipes = ({
 
   filteredRecipes = _.chain recipes
     .filter _baseLiquorFilter(baseLiquorFilter)
-    .filter _mixabilityFilter(includeAllDrinks, ingredientSplits)
-    .filter _recipeListFilter(selectedRecipeList, favoritedRecipeIds)
+    .filter _recipeListFilter(selectedRecipeList, ingredientSplits, favoritedRecipeIds)
     .filter _searchTermFilter(searchTerm, ingredientsByTag)
     .value()
 
@@ -96,7 +88,6 @@ module.exports = _.extend filteredGroupedRecipes, {
   memoized : memoize filteredGroupedRecipes
   __test   : {
     _baseLiquorFilter
-    _mixabilityFilter
     _searchTermFilter
     _recipeListFilter
     _sortAndGroupAlphabetical

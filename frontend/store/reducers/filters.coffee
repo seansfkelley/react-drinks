@@ -8,7 +8,6 @@ module.exports = require('./makeReducer') _.extend({
   ingredientSearchTerm   : ''
   selectedIngredientTags : {}
   baseLiquorFilter       : ANY_BASE_LIQUOR
-  includeAllDrinks       : true
   selectedRecipeList     : definitions.RECIPE_LIST_TYPES[0]
 }, require('../persistence').load().filters), {
   'set-recipe-search-term' : (state, { searchTerm }) ->
@@ -22,9 +21,6 @@ module.exports = require('./makeReducer') _.extend({
 
   'set-base-liquor-filter' : (state, { filter }) ->
     return _.defaults { baseLiquorFilter : filter }, state
-
-  'set-include-all-drinks' : (state, { include }) ->
-    return _.defaults { includeAllDrinks : include }, state
 
   'set-selected-recipe-list' : (state, { listType }) ->
     return _.defaults { selectedRecipeList : listType }, state

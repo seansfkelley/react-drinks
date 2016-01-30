@@ -2,7 +2,6 @@ _ = require 'lodash'
 
 filteredGroupedRecipes = require '../frontend/store/derived/filteredGroupedRecipes'
 { _baseLiquorFilter
-  _mixabilityFilter
   _searchTermFilter
   _recipeListFilter
   _sortAndGroupAlphabetical } = filteredGroupedRecipes.__test
@@ -74,40 +73,7 @@ describe 'filteredGroupedRecipes', ->
     RECIPE_A = { recipeId : 'a' }
     RECIPE_B = { recipeId : 'b' }
 
-    it 'should return the list as-is if includeAllDrinks is true', ->
-      _.filter([
-        RECIPE_A
-        RECIPE_B
-      ], _mixabilityFilter(true, {})).should.deep.equal [
-        RECIPE_A
-        RECIPE_B
-      ]
 
-    it 'should filter out recipes if its splits include any missing ingredients', ->
-      splits = {
-        'a' :
-          missing    : [ 'ingredient-1' ]
-          substitute : [ 'ingredient-2' ]
-          available  : [ 'ingredient-3' ]
-      }
-
-      _.filter([
-        RECIPE_A
-      ], _mixabilityFilter(false, splits)).should.deep.equal []
-
-    it 'should not filter recipes out if its splits contain substitutes but no missing ingredients', ->
-      splits = {
-        'a' :
-          missing    : []
-          substitute : [ 'ingredient-1' ]
-          available  : [ 'ingredient-2' ]
-      }
-
-      _.filter([
-        RECIPE_A
-      ], _mixabilityFilter(false, splits)).should.deep.equal [
-        RECIPE_A
-      ]
 
   describe '#_searchTermFilter', ->
     RECIPES = [ 'a', 'b', 'c' ]
@@ -118,17 +84,43 @@ describe 'filteredGroupedRecipes', ->
 
   describe '#_recipeListFilter', ->
     RECIPE_A = { recipeId : 'a', isCustom : true }
-    RECIPE_B = { recipeId: 'b' }
+    RECIPE_B = { recipeId : 'b' }
     RECIPES = [ RECIPE_A, RECIPE_B ]
 
     it 'should return the list as-is when set to filter \'all\'', ->
       _.filter(RECIPES, _recipeListFilter('all')).should.deep.equal RECIPES
 
+    it 'should filter out recipes if its splits include any missing ingredients when filtering on \'mixable\'', ->
+      splits = {
+        'a' :
+          missing    : [ 'ingredient-1' ]
+          substitute : [ 'ingredient-2' ]
+          available  : [ 'ingredient-3' ]
+      }
+
+      _.filter([
+        RECIPE_A
+      ], _recipeListFilter('mixable', splits, [])).should.deep.equal []
+
+    it 'should not filter recipes out if its splits contain substitutes but no missing ingredients when filtering on \'mixable\'', ->
+      splits = {
+        'a' :
+          missing    : []
+          substitute : [ 'ingredient-1' ]
+          available  : [ 'ingredient-2' ]
+      }
+
+      _.filter([
+        RECIPE_A
+      ], _recipeListFilter('mixable', splits, [])).should.deep.equal [
+        RECIPE_A
+      ]
+
     it 'should return an empty list when filtering on \'favorites\' with no favorites', ->
-      _.filter(RECIPES, _recipeListFilter('favorites', [])).should.deep.equal []
+      _.filter(RECIPES, _recipeListFilter('favorites', {}, [])).should.deep.equal []
 
     it 'should return any recipes that match on the recipeId field when filtering on \'favorites\'', ->
-      _.filter(RECIPES, _recipeListFilter('favorites', [ 'b' ])).should.deep.equal [ RECIPE_B ]
+      _.filter(RECIPES, _recipeListFilter('favorites', {}, [ 'b' ])).should.deep.equal [ RECIPE_B ]
 
     it 'should return any recipes with isCustom set when filtering on \'custom\'', ->
       _.filter(RECIPES, _recipeListFilter('custom')).should.deep.equal [ RECIPE_A ]
