@@ -1,5 +1,9 @@
 @require '../shared/animation'
 
+$line-height = 44px
+$title-margin = 12px
+$help-text-size = 14px
+
 .editor-landing-page
   background: #fff
   height: 100%
@@ -13,9 +17,10 @@
     font-size: 20px
     margin-bottom: 44px // adjusts center to account for top bar
 
-    input
+    input, textarea
       border: 1px solid #eee
       padding: 10px
+      height: $line-height
 
   .add-recipe-section
     padding: 0 5%
@@ -26,11 +31,41 @@
     justify-content: center
     transition: flex $transition-duration-quick-ish
 
+    .help-text
+      height: 0
+      overflow: hidden
+      opacity: 0
+      transition: opacity $transition-duration-quick-ish, height $transition-duration-quick-ish
+      font-size: 14px
+      color: #777
+      margin-left: 2px
+
     .section-title
-      margin: 8px 0
+      margin: $title-margin 0 $title-margin 2px
+      text-transform: uppercase
+      font-size: 16px
+
+    .next-button
+      opacity: 0
+      transition: opacity $transition-duration-quick-ish
 
     &:not(:last-child)
       border-bottom: 1px solid #ccc
 
     &.is-expanded
       flex: 3
+
+      .next-button
+        opacity: 1
+
+      .help-text
+        height: $help-text-size + $title-margin
+        opacity: 1
+
+  .add-recipe-section.add-prose
+    textarea
+      transition: height $transition-duration-quick-ish, font-size $transition-duration-quick-ish
+
+    &.is-expanded textarea
+      height: 3 * $line-height
+      font-size: 14px

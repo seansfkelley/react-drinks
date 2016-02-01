@@ -42,9 +42,10 @@ EditorLandingPage = React.createClass {
           'is-expanded' : @state.focusedInput == 'nameInput'
         }}>
           <div className='section-title'>Create New Drink</div>
+          <div className='help-text'>Create a new recipe, step by step.</div>
           <input
             type='text'
-            placeholder='Name...'
+            placeholder='Gin & Tonic'
             autoCorrect='off'
             autoCapitalize='on'
             autoComplete='off'
@@ -57,6 +58,7 @@ EditorLandingPage = React.createClass {
             onBlur={@_onBlur}
           />
           <NextButton
+            text='Create'
             isEnabled={!!@state.name}
             onNext={@_goToGuided}
           />
@@ -65,8 +67,16 @@ EditorLandingPage = React.createClass {
           'is-expanded' : @state.focusedInput == 'proseInput'
         }}>
           <div className='section-title'>Recipe from Text</div>
+          <div className='help-text'>Paste an existing recipe to get started faster.</div>
           <textarea
-            placeholder='Recipe text...'
+            placeholder='
+            Martini\n
+            \n
+            2 oz gin\n
+            vermouth\n
+            \n
+            Shaken, not stirred.
+            '
             autoCorrect='off'
             autoCapitalize='on'
             autoComplete='off'
@@ -79,6 +89,7 @@ EditorLandingPage = React.createClass {
             onBlur={@_onBlur}
           />
           <NextButton
+            text='Parse'
             isEnabled={!!@state.providedProse}
             onNext={@_goToProse}
           />
@@ -87,9 +98,10 @@ EditorLandingPage = React.createClass {
           'is-expanded' : @state.focusedInput == 'idInput'
         }}>
           <div className='section-title'>Use Code</div>
+          <div className='help-text'>Use a code copied from another spiritgui.de recipe.</div>
           <input
             type='text'
-            placeholder='Code...'
+            placeholder='a6be7da3f0843f7c84de9bdb771f7f08'
             autoCorrect='off'
             autoCapitalize='off'
             autoComplete='off'
@@ -102,9 +114,9 @@ EditorLandingPage = React.createClass {
             onBlur={@_onBlur}
           />
           <NextButton
+            text='Fetch'
             isEnabled={!!@state.providedRecipeId}
             onNext={@_goToId}
-            text='Fetch'
           />
         </div>
       </div>
