@@ -45,6 +45,7 @@ RecipeView = React.createClass {
       notes        : React.PropTypes.string
       source       : React.PropTypes.string
       url          : React.PropTypes.string
+      recipeId     : React.PropTypes.string
     }).isRequired
     ingredientSplits : React.PropTypes.object
     ingredientsByTag : React.PropTypes.object
@@ -53,11 +54,13 @@ RecipeView = React.createClass {
     onEdit           : React.PropTypes.func
     isFavorited      : React.PropTypes.bool
     isShareable      : React.PropTypes.bool
+    showId           : React.PropTypes.bool
     className        : React.PropTypes.string
 
   getDefaultProps : ->
     return {
       isShareable : false
+      showId      : false
     }
 
   render : ->
@@ -127,6 +130,12 @@ RecipeView = React.createClass {
         onTouchTap={@_favorite}
       />
 
+    if @props.showId
+      recipeId = <div className='recipe-id'>
+        <span className='explanation'>paste this ID in your spiritgui.de to save it</span>
+        <span className='id'>{@props.recipe.recipeId}</span>
+      </div>
+
     <div className={classnames 'recipe-view fixed-header-footer', @props.className}>
       {header}
       <div className='recipe-description fixed-content-pane'>
@@ -136,6 +145,7 @@ RecipeView = React.createClass {
         {recipeInstructions}
         {recipeNotes}
         {recipeUrl}
+        {recipeId}
       </div>
       {if footerButtons.length then <div className='fixed-footer'>{footerButtons}</div>}
     </div>

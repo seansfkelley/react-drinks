@@ -20,7 +20,7 @@ StandaloneRecipeView = React.createClass {
           <i className='fa fa-chevron-right'/>
         </TitleBar>
       </a>
-      <RecipeView recipe={@props.recipe}/>
+      <RecipeView recipe={@props.recipe} showId={true}/>
     </div>
 }
 

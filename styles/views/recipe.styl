@@ -89,8 +89,10 @@ $header-border = 1px solid #ddd
     font-size: 1.1em
     text-decoration: none
     color: #333
-    float: right
-    margin-right: 8px
+    display: block
+    width: 100%
+    text-align: right
+    padding-right: 8px
     // Make it a nice big touch target.
     height: 44px
     line-height: 44px
@@ -104,3 +106,20 @@ $header-border = 1px solid #ddd
     i.fa
       margin-left: 8px
       font-size: 0.8em
+
+  .recipe-id
+    color: #777
+    width: 100%
+    text-align: center
+    margin-top: 16px
+
+    .explanation
+      font-size: 14px
+
+    .id
+      font-size: 18px
+      user-select: initial
+
+    .explanation, .id
+      display: block
+
