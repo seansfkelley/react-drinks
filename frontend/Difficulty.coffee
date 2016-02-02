@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 Difficulty = {
   EASY   : 'easy'
   MEDIUM : 'medium'

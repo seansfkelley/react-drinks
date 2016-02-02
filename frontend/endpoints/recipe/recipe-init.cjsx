@@ -1,5 +1,6 @@
 require('../common-init')()
 
+React    = require 'react'
 ReactDOM = require 'react-dom'
 
 StandaloneRecipe = require './StandaloneRecipe'
