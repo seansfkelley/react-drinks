@@ -1,4 +1,5 @@
 @require '../shared/colors'
+@require '../shared/mixins'
 
 .recipe-list-view
   .fixed-header
@@ -34,6 +35,13 @@
       font-weight: 600
       font-size: 18px
       text-transform: uppercase
+      position: relative
+
+      &:after
+        content: ''
+        background-image: linear-gradient(90deg, #676767 0, transparent 15%, transparent 85%, #676767 100%)
+        pointer-events: none
+        abs-full-screen()
 
       .base-liquor-option
         width: 25%
