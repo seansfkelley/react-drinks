@@ -121,11 +121,15 @@ Swipable = React.createClass {
       </div>
     </InertialSwipable>
 
-  # componentDidUpdate : ->
-  #   @_computeCachedState()
-
   componentDidMount: ->
     @_computeCachedState()
+
+    window.addEventListener 'orientationchange', @_computeCachedState, false
+    window.addEventListener 'resize', @_computeCachedState, false
+
+  componentWillUnmount : ->
+    window.removeEventListener 'orientationchange', @_computeCachedState
+    window.removeEventListener 'resize', @_computeCachedState
 
   _computeCachedState : ->
     wrapperWidth = @refs.slidingContainer.offsetWidth
