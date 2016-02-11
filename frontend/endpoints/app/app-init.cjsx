@@ -42,6 +42,11 @@ Promise.any [
 initializationPromise
 .then ->
   persistence.watch store
+  # The idea is to refresh the timestamps, even if the user doesn't interact. Opening the app
+  # should be sufficient interaction to reset the timers on all the expirable pieces of state.
+  store.dispatch {
+    type : '--dummy-event-to-trigger-persistence--'
+  }
 
   ReactDOM.render <App/>, APP_ROOT
 
