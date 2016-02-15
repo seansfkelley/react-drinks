@@ -1,6 +1,8 @@
 @require '../shared/colors'
 @require '../shared/mixins'
 
+$transparent-header-background-color = alpha($header-background-color, 0)
+
 .recipe-list-view
   .fixed-header
     z-index: 1 // for the arrow
@@ -39,7 +41,7 @@
 
       &:after
         content: ''
-        background-image: linear-gradient(90deg, #676767 0, transparent 15%, transparent 85%, #676767 100%)
+        background-image: linear-gradient(90deg, $header-background-color 0, $transparent-header-background-color 15%, $transparent-header-background-color 85%, $header-background-color 100%)
         pointer-events: none
         abs-full-screen()
 
