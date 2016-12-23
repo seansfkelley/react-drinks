@@ -26,7 +26,6 @@
     "browserify": "^13.1.1",
     "classnames": "^1.2.0",
     "coffee-reactify": "^4.0.0",
-    "coffee-script": "^1.9.3",
     "express": "^4.11.2",
     "express-promise": "^0.4.0",
     "fbjs": "^0.4.0",
@@ -72,8 +71,17 @@
   },
   "devDependencies": {
     "chai": "^2.1.2",
+    "cjsx-loader": "^3.0.0",
+    "coffee-script": "^1.9.3",
+    "coffee-loader": "^0.7.2",
     "mocha": "^2.2.1",
     "mocha-multi": "^0.6.0",
-    "mocha-osx-reporter": "^0.1.2"
+    "mocha-osx-reporter": "^0.1.2",
+    "source-map-loader": "^0.1.5",
+    "style-loader": "^0.13.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.4.0",
+    "webpack": "^1",
+    "webpack-notifier": "^1.5.0"
   }
 }
