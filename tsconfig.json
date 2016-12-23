@@ -7,7 +7,8 @@
     "experimentalDecorators": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "pretty": true
+    "pretty": true,
+    "strictNullChecks": true
   },
   "exclude": [
     "node_modules",
