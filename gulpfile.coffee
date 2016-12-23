@@ -56,11 +56,12 @@ copyAssets = ->
 
 buildSingleScript  = ({ source, destination, watch, dieOnError }) ->
   bundler = browserify source, {
-    extensions   : [ '.coffee', '.cjsx' ]
+    extensions   : [ '.coffee', '.cjsx', '.ts', '.tsx' ]
     debug        : true
     cache        : {}
     packageCache : {}
     fullPaths    : watch
+    plugin       : [ require 'tsify' ]
   }
   if watch
     bundler = watchify bundler
