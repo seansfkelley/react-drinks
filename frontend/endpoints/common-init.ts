@@ -1,15 +1,18 @@
-import {} from 'lodash';
+import { once } from 'lodash';
+import * as Bluebird from 'bluebird';
+import * as injectTapEventPlugin from 'react-tap-event-plugin';
 
-module.exports = _.once(function () {
-  require('bluebird').longStackTraces();
+export default once(() => {
+  Bluebird.longStackTraces();
+  injectTapEventPlugin();
 
-  if (window.navigator.standalone) {
-    document.body.setAttribute('standalone', true);
+  if ((window.navigator as any).standalone) {
+    document.body.setAttribute('standalone', 'true');
   }
-
-  return require('react-tap-event-plugin')();
 });
 
+// an attempt to fix https://github.com/zilverline/react-tap-event-plugin/issues/7
+//
 // if 'ontouchstart' of window
 //   kill = (type) ->
 //     window.document.addEventListener(type, (e) ->

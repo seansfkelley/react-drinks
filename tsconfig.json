@@ -5,14 +5,18 @@
     "sourceMap": true,
     "jsx": "react",
     "experimentalDecorators": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "pretty": true,
     "strictNullChecks": true
   },
   "exclude": [
     "node_modules",
-    ".dist",
-    "test"
+    ".dist"
   ]
 }

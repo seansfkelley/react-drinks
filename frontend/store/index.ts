@@ -1,13 +1,26 @@
-const redux = require('redux');
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import * as ReduxThunk from 'redux-thunk';
 
-const rootReducer = redux.combineReducers({
-  ui: require('./reducers/ui'),
-  filters: require('./reducers/filters'),
-  ingredients: require('./reducers/ingredients'),
-  recipes: require('./reducers/recipes'),
-  editableRecipe: require('./reducers/editableRecipe')
+import { reducer as reduceUi, UiState } from './reducers/ui';
+import { reducer as reduceFilters, FiltersState } from './reducers/filters';
+import { reducer as reduceIngredients, IngredientsState } from './reducers/ingredients';
+import { reducer as reduceRecipes, RecipesState } from './reducers/recipes';
+import { reducer as reduceEditableRecipe, EditableRecipeState } from './reducers/editableRecipe';
+
+export interface RootState {
+  ui: UiState;
+  filters: FiltersState;
+  ingredients: IngredientsState;
+  recipes: RecipesState;
+  editableRecipe: EditableRecipeState;
+}
+
+const rootReducer = combineReducers({
+  ui: reduceUi,
+  filters: reduceFilters,
+  ingredients: reduceIngredients,
+  recipes: reduceRecipes,
+  editableRecipe: reduceEditableRecipe
 });
 
-const createStore = redux.applyMiddleware(require('redux-thunk'))(redux.createStore);
-
-module.exports = createStore(rootReducer);
+export const store = applyMiddleware(ReduxThunk)(createStore)(rootReducer);

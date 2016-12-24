@@ -202,21 +202,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-tap-event-plugin@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@types/react-tap-event-plugin/-/react-tap-event-plugin-0.0.30.tgz#123f35080412f489b6770c5a65c159ff96654cb5"
+
 "@types/react@*", "@types/react@^0.14.55":
   version "0.14.55"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-0.14.55.tgz#f7f7a6ad0c94780531e95632435b2798c5dad11b"
-
-"@types/redux-thunk@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@types/redux-thunk/-/redux-thunk-2.1.0.tgz#bc2b6e972961831afb82a9bf4f06726e351f9416"
-  dependencies:
-    redux-thunk "*"
-
-"@types/redux@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.0.tgz#f1ebe1e5411518072e4fdfca5c76e16e74c1399a"
-  dependencies:
-    redux "*"
 
 "@types/revalidator@^0.3.5":
   version "0.3.5"
@@ -3123,11 +3115,7 @@ lodash.uniq@^4.3.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@^4.14.0:
-  version "4.17.2"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
-
-lodash@^4.17.3:
+lodash@^4.14.0, lodash@^4.17.3:
   version "4.17.3"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.3.tgz#557ed7d2a9438cac5fd5a43043ca60cb455e01f7"
 
@@ -4235,11 +4223,11 @@ redeyed@~1.0.0:
   dependencies:
     esprima "~3.0.0"
 
-redux-thunk@*, redux-thunk@^0.1.0:
+redux-thunk@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-0.1.0.tgz#8e347606808b35bf8a927df4616f6fed101826e5"
 
-redux@*, redux@^2.0.0:
+redux@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-2.0.0.tgz#38923965e539496d5466f226f0a58c2238ec2a62"
 

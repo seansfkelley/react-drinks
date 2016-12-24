@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
 
-import { Ingredient, IngredientGroup } from '../shared/types';
+import { Ingredient, IngredientGroupMeta } from '../shared/types';
 import { get as getDatabase } from './database';
 
 const { ingredientDb, configDb } = getDatabase();
@@ -14,7 +14,7 @@ export function getIngredients(): Promise<Ingredient[]> {
     });
 }
 
-export function getGroups(): Promise<IngredientGroup[]> {
+export function getGroups(): Promise<IngredientGroupMeta[]> {
   return configDb.get('ingredient-groups')
     .then(({ orderedGroups }) => orderedGroups);
 }

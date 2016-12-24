@@ -1,26 +1,36 @@
+import { assign, once, mapValues } from 'lodash';
 import * as Promise from 'bluebird';
-const reqwest = require('reqwest');
+import * as reqwest from 'reqwest';
 import * as log from 'loglevel';
 
-const store = require('.');
+import { store } from '.';
+import recipeLoader from './recipeLoader';
 
-const recipeLoader = require('./recipeLoader');
-
-module.exports = _.once(function () {
+export default once(() => {
   const { customRecipeIds } = store.getState().recipes;
-  const { defaultRecipeIds } = window;
+  const { defaultRecipeIds } = window as any;
 
-  log.info(`loading ${ defaultRecipeIds.length } default recipe(s) and ${ customRecipeIds.length } custom recipe(s)`);
+  log.info(`loading ${defaultRecipeIds.length} default recipe(s) and ${customRecipeIds.length} custom recipe(s)`);
 
-  return Promise.all([Promise.resolve(reqwest({
-    url: '/ingredients',
-    method: 'get',
-    type: 'json',
-    contentType: 'application/json'
-  })).then(ingredients => store.dispatch(_.extend({
-    type: 'set-ingredients'
-  }, ingredients))), recipeLoader([].concat(customRecipeIds).concat(defaultRecipeIds)).then(recipesById => store.dispatch({
-    type: 'recipes-loaded',
-    recipesById: _.mapValues(recipesById, (recipe, recipeId) => _.extend({ recipeId }, recipe))
-  }))]);
+  return Promise.all([
+    Promise.resolve(reqwest({
+      url: '/ingredients',
+      method: 'get',
+      type: 'json',
+      contentType: 'application/json'
+    }))
+      .then(ingredients => {
+        store.dispatch(assign({
+          type: 'set-ingredients'
+        }, ingredients));
+      })
+  ,
+    recipeLoader([].concat(customRecipeIds).concat(defaultRecipeIds))
+      .then(recipesById => {
+        store.dispatch({
+          type: 'recipes-loaded',
+          recipesById: mapValues(recipesById, (recipe, recipeId) => assign({ recipeId }, recipe))
+        });
+      })
+  ]);
 });

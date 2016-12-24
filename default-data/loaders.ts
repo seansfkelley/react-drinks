@@ -4,7 +4,7 @@ import { safeLoad } from 'js-yaml';
 import * as revalidator from 'revalidator';
 import * as log from 'loglevel';
 
-import { Ingredient, IngredientGroup, DbRecipe } from '../shared/types';
+import { Ingredient, IngredientGroupMeta, DbRecipe } from '../shared/types';
 import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
 import { UNASSIGNED_BASE_LIQUOR, BASE_LIQUORS } from '../shared/definitions';
 import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
@@ -133,7 +133,7 @@ export const loadRecipeFile = memoize((filename: string) => {
 
 export const loadIngredientGroups = once(() => {
   log.debug("loading ingredient grouping");
-  const groups: IngredientGroup[] = safeLoad(readFileSync(`${__dirname}/data/groups.yaml`).toString());
+  const groups: IngredientGroupMeta[] = safeLoad(readFileSync(`${__dirname}/data/groups.yaml`).toString());
   log.debug(`loaded ${groups.length} groups`);
 
   validateOrThrow(groups, {

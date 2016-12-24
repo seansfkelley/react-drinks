@@ -16,7 +16,7 @@ export interface Ingredient {
   searchable: string[];
 }
 
-export interface IngredientGroup {
+export interface IngredientGroupMeta {
   type: string;
   display: string;
 }

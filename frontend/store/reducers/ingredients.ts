@@ -1,51 +1,81 @@
-import {} from 'lodash';
+import { assign, sortBy, groupBy, map, findIndex } from 'lodash';
 import * as log from 'loglevel';
 
-const normalization = require('../../../shared/normalization');
-const { ANY_BASE_LIQUOR } = require('../../../shared/definitions');
+import makeReducer from './makeReducer';
+import { load } from '../persistence';
+import { Ingredient, IngredientGroupMeta } from '../../../shared/types';
+import { GroupedIngredients } from '../../types';
+import { normalizeIngredient } from '../../../shared/normalization';
 
-const _displaySort = i => i.display.toLowerCase();
+function _displaySort(i: Ingredient) {
+  return i.display.toLowerCase();
+}
 
-const _computeIngredientsByTag = function (ingredients, intangibleIngredients) {
-  const ingredientsByTag = _.chain(ingredients).filter(i => i.tag != null).reduce(function (map, i) {
-    map[i.tag] = i;return map;
-  }, {}).value();
+function _computeIngredientsByTag(ingredients: Ingredient[], intangibleIngredients: Ingredient[]) {
+  const ingredientsByTag = ingredients
+    .filter(i => i.tag != null)
+    .reduce((obj, i) =>{
+      obj[i.tag!] = i;
+      return obj;
+    }, {} as { [tag: string]: Ingredient });
 
-  for (var i of intangibleIngredients) {
+  // What is going on here?? Is `ingredients` not all possible ingredients?
+  intangibleIngredients.forEach(i => {
     ingredientsByTag[i.tag] = i;
     ingredients.push(i);
-  }
+  });
 
-  for (i of ingredients) {
+  ingredients.forEach(i => {
     if (i.generic != null && ingredientsByTag[i.generic] == null) {
-      log.trace(`ingredient ${ i.tag } refers to unknown generic ${ i.generic }; inferring generic`);
-      ingredientsByTag[i.generic] = normalization.normalizeIngredient({
+      log.trace(`ingredient ${i.tag} refers to unknown generic ${i.generic}; inferring generic`);
+      ingredientsByTag[i.generic] = normalizeIngredient({
         tag: i.generic,
         display: `[inferred] ${ i.generic }`
       });
     }
-  }
+  });
 
   return ingredientsByTag;
 };
 
-const _computeGroupedIngredients = (ingredients, groups) => _.chain(ingredients).filter('tangible').sortBy(_displaySort).groupBy('group').map((ingredients, groupTag) => ({
-  name: _.findWhere(groups, { type: groupTag }).display,
-  ingredients
-})).sortBy(({ name }) => _.findIndex(groups, { display: name })).value();
+function _computeGroupedIngredients(ingredients: Ingredient[], groups: IngredientGroupMeta[]) {
+  return sortBy(
+    map(
+      groupBy(
+        sortBy(
+          ingredients.filter(i => i.tangible),
+          _displaySort
+        ),
+        i => i.group
+      ),
+      (ingredients, groupTag) => ({
+        name: groups[findIndex(groups, g => g.type === groupTag)].display,
+        ingredients
+      })
+    ),
+    ({ name }) => findIndex(groups, g => g.display === name)
+  );
+}
 
-module.exports = require('./makeReducer')(_.extend({
+export interface IngredientsState {
+  alphabeticalIngredients: Ingredient[];
+  allAlphabeticalIngredients: Ingredient[];
+  groupedIngredients: GroupedIngredients[];
+  ingredientsByTag: { [tag: string]: Ingredient };
+}
+
+export const reducer = makeReducer<IngredientsState>(assign({
   alphabeticalIngredients: [],
   allAlphabeticalIngredients: [],
   groupedIngredients: [],
   ingredientsByTag: {}
-}, require('../persistence').load().ingredients), {
-  ['set-ingredients'](state, { ingredients, groups }) {
+}, load().ingredients), {
+  'set-ingredients': (_state, { ingredients, groups }: { ingredients: Ingredient[], groups: IngredientGroupMeta[] }) => {
     // We don't use state, this is a set-once kind of deal.
     return {
-      allAlphabeticalIngredients: _.sortBy(ingredients, _displaySort),
-      alphabeticalIngredients: _.sortBy(_.filter(ingredients, 'tangible'), _displaySort),
-      ingredientsByTag: _computeIngredientsByTag(ingredients, _.reject(ingredients, 'tangible')),
+      allAlphabeticalIngredients: sortBy(ingredients, _displaySort),
+      alphabeticalIngredients: sortBy(ingredients.filter(i => i.tangible), _displaySort),
+      ingredientsByTag: _computeIngredientsByTag(ingredients, ingredients.filter(i => !i.tangible)),
       groupedIngredients: _computeGroupedIngredients(ingredients, groups)
     };
   }

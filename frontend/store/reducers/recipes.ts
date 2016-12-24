@@ -1,38 +1,51 @@
-import {} from 'lodash';
+import { assign, defaults, omit, without, sortBy } from 'lodash';
 
-const _recomputeDerivedLists = function (state) {
-  const alphabeticalRecipeIds = _.chain(state.recipesById).keys().sortBy(recipeId => state.recipesById[recipeId].sortName).value();
+import { Recipe } from '../../../shared/types';
+import makeReducer from './makeReducer';
 
-  return _.defaults({
+function _recomputeDerivedLists(state: RecipesState): RecipesState {
+  const alphabeticalRecipeIds = sortBy(
+    Object.keys(state.recipesById),
+    recipeId => state.recipesById[recipeId].sortName
+  );
+
+  return defaults({
     alphabeticalRecipeIds,
-    alphabeticalRecipes: _.map(alphabeticalRecipeIds, recipeId => state.recipesById[recipeId])
+    alphabeticalRecipes: alphabeticalRecipeIds.map(recipeId => state.recipesById[recipeId])
   }, state);
 };
 
-module.exports = require('./makeReducer')(_.extend({
+export interface RecipesState {
+  alphabeticalRecipes: Recipe[];
+  alphabeticalRecipeIds: string[];
+  recipesById: { [recipeId: string]: Recipe };
+  customRecipeIds: string[];
+}
+
+export const reducer = makeReducer<RecipesState>(assign({
   // TODO: Remove this once bigger refactors are done.
   alphabeticalRecipes: [],
   alphabeticalRecipeIds: [],
   recipesById: {},
   customRecipeIds: []
 }, require('../persistence').load().recipes), {
-  ['recipes-loaded'](state, { recipesById }) {
-    return _recomputeDerivedLists(_.defaults({ recipesById }, state));
+  'recipes-loaded': (state, { recipesById }) => {
+    return _recomputeDerivedLists(defaults({ recipesById }, state));
   },
 
-  ['saved-recipe'](state, { recipe }) {
-    return _recomputeDerivedLists(_.defaults({
+  'saved-recipe': (state, { recipe }) => {
+    return _recomputeDerivedLists(defaults({
       customRecipeIds: state.customRecipeIds.concat([recipe.recipeId]),
-      recipesById: _.defaults({
+      recipesById: defaults({
         [recipe.recipeId]: recipe
       }, state.recipesById)
     }, state));
   },
 
-  ['delete-recipe'](state, { recipeId }) {
-    return _recomputeDerivedLists(_.defaults({
-      customRecipeIds: _.without(state.customRecipeIds, recipeId),
-      recipesById: _.omit(state.recipesById, recipeId)
+  'delete-recipe': (state, { recipeId }) => {
+    return _recomputeDerivedLists(defaults({
+      customRecipeIds: without(state.customRecipeIds, recipeId),
+      recipesById: omit(state.recipesById, recipeId)
     }, state));
   }
 });

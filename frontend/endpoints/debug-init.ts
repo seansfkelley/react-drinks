@@ -1,22 +1,26 @@
-import {} from 'lodash';
-const React = require('react');
-const ReactPerf = require('react-addons-perf');
-const reqwest = require('reqwest');
+import * as _ from 'lodash';
+import { once, mapValues } from 'lodash';
+import * as React from 'react';
+import * as ReactPerf from 'react-addons-perf';
+import * as reqwest from 'reqwest';
+import * as log from 'loglevel';
 
-module.exports = _.once(function () {
-  window.getJquery = function () {
+import { store } from '../store';
+
+export default once(() => {
+  (window as any).getJquery = () => {
     const jq = document.createElement('script');
     jq.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js';
-    return document.getElementsByTagName('head')[0].appendChild(jq);
+    document.getElementsByTagName('head')[0].appendChild(jq);
   };
 
-  window.reactPerf = ReactPerf;
+  (window as any).reactPerf = ReactPerf;
 
-  window.debug = {
-    log: require('loglevel'),
+  (window as any).debug = {
+    log,
 
     localStorage() {
-      return _.mapValues(localStorage, function (v) {
+      return mapValues(localStorage, function (v) {
         try {
           return JSON.parse(v);
         } catch (error) {
@@ -34,7 +38,7 @@ module.exports = _.once(function () {
     },
 
     getState() {
-      return require('../store').getState();
+      return store.getState();
     },
 
     reactPerf(timeout = 2000) {
@@ -47,8 +51,8 @@ module.exports = _.once(function () {
   };
 
   // For devtools.
-  window.React = React;
+  (window as any).React = React;
   // Because I use these a lot.
-  window._ = _;
-  return window.reqwest = reqwest;
+  (window as any)._ = _;
+  (window as any).reqwest = reqwest;
 });

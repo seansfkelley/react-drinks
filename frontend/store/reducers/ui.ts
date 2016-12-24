@@ -1,7 +1,20 @@
-import {} from 'lodash';
+import { assign, defaults, union, without, indexOf, clone } from 'lodash';
+import makeReducer from './makeReducer';
+import { load } from '../persistence';
 
-module.exports = require('./makeReducer')(_.extend({
-  errorMessage: null,
+export interface UiState {
+  errorMessage?: string;
+  recipeViewingIndex: number;
+  currentlyViewedRecipeIds: string[];
+  favoritedRecipeIds: string[];
+  showingRecipeViewer: boolean;
+  showingRecipeEditor: boolean;
+  showingSidebar: boolean;
+  showingListSelector: boolean;
+}
+
+export const reducer = makeReducer<UiState>(assign({
+  errorMessage: undefined,
   recipeViewingIndex: 0,
   currentlyViewedRecipeIds: [],
   favoritedRecipeIds: [],
@@ -10,78 +23,78 @@ module.exports = require('./makeReducer')(_.extend({
   showingRecipeEditor: false,
   showingSidebar: false,
   showingListSelector: false
-}, require('../persistence').load().ui), {
-  ['rewrite-recipe-id'](state, { from, to }) {
+}, load().ui), {
+  'rewrite-recipe-id': (state, { from, to }) => {
     let { currentlyViewedRecipeIds, favoritedRecipeIds } = state;
 
-    let i = _.indexOf(currentlyViewedRecipeIds, from);
+    let i = indexOf(currentlyViewedRecipeIds, from);
     if (i !== -1) {
-      currentlyViewedRecipeIds = _.clone(currentlyViewedRecipeIds);
+      currentlyViewedRecipeIds = clone(currentlyViewedRecipeIds);
       currentlyViewedRecipeIds[i] = to;
     }
 
-    i = _.indexOf(favoritedRecipeIds, from);
+    i = indexOf(favoritedRecipeIds, from);
     if (i !== -1) {
-      favoritedRecipeIds = _.clone(favoritedRecipeIds);
+      favoritedRecipeIds = clone(favoritedRecipeIds);
       favoritedRecipeIds[i] = to;
     }
 
-    return _.defaults({ currentlyViewedRecipeIds, favoritedRecipeIds }, state);
+    return defaults({ currentlyViewedRecipeIds, favoritedRecipeIds }, state);
   },
 
-  ['set-recipe-viewing-index'](state, { index }) {
-    return _.defaults({ recipeViewingIndex: index }, state);
+  'set-recipe-viewing-index': (state, { index }) => {
+    return defaults({ recipeViewingIndex: index }, state);
   },
 
-  ['favorite-recipe'](state, { recipeId }) {
-    return _.defaults({ favoritedRecipeIds: _.union(state.favoritedRecipeIds, [recipeId]) }, state);
+  'favorite-recipe': (state, { recipeId }) => {
+    return defaults({ favoritedRecipeIds: union(state.favoritedRecipeIds, [recipeId]) }, state);
   },
 
-  ['unfavorite-recipe'](state, { recipeId }) {
-    return _.defaults({ favoritedRecipeIds: _.without(state.favoritedRecipeIds, recipeId) }, state);
+  'unfavorite-recipe': (state, { recipeId }) => {
+    return defaults({ favoritedRecipeIds: without(state.favoritedRecipeIds, recipeId) }, state);
   },
 
-  ['show-recipe-viewer'](state, { index, recipeIds }) {
-    return _.defaults({
+  'show-recipe-viewer': (state, { index, recipeIds }) => {
+    return defaults({
       showingRecipeViewer: true,
       recipeViewingIndex: index,
       currentlyViewedRecipeIds: recipeIds
     }, state);
   },
 
-  ['hide-recipe-viewer'](state) {
-    return _.defaults({
+  'hide-recipe-viewer': (state) => {
+    return defaults({
       showingRecipeViewer: false,
       recipeViewingIndex: 0,
       currentlyViewedRecipeIds: []
     }, state);
   },
 
-  ['show-recipe-editor'](state) {
-    return _.defaults({ showingRecipeEditor: true }, state);
+  'show-recipe-editor': (state) => {
+    return defaults({ showingRecipeEditor: true }, state);
   },
 
-  ['hide-recipe-editor'](state) {
-    return _.defaults({ showingRecipeEditor: false }, state);
+  'hide-recipe-editor': (state) => {
+    return defaults({ showingRecipeEditor: false }, state);
   },
 
-  ['show-sidebar'](state) {
-    return _.defaults({ showingSidebar: true }, state);
+  'show-sidebar': (state) => {
+    return defaults({ showingSidebar: true }, state);
   },
 
-  ['hide-sidebar'](state) {
-    return _.defaults({ showingSidebar: false }, state);
+  'hide-sidebar': (state) => {
+    return defaults({ showingSidebar: false }, state);
   },
 
-  ['show-list-selector'](state) {
-    return _.defaults({ showingListSelector: true }, state);
+  'show-list-selector': (state) => {
+    return defaults({ showingListSelector: true }, state);
   },
 
-  ['hide-list-selector'](state) {
-    return _.defaults({ showingListSelector: false }, state);
+  'hide-list-selector': (state) => {
+    return defaults({ showingListSelector: false }, state);
   },
 
-  ['error-message'](state, { message }) {
-    return _.defaults({ errorMessage: message }, state);
+  'error-message': (state, { message }) => {
+    return defaults({ errorMessage: message }, state);
   }
 });

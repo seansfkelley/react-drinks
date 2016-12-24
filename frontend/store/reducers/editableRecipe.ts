@@ -1,11 +1,28 @@
-import {} from 'lodash';
+import { assign, defaults, pick, clone, without } from 'lodash';
 
-const { parseIngredientFromText } = require('../../utils');
+import makeReducer from './makeReducer';
+import { load } from '../persistence';
+import { parseIngredientFromText } from '../../utils';
+import { Recipe, DisplayIngredient } from '../../../shared/types';
+import { EditableRecipePageType } from '../../types';
 
-const EditableRecipePageType = require('../../EditableRecipePageType');
+export interface EditableRecipeState {
+  originalRecipeId?: string;
+  currentPage: EditableRecipePageType;
+  name: string;
+  ingredients: {
+    tag?: string;
+    isEditing: boolean;
+    display?: DisplayIngredient;
+  }[];
+  instructions: string;
+  notes: string;
+  base: string[];
+  saving: boolean;
+}
 
-const _createEmptyStore = () => ({
-  originalRecipeId: null,
+const _createEmptyStore = (): EditableRecipeState => ({
+  originalRecipeId: undefined,
   currentPage: EditableRecipePageType.NAME,
   name: '',
   ingredients: [],
@@ -15,76 +32,76 @@ const _createEmptyStore = () => ({
   saving: false
 });
 
-module.exports = require('./makeReducer')(_.extend(_createEmptyStore(), require('../persistence').load().editableRecipe), {
-  ['seed-recipe-editor'](state, { recipe }) {
-    return _.defaults({
+export const reducer = makeReducer<EditableRecipeState>(assign(_createEmptyStore(), load().editableRecipe), {
+  'seed-recipe-editor': (_state, { recipe }: { recipe: Recipe }) => {
+    return defaults({
       originalRecipeId: recipe.recipeId,
-      ingredients: _.map(recipe.ingredients, i => ({
+      ingredients: recipe.ingredients.map(i => ({
         tag: i.tag,
         isEditing: false,
-        display: _.pick(i, 'displayAmount', 'displayUnit', 'displayIngredient')
+        display: pick(i, 'displayAmount', 'displayUnit', 'displayIngredient')
       }))
-    }, _.pick(recipe, 'name', 'instructions', 'notes', 'base'));
+    }, pick(recipe, 'name', 'instructions', 'notes', 'base')) as EditableRecipeState;
   },
 
-  ['set-editable-recipe-page'](state, { page }) {
-    return _.defaults({ currentPage: page }, state);
+  'set-editable-recipe-page': (state, { page }) => {
+    return defaults({ currentPage: page }, state);
   },
 
-  ['set-name'](state, { name }) {
-    return _.defaults({ name }, state);
+  'set-name': (state, { name }) => {
+    return defaults({ name }, state);
   },
 
-  ['delete-ingredient'](state, { index }) {
-    const ingredients = _.clone(state.ingredients);
+  'delete-ingredient': (state, { index }) => {
+    const ingredients = clone(state.ingredients);
     // Ugh side effects.
     ingredients.splice(index, 1);
-    return _.defaults({ ingredients }, state);
+    return defaults({ ingredients }, state);
   },
 
-  ['add-ingredient'](state) {
-    return _.defaults({
+  'add-ingredient': (state) => {
+    return defaults({
       ingredients: state.ingredients.concat([{ isEditing: true }])
     }, state);
   },
 
-  ['commit-ingredient'](state, { index, rawText, tag }) {
-    const ingredients = _.clone(state.ingredients);
+  'commit-ingredient': (state, { index, rawText, tag }) => {
+    const ingredients = clone(state.ingredients);
     ingredients[index] = {
       tag,
       isEditing: false,
-      display: parseIngredientFromText(rawText, tag)
+      display: parseIngredientFromText(rawText)
     };
-    return _.defaults({ ingredients }, state);
+    return defaults({ ingredients }, state);
   },
 
-  ['set-instructions'](state, { instructions }) {
-    return _.defaults({ instructions }, state);
+  'set-instructions': (state, { instructions }) => {
+    return defaults({ instructions }, state);
   },
 
-  ['set-notes'](state, { notes }) {
-    return _.defaults({ notes }, state);
+  'set-notes': (state, { notes }) => {
+    return defaults({ notes }, state);
   },
 
-  ['toggle-base-liquor-tag'](state, { tag }) {
+  'toggle-base-liquor-tag': (state, { tag }) => {
     let base;
     if (state.base.includes(tag)) {
-      base = _.without(state.base, tag);
+      base = without(state.base, tag);
     } else {
       base = state.base.concat([tag]);
     }
-    return _.defaults({ base }, state);
+    return defaults({ base }, state);
   },
 
-  ['saving-recipe'](state) {
-    return _.defaults({ saving: true }, state);
+  'saving-recipe': (state) => {
+    return defaults({ saving: true }, state);
   },
 
-  ['saved-recipe'](state) {
+  'saved-recipe': (_state) => {
     return _createEmptyStore();
   },
 
-  ['clear-editable-recipe'](state) {
+  'clear-editable-recipe': (_state) => {
     return _createEmptyStore();
   }
 });

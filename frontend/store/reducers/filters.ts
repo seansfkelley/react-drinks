@@ -1,32 +1,41 @@
-import {} from 'lodash';
-const definitions = require('../../../shared/definitions');
+import { assign, defaults } from 'lodash';
 
-const { ANY_BASE_LIQUOR } = require('../../../shared/definitions');
+import makeReducer from './makeReducer';
+import { load } from '../persistence';
+import { ANY_BASE_LIQUOR, RECIPE_LIST_TYPES } from '../../../shared/definitions';
 
-module.exports = require('./makeReducer')(_.extend({
+export interface FiltersState {
+  recipeSearchTerm: string;
+  ingredientSearchTerm: string;
+  selectedIngredientTags: { [tag: string]: any },
+  baseLiquorFilter: string;
+  selectedRecipeList: string;
+}
+
+export const reducer = makeReducer<FiltersState>(assign({
   recipeSearchTerm: '',
   ingredientSearchTerm: '',
   selectedIngredientTags: {},
   baseLiquorFilter: ANY_BASE_LIQUOR,
-  selectedRecipeList: definitions.RECIPE_LIST_TYPES[0]
-}, require('../persistence').load().filters), {
-  ['set-recipe-search-term'](state, { searchTerm }) {
-    return _.defaults({ recipeSearchTerm: searchTerm }, state);
+  selectedRecipeList: RECIPE_LIST_TYPES[0]
+}, load().filters), {
+  'set-recipe-search-term': (state, { searchTerm }) => {
+    return defaults({ recipeSearchTerm: searchTerm }, state);
   },
 
-  ['set-ingredient-search-term'](state, { searchTerm }) {
-    return _.defaults({ ingredientSearchTerm: searchTerm }, state);
+  'set-ingredient-search-term': (state, { searchTerm }) => {
+    return defaults({ ingredientSearchTerm: searchTerm }, state);
   },
 
-  ['set-selected-ingredient-tags'](state, { tags }) {
-    return _.defaults({ selectedIngredientTags: tags }, state);
+  'set-selected-ingredient-tags': (state, { tags }) => {
+    return defaults({ selectedIngredientTags: tags }, state);
   },
 
-  ['set-base-liquor-filter'](state, { filter }) {
-    return _.defaults({ baseLiquorFilter: filter }, state);
+  'set-base-liquor-filter': (state, { filter }) => {
+    return defaults({ baseLiquorFilter: filter }, state);
   },
 
-  ['set-selected-recipe-list'](state, { listType }) {
-    return _.defaults({ selectedRecipeList: listType }, state);
+  'set-selected-recipe-list': (state, { listType }) => {
+    return defaults({ selectedRecipeList: listType }, state);
   }
 });
