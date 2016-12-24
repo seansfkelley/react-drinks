@@ -1,3 +1,4 @@
-require('loglevel').setLevel('silent');
-require('chai').should();
+import * as log from 'loglevel';
+
+log.setLevel('silent');
 

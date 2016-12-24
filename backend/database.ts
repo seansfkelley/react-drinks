@@ -5,64 +5,7 @@ import * as Promise from 'bluebird';
 
 import config from './config';
 import { Ingredient, Recipe } from '../shared/types';
-
-const PROXY_BLUEBIRD_PROMISE: ProxyHandler<any> = {
-  get: (target, name) => {
-    if (typeof target[name] === 'function') {
-      return (...args) => {
-        const result = target[name](...args);
-        if (result && typeof result.then === 'function') {
-          return Promise.resolve(result);
-        } else {
-          return result;
-        }
-      };
-    } else {
-      return target[name];
-    }
-  }
-};
-
-const PROXY_RETRY: ProxyHandler<any> = {
-  get: (target, name) => {
-    if (typeof target[name] === 'function') {
-      return (...args) => {
-        const retryHelper = (retries: number) => {
-          let result;
-          try {
-            result = target[name](...args);
-          } catch (e) {
-            if (retries > 0) {
-              return retryHelper(retries - 1);
-            } else {
-              throw e;
-            }
-          }
-
-          if (result && typeof result.then === 'function') {
-            return result
-              .then(
-                success => success,
-                error => {
-                  if (retries > 0) {
-                    return retryHelper(retries - 1);
-                  } else {
-                    throw error;
-                  }
-                }
-              );
-          } else {
-            return result;
-          }
-        }
-
-        return retryHelper(1);
-      };
-    } else {
-      return target[name];
-    }
-  }
-};
+import { PROXY_RETRY, PROXY_BLUEBIRD_PROMISE } from './proxies';
 
 function createDatabases() {
   const auth = pick(config.couchDb, 'username', 'password') as {};
