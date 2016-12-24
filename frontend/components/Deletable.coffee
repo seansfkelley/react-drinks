@@ -23,25 +23,25 @@ Deletable = React.createClass {
   render : ->
     renderableProps = _.omit @props, 'onDelete'
     left = DELETABLE_WIDTH - Math.abs(@state.left)
-    <Draggable
-      axis='x'
-      bounds={{ left : -DELETABLE_WIDTH, right : 0 }}
-      onStart={@_onDragStart}
-      onDrag={@_onDrag}
-      onStop={@_onDragEnd}
-      ref='draggable'
-    >
-      <div className={classnames 'deletable', @props.className}>
-        {@props.children}
-        <div
-          className='delete-button'
-          style={{ width : Math.abs(@state.deltaX), right : @state.deltaX }}
-          onTouchTap={@_onDelete}
-        >
-          <span className='text' style={{ width : DELETABLE_WIDTH }}>Delete</span>
-        </div>
-      </div>
-    </Draggable>
+    React.createElement(Draggable, { \
+      "axis": 'x',  \
+      "bounds": ({ left : -DELETABLE_WIDTH, right : 0 }),  \
+      "onStart": (@_onDragStart),  \
+      "onDrag": (@_onDrag),  \
+      "onStop": (@_onDragEnd),  \
+      "ref": 'draggable'
+    },
+      React.createElement("div", {"className": (classnames 'deletable', @props.className)},
+        (@props.children),
+        React.createElement("div", { \
+          "className": 'delete-button',  \
+          "style": ({ width : Math.abs(@state.deltaX), right : @state.deltaX }),  \
+          "onTouchTap": (@_onDelete)
+        },
+          React.createElement("span", {"className": 'text', "style": ({ width : DELETABLE_WIDTH })}, "Delete")
+        )
+      )
+    )
 
   _onDelete : (e) ->
     e.stopPropagation()

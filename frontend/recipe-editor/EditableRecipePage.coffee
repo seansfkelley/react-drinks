@@ -17,14 +17,14 @@ NavigationHeader = React.createClass {
   ]
 
   render : ->
-    <div className='navigation-header fixed-header'>
-      {if @props.previousTitle and @props.onPrevious
-        <div className='back-button float-left' onTouchTap={@props.onPrevious}>
-          <i className='fa fa-chevron-left'/>
-          <span className='back-button-label'>{@props.previousTitle}</span>
-        </div>}
-      <i className='fa fa-times float-right' onTouchTap={@_close}/>
-    </div>
+    React.createElement("div", {"className": 'navigation-header fixed-header'},
+      (if @props.previousTitle and @props.onPrevious
+        React.createElement("div", {"className": 'back-button float-left', "onTouchTap": (@props.onPrevious)},
+          React.createElement("i", {"className": 'fa fa-chevron-left'}),
+          React.createElement("span", {"className": 'back-button-label'}, (@props.previousTitle))
+        )),
+      React.createElement("i", {"className": 'fa fa-times float-right', "onTouchTap": (@_close)})
+    )
 
   _close : ->
     store.dispatch {
@@ -44,10 +44,10 @@ EditableRecipePage = React.createClass {
     className     : React.PropTypes.string
 
   render : ->
-    <div className={classnames 'editable-recipe-page fixed-header-footer', @props.className}>
-      <NavigationHeader onClose={@props.onClose} previousTitle={@props.previousTitle} onPrevious={@props.onPrevious}/>
-      {@props.children}
-    </div>
+    React.createElement("div", {"className": (classnames 'editable-recipe-page fixed-header-footer', @props.className)},
+      React.createElement(NavigationHeader, {"onClose": (@props.onClose), "previousTitle": (@props.previousTitle), "onPrevious": (@props.onPrevious)}),
+      (@props.children)
+    )
 }
 
 module.exports = EditableRecipePage

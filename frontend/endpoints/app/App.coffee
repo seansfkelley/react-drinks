@@ -42,32 +42,32 @@ App = React.createClass {
       @state.showingListSelector
     ]
 
-    <div className='app-event-wrapper' onTouchStart={@_deselectActiveElement}>
-      <RecipeListView/>
-      <div className={classnames 'overlay-background', { 'visible' : anyOverlayVisible}} onTouchStart={@_closeOverlays}/>
-      <Overlay type='modal' isVisible={@state.showingRecipeViewer}>
-        <SwipableRecipeView
-          onClose={@_hideRecipeViewer}
-        />
-      </Overlay>
-      <Overlay type='pushover' isVisible={@state.showingSidebar}>
-        <IngredientsSidebar
-          onClose={@_hideSidebar}
-          ref='ingredientsSidebar'
-        />
-      </Overlay>
-      <Overlay type='flyup' isVisible={@state.showingRecipeEditor}>
-        <EditableRecipeView
-          onClose={@_hideRecipeEditor}
-        />
-      </Overlay>
-      <Overlay type='modal' isVisible={@state.showingListSelector}>
-        <RecipeListSelector
-          currentType={@state.selectedRecipeList}
-          onClose={@_hideListSelector}
-        />
-      </Overlay>
-    </div>
+    React.createElement("div", {"className": 'app-event-wrapper', "onTouchStart": (@_deselectActiveElement)},
+      React.createElement(RecipeListView, null),
+      React.createElement("div", {"className": (classnames 'overlay-background', { 'visible' : anyOverlayVisible}), "onTouchStart": (@_closeOverlays)}),
+      React.createElement(Overlay, {"type": 'modal', "isVisible": (@state.showingRecipeViewer)},
+        React.createElement(SwipableRecipeView, { \
+          "onClose": (@_hideRecipeViewer)
+        })
+      ),
+      React.createElement(Overlay, {"type": 'pushover', "isVisible": (@state.showingSidebar)},
+        React.createElement(IngredientsSidebar, { \
+          "onClose": (@_hideSidebar),  \
+          "ref": 'ingredientsSidebar'
+        })
+      ),
+      React.createElement(Overlay, {"type": 'flyup', "isVisible": (@state.showingRecipeEditor)},
+        React.createElement(EditableRecipeView, { \
+          "onClose": (@_hideRecipeEditor)
+        })
+      ),
+      React.createElement(Overlay, {"type": 'modal', "isVisible": (@state.showingListSelector)},
+        React.createElement(RecipeListSelector, { \
+          "currentType": (@state.selectedRecipeList),  \
+          "onClose": (@_hideListSelector)
+        })
+      )
+    )
 
   _deselectActiveElement : ->
     document.activeElement?.blur()

@@ -20,14 +20,14 @@ InertialSwipable = React.createClass {
   mixins : [ PureRenderMixin ]
 
   render : ->
-    <div
-      onTouchStart={@_onTouchStart}
-      onTouchMove={@_onTouchMove}
-      onTouchEnd={@_onTouchEnd}
-      className={classnames 'inertial-swipable', @props.className}
-    >
-      {@props.children}
-    </div>
+    React.createElement("div", { \
+      "onTouchStart": (@_onTouchStart),  \
+      "onTouchMove": (@_onTouchMove),  \
+      "onTouchEnd": (@_onTouchEnd),  \
+      "className": (classnames 'inertial-swipable', @props.className)
+    },
+      (@props.children)
+    )
 
   _onTouchStart : (e) ->
     @_logicBox.onTouchStart e
@@ -99,27 +99,27 @@ Swipable = React.createClass {
   render : ->
     offset = -@state.delta + (@state.wrapperWidth - @state.itemWidths[0]) / 2
 
-    <InertialSwipable
-      onSwiping={@_onSwiping}
-      onSwiped={@_onSwiped}
-      itemOffsets={@state.itemOffsets}
-      initialDelta={@state.initialDelta}
-      getNearestIndex={@_getNearestIndex}
-      friction={@props.friction}
-      className={classnames 'viewport-container', @props.className}
-      ref='inertialSwipable'
-    >
-      <div
-        className='sliding-container'
-        ref='slidingContainer'
-        style={{
+    React.createElement(InertialSwipable, { \
+      "onSwiping": (@_onSwiping),  \
+      "onSwiped": (@_onSwiped),  \
+      "itemOffsets": (@state.itemOffsets),  \
+      "initialDelta": (@state.initialDelta),  \
+      "getNearestIndex": (@_getNearestIndex),  \
+      "friction": (@props.friction),  \
+      "className": (classnames 'viewport-container', @props.className),  \
+      "ref": 'inertialSwipable'
+    },
+      React.createElement("div", { \
+        "className": 'sliding-container',  \
+        "ref": 'slidingContainer',  \
+        "style": ({
           WebkitTransform : "translateX(#{offset}px) translateZ(0)" # Hardware acceleration.
           transform       : "translateX(#{offset}px)"
-        }}
-      >
-        {@props.children}
-      </div>
-    </InertialSwipable>
+        })
+      },
+        (@props.children)
+      )
+    )
 
   componentDidMount: ->
     @_computeCachedState()

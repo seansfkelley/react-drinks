@@ -31,34 +31,34 @@ SwipableRecipeView = React.createClass {
 
   render : ->
     if @state.currentlyViewedRecipeIds.length == 0
-      return <div/>
+      return React.createElement("div", null)
     else
       recipePages = _.map @state.currentlyViewedRecipeIds, (recipeId, i) =>
-        <div className='swipable-padding-wrapper' key={recipeId}>
-          {if Math.abs(i - @state.recipeViewingIndex) <= 1
+        React.createElement("div", {"className": 'swipable-padding-wrapper', "key": (recipeId)},
+          (if Math.abs(i - @state.recipeViewingIndex) <= 1
             recipe = @state.recipesById[recipeId]
-            <div className='swipable-position-wrapper'>
-              <RecipeView
-                recipe={recipe}
-                ingredientsByTag={@state.ingredientsByTag}
-                ingredientSplits={@state.ingredientSplitsByRecipeId?[recipeId]}
-                onClose={@_onClose}
-                onFavorite={@_onFavorite}
-                onEdit={if recipe.isCustom then @_onEdit}
-                isFavorited={recipeId in @state.favoritedRecipeIds}
-                isShareable={true}
-              />
-            </div>}
-        </div>
+            React.createElement("div", {"className": 'swipable-position-wrapper'},
+              React.createElement(RecipeView, { \
+                "recipe": (recipe),  \
+                "ingredientsByTag": (@state.ingredientsByTag),  \
+                "ingredientSplits": (@state.ingredientSplitsByRecipeId?[recipeId]),  \
+                "onClose": (@_onClose),  \
+                "onFavorite": (@_onFavorite),  \
+                "onEdit": (if recipe.isCustom then @_onEdit),  \
+                "isFavorited": (recipeId in @state.favoritedRecipeIds),  \
+                "isShareable": (true)
+              })
+            ))
+        )
 
-      <Swipable
-        className='swipable-recipe-container'
-        initialIndex={@state.recipeViewingIndex}
-        onSlideChange={@_onSlideChange}
-        friction=0.9
-      >
-        {recipePages}
-      </Swipable>
+      React.createElement(Swipable, { \
+        "className": 'swipable-recipe-container',  \
+        "initialIndex": (@state.recipeViewingIndex),  \
+        "onSlideChange": (@_onSlideChange),  \
+        "friction": 0.9
+      },
+        (recipePages)
+      )
 
   _onSlideChange : (index) ->
     store.dispatch {

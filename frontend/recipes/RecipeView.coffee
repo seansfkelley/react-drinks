@@ -21,10 +21,10 @@ IngredientCategory = {
 }
 
 IconButton = ({ icon, text, onTouchTap }) ->
-  <div className='icon-button' onTouchTap={onTouchTap}>
-    <i className={classnames 'fa', icon}/>
-    <div className='label'>{text}</div>
-  </div>
+  React.createElement("div", {"className": 'icon-button', "onTouchTap": (onTouchTap)},
+    React.createElement("i", {"className": (classnames 'fa', icon)}),
+    React.createElement("div", {"className": 'label'}, (text))
+  )
 
 IconButton.propTypes = {
   icon       : React.PropTypes.string
@@ -64,72 +64,72 @@ RecipeView = React.createClass {
     else
       ingredientNodes = _.map @props.recipe.ingredients, (i) ->
         # This fucked-up key is because sometimes, the same tag will appear twice (e.g. Penicillin's two scotches).
-        <MeasuredIngredient {...i} key={"#{i.tag} #{i.displayIngredient}"}/>
+        React.createElement(MeasuredIngredient, Object.assign({},  i, {"key": ("#{i.tag} #{i.displayIngredient}")}))
 
     if @props.recipe.notes?
       recipeNotes =
-        <div className='recipe-notes'>
-          <div className='text'>
-            {utils.fractionify @props.recipe.notes}
-          </div>
-        </div>
+        React.createElement("div", {"className": 'recipe-notes'},
+          React.createElement("div", {"className": 'text'},
+            (utils.fractionify @props.recipe.notes)
+          )
+        )
 
     if @props.recipe.source? and @props.recipe.url?
-      recipeUrl = <a className='recipe-url' href={@props.recipe.url} target='_blank'>
-        <span className='lead-in'>source:</span>
-        {@props.recipe.source}
-        <i className='fa fa-external-link'/>
-      </a>
+      recipeUrl = React.createElement("a", {"className": 'recipe-url', "href": (@props.recipe.url), "target": '_blank'},
+        React.createElement("span", {"className": 'lead-in'}, "source:"),
+        (@props.recipe.source),
+        React.createElement("i", {"className": 'fa fa-external-link'})
+      )
 
     instructionLines = _.chain @props.recipe.instructions.split('\n')
       .compact()
-      .map (l, i) -> <li className='text-line' key={i}>{utils.fractionify l}</li>
+      .map (l, i) -> React.createElement("li", {"className": 'text-line', "key": (i)}, (utils.fractionify l))
       .value()
-    recipeInstructions = <ol className='recipe-instructions'>{instructionLines}</ol>
+    recipeInstructions = React.createElement("ol", {"className": 'recipe-instructions'}, (instructionLines))
 
     if @props.onClose?
-      header = <TitleBar className='fixed-header' rightIcon='fa-times' rightIconOnTouchTap={@props.onClose}>
-        {@props.recipe.name}
-      </TitleBar>
+      header = React.createElement(TitleBar, {"className": 'fixed-header', "rightIcon": 'fa-times', "rightIconOnTouchTap": (@props.onClose)},
+        (@props.recipe.name)
+      )
     else
-      header = <TitleBar className='fixed-header'>{@props.recipe.name}</TitleBar>
+      header = React.createElement(TitleBar, {"className": 'fixed-header'}, (@props.recipe.name))
 
     footerButtons = []
 
     if @props.onEdit
-      footerButtons.push <IconButton
-        key='edit'
-        icon='fa-pencil-square-o'
-        text='Edit'
-        onTouchTap={@_edit}
-      />
+      footerButtons.push React.createElement(IconButton, { \
+        "key": 'edit',  \
+        "icon": 'fa-pencil-square-o',  \
+        "text": 'Edit',  \
+        "onTouchTap": (@_edit)
+      })
     if @props.isShareable
-      footerButtons.push <IconButton
-        key='share'
-        icon='fa-share-square-o'
-        text='Share'
-        onTouchTap={@_share}
-      />
+      footerButtons.push React.createElement(IconButton, { \
+        "key": 'share',  \
+        "icon": 'fa-share-square-o',  \
+        "text": 'Share',  \
+        "onTouchTap": (@_share)
+      })
     if @props.onFavorite
-      footerButtons.push <IconButton
-        key='favorite'
-        icon={classnames { 'fa-star' : @props.isFavorited, 'fa-star-o' : not @props.isFavorited }}
-        text='Favorite'
-        onTouchTap={@_favorite}
-      />
+      footerButtons.push React.createElement(IconButton, { \
+        "key": 'favorite',  \
+        "icon": (classnames { 'fa-star' : @props.isFavorited, 'fa-star-o' : not @props.isFavorited }),  \
+        "text": 'Favorite',  \
+        "onTouchTap": (@_favorite)
+      })
 
-    <div className='recipe-view fixed-header-footer'>
-      {header}
-      <div className='recipe-description fixed-content-pane'>
-        <div className='recipe-ingredients'>
-          {ingredientNodes}
-        </div>
-        {recipeInstructions}
-        {recipeNotes}
-        {recipeUrl}
-      </div>
-      {if footerButtons.length then <div className='fixed-footer'>{footerButtons}</div>}
-    </div>
+    React.createElement("div", {"className": 'recipe-view fixed-header-footer'},
+      (header),
+      React.createElement("div", {"className": 'recipe-description fixed-content-pane'},
+        React.createElement("div", {"className": 'recipe-ingredients'},
+          (ingredientNodes)
+        ),
+        (recipeInstructions),
+        (recipeNotes),
+        (recipeUrl)
+      ),
+      (if footerButtons.length then React.createElement("div", {"className": 'fixed-footer'}, (footerButtons)))
+    )
 
   _edit : ->
     @props.onEdit @props.recipe
@@ -157,7 +157,7 @@ RecipeView = React.createClass {
             difficulty : @props.ingredientsByTag[i.tag].difficulty
           }, i
 
-      return _.map measuredIngredients, (i) -> <MeasuredIngredient {...i} key={"#{i.tag} #{i.displayIngredient}"}/>
+      return _.map measuredIngredients, (i) -> React.createElement(MeasuredIngredient, Object.assign({},  i, {"key": ("#{i.tag} #{i.displayIngredient}")}))
 }
 
 module.exports = RecipeView

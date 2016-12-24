@@ -20,14 +20,14 @@ ErrorMessageOverlay = React.createClass {
     if not @state.errorMessage
       content = null
     else
-      content = <div className='error-message'>
-        <i className='fa fa-exclamation-circle'/>
-        <div className='message-text'>{@state.errorMessage}</div>
-      </div>
+      content = React.createElement("div", {"className": 'error-message'},
+        React.createElement("i", {"className": 'fa fa-exclamation-circle'}),
+        React.createElement("div", {"className": 'message-text'}, (@state.errorMessage))
+      )
 
-    <div className={classnames 'error-message-overlay', { 'visible' : @state.errorMessage } }>
-      {content}
-    </div>
+    React.createElement("div", {"className": (classnames 'error-message-overlay', { 'visible' : @state.errorMessage } )},
+      (content)
+    )
 }
 
 module.exports = ErrorMessageOverlay

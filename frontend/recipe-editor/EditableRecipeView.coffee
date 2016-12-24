@@ -41,51 +41,51 @@ EditableRecipeView = React.createClass {
     return switch @state.currentPage
 
       when EditableRecipePageType.NAME
-        <EditableNamePage
-          onNext={@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)}
-          onClose={@props.onClose}}
-        />
+        React.createElement(EditableNamePage, { \
+          "onNext": (@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)),  \
+          "onClose": (@props.onClose)
+        })
 
       when EditableRecipePageType.INGREDIENTS
-        <EditableIngredientsPage
-          previousTitle={'"' + @state.name + '"'}
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.NAME)}
-          onNext={@_makePageSwitcher(EditableRecipePageType.BASE)}
-          onClose={@props.onClose}}
-        />
+        React.createElement(EditableIngredientsPage, { \
+          "previousTitle": ('"' + @state.name + '"'),  \
+          "onPrevious": (@_makePageSwitcher(EditableRecipePageType.NAME)),  \
+          "onNext": (@_makePageSwitcher(EditableRecipePageType.BASE)),  \
+          "onClose": (@props.onClose)
+        })
 
       when EditableRecipePageType.BASE
         previousTitle = "#{@state.ingredients.length} ingredient"
         if @state.ingredients.length != 1
           previousTitle += 's'
-        <EditableBaseLiquorPage
-          previousTitle={previousTitle}
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)}
-          onNext={@_makePageSwitcher(EditableRecipePageType.TEXT)}
-          onClose={@props.onClose}}
-        />
+        React.createElement(EditableBaseLiquorPage, { \
+          "previousTitle": (previousTitle),  \
+          "onPrevious": (@_makePageSwitcher(EditableRecipePageType.INGREDIENTS)),  \
+          "onNext": (@_makePageSwitcher(EditableRecipePageType.TEXT)),  \
+          "onClose": (@props.onClose)
+        })
 
       when EditableRecipePageType.TEXT
         if @state.base.length == 1
           previousTitle = "#{definitions.BASE_TITLES_BY_TAG[@state.base[0]]}-based"
         else
           previousTitle = "#{@state.base.length} base liquors"
-        <EditableTextPage
-          previousTitle={previousTitle}
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.BASE)}
-          onNext={@_makePageSwitcher(EditableRecipePageType.PREVIEW)}
-          onClose={@props.onClose}}
-        />
+        React.createElement(EditableTextPage, { \
+          "previousTitle": (previousTitle),  \
+          "onPrevious": (@_makePageSwitcher(EditableRecipePageType.BASE)),  \
+          "onNext": (@_makePageSwitcher(EditableRecipePageType.PREVIEW)),  \
+          "onClose": (@props.onClose)
+        })
 
       when EditableRecipePageType.PREVIEW
-        <PreviewPage
-          previousTitle='Instructions'
-          onPrevious={@_makePageSwitcher(EditableRecipePageType.TEXT)}
-          onNext={@_finish}
-          onClose={@props.onClose}}
-          recipe={@_constructRecipe()}
-          isSaving={@state.saving}
-        />
+        React.createElement(PreviewPage, { \
+          "previousTitle": 'Instructions',  \
+          "onPrevious": (@_makePageSwitcher(EditableRecipePageType.TEXT)),  \
+          "onNext": (@_finish),  \
+          "onClose": (@props.onClose),  \
+          "recipe": (@_constructRecipe()),  \
+          "isSaving": (@state.saving)
+        })
 
   _makePageSwitcher : (page) ->
     return =>

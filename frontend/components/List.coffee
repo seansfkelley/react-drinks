@@ -21,14 +21,14 @@ List = React.createClass {
       if @props.emptyView
         children = @props.emptyView
       else
-        children = <div className='empty-list-text'>{@props.emptyText}</div>
+        children = React.createElement("div", {"className": 'empty-list-text'}, (@props.emptyText))
     else
       children = @props.children
 
     renderableProps = _.omit @props, 'emptyView', 'emptyText'
-    <div {...renderableProps} className={classnames 'list', @props.className}>
-      {children}
-    </div>
+    React.createElement("div", Object.assign({},  renderableProps, {"className": (classnames 'list', @props.className)}),
+      (children)
+    )
 }
 
 List.Header = React.createClass {
@@ -39,14 +39,14 @@ List.Header = React.createClass {
 
   render : ->
     if React.Children.count(@props.children) == 0
-      children = <span className='text'>{@props.title}</span>
+      children = React.createElement("span", {"className": 'text'}, (@props.title))
     else
       children = @props.children
 
     renderableProps = _.omit @props, 'title'
-    <div {...renderableProps} className={classnames 'list-header', @props.className}>
-      {children}
-    </div>
+    React.createElement("div", Object.assign({},  renderableProps, {"className": (classnames 'list-header', @props.className)}),
+      (children)
+    )
 }
 
 List.ItemGroup = React.createClass {
@@ -55,9 +55,9 @@ List.ItemGroup = React.createClass {
   propTypes : {}
 
   render : ->
-    <div {...@props} className={classnames 'list-group', @props.className}>
-      {@props.children}
-    </div>
+    React.createElement("div", Object.assign({},  @props, {"className": (classnames 'list-group', @props.className)}),
+      (@props.children)
+    )
 }
 
 List.Item = React.createClass {
@@ -66,9 +66,9 @@ List.Item = React.createClass {
   propTypes : {}
 
   render : ->
-    <div {...@props} className={classnames 'list-item', @props.className}>
-      {@props.children}
-    </div>
+    React.createElement("div", Object.assign({},  @props, {"className": (classnames 'list-item', @props.className)}),
+      (@props.children)
+    )
 }
 
 List.DeletableItem = React.createClass {
@@ -79,13 +79,13 @@ List.DeletableItem = React.createClass {
 
   render : ->
     renderableProps = _.omit @props, 'onDelete'
-    <List.Item {...renderableProps} className={classnames 'deletable-list-item', @props.className}>
-      <Deletable onDelete={@props.onDelete}>
-        <div>
-          {@props.children}
-        </div>
-      </Deletable>
-    </List.Item>
+    React.createElement(List.Item, Object.assign({},  renderableProps, {"className": (classnames 'deletable-list-item', @props.className)}),
+      React.createElement(Deletable, {"onDelete": (@props.onDelete)},
+        React.createElement("div", null,
+          (@props.children)
+        )
+      )
+    )
 }
 
 List.AddableItem = React.createClass {
@@ -105,22 +105,22 @@ List.AddableItem = React.createClass {
   }
 
   render : ->
-    <List.Item className='addable-list-item'>
-      <input
-        onFocus={@_setEditing}
-        onBlur={@_clearEditing}
-        onChange={@_setValue}
-        value={@state.value}
-        placeholder={@props.placeholder}
-        type='text'
-        autoCorrect='off'
-        autoCapitalize='off'
-        autoComplete='off'
-        spellCheck='false'
-        ref='input'
-      />
-      <i className={classnames 'fa fa-plus', { 'enabled' : @state.isEditing or @state.value }} onTouchTap={@_add}/>
-    </List.Item>
+    React.createElement(List.Item, {"className": 'addable-list-item'},
+      React.createElement("input", { \
+        "onFocus": (@_setEditing),  \
+        "onBlur": (@_clearEditing),  \
+        "onChange": (@_setValue),  \
+        "value": (@state.value),  \
+        "placeholder": (@props.placeholder),  \
+        "type": 'text',  \
+        "autoCorrect": 'off',  \
+        "autoCapitalize": 'off',  \
+        "autoComplete": 'off',  \
+        "spellCheck": 'false',  \
+        "ref": 'input'
+      }),
+      React.createElement("i", {"className": (classnames 'fa fa-plus', { 'enabled' : @state.isEditing or @state.value }), "onTouchTap": (@_add)})
+    )
 
   _setEditing : ->
     @setState { isEditing : false }

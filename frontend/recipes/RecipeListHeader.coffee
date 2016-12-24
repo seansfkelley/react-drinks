@@ -29,33 +29,33 @@ RecipeListHeader = React.createClass {
     if initialBaseLiquorIndex == -1
       initialBaseLiquorIndex = 0
 
-    <div className='recipe-list-header fixed-header'>
-      <TitleBar
-        leftIcon='/assets/img/ingredients.svg'
-        leftIconOnTouchTap={@_showSidebar}
-        rightIcon='fa-plus'
-        rightIconOnTouchTap={@_newRecipe}
-        className='recipe-list-header'
-        onTouchTap={@_showListSelector}
-      >
-        {definitions.RECIPE_LIST_NAMES[@state.selectedRecipeList]}
-        <i className='fa fa-chevron-down'/>
-      </TitleBar>
-      <Swipable
-        className='base-liquor-container'
-        initialIndex={initialBaseLiquorIndex}
-        onSlideChange={@_onBaseLiquorChange}
-        friction=0.7
-      >
-        {for base in BASE_LIQUORS
-          <div
-            className={classnames 'base-liquor-option', { 'selected' : base == @state.baseLiquorFilter }}
-            key={base}
-          >
-            {base}
-          </div>}
-      </Swipable>
-    </div>
+    React.createElement("div", {"className": 'recipe-list-header fixed-header'},
+      React.createElement(TitleBar, { \
+        "leftIcon": '/assets/img/ingredients.svg',  \
+        "leftIconOnTouchTap": (@_showSidebar),  \
+        "rightIcon": 'fa-plus',  \
+        "rightIconOnTouchTap": (@_newRecipe),  \
+        "className": 'recipe-list-header',  \
+        "onTouchTap": (@_showListSelector)
+      },
+        (definitions.RECIPE_LIST_NAMES[@state.selectedRecipeList]),
+        React.createElement("i", {"className": 'fa fa-chevron-down'})
+      ),
+      React.createElement(Swipable, { \
+        "className": 'base-liquor-container',  \
+        "initialIndex": (initialBaseLiquorIndex),  \
+        "onSlideChange": (@_onBaseLiquorChange),  \
+        "friction": 0.7
+      },
+        (for base in BASE_LIQUORS
+          React.createElement("div", { \
+            "className": (classnames 'base-liquor-option', { 'selected' : base == @state.baseLiquorFilter }),  \
+            "key": (base)
+          },
+            (base)
+          ))
+      )
+    )
 
   _onBaseLiquorChange : (index) ->
     store.dispatch {

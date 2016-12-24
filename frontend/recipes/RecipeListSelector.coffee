@@ -23,17 +23,17 @@ RecipeListSelector = React.createClass {
     ]
 
     options = _.map reorderedOptions, (type) =>
-      <div
-        key={type}
-        className={classnames 'option', { 'is-selected' : type == @props.currentType }}
-        onTouchTap={@_onOptionSelect.bind(null, type)}
-      >
-        <span className='label'>{definitions.RECIPE_LIST_NAMES[type]}</span>
-      </div>
+      React.createElement("div", { \
+        "key": (type),  \
+        "className": (classnames 'option', { 'is-selected' : type == @props.currentType }),  \
+        "onTouchTap": (@_onOptionSelect.bind(null, type))
+      },
+        React.createElement("span", {"className": 'label'}, (definitions.RECIPE_LIST_NAMES[type]))
+      )
 
-    <div className='recipe-list-selector'>
-      {options}
-    </div>
+    React.createElement("div", {"className": 'recipe-list-selector'},
+      (options)
+    )
 
   _onOptionSelect : (listType) ->
     store.dispatch {

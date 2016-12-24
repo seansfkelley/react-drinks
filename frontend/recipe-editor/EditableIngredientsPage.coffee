@@ -32,51 +32,51 @@ EditableIngredient = React.createClass {
 
   render : ->
     if @state.tag?
-      ingredientSelector = <List.Item>
-        {@props.ingredientsByTag[@state.tag].display}
-        <i className='fa fa-times-circle' onTouchTap={@_unsetTag}/>
-      </List.Item>
+      ingredientSelector = React.createElement(List.Item, null,
+        (@props.ingredientsByTag[@state.tag].display),
+        React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (@_unsetTag)})
+      )
     else
       ingredientSelector = _.map @state.guessedTags, (tag) =>
-        <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{@props.ingredientsByTag[tag].display}</List.Item>
+        React.createElement(List.Item, {"onTouchTap": (@_tagSetter tag), "key": "tag-#{tag}"}, (@props.ingredientsByTag[tag].display))
 
       if ingredientSelector.length
-        ingredientSelector.push <div className='section-separator' key='separator'/>
+        ingredientSelector.push React.createElement("div", {"className": 'section-separator', "key": 'separator'})
 
       ingredientSelector = ingredientSelector.concat(_.chain(@props.allAlphabeticalIngredients)
         .filter ({ tag }) => tag not in @state.guessedTags
         .map ({ display, tag }) =>
-          <List.Item onTouchTap={@_tagSetter tag} key="tag-#{tag}">{display}</List.Item>
+          React.createElement(List.Item, {"onTouchTap": (@_tagSetter tag), "key": "tag-#{tag}"}, (display))
         .value()
       )
 
-    <div className='editable-ingredient'>
-      <div className='input-line'>
-        <input
-          type='text'
-          placeholder='ex: 1 oz gin'
-          autoCorrect='off'
-          autoCapitalize='off'
-          autoComplete='off'
-          spellCheck='false'
-          ref='input'
-          value={@state.value}
-          onChange={@_onChange}
-          onTouchTap={@_focus}
-        />
-        <div
-          className={classnames 'done-button', { 'disabled' : not @_isCommittable() }}
-          onTouchTap={@_commitIfAllowed}
-        >
+    React.createElement("div", {"className": 'editable-ingredient'},
+      React.createElement("div", {"className": 'input-line'},
+        React.createElement("input", { \
+          "type": 'text',  \
+          "placeholder": 'ex: 1 oz gin',  \
+          "autoCorrect": 'off',  \
+          "autoCapitalize": 'off',  \
+          "autoComplete": 'off',  \
+          "spellCheck": 'false',  \
+          "ref": 'input',  \
+          "value": (@state.value),  \
+          "onChange": (@_onChange),  \
+          "onTouchTap": (@_focus)
+        }),
+        React.createElement("div", { \
+          "className": (classnames 'done-button', { 'disabled' : not @_isCommittable() }),  \
+          "onTouchTap": (@_commitIfAllowed)
+        }, """
           Done
-          <i className='fa fa-check-circle'/>
-        </div>
-      </div>
-      <div className='ingredient-list-header'>A Type Of</div>
-      <List className='ingredient-group-list' onTouchStart={@_dismissKeyboard}>
-        {ingredientSelector}
-      </List>
-    </div>
+""", React.createElement("i", {"className": 'fa fa-check-circle'})
+        )
+      ),
+      React.createElement("div", {"className": 'ingredient-list-header'}, "A Type Of"),
+      React.createElement(List, {"className": 'ingredient-group-list', "onTouchStart": (@_dismissKeyboard)},
+        (ingredientSelector)
+      )
+    )
 
   componentDidMount : ->
     @_guessTags = _.throttle @_guessTags, 250
@@ -147,41 +147,41 @@ EditableIngredientsPage = React.createClass {
   render : ->
     ingredientNodes = _.map @state.ingredients, (ingredient, index) =>
       if ingredient.isEditing
-        ingredientNode = <EditableIngredient
-          addIngredient={@_ingredientAdder index}
-          ingredientsByTag={@state.ingredientsByTag}
-          allAlphabeticalIngredients={@state.allAlphabeticalIngredients}
-        />
+        ingredientNode = React.createElement(EditableIngredient, { \
+          "addIngredient": (@_ingredientAdder index),  \
+          "ingredientsByTag": (@state.ingredientsByTag),  \
+          "allAlphabeticalIngredients": (@state.allAlphabeticalIngredients)
+        })
       else
-        ingredientNode = <MeasuredIngredient {...ingredient.display}/>
+        ingredientNode = React.createElement(MeasuredIngredient, Object.assign({},  ingredient.display))
 
-      return <Deletable
-        onDelete={@_ingredientDeleter index}
-        key="tag-#{ingredient.tag ? ingredient.display?.displayIngredient}-#{index}"
-      >
-        {ingredientNode}
-      </Deletable>
+      return React.createElement(Deletable, { \
+        "onDelete": (@_ingredientDeleter index),  \
+        "key": "tag-#{ingredient.tag ? ingredient.display?.displayIngredient}-#{index}"
+      },
+        (ingredientNode)
+      )
 
-    <EditableRecipePage
-      className='ingredients-page'
-      onClose={@props.onClose}
-      onPrevious={@props.onPrevious}
-      previousTitle={@props.previousTitle}
-    >
-      <div className='fixed-content-pane'>
-        <div className='ingredients-list'>
-          {ingredientNodes}
-        </div>
-        <div className={classnames 'new-ingredient-button', { 'disabled' : @_anyAreEditing() }} onTouchTap={@_addEmptyIngredient}>
-          <i className='fa fa-plus-circle'/>
-          <span>New Ingredient</span>
-        </div>
-        <div className={classnames 'next-button', { 'disabled' : not @_isEnabled() }} onTouchTap={@_nextIfEnabled}>
-          <span className='next-text'>Next</span>
-          <i className='fa fa-arrow-right'/>
-        </div>
-      </div>
-    </EditableRecipePage>
+    React.createElement(EditableRecipePage, { \
+      "className": 'ingredients-page',  \
+      "onClose": (@props.onClose),  \
+      "onPrevious": (@props.onPrevious),  \
+      "previousTitle": (@props.previousTitle)
+    },
+      React.createElement("div", {"className": 'fixed-content-pane'},
+        React.createElement("div", {"className": 'ingredients-list'},
+          (ingredientNodes)
+        ),
+        React.createElement("div", {"className": (classnames 'new-ingredient-button', { 'disabled' : @_anyAreEditing() }), "onTouchTap": (@_addEmptyIngredient)},
+          React.createElement("i", {"className": 'fa fa-plus-circle'}),
+          React.createElement("span", null, "New Ingredient")
+        ),
+        React.createElement("div", {"className": (classnames 'next-button', { 'disabled' : not @_isEnabled() }), "onTouchTap": (@_nextIfEnabled)},
+          React.createElement("span", {"className": 'next-text'}, "Next"),
+          React.createElement("i", {"className": 'fa fa-arrow-right'})
+        )
+      )
+    )
 
   _anyAreEditing : ->
     return _.any @state.ingredients, 'isEditing'

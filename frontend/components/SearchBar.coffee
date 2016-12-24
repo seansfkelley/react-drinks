@@ -17,25 +17,25 @@ SearchBar = React.createClass {
   }
 
   render : ->
-    <div className={classnames 'search-bar', @props.className}  onTouchStart={@_stopTouchStart}>
-      <i className='fa fa-search'/>
-      <input
-        type='text'
-        className='search-input'
-        placeholder={@props.placeholder}
-        value={@state.value}
-        onChange={@_onChange}
-        onTouchTap={@focus}
-        ref='input'
-        tabIndex=-1
-        autoCorrect='off'
-        autoCapitalize='off'
-        autoComplete='off'
-        spellCheck='false'
-      />
-      {if @state.value.length
-        <i className='fa fa-times-circle' onTouchTap={@clearAndFocus} onTouchStart={@_stopTouchStart}/>}
-    </div>
+    React.createElement("div", {"className": (classnames 'search-bar', @props.className), "onTouchStart": (@_stopTouchStart)},
+      React.createElement("i", {"className": 'fa fa-search'}),
+      React.createElement("input", { \
+        "type": 'text',  \
+        "className": 'search-input',  \
+        "placeholder": (@props.placeholder),  \
+        "value": (@state.value),  \
+        "onChange": (@_onChange),  \
+        "onTouchTap": (@focus),  \
+        "ref": 'input',  \
+        "tabIndex": -1,  \
+        "autoCorrect": 'off',  \
+        "autoCapitalize": 'off',  \
+        "autoComplete": 'off',  \
+        "spellCheck": 'false'
+      }),
+      (if @state.value.length
+        React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (@clearAndFocus), "onTouchStart": (@_stopTouchStart)}))
+    )
 
   clearAndFocus : ->
     @clear()

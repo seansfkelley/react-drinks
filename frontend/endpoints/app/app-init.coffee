@@ -48,7 +48,7 @@ initializationPromise
     type : '--dummy-event-to-trigger-persistence--'
   }
 
-  ReactDOM.render <App/>, APP_ROOT
+  ReactDOM.render React.createElement(App, null), APP_ROOT
 
   webClipNotification.renderIfAppropriate()
 
@@ -60,4 +60,4 @@ initializationPromise
     message : 'There was an error loading data from the server! Try reloading.'
   }
 
-ReactDOM.render <ErrorMessageOverlay/>, ERROR_MESSAGE_ROOT
+ReactDOM.render React.createElement(ErrorMessageOverlay, null), ERROR_MESSAGE_ROOT

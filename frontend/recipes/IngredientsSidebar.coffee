@@ -28,15 +28,15 @@ IngredientsSidebar = React.createClass {
   ]
 
   render : ->
-    <div className='ingredients-sidebar'>
-      <SearchBar placeholder='Ingredient name...' onChange={@_onSearch}/>
-      <GroupedIngredientList
-        groupedIngredients={@state.filteredGroupedIngredients}
-        initialSelectedIngredientTags={@state.selectedIngredientTags}
-        onSelectionChange={@_onIngredientToggle}
-        ref='ingredientList'
-      />
-    </div>
+    React.createElement("div", {"className": 'ingredients-sidebar'},
+      React.createElement(SearchBar, {"placeholder": 'Ingredient name...', "onChange": (@_onSearch)}),
+      React.createElement(GroupedIngredientList, { \
+        "groupedIngredients": (@state.filteredGroupedIngredients),  \
+        "initialSelectedIngredientTags": (@state.selectedIngredientTags),  \
+        "onSelectionChange": (@_onIngredientToggle),  \
+        "ref": 'ingredientList'
+      })
+    )
 
   _onSearch : (searchTerm) ->
     store.dispatch {

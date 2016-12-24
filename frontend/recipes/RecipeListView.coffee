@@ -43,12 +43,12 @@ RecipeList = React.createClass {
         listNodes.push @_makeItem(key, r, absoluteIndex)
         absoluteIndex += 1
 
-    <List className={List.ClassNames.HEADERED}>
-      {listNodes}
-    </List>
+    React.createElement(List, {"className": (List.ClassNames.HEADERED)},
+      (listNodes)
+    )
 
   _makeHeader : (groupKey, recipes) ->
-    return <List.Header title={groupKey.toUpperCase()} key={'header-' + groupKey}/>
+    return React.createElement(List.Header, {"title": (groupKey.toUpperCase()), "key": ('header-' + groupKey)})
 
   _makeItem : (groupKey, r, absoluteIndex) ->
     missingIngredients = @props.ingredientSplitsByRecipeId[r.recipeId].missing
@@ -64,14 +64,14 @@ RecipeList = React.createClass {
     # TODO: This can cause needless rerenders, especially when text-searching.
     # PureRenderMixin is bypassed since .bind() returns a new function every time.
     # Is there a way to always pass the same function and infer the index from the event?
-    return <RecipeListItem
-      difficulty={difficulty}
-      isMixable={isMixable}
-      recipeName={r.name}
-      onTouchTap={@_showRecipeViewer.bind this, absoluteIndex}
-      onDelete={if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)}
-      key={r.recipeId}
-    />
+    return React.createElement(RecipeListItem, { \
+      "difficulty": (difficulty),  \
+      "isMixable": (isMixable),  \
+      "recipeName": (r.name),  \
+      "onTouchTap": (@_showRecipeViewer.bind this, absoluteIndex),  \
+      "onDelete": (if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)),  \
+      "key": (r.recipeId)
+    })
 
   _showRecipeViewer : (index) ->
     recipeIds = _.chain @props.recipes
@@ -112,24 +112,24 @@ RecipeListView = React.createClass {
   ]
 
   render : ->
-    <div className='recipe-list-view fixed-header-footer'>
-      <RecipeListHeader/>
-      <div className='fixed-content-pane' ref='content'>
-        <SearchBar
-          className='list-topper'
-          initialValue={@state.recipeSearchTerm}
-          placeholder='Name or ingredient...'
-          onChange={@_onSearch}
-          ref='search'
-        />
-        <RecipeList
-          recipes={@state.filteredGroupedRecipes}
-          ingredientsByTag={@state.ingredientsByTag}
-          ingredientSplitsByRecipeId={@state.ingredientSplitsByRecipeId}
-          favoritedRecipeIds={@state.favoritedRecipeIds}
-        />
-      </div>
-    </div>
+    React.createElement("div", {"className": 'recipe-list-view fixed-header-footer'},
+      React.createElement(RecipeListHeader, null),
+      React.createElement("div", {"className": 'fixed-content-pane', "ref": 'content'},
+        React.createElement(SearchBar, { \
+          "className": 'list-topper',  \
+          "initialValue": (@state.recipeSearchTerm),  \
+          "placeholder": 'Name or ingredient...',  \
+          "onChange": (@_onSearch),  \
+          "ref": 'search'
+        }),
+        React.createElement(RecipeList, { \
+          "recipes": (@state.filteredGroupedRecipes),  \
+          "ingredientsByTag": (@state.ingredientsByTag),  \
+          "ingredientSplitsByRecipeId": (@state.ingredientSplitsByRecipeId),  \
+          "favoritedRecipeIds": (@state.favoritedRecipeIds)
+        })
+      )
+    )
 
   componentDidMount : ->
     @_attemptScrollDown()

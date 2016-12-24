@@ -30,28 +30,28 @@ MeasuredIngredient = React.createClass {
     # The space is necessary to space out the spans from each other. Newlines are insufficient.
     # Include the keys only to keep React happy so that it warns us about significant uses of
     # arrays without key props.
-    <div className={classnames 'measured-ingredient', @props.className, {
+    React.createElement("div", {"className": (classnames 'measured-ingredient', @props.className, {
         'missing'     : @props.isMissing
         'substituted' : @props.isSubstituted
-    }}>
-      <span className='measure'>
-        <span className='amount'>{utils.fractionify @props.displayAmount}</span>
-        {' '}
-        <span className='unit'>{@props.displayUnit}</span>
-      </span>
-      <span className='ingredient'>
-        <span className='name'>{@props.displayIngredient}</span>
-      {if @props.displaySubstitutes.length
+    })},
+      React.createElement("span", {"className": 'measure'},
+        React.createElement("span", {"className": 'amount'}, (utils.fractionify @props.displayAmount)),
+        (' '),
+        React.createElement("span", {"className": 'unit'}, (@props.displayUnit))
+      ),
+      React.createElement("span", {"className": 'ingredient'},
+        React.createElement("span", {"className": 'name'}, (@props.displayIngredient)),
+      (if @props.displaySubstitutes.length
         [
-          <span className='substitute-label' key='label'>try:</span>
-          <span className='substitute-content' key='content'>{@props.displaySubstitutes}</span>
-        ]}
-      {if @props.difficulty
-        <span className={classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty]}>
-          {Difficulty.HUMAN_READABLE[@props.difficulty]}
-        </span>}
-      </span>
-    </div>
+          React.createElement("span", {"className": 'substitute-label', "key": 'label'}, "try:")
+          React.createElement("span", {"className": 'substitute-content', "key": 'content'}, (@props.displaySubstitutes))
+        ]),
+      (if @props.difficulty
+        React.createElement("span", {"className": (classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty])},
+          (Difficulty.HUMAN_READABLE[@props.difficulty])
+        ))
+      )
+    )
 }
 
 module.exports = MeasuredIngredient

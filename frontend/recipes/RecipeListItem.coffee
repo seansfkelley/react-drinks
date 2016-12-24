@@ -24,20 +24,20 @@ RecipeListItem = React.createClass {
 
   render : ->
     if @props.difficulty
-      difficultyNode = <span className={classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty]}>
-        {Difficulty.HUMAN_READABLE[@props.difficulty]}
-      </span>
+      difficultyNode = React.createElement("span", {"className": (classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty])},
+        (Difficulty.HUMAN_READABLE[@props.difficulty])
+      )
 
     ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
 
-    <ListItemClass
-      className={classnames 'recipe-list-item', { 'is-mixable' : @props.isMixable }}
-      onTouchTap={@props.onTouchTap}
-      onDelete={@props.onDelete}
-    >
-      <span className='name'>{@props.recipeName}</span>
-      {difficultyNode}
-    </ListItemClass>
+    React.createElement(ListItemClass, { \
+      "className": (classnames 'recipe-list-item', { 'is-mixable' : @props.isMixable }),  \
+      "onTouchTap": (@props.onTouchTap),  \
+      "onDelete": (@props.onDelete)
+    },
+      React.createElement("span", {"className": 'name'}, (@props.recipeName)),
+      (difficultyNode)
+    )
 }
 
 module.exports = RecipeListItem

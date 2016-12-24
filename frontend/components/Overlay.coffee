@@ -11,9 +11,9 @@ Overlay = React.createClass {
     children  : React.PropTypes.element
 
   render : ->
-    <div className={classnames 'overlay', { 'visible' : @props.isVisible }, @props.type}>
-      {@props.children}
-    </div>
+    React.createElement("div", {"className": (classnames 'overlay', { 'visible' : @props.isVisible }, @props.type)},
+      (@props.children)
+    )
 }
 
 module.exports = Overlay

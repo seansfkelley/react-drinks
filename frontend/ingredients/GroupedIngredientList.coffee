@@ -18,10 +18,10 @@ IngredientGroupHeader = React.createClass {
   mixins : [ PureRenderMixin ]
 
   render : ->
-    <List.Header onTouchTap={@props.onToggle}>
-      <span className='text'>{@props.title}</span>
-      {if @props.selectedCount > 0 then <span className='count'>{@props.selectedCount}</span>}
-    </List.Header>
+    React.createElement(List.Header, {"onTouchTap": (@props.onToggle)},
+      React.createElement("span", {"className": 'text'}, (@props.title)),
+      (if @props.selectedCount > 0 then React.createElement("span", {"className": 'count'}, (@props.selectedCount)))
+    )
 }
 
 IngredientItemGroup = React.createClass {
@@ -44,9 +44,9 @@ IngredientItemGroup = React.createClass {
         height : groupSize * stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT + stylingConstants.INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET
       }
 
-    <List.ItemGroup className={classnames { 'collapsed' : not @props.isExpanded }} style={style}>
-      {@props.children}
-    </List.ItemGroup>
+    React.createElement(List.ItemGroup, {"className": (classnames { 'collapsed' : not @props.isExpanded }), "style": (style)},
+      (@props.children)
+    )
 }
 
 IngredientListItem = React.createClass {
@@ -63,10 +63,10 @@ IngredientListItem = React.createClass {
     if @props.isSelected
       className = 'is-selected'
 
-    <List.Item className={className} onTouchTap={@_toggleIngredient}>
-      <div className='name'>{@props.ingredient.display}</div>
-      <i className='fa fa-check-circle has-ingredient-icon'/>
-    </List.Item>
+    React.createElement(List.Item, {"className": (className), "onTouchTap": (@_toggleIngredient)},
+      React.createElement("div", {"className": 'name'}, (@props.ingredient.display)),
+      React.createElement("i", {"className": 'fa fa-check-circle has-ingredient-icon'})
+    )
 
   _toggleIngredient : ->
     @props.toggleTag @props.ingredient.tag
@@ -95,12 +95,12 @@ GroupedIngredientList = React.createClass {
       .value()
 
     _makeListItem = (i) =>
-      return <IngredientListItem
-        ingredient={i}
-        isSelected={@state.selectedIngredientTags[i.tag]?}
-        toggleTag={@_toggleIngredient}
-        key={i.tag}
-      />
+      return React.createElement(IngredientListItem, { \
+        "ingredient": (i),  \
+        "isSelected": (@state.selectedIngredientTags[i.tag]?),  \
+        "toggleTag": (@_toggleIngredient),  \
+        "key": (i.tag)
+      })
 
     if ingredientCount == 0
       listNodes = []
@@ -113,11 +113,11 @@ GroupedIngredientList = React.createClass {
 
       selectedCount = _.filter(ingredients, (i) => @state.selectedIngredientTags[i.tag]?).length
 
-      header = <IngredientGroupHeader
-        title="All Results (#{ingredientCount})"
-        selectedCount={selectedCount}
-        key='header-all-results'
-      />
+      header = React.createElement(IngredientGroupHeader, { \
+        "title": "All Results (#{ingredientCount})",  \
+        "selectedCount": (selectedCount),  \
+        "key": 'header-all-results'
+      })
 
       listNodes = [
         header
@@ -134,27 +134,27 @@ GroupedIngredientList = React.createClass {
           if @state.selectedIngredientTags[i.tag]?
             selectedCount += 1
         listNodes.push [
-          <IngredientGroupHeader
-            title={name}
-            selectedCount={selectedCount}
-            onToggle={_.partial @_toggleGroup, name}
-            key={'header-' + name}
-          />
-          <IngredientItemGroup
-            title={name}
-            isExpanded={@state.expandedGroupName == name}
-            key={'group-' + name}
-          >
-            {ingredientNodes}
-          </IngredientItemGroup>
+          React.createElement(IngredientGroupHeader, { \
+            "title": (name),  \
+            "selectedCount": (selectedCount),  \
+            "onToggle": (_.partial @_toggleGroup, name),  \
+            "key": ('header-' + name)
+          })
+          React.createElement(IngredientItemGroup, { \
+            "title": (name),  \
+            "isExpanded": (@state.expandedGroupName == name),  \
+            "key": ('group-' + name)
+          },
+            (ingredientNodes)
+          )
         ]
 
-    <List
-      className={classnames List.ClassNames.HEADERED, List.ClassNames.COLLAPSIBLE, 'grouped-ingredient-list'}
-      emptyText='Nothing matched your search.'
-    >
-      {listNodes}
-    </List>
+    React.createElement(List, { \
+      "className": (classnames List.ClassNames.HEADERED, List.ClassNames.COLLAPSIBLE, 'grouped-ingredient-list'),  \
+      "emptyText": 'Nothing matched your search.'
+    },
+      (listNodes)
+    )
 
   getSelectedTags : ->
     return @state.selectedIngredientTags
