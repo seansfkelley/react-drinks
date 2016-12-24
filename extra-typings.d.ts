@@ -2,6 +2,7 @@ declare module 'react-draggable';
 declare module 'reqwest';
 declare module 'react-inline-svg';
 declare module 'MD5';
+declare module 'express-promise';
 
 // Ripped RIGHT from lid.es6.d.ts because I want to use this on Chrome but
 // I don't want to have to target ES6 and I know that this class exists there.

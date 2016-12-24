@@ -4,7 +4,7 @@ import * as PouchDBConstructor from 'pouchdb';
 import * as Promise from 'bluebird';
 
 import config from './config';
-import { Ingredient, Recipe } from '../shared/types';
+import { Ingredient, DbRecipe } from '../shared/types';
 import { PROXY_RETRY, PROXY_BLUEBIRD_PROMISE } from './proxies';
 
 function createDatabases() {
@@ -22,10 +22,9 @@ function createDatabases() {
 
   return {
     ingredientDb: makeDb<Ingredient>(config.couchDb.ingredientDbName),
-    recipeDb: makeDb<Recipe>(config.couchDb.recipeDbName),
+    recipeDb: makeDb<DbRecipe>(config.couchDb.recipeDbName),
     configDb: makeDb<any>(config.couchDb.configDbName)
   };
 }
 
 export const get = once(createDatabases);
-

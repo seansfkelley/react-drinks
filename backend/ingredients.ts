@@ -1,17 +1,20 @@
-import {} from 'lodash';
+import { omit } from 'lodash';
 
-const { ingredientDb, configDb } = require('./database').get();
+import { Ingredient, IngredientGroup } from '../shared/types';
+import { get as getDatabase } from './database';
 
-const getIngredients = () => ingredientDb.allDocs({
-  include_docs: true
-}).then(({ total_rows, offset, rows }) =>
-// rows -> { id, key, value: { rev }, doc: { ... }}
-_.chain(rows).pluck('doc').map(r => _.omit(r, '_id', '_rev')).value());
+const { ingredientDb, configDb } = getDatabase();
 
-const getGroups = () => configDb.get('ingredient-groups').then(({ orderedGroups }) => orderedGroups);
+export function getIngredients(): Promise<Ingredient[]> {
+  return ingredientDb.allDocs({
+    include_docs: true
+  })
+    .then(({ total_rows, offset, rows }) => {
+      return rows.map(r => omit(r.doc, '_id', '_rev') as Ingredient);
+    });
+}
 
-module.exports = {
-  getIngredients,
-  getGroups
-};
-
+export function getGroups(): Promise<IngredientGroup[]> {
+  return configDb.get('ingredient-groups')
+    .then(({ orderedGroups }) => orderedGroups);
+}

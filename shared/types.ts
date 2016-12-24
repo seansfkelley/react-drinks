@@ -1,5 +1,3 @@
-// TODO: What other fields are on these types?
-
 export interface DisplayIngredient {
   tag?: string;
   displayIngredient: string;
@@ -11,6 +9,7 @@ export interface Ingredient {
   display: string;
   group: string;
   tangible: boolean;
+  // TODO: Replace tag with ingredientId.
   tag: string;
   generic?: string;
   difficulty: 'easy' | 'medium' | 'hard';
@@ -22,7 +21,7 @@ export interface IngredientGroup {
   display: string;
 }
 
-export interface Recipe {
+export interface DbRecipe {
   name: string;
   ingredients: DisplayIngredient[];
   instructions: string;
@@ -32,4 +31,8 @@ export interface Recipe {
   base: string | string[];
   canonicalName: string;
   sortName: string;
+}
+
+export interface Recipe extends DbRecipe {
+  recipeId: string;
 }

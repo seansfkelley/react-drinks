@@ -4,7 +4,7 @@ import { safeLoad } from 'js-yaml';
 import * as revalidator from 'revalidator';
 import * as log from 'loglevel';
 
-import { Ingredient, IngredientGroup, Recipe } from '../shared/types';
+import { Ingredient, IngredientGroup, DbRecipe } from '../shared/types';
 import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
 import { UNASSIGNED_BASE_LIQUOR, BASE_LIQUORS } from '../shared/definitions';
 import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
@@ -115,7 +115,7 @@ const INGREDIENT_GROUP_SCHEMA: ActuallyUsefulRevalidatorType = {
 
 export const loadRecipeFile = memoize((filename: string) => {
   log.debug(`loading recipes from ${filename}`);
-  const recipes: Partial<Recipe>[] = safeLoad(readFileSync(`${__dirname}/data/${filename}.yaml`).toString());
+  const recipes: Partial<DbRecipe>[] = safeLoad(readFileSync(`${__dirname}/data/${filename}.yaml`).toString());
   log.debug(`loaded ${recipes.length} recipe(s) from ${filename}`);
 
   const unassignedBases = recipes.filter(r => r.base === UNASSIGNED_BASE_LIQUOR);
