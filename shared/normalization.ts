@@ -1,44 +1,43 @@
-const _ = require('lodash');
+import { clone, deburr } from 'lodash';
+import { assert } from './tinyassert';
+import { Ingredient, Recipe } from './types';
 
-const assert = require('./tinyassert');
+export function normalizeIngredient(ingredient: Partial<Ingredient>): Ingredient {
+  assert(ingredient.display);
 
-const normalizeIngredient = function (i) {
-  assert(i.display);
-
-  i = _.clone(i);
-  if (i.tag == null) {
-    i.tag = i.display.toLowerCase();
+  // TODO: this `as any` forces me to lie to the type system.
+  const normalized: Ingredient = clone(ingredient) as any;
+  if (normalized.tag == null) {
+    normalized.tag = normalized.display!.toLowerCase();
   }
-  if (i.searchable == null) {
-    i.searchable = [];
+  if (normalized.searchable == null) {
+    normalized.searchable = [];
   }
-  i.searchable.push(_.deburr(i.display).toLowerCase());
-  i.searchable.push(i.tag);
-  if (i.tangible == null) {
-    i.tangible = true;
+  normalized.searchable.push(deburr(normalized.display).toLowerCase());
+  normalized.searchable.push(normalized.tag);
+  if (normalized.tangible == null) {
+    normalized.tangible = true;
   }
   // TODO: Add display for generic to here.
   // if i.generic and not _.contains i.searchable, i.generic
   //   i.searchable.push i.generic
-  return i;
+  return normalized;
 };
 
-const normalizeRecipe = function (r) {
-  assert(r.name);
+export function normalizeRecipe(recipe: Partial<Recipe>): Recipe {
+  assert(recipe.name);
 
-  r = _.clone(r);
-  r.canonicalName = _.deburr(r.name).toLowerCase();
-  const nameWords = r.canonicalName.split(' ');
-  if (['a', 'the'].includes(nameWords[0])) {
-    r.sortName = nameWords.slice(1).join(' ');
+  // TODO: this `as any` forces me to lie to the type system.
+  const normalized: Recipe = clone(recipe) as any;
+  normalized.canonicalName = deburr(normalized.name).toLowerCase();
+  const nameWords = normalized.canonicalName.split(' ');
+  if (['a', 'the'].indexOf(nameWords[0]) !== -1) {
+    normalized.sortName = nameWords.slice(1).join(' ');
   } else {
-    r.sortName = r.canonicalName;
+    normalized.sortName = normalized.canonicalName;
   }
-  if (r.base == null) {
-    r.base = [];
+  if (normalized.base == null) {
+    normalized.base = [];
   }
-  return r;
+  return normalized;
 };
-
-module.exports = { normalizeIngredient, normalizeRecipe };
-
