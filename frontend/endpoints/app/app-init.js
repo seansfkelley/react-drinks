@@ -57,11 +57,12 @@ initializationPromise
 
   return LOADING_OVERLAY.classList.add('fade-out');
 })
-
-.catch(() =>
+.catch((e) => {
+  console.log(e);
   store.dispatch({
     type    : 'error-message',
     message : 'There was an error loading data from the server! Try reloading.'
-  }));
+  });
+});
 
 ReactDOM.render(React.createElement(ErrorMessageOverlay, null), ERROR_MESSAGE_ROOT);
