@@ -49,8 +49,10 @@ const buildSingleScript = function ({ source, destination, watch, dieOnError }) 
     cache: {},
     packageCache: {},
     fullPaths: watch,
+    transform: [require('reactify')],
     plugin: [require('tsify')]
   });
+
   if (watch) {
     bundler = watchify(bundler);
   }
