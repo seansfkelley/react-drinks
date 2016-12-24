@@ -27,10 +27,10 @@ LIBRARY_CSS_PATHS = [
 
 SRC_PATHS =
   scripts : [
-    source      : './frontend/endpoints/app/app-init.cjsx'
+    source      : './frontend/endpoints/app/app-init.coffee'
     destination : 'app-init.js'
   ,
-    source      : './frontend/endpoints/recipe/recipe-init.cjsx'
+    source      : './frontend/endpoints/recipe/recipe-init.coffee'
     destination : 'recipe-init.js'
   ]
   styles : [
@@ -56,7 +56,7 @@ copyAssets = ->
 
 buildSingleScript  = ({ source, destination, watch, dieOnError }) ->
   bundler = browserify source, {
-    extensions   : [ '.coffee', '.cjsx', '.ts', '.tsx' ]
+    extensions   : [ '.coffee', '.ts', '.tsx' ]
     debug        : true
     cache        : {}
     packageCache : {}
@@ -67,7 +67,7 @@ buildSingleScript  = ({ source, destination, watch, dieOnError }) ->
     bundler = watchify bundler
 
   # https://github.com/substack/node-browserify/issues/1124
-  bundler.transform require 'coffee-reactify'
+  bundler.transform require 'coffeeify'
 
   rebundle = ->
     b = bundler.bundle()
