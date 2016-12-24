@@ -1,125 +1,150 @@
-_   = require 'lodash'
-log = require 'loglevel'
+const _   = require('lodash');
+const log = require('loglevel');
 
-memoize = require './memoize'
-assert  = require '../../../shared/tinyassert'
+const memoize = require('./memoize');
+const assert  = require('../../../shared/tinyassert');
 
-_countSubsetMissing = (small, large) ->
-  missed = 0
-  for s in small
-    if s not in large
-      missed++
-  return missed
+const _countSubsetMissing = function(small, large) {
+  let missed = 0;
+  for (let s of small) {
+    if (!large.includes(s)) {
+      missed++;
+    }
+  }
+  return missed;
+};
 
-_includeAllGenerics = ({ ingredients, ingredientsByTag }) ->
-  withGenerics = []
+const _includeAllGenerics = function({ ingredients, ingredientsByTag }) {
+  const withGenerics = [];
 
-  for current in ingredients
-    withGenerics.push current
-    while current = ingredientsByTag[current.generic]
-      withGenerics.push current
+  for (let current of ingredients) {
+    withGenerics.push(current);
+    while (current = ingredientsByTag[current.generic]) {
+      withGenerics.push(current);
+    }
+  }
 
-  return _.uniq withGenerics
+  return _.uniq(withGenerics);
+};
 
-_toMostGenericTags = ({ ingredients, ingredientsByTag }) ->
-  return _.chain _includeAllGenerics({ ingredients, ingredientsByTag })
-    .reject 'generic'
-    .pluck 'tag'
+const _toMostGenericTags = ({ ingredients, ingredientsByTag }) =>
+  _.chain(_includeAllGenerics({ ingredients, ingredientsByTag }))
+    .reject('generic')
+    .pluck('tag')
     .uniq()
     .value()
+;
 
-_computeSubstitutionMap = ({ ingredients, ingredientsByTag }) ->
-  ingredientsByTagWithGenerics = {}
-  for i in ingredients
-    generic = i
-    (ingredientsByTagWithGenerics[generic.tag] ?= []).push i.tag
-    while generic = ingredientsByTag[generic.generic]
-      (ingredientsByTagWithGenerics[generic.tag] ?= []).push i.tag
-  return ingredientsByTagWithGenerics
+const _computeSubstitutionMap = function({ ingredients, ingredientsByTag }) {
+  const ingredientsByTagWithGenerics = {};
+  for (let i of ingredients) {
+    let generic = i;
+    (ingredientsByTagWithGenerics[generic.tag] != null ? ingredientsByTagWithGenerics[generic.tag] : (ingredientsByTagWithGenerics[generic.tag] = [])).push(i.tag);
+    while (generic = ingredientsByTag[generic.generic]) {
+      (ingredientsByTagWithGenerics[generic.tag] != null ? ingredientsByTagWithGenerics[generic.tag] : (ingredientsByTagWithGenerics[generic.tag] = [])).push(i.tag);
+    }
+  }
+  return ingredientsByTagWithGenerics;
+};
 
-_generateSearchResult = ({ recipe, substitutionMap, ingredientsByTag }) ->
-  missing    = []
-  available  = []
-  substitute = []
+const _generateSearchResult = function({ recipe, substitutionMap, ingredientsByTag }) {
+  const missing    = [];
+  const available  = [];
+  const substitute = [];
 
-  for ingredient in recipe.ingredients
-    if not ingredient.tag? # Things like 'water' are untagged.
-      available.push ingredient
-    else if substitutionMap[ingredient.tag]?
-      available.push ingredient
-    else
-      currentTag = ingredient.tag
-      while currentTag?
-        if substitutionMap[currentTag]?
-          substitute.push {
-            need : ingredient
-            have : _.map substitutionMap[currentTag], (t) => ingredientsByTag[t].display
-          }
-          break
-        currentIngredient = ingredientsByTag[currentTag]
-        if not currentIngredient?
-          log.warn "recipe '#{recipe.name}' calls for or has a generic that calls for unknown tag '#{currentTag}'"
-        currentTag = ingredientsByTag[currentIngredient?.generic]?.tag
-      if not currentTag?
-        missing.push ingredient
+  for (let ingredient of recipe.ingredients) {
+    if (ingredient.tag == null) { // Things like 'water' are untagged.
+      available.push(ingredient);
+    } else if (substitutionMap[ingredient.tag] != null) {
+      available.push(ingredient);
+    } else {
+      let currentTag = ingredient.tag;
+      while (currentTag != null) {
+        if (substitutionMap[currentTag] != null) {
+          substitute.push({
+            need : ingredient,
+            have : _.map(substitutionMap[currentTag], t => ingredientsByTag[t].display)
+          });
+          break;
+        }
+        const currentIngredient = ingredientsByTag[currentTag];
+        if (currentIngredient == null) {
+          log.warn(`recipe '${recipe.name}' calls for or has a generic that calls for unknown tag '${currentTag}'`);
+        }
+        currentTag = __guard__(ingredientsByTag[__guard__(currentIngredient, x1 => x1.generic)], x => x.tag);
+      }
+      if (currentTag == null) {
+        missing.push(ingredient);
+      }
+    }
+  }
 
-  return { recipeId : recipe.recipeId, missing, available, substitute }
+  return { recipeId : recipe.recipeId, missing, available, substitute };
+};
 
-ingredientSplitsByRecipeId = ({ recipes, ingredientsByTag, ingredientTags }) ->
-  assert recipes
-  assert ingredientsByTag
-  assert ingredientTags
+const ingredientSplitsByRecipeId = function({ recipes, ingredientsByTag, ingredientTags }) {
+  assert(recipes);
+  assert(ingredientsByTag);
+  assert(ingredientTags);
 
-  # Fucking hell I just want Set objects.
-  if _.isPlainObject ingredientTags
-    ingredientTags = _.keys ingredientTags
+  // Fucking hell I just want Set objects.
+  if (_.isPlainObject(ingredientTags)) {
+    ingredientTags = _.keys(ingredientTags);
+  }
 
-  exactlyAvailableIngredientsRaw = _.map ingredientTags, (tag) -> ingredientsByTag[tag]
-  exactlyAvailableIngredients = _.compact exactlyAvailableIngredientsRaw
-  if exactlyAvailableIngredientsRaw.length != exactlyAvailableIngredients.length
-    extraneous = _.chain exactlyAvailableIngredientsRaw
-      .map (value, i) => if not value? then ingredientTags[i]
+  const exactlyAvailableIngredientsRaw = _.map(ingredientTags, tag => ingredientsByTag[tag]);
+  const exactlyAvailableIngredients = _.compact(exactlyAvailableIngredientsRaw);
+  if (exactlyAvailableIngredientsRaw.length !== exactlyAvailableIngredients.length) {
+    const extraneous = _.chain(exactlyAvailableIngredientsRaw)
+      .map((value, i) => { if (value == null) { return ingredientTags[i]; } })
       .compact()
-      .value()
-    log.warn "some tags that were searched are extraneous and will be ignored: #{JSON.stringify extraneous}"
+      .value();
+    log.warn(`some tags that were searched are extraneous and will be ignored: ${JSON.stringify(extraneous)}`);
+  }
 
-  substitutionMap = _computeSubstitutionMap {
-    ingredients : exactlyAvailableIngredients
+  const substitutionMap = _computeSubstitutionMap({
+    ingredients : exactlyAvailableIngredients,
     ingredientsByTag
-  }
-  allAvailableTagsWithGenerics = _.keys substitutionMap
+  });
+  const allAvailableTagsWithGenerics = _.keys(substitutionMap);
 
-  return _.chain recipes
-    .map (r) =>
-      indexableIngredients = _.chain r.ingredients
-        .filter 'tag'
-        .map (i) => ingredientsByTag[i.tag]
-        .value()
-      unknownIngredientAdjustment = indexableIngredients.length - _.compact(indexableIngredients).length
-      mostGenericRecipeTags = _toMostGenericTags {
-        ingredients : _.compact(indexableIngredients)
+  return _.chain(recipes)
+    .map(r => {
+      const indexableIngredients = _.chain(r.ingredients)
+        .filter('tag')
+        .map(i => ingredientsByTag[i.tag])
+        .value();
+      const unknownIngredientAdjustment = indexableIngredients.length - _.compact(indexableIngredients).length;
+      const mostGenericRecipeTags = _toMostGenericTags({
+        ingredients : _.compact(indexableIngredients),
         ingredientsByTag
-      }
-      missingCount = _countSubsetMissing(
-        mostGenericRecipeTags
+      });
+      const missingCount = _countSubsetMissing(
+        mostGenericRecipeTags,
         allAvailableTagsWithGenerics
-      ) + unknownIngredientAdjustment
-      return _generateSearchResult {
-        recipe : r
-        substitutionMap
+      ) + unknownIngredientAdjustment;
+      return _generateSearchResult({
+        recipe : r,
+        substitutionMap,
         ingredientsByTag
-      }
+      });
+    })
     .compact()
-    .reduce ((obj, result) -> obj[result.recipeId] = _.omit(result, 'recipeId') ; return obj), {}
-    .value()
+    .reduce((function(obj, result) { obj[result.recipeId] = _.omit(result, 'recipeId');  return obj; }), {})
+    .value();
+};
 
-module.exports = _.extend ingredientSplitsByRecipeId, {
+module.exports = _.extend(ingredientSplitsByRecipeId, {
   __test : {
-    _countSubsetMissing
-    _includeAllGenerics
-    _toMostGenericTags
-    _computeSubstitutionMap
+    _countSubsetMissing,
+    _includeAllGenerics,
+    _toMostGenericTags,
+    _computeSubstitutionMap,
     _generateSearchResult
-  }
-  memoized : memoize ingredientSplitsByRecipeId
+  },
+  memoized : memoize(ingredientSplitsByRecipeId)
+});
+
+function __guard__(value, transform) {
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
 }

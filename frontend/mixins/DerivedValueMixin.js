@@ -1,31 +1,44 @@
-_ = require 'lodash'
+const _ = require('lodash');
 
-store   = require '../store'
-derived = require '../store/derived'
+const store   = require('../store');
+const derived = require('../store/derived');
 
-DerivedValueMixin = (fieldNames...) ->
-  fieldNames = _.flatten fieldNames
-  fnName = _.uniqueId '_onStoreChange_'
-  getDerivedFields = ->
-    state = store.getState()
-    return _.reduce(fieldNames, ((fields, fieldName) ->
-      fields[fieldName] = derived[fieldName](state)
-      return fields
-    ), {})
+const DerivedValueMixin = function(...fieldNames) {
+  fieldNames = _.flatten(fieldNames);
+  const fnName = _.uniqueId('_onStoreChange_');
+  const getDerivedFields = function() {
+    const state = store.getState();
+    return _.reduce(fieldNames, (function(fields, fieldName) {
+      fields[fieldName] = derived[fieldName](state);
+      return fields;
+    }), {});
+  };
 
-  mixin = {
-    getInitialState : getDerivedFields
+  const mixin = {
+    getInitialState : getDerivedFields,
 
-    componentDidMount : ->
-      @_derivedValueMixin_unsubscribe = store.subscribe @[fnName]
+    componentDidMount() {
+      return this._derivedValueMixin_unsubscribe = store.subscribe(this[fnName]);
+    },
 
-    componentWillUnmount : ->
-      @_derivedValueMixin_unsubscribe?()
+    componentWillUnmount() {
+      return __guardMethod__(this, '_derivedValueMixin_unsubscribe', o => o._derivedValueMixin_unsubscribe());
+    }
+  };
+
+  mixin[fnName] = function() {
+    return this.setState(getDerivedFields());
+  };
+
+  return mixin;
+};
+
+module.exports = DerivedValueMixin;
+
+function __guardMethod__(obj, methodName, transform) {
+  if (typeof obj !== 'undefined' && obj !== null && typeof obj[methodName] === 'function') {
+    return transform(obj, methodName);
+  } else {
+    return undefined;
   }
-
-  mixin[fnName] = ->
-    @setState getDerivedFields()
-
-  return mixin
-
-module.exports = DerivedValueMixin
+}

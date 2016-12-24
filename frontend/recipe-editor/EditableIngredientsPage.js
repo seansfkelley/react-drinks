@@ -1,219 +1,261 @@
-_               = require 'lodash'
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const _               = require('lodash');
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-store = require '../store'
+const store = require('../store');
 
-{ parseIngredientFromText } = require '../utils'
+const { parseIngredientFromText } = require('../utils');
 
-ReduxMixin = require '../mixins/ReduxMixin'
+const ReduxMixin = require('../mixins/ReduxMixin');
 
-EditableRecipePage = require './EditableRecipePage'
+const EditableRecipePage = require('./EditableRecipePage');
 
-Deletable = require '../components/Deletable'
-List      = require '../components/List'
+const Deletable = require('../components/Deletable');
+const List      = require('../components/List');
 
-MeasuredIngredient = require '../recipes/MeasuredIngredient'
+const MeasuredIngredient = require('../recipes/MeasuredIngredient');
 
-EditableIngredient = React.createClass {
-  displayName : 'EditableIngredient'
+const EditableIngredient = React.createClass({
+  displayName : 'EditableIngredient',
 
-  propTypes :
-    addIngredient              : React.PropTypes.func.isRequired
-    ingredientsByTag           : React.PropTypes.object.isRequired
+  propTypes : {
+    addIngredient              : React.PropTypes.func.isRequired,
+    ingredientsByTag           : React.PropTypes.object.isRequired,
     allAlphabeticalIngredients : React.PropTypes.array.isRequired
+  },
 
-  getInitialState : -> {
-    tag         : null
-    value       : ''
+  getInitialState() { return {
+    tag         : null,
+    value       : '',
     guessedTags : []
-  }
+  }; },
 
-  render : ->
-    if @state.tag?
+  render() {
+    let ingredientSelector;
+    if (this.state.tag != null) {
       ingredientSelector = React.createElement(List.Item, null,
-        (@props.ingredientsByTag[@state.tag].display),
-        React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (@_unsetTag)})
+        (this.props.ingredientsByTag[this.state.tag].display),
+        React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (this._unsetTag)})
+      );
+    } else {
+      ingredientSelector = _.map(this.state.guessedTags, tag => {
+        return React.createElement(List.Item, {"onTouchTap": (this._tagSetter(tag)), "key": `tag-${tag}`}, (this.props.ingredientsByTag[tag].display));
+      }
+      );
+
+      if (ingredientSelector.length) {
+        ingredientSelector.push(React.createElement("div", {"className": 'section-separator', "key": 'separator'}));
+      }
+
+      ingredientSelector = ingredientSelector.concat(_.chain(this.props.allAlphabeticalIngredients)
+        .filter(({ tag }) => !this.state.guessedTags.includes(tag))
+        .map(({ display, tag }) => {
+          return React.createElement(List.Item, {"onTouchTap": (this._tagSetter(tag)), "key": `tag-${tag}`}, (display));
+        }
       )
-    else
-      ingredientSelector = _.map @state.guessedTags, (tag) =>
-        React.createElement(List.Item, {"onTouchTap": (@_tagSetter tag), "key": "tag-#{tag}"}, (@props.ingredientsByTag[tag].display))
-
-      if ingredientSelector.length
-        ingredientSelector.push React.createElement("div", {"className": 'section-separator', "key": 'separator'})
-
-      ingredientSelector = ingredientSelector.concat(_.chain(@props.allAlphabeticalIngredients)
-        .filter ({ tag }) => tag not in @state.guessedTags
-        .map ({ display, tag }) =>
-          React.createElement(List.Item, {"onTouchTap": (@_tagSetter tag), "key": "tag-#{tag}"}, (display))
         .value()
-      )
+      );
+    }
 
-    React.createElement("div", {"className": 'editable-ingredient'},
+    return React.createElement("div", {"className": 'editable-ingredient'},
       React.createElement("div", {"className": 'input-line'},
-        React.createElement("input", { \
-          "type": 'text',  \
-          "placeholder": 'ex: 1 oz gin',  \
-          "autoCorrect": 'off',  \
-          "autoCapitalize": 'off',  \
-          "autoComplete": 'off',  \
-          "spellCheck": 'false',  \
-          "ref": 'input',  \
-          "value": (@state.value),  \
-          "onChange": (@_onChange),  \
-          "onTouchTap": (@_focus)
+        React.createElement("input", { 
+          "type": 'text',  
+          "placeholder": 'ex: 1 oz gin',  
+          "autoCorrect": 'off',  
+          "autoCapitalize": 'off',  
+          "autoComplete": 'off',  
+          "spellCheck": 'false',  
+          "ref": 'input',  
+          "value": (this.state.value),  
+          "onChange": (this._onChange),  
+          "onTouchTap": (this._focus)
         }),
-        React.createElement("div", { \
-          "className": (classnames 'done-button', { 'disabled' : not @_isCommittable() }),  \
-          "onTouchTap": (@_commitIfAllowed)
+        React.createElement("div", { 
+          "className": (classnames('done-button', { 'disabled' : !this._isCommittable() })),  
+          "onTouchTap": (this._commitIfAllowed)
         }, "Done",
           React.createElement("i", {"className": 'fa fa-check-circle'})
         )
       ),
       React.createElement("div", {"className": 'ingredient-list-header'}, "A Type Of"),
-      React.createElement(List, {"className": 'ingredient-group-list', "onTouchStart": (@_dismissKeyboard)},
+      React.createElement(List, {"className": 'ingredient-group-list', "onTouchStart": (this._dismissKeyboard)},
         (ingredientSelector)
       )
-    )
+    );
+  },
 
-  componentDidMount : ->
-    @_guessTags = _.throttle @_guessTags, 250
+  componentDidMount() {
+    return this._guessTags = _.throttle(this._guessTags, 250);
+  },
 
-  componentWillUnmount : ->
-    @_guessTags.cancel()
+  componentWillUnmount() {
+    return this._guessTags.cancel();
+  },
 
-  _focus : ->
-    @refs.input.focus()
+  _focus() {
+    return this.refs.input.focus();
+  },
 
-  _dismissKeyboard : ->
-    @refs.input.blur()
+  _dismissKeyboard() {
+    return this.refs.input.blur();
+  },
 
-  _tagSetter : (tag) ->
-    return =>
-      @setState { tag }
+  _tagSetter(tag) {
+    return () => {
+      return this.setState({ tag });
+    };
+  },
 
-  _unsetTag : ->
-    @setState { tag : null }
+  _unsetTag() {
+    return this.setState({ tag : null });
+  },
 
-  _isCommittable : ->
-    return !!@state.value.trim()
+  _isCommittable() {
+    return !!this.state.value.trim();
+  },
 
-  _commitIfAllowed : ->
-    if @_isCommittable()
-      @props.addIngredient @state.value.trim(), @state.tag
+  _commitIfAllowed() {
+    if (this._isCommittable()) {
+      return this.props.addIngredient(this.state.value.trim(), this.state.tag);
+    }
+  },
 
-  _onChange : (e) ->
-    @setState { value : e.target.value }
-    @_guessTags e.target.value
+  _onChange(e) {
+    this.setState({ value : e.target.value });
+    return this._guessTags(e.target.value);
+  },
 
-  _guessTags : (value) ->
-    { displayIngredient } = parseIngredientFromText value
-    if not displayIngredient
-      @setState { guessedTags : [] }
-    else
-      # This is probably dumb slow.
-      words = _.deburr(displayIngredient).split ' '
-      guessedTags = _.chain(@props.allAlphabeticalIngredients)
-        .filter ({ searchable }) ->
-          _.any words, (w) ->
-            _.any searchable, (s) ->
-              s.indexOf(w) != -1
-        .pluck 'tag'
-        .value()
+  _guessTags(value) {
+    const { displayIngredient } = parseIngredientFromText(value);
+    if (!displayIngredient) {
+      return this.setState({ guessedTags : [] });
+    } else {
+      // This is probably dumb slow.
+      const words = _.deburr(displayIngredient).split(' ');
+      const guessedTags = _.chain(this.props.allAlphabeticalIngredients)
+        .filter(({ searchable }) =>
+          _.any(words, w =>
+            _.any(searchable, s => s.indexOf(w) !== -1)
+          )
+      )
+        .pluck('tag')
+        .value();
 
-      @setState { guessedTags }
+      return this.setState({ guessedTags });
+    }
+  }
 
-}
+});
 
-EditableIngredientsPage = React.createClass {
-  displayName : 'EditableIngredientsPage'
+const EditableIngredientsPage = React.createClass({
+  displayName : 'EditableIngredientsPage',
 
   mixins : [
-    ReduxMixin {
-      editableRecipe : 'ingredients'
+    ReduxMixin({
+      editableRecipe : 'ingredients',
       ingredients    : [ 'ingredientsByTag', 'allAlphabeticalIngredients' ]
-    }
+    }),
     PureRenderMixin
-  ]
+  ],
 
-  propTypes :
-    onClose       : React.PropTypes.func.isRequired
-    onNext        : React.PropTypes.func
-    onPrevious    : React.PropTypes.func
+  propTypes : {
+    onClose       : React.PropTypes.func.isRequired,
+    onNext        : React.PropTypes.func,
+    onPrevious    : React.PropTypes.func,
     previousTitle : React.PropTypes.string
+  },
 
-  render : ->
-    ingredientNodes = _.map @state.ingredients, (ingredient, index) =>
-      if ingredient.isEditing
-        ingredientNode = React.createElement(EditableIngredient, { \
-          "addIngredient": (@_ingredientAdder index),  \
-          "ingredientsByTag": (@state.ingredientsByTag),  \
-          "allAlphabeticalIngredients": (@state.allAlphabeticalIngredients)
-        })
-      else
-        ingredientNode = React.createElement(MeasuredIngredient, Object.assign({},  ingredient.display))
+  render() {
+    const ingredientNodes = _.map(this.state.ingredients, (ingredient, index) => {
+      let ingredientNode;
+      if (ingredient.isEditing) {
+        ingredientNode = React.createElement(EditableIngredient, { 
+          "addIngredient": (this._ingredientAdder(index)),  
+          "ingredientsByTag": (this.state.ingredientsByTag),  
+          "allAlphabeticalIngredients": (this.state.allAlphabeticalIngredients)
+        });
+      } else {
+        ingredientNode = React.createElement(MeasuredIngredient, Object.assign({},  ingredient.display));
+      }
 
-      return React.createElement(Deletable, { \
-        "onDelete": (@_ingredientDeleter index),  \
-        "key": "tag-#{ingredient.tag ? ingredient.display?.displayIngredient}-#{index}"
+      return React.createElement(Deletable, { 
+        "onDelete": (this._ingredientDeleter(index)),  
+        "key": `tag-${ingredient.tag != null ? ingredient.tag : __guard__(ingredient.display, x => x.displayIngredient)}-${index}`
       },
         (ingredientNode)
-      )
+      );
+    }
+    );
 
-    React.createElement(EditableRecipePage, { \
-      "className": 'ingredients-page',  \
-      "onClose": (@props.onClose),  \
-      "onPrevious": (@props.onPrevious),  \
-      "previousTitle": (@props.previousTitle)
+    return React.createElement(EditableRecipePage, { 
+      "className": 'ingredients-page',  
+      "onClose": (this.props.onClose),  
+      "onPrevious": (this.props.onPrevious),  
+      "previousTitle": (this.props.previousTitle)
     },
       React.createElement("div", {"className": 'fixed-content-pane'},
         React.createElement("div", {"className": 'ingredients-list'},
           (ingredientNodes)
         ),
-        React.createElement("div", {"className": (classnames 'new-ingredient-button', { 'disabled' : @_anyAreEditing() }), "onTouchTap": (@_addEmptyIngredient)},
+        React.createElement("div", {"className": (classnames('new-ingredient-button', { 'disabled' : this._anyAreEditing() })), "onTouchTap": (this._addEmptyIngredient)},
           React.createElement("i", {"className": 'fa fa-plus-circle'}),
           React.createElement("span", null, "New Ingredient")
         ),
-        React.createElement("div", {"className": (classnames 'next-button', { 'disabled' : not @_isEnabled() }), "onTouchTap": (@_nextIfEnabled)},
+        React.createElement("div", {"className": (classnames('next-button', { 'disabled' : !this._isEnabled() })), "onTouchTap": (this._nextIfEnabled)},
           React.createElement("span", {"className": 'next-text'}, "Next"),
           React.createElement("i", {"className": 'fa fa-arrow-right'})
         )
       )
-    )
+    );
+  },
 
-  _anyAreEditing : ->
-    return _.any @state.ingredients, 'isEditing'
+  _anyAreEditing() {
+    return _.any(this.state.ingredients, 'isEditing');
+  },
 
-  _isEnabled : ->
-    return @state.ingredients.length > 0 and not _.any(@state.ingredients, 'isEditing')
+  _isEnabled() {
+    return this.state.ingredients.length > 0 && !_.any(this.state.ingredients, 'isEditing');
+  },
 
-  _nextIfEnabled : ->
-    if @_isEnabled()
-      @props.onNext()
-
-  _addEmptyIngredient : ->
-    return if @_anyAreEditing()
-
-    store.dispatch {
-      type : 'add-ingredient'
+  _nextIfEnabled() {
+    if (this._isEnabled()) {
+      return this.props.onNext();
     }
+  },
 
-  _ingredientAdder : (index) ->
-    return (rawText, tag) =>
-      store.dispatch {
-        type : 'commit-ingredient'
-        index
-        rawText
+  _addEmptyIngredient() {
+    if (this._anyAreEditing()) { return; }
+
+    return store.dispatch({
+      type : 'add-ingredient'
+    });
+  },
+
+  _ingredientAdder(index) {
+    return (rawText, tag) => {
+      return store.dispatch({
+        type : 'commit-ingredient',
+        index,
+        rawText,
         tag
-      }
+      });
+    };
+  },
 
-  _ingredientDeleter : (index) ->
-    return =>
-      store.dispatch {
-        type : 'delete-ingredient'
+  _ingredientDeleter(index) {
+    return () => {
+      return store.dispatch({
+        type : 'delete-ingredient',
         index
-      }
-}
+      });
+    };
+  }
+});
 
-module.exports = EditableIngredientsPage
+module.exports = EditableIngredientsPage;
+
+function __guard__(value, transform) {
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
+}

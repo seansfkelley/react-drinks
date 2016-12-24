@@ -1,78 +1,85 @@
-_               = require 'lodash'
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const _               = require('lodash');
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-store = require '../store'
+const store = require('../store');
 
-ReduxMixin = require '../mixins/ReduxMixin'
+const ReduxMixin = require('../mixins/ReduxMixin');
 
-EditableRecipePage = require './EditableRecipePage'
+const EditableRecipePage = require('./EditableRecipePage');
 
-EditableNamePage = React.createClass {
-  displayName : 'EditableNamePage'
+const EditableNamePage = React.createClass({
+  displayName : 'EditableNamePage',
 
   mixins : [
-    ReduxMixin {
+    ReduxMixin({
       editableRecipe : 'name'
-    }
+    }),
     PureRenderMixin
-  ]
+  ],
 
-  propTypes :
-    onClose       : React.PropTypes.func.isRequired
-    onNext        : React.PropTypes.func
-    onPrevious    : React.PropTypes.func
+  propTypes : {
+    onClose       : React.PropTypes.func.isRequired,
+    onNext        : React.PropTypes.func,
+    onPrevious    : React.PropTypes.func,
     previousTitle : React.PropTypes.string
+  },
 
-  render : ->
-    React.createElement(EditableRecipePage, { \
-      "className": 'name-page',  \
-      "onClose": (@props.onClose),  \
-      "onPrevious": (@props.onPrevious),  \
-      "previousTitle": (@props.previousTitle)
+  render() {
+    return React.createElement(EditableRecipePage, { 
+      "className": 'name-page',  
+      "onClose": (this.props.onClose),  
+      "onPrevious": (this.props.onPrevious),  
+      "previousTitle": (this.props.previousTitle)
     },
       React.createElement("div", {"className": 'fixed-content-pane'},
         React.createElement("div", {"className": 'page-title'}, "Add a Recipe"),
-        React.createElement("input", { \
-          "type": 'text',  \
-          "placeholder": 'Name...',  \
-          "autoCorrect": 'off',  \
-          "autoCapitalize": 'on',  \
-          "autoComplete": 'off',  \
-          "spellCheck": 'false',  \
-          "ref": 'input',  \
-          "value": (@state.name),  \
-          "onChange": (@_onChange),  \
-          "onTouchTap": (@_focus)
+        React.createElement("input", { 
+          "type": 'text',  
+          "placeholder": 'Name...',  
+          "autoCorrect": 'off',  
+          "autoCapitalize": 'on',  
+          "autoComplete": 'off',  
+          "spellCheck": 'false',  
+          "ref": 'input',  
+          "value": (this.state.name),  
+          "onChange": (this._onChange),  
+          "onTouchTap": (this._focus)
         }),
-        React.createElement("div", {"className": (classnames 'next-button', { 'disabled' : not @_isEnabled() }), "onTouchTap": (@_nextIfEnabled)},
+        React.createElement("div", {"className": (classnames('next-button', { 'disabled' : !this._isEnabled() })), "onTouchTap": (this._nextIfEnabled)},
           React.createElement("span", {"className": 'next-text'}, "Next"),
           React.createElement("i", {"className": 'fa fa-arrow-right'})
         )
       )
-    )
+    );
+  },
 
-  _focus : ->
-    @refs.input.focus()
+  _focus() {
+    return this.refs.input.focus();
+  },
 
-  # mixin-ify this kind of stuff probably
-  _isEnabled : ->
-    return !!@state.name
+  // mixin-ify this kind of stuff probably
+  _isEnabled() {
+    return !!this.state.name;
+  },
 
-  _nextIfEnabled : ->
-    if @_isEnabled()
-      store.dispatch {
-        type : 'set-name'
-        name : @state.name.trim()
-      }
-      @props.onNext()
-
-  _onChange : (e) ->
-    store.dispatch {
-      type : 'set-name'
-      name : e.target.value
+  _nextIfEnabled() {
+    if (this._isEnabled()) {
+      store.dispatch({
+        type : 'set-name',
+        name : this.state.name.trim()
+      });
+      return this.props.onNext();
     }
-}
+  },
 
-module.exports = EditableNamePage
+  _onChange(e) {
+    return store.dispatch({
+      type : 'set-name',
+      name : e.target.value
+    });
+  }
+});
+
+module.exports = EditableNamePage;

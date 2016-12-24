@@ -1,72 +1,87 @@
-_ = require 'lodash'
+const _ = require('lodash');
 
-module.exports = require('./makeReducer') _.extend({
-  errorMessage             : null
-  recipeViewingIndex       : 0
-  currentlyViewedRecipeIds : []
-  favoritedRecipeIds       : []
+module.exports = require('./makeReducer')(_.extend({
+  errorMessage             : null,
+  recipeViewingIndex       : 0,
+  currentlyViewedRecipeIds : [],
+  favoritedRecipeIds       : [],
 
-  showingRecipeViewer      : false
-  showingRecipeEditor      : false
-  showingSidebar           : false
+  showingRecipeViewer      : false,
+  showingRecipeEditor      : false,
+  showingSidebar           : false,
   showingListSelector      : false
 }, require('../persistence').load().ui), {
-  'rewrite-recipe-id' : (state, { from, to }) ->
-    { currentlyViewedRecipeIds, favoritedRecipeIds } = state
+  ['rewrite-recipe-id'](state, { from, to }) {
+    let { currentlyViewedRecipeIds, favoritedRecipeIds } = state;
 
-    i = _.indexOf currentlyViewedRecipeIds, from
-    if i != -1
-      currentlyViewedRecipeIds = _.clone currentlyViewedRecipeIds
-      currentlyViewedRecipeIds[i] = to
+    let i = _.indexOf(currentlyViewedRecipeIds, from);
+    if (i !== -1) {
+      currentlyViewedRecipeIds = _.clone(currentlyViewedRecipeIds);
+      currentlyViewedRecipeIds[i] = to;
+    }
 
-    i = _.indexOf favoritedRecipeIds, from
-    if i != -1
-      favoritedRecipeIds = _.clone favoritedRecipeIds
-      favoritedRecipeIds[i] = to
+    i = _.indexOf(favoritedRecipeIds, from);
+    if (i !== -1) {
+      favoritedRecipeIds = _.clone(favoritedRecipeIds);
+      favoritedRecipeIds[i] = to;
+    }
 
-    return _.defaults { currentlyViewedRecipeIds, favoritedRecipeIds }, state
+    return _.defaults({ currentlyViewedRecipeIds, favoritedRecipeIds }, state);
+  },
 
-  'set-recipe-viewing-index' : (state, { index }) ->
-    return _.defaults { recipeViewingIndex : index }, state
+  ['set-recipe-viewing-index'](state, { index }) {
+    return _.defaults({ recipeViewingIndex : index }, state);
+  },
 
-  'favorite-recipe' : (state, { recipeId }) ->
-    return _.defaults { favoritedRecipeIds : _.union state.favoritedRecipeIds, [ recipeId ] }, state
+  ['favorite-recipe'](state, { recipeId }) {
+    return _.defaults({ favoritedRecipeIds : _.union(state.favoritedRecipeIds, [ recipeId ]) }, state);
+  },
 
-  'unfavorite-recipe' : (state, { recipeId }) ->
-    return _.defaults { favoritedRecipeIds : _.without state.favoritedRecipeIds, recipeId }, state
+  ['unfavorite-recipe'](state, { recipeId }) {
+    return _.defaults({ favoritedRecipeIds : _.without(state.favoritedRecipeIds, recipeId) }, state);
+  },
 
-  'show-recipe-viewer' : (state, { index, recipeIds }) ->
-    return _.defaults {
-      showingRecipeViewer      : true
-      recipeViewingIndex       : index
+  ['show-recipe-viewer'](state, { index, recipeIds }) {
+    return _.defaults({
+      showingRecipeViewer      : true,
+      recipeViewingIndex       : index,
       currentlyViewedRecipeIds : recipeIds
-     }, state
+     }, state);
+  },
 
-  'hide-recipe-viewer' : (state) ->
-    return _.defaults {
-      showingRecipeViewer      : false
-      recipeViewingIndex       : 0
+  ['hide-recipe-viewer'](state) {
+    return _.defaults({
+      showingRecipeViewer      : false,
+      recipeViewingIndex       : 0,
       currentlyViewedRecipeIds : []
-     }, state
+     }, state);
+  },
 
-  'show-recipe-editor' : (state) ->
-    return _.defaults { showingRecipeEditor : true }, state
+  ['show-recipe-editor'](state) {
+    return _.defaults({ showingRecipeEditor : true }, state);
+  },
 
-  'hide-recipe-editor' : (state) ->
-    return _.defaults { showingRecipeEditor : false }, state
+  ['hide-recipe-editor'](state) {
+    return _.defaults({ showingRecipeEditor : false }, state);
+  },
 
-  'show-sidebar' : (state) ->
-    return _.defaults { showingSidebar : true }, state
+  ['show-sidebar'](state) {
+    return _.defaults({ showingSidebar : true }, state);
+  },
 
-  'hide-sidebar' : (state) ->
-    return _.defaults { showingSidebar : false }, state
+  ['hide-sidebar'](state) {
+    return _.defaults({ showingSidebar : false }, state);
+  },
 
-  'show-list-selector' : (state) ->
-    return _.defaults { showingListSelector : true }, state
+  ['show-list-selector'](state) {
+    return _.defaults({ showingListSelector : true }, state);
+  },
 
-  'hide-list-selector' : (state) ->
-    return _.defaults { showingListSelector : false }, state
+  ['hide-list-selector'](state) {
+    return _.defaults({ showingListSelector : false }, state);
+  },
 
-  'error-message' : (state, { message }) ->
-    return _.defaults { errorMessage : message }, state
-}
+  ['error-message'](state, { message }) {
+    return _.defaults({ errorMessage : message }, state);
+  }
+});

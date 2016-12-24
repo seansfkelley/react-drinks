@@ -1,82 +1,89 @@
-_               = require 'lodash'
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const _               = require('lodash');
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-definitions = require '../../shared/definitions'
+const definitions = require('../../shared/definitions');
 
-ReduxMixin = require '../mixins/ReduxMixin'
+const ReduxMixin = require('../mixins/ReduxMixin');
 
-TitleBar = require '../components/TitleBar'
-Swipable = require '../components/Swipable'
+const TitleBar = require('../components/TitleBar');
+const Swipable = require('../components/Swipable');
 
-store = require '../store'
+const store = require('../store');
 
-BASE_LIQUORS = [ definitions.ANY_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
+const BASE_LIQUORS = [ definitions.ANY_BASE_LIQUOR ].concat(definitions.BASE_LIQUORS);
 
-RecipeListHeader = React.createClass {
-  displayName : 'RecipeListHeader'
+const RecipeListHeader = React.createClass({
+  displayName : 'RecipeListHeader',
 
   mixins : [
-    ReduxMixin {
+    ReduxMixin({
       filters : [ 'baseLiquorFilter', 'selectedRecipeList' ]
-    }
+    }),
     PureRenderMixin
-  ]
+  ],
 
-  render : ->
-    initialBaseLiquorIndex = _.indexOf BASE_LIQUORS, @state.baseLiquorFilter
-    if initialBaseLiquorIndex == -1
-      initialBaseLiquorIndex = 0
+  render() {
+    let initialBaseLiquorIndex = _.indexOf(BASE_LIQUORS, this.state.baseLiquorFilter);
+    if (initialBaseLiquorIndex === -1) {
+      initialBaseLiquorIndex = 0;
+    }
 
-    React.createElement("div", {"className": 'recipe-list-header fixed-header'},
-      React.createElement(TitleBar, { \
-        "leftIcon": '/assets/img/ingredients.svg',  \
-        "leftIconOnTouchTap": (@_showSidebar),  \
-        "rightIcon": 'fa-plus',  \
-        "rightIconOnTouchTap": (@_newRecipe),  \
-        "className": 'recipe-list-header',  \
-        "onTouchTap": (@_showListSelector)
+    return React.createElement("div", {"className": 'recipe-list-header fixed-header'},
+      React.createElement(TitleBar, { 
+        "leftIcon": '/assets/img/ingredients.svg',  
+        "leftIconOnTouchTap": (this._showSidebar),  
+        "rightIcon": 'fa-plus',  
+        "rightIconOnTouchTap": (this._newRecipe),  
+        "className": 'recipe-list-header',  
+        "onTouchTap": (this._showListSelector)
       },
-        (definitions.RECIPE_LIST_NAMES[@state.selectedRecipeList]),
+        (definitions.RECIPE_LIST_NAMES[this.state.selectedRecipeList]),
         React.createElement("i", {"className": 'fa fa-chevron-down'})
       ),
-      React.createElement(Swipable, { \
-        "className": 'base-liquor-container',  \
-        "initialIndex": (initialBaseLiquorIndex),  \
-        "onSlideChange": (@_onBaseLiquorChange),  \
+      React.createElement(Swipable, { 
+        "className": 'base-liquor-container',  
+        "initialIndex": (initialBaseLiquorIndex),  
+        "onSlideChange": (this._onBaseLiquorChange),  
         "friction": 0.7
       },
-        (_.map(BASE_LIQUORS, (base) =>
-          React.createElement("div", { \
-            "className": (classnames 'base-liquor-option', { 'selected' : base == @state.baseLiquorFilter }),  \
+        (_.map(BASE_LIQUORS, base => {
+          return React.createElement("div", { 
+            "className": (classnames('base-liquor-option', { 'selected' : base === this.state.baseLiquorFilter })),  
             "key": (base)
           },
             (base)
-        )))
+        );
+        }))
       )
     );
+  },
 
-  _onBaseLiquorChange : (index) ->
-    store.dispatch {
-      type   : 'set-base-liquor-filter'
+  _onBaseLiquorChange(index) {
+    return store.dispatch({
+      type   : 'set-base-liquor-filter',
       filter : BASE_LIQUORS[index]
-    }
+    });
+  },
 
-  _showSidebar : ->
-    store.dispatch {
+  _showSidebar() {
+    return store.dispatch({
       type : 'show-sidebar'
-    }
+    });
+  },
 
-  _showListSelector : ->
-    store.dispatch {
+  _showListSelector() {
+    return store.dispatch({
       type : 'show-list-selector'
-    }
+    });
+  },
 
-  _newRecipe : ->
-    store.dispatch {
+  _newRecipe() {
+    return store.dispatch({
       type : 'show-recipe-editor'
-    }
-}
+    });
+  }
+});
 
-module.exports = RecipeListHeader
+module.exports = RecipeListHeader;

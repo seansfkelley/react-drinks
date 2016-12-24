@@ -1,11 +1,11 @@
-require('../common-init')()
+require('../common-init')();
 
-React    = require 'react'
-ReactDOM = require 'react-dom'
+const React    = require('react');
+const ReactDOM = require('react-dom');
 
-StandaloneRecipe = require './StandaloneRecipe'
+const StandaloneRecipe = require('./StandaloneRecipe');
 
-APP_ROOT = document.querySelector '#app-root'
+const APP_ROOT = document.querySelector('#app-root');
 
-# TODO: Redirect to nonexistent error page if this is mangled.
-ReactDOM.render React.createElement(StandaloneRecipe, {"recipe": (window.recipeData)}), APP_ROOT
+// TODO: Redirect to nonexistent error page if this is mangled.
+ReactDOM.render(React.createElement(StandaloneRecipe, {"recipe": (window.recipeData)}), APP_ROOT);

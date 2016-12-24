@@ -1,152 +1,169 @@
-_               = require 'lodash'
-React           = require 'react'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const _               = require('lodash');
+const React           = require('react');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-ReduxMixin        = require '../mixins/ReduxMixin'
-DerivedValueMixin = require '../mixins/DerivedValueMixin'
+const ReduxMixin        = require('../mixins/ReduxMixin');
+const DerivedValueMixin = require('../mixins/DerivedValueMixin');
 
-SearchBar = require '../components/SearchBar'
-List      = require '../components/List'
+const SearchBar = require('../components/SearchBar');
+const List      = require('../components/List');
 
-store            = require '../store'
-utils            = require '../utils'
-stylingConstants = require '../stylingConstants'
-Difficulty       = require '../Difficulty'
+const store            = require('../store');
+const utils            = require('../utils');
+const stylingConstants = require('../stylingConstants');
+const Difficulty       = require('../Difficulty');
 
-RecipeListItem     = require './RecipeListItem'
-RecipeListHeader   = require './RecipeListHeader'
+const RecipeListItem     = require('./RecipeListItem');
+const RecipeListHeader   = require('./RecipeListHeader');
 
-RecipeList = React.createClass {
-  displayName : 'RecipeList'
+const RecipeList = React.createClass({
+  displayName : 'RecipeList',
 
-  propTypes :
-    recipes                    : React.PropTypes.array.isRequired
-    ingredientsByTag           : React.PropTypes.object.isRequired
-    favoritedRecipeIds         : React.PropTypes.array.isRequired
+  propTypes : {
+    recipes                    : React.PropTypes.array.isRequired,
+    ingredientsByTag           : React.PropTypes.object.isRequired,
+    favoritedRecipeIds         : React.PropTypes.array.isRequired,
     ingredientSplitsByRecipeId : React.PropTypes.object.isRequired
+  },
 
-  mixins : [ PureRenderMixin ]
+  mixins : [ PureRenderMixin ],
 
-  render : ->
-    recipeCount = _.chain @props.recipes
-      .pluck 'recipes'
-      .pluck 'length'
-      .reduce ((sum, l) -> sum + l), 0
-      .value()
+  render() {
+    const recipeCount = _.chain(this.props.recipes)
+      .pluck('recipes')
+      .pluck('length')
+      .reduce(((sum, l) => sum + l), 0)
+      .value();
 
-    listNodes = []
-    absoluteIndex = 0
-    for { key, recipes } in @props.recipes
-      if recipeCount > 6
-        listNodes.push @_makeHeader(key, recipes)
-      for r in recipes
-        listNodes.push @_makeItem(key, r, absoluteIndex)
-        absoluteIndex += 1
+    const listNodes = [];
+    let absoluteIndex = 0;
+    for (let { key, recipes } of this.props.recipes) {
+      if (recipeCount > 6) {
+        listNodes.push(this._makeHeader(key, recipes));
+      }
+      for (let r of recipes) {
+        listNodes.push(this._makeItem(key, r, absoluteIndex));
+        absoluteIndex += 1;
+      }
+    }
 
-    React.createElement(List, {"className": (List.ClassNames.HEADERED)},
+    return React.createElement(List, {"className": (List.ClassNames.HEADERED)},
       (listNodes)
-    )
+    );
+  },
 
-  _makeHeader : (groupKey, recipes) ->
-    return React.createElement(List.Header, {"title": (groupKey.toUpperCase()), "key": ('header-' + groupKey)})
+  _makeHeader(groupKey, recipes) {
+    return React.createElement(List.Header, {"title": (groupKey.toUpperCase()), "key": (`header-${groupKey}`)});
+  },
 
-  _makeItem : (groupKey, r, absoluteIndex) ->
-    missingIngredients = @props.ingredientSplitsByRecipeId[r.recipeId].missing
-    if missingIngredients.length
-      isMixable = false
-      difficulty = Difficulty.getHardest(_.chain missingIngredients
-        .pluck 'tag'
-        .map (tag) => @props.ingredientsByTag[tag]
-        .pluck 'difficulty'
+  _makeItem(groupKey, r, absoluteIndex) {
+    let difficulty, isMixable;
+    const missingIngredients = this.props.ingredientSplitsByRecipeId[r.recipeId].missing;
+    if (missingIngredients.length) {
+      isMixable = false;
+      difficulty = Difficulty.getHardest(_.chain(missingIngredients)
+        .pluck('tag')
+        .map(tag => this.props.ingredientsByTag[tag])
+        .pluck('difficulty')
         .value()
-      )
+      );
+    }
 
-    # TODO: This can cause needless rerenders, especially when text-searching.
-    # PureRenderMixin is bypassed since .bind() returns a new function every time.
-    # Is there a way to always pass the same function and infer the index from the event?
-    return React.createElement(RecipeListItem, { \
-      "difficulty": (difficulty),  \
-      "isMixable": (isMixable),  \
-      "recipeName": (r.name),  \
-      "onTouchTap": (@_showRecipeViewer.bind this, absoluteIndex),  \
-      "onDelete": (if r.isCustom then @_deleteRecipe.bind(null, r.recipeId)),  \
+    // TODO: This can cause needless rerenders, especially when text-searching.
+    // PureRenderMixin is bypassed since .bind() returns a new function every time.
+    // Is there a way to always pass the same function and infer the index from the event?
+    return React.createElement(RecipeListItem, { 
+      "difficulty": (difficulty),  
+      "isMixable": (isMixable),  
+      "recipeName": (r.name),  
+      "onTouchTap": (this._showRecipeViewer.bind(this, absoluteIndex)),  
+      "onDelete": (r.isCustom ? this._deleteRecipe.bind(null, r.recipeId) : undefined),  
       "key": (r.recipeId)
-    })
+    });
+  },
 
-  _showRecipeViewer : (index) ->
-    recipeIds = _.chain @props.recipes
-      .pluck 'recipes'
+  _showRecipeViewer(index) {
+    const recipeIds = _.chain(this.props.recipes)
+      .pluck('recipes')
       .flatten()
-      .pluck 'recipeId'
-      .value()
+      .pluck('recipeId')
+      .value();
 
-    store.dispatch {
-      type : 'show-recipe-viewer'
-      recipeIds
+    return store.dispatch({
+      type : 'show-recipe-viewer',
+      recipeIds,
       index
-    }
+    });
+  },
 
-  _deleteRecipe : (recipeId) ->
-    store.dispatch {
-      type : 'delete-recipe'
+  _deleteRecipe(recipeId) {
+    return store.dispatch({
+      type : 'delete-recipe',
       recipeId
-    }
-}
+    });
+  }
+});
 
-RecipeListView = React.createClass {
-  displayName : 'RecipeListView'
+const RecipeListView = React.createClass({
+  displayName : 'RecipeListView',
 
-  propTypes : {}
+  propTypes : {},
 
   mixins : [
-    ReduxMixin {
-      filters     : [ 'recipeSearchTerm', 'baseLiquorFilter' ]
-      ingredients : 'ingredientsByTag'
+    ReduxMixin({
+      filters     : [ 'recipeSearchTerm', 'baseLiquorFilter' ],
+      ingredients : 'ingredientsByTag',
       ui          : 'favoritedRecipeIds'
-    }
-    DerivedValueMixin [
-      'filteredGroupedRecipes'
+    }),
+    DerivedValueMixin([
+      'filteredGroupedRecipes',
       'ingredientSplitsByRecipeId'
-    ]
+    ]),
     PureRenderMixin
-  ]
+  ],
 
-  render : ->
-    React.createElement("div", {"className": 'recipe-list-view fixed-header-footer'},
+  render() {
+    return React.createElement("div", {"className": 'recipe-list-view fixed-header-footer'},
       React.createElement(RecipeListHeader, null),
       React.createElement("div", {"className": 'fixed-content-pane', "ref": 'content'},
-        React.createElement(SearchBar, { \
-          "className": 'list-topper',  \
-          "initialValue": (@state.recipeSearchTerm),  \
-          "placeholder": 'Name or ingredient...',  \
-          "onChange": (@_onSearch),  \
+        React.createElement(SearchBar, { 
+          "className": 'list-topper',  
+          "initialValue": (this.state.recipeSearchTerm),  
+          "placeholder": 'Name or ingredient...',  
+          "onChange": (this._onSearch),  
           "ref": 'search'
         }),
-        React.createElement(RecipeList, { \
-          "recipes": (@state.filteredGroupedRecipes),  \
-          "ingredientsByTag": (@state.ingredientsByTag),  \
-          "ingredientSplitsByRecipeId": (@state.ingredientSplitsByRecipeId),  \
-          "favoritedRecipeIds": (@state.favoritedRecipeIds)
+        React.createElement(RecipeList, { 
+          "recipes": (this.state.filteredGroupedRecipes),  
+          "ingredientsByTag": (this.state.ingredientsByTag),  
+          "ingredientSplitsByRecipeId": (this.state.ingredientSplitsByRecipeId),  
+          "favoritedRecipeIds": (this.state.favoritedRecipeIds)
         })
       )
-    )
+    );
+  },
 
-  componentDidMount : ->
-    @_attemptScrollDown()
+  componentDidMount() {
+    return this._attemptScrollDown();
+  },
 
-  componentDidUpdate : (prevProps, prevState) ->
-    if not @refs.search.isFocused() and prevState.baseLiquorFilter != @state.baseLiquorFilter
-      @_attemptScrollDown()
-
-  _attemptScrollDown : _.debounce ->
-    @refs.content.scrollTop = stylingConstants.RECIPE_LIST_ITEM_HEIGHT - stylingConstants.RECIPE_LIST_HEADER_HEIGHT / 2
-
-  _onSearch : (searchTerm) ->
-    store.dispatch {
-      type : 'set-recipe-search-term'
-      searchTerm
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.refs.search.isFocused() && prevState.baseLiquorFilter !== this.state.baseLiquorFilter) {
+      return this._attemptScrollDown();
     }
+  },
 
-}
+  _attemptScrollDown : _.debounce(function() {
+    return this.refs.content.scrollTop = stylingConstants.RECIPE_LIST_ITEM_HEIGHT - (stylingConstants.RECIPE_LIST_HEADER_HEIGHT / 2);
+  }),
 
-module.exports = RecipeListView
+  _onSearch(searchTerm) {
+    return store.dispatch({
+      type : 'set-recipe-search-term',
+      searchTerm
+    });
+  }
+
+});
+
+module.exports = RecipeListView;

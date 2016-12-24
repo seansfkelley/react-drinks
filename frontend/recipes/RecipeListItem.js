@@ -1,43 +1,47 @@
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-List = require '../components/List'
+const List = require('../components/List');
 
-Difficulty = require '../Difficulty'
+const Difficulty = require('../Difficulty');
 
-RecipeListItem = React.createClass {
-  displayName : 'RecipeListItem'
+const RecipeListItem = React.createClass({
+  displayName : 'RecipeListItem',
 
-  propTypes :
-    recipeName : React.PropTypes.string.isRequired
-    difficulty : React.PropTypes.string
-    isMixable  : React.PropTypes.bool
-    onTouchTap : React.PropTypes.func
+  propTypes : {
+    recipeName : React.PropTypes.string.isRequired,
+    difficulty : React.PropTypes.string,
+    isMixable  : React.PropTypes.bool,
+    onTouchTap : React.PropTypes.func,
     onDelete   : React.PropTypes.func
+  },
 
-  mixins : [ PureRenderMixin ]
+  mixins : [ PureRenderMixin ],
 
-  getDefaultProps : -> {
+  getDefaultProps() { return {
     isMixable : true
-  }
+  }; },
 
-  render : ->
-    if @props.difficulty
-      difficultyNode = React.createElement("span", {"className": (classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty])},
-        (Difficulty.HUMAN_READABLE[@props.difficulty])
-      )
+  render() {
+    let difficultyNode;
+    if (this.props.difficulty) {
+      difficultyNode = React.createElement("span", {"className": (classnames('difficulty', Difficulty.CLASS_NAME[this.props.difficulty]))},
+        (Difficulty.HUMAN_READABLE[this.props.difficulty])
+      );
+    }
 
-    ListItemClass = if @props.onDelete? then List.DeletableItem else List.Item
+    const ListItemClass = (this.props.onDelete != null) ? List.DeletableItem : List.Item;
 
-    React.createElement(ListItemClass, { \
-      "className": (classnames 'recipe-list-item', { 'is-mixable' : @props.isMixable }),  \
-      "onTouchTap": (@props.onTouchTap),  \
-      "onDelete": (@props.onDelete)
+    return React.createElement(ListItemClass, { 
+      "className": (classnames('recipe-list-item', { 'is-mixable' : this.props.isMixable })),  
+      "onTouchTap": (this.props.onTouchTap),  
+      "onDelete": (this.props.onDelete)
     },
-      React.createElement("span", {"className": 'name'}, (@props.recipeName)),
+      React.createElement("span", {"className": 'name'}, (this.props.recipeName)),
       (difficultyNode)
-    )
-}
+    );
+  }
+});
 
-module.exports = RecipeListItem
+module.exports = RecipeListItem;

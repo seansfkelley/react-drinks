@@ -1,25 +1,27 @@
-React = require 'react'
+const React = require('react');
 
-definitions = require '../../../shared/definitions'
+const definitions = require('../../../shared/definitions');
 
-TitleBar = require '../../components/TitleBar'
+const TitleBar = require('../../components/TitleBar');
 
-RecipeView = require '../../recipes/RecipeView'
+const RecipeView = require('../../recipes/RecipeView');
 
-StandaloneRecipeView = React.createClass {
-  displayName : 'StandaloneRecipeView'
+const StandaloneRecipeView = React.createClass({
+  displayName : 'StandaloneRecipeView',
 
-  propTypes :
+  propTypes : {
     recipe : React.PropTypes.object.isRequired
+  },
 
-  render : ->
-    React.createElement("div", {"className": 'standalone-recipe'},
+  render() {
+    return React.createElement("div", {"className": 'standalone-recipe'},
       React.createElement("a", {"className": 'homepage-link', "href": (definitions.BASE_URL), "target": '_blank'},
         React.createElement(TitleBar, null, "Spirit Guide", React.createElement("i", {"className": 'fa fa-chevron-right'})
         )
       ),
-      React.createElement(RecipeView, {"recipe": (@props.recipe)})
-    )
-}
+      React.createElement(RecipeView, {"recipe": (this.props.recipe)})
+    );
+  }
+});
 
-module.exports = StandaloneRecipeView
+module.exports = StandaloneRecipeView;

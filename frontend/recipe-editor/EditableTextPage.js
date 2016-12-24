@@ -1,75 +1,82 @@
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-store = require '../store'
+const store = require('../store');
 
-ReduxMixin = require '../mixins/ReduxMixin'
+const ReduxMixin = require('../mixins/ReduxMixin');
 
-EditableRecipePage = require './EditableRecipePage'
+const EditableRecipePage = require('./EditableRecipePage');
 
-EditableTextPage = React.createClass {
-  displayName : 'EditableTextPage'
+const EditableTextPage = React.createClass({
+  displayName : 'EditableTextPage',
 
   mixins : [
-    ReduxMixin {
+    ReduxMixin({
       editableRecipe : [ 'instructions', 'notes' ]
-    }
-  ]
+    })
+  ],
 
-  propTypes :
-    onClose       : React.PropTypes.func.isRequired
-    onNext        : React.PropTypes.func
-    onPrevious    : React.PropTypes.func
+  propTypes : {
+    onClose       : React.PropTypes.func.isRequired,
+    onNext        : React.PropTypes.func,
+    onPrevious    : React.PropTypes.func,
     previousTitle : React.PropTypes.string
+  },
 
-  render : ->
-    React.createElement(EditableRecipePage, { \
-      "className": 'text-page',  \
-      "onClose": (@props.onClose),  \
-      "onPrevious": (@props.onPrevious),  \
-      "previousTitle": (@props.previousTitle)
+  render() {
+    return React.createElement(EditableRecipePage, { 
+      "className": 'text-page',  
+      "onClose": (this.props.onClose),  
+      "onPrevious": (this.props.onPrevious),  
+      "previousTitle": (this.props.previousTitle)
     },
       React.createElement("div", {"className": 'fixed-content-pane'},
-        React.createElement("textarea", { \
-          "className": 'editable-text-area',  \
-          "placeholder": 'Instructions...',  \
-          "onChange": (@_setInstructions),  \
-          "value": (@state.instructions),  \
+        React.createElement("textarea", { 
+          "className": 'editable-text-area',  
+          "placeholder": 'Instructions...',  
+          "onChange": (this._setInstructions),  
+          "value": (this.state.instructions),  
           "ref": 'instructions'
         }),
-        React.createElement("textarea", { \
-          "className": 'editable-text-area',  \
-          "placeholder": 'Notes (optional)...',  \
-          "onChange": (@_setNotes),  \
-          "value": (@state.notes),  \
+        React.createElement("textarea", { 
+          "className": 'editable-text-area',  
+          "placeholder": 'Notes (optional)...',  
+          "onChange": (this._setNotes),  
+          "value": (this.state.notes),  
           "ref": 'notes'
         }),
-        React.createElement("div", {"className": (classnames 'next-button', { 'disabled' : not @_isEnabled() }), "onTouchTap": (@_nextIfEnabled)},
+        React.createElement("div", {"className": (classnames('next-button', { 'disabled' : !this._isEnabled() })), "onTouchTap": (this._nextIfEnabled)},
           React.createElement("span", {"className": 'next-text'}, "Next"),
           React.createElement("i", {"className": 'fa fa-arrow-right'})
         )
       )
-    )
+    );
+  },
 
-  _isEnabled : ->
-    return @state.instructions.length
+  _isEnabled() {
+    return this.state.instructions.length;
+  },
 
-  _nextIfEnabled : ->
-    if @_isEnabled()
-      @props.onNext()
+  _nextIfEnabled() {
+    if (this._isEnabled()) {
+      return this.props.onNext();
+    }
+  },
 
-  _setInstructions : (e) ->
-    store.dispatch {
-      type         : 'set-instructions'
+  _setInstructions(e) {
+    return store.dispatch({
+      type         : 'set-instructions',
       instructions : e.target.value
-    }
+    });
+  },
 
-  _setNotes : (e) ->
-    store.dispatch {
-      type  : 'set-notes'
+  _setNotes(e) {
+    return store.dispatch({
+      type  : 'set-notes',
       notes : e.target.value
-    }
-}
+    });
+  }
+});
 
-module.exports = EditableTextPage
+module.exports = EditableTextPage;

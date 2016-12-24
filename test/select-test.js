@@ -1,43 +1,47 @@
-select = require '../frontend/store/derived/select'
+const select = require('../frontend/store/derived/select');
 
-describe 'select', ->
-  it 'should shallowly select non-primitive items', ->
-    obj = {}
-    arr = []
-    result = select({
-      one : obj
+describe('select', function() {
+  it('should shallowly select non-primitive items', function() {
+    const obj = {};
+    const arr = [];
+    const result = select({
+      one : obj,
       two : arr
     }, {
-      a : 'one'
+      a : 'one',
       b : 'two'
-    })
-    result.should.have.property 'a', obj
-    result.should.have.property 'b', arr
+    });
+    result.should.have.property('a', obj);
+    return result.should.have.property('b', arr);
+  });
 
-  it 'should select nested properties using a dot-separated syntax', ->
+  it('should select nested properties using a dot-separated syntax', () =>
     select({
-      top :
-        middle :
+      top : {
+        middle : {
           bottom : 1337
+        }
+      }
     }, {
       value : 'top.middle.bottom'
-    }).should.deep.equal {
+    }).should.deep.equal({
       value : 1337
-    }
+    }));
 
-  it 'should select multiple values from the same source field', ->
-    field = {
-      one   : 1
-      two   : 2
-      three :
+  return it('should select multiple values from the same source field', function() {
+    const field = {
+      one   : 1,
+      two   : 2,
+      three : {
         nested : 'stuff'
-    }
-    select({ field }, {
-      everything   : 'field'
-      number       : 'field.one'
+      }
+    };
+    return select({ field }, {
+      everything   : 'field',
+      number       : 'field.one',
       deeplyNested : 'field.three.nested'
-    }).should.deep.equal {
-      everything   : field
-      number       : 1
+    }).should.deep.equal({
+      everything   : field,
+      number       : 1,
       deeplyNested : 'stuff'
-    }
+    });});});

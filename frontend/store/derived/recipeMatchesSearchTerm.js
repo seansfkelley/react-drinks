@@ -1,33 +1,39 @@
-_ = require 'lodash'
+const _ = require('lodash');
 
-assert = require '../../../shared/tinyassert'
+const assert = require('../../../shared/tinyassert');
 
-memoize = require './memoize'
+const memoize = require('./memoize');
 
-WHITESPACE_REGEX = /\s+/g
+const WHITESPACE_REGEX = /\s+/g;
 
-# SO INEFFICIENT.
-recipeMatchesSearchTerm = ({ recipe, searchTerm, ingredientsByTag }) ->
-  searchTerm ?= ''
+// SO INEFFICIENT.
+const recipeMatchesSearchTerm = function({ recipe, searchTerm, ingredientsByTag }) {
+  if (searchTerm == null) { searchTerm = ''; }
 
-  assert recipe
-  assert ingredientsByTag
+  assert(recipe);
+  assert(ingredientsByTag);
 
-  if not searchTerm.trim()
-    return false
+  if (!searchTerm.trim()) {
+    return false;
+  }
 
-  terms = _.compact searchTerm.trim().split(WHITESPACE_REGEX)
+  const terms = _.compact(searchTerm.trim().split(WHITESPACE_REGEX));
 
-  searchable = _.chain recipe.ingredients
-    .pluck 'tag'
-    .map (t) => ingredientsByTag[t]?.searchable
+  const searchable = _.chain(recipe.ingredients)
+    .pluck('tag')
+    .map(t => __guard__(ingredientsByTag[t], x => x.searchable))
     .compact()
     .flatten()
-    .concat recipe.canonicalName.split(WHITESPACE_REGEX)
-    .value()
+    .concat(recipe.canonicalName.split(WHITESPACE_REGEX))
+    .value();
 
-  return _.all terms, (t) -> _.any(searchable, (s) -> s.indexOf(t) != -1)
+  return _.all(terms, t => _.any(searchable, s => s.indexOf(t) !== -1));
+};
 
-module.exports = _.extend recipeMatchesSearchTerm, {
-  memoized : memoize recipeMatchesSearchTerm
+module.exports = _.extend(recipeMatchesSearchTerm, {
+  memoized : memoize(recipeMatchesSearchTerm)
+});
+
+function __guard__(value, transform) {
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
 }

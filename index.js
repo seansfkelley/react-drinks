@@ -1,1 +1,1 @@
-require('./backend').start()
+require('./backend').start();

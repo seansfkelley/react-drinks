@@ -1,72 +1,84 @@
-recipeMatchesSearchTerm = require '../frontend/store/derived/recipeMatchesSearchTerm'
+const recipeMatchesSearchTerm = require('../frontend/store/derived/recipeMatchesSearchTerm');
 
-searchableIngredient = (tag, searchable...) ->
-  return { tag, searchable }
+const searchableIngredient = (tag, ...searchable) => ({ tag, searchable });
 
-searchableRecipe = (canonicalName, ingredients...) ->
-  return { canonicalName, ingredients }
+const searchableRecipe = (canonicalName, ...ingredients) => ({ canonicalName, ingredients });
 
-makeIngredientsByTag = (array) ->
-  ingredientsByTag = {}
-  for i in array
-    ingredientsByTag[i.tag] = i
-  return ingredientsByTag
+const makeIngredientsByTag = function(array) {
+  const ingredientsByTag = {};
+  for (let i of array) {
+    ingredientsByTag[i.tag] = i;
+  }
+  return ingredientsByTag;
+};
 
-describe 'recipeMatchesSearchTerm', ->
-  ONE = searchableIngredient 'ingredient-1', '1', 'one'
-  TWO = searchableIngredient 'ingredient-2', '2', 'two'
+describe('recipeMatchesSearchTerm', function() {
+  const ONE = searchableIngredient('ingredient-1', '1', 'one');
+  const TWO = searchableIngredient('ingredient-2', '2', 'two');
 
-  ingredientsByTag = makeIngredientsByTag [ ONE, TWO ]
+  const ingredientsByTag = makeIngredientsByTag([ ONE, TWO ]);
 
-  context 'should return true', ->
-    context 'when given a single-word search term', ->
-      it 'that is a substring of the recipe name', ->
+  context('should return true', function() {
+    context('when given a single-word search term', function() {
+      it('that is a substring of the recipe name', () =>
         recipeMatchesSearchTerm({
-          recipe     : searchableRecipe('recipe name')
-          searchTerm : 'recipe'
+          recipe     : searchableRecipe('recipe name'),
+          searchTerm : 'recipe',
           ingredientsByTag
         }).should.be.true
+      );
 
-      it 'that is a substring of a searchable term of a recipe ingredient', ->
+      return it('that is a substring of a searchable term of a recipe ingredient', () =>
         recipeMatchesSearchTerm({
-          recipe     : searchableRecipe('recipe name', ONE)
-          searchTerm : 'one'
+          recipe     : searchableRecipe('recipe name', ONE),
+          searchTerm : 'one',
           ingredientsByTag
         }).should.be.true
+      );
+    });
 
-    context 'when given a space-delimited search term', ->
-      it 'where all space-delimited terms are substrings of searchable terms of one ingredient', ->
+    return context('when given a space-delimited search term', function() {
+      it('where all space-delimited terms are substrings of searchable terms of one ingredient', () =>
         recipeMatchesSearchTerm({
-          recipe     : searchableRecipe('recipe name', ONE)
-          searchTerm : 'one 1'
+          recipe     : searchableRecipe('recipe name', ONE),
+          searchTerm : 'one 1',
           ingredientsByTag
         }).should.be.true
+      );
 
-      it 'where all space-delimited terms are substrings of searchable terms of multiple ingredients', ->
+      it('where all space-delimited terms are substrings of searchable terms of multiple ingredients', () =>
         recipeMatchesSearchTerm({
-          recipe     : searchableRecipe('recipe name', ONE, TWO)
-          searchTerm : 'one two'
+          recipe     : searchableRecipe('recipe name', ONE, TWO),
+          searchTerm : 'one two',
           ingredientsByTag
         }).should.be.true
+      );
 
-      it 'where all space-delimited terms are substrings of a searchable term or the title', ->
+      return it('where all space-delimited terms are substrings of a searchable term or the title', () =>
         recipeMatchesSearchTerm({
-          recipe     : searchableRecipe('recipe name', ONE)
-          searchTerm : 'one name'
+          recipe     : searchableRecipe('recipe name', ONE),
+          searchTerm : 'one name',
           ingredientsByTag
         }).should.be.true
+      );
+    });
+  });
 
-  context 'should return false', ->
-    it 'when given a string of all whitespace', ->
+  return context('should return false', function() {
+    it('when given a string of all whitespace', () =>
       recipeMatchesSearchTerm({
-        recipe     : searchableRecipe('recipe name')
-        searchTerm :  ' '
+        recipe     : searchableRecipe('recipe name'),
+        searchTerm :  ' ',
         ingredientsByTag
       }).should.be.false
+    );
 
-    it 'when given a space-delimited search term where only one of the two terms are substrings of a searchable term', ->
+    return it('when given a space-delimited search term where only one of the two terms are substrings of a searchable term', () =>
       recipeMatchesSearchTerm({
-        recipe     : searchableRecipe('recipe name', ONE, TWO)
-        searchTerm : 'one three'
+        recipe     : searchableRecipe('recipe name', ONE, TWO),
+        searchTerm : 'one three',
         ingredientsByTag
       }).should.be.false
+    );
+  });
+});

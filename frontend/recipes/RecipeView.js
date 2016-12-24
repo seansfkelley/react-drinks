@@ -1,124 +1,139 @@
-_               = require 'lodash'
-React           = require 'react'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
-classnames      = require 'classnames'
+const _               = require('lodash');
+const React           = require('react');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
+const classnames      = require('classnames');
 
-utils       = require '../utils'
-definitions = require '../../shared/definitions'
+const utils       = require('../utils');
+const definitions = require('../../shared/definitions');
 
-ReduxMixin = require '../mixins/ReduxMixin'
+const ReduxMixin = require('../mixins/ReduxMixin');
 
-TitleBar = require '../components/TitleBar'
+const TitleBar = require('../components/TitleBar');
 
-MeasuredIngredient = require './MeasuredIngredient'
+const MeasuredIngredient = require('./MeasuredIngredient');
 
-IS_IPHONE_IOS_8 = window.navigator.userAgent.indexOf('iPhone OS 8') != -1
+const IS_IPHONE_IOS_8 = window.navigator.userAgent.indexOf('iPhone OS 8') !== -1;
 
-IngredientCategory = {
-  MISSING    : 'missing'
-  SUBSTITUTE : 'substitute'
+const IngredientCategory = {
+  MISSING    : 'missing',
+  SUBSTITUTE : 'substitute',
   AVAILABLE  : 'available'
-}
+};
 
-IconButton = ({ icon, text, onTouchTap }) ->
+const IconButton = ({ icon, text, onTouchTap }) =>
   React.createElement("div", {"className": 'icon-button', "onTouchTap": (onTouchTap)},
-    React.createElement("i", {"className": (classnames 'fa', icon)}),
+    React.createElement("i", {"className": (classnames('fa', icon))}),
     React.createElement("div", {"className": 'label'}, (text))
   )
+;
 
 IconButton.propTypes = {
-  icon       : React.PropTypes.string
-  text       : React.PropTypes.string
+  icon       : React.PropTypes.string,
+  text       : React.PropTypes.string,
   onTouchTap : React.PropTypes.func
-}
+};
 
-RecipeView = React.createClass {
-  displayName : 'RecipeView'
+const RecipeView = React.createClass({
+  displayName : 'RecipeView',
 
-  mixins : [ PureRenderMixin ]
+  mixins : [ PureRenderMixin ],
 
-  propTypes :
-    recipe           : React.PropTypes.object.isRequired
-    ingredientSplits : React.PropTypes.object
-    ingredientsByTag : React.PropTypes.object
-    onClose          : React.PropTypes.func
-    onFavorite       : React.PropTypes.func
-    onEdit           : React.PropTypes.func
-    isFavorited      : React.PropTypes.bool
+  propTypes : {
+    recipe           : React.PropTypes.object.isRequired,
+    ingredientSplits : React.PropTypes.object,
+    ingredientsByTag : React.PropTypes.object,
+    onClose          : React.PropTypes.func,
+    onFavorite       : React.PropTypes.func,
+    onEdit           : React.PropTypes.func,
+    isFavorited      : React.PropTypes.bool,
     isShareable      : React.PropTypes.bool
+  },
 
-  getDefaultProps : ->
+  getDefaultProps() {
     return {
       isShareable : false
+    };
+  },
+
+  render() {
+    let header, ingredientNodes, recipeNotes, recipeUrl;
+    if (this.props.ingredientSplits != null) {
+      ingredientNodes = _.chain(IngredientCategory)
+        .invert()
+        .mapValues((_, key) => this.props.ingredientSplits[key])
+        // TODO: The order these sections end up in is arbitrary; we should enforce it.
+        .map(this._renderCategory)
+        .flatten()
+        .value();
+    } else {
+      ingredientNodes = _.map(this.props.recipe.ingredients, i =>
+        // This fucked-up key is because sometimes, the same tag will appear twice (e.g. Penicillin's two scotches).
+        React.createElement(MeasuredIngredient, Object.assign({},  i, {"key": (`${i.tag} ${i.displayIngredient}`)}))
+      );
     }
 
-  render : ->
-    if @props.ingredientSplits?
-      ingredientNodes = _.chain IngredientCategory
-        .invert()
-        .mapValues (_, key) => @props.ingredientSplits[key]
-        # TODO: The order these sections end up in is arbitrary; we should enforce it.
-        .map @_renderCategory
-        .flatten()
-        .value()
-    else
-      ingredientNodes = _.map @props.recipe.ingredients, (i) ->
-        # This fucked-up key is because sometimes, the same tag will appear twice (e.g. Penicillin's two scotches).
-        React.createElement(MeasuredIngredient, Object.assign({},  i, {"key": ("#{i.tag} #{i.displayIngredient}")}))
-
-    if @props.recipe.notes?
+    if (this.props.recipe.notes != null) {
       recipeNotes =
         React.createElement("div", {"className": 'recipe-notes'},
           React.createElement("div", {"className": 'text'},
-            (utils.fractionify @props.recipe.notes)
+            (utils.fractionify(this.props.recipe.notes))
           )
-        )
+        );
+    }
 
-    if @props.recipe.source? and @props.recipe.url?
-      recipeUrl = React.createElement("a", {"className": 'recipe-url', "href": (@props.recipe.url), "target": '_blank'},
+    if ((this.props.recipe.source != null) && (this.props.recipe.url != null)) {
+      recipeUrl = React.createElement("a", {"className": 'recipe-url', "href": (this.props.recipe.url), "target": '_blank'},
         React.createElement("span", {"className": 'lead-in'}, "source:"),
-        (@props.recipe.source),
+        (this.props.recipe.source),
         React.createElement("i", {"className": 'fa fa-external-link'})
-      )
+      );
+    }
 
-    instructionLines = _.chain @props.recipe.instructions.split('\n')
+    const instructionLines = _.chain(this.props.recipe.instructions.split('\n'))
       .compact()
-      .map (l, i) -> React.createElement("li", {"className": 'text-line', "key": (i)}, (utils.fractionify l))
-      .value()
-    recipeInstructions = React.createElement("ol", {"className": 'recipe-instructions'}, (instructionLines))
+      .map((l, i) => React.createElement("li", {"className": 'text-line', "key": (i)}, (utils.fractionify(l))))
+      .value();
+    const recipeInstructions = React.createElement("ol", {"className": 'recipe-instructions'}, (instructionLines));
 
-    if @props.onClose?
-      header = React.createElement(TitleBar, {"className": 'fixed-header', "rightIcon": 'fa-times', "rightIconOnTouchTap": (@props.onClose)},
-        (@props.recipe.name)
-      )
-    else
-      header = React.createElement(TitleBar, {"className": 'fixed-header'}, (@props.recipe.name))
+    if (this.props.onClose != null) {
+      header = React.createElement(TitleBar, {"className": 'fixed-header', "rightIcon": 'fa-times', "rightIconOnTouchTap": (this.props.onClose)},
+        (this.props.recipe.name)
+      );
+    } else {
+      header = React.createElement(TitleBar, {"className": 'fixed-header'}, (this.props.recipe.name));
+    }
 
-    footerButtons = []
+    const footerButtons = [];
 
-    if @props.onEdit
-      footerButtons.push React.createElement(IconButton, { \
-        "key": 'edit',  \
-        "icon": 'fa-pencil-square-o',  \
-        "text": 'Edit',  \
-        "onTouchTap": (@_edit)
+    if (this.props.onEdit) {
+      footerButtons.push(React.createElement(IconButton, { 
+        "key": 'edit',  
+        "icon": 'fa-pencil-square-o',  
+        "text": 'Edit',  
+        "onTouchTap": (this._edit)
       })
-    if @props.isShareable
-      footerButtons.push React.createElement(IconButton, { \
-        "key": 'share',  \
-        "icon": 'fa-share-square-o',  \
-        "text": 'Share',  \
-        "onTouchTap": (@_share)
+      );
+    }
+    if (this.props.isShareable) {
+      footerButtons.push(React.createElement(IconButton, { 
+        "key": 'share',  
+        "icon": 'fa-share-square-o',  
+        "text": 'Share',  
+        "onTouchTap": (this._share)
       })
-    if @props.onFavorite
-      footerButtons.push React.createElement(IconButton, { \
-        "key": 'favorite',  \
-        "icon": (classnames { 'fa-star' : @props.isFavorited, 'fa-star-o' : not @props.isFavorited }),  \
-        "text": 'Favorite',  \
-        "onTouchTap": (@_favorite)
+      );
+    }
+    if (this.props.onFavorite) {
+      footerButtons.push(React.createElement(IconButton, { 
+        "key": 'favorite',  
+        "icon": (classnames({ 'fa-star' : this.props.isFavorited, 'fa-star-o' : !this.props.isFavorited })),  
+        "text": 'Favorite',  
+        "onTouchTap": (this._favorite)
       })
+      );
+    }
 
-    React.createElement("div", {"className": 'recipe-view fixed-header-footer'},
+    return React.createElement("div", {"className": 'recipe-view fixed-header-footer'},
       (header),
       React.createElement("div", {"className": 'recipe-description fixed-content-pane'},
         React.createElement("div", {"className": 'recipe-ingredients'},
@@ -128,36 +143,46 @@ RecipeView = React.createClass {
         (recipeNotes),
         (recipeUrl)
       ),
-      (if footerButtons.length then React.createElement("div", {"className": 'fixed-footer'}, (footerButtons)))
-    )
+      (footerButtons.length ? React.createElement("div", {"className": 'fixed-footer'}, (footerButtons)) : undefined)
+    );
+  },
 
-  _edit : ->
-    @props.onEdit @props.recipe
+  _edit() {
+    return this.props.onEdit(this.props.recipe);
+  },
 
-  _share : ->
-    window.open "sms:&body=#{@props.recipe.name} #{definitions.BASE_URL}/recipe/#{@props.recipe.recipeId}"
+  _share() {
+    return window.open(`sms:&body=${this.props.recipe.name} ${definitions.BASE_URL}/recipe/${this.props.recipe.recipeId}`);
+  },
 
-  _favorite : ->
-    @props.onFavorite @props.recipe, not @props.isFavorited
+  _favorite() {
+    return this.props.onFavorite(this.props.recipe, !this.props.isFavorited);
+  },
 
-  _renderCategory : (measuredIngredients, category) ->
-    if measuredIngredients.length == 0
-      return []
-    else
-      if category == IngredientCategory.SUBSTITUTE
-        measuredIngredients = _.map measuredIngredients, (i) ->
-          return _.defaults {
-            isSubstituted      : true
+  _renderCategory(measuredIngredients, category) {
+    if (measuredIngredients.length === 0) {
+      return [];
+    } else {
+      if (category === IngredientCategory.SUBSTITUTE) {
+        measuredIngredients = _.map(measuredIngredients, i =>
+          _.defaults({
+            isSubstituted      : true,
             displaySubstitutes : i.have
-          }, i.need
-      else if category == IngredientCategory.MISSING
-        measuredIngredients = _.map measuredIngredients, (i) =>
-          return _.defaults {
-            isMissing  : true
-            difficulty : @props.ingredientsByTag[i.tag].difficulty
-          }, i
+          }, i.need)
+        );
+      } else if (category === IngredientCategory.MISSING) {
+        measuredIngredients = _.map(measuredIngredients, i => {
+          return _.defaults({
+            isMissing  : true,
+            difficulty : this.props.ingredientsByTag[i.tag].difficulty
+          }, i);
+        }
+        );
+      }
 
-      return _.map measuredIngredients, (i) -> React.createElement(MeasuredIngredient, Object.assign({},  i, {"key": ("#{i.tag} #{i.displayIngredient}")}))
-}
+      return _.map(measuredIngredients, i => React.createElement(MeasuredIngredient, Object.assign({},  i, {"key": (`${i.tag} ${i.displayIngredient}`)})));
+    }
+  }
+});
 
-module.exports = RecipeView
+module.exports = RecipeView;

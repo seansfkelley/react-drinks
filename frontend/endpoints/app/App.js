@@ -1,103 +1,114 @@
-React      = require 'react'
-classnames = require 'classnames'
+const React      = require('react');
+const classnames = require('classnames');
 
-store = require '../../store'
+const store = require('../../store');
 
-ReduxMixin = require '../../mixins/ReduxMixin'
+const ReduxMixin = require('../../mixins/ReduxMixin');
 
-RecipeListView     = require '../../recipes/RecipeListView'
-SwipableRecipeView = require '../../recipes/SwipableRecipeView'
-IngredientsSidebar = require '../../recipes/IngredientsSidebar'
-RecipeListSelector = require '../../recipes/RecipeListSelector'
-EditableRecipeView = require '../../recipe-editor/EditableRecipeView'
+const RecipeListView     = require('../../recipes/RecipeListView');
+const SwipableRecipeView = require('../../recipes/SwipableRecipeView');
+const IngredientsSidebar = require('../../recipes/IngredientsSidebar');
+const RecipeListSelector = require('../../recipes/RecipeListSelector');
+const EditableRecipeView = require('../../recipe-editor/EditableRecipeView');
 
-Overlay = require '../../components/Overlay'
+const Overlay = require('../../components/Overlay');
 
-App = React.createClass {
-  displayName : 'App'
+const App = React.createClass({
+  displayName : 'App',
 
-  propTypes : {}
+  propTypes : {},
 
   mixins : [
-    ReduxMixin {
-      recipes : 'allRecipes'
+    ReduxMixin({
+      recipes : 'allRecipes',
       filters : [
         'selectedRecipeList'
-      ]
+      ],
       ui      : [
-        'favoritedRecipeIds'
-        'showingRecipeViewer'
-        'showingRecipeEditor'
-        'showingSidebar'
+        'favoritedRecipeIds',
+        'showingRecipeViewer',
+        'showingRecipeEditor',
+        'showingSidebar',
         'showingListSelector'
       ]
-    }
-  ]
+    })
+  ],
 
-  render : ->
-    anyOverlayVisible = _.any [
-      @state.showingRecipeViewer
-      @state.showingRecipeEditor
-      @state.showingSidebar
-      @state.showingListSelector
-    ]
+  render() {
+    const anyOverlayVisible = _.any([
+      this.state.showingRecipeViewer,
+      this.state.showingRecipeEditor,
+      this.state.showingSidebar,
+      this.state.showingListSelector
+    ]);
 
-    React.createElement("div", {"className": 'app-event-wrapper', "onTouchStart": (@_deselectActiveElement)},
+    return React.createElement("div", {"className": 'app-event-wrapper', "onTouchStart": (this._deselectActiveElement)},
       React.createElement(RecipeListView, null),
-      React.createElement("div", {"className": (classnames 'overlay-background', { 'visible' : anyOverlayVisible}), "onTouchStart": (@_closeOverlays)}),
-      React.createElement(Overlay, {"type": 'modal', "isVisible": (@state.showingRecipeViewer)},
-        React.createElement(SwipableRecipeView, { \
-          "onClose": (@_hideRecipeViewer)
+      React.createElement("div", {"className": (classnames('overlay-background', { 'visible' : anyOverlayVisible})), "onTouchStart": (this._closeOverlays)}),
+      React.createElement(Overlay, {"type": 'modal', "isVisible": (this.state.showingRecipeViewer)},
+        React.createElement(SwipableRecipeView, { 
+          "onClose": (this._hideRecipeViewer)
         })
       ),
-      React.createElement(Overlay, {"type": 'pushover', "isVisible": (@state.showingSidebar)},
-        React.createElement(IngredientsSidebar, { \
-          "onClose": (@_hideSidebar),  \
+      React.createElement(Overlay, {"type": 'pushover', "isVisible": (this.state.showingSidebar)},
+        React.createElement(IngredientsSidebar, { 
+          "onClose": (this._hideSidebar),  
           "ref": 'ingredientsSidebar'
         })
       ),
-      React.createElement(Overlay, {"type": 'flyup', "isVisible": (@state.showingRecipeEditor)},
-        React.createElement(EditableRecipeView, { \
-          "onClose": (@_hideRecipeEditor)
+      React.createElement(Overlay, {"type": 'flyup', "isVisible": (this.state.showingRecipeEditor)},
+        React.createElement(EditableRecipeView, { 
+          "onClose": (this._hideRecipeEditor)
         })
       ),
-      React.createElement(Overlay, {"type": 'modal', "isVisible": (@state.showingListSelector)},
-        React.createElement(RecipeListSelector, { \
-          "currentType": (@state.selectedRecipeList),  \
-          "onClose": (@_hideListSelector)
+      React.createElement(Overlay, {"type": 'modal', "isVisible": (this.state.showingListSelector)},
+        React.createElement(RecipeListSelector, { 
+          "currentType": (this.state.selectedRecipeList),  
+          "onClose": (this._hideListSelector)
         })
       )
-    )
+    );
+  },
 
-  _deselectActiveElement : ->
-    document.activeElement?.blur()
+  _deselectActiveElement() {
+    return __guard__(document.activeElement, x => x.blur());
+  },
 
-  _hideRecipeViewer : ->
-    store.dispatch {
+  _hideRecipeViewer() {
+    return store.dispatch({
       type : 'hide-recipe-viewer'
-    }
+    });
+  },
 
-  _hideSidebar : ->
-    store.dispatch {
+  _hideSidebar() {
+    return store.dispatch({
       type : 'hide-sidebar'
-    }
+    });
+  },
 
-  _hideRecipeEditor : ->
-    store.dispatch {
+  _hideRecipeEditor() {
+    return store.dispatch({
       type : 'hide-recipe-editor'
-    }
+    });
+  },
 
-  _hideListSelector : ->
-    store.dispatch {
+  _hideListSelector() {
+    return store.dispatch({
       type : 'hide-list-selector'
-    }
+    });
+  },
 
-  _closeOverlays : ->
-    @refs.ingredientsSidebar.forceClose()
-    @_hideRecipeViewer()
-    @_hideRecipeEditor()
-    @_hideListSelector()
+  _closeOverlays() {
+    this.refs.ingredientsSidebar.forceClose();
+    this._hideRecipeViewer();
+    this._hideRecipeEditor();
+    return this._hideListSelector();
+  }
 
+});
+
+module.exports = App;
+
+function __guard__(value, transform) {
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
 }
-
-module.exports = App

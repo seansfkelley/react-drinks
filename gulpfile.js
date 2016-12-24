@@ -1,138 +1,148 @@
-_            = require 'lodash'
-gulp         = require 'gulp'
-gulpif       = require 'gulp-if'
-rename       = require 'gulp-rename'
-replace      = require 'gulp-replace'
-stylus       = require 'gulp-stylus'
-postcss      = require 'gulp-postcss'
-sourcemaps   = require 'gulp-sourcemaps'
-concat       = require 'gulp-concat'
-uglify       = require 'gulp-uglify'
-minifyCss    = require 'gulp-minify-css'
-notify       = require 'gulp-notify'
-livereload   = require 'gulp-livereload'
-filter       = require 'gulp-filter'
-browserify   = require 'browserify'
-watchify     = require 'watchify'
-buffer       = require 'vinyl-buffer'
-sourceStream = require 'vinyl-source-stream'
-autoprefixer = require 'autoprefixer-core'
+const _            = require('lodash');
+const gulp         = require('gulp');
+const gulpif       = require('gulp-if');
+const rename       = require('gulp-rename');
+const replace      = require('gulp-replace');
+const stylus       = require('gulp-stylus');
+const postcss      = require('gulp-postcss');
+const sourcemaps   = require('gulp-sourcemaps');
+const concat       = require('gulp-concat');
+const uglify       = require('gulp-uglify');
+const minifyCss    = require('gulp-minify-css');
+const notify       = require('gulp-notify');
+const livereload   = require('gulp-livereload');
+const filter       = require('gulp-filter');
+const browserify   = require('browserify');
+const watchify     = require('watchify');
+const buffer       = require('vinyl-buffer');
+const sourceStream = require('vinyl-source-stream');
+const autoprefixer = require('autoprefixer-core');
 
-IS_PROD = process.env.NODE_ENV == 'production'
+const IS_PROD = process.env.NODE_ENV === 'production';
 
-LIBRARY_CSS_PATHS = [
-  'font-awesome/css/font-awesome.css'
+const LIBRARY_CSS_PATHS = [
+  'font-awesome/css/font-awesome.css',
   'react-draggable/lib/styles.css'
-]
+];
 
-SRC_PATHS =
-  scripts : [
-    source      : './frontend/endpoints/app/app-init.coffee'
+const SRC_PATHS = {
+  scripts : [{
+    source      : './frontend/endpoints/app/app-init.coffee',
     destination : 'app-init.js'
-  ,
-    source      : './frontend/endpoints/recipe/recipe-init.coffee'
+  }
+  , {
+    source      : './frontend/endpoints/recipe/recipe-init.coffee',
     destination : 'recipe-init.js'
-  ]
+  }
+  ],
   styles : [
     './styles/index.styl'
-  ].concat _.map(LIBRARY_CSS_PATHS, (p) -> './node_modules/' + p)
+  ].concat(_.map(LIBRARY_CSS_PATHS, p => `./node_modules/${p}`)),
   styleWatch : [
     './styles/**/*.styl'
-  ]
+  ],
   fonts : [
-    './fonts/**.*'
+    './fonts/**.*',
     './node_modules/font-awesome/fonts/**.*'
-  ]
+  ],
   img : [
     './img/**.*'
   ]
+};
 
-copyAssets = ->
-  gulp.src SRC_PATHS.fonts
-    .pipe gulp.dest './.dist/fonts'
+const copyAssets = function() {
+  gulp.src(SRC_PATHS.fonts)
+    .pipe(gulp.dest('./.dist/fonts'));
 
-  gulp.src SRC_PATHS.img
-    .pipe gulp.dest './.dist/img'
+  return gulp.src(SRC_PATHS.img)
+    .pipe(gulp.dest('./.dist/img'));
+};
 
-buildSingleScript  = ({ source, destination, watch, dieOnError }) ->
-  bundler = browserify source, {
-    extensions   : [ '.coffee', '.ts', '.tsx' ]
-    debug        : true
-    cache        : {}
-    packageCache : {}
-    fullPaths    : watch
-    plugin       : [ require 'tsify' ]
+const buildSingleScript  = function({ source, destination, watch, dieOnError }) {
+  let bundler = browserify(source, {
+    extensions   : [ '.coffee', '.ts', '.tsx' ],
+    debug        : true,
+    cache        : {},
+    packageCache : {},
+    fullPaths    : watch,
+    plugin       : [ require('tsify') ]
+  });
+  if (watch) {
+    bundler = watchify(bundler);
   }
-  if watch
-    bundler = watchify bundler
 
-  # https://github.com/substack/node-browserify/issues/1124
-  bundler.transform require 'coffeeify'
+  // https://github.com/substack/node-browserify/issues/1124
+  bundler.transform(require('coffeeify'));
 
-  rebundle = ->
-    b = bundler.bundle()
+  const rebundle = function() {
+    let b = bundler.bundle();
 
-    if not dieOnError
-      b = b.on 'error', notify.onError {
-        title : 'Browserify Error'
+    if (!dieOnError) {
+      b = b.on('error', notify.onError({
+        title : 'Browserify Error',
         sound : 'Sosumi'
-      }
+      }));
+    }
 
     return b
-      .pipe sourceStream destination
-      .pipe buffer()
-      .pipe sourcemaps.init { loadMaps : true }
-      .pipe gulpif IS_PROD, uglify()
-      .pipe notify {
-        title   : 'Finished compiling Javascript'
+      .pipe(sourceStream(destination))
+      .pipe(buffer())
+      .pipe(sourcemaps.init({ loadMaps : true }))
+      .pipe(gulpif(IS_PROD, uglify()))
+      .pipe(notify({
+        title   : 'Finished compiling Javascript',
         message : '<%= file.relative %>'
-      }
-      .pipe sourcemaps.write './'
-      .pipe gulp.dest './.dist'
-      .pipe filter [ '*', '!*.map' ]
-      .pipe livereload()
+      }))
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./.dist'))
+      .pipe(filter([ '*', '!*.map' ]))
+      .pipe(livereload());
+  };
 
-  bundler.on 'update', rebundle
-  rebundle()
+  bundler.on('update', rebundle);
+  return rebundle();
+};
 
-buildScripts = (watch = false, dieOnError = false) ->
-  for { source, destination } in SRC_PATHS.scripts
-    buildSingleScript { source, destination, watch, dieOnError }
-  return # for loop
+const buildScripts = function(watch = false, dieOnError = false) {
+  for (let { source, destination } of SRC_PATHS.scripts) {
+    buildSingleScript({ source, destination, watch, dieOnError });
+  } // for loop
+};
 
-buildStyles = ->
-  gulp.src SRC_PATHS.styles
-    .pipe sourcemaps.init { loadMaps : true }
-    .pipe stylus()
-    # TODO: Why doesn't this abort the stream like the Browserify one does?
-    .on 'error', notify.onError {
-      title : 'Stylus Error'
+const buildStyles = () =>
+  gulp.src(SRC_PATHS.styles)
+    .pipe(sourcemaps.init({ loadMaps : true }))
+    .pipe(stylus())
+    // TODO: Why doesn't this abort the stream like the Browserify one does?
+    .on('error', notify.onError({
+      title : 'Stylus Error',
       sound : 'Sosumi'
-    }
-    .pipe postcss [
+    }))
+    .pipe(postcss([
       autoprefixer()
-    ]
-    .pipe concat 'all-styles.css'
-    .pipe replace '../fonts/', '/assets/fonts/'
-    .pipe gulpif IS_PROD, minifyCss()
-    .pipe notify {
-      title   : 'Finished compiling CSS'
-      message : '<%= file.relative %>'
+    ]))
+    .pipe(concat('all-styles.css'))
+    .pipe(replace('../fonts/', '/assets/fonts/'))
+    .pipe(gulpif(IS_PROD, minifyCss()))
+    .pipe(notify({
+      title   : 'Finished compiling CSS',
+      message : '<%= file.relative %>',
       sound   : 'Glass'
-    }
-    .pipe sourcemaps.write './'
-    .pipe gulp.dest './.dist'
-    .pipe filter [ '*', '!*.map' ]
-    .pipe livereload()
+    }))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./.dist'))
+    .pipe(filter([ '*', '!*.map' ]))
+    .pipe(livereload())
+;
 
-gulp.task 'assets', copyAssets
-gulp.task 'scripts', -> buildScripts(false, true)
-gulp.task 'styles', buildStyles
-gulp.task 'watch', ->
-  livereload.listen()
-  copyAssets()
-  buildScripts(true, false)
-  buildStyles()
-  gulp.watch SRC_PATHS.styleWatch,  [ 'styles' ]
-gulp.task 'dist', [ 'scripts', 'styles', 'assets' ]
-gulp.task 'default', [ 'watch' ]
+gulp.task('assets', copyAssets);
+gulp.task('scripts', () => buildScripts(false, true));
+gulp.task('styles', buildStyles);
+gulp.task('watch', function() {
+  livereload.listen();
+  copyAssets();
+  buildScripts(true, false);
+  buildStyles();
+  return gulp.watch(SRC_PATHS.styleWatch,  [ 'styles' ]);});
+gulp.task('dist', [ 'scripts', 'styles', 'assets' ]);
+gulp.task('default', [ 'watch' ]);

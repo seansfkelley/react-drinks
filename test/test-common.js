@@ -1,2 +1,2 @@
-require('loglevel').setLevel 'silent'
-require('chai').should()
+require('loglevel').setLevel('silent');
+require('chai').should();

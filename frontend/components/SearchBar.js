@@ -1,65 +1,73 @@
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-SearchBar = React.createClass {
-  displayName : 'SearchBar'
+const SearchBar = React.createClass({
+  displayName : 'SearchBar',
 
-  propTypes :
-    onChange     : React.PropTypes.func.isRequired
-    initialValue : React.PropTypes.string
+  propTypes : {
+    onChange     : React.PropTypes.func.isRequired,
+    initialValue : React.PropTypes.string,
     placeholder  : React.PropTypes.string
+  },
 
-  mixins : [ PureRenderMixin ]
+  mixins : [ PureRenderMixin ],
 
-  getInitialState : -> {
-    value : @props.initialValue ? ''
-  }
+  getInitialState() { return {
+    value : this.props.initialValue != null ? this.props.initialValue : ''
+  }; },
 
-  render : ->
-    React.createElement("div", {"className": (classnames 'search-bar', @props.className), "onTouchStart": (@_stopTouchStart)},
+  render() {
+    return React.createElement("div", {"className": (classnames('search-bar', this.props.className)), "onTouchStart": (this._stopTouchStart)},
       React.createElement("i", {"className": 'fa fa-search'}),
-      React.createElement("input", { \
-        "type": 'text',  \
-        "className": 'search-input',  \
-        "placeholder": (@props.placeholder),  \
-        "value": (@state.value),  \
-        "onChange": (@_onChange),  \
-        "onTouchTap": (@focus),  \
-        "ref": 'input',  \
-        "tabIndex": -1,  \
-        "autoCorrect": 'off',  \
-        "autoCapitalize": 'off',  \
-        "autoComplete": 'off',  \
+      React.createElement("input", { 
+        "type": 'text',  
+        "className": 'search-input',  
+        "placeholder": (this.props.placeholder),  
+        "value": (this.state.value),  
+        "onChange": (this._onChange),  
+        "onTouchTap": (this.focus),  
+        "ref": 'input',  
+        "tabIndex": -1,  
+        "autoCorrect": 'off',  
+        "autoCapitalize": 'off',  
+        "autoComplete": 'off',  
         "spellCheck": 'false'
       }),
-      (if @state.value.length then React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (@clearAndFocus), "onTouchStart": (@_stopTouchStart)}))
-    )
+      (this.state.value.length ? React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (this.clearAndFocus), "onTouchStart": (this._stopTouchStart)}) : undefined)
+    );
+  },
 
-  clearAndFocus : ->
-    @clear()
-    @focus()
+  clearAndFocus() {
+    this.clear();
+    return this.focus();
+  },
 
-  clear : ->
-    @setState { value : '' }
-    @props.onChange ''
+  clear() {
+    this.setState({ value : '' });
+    return this.props.onChange('');
+  },
 
-  focus : ->
-    @refs.input.focus()
+  focus() {
+    return this.refs.input.focus();
+  },
 
-  isFocused : ->
-    return document.activeElement == @refs.input
+  isFocused() {
+    return document.activeElement === this.refs.input;
+  },
 
-  _onChange : (e) ->
-    @setState { value : e.target.value }
-    @props.onChange e.target.value
+  _onChange(e) {
+    this.setState({ value : e.target.value });
+    return this.props.onChange(e.target.value);
+  },
 
-  _stopTouchStart : (e) ->
-    # This is hacky, but both of these are independently necessary.
-    # 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
-    e.stopPropagation()
-    # 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
-    e.preventDefault()
-}
+  _stopTouchStart(e) {
+    // This is hacky, but both of these are independently necessary.
+    // 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
+    e.stopPropagation();
+    // 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
+    return e.preventDefault();
+  }
+});
 
-module.exports = SearchBar
+module.exports = SearchBar;

@@ -1,176 +1,203 @@
-_               = require 'lodash'
-React           = require 'react'
-ReactDOM        = require 'react-dom'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const _               = require('lodash');
+const React           = require('react');
+const ReactDOM        = require('react-dom');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-IntertialSwipeLogicBox = require './IntertialSwipeLogicBox'
+const IntertialSwipeLogicBox = require('./IntertialSwipeLogicBox');
 
-InertialSwipable = React.createClass {
-  displayName : 'InertialSwipable'
+const InertialSwipable = React.createClass({
+  displayName : 'InertialSwipable',
 
-  propTypes :
-    onSwiping       : React.PropTypes.func
-    onSwiped        : React.PropTypes.func
-    initialDelta    : React.PropTypes.number
-    getNearestIndex : React.PropTypes.func
-    itemOffsets     : React.PropTypes.array.isRequired
+  propTypes : {
+    onSwiping       : React.PropTypes.func,
+    onSwiped        : React.PropTypes.func,
+    initialDelta    : React.PropTypes.number,
+    getNearestIndex : React.PropTypes.func,
+    itemOffsets     : React.PropTypes.array.isRequired,
     friction        : React.PropTypes.number
+  },
 
-  mixins : [ PureRenderMixin ]
+  mixins : [ PureRenderMixin ],
 
-  render : ->
-    React.createElement("div", { \
-      "onTouchStart": (@_onTouchStart),  \
-      "onTouchMove": (@_onTouchMove),  \
-      "onTouchEnd": (@_onTouchEnd),  \
-      "className": (classnames 'inertial-swipable', @props.className)
+  render() {
+    return React.createElement("div", { 
+      "onTouchStart": (this._onTouchStart),  
+      "onTouchMove": (this._onTouchMove),  
+      "onTouchEnd": (this._onTouchEnd),  
+      "className": (classnames('inertial-swipable', this.props.className))
     },
-      (@props.children)
-    )
+      (this.props.children)
+    );
+  },
 
-  _onTouchStart : (e) ->
-    @_logicBox.onTouchStart e
+  _onTouchStart(e) {
+    return this._logicBox.onTouchStart(e);
+  },
 
-  _onTouchMove : (e) ->
-    @_logicBox.onTouchMove e
+  _onTouchMove(e) {
+    return this._logicBox.onTouchMove(e);
+  },
 
-  _onTouchEnd : (e) ->
-    @_logicBox.onTouchEnd e
+  _onTouchEnd(e) {
+    return this._logicBox.onTouchEnd(e);
+  },
 
-  componentDidMount : ->
-    @_logicBox = new IntertialSwipeLogicBox {
-      itemOffsets     : @props.itemOffsets
-      getNearestIndex : @props.getNearestIndex
-      onChangeDelta   : @props.onSwiping
-      onFinish        : @props.onSwiped
-      initialDelta    : @props.initialDelta
-      amplitudeFactor : if @props.friction then 1 - @props.friction
+  componentDidMount() {
+    return this._logicBox = new IntertialSwipeLogicBox({
+      itemOffsets     : this.props.itemOffsets,
+      getNearestIndex : this.props.getNearestIndex,
+      onChangeDelta   : this.props.onSwiping,
+      onFinish        : this.props.onSwiped,
+      initialDelta    : this.props.initialDelta,
+      amplitudeFactor : this.props.friction ? 1 - this.props.friction : undefined
+    });
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(nextProps.itemOffsets, this.props.itemOffsets)) {
+      __guard__(this._logicBox, x => x.destroy());
+      return this._logicBox = new IntertialSwipeLogicBox({
+        itemOffsets     : nextProps.itemOffsets,
+        getNearestIndex : this.props.getNearestIndex,
+        onChangeDelta   : nextProps.onSwiping,
+        onFinish        : nextProps.onSwiped,
+        initialDelta    : nextProps.initialDelta,
+        amplitudeFactor : this.props.friction ? 1 - this.props.friction : undefined
+      });
+    } else if (nextProps.initialDelta !== this.props.initialDelta) {
+      return __guard__(this._logicBox, x1 => x1.setDeltaInstantly(nextProps.initialDelta));
     }
+  },
 
-  componentWillReceiveProps : (nextProps) ->
-    if not _.isEqual(nextProps.itemOffsets, @props.itemOffsets)
-      @_logicBox?.destroy()
-      @_logicBox = new IntertialSwipeLogicBox {
-        itemOffsets     : nextProps.itemOffsets
-        getNearestIndex : @props.getNearestIndex
-        onChangeDelta   : nextProps.onSwiping
-        onFinish        : nextProps.onSwiped
-        initialDelta    : nextProps.initialDelta
-        amplitudeFactor : if @props.friction then 1 - @props.friction
-      }
-    else if nextProps.initialDelta != @props.initialDelta
-      @_logicBox?.setDeltaInstantly nextProps.initialDelta
-
-  componentWillUnmount : ->
-    @_logicBox?.destroy()
-}
+  componentWillUnmount() {
+    return __guard__(this._logicBox, x => x.destroy());
+  }
+});
 
 
-Swipable = React.createClass {
-  displayName : 'Swipable'
+const Swipable = React.createClass({
+  displayName : 'Swipable',
 
-  propTypes :
-    initialIndex  : React.PropTypes.number
-    onSlideChange : React.PropTypes.func
+  propTypes : {
+    initialIndex  : React.PropTypes.number,
+    onSlideChange : React.PropTypes.func,
     friction      : React.PropTypes.number
+  },
 
-  mixins : [ PureRenderMixin ]
+  mixins : [ PureRenderMixin ],
 
-  getInitialState : ->
-    zeroes = _.map _.range(React.Children.count(@props.children)), -> 0
+  getInitialState() {
+    const zeroes = _.map(_.range(React.Children.count(this.props.children)), () => 0);
     return {
-      wrapperWidth : 0
-      itemWidths   : zeroes
-      itemOffsets  : zeroes
-      delta        : 0
+      wrapperWidth : 0,
+      itemWidths   : zeroes,
+      itemOffsets  : zeroes,
+      delta        : 0,
       initialDelta : 0
-    }
+    };
+  },
 
-  _getIndexForDelta : (delta) ->
-    # return _.sortedIndex(@state.itemOffsets, delta)
-    shiftedOffsets = _.chain()
-      .range(@state.itemOffsets.length)
-      .map (i) => @state.itemOffsets[i] - @state.itemWidths[i] / 2
-      .value()
-    # Why is this -1 again?
-    return Math.max 0, _.sortedIndex(shiftedOffsets, delta) - 1
+  _getIndexForDelta(delta) {
+    // return _.sortedIndex(@state.itemOffsets, delta)
+    const shiftedOffsets = _.chain()
+      .range(this.state.itemOffsets.length)
+      .map(i => this.state.itemOffsets[i] - (this.state.itemWidths[i] / 2))
+      .value();
+    // Why is this -1 again?
+    return Math.max(0, _.sortedIndex(shiftedOffsets, delta) - 1);
+  },
 
-  render : ->
-    offset = -@state.delta + (@state.wrapperWidth - @state.itemWidths[0]) / 2
+  render() {
+    const offset = -this.state.delta + ((this.state.wrapperWidth - this.state.itemWidths[0]) / 2);
 
-    React.createElement(InertialSwipable, { \
-      "onSwiping": (@_onSwiping),  \
-      "onSwiped": (@_onSwiped),  \
-      "itemOffsets": (@state.itemOffsets),  \
-      "initialDelta": (@state.initialDelta),  \
-      "getNearestIndex": (@_getNearestIndex),  \
-      "friction": (@props.friction),  \
-      "className": (classnames 'viewport-container', @props.className),  \
+    return React.createElement(InertialSwipable, { 
+      "onSwiping": (this._onSwiping),  
+      "onSwiped": (this._onSwiped),  
+      "itemOffsets": (this.state.itemOffsets),  
+      "initialDelta": (this.state.initialDelta),  
+      "getNearestIndex": (this._getNearestIndex),  
+      "friction": (this.props.friction),  
+      "className": (classnames('viewport-container', this.props.className)),  
       "ref": 'inertialSwipable'
     },
-      React.createElement("div", { \
-        "className": 'sliding-container',  \
-        "ref": 'slidingContainer',  \
+      React.createElement("div", { 
+        "className": 'sliding-container',  
+        "ref": 'slidingContainer',  
         "style": ({
-          WebkitTransform : "translateX(#{offset}px) translateZ(0)" # Hardware acceleration.
-          transform       : "translateX(#{offset}px)"
+          WebkitTransform : `translateX(${offset}px) translateZ(0)`, // Hardware acceleration.
+          transform       : `translateX(${offset}px)`
         })
       },
-        (@props.children)
+        (this.props.children)
       )
-    )
+    );
+  },
 
-  componentDidMount: ->
-    @_computeCachedState()
+  componentDidMount() {
+    this._computeCachedState();
 
-    window.addEventListener 'orientationchange', @_computeCachedState, false
-    window.addEventListener 'resize', @_computeCachedState, false
+    window.addEventListener('orientationchange', this._computeCachedState, false);
+    return window.addEventListener('resize', this._computeCachedState, false);
+  },
 
-  componentWillUnmount : ->
-    window.removeEventListener 'orientationchange', @_computeCachedState
-    window.removeEventListener 'resize', @_computeCachedState
+  componentWillUnmount() {
+    window.removeEventListener('orientationchange', this._computeCachedState);
+    return window.removeEventListener('resize', this._computeCachedState);
+  },
 
-  _computeCachedState : ->
-    wrapperWidth = @refs.slidingContainer.offsetWidth
-    itemWidths   = _.pluck @refs.slidingContainer.children, 'offsetWidth'
-    itemOffsets  = _.chain itemWidths
-      .reduce ((offsets, width) ->
-        offsets.push _.last(offsets) + width
-        return offsets
-      ), [ 0 ]
+  _computeCachedState() {
+    const wrapperWidth = this.refs.slidingContainer.offsetWidth;
+    const itemWidths   = _.pluck(this.refs.slidingContainer.children, 'offsetWidth');
+    const itemOffsets  = _.chain(itemWidths)
+      .reduce((function(offsets, width) {
+        offsets.push(_.last(offsets) + width);
+        return offsets;
+      }), [ 0 ])
       .initial()
-      .value()
-    initialDelta = itemOffsets[@props.initialIndex ? 0]
-    @setState { wrapperWidth, itemWidths, itemOffsets, initialDelta }
+      .value();
+    const initialDelta = itemOffsets[this.props.initialIndex != null ? this.props.initialIndex : 0];
+    return this.setState({ wrapperWidth, itemWidths, itemOffsets, initialDelta });
+  },
 
-  _getNearestIndex : (e) ->
-    target = e.target
-    while target? and target.parentNode != @refs.slidingContainer
-      target = target.parentNode
-    if target
-      return _.indexOf(@refs.slidingContainer.children, target)
-    else
-      { offsetLeft, offsetWidth } = ReactDOM.findDOMNode @refs.inertialSwipable
-      if (e.changedTouches[0].clientX - offsetLeft) < offsetWidth / 2
-        return 0
-      else
-        return @refs.slidingContainer.children.length - 1
+  _getNearestIndex(e) {
+    let { target } = e;
+    while ((target != null) && target.parentNode !== this.refs.slidingContainer) {
+      target = target.parentNode;
+    }
+    if (target) {
+      return _.indexOf(this.refs.slidingContainer.children, target);
+    } else {
+      const { offsetLeft, offsetWidth } = ReactDOM.findDOMNode(this.refs.inertialSwipable);
+      if ((e.changedTouches[0].clientX - offsetLeft) < offsetWidth / 2) {
+        return 0;
+      } else {
+        return this.refs.slidingContainer.children.length - 1;
+      }
+    }
+  },
 
-  _onSwiping : (delta) ->
-    oldIndex = @_getIndexForDelta @state.delta
-    newIndex = @_getIndexForDelta delta
-    @setState { delta }
-    if oldIndex != newIndex
-      @props.onSlideChange newIndex
+  _onSwiping(delta) {
+    const oldIndex = this._getIndexForDelta(this.state.delta);
+    const newIndex = this._getIndexForDelta(delta);
+    this.setState({ delta });
+    if (oldIndex !== newIndex) {
+      return this.props.onSlideChange(newIndex);
+    }
+  },
 
-  _onSwiped : ->
-    index = @_getIndexForDelta @state.delta
-    @setState { initialDelta : @state.itemOffsets[index] }
-    # Leaving this here for posterity, but, I think it's a safe bet
-    # that the index hasn't changed between the last onSwiping call
-    # and this, so don't call it twice in a row.
-    # @props.onSlideChange index
+  _onSwiped() {
+    const index = this._getIndexForDelta(this.state.delta);
+    return this.setState({ initialDelta : this.state.itemOffsets[index] });
+  }
+    // Leaving this here for posterity, but, I think it's a safe bet
+    // that the index hasn't changed between the last onSwiping call
+    // and this, so don't call it twice in a row.
+    // @props.onSlideChange index
+});
+
+module.exports = Swipable;
+
+function __guard__(value, transform) {
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
 }
-
-module.exports = Swipable

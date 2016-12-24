@@ -1,52 +1,57 @@
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-store = require '../store'
+const store = require('../store');
 
-NavigationHeader = React.createClass {
-  displayName : 'NavigationHeader'
+const NavigationHeader = React.createClass({
+  displayName : 'NavigationHeader',
 
-  propTypes :
-    onClose       : React.PropTypes.func.isRequired
-    previousTitle : React.PropTypes.string
+  propTypes : {
+    onClose       : React.PropTypes.func.isRequired,
+    previousTitle : React.PropTypes.string,
     onPrevious    : React.PropTypes.func
+  },
 
   mixins : [
     PureRenderMixin
-  ]
+  ],
 
-  render : ->
-    React.createElement("div", {"className": 'navigation-header fixed-header'},
-      (if @props.previousTitle and @props.onPrevious then React.createElement("div", {"className": 'back-button float-left', "onTouchTap": (@props.onPrevious)},
+  render() {
+    return React.createElement("div", {"className": 'navigation-header fixed-header'},
+      (this.props.previousTitle && this.props.onPrevious ? React.createElement("div", {"className": 'back-button float-left', "onTouchTap": (this.props.onPrevious)},
         React.createElement("i", {"className": 'fa fa-chevron-left'}),
-        React.createElement("span", {"className": 'back-button-label'}, (@props.previousTitle))
-      )),
-      React.createElement("i", {"className": 'fa fa-times float-right', "onTouchTap": (@_close)})
-    )
+        React.createElement("span", {"className": 'back-button-label'}, (this.props.previousTitle))
+      ) : undefined),
+      React.createElement("i", {"className": 'fa fa-times float-right', "onTouchTap": (this._close)})
+    );
+  },
 
-  _close : ->
-    store.dispatch {
+  _close() {
+    store.dispatch({
       type : 'clear-editable-recipe'
-    }
+    });
 
-    @props.onClose()
-}
+    return this.props.onClose();
+  }
+});
 
-EditableRecipePage = React.createClass {
-  displayName : 'EditableRecipePage'
+const EditableRecipePage = React.createClass({
+  displayName : 'EditableRecipePage',
 
-  propTypes :
-    onClose       : React.PropTypes.func.isRequired
-    onPrevious    : React.PropTypes.func
-    previousTitle : React.PropTypes.string
+  propTypes : {
+    onClose       : React.PropTypes.func.isRequired,
+    onPrevious    : React.PropTypes.func,
+    previousTitle : React.PropTypes.string,
     className     : React.PropTypes.string
+  },
 
-  render : ->
-    React.createElement("div", {"className": (classnames 'editable-recipe-page fixed-header-footer', @props.className)},
-      React.createElement(NavigationHeader, {"onClose": (@props.onClose), "previousTitle": (@props.previousTitle), "onPrevious": (@props.onPrevious)}),
-      (@props.children)
-    )
-}
+  render() {
+    return React.createElement("div", {"className": (classnames('editable-recipe-page fixed-header-footer', this.props.className))},
+      React.createElement(NavigationHeader, {"onClose": (this.props.onClose), "previousTitle": (this.props.previousTitle), "onPrevious": (this.props.onPrevious)}),
+      (this.props.children)
+    );
+  }
+});
 
-module.exports = EditableRecipePage
+module.exports = EditableRecipePage;

@@ -1,74 +1,82 @@
-_               = require 'lodash'
-React           = require 'react'
-classnames      = require 'classnames'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const _               = require('lodash');
+const React           = require('react');
+const classnames      = require('classnames');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-store = require '../store'
+const store = require('../store');
 
-ReduxMixin = require '../mixins/ReduxMixin'
+const ReduxMixin = require('../mixins/ReduxMixin');
 
-definitions = require '../../shared/definitions'
+const definitions = require('../../shared/definitions');
 
-List = require '../components/List'
+const List = require('../components/List');
 
-EditableRecipePage = require './EditableRecipePage'
+const EditableRecipePage = require('./EditableRecipePage');
 
-EditableBaseLiquorPage = React.createClass {
-  displayName : 'EditableBaseLiquorPage'
+const EditableBaseLiquorPage = React.createClass({
+  displayName : 'EditableBaseLiquorPage',
 
   mixins : [
-    ReduxMixin {
+    ReduxMixin({
       editableRecipe : 'base'
-    }
+    }),
     PureRenderMixin
-  ]
+  ],
 
-  propTypes :
-    onClose       : React.PropTypes.func.isRequired
-    onNext        : React.PropTypes.func
-    onPrevious    : React.PropTypes.func
+  propTypes : {
+    onClose       : React.PropTypes.func.isRequired,
+    onNext        : React.PropTypes.func,
+    onPrevious    : React.PropTypes.func,
     previousTitle : React.PropTypes.string
+  },
 
-  render : ->
-    React.createElement(EditableRecipePage, { \
-      "className": 'base-tag-page',  \
-      "onClose": (@props.onClose),  \
-      "onPrevious": (@props.onPrevious),  \
-      "previousTitle": (@props.previousTitle)
+  render() {
+    return React.createElement(EditableRecipePage, { 
+      "className": 'base-tag-page',  
+      "onClose": (this.props.onClose),  
+      "onPrevious": (this.props.onPrevious),  
+      "previousTitle": (this.props.previousTitle)
     },
       React.createElement("div", {"className": 'fixed-content-pane'},
         React.createElement("div", {"className": 'page-title'}, "Base ingredient(s)"),
         React.createElement(List, null,
-          (_.map(definitions.BASE_LIQUORS, (tag) =>
-            React.createElement(List.Item, { \
-              "className": (classnames 'base-liquor-option', { 'is-selected' : tag in @state.base }),  \
-              "onTouchTap": (@_tagToggler tag),  \
-              "key": "tag-#{tag}"
+          (_.map(definitions.BASE_LIQUORS, tag => {
+            return React.createElement(List.Item, { 
+              "className": (classnames('base-liquor-option', { 'is-selected' : this.state.base.includes(tag) })),  
+              "onTouchTap": (this._tagToggler(tag)),  
+              "key": `tag-${tag}`
             },
               (definitions.BASE_TITLES_BY_TAG[tag]),
               React.createElement("i", {"className": 'fa fa-check-circle'})
-          )))
+          );
+          }))
         ),
-        React.createElement("div", {"className": (classnames 'next-button', { 'disabled' : not @_isEnabled() }), "onTouchTap": (@_nextIfEnabled)},
+        React.createElement("div", {"className": (classnames('next-button', { 'disabled' : !this._isEnabled() })), "onTouchTap": (this._nextIfEnabled)},
           React.createElement("span", {"className": 'next-text'}, "Next"),
           React.createElement("i", {"className": 'fa fa-arrow-right'})
         )
       )
-    )
+    );
+  },
 
-  _isEnabled : ->
-    return @state.base.length > 0
+  _isEnabled() {
+    return this.state.base.length > 0;
+  },
 
-  _nextIfEnabled : ->
-    if @_isEnabled()
-      @props.onNext()
+  _nextIfEnabled() {
+    if (this._isEnabled()) {
+      return this.props.onNext();
+    }
+  },
 
-  _tagToggler : (tag) ->
-    return =>
-      store.dispatch {
-        type : 'toggle-base-liquor-tag'
+  _tagToggler(tag) {
+    return () => {
+      return store.dispatch({
+        type : 'toggle-base-liquor-tag',
         tag
-      }
-}
+      });
+    };
+  }
+});
 
-module.exports = EditableBaseLiquorPage
+module.exports = EditableBaseLiquorPage;

@@ -1,101 +1,116 @@
-_               = require 'lodash'
-React           = require 'react'
-PureRenderMixin = require 'react-addons-pure-render-mixin'
+const _               = require('lodash');
+const React           = require('react');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-ReduxMixin        = require '../mixins/ReduxMixin'
-DerivedValueMixin = require '../mixins/DerivedValueMixin'
+const ReduxMixin        = require('../mixins/ReduxMixin');
+const DerivedValueMixin = require('../mixins/DerivedValueMixin');
 
-Swipable = require '../components/Swipable'
+const Swipable = require('../components/Swipable');
 
-store = require '../store'
+const store = require('../store');
 
-RecipeView = require './RecipeView'
+const RecipeView = require('./RecipeView');
 
-SwipableRecipeView = React.createClass {
-  displayName : 'SwipableRecipeView'
+const SwipableRecipeView = React.createClass({
+  displayName : 'SwipableRecipeView',
 
-  propTypes :
+  propTypes : {
     onClose : React.PropTypes.func.isRequired
+  },
 
   mixins : [
-    ReduxMixin {
-      recipes     : 'recipesById'
-      ingredients : 'ingredientsByTag'
+    ReduxMixin({
+      recipes     : 'recipesById',
+      ingredients : 'ingredientsByTag',
       ui          : [ 'favoritedRecipeIds', 'currentlyViewedRecipeIds', 'recipeViewingIndex' ]
-    }
-    DerivedValueMixin [
+    }),
+    DerivedValueMixin([
       'ingredientSplitsByRecipeId'
-    ]
+    ]),
     PureRenderMixin
-  ]
+  ],
 
-  render : ->
-    if @state.currentlyViewedRecipeIds.length == 0
-      return React.createElement("div", null)
-    else
-      recipePages = _.map @state.currentlyViewedRecipeIds, (recipeId, i) =>
-        React.createElement("div", {"className": 'swipable-padding-wrapper', "key": (recipeId)},
-          (if Math.abs(i - @state.recipeViewingIndex) <= 1 then @_renderRecipe(@state.recipesById[recipeId]))
-        )
+  render() {
+    if (this.state.currentlyViewedRecipeIds.length === 0) {
+      return React.createElement("div", null);
+    } else {
+      const recipePages = _.map(this.state.currentlyViewedRecipeIds, (recipeId, i) => {
+        return React.createElement("div", {"className": 'swipable-padding-wrapper', "key": (recipeId)},
+          (Math.abs(i - this.state.recipeViewingIndex) <= 1 ? this._renderRecipe(this.state.recipesById[recipeId]) : undefined)
+        );
+      }
+      );
 
-      return React.createElement(Swipable, { \
-        "className": 'swipable-recipe-container',  \
-        "initialIndex": (@state.recipeViewingIndex),  \
-        "onSlideChange": (@_onSlideChange),  \
+      return React.createElement(Swipable, { 
+        "className": 'swipable-recipe-container',  
+        "initialIndex": (this.state.recipeViewingIndex),  
+        "onSlideChange": (this._onSlideChange),  
         "friction": 0.9
       },
         (recipePages)
-      )
+      );
+    }
+  },
 
-  _renderRecipe : (recipe) ->
+  _renderRecipe(recipe) {
     return React.createElement("div", {"className": 'swipable-position-wrapper'},
-      React.createElement(RecipeView, { \
-        "recipe": (recipe),  \
-        "ingredientsByTag": (@state.ingredientsByTag),  \
-        "ingredientSplits": (@state.ingredientSplitsByRecipeId?[recipeId]),  \
-        "onClose": (@_onClose),  \
-        "onFavorite": (@_onFavorite),  \
-        "onEdit": (if recipe.isCustom then @_onEdit),  \
-        "isFavorited": (recipeId in @state.favoritedRecipeIds),  \
+      React.createElement(RecipeView, { 
+        "recipe": (recipe),  
+        "ingredientsByTag": (this.state.ingredientsByTag),  
+        "ingredientSplits": (__guard__(this.state.ingredientSplitsByRecipeId, x => x[recipeId])),  
+        "onClose": (this._onClose),  
+        "onFavorite": (this._onFavorite),  
+        "onEdit": (recipe.isCustom ? this._onEdit : undefined),  
+        "isFavorited": (this.state.favoritedRecipeIds.includes(recipeId)),  
         "isShareable": (true)
       })
-    )
+    );
+  },
 
-  _onSlideChange : (index) ->
-    store.dispatch {
-      type : 'set-recipe-viewing-index'
+  _onSlideChange(index) {
+    return store.dispatch({
+      type : 'set-recipe-viewing-index',
       index
-    }
+    });
+  },
 
-  _onClose : ->
-    store.dispatch {
-      type  : 'set-recipe-viewing-index'
+  _onClose() {
+    store.dispatch({
+      type  : 'set-recipe-viewing-index',
       index : 0
-    }
+    });
 
-    @props.onClose()
+    return this.props.onClose();
+  },
 
-  _onEdit : (recipe) ->
-    store.dispatch {
-      type : 'seed-recipe-editor'
+  _onEdit(recipe) {
+    store.dispatch({
+      type : 'seed-recipe-editor',
       recipe
-    }
+    });
 
-    store.dispatch {
+    return store.dispatch({
       type : 'show-recipe-editor'
+    });
+  },
+
+  _onFavorite(recipe, shouldFavorite) {
+    if (shouldFavorite) {
+      return store.dispatch({
+        type     : 'favorite-recipe',
+        recipeId : recipe.recipeId
+      });
+    } else {
+      return store.dispatch({
+        type     : 'unfavorite-recipe',
+        recipeId : recipe.recipeId
+      });
     }
+  }
+});
 
-  _onFavorite : (recipe, shouldFavorite) ->
-    if shouldFavorite
-      store.dispatch {
-        type     : 'favorite-recipe'
-        recipeId : recipe.recipeId
-      }
-    else
-      store.dispatch {
-        type     : 'unfavorite-recipe'
-        recipeId : recipe.recipeId
-      }
+module.exports = SwipableRecipeView;
+
+function __guard__(value, transform) {
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
 }
-
-module.exports = SwipableRecipeView
