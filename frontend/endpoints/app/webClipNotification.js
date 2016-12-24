@@ -12,16 +12,11 @@ WebClipNotification = React.createClass {
   render : ->
     React.createElement("div", {"className": 'web-clip-notification arrow-box hidden', "onTouchTap": (@_dismiss)},
       React.createElement("span", {"className": 'request'},
-        React.createElement("span", {"className": 'lead-in'}, """
-          Hey there first-timer!
-"""), """
-        Tap """, React.createElement("img", {"src": '/assets/img/ios-export.png'}), """ to save Spirit Guide to your home screen.
-        That gets rid of the top and bottom bars, to boot!
-"""),
+        React.createElement("span", {"className": 'lead-in'}, "Hey there first-timer!"), "Tap",
+          React.createElement("img", {"src": '/assets/img/ios-export.png'}), """ to save Spirit Guide to your home screen.
+        That gets rid of the top and bottom bars, to boot!"""),
       React.createElement("br", null),
-      React.createElement("span", {"className": 'dismiss'}, """
-        Tap this note to dismiss it permanently.
-""")
+      React.createElement("span", {"className": 'dismiss'}, "Tap this note to dismiss it permanently.")
     )
 
   componentDidMount : ->

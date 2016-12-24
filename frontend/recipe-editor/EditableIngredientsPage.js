@@ -67,9 +67,8 @@ EditableIngredient = React.createClass {
         React.createElement("div", { \
           "className": (classnames 'done-button', { 'disabled' : not @_isCommittable() }),  \
           "onTouchTap": (@_commitIfAllowed)
-        }, """
-          Done
-""", React.createElement("i", {"className": 'fa fa-check-circle'})
+        }, "Done",
+          React.createElement("i", {"className": 'fa fa-check-circle'})
         )
       ),
       React.createElement("div", {"className": 'ingredient-list-header'}, "A Type Of"),

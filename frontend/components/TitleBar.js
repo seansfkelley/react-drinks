@@ -45,8 +45,7 @@ TitleBar = React.createClass {
 
     React.createElement("div", {"className": (classnames 'title-bar', @props.className)},
       (leftIcon),
-      (if React.Children.count(@props.children) > 0
-        React.createElement("div", {"className": (classnames 'title', { 'showing-icons' : showingIcons }), "onTouchTap": (@props.onTouchTap)},
+      (if React.Children.count(@props.children) > 0 then React.createElement("div", {"className": (classnames 'title', { 'showing-icons' : showingIcons }), "onTouchTap": (@props.onTouchTap)},
           (@props.children)
         )),
       (rightIcon)

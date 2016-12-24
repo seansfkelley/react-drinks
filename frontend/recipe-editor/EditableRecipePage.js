@@ -18,11 +18,10 @@ NavigationHeader = React.createClass {
 
   render : ->
     React.createElement("div", {"className": 'navigation-header fixed-header'},
-      (if @props.previousTitle and @props.onPrevious
-        React.createElement("div", {"className": 'back-button float-left', "onTouchTap": (@props.onPrevious)},
-          React.createElement("i", {"className": 'fa fa-chevron-left'}),
-          React.createElement("span", {"className": 'back-button-label'}, (@props.previousTitle))
-        )),
+      (if @props.previousTitle and @props.onPrevious then React.createElement("div", {"className": 'back-button float-left', "onTouchTap": (@props.onPrevious)},
+        React.createElement("i", {"className": 'fa fa-chevron-left'}),
+        React.createElement("span", {"className": 'back-button-label'}, (@props.previousTitle))
+      )),
       React.createElement("i", {"className": 'fa fa-times float-right', "onTouchTap": (@_close)})
     )
 

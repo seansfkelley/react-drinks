@@ -10,9 +10,9 @@ definitions   = require '../shared/definitions'
 revalidatorUtils = require './revalidator-utils'
 { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils
 
-xor = (a, b) -> (a or b) and not (a and b)
+xor = (a, b) -> ((a or b) and not (a and b))
 
-BASE_LIQUORS = [ definitions.UNASSIGNED_BASE_LIQUOR ].concat definitions.BASE_LIQUORS
+BASE_LIQUORS = [ definitions.UNASSIGNED_BASE_LIQUOR ].concat(definitions.BASE_LIQUORS)
 
 INGREDIENT_SCHEMA = {
   type       : 'object'
@@ -53,7 +53,7 @@ RECIPE_SCHEMA = {
     # The display name of the recipe.
     name : REQUIRED_STRING
     # The measured ingredients for how to mix this recipe.
-    ingredients :
+    ingredients : {
       type       : 'array'
       required   : true
       items      :
@@ -65,6 +65,7 @@ RECIPE_SCHEMA = {
             pattern  : /^[-. \/\d]+$/
           displayUnit       : OPTIONAL_STRING
           displayIngredient : REQUIRED_STRING
+    }
     # A string of one or more lines explaining how to make the drink.
     instructions : REQUIRED_STRING
     # A string of one or more lines with possibly interesting suggestions or historical notes.
@@ -74,7 +75,7 @@ RECIPE_SCHEMA = {
     # The full URL to the source page for this recipe.
     url : OPTIONAL_STRING
     # One of a few very broad ingredient categories that best describes the genre of this drink.
-    base :
+    base : {
       type     : [ 'array', 'string' ]
       required : true
       conform  : (strOrArray) ->
@@ -84,6 +85,7 @@ RECIPE_SCHEMA = {
           return _.all strOrArray, (base) -> base in BASE_LIQUORS
         else
           return false
+    }
 }
 
 INGREDIENT_GROUP_SCHEMA = {
@@ -98,7 +100,7 @@ loadRecipeFile = _.memoize (filename) ->
   recipes = yaml.safeLoad fs.readFileSync("#{__dirname}/data/#{filename}.yaml")
   log.debug "loaded #{recipes.length} recipe(s) from #{filename}"
 
-  unassignedBases = _.where recipes, { base : definitions.UNASSIGNED_BASE_LIQUOR }
+  unassignedBases = _.where(recipes, { base : definitions.UNASSIGNED_BASE_LIQUOR })
   if unassignedBases.length
     log.warn "#{unassignedBases.length} recipe(s) in #{filename} have an unassigned base liquor: #{_.pluck(unassignedBases, 'name').join ', '}"
 

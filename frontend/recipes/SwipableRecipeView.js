@@ -35,23 +35,10 @@ SwipableRecipeView = React.createClass {
     else
       recipePages = _.map @state.currentlyViewedRecipeIds, (recipeId, i) =>
         React.createElement("div", {"className": 'swipable-padding-wrapper', "key": (recipeId)},
-          (if Math.abs(i - @state.recipeViewingIndex) <= 1
-            recipe = @state.recipesById[recipeId]
-            React.createElement("div", {"className": 'swipable-position-wrapper'},
-              React.createElement(RecipeView, { \
-                "recipe": (recipe),  \
-                "ingredientsByTag": (@state.ingredientsByTag),  \
-                "ingredientSplits": (@state.ingredientSplitsByRecipeId?[recipeId]),  \
-                "onClose": (@_onClose),  \
-                "onFavorite": (@_onFavorite),  \
-                "onEdit": (if recipe.isCustom then @_onEdit),  \
-                "isFavorited": (recipeId in @state.favoritedRecipeIds),  \
-                "isShareable": (true)
-              })
-            ))
+          (if Math.abs(i - @state.recipeViewingIndex) <= 1 then @_renderRecipe(@state.recipesById[recipeId]))
         )
 
-      React.createElement(Swipable, { \
+      return React.createElement(Swipable, { \
         "className": 'swipable-recipe-container',  \
         "initialIndex": (@state.recipeViewingIndex),  \
         "onSlideChange": (@_onSlideChange),  \
@@ -59,6 +46,20 @@ SwipableRecipeView = React.createClass {
       },
         (recipePages)
       )
+
+  _renderRecipe : (recipe) ->
+    return React.createElement("div", {"className": 'swipable-position-wrapper'},
+      React.createElement(RecipeView, { \
+        "recipe": (recipe),  \
+        "ingredientsByTag": (@state.ingredientsByTag),  \
+        "ingredientSplits": (@state.ingredientSplitsByRecipeId?[recipeId]),  \
+        "onClose": (@_onClose),  \
+        "onFavorite": (@_onFavorite),  \
+        "onEdit": (if recipe.isCustom then @_onEdit),  \
+        "isFavorited": (recipeId in @state.favoritedRecipeIds),  \
+        "isShareable": (true)
+      })
+    )
 
   _onSlideChange : (index) ->
     store.dispatch {

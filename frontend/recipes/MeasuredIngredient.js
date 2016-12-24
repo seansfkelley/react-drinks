@@ -41,15 +41,13 @@ MeasuredIngredient = React.createClass {
       ),
       React.createElement("span", {"className": 'ingredient'},
         React.createElement("span", {"className": 'name'}, (@props.displayIngredient)),
-      (if @props.displaySubstitutes.length
-        [
-          React.createElement("span", {"className": 'substitute-label', "key": 'label'}, "try:")
-          React.createElement("span", {"className": 'substitute-content', "key": 'content'}, (@props.displaySubstitutes))
-        ]),
-      (if @props.difficulty
-        React.createElement("span", {"className": (classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty])},
-          (Difficulty.HUMAN_READABLE[@props.difficulty])
-        ))
+      (if @props.displaySubstitutes.length then [
+        React.createElement("span", {"className": 'substitute-label', "key": 'label'}, "try:")
+        React.createElement("span", {"className": 'substitute-content', "key": 'content'}, (@props.displaySubstitutes))
+      ]),
+      (if @props.difficulty then React.createElement("span", {"className": (classnames 'difficulty', Difficulty.CLASS_NAME[@props.difficulty])},
+        (Difficulty.HUMAN_READABLE[@props.difficulty])
+      ))
       )
     )
 }

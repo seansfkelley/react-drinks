@@ -39,7 +39,7 @@ EditableBaseLiquorPage = React.createClass {
       React.createElement("div", {"className": 'fixed-content-pane'},
         React.createElement("div", {"className": 'page-title'}, "Base ingredient(s)"),
         React.createElement(List, null,
-          (for tag in definitions.BASE_LIQUORS
+          (_.map(definitions.BASE_LIQUORS, (tag) =>
             React.createElement(List.Item, { \
               "className": (classnames 'base-liquor-option', { 'is-selected' : tag in @state.base }),  \
               "onTouchTap": (@_tagToggler tag),  \
@@ -47,7 +47,7 @@ EditableBaseLiquorPage = React.createClass {
             },
               (definitions.BASE_TITLES_BY_TAG[tag]),
               React.createElement("i", {"className": 'fa fa-check-circle'})
-            ))
+          )))
         ),
         React.createElement("div", {"className": (classnames 'next-button', { 'disabled' : not @_isEnabled() }), "onTouchTap": (@_nextIfEnabled)},
           React.createElement("span", {"className": 'next-text'}, "Next"),

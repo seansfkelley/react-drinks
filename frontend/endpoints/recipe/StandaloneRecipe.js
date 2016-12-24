@@ -15,9 +15,7 @@ StandaloneRecipeView = React.createClass {
   render : ->
     React.createElement("div", {"className": 'standalone-recipe'},
       React.createElement("a", {"className": 'homepage-link', "href": (definitions.BASE_URL), "target": '_blank'},
-        React.createElement(TitleBar, null, """
-          Spirit Guide
-""", React.createElement("i", {"className": 'fa fa-chevron-right'})
+        React.createElement(TitleBar, null, "Spirit Guide", React.createElement("i", {"className": 'fa fa-chevron-right'})
         )
       ),
       React.createElement(RecipeView, {"recipe": (@props.recipe)})

@@ -8,13 +8,13 @@ saveRecipe = (recipe) ->
     }
 
     recipeNoId = _.omit recipe, 'originalRecipeId'
-    return Promise.resolve reqwest({
+    return Promise.resolve(reqwest({
       url    : '/recipe'
       method : 'post'
       type   : 'json'
       data   : recipeNoId
-    })
-    .then ({ ackRecipeId }) ->
+    }))
+    .then(({ ackRecipeId }) ->
       dispatch {
         type   : 'saved-recipe'
         recipe : _.extend { recipeId : ackRecipeId }, recipeNoId
@@ -31,6 +31,7 @@ saveRecipe = (recipe) ->
           type     : 'delete-recipe'
           recipeId : recipe.originalRecipeId
         }
+    )
 
 module.exports = {
   saveRecipe

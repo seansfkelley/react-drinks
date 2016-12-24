@@ -47,15 +47,15 @@ RecipeListHeader = React.createClass {
         "onSlideChange": (@_onBaseLiquorChange),  \
         "friction": 0.7
       },
-        (for base in BASE_LIQUORS
+        (_.map(BASE_LIQUORS, (base) =>
           React.createElement("div", { \
             "className": (classnames 'base-liquor-option', { 'selected' : base == @state.baseLiquorFilter }),  \
             "key": (base)
           },
             (base)
-          ))
+        )))
       )
-    )
+    );
 
   _onBaseLiquorChange : (index) ->
     store.dispatch {

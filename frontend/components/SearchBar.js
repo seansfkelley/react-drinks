@@ -33,8 +33,7 @@ SearchBar = React.createClass {
         "autoComplete": 'off',  \
         "spellCheck": 'false'
       }),
-      (if @state.value.length
-        React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (@clearAndFocus), "onTouchStart": (@_stopTouchStart)}))
+      (if @state.value.length then React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (@clearAndFocus), "onTouchStart": (@_stopTouchStart)}))
     )
 
   clearAndFocus : ->
