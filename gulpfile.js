@@ -27,11 +27,11 @@ const LIBRARY_CSS_PATHS = [
 
 const SRC_PATHS = {
   scripts : [{
-    source      : './frontend/endpoints/app/app-init.coffee',
+    source      : './frontend/endpoints/app/app-init.js',
     destination : 'app-init.js'
   }
   , {
-    source      : './frontend/endpoints/recipe/recipe-init.coffee',
+    source      : './frontend/endpoints/recipe/recipe-init.js',
     destination : 'recipe-init.js'
   }
   ],
@@ -60,7 +60,7 @@ const copyAssets = function() {
 
 const buildSingleScript  = function({ source, destination, watch, dieOnError }) {
   let bundler = browserify(source, {
-    extensions   : [ '.coffee', '.ts', '.tsx' ],
+    extensions   : [ '.js', '.ts', '.tsx' ],
     debug        : true,
     cache        : {},
     packageCache : {},
@@ -70,9 +70,6 @@ const buildSingleScript  = function({ source, destination, watch, dieOnError }) 
   if (watch) {
     bundler = watchify(bundler);
   }
-
-  // https://github.com/substack/node-browserify/issues/1124
-  bundler.transform(require('coffeeify'));
 
   const rebundle = function() {
     let b = bundler.bundle();

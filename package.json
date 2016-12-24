@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "./node_modules/.bin/coffee index.coffee",
+    "start": "./index.js",
     "test": "multi=\"mocha-osx-reporter=- spec=-\" ./node_modules/.bin/mocha --reporter mocha-multi",
-    "dev": "./node_modules/.bin/nodemon index.coffee"
+    "dev": "./node_modules/.bin/nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -26,8 +26,6 @@
     "body-parser": "^1.14.1",
     "browserify": "^13.1.1",
     "classnames": "^1.2.0",
-    "coffee-script": "^1.9.3",
-    "coffeeify": "^2.1.0",
     "express": "^4.11.2",
     "express-promise": "^0.4.0",
     "fbjs": "^0.4.0",

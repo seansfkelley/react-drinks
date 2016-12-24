@@ -15,4 +15,4 @@ export NODE_ENV=production
 
 npm install
 
-./node_modules/.bin/coffee scripts/seed-database.coffee --force --include-custom-recipes
+.scripts/seed-database.js --force --include-custom-recipes

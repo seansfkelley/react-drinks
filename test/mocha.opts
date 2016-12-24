@@ -1,3 +1,3 @@
---compilers coffee:coffee-script/register,ts:ts-node/register,tsx:ts-node/register
+--compilers ts:ts-node/register,tsx:ts-node/register
 --reporter spec
---require ./test/test-common.coffee
+--require ./test/test-common.js

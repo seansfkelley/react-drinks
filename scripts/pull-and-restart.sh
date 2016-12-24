@@ -7,7 +7,7 @@ then
 fi
 
 # This may fail.
-forever stop index.coffee
+forever stop ./index.js
 
 # Anything else should not.
 set -e
@@ -20,4 +20,4 @@ export NODE_ENV=production
 npm install
 gulp dist
 
-forever start -c ./node_modules/.bin/coffee index.coffee
+forever start -c ./index.js
