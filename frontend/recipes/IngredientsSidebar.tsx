@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 const React = require('react');
 const classnames = require('classnames');
 const Isvg = require('react-inlinesvg');

@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 
 const store = require('../store');
 

@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const log = require('loglevel');
+import {} from 'lodash';
+import * as log from 'loglevel';
 
 const normalization = require('../../../shared/normalization');
 const { ANY_BASE_LIQUOR } = require('../../../shared/definitions');

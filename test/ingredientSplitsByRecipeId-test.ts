@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 
 const ingredientSplitsByRecipeId = require('../frontend/store/derived/ingredientSplitsByRecipeId');
 

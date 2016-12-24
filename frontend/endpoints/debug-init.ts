@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 const React = require('react');
 const ReactPerf = require('react-addons-perf');
 const reqwest = require('reqwest');

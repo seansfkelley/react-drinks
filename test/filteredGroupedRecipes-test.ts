@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 
 const filteredGroupedRecipes = require('../frontend/store/derived/filteredGroupedRecipes');
 const { _baseLiquorFilter,

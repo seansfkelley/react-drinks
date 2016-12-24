@@ -1,6 +1,6 @@
-const Promise = require('bluebird');
+import * as Promise from 'bluebird';
 const reqwest = require('reqwest');
-const log = require('loglevel');
+import * as log from 'loglevel';
 
 const store = require('.');
 

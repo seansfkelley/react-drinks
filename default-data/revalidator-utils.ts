@@ -1,8 +1,8 @@
-const _ = require('lodash');
-const util = require('util');
-const revalidator = require('revalidator');
+import { assign } from 'lodash';
+import { inspect } from 'util';
+import * as revalidator from 'revalidator';
 
-_.extend(revalidator.validate.defaults, {
+assign((revalidator.validate as any).defaults, {
   validateFormats: true,
   validateFormatsStrict: true,
   validateFormatExtensions: true,
@@ -10,20 +10,20 @@ _.extend(revalidator.validate.defaults, {
   cast: false
 });
 
-module.exports = {
-  REQUIRED_STRING: {
-    type: 'string',
-    required: true
-  },
-  OPTIONAL_STRING: {
-    type: 'string',
-    required: false
-  },
-  validateOrThrow(object, schema) {
-    const validation = revalidator.validate(object, schema);
-    if (!validation.valid) {
-      throw new Error(`validation failed: \n${ util.inspect(validation.errors) }`);
-    }
-  }
+export const REQUIRED_STRING = {
+  type: 'string',
+  required: true
 };
 
+export const OPTIONAL_STRING = {
+  type: 'string',
+  required: false
+};
+
+// I wanted to have real types here, but the revalidator types suck.
+export function validateOrThrow(object: any, schema: any) {
+  const validation = revalidator.validate(object, schema);
+  if (!validation.valid) {
+    throw new Error(`validation failed: \n${inspect(validation.errors)}`);
+  }
+}

@@ -4,9 +4,9 @@ require('../debug-init')();
 // Kick off requests ASAP.
 const initializationPromise = require('../../store/init')();
 
-const _ = require('lodash');
+import {} from 'lodash';
 const ReactDOM = require('react-dom');
-const Promise = require('bluebird');
+import * as Promise from 'bluebird';
 
 const App = require('./App');
 const ErrorMessageOverlay = require('../../components/ErrorMessageOverlay');

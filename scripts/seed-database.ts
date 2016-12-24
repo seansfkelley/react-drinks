@@ -1,111 +1,140 @@
 #!/usr/bin/env node
 
-
-const log = require('loglevel');
+import * as log from 'loglevel';
 log.setLevel('info');
 
-if (!process.argv.includes('--force')) {
+if (process.argv.indexOf('--force') !== -1) {
   log.info('ERROR: will not reseed database unless --force is applied');
   process.exit(1);
 }
 
 const startTime = Date.now();
 
-const _ = require('lodash');
-const Promise = require('bluebird');
-const md5 = require('MD5');
+import { groupBy, size, omit, values, flatten, extend } from 'lodash';
+import * as Promise from 'bluebird';
+import * as md5 from 'MD5';
 
-const config = require('../backend/config');
-const { recipeDb, ingredientDb, configDb } = require('../backend/database').get();
+import config from '../backend/config';
+import { loadRecipeFile, loadIngredients, loadIngredientGroups } from '../default-data/loaders';
+import { get as getDatabase } from '../backend/database';
 
-const defaultDataLoaders = require('../default-data/loaders');
+const { recipeDb, ingredientDb, configDb } = getDatabase();
 
 const DEFAULT_RECIPE_LIST_DOC_ID = 'default-recipe-list';
 const INGREDIENT_GROUP_DOC_ID = 'ingredient-groups';
 
-const logAttemptedOverwriteResult = function (result, docType = 'entries') {
-  const failures = _.chain(result).filter('error').groupBy('name').value();
+interface ErrorResponse extends PouchDB.Core.Response {
+  name?: string;
+  error?: string;
+}
 
-  log.info(`${ _.reject(result, 'error').length } ${ docType } newly inserted`);
-  if (_.size(failures)) {
-    log.warn(`${ __guard__(failures.conflict, x => x.length) != null ? __guard__(failures.conflict, x => x.length) : 0 } ${ docType } already existed`);
-    const nonConflictFailures = _.chain(failures).omit('conflict').values().flatten().value();
+const logAttemptedOverwriteResult = (result: ErrorResponse[], docType: string = 'entries') => {
+  const failures = groupBy(result.filter(r => !!r.error), 'name');
+
+  log.info(`${result.filter(r => !r.error).length} ${docType} newly inserted`);
+  if (size(failures)) {
+    if (failures['conflict'] && failures['conflict'].length > 0) {
+      log.warn(`${failures['conflict'].length} ${docType} already existed`);
+    }
+
+    const nonConflictFailures = flatten(values(omit(failures, 'conflict')));
     if (nonConflictFailures.length) {
-      return log.error(`${ nonConflictFailures.length } ${ docType } failed for other reasons:\n${ nonConflictFailures }`);
+      return log.error(`${nonConflictFailures.length} ${docType} failed for other reasons:\n${nonConflictFailures}`);
     }
   }
 };
 
-Promise.resolve().then(function () {
-  log.info(`seeding database at ${ config.couchDb.url }`);
-
-  const recipeFilesToLoad = ['iba-recipes', 'recipes'];
-
-  if (process.argv.includes('--include-custom-recipes')) {
-    recipeFilesToLoad.push('custom-recipes');
-    recipeFilesToLoad.push('michael-cecconi');
+function ignoreNotFoundError(error) {
+  if (!error || error.name !== 'not_found') {
+    throw error;
   }
+}
 
-  log.debug(`will load recipes from files: ${ recipeFilesToLoad.join(', ') }`);
-
-  const recipesWithId = _.chain(recipeFilesToLoad).map(defaultDataLoaders.loadRecipeFile).flatten()
-  // So, we don't really care if this is a hash or not. It just needs to be sufficiently unique.
-  // The reason it does this is because it avoids accidentally assigning the same ID to a default
-  // recipe (which don't come with any) and a custom recipe (which should retain theirs forever).
-  .map(r => _.extend({ _id: md5(JSON.stringify(r)) }, r)).value();
-
-  log.info(`${ recipesWithId.length } recipes to be inserted`);
-
-  return recipeDb.bulkDocs(recipesWithId).then(result => logAttemptedOverwriteResult(result, 'recipes')).then(() => configDb.get(DEFAULT_RECIPE_LIST_DOC_ID).catch(function (err) {
-    if (__guard__(err, x => x.name) === 'not_found') {
-      return undefined;
-    } else {
-      throw err;
-    }
-  }).then(function (result) {
-    if (result) {
-      return result._rev;
-    } else {
-      return undefined;
-    }
-  })).then(_rev => configDb.put({
-    _id: DEFAULT_RECIPE_LIST_DOC_ID,
-    _rev,
-    defaultIds: _.pluck(recipesWithId, '_id')
-  })).then(() => log.info(`successfully updated list of default recipe IDs (new count: ${ recipesWithId.length })`));
-}).then(function () {
-  const ingredients = defaultDataLoaders.loadIngredients();
-  log.info(`${ ingredients.length } ingredients to be inserted`);
-
-  const ingredientsWithId = _.map(ingredients, i => _.extend({ _id: i.tag }, i));
-
-  return ingredientDb.bulkDocs(ingredientsWithId);
-}).then(result => logAttemptedOverwriteResult(result, 'ingredients')).then(() => configDb.get(INGREDIENT_GROUP_DOC_ID).catch(function (err) {
-  if (__guard__(err, x => x.name) === 'not_found') {
-    return undefined;
-  } else {
-    throw err;
-  }
-}).then(function (result) {
-  if (result) {
+function getRevision(result?: { _rev: any }) {
+  if (result && result._rev != null) {
     return result._rev;
   } else {
     return undefined;
   }
-})).then(function (_rev) {
-  const orderedGroups = defaultDataLoaders.loadIngredientGroups();
-
-  return configDb.put({
-    _id: INGREDIENT_GROUP_DOC_ID,
-    _rev,
-    orderedGroups
-  }).then(() => log.info(`successfully updated list of ordered groups (new count: ${ orderedGroups.length })`));
-}).catch(function (err) {
-  let left;
-  return log.error((left = __guard__(err, x => x.stack) != null ? __guard__(err, x => x.stack) : err) != null ? left : 'unknown error');
-}).finally(() => log.info(`seeding database finished in ${ ((Date.now() - startTime) / 1000).toFixed(2) }s`));
-
-function __guard__(value, transform) {
-  return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
 }
+
+function bestEffortLogError(error) {
+  let logline;
+  if (error) {
+    logline = error.stack ? error.stack : error.toString();
+  } else {
+    logline = 'an unknown error occured!'
+  }
+  log.error(logline);
+}
+
+Promise.resolve()
+  .then(() => {
+    log.info(`seeding database at ${config.couchDb.url}`);
+
+    const recipeFilesToLoad = ['iba-recipes', 'recipes'];
+
+    if (process.argv.indexOf('--include-custom-recipes') !== -1) {
+      recipeFilesToLoad.push('custom-recipes');
+      recipeFilesToLoad.push('michael-cecconi');
+    }
+
+    log.debug(`will load recipes from files: ${recipeFilesToLoad.join(', ')}`);
+
+    const recipesWithId = flatten(recipeFilesToLoad.map(loadRecipeFile))
+      // So, we don't really care if this is a hash or not. It just needs to be sufficiently unique.
+      // The reason it does this is because it avoids accidentally assigning the same ID to a default
+      // recipe (which don't come with any) and a custom recipe (which should retain theirs forever).
+      .map(r => extend({
+        _id: md5(JSON.stringify(r))
+      }, r));
+
+    log.info(`${recipesWithId.length} recipes to be inserted`);
+
+    return recipeDb
+      .bulkDocs(recipesWithId)
+      .then(result => logAttemptedOverwriteResult(result, 'recipes'))
+      .then(() =>
+        configDb.get(DEFAULT_RECIPE_LIST_DOC_ID)
+          .then(
+            getRevision,
+            ignoreNotFoundError
+          )
+      )
+      .then(_rev =>
+        configDb.put({
+          _id: DEFAULT_RECIPE_LIST_DOC_ID,
+          _rev,
+          defaultIds: recipesWithId.map(r => r._id)
+      }))
+      .then(() => log.info(`successfully updated list of default recipe IDs (new count: ${recipesWithId.length})`));
+  })
+  .then(() => {
+    const ingredients = loadIngredients();
+    log.info(`${ingredients.length} ingredients to be inserted`);
+
+    const ingredientsWithId = ingredients.map(i => extend({ _id: i.tag }, i));
+
+    return ingredientDb.bulkDocs(ingredientsWithId);
+  })
+  .then(result => logAttemptedOverwriteResult(result, 'ingredients'))
+  .then(() =>
+    configDb.get(INGREDIENT_GROUP_DOC_ID)
+      .then(
+        getRevision,
+        ignoreNotFoundError
+      )
+  )
+  .then((_rev) => {
+    const orderedGroups = loadIngredientGroups();
+
+    return configDb.put({
+      _id: INGREDIENT_GROUP_DOC_ID,
+      _rev,
+      orderedGroups
+    })
+    .then(() => log.info(`successfully updated list of ordered groups (new count: ${orderedGroups.length})`));
+  })
+  .catch(bestEffortLogError)
+  .finally(() => log.info(`seeding database finished in ${((Date.now() - startTime) / 1000).toFixed(2)}s`));
 

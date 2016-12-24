@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 
 const _recomputeDerivedLists = function (state) {
   const alphabeticalRecipeIds = _.chain(state.recipesById).keys().sortBy(recipeId => state.recipesById[recipeId].sortName).value();

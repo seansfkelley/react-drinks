@@ -1,4 +1,4 @@
-const Promise = require('bluebird');
+import * as Promise from 'bluebird';
 const reqwest = require('reqwest');
 
 const saveRecipe = recipe => function (dispatch, getState) {

@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 
 module.exports = function (fn) {
   let lastArg = null;

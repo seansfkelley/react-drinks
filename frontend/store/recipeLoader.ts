@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const log = require('loglevel');
-const Promise = require('bluebird');
+import {} from 'lodash';
+import * as log from 'loglevel';
+import * as Promise from 'bluebird';
 const reqwest = require('reqwest');
 
 const LOCALSTORAGE_KEY = 'drinks-app-recipe-cache';

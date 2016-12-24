@@ -15,4 +15,4 @@ export NODE_ENV=production
 
 npm install
 
-.scripts/seed-database.js --force --include-custom-recipes
+./scripts/seed-database.js --force --include-custom-recipes

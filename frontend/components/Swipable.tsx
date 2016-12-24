@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 const React = require('react');
 const ReactDOM = require('react-dom');
 const classnames = require('classnames');

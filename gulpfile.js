@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
 const rename = require('gulp-rename');

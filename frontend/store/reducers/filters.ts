@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 const definitions = require('../../../shared/definitions');
 
 const { ANY_BASE_LIQUOR } = require('../../../shared/definitions');

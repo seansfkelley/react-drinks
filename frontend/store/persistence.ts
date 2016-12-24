@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const log = require('loglevel');
+import {} from 'lodash';
+import * as log from 'loglevel';
 
 const ONE_MINUTE_MS = 1000 * 60;
 const LOCALSTORAGE_KEY = 'drinks-app-persistence';

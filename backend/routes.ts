@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const log = require('loglevel');
+import {} from 'lodash';
+import * as log from 'loglevel';
 
 const recipes = require('./recipes');
 const ingredients = require('./ingredients');

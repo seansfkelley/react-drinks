@@ -22,6 +22,7 @@
     "@types/bluebird": "^3.0.36",
     "@types/chai": "^3.4.34",
     "@types/classnames": "^0.0.32",
+    "@types/es6-promise": "^0.0.32",
     "@types/js-yaml": "^3.5.29",
     "@types/lodash": "^4.14.44",
     "@types/loglevel": "^1.4.29",

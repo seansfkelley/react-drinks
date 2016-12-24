@@ -1,22 +1,29 @@
-let config;
-const _ = require('lodash');
-const log = require('loglevel');
-const fs = require('fs');
-const yaml = require('js-yaml');
+import * as log from 'loglevel';
+import { readFileSync } from 'fs';
+import { safeLoad} from 'js-yaml';
 
+interface Config {
+  couchDb: {
+    url: string;
+    recipeDbName: string;
+    configDbName: string;
+    ingredientDbName: string;
+  };
+}
+
+let filename;
 switch (process.env.NODE_ENV) {
   case 'production':
     log.info('loading config from config-production.yaml');
-    config = yaml.safeLoad(fs.readFileSync(`${ __dirname }/config-production.yaml`));
+    filename = 'config-production.yaml';
     break;
   case 'staging':
     log.info('loading config from config-staging.yaml');
-    config = yaml.safeLoad(fs.readFileSync(`${ __dirname }/config-staging.yaml`));
+    filename = 'config-staging.yaml';
     break;
   default:
     log.info('loading config from config-development.yaml');
-    config = yaml.safeLoad(fs.readFileSync(`${ __dirname }/config-development.yaml`));
+    filename = 'config-development.yaml';
 }
 
-module.exports = config;
-
+export default safeLoad(readFileSync(`${__dirname}/${filename}`).toString()) as Config;

@@ -1,4 +1,5 @@
 import { invert, pickBy } from 'lodash';
+import { DisplayIngredient } from '../shared/types';
 
 const ASCII_TO_ENTITY: { [fraction: string]: string } = {
   '1/4' : '\u00bc',
@@ -71,12 +72,6 @@ const MEASUREMENTS = [
   'pinches',
   'slice'
 ];
-
-export interface DisplayIngredient {
-  displayIngredient: string;
-  displayAmount?: string;
-  displayUnit?: string;
-}
 
 export function parseIngredientFromText(rawText: string): DisplayIngredient {
   let displayAmount: string | undefined;

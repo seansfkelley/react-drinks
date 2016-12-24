@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 
 module.exports = require('./makeReducer')(_.extend({
   errorMessage: null,

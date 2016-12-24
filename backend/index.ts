@@ -1,11 +1,11 @@
-const log = require('loglevel');
+import * as log from 'loglevel';
 
 // Logging before all.
 log.setLevel('debug');
 
 log.info(`starting spirit guide with PORT=${ process.env.PORT } and NODE_ENV=${ process.env.NODE_ENV }`);
 
-const _ = require('lodash');
+import {} from 'lodash';
 const express = require('express');
 const notifier = require('node-notifier');
 const assert = require('../shared/tinyassert');

@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import {} from 'lodash';
 const React = require('react');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 const classnames = require('classnames');

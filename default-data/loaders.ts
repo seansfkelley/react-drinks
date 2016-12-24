@@ -1,20 +1,21 @@
-const _ = require('lodash');
-const fs = require('fs');
-const yaml = require('js-yaml');
-const revalidator = require('revalidator');
-const log = require('loglevel');
+import { isString, isArray, memoize, once } from 'lodash';
+import { readFileSync } from 'fs';
+import { safeLoad } from 'js-yaml';
+import * as revalidator from 'revalidator';
+import * as log from 'loglevel';
 
-const normalization = require('../shared/normalization');
-const definitions = require('../shared/definitions');
-
-const revalidatorUtils = require('./revalidator-utils');
-const { REQUIRED_STRING, OPTIONAL_STRING } = revalidatorUtils;
+import { Ingredient, IngredientGroup, Recipe } from '../shared/types';
+import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
+import { UNASSIGNED_BASE_LIQUOR, BASE_LIQUORS } from '../shared/definitions';
+import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
 
 const xor = (a, b) => (a || b) && !(a && b);
 
-const BASE_LIQUORS = [definitions.UNASSIGNED_BASE_LIQUOR].concat(definitions.BASE_LIQUORS);
+const ALL_BASE_LIQUORS = [UNASSIGNED_BASE_LIQUOR].concat(BASE_LIQUORS);
 
-const INGREDIENT_SCHEMA = {
+type ActuallyUsefulRevalidatorType = Revalidator.ISchema<any> & Revalidator.JSONSchema<any> ;
+
+const INGREDIENT_SCHEMA: ActuallyUsefulRevalidatorType = {
   type: 'object',
   properties: {
     // The display name of the ingredient.
@@ -22,7 +23,7 @@ const INGREDIENT_SCHEMA = {
     // The category this ingredient is in (e.g., spirit, mixer, syrup...)
     group: {
       type: 'string',
-      conform(v, object) {
+      conform: (v, object) => {
         return xor(v != null, !(object.tangible != null ? object.tangible : true));
       }
     },
@@ -31,7 +32,7 @@ const INGREDIENT_SCHEMA = {
     // (either variety), but it's also useful for e.g whiskey as a generic.
     tangible: {
       type: 'boolean',
-      conform(v, object) {
+      conform: (v, object) => {
         return xor(!(v != null ? v : true), object.group != null);
       }
     },
@@ -57,7 +58,7 @@ const INGREDIENT_SCHEMA = {
   }
 };
 
-const RECIPE_SCHEMA = {
+const RECIPE_SCHEMA: ActuallyUsefulRevalidatorType  = {
   type: 'object',
   properties: {
     // The display name of the recipe.
@@ -91,11 +92,11 @@ const RECIPE_SCHEMA = {
     base: {
       type: ['array', 'string'],
       required: true,
-      conform(strOrArray) {
-        if (_.isString(strOrArray)) {
-          return BASE_LIQUORS.includes(strOrArray);
-        } else if (_.isArray(strOrArray)) {
-          return _.all(strOrArray, base => BASE_LIQUORS.includes(base));
+      conform: (strOrArray: string | string[]) => {
+        if (isString(strOrArray)) {
+          return ALL_BASE_LIQUORS.indexOf(strOrArray) !== -1;
+        } else if (isArray(strOrArray)) {
+          return strOrArray.every(base => ALL_BASE_LIQUORS.indexOf(base) !== -1);
         } else {
           return false;
         }
@@ -104,7 +105,7 @@ const RECIPE_SCHEMA = {
   }
 };
 
-const INGREDIENT_GROUP_SCHEMA = {
+const INGREDIENT_GROUP_SCHEMA: ActuallyUsefulRevalidatorType = {
   type: 'object',
   properties: {
     type: REQUIRED_STRING,
@@ -112,30 +113,30 @@ const INGREDIENT_GROUP_SCHEMA = {
   }
 };
 
-const loadRecipeFile = _.memoize(function (filename) {
-  log.debug(`loading recipes from ${ filename }`);
-  const recipes = yaml.safeLoad(fs.readFileSync(`${ __dirname }/data/${ filename }.yaml`));
-  log.debug(`loaded ${ recipes.length } recipe(s) from ${ filename }`);
+export const loadRecipeFile = memoize((filename: string) => {
+  log.debug(`loading recipes from ${filename}`);
+  const recipes: Partial<Recipe>[] = safeLoad(readFileSync(`${__dirname}/data/${filename}.yaml`).toString());
+  log.debug(`loaded ${recipes.length} recipe(s) from ${filename}`);
 
-  const unassignedBases = _.where(recipes, { base: definitions.UNASSIGNED_BASE_LIQUOR });
+  const unassignedBases = recipes.filter(r => r.base === UNASSIGNED_BASE_LIQUOR);
   if (unassignedBases.length) {
-    log.warn(`${ unassignedBases.length } recipe(s) in ${ filename } have an unassigned base liquor: ${ _.pluck(unassignedBases, 'name').join(', ') }`);
+    log.warn(`${unassignedBases.length} recipe(s) in ${filename} have an unassigned base liquor: ${unassignedBases.map(r => r.name).join(', ') }`);
   }
 
-  revalidatorUtils.validateOrThrow(recipes, {
+  validateOrThrow(recipes, {
     type: 'array',
     items: RECIPE_SCHEMA
   });
 
-  return _.map(recipes, normalization.normalizeRecipe);
+  return recipes.map(normalizeRecipe);
 });
 
-const loadIngredientGroups = _.once(function () {
+export const loadIngredientGroups = once(() => {
   log.debug("loading ingredient grouping");
-  const groups = yaml.safeLoad(fs.readFileSync(`${ __dirname }/data/groups.yaml`));
-  log.debug(`loaded ${ groups.length } groups`);
+  const groups: IngredientGroup[] = safeLoad(readFileSync(`${__dirname}/data/groups.yaml`).toString());
+  log.debug(`loaded ${groups.length} groups`);
 
-  revalidatorUtils.validateOrThrow(groups, {
+  validateOrThrow(groups, {
     type: 'array',
     items: INGREDIENT_GROUP_SCHEMA
   });
@@ -143,22 +144,15 @@ const loadIngredientGroups = _.once(function () {
   return groups;
 });
 
-const loadIngredients = _.once(function () {
+export const loadIngredients = once(() => {
   log.debug("loading ingredients");
-  const ingredients = yaml.safeLoad(fs.readFileSync(`${ __dirname }/data/ingredients.yaml`));
-  log.debug(`loaded ${ ingredients.length } ingredients`);
+  const ingredients: Partial<Ingredient>[] = safeLoad(readFileSync(`${__dirname}/data/ingredients.yaml`).toString());
+  log.debug(`loaded ${ingredients.length} ingredients`);
 
-  revalidatorUtils.validateOrThrow(ingredients, {
+  validateOrThrow(ingredients, {
     type: 'array',
     items: INGREDIENT_SCHEMA
   });
 
-  return _.map(ingredients, normalization.normalizeIngredient);
+  return ingredients.map(normalizeIngredient);
 });
-
-module.exports = {
-  loadRecipeFile,
-  loadIngredientGroups,
-  loadIngredients
-};
-

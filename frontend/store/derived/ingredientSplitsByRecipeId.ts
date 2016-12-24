@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const log = require('loglevel');
+import {} from 'lodash';
+import * as log from 'loglevel';
 
 const memoize = require('./memoize');
 const assert = require('../../../shared/tinyassert');
