@@ -41,10 +41,10 @@ const SwipableRecipeView = React.createClass({
       }
       );
 
-      return React.createElement(Swipable, { 
-        "className": 'swipable-recipe-container',  
-        "initialIndex": (this.state.recipeViewingIndex),  
-        "onSlideChange": (this._onSlideChange),  
+      return React.createElement(Swipable, {
+        "className": 'swipable-recipe-container',
+        "initialIndex": (this.state.recipeViewingIndex),
+        "onSlideChange": (this._onSlideChange),
         "friction": 0.9
       },
         (recipePages)
@@ -54,14 +54,14 @@ const SwipableRecipeView = React.createClass({
 
   _renderRecipe(recipe) {
     return React.createElement("div", {"className": 'swipable-position-wrapper'},
-      React.createElement(RecipeView, { 
-        "recipe": (recipe),  
-        "ingredientsByTag": (this.state.ingredientsByTag),  
-        "ingredientSplits": (__guard__(this.state.ingredientSplitsByRecipeId, x => x[recipeId])),  
-        "onClose": (this._onClose),  
-        "onFavorite": (this._onFavorite),  
-        "onEdit": (recipe.isCustom ? this._onEdit : undefined),  
-        "isFavorited": (this.state.favoritedRecipeIds.includes(recipeId)),  
+      React.createElement(RecipeView, {
+        "recipe": (recipe),
+        "ingredientsByTag": (this.state.ingredientsByTag),
+        "ingredientSplits": (__guard__(this.state.ingredientSplitsByRecipeId, x => x[recipe.recipeId])),
+        "onClose": (this._onClose),
+        "onFavorite": (this._onFavorite),
+        "onEdit": (recipe.isCustom ? this._onEdit : undefined),
+        "isFavorited": (this.state.favoritedRecipeIds.includes(recipe.recipeId)),
         "isShareable": (true)
       })
     );
