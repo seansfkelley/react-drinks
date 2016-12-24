@@ -1,23 +1,18 @@
-import {} from 'lodash';
+import { Ingredient } from '../../../shared/types';
+import { memoize } from './memoize';
 
-const assert = require('../../../shared/tinyassert');
-
-const memoize = require('./memoize');
-
-const filteredGroupedIngredients = function ({ groupedIngredients, searchTerm }) {
-  let left;
+export function filteredGroupedIngredients({ groupedIngredients, searchTerm }: { groupedIngredients: { name: string, ingredients: Ingredient[] }[], searchTerm?: string }) {
   if (searchTerm == null) {
     searchTerm = '';
   }
+  searchTerm = searchTerm.trim();
 
-  assert(groupedIngredients);
-
-  if (((left = searchTerm.trim()) != null ? left : '') === '') {
+  if (searchTerm === '') {
     return groupedIngredients;
   } else {
     searchTerm = searchTerm.toLowerCase();
 
-    const filterBySearchTerm = function (i) {
+    const filterBySearchTerm = (i) => {
       for (let term of i.searchable) {
         if (term.indexOf(searchTerm) !== -1) {
           return true;
@@ -26,13 +21,13 @@ const filteredGroupedIngredients = function ({ groupedIngredients, searchTerm })
       return false;
     };
 
-    return _.chain(groupedIngredients).map(function ({ name, ingredients }) {
-      ingredients = _.filter(ingredients, filterBySearchTerm);
-      return { name, ingredients };
-    }).filter(({ ingredients }) => ingredients.length > 0).value();
+    return groupedIngredients
+      .map(({ name, ingredients }) => ({
+        name,
+        ingredients: ingredients.filter(filterBySearchTerm)
+      }))
+      .filter(({ ingredients }) => ingredients.length > 0);
   }
 };
 
-module.exports = _.extend(filteredGroupedIngredients, {
-  memoized: memoize(filteredGroupedIngredients)
-});
+export const memoized = memoize(filteredGroupedIngredients);

@@ -1,118 +1,155 @@
-import {} from 'lodash';
+import { expect } from 'chai';
 
-const filteredGroupedRecipes = require('../frontend/store/derived/filteredGroupedRecipes');
-const { _baseLiquorFilter,
+import { makePartialProxy } from './testUtils';
+import { DisplayIngredient, Recipe } from '../shared/types';
+import { ANY_BASE_LIQUOR } from '../shared/definitions';
+import {
+  _baseLiquorFilter,
   _searchTermFilter,
   _recipeListFilter,
-  _sortAndGroupAlphabetical } = filteredGroupedRecipes.__test;
+  _sortAndGroupAlphabetical,
+  filteredGroupedRecipes
+} from '../frontend/store/derived/filteredGroupedRecipes';
+import { IngredientSplit } from '../frontend/store/derived/ingredientSplitsByRecipeId';
 
-const { ANY_BASE_LIQUOR } = require('../shared/definitions');
+describe('filteredGroupedRecipes', () => {
+  describe('#_baseLiquorFilter', () => {
+    function recipe(name: string, base: any) {
+      return makePartialProxy<Recipe>({ name, recipeId: name, base });
+    }
 
-describe('filteredGroupedRecipes', function () {
-  describe('#_baseLiquorFilter', function () {
-    const RECIPE_A = { base: ['a'] };
-    const RECIPE_B = { base: ['b'] };
-    const RECIPE_A_B = { base: ['a', 'b'] };
+    const RECIPE_A = recipe('a', ['a']);
+    const RECIPE_B = recipe('b', ['b']);
+    const RECIPE_A_B = recipe('a_b', ['a', 'b']);
+    const RECIPE_A_STRING = recipe('a_string', 'a');
+    const RECIPE_B_STRING = recipe('b_string', 'b');
+    const RECIPE_NO_BASE = recipe('no_base', undefined);
+    const RECIPE_OBJECT = recipe('object', {} as any);
 
-    const RECIPE_A_STRING = { base: 'a' };
-    const RECIPE_B_STRING = { base: 'b' };
+    it('should return the list as-is if the filter is ANY_BASE_LIQUOR', () => {
+      expect([RECIPE_A, RECIPE_B].filter(_baseLiquorFilter(ANY_BASE_LIQUOR))).to.deep.equal([RECIPE_A, RECIPE_B]);
+    });
 
-    const RECIPE_NULL = {};
-    const RECIPE_OBJECT = { base: {} };
+    it('should filter recipes properly when their "base" property is a string', () => {
+      expect([RECIPE_A_STRING, RECIPE_B_STRING].filter(_baseLiquorFilter('a'))).to.deep.equal([RECIPE_A_STRING]);
+    });
 
-    it('should return the list as-is if the filter is ANY_BASE_LIQUOR', () => _.filter([RECIPE_A, RECIPE_B], _baseLiquorFilter(ANY_BASE_LIQUOR)).should.deep.equal([RECIPE_A, RECIPE_B]));
+    it('should filter recipes properly when their "base" property is an array of strings', () => {
+      expect([RECIPE_A, RECIPE_B].filter(_baseLiquorFilter('a'))).to.deep.equal([RECIPE_A]);
+    });
 
-    it('should filter recipes properly when their "base" property is a string', () => _.filter([RECIPE_A_STRING, RECIPE_B_STRING], _baseLiquorFilter('a')).should.deep.equal([RECIPE_A_STRING]));
+    it('should filter out recipes with no "base" property', () => {
+      expect([RECIPE_A, RECIPE_NO_BASE].filter(_baseLiquorFilter('a'))).to.deep.equal([RECIPE_A]);
+    });
 
-    it('should filter recipes properly when their "base" property is an array of strings', () => _.filter([RECIPE_A, RECIPE_B], _baseLiquorFilter('a')).should.deep.equal([RECIPE_A]));
+    it('should filter out recipes with a non-string, non-array "base" property', () => {
+      expect([RECIPE_A, RECIPE_OBJECT].filter(_baseLiquorFilter('a'))).to.deep.equal([RECIPE_A]);
+    });
 
-    it('should filter out recipes with no "base" property', () => _.filter([RECIPE_A, RECIPE_NULL], _baseLiquorFilter('a')).should.deep.equal([RECIPE_A]));
-
-    it('should filter out recipes with a non-string, non-array "base" property', () => _.filter([RECIPE_A, RECIPE_OBJECT], _baseLiquorFilter('a')).should.deep.equal([RECIPE_A]));
-
-    return it('should retain recipes if any "base" matches when it\'s an array of strings', () => _.filter([RECIPE_A, RECIPE_A_B], _baseLiquorFilter('b')).should.deep.equal([RECIPE_A_B]));
+    it('should retain recipes if any "base" matches when it\'s an array of strings', () => {
+      expect([RECIPE_A, RECIPE_A_B].filter(_baseLiquorFilter('b'))).to.deep.equal([RECIPE_A_B]);
+    });
   });
 
-  describe('#_mixabilityFilter', function () {
-    let RECIPE_B;
-    const RECIPE_A = { recipeId: 'a' };
-    return RECIPE_B = { recipeId: 'b' };
-  });
-
-  describe('#_searchTermFilter', function () {
-    const RECIPES = ['a', 'b', 'c'];
+  describe('#_searchTermFilter', () => {
+    const RECIPES = [makePartialProxy<Recipe>({ name: 'foo'}), makePartialProxy<Recipe>({ name: 'bar' })];
     // Other filtering behavior is tested by the recipeMatchesSearchTerm tests.
     // Perhaps that file should be inlined into this file?
-    return it('should return the list as-is when the search term is all whitespace', () => _.filter(RECIPES, _searchTermFilter(' \t')).should.deep.equal(RECIPES));
+    it('should return the list as-is when the search term is all whitespace', () => {
+      expect(RECIPES.filter(_searchTermFilter(' \t', {}))).to.deep.equal(RECIPES);
+    });
   });
 
-  describe('#_recipeListFilter', function () {
-    const RECIPE_A = { recipeId: 'a', isCustom: true };
-    const RECIPE_B = { recipeId: 'b' };
+  describe('#_recipeListFilter', () => {
+    const RECIPE_A = makePartialProxy<Recipe>({ recipeId: 'a', isCustom: true });
+    const RECIPE_B = makePartialProxy<Recipe>({ recipeId: 'b', isCustom: undefined });
     const RECIPES = [RECIPE_A, RECIPE_B];
 
-    it('should return the list as-is when set to filter \'all\'', () => _.filter(RECIPES, _recipeListFilter('all')).should.deep.equal(RECIPES));
+    function displayIngredient(name: string) {
+      return makePartialProxy<DisplayIngredient>({ tag: name, displayIngredient: name });
+    }
 
-    it('should filter out recipes if its splits include any missing ingredients when filtering on \'mixable\'', function () {
-      const splits = {
+    it('should return the list as-is when set to filter \'all\'', () => {
+      expect(RECIPES.filter(_recipeListFilter('all', {}, []))).to.deep.equal(RECIPES);
+    });
+
+    it('should filter out recipes if its splits include any missing ingredients when filtering on \'mixable\'', () => {
+      const splits: { [recipeId: string]: IngredientSplit } = {
         'a': {
-          missing: ['ingredient-1'],
-          substitute: ['ingredient-2'],
-          available: ['ingredient-3']
+          available: [displayIngredient('foo')],
+          missing: [displayIngredient('bar')],
+          substitute: [{
+            need: displayIngredient('baz'),
+            have: [ 'quux' ]
+          }]
         }
       };
 
-      return _.filter([RECIPE_A], _recipeListFilter('mixable', splits, [])).should.deep.equal([]);
+      expect([RECIPE_A].filter(_recipeListFilter('mixable', splits, []))).to.deep.equal([]);
     });
 
-    it('should not filter recipes out if its splits contain substitutes but no missing ingredients when filtering on \'mixable\'', function () {
-      const splits = {
+    it('should not filter recipes out if its splits contain substitutes but no missing ingredients when filtering on \'mixable\'', () => {
+      const splits: { [recipeId: string]: IngredientSplit } = {
         'a': {
+          available: [displayIngredient('foo')],
           missing: [],
-          substitute: ['ingredient-1'],
-          available: ['ingredient-2']
+          substitute: [{
+            need: displayIngredient('baz'),
+            have: [ 'quux' ]
+          }]
         }
       };
 
-      return _.filter([RECIPE_A], _recipeListFilter('mixable', splits, [])).should.deep.equal([RECIPE_A]);
+      expect([RECIPE_A].filter(_recipeListFilter('mixable', splits, []))).to.deep.equal([RECIPE_A]);
     });
 
-    it('should return an empty list when filtering on \'favorites\' with no favorites', () => _.filter(RECIPES, _recipeListFilter('favorites', {}, [])).should.deep.equal([]));
+    it('should return an empty list when filtering on \'favorites\' with no favorites', () => {
+      expect(RECIPES.filter(_recipeListFilter('favorites', {}, []))).to.deep.equal([]);
+    });
 
-    it('should return any recipes that match on the recipeId field when filtering on \'favorites\'', () => _.filter(RECIPES, _recipeListFilter('favorites', {}, ['b'])).should.deep.equal([RECIPE_B]));
+    it('should return any recipes that match on the recipeId field when filtering on \'favorites\'', () => {
+      expect(RECIPES.filter(_recipeListFilter('favorites', {}, ['b']))).to.deep.equal([RECIPE_B]);
+    });
 
-    return it('should return any recipes with isCustom set when filtering on \'custom\'', () => _.filter(RECIPES, _recipeListFilter('custom')).should.deep.equal([RECIPE_A]));
+    it('should return any recipes with isCustom set when filtering on \'custom\'', () => {
+      expect(RECIPES.filter(_recipeListFilter('custom', {}, []))).to.deep.equal([RECIPE_A]);
+    });
   });
 
-  return describe('#_sortAndGroupAlphabetical', function () {
-    const RECIPE_A = { sortName: 'a1' };
-    const RECIPE_A_2 = { sortName: 'a2' };
-    const RECIPE_B = { sortName: 'b' };
-    const RECIPE_1 = { sortName: '1' };
-    const RECIPE_2 = { sortName: '2' };
+  describe('#_sortAndGroupAlphabetical', () => {
+    const RECIPE_A = makePartialProxy<Recipe>({ sortName: 'a1' });
+    const RECIPE_A_2 = makePartialProxy<Recipe>({ sortName: 'a2' });
+    const RECIPE_B = makePartialProxy<Recipe>({ sortName: 'b' });
+    const RECIPE_1 = makePartialProxy<Recipe>({ sortName: '1' });
+    const RECIPE_2 = makePartialProxy<Recipe>({ sortName: '2' });
 
-    it('should group recipes based on the first character of their "sortName" property', () => _sortAndGroupAlphabetical([RECIPE_A, RECIPE_A_2, RECIPE_B]).should.deep.equal([{
-      key: 'a',
-      recipes: [RECIPE_A, RECIPE_A_2]
-    }, {
-      key: 'b',
-      recipes: [RECIPE_B]
-    }]));
+    it('should group recipes based on the first character of their "sortName" property', () => {
+      expect(_sortAndGroupAlphabetical([RECIPE_A, RECIPE_A_2, RECIPE_B])).to.deep.equal([{
+        key: 'a',
+        recipes: [RECIPE_A, RECIPE_A_2]
+      }, {
+        key: 'b',
+        recipes: [RECIPE_B]
+      }]);
+    });
 
-    it('should group numerically-named recipes together', () => _sortAndGroupAlphabetical([RECIPE_A, RECIPE_1, RECIPE_2]).should.deep.equal([{
-      key: '#',
-      recipes: [RECIPE_1, RECIPE_2]
-    }, {
-      key: 'a',
-      recipes: [RECIPE_A]
-    }]));
+    it('should group numerically-named recipes together', () => {
+      expect(_sortAndGroupAlphabetical([RECIPE_A, RECIPE_1, RECIPE_2])).to.deep.equal([{
+        key: '#',
+        recipes: [RECIPE_1, RECIPE_2]
+      }, {
+        key: 'a',
+        recipes: [RECIPE_A]
+      }]);
+    });
 
-    return it('should sort the recipes in each group by their full "sortName" property', () => _sortAndGroupAlphabetical([
-    // Note that the input order here is important!
-    RECIPE_A_2, RECIPE_A]).should.deep.equal([{
-      key: 'a',
-      recipes: [RECIPE_A, RECIPE_A_2]
-    }]));
+    it('should sort the recipes in each group by their full "sortName" property', () => {
+      // Note that the input order here is important!
+      expect(_sortAndGroupAlphabetical([RECIPE_A_2, RECIPE_A])).to.deep.equal([{
+        key: 'a',
+        recipes: [RECIPE_A, RECIPE_A_2]
+      }]);
+    });
   });
 });
 

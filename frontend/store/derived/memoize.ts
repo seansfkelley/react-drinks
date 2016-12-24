@@ -1,20 +1,16 @@
-import {} from 'lodash';
+import { every } from 'lodash';
 
-module.exports = function (fn) {
-  let lastArg = null;
-  let lastResult = null;
+export function memoize<I extends {}, O>(fn: (input: I) => O): (input: I) => O {
+  let lastArg: I | undefined;
+  let lastResult: O | undefined;
 
-  return function (arg) {
-    if (_.all(arg, (value, key) => __guard__(lastArg, x => x[key]) === value)) {
-      return lastResult;
+  return (arg: I) => {
+    if (every(arg, (value, key) => lastArg != null && lastArg![key!] === value)) {
+      return lastResult!;
     } else {
       lastArg = arg;
       lastResult = fn(arg);
-      return lastResult;
+      return lastResult!;
     }
   };
 };
-
-function __guard__(value, transform) {
-  return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
-}

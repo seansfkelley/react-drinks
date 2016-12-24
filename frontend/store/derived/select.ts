@@ -1,3 +1,3 @@
-import {} from 'lodash';
+import { mapValues, get } from 'lodash';
 
-module.exports = (state, pathsByField) => _.mapValues(pathsByField, path => _.get(state, path));
+export default (state, pathsByField) => mapValues(pathsByField, path => get(state, path));

@@ -31,6 +31,7 @@ export interface DbRecipe {
   base: string | string[];
   canonicalName: string;
   sortName: string;
+  isCustom?: boolean;
 }
 
 export interface Recipe extends DbRecipe {

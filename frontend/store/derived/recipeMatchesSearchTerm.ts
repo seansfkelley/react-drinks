@@ -1,35 +1,28 @@
-import {} from 'lodash';
-
-const assert = require('../../../shared/tinyassert');
-
-const memoize = require('./memoize');
+import { Recipe, Ingredient } from '../../../shared/types';
+import { assert } from '../../../shared/tinyassert';
+import { memoize } from './memoize';
 
 const WHITESPACE_REGEX = /\s+/g;
 
 // SO INEFFICIENT.
-const recipeMatchesSearchTerm = function ({ recipe, searchTerm, ingredientsByTag }) {
+export function recipeMatchesSearchTerm({ recipe, searchTerm, ingredientsByTag }: { recipe: Recipe, searchTerm?: string, ingredientsByTag: { [tag: string]: Ingredient } }) {
   if (searchTerm == null) {
     searchTerm = '';
   }
 
-  assert(recipe);
-  assert(ingredientsByTag);
-
-  if (!searchTerm.trim()) {
+  if (searchTerm.trim().length === 0) {
     return false;
   }
 
-  const terms = _.compact(searchTerm.trim().split(WHITESPACE_REGEX));
+  const terms = searchTerm.trim().split(WHITESPACE_REGEX).filter(t => !!t);
+  const searchable = recipe.ingredients
+    .map(i => i.tag)
+    .map(tag => ingredientsByTag[tag!] && ingredientsByTag[tag!].searchable)
+    .filter(terms => !!terms)
+    .reduce((acc, next) => acc.concat(next), [])
+    .concat(recipe.canonicalName.split(WHITESPACE_REGEX));
 
-  const searchable = _.chain(recipe.ingredients).pluck('tag').map(t => __guard__(ingredientsByTag[t], x => x.searchable)).compact().flatten().concat(recipe.canonicalName.split(WHITESPACE_REGEX)).value();
-
-  return _.all(terms, t => _.any(searchable, s => s.indexOf(t) !== -1));
+  return terms.every(t => searchable.some(s => s.indexOf(t) !== -1));
 };
 
-module.exports = _.extend(recipeMatchesSearchTerm, {
-  memoized: memoize(recipeMatchesSearchTerm)
-});
-
-function __guard__(value, transform) {
-  return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
-}
+export const memoized = memoize(recipeMatchesSearchTerm);
