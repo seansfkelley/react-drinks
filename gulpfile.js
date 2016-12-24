@@ -1,4 +1,4 @@
-import {} from 'lodash';
+const _ = require('lodash');
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
 const rename = require('gulp-rename');
@@ -12,6 +12,7 @@ const minifyCss = require('gulp-minify-css');
 const notify = require('gulp-notify');
 const livereload = require('gulp-livereload');
 const filter = require('gulp-filter');
+const merge = require('merge-stream');
 const browserify = require('browserify');
 const watchify = require('watchify');
 const buffer = require('vinyl-buffer');
@@ -30,19 +31,25 @@ const SRC_PATHS = {
     source: './frontend/endpoints/recipe/recipe-init.tsx',
     destination: 'recipe-init.js'
   }],
-  styles: ['./styles/index.styl'].concat(_.map(LIBRARY_CSS_PATHS, p => `./node_modules/${ p }`)),
+  styles: ['./styles/index.styl'].concat(LIBRARY_CSS_PATHS.map(p => `./node_modules/${p}`)),
   styleWatch: ['./styles/**/*.styl'],
   fonts: ['./fonts/**.*', './node_modules/font-awesome/fonts/**.*'],
   img: ['./img/**.*']
 };
 
-const copyAssets = function () {
-  gulp.src(SRC_PATHS.fonts).pipe(gulp.dest('./.dist/fonts'));
+function copyAssets() {
+  const font = gulp
+    .src(SRC_PATHS.fonts)
+    .pipe(gulp.dest('./.dist/fonts'));
 
-  return gulp.src(SRC_PATHS.img).pipe(gulp.dest('./.dist/img'));
+  const img = gulp
+    .src(SRC_PATHS.img)
+    .pipe(gulp.dest('./.dist/img'));
+
+  return merge(font, img);
 };
 
-const buildSingleScript = function ({ source, destination, watch, dieOnError }) {
+function buildSingleScript({ source, destination, watch, dieOnError }) {
   let bundler = browserify(source, {
     extensions: ['.js', '.ts', '.tsx'],
     debug: true,
@@ -56,7 +63,7 @@ const buildSingleScript = function ({ source, destination, watch, dieOnError }) 
     bundler = watchify(bundler);
   }
 
-  const rebundle = function () {
+  function rebundle() {
     let b = bundler.bundle();
 
     if (!dieOnError) {
@@ -66,37 +73,61 @@ const buildSingleScript = function ({ source, destination, watch, dieOnError }) 
       }));
     }
 
-    return b.pipe(sourceStream(destination)).pipe(buffer()).pipe(sourcemaps.init({ loadMaps: true })).pipe(gulpif(IS_PROD, uglify())).pipe(notify({
-      title: 'Finished compiling Javascript',
-      message: '<%= file.relative %>'
-    })).pipe(sourcemaps.write('./')).pipe(gulp.dest('./.dist')).pipe(filter(['*', '!*.map'])).pipe(livereload());
+    return b
+      .pipe(sourceStream(destination))
+      .pipe(buffer())
+      .pipe(sourcemaps.init({ loadMaps: true }))
+      .pipe(gulpif(IS_PROD, uglify()))
+      .pipe(notify({
+        title: 'Finished compiling Javascript',
+        message: '<%= file.relative %>'
+      }))
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./.dist'))
+      .pipe(filter(['*', '!*.map']))
+      .pipe(livereload());
   };
 
   bundler.on('update', rebundle);
+
   return rebundle();
 };
 
-const buildScripts = function (watch = false, dieOnError = false) {
-  for (let { source, destination } of SRC_PATHS.scripts) {
+function buildScripts(watch = false, dieOnError = false) {
+  return merge(...SRC_PATHS.scripts.map(({ source, destination }) => {
     buildSingleScript({ source, destination, watch, dieOnError });
-  } // for loop
+  }));
 };
 
-const buildStyles = () => gulp.src(SRC_PATHS.styles).pipe(sourcemaps.init({ loadMaps: true })).pipe(stylus())
-// TODO: Why doesn't this abort the stream like the Browserify one does?
-.on('error', notify.onError({
-  title: 'Stylus Error',
-  sound: 'Sosumi'
-})).pipe(postcss([autoprefixer()])).pipe(concat('all-styles.css')).pipe(replace('../fonts/', '/assets/fonts/')).pipe(gulpif(IS_PROD, minifyCss())).pipe(notify({
-  title: 'Finished compiling CSS',
-  message: '<%= file.relative %>',
-  sound: 'Glass'
-})).pipe(sourcemaps.write('./')).pipe(gulp.dest('./.dist')).pipe(filter(['*', '!*.map'])).pipe(livereload());
+function buildStyles() {
+  return gulp
+    .src(SRC_PATHS.styles)
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(stylus())
+    // TODO: Why doesn't this abort the stream like the Browserify one does?
+    .on('error', notify.onError({
+      title: 'Stylus Error',
+      sound: 'Sosumi'
+    }))
+    .pipe(postcss([autoprefixer()]))
+    .pipe(concat('all-styles.css'))
+    .pipe(replace('../fonts/', '/assets/fonts/'))
+    .pipe(gulpif(IS_PROD, minifyCss()))
+    .pipe(notify({
+      title: 'Finished compiling CSS',
+      message: '<%= file.relative %>',
+      sound: 'Glass'
+    }))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./.dist'))
+    .pipe(filter(['*', '!*.map']))
+    .pipe(livereload());
+}
 
 gulp.task('assets', copyAssets);
 gulp.task('scripts', () => buildScripts(false, true));
 gulp.task('styles', buildStyles);
-gulp.task('watch', function () {
+gulp.task('watch', () => {
   livereload.listen();
   copyAssets();
   buildScripts(true, false);
@@ -105,4 +136,3 @@ gulp.task('watch', function () {
 });
 gulp.task('dist', ['scripts', 'styles', 'assets']);
 gulp.task('default', ['watch']);
-
