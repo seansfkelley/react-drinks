@@ -24,10 +24,10 @@ const LIBRARY_CSS_PATHS = ['font-awesome/css/font-awesome.css', 'react-draggable
 
 const SRC_PATHS = {
   scripts: [{
-    source: './frontend/endpoints/app/app-init.js',
+    source: './frontend/endpoints/app/app-init.jsx',
     destination: 'app-init.js'
   }, {
-    source: './frontend/endpoints/recipe/recipe-init.js',
+    source: './frontend/endpoints/recipe/recipe-init.jsx',
     destination: 'recipe-init.js'
   }],
   styles: ['./styles/index.styl'].concat(_.map(LIBRARY_CSS_PATHS, p => `./node_modules/${ p }`)),
@@ -44,7 +44,7 @@ const copyAssets = function () {
 
 const buildSingleScript = function ({ source, destination, watch, dieOnError }) {
   let bundler = browserify(source, {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     debug: true,
     cache: {},
     packageCache: {},
