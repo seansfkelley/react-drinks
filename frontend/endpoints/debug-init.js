@@ -1,10 +1,10 @@
-const _         = require('lodash');
-const React     = require('react');
+const _ = require('lodash');
+const React = require('react');
 const ReactPerf = require('react-addons-perf');
-const reqwest   = require('reqwest');
+const reqwest = require('reqwest');
 
-module.exports = _.once(function() {
-  window.getJquery = function() {
+module.exports = _.once(function () {
+  window.getJquery = function () {
     const jq = document.createElement('script');
     jq.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js';
     return document.getElementsByTagName('head')[0].appendChild(jq);
@@ -13,10 +13,10 @@ module.exports = _.once(function() {
   window.reactPerf = ReactPerf;
 
   window.debug = {
-    log : require('loglevel'),
+    log: require('loglevel'),
 
     localStorage() {
-      return _.mapValues(localStorage, function(v) {
+      return _.mapValues(localStorage, function (v) {
         try {
           return JSON.parse(v);
         } catch (error) {
@@ -25,7 +25,7 @@ module.exports = _.once(function() {
       });
     },
 
-    clearLocalStorage({ force } = { force : false }){
+    clearLocalStorage({ force } = { force: false }) {
       if (!force) {
         return console.error('pass the \'force\' option if you really mean it');
       } else {
@@ -39,10 +39,10 @@ module.exports = _.once(function() {
 
     reactPerf(timeout = 2000) {
       ReactPerf.start();
-      return setTimeout((function() {
+      return setTimeout(function () {
         ReactPerf.stop();
         return ReactPerf.printWasted();
-      }), timeout);
+      }, timeout);
     }
   };
 

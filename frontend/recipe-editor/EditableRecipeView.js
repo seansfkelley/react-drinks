@@ -1,20 +1,20 @@
-const _       = require('lodash');
-const React   = require('react');
+const _ = require('lodash');
+const React = require('react');
 
 const ReduxMixin = require('../mixins/ReduxMixin');
 
 const normalization = require('../../shared/normalization');
 
-const store                  = require('../store');
+const store = require('../store');
 const EditableRecipePageType = require('../EditableRecipePageType');
 
 const definitions = require('../../shared/definitions');
 
-const EditableNamePage        = require('./EditableNamePage');
+const EditableNamePage = require('./EditableNamePage');
 const EditableIngredientsPage = require('./EditableIngredientsPage');
-const EditableBaseLiquorPage  = require('./EditableBaseLiquorPage');
-const EditableTextPage        = require('./EditableTextPage');
-const PreviewPage             = require('./PreviewPage');
+const EditableBaseLiquorPage = require('./EditableBaseLiquorPage');
+const EditableTextPage = require('./EditableTextPage');
+const PreviewPage = require('./PreviewPage');
 
 const editableRecipeActions = require('./editableRecipeActions');
 
@@ -26,102 +26,70 @@ const editableRecipeActions = require('./editableRecipeActions');
 // TODO: "done" button is rather far away
 
 const EditableRecipeView = React.createClass({
-  displayName : 'EditableRecipeView',
+  displayName: 'EditableRecipeView',
 
-  propTypes : {
-    onClose : React.PropTypes.func.isRequired
+  propTypes: {
+    onClose: React.PropTypes.func.isRequired
   },
 
-  mixins : [
-    ReduxMixin({
-      editableRecipe : [ 'currentPage', 'ingredients', 'name', 'base', 'saving' ]
-    })
-  ],
+  mixins: [ReduxMixin({
+    editableRecipe: ['currentPage', 'ingredients', 'name', 'base', 'saving']
+  })],
 
   render() {
-    return (() => { switch (this.state.currentPage) {
+    return (() => {
+      switch (this.state.currentPage) {
 
-      case EditableRecipePageType.NAME:
-        return React.createElement(EditableNamePage, { 
-          "onNext": (this._makePageSwitcher(EditableRecipePageType.INGREDIENTS)),  
-          "onClose": (this.props.onClose)
-        });
+        case EditableRecipePageType.NAME:
+          return <EditableNamePage onNext={this._makePageSwitcher(EditableRecipePageType.INGREDIENTS)} onClose={this.props.onClose} />;
 
-      case EditableRecipePageType.INGREDIENTS:
-        return React.createElement(EditableIngredientsPage, { 
-          "previousTitle": (`"${this.state.name}"`),  
-          "onPrevious": (this._makePageSwitcher(EditableRecipePageType.NAME)),  
-          "onNext": (this._makePageSwitcher(EditableRecipePageType.BASE)),  
-          "onClose": (this.props.onClose)
-        });
+        case EditableRecipePageType.INGREDIENTS:
+          return <EditableIngredientsPage previousTitle={`"${ this.state.name }"`} onPrevious={this._makePageSwitcher(EditableRecipePageType.NAME)} onNext={this._makePageSwitcher(EditableRecipePageType.BASE)} onClose={this.props.onClose} />;
 
-      case EditableRecipePageType.BASE:
-        let previousTitle = `${this.state.ingredients.length} ingredient`;
-        if (this.state.ingredients.length !== 1) {
-          previousTitle += 's';
-        }
-        return React.createElement(EditableBaseLiquorPage, { 
-          "previousTitle": (previousTitle),  
-          "onPrevious": (this._makePageSwitcher(EditableRecipePageType.INGREDIENTS)),  
-          "onNext": (this._makePageSwitcher(EditableRecipePageType.TEXT)),  
-          "onClose": (this.props.onClose)
-        });
+        case EditableRecipePageType.BASE:
+          let previousTitle = `${ this.state.ingredients.length } ingredient`;
+          if (this.state.ingredients.length !== 1) {
+            previousTitle += 's';
+          }
+          return <EditableBaseLiquorPage previousTitle={previousTitle} onPrevious={this._makePageSwitcher(EditableRecipePageType.INGREDIENTS)} onNext={this._makePageSwitcher(EditableRecipePageType.TEXT)} onClose={this.props.onClose} />;
 
-      case EditableRecipePageType.TEXT:
-        if (this.state.base.length === 1) {
-          previousTitle = `${definitions.BASE_TITLES_BY_TAG[this.state.base[0]]}-based`;
-        } else {
-          previousTitle = `${this.state.base.length} base liquors`;
-        }
-        return React.createElement(EditableTextPage, { 
-          "previousTitle": (previousTitle),  
-          "onPrevious": (this._makePageSwitcher(EditableRecipePageType.BASE)),  
-          "onNext": (this._makePageSwitcher(EditableRecipePageType.PREVIEW)),  
-          "onClose": (this.props.onClose)
-        });
+        case EditableRecipePageType.TEXT:
+          if (this.state.base.length === 1) {
+            previousTitle = `${ definitions.BASE_TITLES_BY_TAG[this.state.base[0]] }-based`;
+          } else {
+            previousTitle = `${ this.state.base.length } base liquors`;
+          }
+          return <EditableTextPage previousTitle={previousTitle} onPrevious={this._makePageSwitcher(EditableRecipePageType.BASE)} onNext={this._makePageSwitcher(EditableRecipePageType.PREVIEW)} onClose={this.props.onClose} />;
 
-      case EditableRecipePageType.PREVIEW:
-        return React.createElement(PreviewPage, { 
-          "previousTitle": 'Instructions',  
-          "onPrevious": (this._makePageSwitcher(EditableRecipePageType.TEXT)),  
-          "onNext": (this._finish),  
-          "onClose": (this.props.onClose),  
-          "recipe": (this._constructRecipe()),  
-          "isSaving": (this.state.saving)
-        });
-    } })();
+        case EditableRecipePageType.PREVIEW:
+          return <PreviewPage previousTitle='Instructions' onPrevious={this._makePageSwitcher(EditableRecipePageType.TEXT)} onNext={this._finish} onClose={this.props.onClose} recipe={this._constructRecipe()} isSaving={this.state.saving} />;
+      }
+    })();
   },
 
   _makePageSwitcher(page) {
     return () => {
       return store.dispatch({
-        type : 'set-editable-recipe-page',
+        type: 'set-editable-recipe-page',
         page
       });
     };
   },
 
   _finish() {
-    return store.dispatch(editableRecipeActions.saveRecipe(this._constructRecipe()))
-    .then(() => {
+    return store.dispatch(editableRecipeActions.saveRecipe(this._constructRecipe())).then(() => {
       return this.props.onClose();
-    }
-    );
+    });
   },
 
   _constructRecipe() {
     const editableRecipeState = store.getState().editableRecipe;
 
     const ingredients = _.map(editableRecipeState.ingredients, ingredient => {
-      return _.pick(_.extend({ tag : ingredient.tag }, ingredient.display), _.identity);
-    }
-    );
+      return _.pick(_.extend({ tag: ingredient.tag }, ingredient.display), _.identity);
+    });
 
-    const recipe = _.chain(editableRecipeState)
-      .pick('name', 'instructions', 'notes', 'base', 'originalRecipeId')
-      .extend({ ingredients, isCustom : true })
-      .pick(_.identity)
-      .value();
+    const recipe = _.chain(editableRecipeState).pick('name', 'instructions', 'notes', 'base', 'originalRecipeId').extend({ ingredients, isCustom: true }).pick(_.identity).value();
 
     return normalization.normalizeRecipe(recipe);
   }

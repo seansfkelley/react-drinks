@@ -1,54 +1,49 @@
-const _   = require('lodash');
+const _ = require('lodash');
 const log = require('loglevel');
 
-const recipes     = require('./recipes');
+const recipes = require('./recipes');
 const ingredients = require('./ingredients');
 
 module.exports = [{
-  method  : 'get',
-  route   : '/',
+  method: 'get',
+  route: '/',
   handler(req, res) {
-    return res.render('app', { defaultRecipeIds : recipes.getDefaultRecipeIds() });
+    return res.render('app', { defaultRecipeIds: recipes.getDefaultRecipeIds() });
   }
-}
-, {
-  method  : 'get',
-  route   : '/ingredients',
+}, {
+  method: 'get',
+  route: '/ingredients',
   handler(req, res) {
     return res.json({
-      ingredients : ingredients.getIngredients(),
-      groups      : ingredients.getGroups()
+      ingredients: ingredients.getIngredients(),
+      groups: ingredients.getGroups()
     });
   }
-}
-, {
-  method  : 'post',
-  route   : '/recipes/bulk',
+}, {
+  method: 'post',
+  route: '/recipes/bulk',
   handler(req, res) {
     return res.json(recipes.bulkLoad(req.body.recipeIds));
   }
-}
-, {
-  method  : 'get',
-  route   : '/recipe/:recipeId',
+}, {
+  method: 'get',
+  route: '/recipe/:recipeId',
   handler(req, res) {
-    return res.render('recipe', { recipe : recipes.load(req.params.recipeId) });
+    return res.render('recipe', { recipe: recipes.load(req.params.recipeId) });
   }
-}
-, {
-  method  : 'post',
-  route   : '/recipe',
+}, {
+  method: 'post',
+  route: '/recipe',
   handler(req, res) {
     const recipe = req.body;
     // This is actually already passed, but it's a string, and that seems bad,
     // so we might as well just set it unconditionally here.
     recipe.isCustom = true;
-    return res.json({ ackRecipeId : recipes.save(recipe) });
+    return res.json({ ackRecipeId: recipes.save(recipe) });
   }
-}
-, {
-  method  : 'all',
-  route   : '*',
+}, {
+  method: 'all',
+  route: '*',
   handler(error, req, res, next) {
     if (error) {
       log.error(error);
@@ -62,10 +57,9 @@ module.exports = [{
       return next();
     }
   }
-}
-, {
-  method  : 'all',
-  route   : '*',
+}, {
+  method: 'all',
+  route: '*',
   handler(req, res, next) {
     res.status(404);
     if (req.get('Content-Type') === 'application/json') {
@@ -74,5 +68,5 @@ module.exports = [{
       return res.render('fail-whale');
     }
   }
-}
-];
+}];
+

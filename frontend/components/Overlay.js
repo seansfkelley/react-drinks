@@ -1,20 +1,18 @@
-const _          = require('lodash');
-const React      = require('react');
+const _ = require('lodash');
+const React = require('react');
 const classnames = require('classnames');
 
 const Overlay = React.createClass({
-  displayName : 'Overlay',
+  displayName: 'Overlay',
 
-  propTypes : {
-    isVisible : React.PropTypes.bool.isRequired,
-    type      : React.PropTypes.oneOf([ 'modal', 'flyup', 'pushover' ]).isRequired,
-    children  : React.PropTypes.element
+  propTypes: {
+    isVisible: React.PropTypes.bool.isRequired,
+    type: React.PropTypes.oneOf(['modal', 'flyup', 'pushover']).isRequired,
+    children: React.PropTypes.element
   },
 
   render() {
-    return React.createElement("div", {"className": (classnames('overlay', { 'visible' : this.props.isVisible }, this.props.type))},
-      (this.props.children)
-    );
+    return <div className={classnames('overlay', { 'visible': this.props.isVisible }, this.props.type)}>{this.props.children}</div>;
   }
 });
 

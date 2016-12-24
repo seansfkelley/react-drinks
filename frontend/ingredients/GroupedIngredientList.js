@@ -1,6 +1,6 @@
-const _               = require('lodash');
-const React           = require('react');
-const classnames      = require('classnames');
+const _ = require('lodash');
+const React = require('react');
+const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
 const List = require('../components/List');
@@ -8,63 +8,60 @@ const List = require('../components/List');
 const stylingConstants = require('../stylingConstants');
 
 const IngredientGroupHeader = React.createClass({
-  displayName : 'IngredientGroupHeader',
+  displayName: 'IngredientGroupHeader',
 
-  propTypes : {
-    title         : React.PropTypes.string.isRequired,
-    selectedCount : React.PropTypes.number.isRequired,
-    onToggle      : React.PropTypes.func
+  propTypes: {
+    title: React.PropTypes.string.isRequired,
+    selectedCount: React.PropTypes.number.isRequired,
+    onToggle: React.PropTypes.func
   },
 
-  mixins : [ PureRenderMixin ],
+  mixins: [PureRenderMixin],
 
   render() {
-    return React.createElement(List.Header, {"onTouchTap": (this.props.onToggle)},
-      React.createElement("span", {"className": 'text'}, (this.props.title)),
-      (this.props.selectedCount > 0 ? React.createElement("span", {"className": 'count'}, (this.props.selectedCount)) : undefined)
-    );
+    return <List.Header onTouchTap={this.props.onToggle}><span className='text'>{this.props.title}</span>{this.props.selectedCount > 0 ? <span className='count'>{this.props.selectedCount}</span> : undefined}</List.Header>;
   }
 });
 
 const IngredientItemGroup = React.createClass({
-  displayName : 'IngredientItemGroup',
+  displayName: 'IngredientItemGroup',
 
-  propTypes : {
-    title      : React.PropTypes.string.isRequired,
-    isExpanded : React.PropTypes.bool
+  propTypes: {
+    title: React.PropTypes.string.isRequired,
+    isExpanded: React.PropTypes.bool
   },
 
-  mixins : [ PureRenderMixin ],
+  mixins: [PureRenderMixin],
 
-  getDefaultProps() { return {
-    isExpanded : true
-  }; },
+  getDefaultProps() {
+    return {
+      isExpanded: true
+    };
+  },
 
   render() {
     let style;
     const groupSize = React.Children.count(this.props.children);
     if (this.props.isExpanded) {
       style = {
-        height : (groupSize * stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT) + stylingConstants.INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET
+        height: groupSize * stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT + stylingConstants.INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET
       };
     }
 
-    return React.createElement(List.ItemGroup, {"className": (classnames({ 'collapsed' : !this.props.isExpanded })), "style": (style)},
-      (this.props.children)
-    );
+    return <List.ItemGroup className={classnames({ 'collapsed': !this.props.isExpanded })} style={style}>{this.props.children}</List.ItemGroup>;
   }
 });
 
 const IngredientListItem = React.createClass({
-  displayName : 'IngredientListItem',
+  displayName: 'IngredientListItem',
 
-  propTypes : {
-    isSelected : React.PropTypes.bool.isRequired,
-    ingredient : React.PropTypes.object.isRequired,
-    toggleTag  : React.PropTypes.func.isRequired
+  propTypes: {
+    isSelected: React.PropTypes.bool.isRequired,
+    ingredient: React.PropTypes.object.isRequired,
+    toggleTag: React.PropTypes.func.isRequired
   },
 
-  mixins : [ PureRenderMixin ],
+  mixins: [PureRenderMixin],
 
   render() {
     let className;
@@ -72,10 +69,7 @@ const IngredientListItem = React.createClass({
       className = 'is-selected';
     }
 
-    return React.createElement(List.Item, {"className": (className), "onTouchTap": (this._toggleIngredient)},
-      React.createElement("div", {"className": 'name'}, (this.props.ingredient.display)),
-      React.createElement("i", {"className": 'fa fa-check-circle has-ingredient-icon'})
-    );
+    return <List.Item className={className} onTouchTap={this._toggleIngredient}><div className='name'>{this.props.ingredient.display}</div><i className='fa fa-check-circle has-ingredient-icon' /></List.Item>;
   },
 
   _toggleIngredient() {
@@ -84,60 +78,41 @@ const IngredientListItem = React.createClass({
 });
 
 const GroupedIngredientList = React.createClass({
-  displayName : 'GroupedIngredientList',
+  displayName: 'GroupedIngredientList',
 
-  propTypes : {
-    groupedIngredients            : React.PropTypes.array,
-    initialSelectedIngredientTags : React.PropTypes.object,
-    onSelectionChange             : React.PropTypes.func
+  propTypes: {
+    groupedIngredients: React.PropTypes.array,
+    initialSelectedIngredientTags: React.PropTypes.object,
+    onSelectionChange: React.PropTypes.func
   },
 
-  mixins : [ PureRenderMixin ],
+  mixins: [PureRenderMixin],
 
-  getInitialState() { return {
-    expandedGroupName          : null,
-    selectedIngredientTags : _.clone(this.props.initialSelectedIngredientTags)
-  }; },
+  getInitialState() {
+    return {
+      expandedGroupName: null,
+      selectedIngredientTags: _.clone(this.props.initialSelectedIngredientTags)
+    };
+  },
 
   render() {
     let ingredients, listNodes, selectedCount;
-    const ingredientCount = _.chain(this.props.groupedIngredients)
-      .pluck('ingredients')
-      .pluck('length')
-      .reduce(((sum, n) => sum + n), 0)
-      .value();
+    const ingredientCount = _.chain(this.props.groupedIngredients).pluck('ingredients').pluck('length').reduce((sum, n) => sum + n, 0).value();
 
     const _makeListItem = i => {
-      return React.createElement(IngredientListItem, { 
-        "ingredient": (i),  
-        "isSelected": (this.state.selectedIngredientTags[i.tag] != null),  
-        "toggleTag": (this._toggleIngredient),  
-        "key": (i.tag)
-      });
+      return <IngredientListItem ingredient={i} isSelected={this.state.selectedIngredientTags[i.tag] != null} toggleTag={this._toggleIngredient} key={i.tag} />;
     };
 
     if (ingredientCount === 0) {
       listNodes = [];
     } else if (ingredientCount < 10) {
-      ingredients = _.chain(this.props.groupedIngredients)
-        .pluck('ingredients')
-        .flatten()
-        .sortBy('displayName')
-        .value();
+      ingredients = _.chain(this.props.groupedIngredients).pluck('ingredients').flatten().sortBy('displayName').value();
 
-      selectedCount = _.filter(ingredients, i => (this.state.selectedIngredientTags[i.tag] != null)).length;
+      selectedCount = _.filter(ingredients, i => this.state.selectedIngredientTags[i.tag] != null).length;
 
-      const header = React.createElement(IngredientGroupHeader, { 
-        "title": `All Results (${ingredientCount})`,  
-        "selectedCount": (selectedCount),  
-        "key": 'header-all-results'
-      });
+      const header = <IngredientGroupHeader title={`All Results (${ ingredientCount })`} selectedCount={selectedCount} key='header-all-results' />;
 
-      listNodes = [
-        header,
-        _.map(ingredients, _makeListItem)
-      ];
-
+      listNodes = [header, _.map(ingredients, _makeListItem)];
     } else {
       let name;
       listNodes = [];
@@ -150,30 +125,11 @@ const GroupedIngredientList = React.createClass({
             selectedCount += 1;
           }
         }
-        listNodes.push([
-          React.createElement(IngredientGroupHeader, { 
-            "title": (name),  
-            "selectedCount": (selectedCount),  
-            "onToggle": (_.partial(this._toggleGroup, name)),  
-            "key": (`header-${name}`)
-          }),
-          React.createElement(IngredientItemGroup, { 
-            "title": (name),  
-            "isExpanded": (this.state.expandedGroupName === name),  
-            "key": (`group-${name}`)
-          },
-            (ingredientNodes)
-          )
-        ]);
+        listNodes.push([<IngredientGroupHeader title={name} selectedCount={selectedCount} onToggle={_.partial(this._toggleGroup, name)} key={`header-${ name }`} />, <IngredientItemGroup title={name} isExpanded={this.state.expandedGroupName === name} key={`group-${ name }`}>{ingredientNodes}</IngredientItemGroup>]);
       }
     }
 
-    return React.createElement(List, { 
-      "className": (classnames(List.ClassNames.HEADERED, List.ClassNames.COLLAPSIBLE, 'grouped-ingredient-list')),  
-      "emptyText": 'Nothing matched your search.'
-    },
-      (listNodes)
-    );
+    return <List className={classnames(List.ClassNames.HEADERED, List.ClassNames.COLLAPSIBLE, 'grouped-ingredient-list')} emptyText='Nothing matched your search.'>{listNodes}</List>;
   },
 
   getSelectedTags() {
@@ -182,7 +138,7 @@ const GroupedIngredientList = React.createClass({
 
   _toggleGroup(expandedGroupName) {
     if (this.state.expandedGroupName === expandedGroupName) {
-      return this.setState({ expandedGroupName : null });
+      return this.setState({ expandedGroupName: null });
     } else {
       return this.setState({ expandedGroupName });
     }

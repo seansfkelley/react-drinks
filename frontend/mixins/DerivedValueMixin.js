@@ -1,21 +1,21 @@
 const _ = require('lodash');
 
-const store   = require('../store');
+const store = require('../store');
 const derived = require('../store/derived');
 
-const DerivedValueMixin = function(...fieldNames) {
+const DerivedValueMixin = function (...fieldNames) {
   fieldNames = _.flatten(fieldNames);
   const fnName = _.uniqueId('_onStoreChange_');
-  const getDerivedFields = function() {
+  const getDerivedFields = function () {
     const state = store.getState();
-    return _.reduce(fieldNames, (function(fields, fieldName) {
+    return _.reduce(fieldNames, function (fields, fieldName) {
       fields[fieldName] = derived[fieldName](state);
       return fields;
-    }), {});
+    }, {});
   };
 
   const mixin = {
-    getInitialState : getDerivedFields,
+    getInitialState: getDerivedFields,
 
     componentDidMount() {
       return this._derivedValueMixin_unsubscribe = store.subscribe(this[fnName]);
@@ -26,7 +26,7 @@ const DerivedValueMixin = function(...fieldNames) {
     }
   };
 
-  mixin[fnName] = function() {
+  mixin[fnName] = function () {
     return this.setState(getDerivedFields());
   };
 

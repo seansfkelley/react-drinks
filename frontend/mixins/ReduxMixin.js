@@ -2,16 +2,15 @@ const _ = require('lodash');
 
 const store = require('../store');
 
-const ReduxMixin = function(fieldsBySubstore) {
+const ReduxMixin = function (fieldsBySubstore) {
   const fnName = _.uniqueId('_onStoreChange_');
-  const getFlattenedFields = function() {
+  const getFlattenedFields = function () {
     const state = store.getState();
-    return _.extend({}, ..._.map(fieldsBySubstore, (fieldArrayOrString, storeName) => _.pick(state[storeName], fieldArrayOrString))
-    );
+    return _.extend({}, ..._.map(fieldsBySubstore, (fieldArrayOrString, storeName) => _.pick(state[storeName], fieldArrayOrString)));
   };
 
   const mixin = {
-    getInitialState : getFlattenedFields,
+    getInitialState: getFlattenedFields,
 
     componentDidMount() {
       return this._reduxMixin_unsubscribe = store.subscribe(this[fnName]);
@@ -22,7 +21,7 @@ const ReduxMixin = function(fieldsBySubstore) {
     }
   };
 
-  mixin[fnName] = function() {
+  mixin[fnName] = function () {
     return this.setState(getFlattenedFields());
   };
 

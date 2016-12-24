@@ -1,7 +1,7 @@
 module.exports = {
-  NAME        : 'name',
-  INGREDIENTS : 'ingredients',
-  TEXT        : 'text',
-  BASE        : 'base',
-  PREVIEW     : 'preview'
+  NAME: 'name',
+  INGREDIENTS: 'ingredients',
+  TEXT: 'text',
+  BASE: 'base',
+  PREVIEW: 'preview'
 };

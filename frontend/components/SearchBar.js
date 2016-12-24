@@ -1,41 +1,26 @@
-const React           = require('react');
-const classnames      = require('classnames');
+const React = require('react');
+const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
 const SearchBar = React.createClass({
-  displayName : 'SearchBar',
+  displayName: 'SearchBar',
 
-  propTypes : {
-    onChange     : React.PropTypes.func.isRequired,
-    initialValue : React.PropTypes.string,
-    placeholder  : React.PropTypes.string
+  propTypes: {
+    onChange: React.PropTypes.func.isRequired,
+    initialValue: React.PropTypes.string,
+    placeholder: React.PropTypes.string
   },
 
-  mixins : [ PureRenderMixin ],
+  mixins: [PureRenderMixin],
 
-  getInitialState() { return {
-    value : this.props.initialValue != null ? this.props.initialValue : ''
-  }; },
+  getInitialState() {
+    return {
+      value: this.props.initialValue != null ? this.props.initialValue : ''
+    };
+  },
 
   render() {
-    return React.createElement("div", {"className": (classnames('search-bar', this.props.className)), "onTouchStart": (this._stopTouchStart)},
-      React.createElement("i", {"className": 'fa fa-search'}),
-      React.createElement("input", { 
-        "type": 'text',  
-        "className": 'search-input',  
-        "placeholder": (this.props.placeholder),  
-        "value": (this.state.value),  
-        "onChange": (this._onChange),  
-        "onTouchTap": (this.focus),  
-        "ref": 'input',  
-        "tabIndex": -1,  
-        "autoCorrect": 'off',  
-        "autoCapitalize": 'off',  
-        "autoComplete": 'off',  
-        "spellCheck": 'false'
-      }),
-      (this.state.value.length ? React.createElement("i", {"className": 'fa fa-times-circle', "onTouchTap": (this.clearAndFocus), "onTouchStart": (this._stopTouchStart)}) : undefined)
-    );
+    return <div className={classnames('search-bar', this.props.className)} onTouchStart={this._stopTouchStart}><i className='fa fa-search' /><input type='text' className='search-input' placeholder={this.props.placeholder} value={this.state.value} onChange={this._onChange} onTouchTap={this.focus} ref='input' tabIndex={-1} autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' />{this.state.value.length ? <i className='fa fa-times-circle' onTouchTap={this.clearAndFocus} onTouchStart={this._stopTouchStart} /> : undefined}</div>;
   },
 
   clearAndFocus() {
@@ -44,7 +29,7 @@ const SearchBar = React.createClass({
   },
 
   clear() {
-    this.setState({ value : '' });
+    this.setState({ value: '' });
     return this.props.onChange('');
   },
 
@@ -57,7 +42,7 @@ const SearchBar = React.createClass({
   },
 
   _onChange(e) {
-    this.setState({ value : e.target.value });
+    this.setState({ value: e.target.value });
     return this.props.onChange(e.target.value);
   },
 

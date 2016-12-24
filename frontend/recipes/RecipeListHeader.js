@@ -1,6 +1,6 @@
-const _               = require('lodash');
-const React           = require('react');
-const classnames      = require('classnames');
+const _ = require('lodash');
+const React = require('react');
+const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
 const definitions = require('../../shared/definitions');
@@ -12,17 +12,14 @@ const Swipable = require('../components/Swipable');
 
 const store = require('../store');
 
-const BASE_LIQUORS = [ definitions.ANY_BASE_LIQUOR ].concat(definitions.BASE_LIQUORS);
+const BASE_LIQUORS = [definitions.ANY_BASE_LIQUOR].concat(definitions.BASE_LIQUORS);
 
 const RecipeListHeader = React.createClass({
-  displayName : 'RecipeListHeader',
+  displayName: 'RecipeListHeader',
 
-  mixins : [
-    ReduxMixin({
-      filters : [ 'baseLiquorFilter', 'selectedRecipeList' ]
-    }),
-    PureRenderMixin
-  ],
+  mixins: [ReduxMixin({
+    filters: ['baseLiquorFilter', 'selectedRecipeList']
+  }), PureRenderMixin],
 
   render() {
     let initialBaseLiquorIndex = _.indexOf(BASE_LIQUORS, this.state.baseLiquorFilter);
@@ -30,58 +27,33 @@ const RecipeListHeader = React.createClass({
       initialBaseLiquorIndex = 0;
     }
 
-    return React.createElement("div", {"className": 'recipe-list-header fixed-header'},
-      React.createElement(TitleBar, { 
-        "leftIcon": '/assets/img/ingredients.svg',  
-        "leftIconOnTouchTap": (this._showSidebar),  
-        "rightIcon": 'fa-plus',  
-        "rightIconOnTouchTap": (this._newRecipe),  
-        "className": 'recipe-list-header',  
-        "onTouchTap": (this._showListSelector)
-      },
-        (definitions.RECIPE_LIST_NAMES[this.state.selectedRecipeList]),
-        React.createElement("i", {"className": 'fa fa-chevron-down'})
-      ),
-      React.createElement(Swipable, { 
-        "className": 'base-liquor-container',  
-        "initialIndex": (initialBaseLiquorIndex),  
-        "onSlideChange": (this._onBaseLiquorChange),  
-        "friction": 0.7
-      },
-        (_.map(BASE_LIQUORS, base => {
-          return React.createElement("div", { 
-            "className": (classnames('base-liquor-option', { 'selected' : base === this.state.baseLiquorFilter })),  
-            "key": (base)
-          },
-            (base)
-        );
-        }))
-      )
-    );
+    return <div className='recipe-list-header fixed-header'><TitleBar leftIcon='/assets/img/ingredients.svg' leftIconOnTouchTap={this._showSidebar} rightIcon='fa-plus' rightIconOnTouchTap={this._newRecipe} className='recipe-list-header' onTouchTap={this._showListSelector}>{definitions.RECIPE_LIST_NAMES[this.state.selectedRecipeList]}<i className='fa fa-chevron-down' /></TitleBar><Swipable className='base-liquor-container' initialIndex={initialBaseLiquorIndex} onSlideChange={this._onBaseLiquorChange} friction={0.7}>{_.map(BASE_LIQUORS, base => {
+          return <div className={classnames('base-liquor-option', { 'selected': base === this.state.baseLiquorFilter })} key={base}>{base}</div>;
+        })}</Swipable></div>;
   },
 
   _onBaseLiquorChange(index) {
     return store.dispatch({
-      type   : 'set-base-liquor-filter',
-      filter : BASE_LIQUORS[index]
+      type: 'set-base-liquor-filter',
+      filter: BASE_LIQUORS[index]
     });
   },
 
   _showSidebar() {
     return store.dispatch({
-      type : 'show-sidebar'
+      type: 'show-sidebar'
     });
   },
 
   _showListSelector() {
     return store.dispatch({
-      type : 'show-list-selector'
+      type: 'show-list-selector'
     });
   },
 
   _newRecipe() {
     return store.dispatch({
-      type : 'show-recipe-editor'
+      type: 'show-recipe-editor'
     });
   }
 });

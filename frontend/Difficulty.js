@@ -1,26 +1,26 @@
 const _ = require('lodash');
 
 const Difficulty = {
-  EASY   : 'easy',
-  MEDIUM : 'medium',
-  HARD   : 'hard'
+  EASY: 'easy',
+  MEDIUM: 'medium',
+  HARD: 'hard'
 };
 
-const ORDERED_DIFFICULTIES = [ Difficulty.EASY, Difficulty.MEDIUM, Difficulty.HARD ];
+const ORDERED_DIFFICULTIES = [Difficulty.EASY, Difficulty.MEDIUM, Difficulty.HARD];
 
 const HUMAN_READABLE = {
-  [Difficulty.EASY]   : 'Easy',
-  [Difficulty.MEDIUM] : 'Medium',
-  [Difficulty.HARD]   : 'Hard'
+  [Difficulty.EASY]: 'Easy',
+  [Difficulty.MEDIUM]: 'Medium',
+  [Difficulty.HARD]: 'Hard'
 };
 
 const CLASS_NAME = {
-  [Difficulty.EASY]   : 'easy',
-  [Difficulty.MEDIUM] : 'medium',
-  [Difficulty.HARD]   : 'hard'
+  [Difficulty.EASY]: 'easy',
+  [Difficulty.MEDIUM]: 'medium',
+  [Difficulty.HARD]: 'hard'
 };
 
-const getHardest = function(difficulties) {
+const getHardest = function (difficulties) {
   if (!difficulties || !difficulties.length) {
     return Difficulty.EASY;
   } else {
@@ -28,7 +28,7 @@ const getHardest = function(difficulties) {
   }
 };
 
-const getEasiest = function(difficulties) {
+const getEasiest = function (difficulties) {
   if (!difficulties || !difficulties.length) {
     return Difficulty.EASY;
   } else {

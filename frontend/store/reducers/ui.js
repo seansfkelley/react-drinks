@@ -1,15 +1,15 @@
 const _ = require('lodash');
 
 module.exports = require('./makeReducer')(_.extend({
-  errorMessage             : null,
-  recipeViewingIndex       : 0,
-  currentlyViewedRecipeIds : [],
-  favoritedRecipeIds       : [],
+  errorMessage: null,
+  recipeViewingIndex: 0,
+  currentlyViewedRecipeIds: [],
+  favoritedRecipeIds: [],
 
-  showingRecipeViewer      : false,
-  showingRecipeEditor      : false,
-  showingSidebar           : false,
-  showingListSelector      : false
+  showingRecipeViewer: false,
+  showingRecipeEditor: false,
+  showingSidebar: false,
+  showingListSelector: false
 }, require('../persistence').load().ui), {
   ['rewrite-recipe-id'](state, { from, to }) {
     let { currentlyViewedRecipeIds, favoritedRecipeIds } = state;
@@ -30,58 +30,58 @@ module.exports = require('./makeReducer')(_.extend({
   },
 
   ['set-recipe-viewing-index'](state, { index }) {
-    return _.defaults({ recipeViewingIndex : index }, state);
+    return _.defaults({ recipeViewingIndex: index }, state);
   },
 
   ['favorite-recipe'](state, { recipeId }) {
-    return _.defaults({ favoritedRecipeIds : _.union(state.favoritedRecipeIds, [ recipeId ]) }, state);
+    return _.defaults({ favoritedRecipeIds: _.union(state.favoritedRecipeIds, [recipeId]) }, state);
   },
 
   ['unfavorite-recipe'](state, { recipeId }) {
-    return _.defaults({ favoritedRecipeIds : _.without(state.favoritedRecipeIds, recipeId) }, state);
+    return _.defaults({ favoritedRecipeIds: _.without(state.favoritedRecipeIds, recipeId) }, state);
   },
 
   ['show-recipe-viewer'](state, { index, recipeIds }) {
     return _.defaults({
-      showingRecipeViewer      : true,
-      recipeViewingIndex       : index,
-      currentlyViewedRecipeIds : recipeIds
-     }, state);
+      showingRecipeViewer: true,
+      recipeViewingIndex: index,
+      currentlyViewedRecipeIds: recipeIds
+    }, state);
   },
 
   ['hide-recipe-viewer'](state) {
     return _.defaults({
-      showingRecipeViewer      : false,
-      recipeViewingIndex       : 0,
-      currentlyViewedRecipeIds : []
-     }, state);
+      showingRecipeViewer: false,
+      recipeViewingIndex: 0,
+      currentlyViewedRecipeIds: []
+    }, state);
   },
 
   ['show-recipe-editor'](state) {
-    return _.defaults({ showingRecipeEditor : true }, state);
+    return _.defaults({ showingRecipeEditor: true }, state);
   },
 
   ['hide-recipe-editor'](state) {
-    return _.defaults({ showingRecipeEditor : false }, state);
+    return _.defaults({ showingRecipeEditor: false }, state);
   },
 
   ['show-sidebar'](state) {
-    return _.defaults({ showingSidebar : true }, state);
+    return _.defaults({ showingSidebar: true }, state);
   },
 
   ['hide-sidebar'](state) {
-    return _.defaults({ showingSidebar : false }, state);
+    return _.defaults({ showingSidebar: false }, state);
   },
 
   ['show-list-selector'](state) {
-    return _.defaults({ showingListSelector : true }, state);
+    return _.defaults({ showingListSelector: true }, state);
   },
 
   ['hide-list-selector'](state) {
-    return _.defaults({ showingListSelector : false }, state);
+    return _.defaults({ showingListSelector: false }, state);
   },
 
   ['error-message'](state, { message }) {
-    return _.defaults({ errorMessage : message }, state);
+    return _.defaults({ errorMessage: message }, state);
   }
 });

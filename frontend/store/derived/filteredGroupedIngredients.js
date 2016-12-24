@@ -4,9 +4,11 @@ const assert = require('../../../shared/tinyassert');
 
 const memoize = require('./memoize');
 
-const filteredGroupedIngredients = function({ groupedIngredients, searchTerm }) {
+const filteredGroupedIngredients = function ({ groupedIngredients, searchTerm }) {
   let left;
-  if (searchTerm == null) { searchTerm = ''; }
+  if (searchTerm == null) {
+    searchTerm = '';
+  }
 
   assert(groupedIngredients);
 
@@ -15,7 +17,7 @@ const filteredGroupedIngredients = function({ groupedIngredients, searchTerm }) 
   } else {
     searchTerm = searchTerm.toLowerCase();
 
-    const filterBySearchTerm = function(i) {
+    const filterBySearchTerm = function (i) {
       for (let term of i.searchable) {
         if (term.indexOf(searchTerm) !== -1) {
           return true;
@@ -24,15 +26,13 @@ const filteredGroupedIngredients = function({ groupedIngredients, searchTerm }) 
       return false;
     };
 
-    return _.chain(groupedIngredients)
-      .map(function({ name, ingredients }) {
-        ingredients = _.filter(ingredients, filterBySearchTerm);
-        return { name, ingredients };})
-      .filter(({ ingredients }) => ingredients.length > 0)
-      .value();
+    return _.chain(groupedIngredients).map(function ({ name, ingredients }) {
+      ingredients = _.filter(ingredients, filterBySearchTerm);
+      return { name, ingredients };
+    }).filter(({ ingredients }) => ingredients.length > 0).value();
   }
 };
 
 module.exports = _.extend(filteredGroupedIngredients, {
-  memoized : memoize(filteredGroupedIngredients)
+  memoized: memoize(filteredGroupedIngredients)
 });

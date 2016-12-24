@@ -3,33 +3,33 @@ const _ = require('lodash');
 const select = require('./select');
 
 const DERIVED_FUNCTIONS = {
-  filteredGroupedRecipes : {
-    fn            : require('./filteredGroupedRecipes'),
-    stateSelector : {
-      ingredientsByTag   : 'ingredients.ingredientsByTag',
-      recipes            : 'recipes.alphabeticalRecipes',
-      baseLiquorFilter   : 'filters.baseLiquorFilter',
-      searchTerm         : 'filters.recipeSearchTerm',
-      ingredientTags     : 'filters.selectedIngredientTags',
-      selectedRecipeList : 'filters.selectedRecipeList',
-      favoritedRecipeIds : 'ui.favoritedRecipeIds'
+  filteredGroupedRecipes: {
+    fn: require('./filteredGroupedRecipes'),
+    stateSelector: {
+      ingredientsByTag: 'ingredients.ingredientsByTag',
+      recipes: 'recipes.alphabeticalRecipes',
+      baseLiquorFilter: 'filters.baseLiquorFilter',
+      searchTerm: 'filters.recipeSearchTerm',
+      ingredientTags: 'filters.selectedIngredientTags',
+      selectedRecipeList: 'filters.selectedRecipeList',
+      favoritedRecipeIds: 'ui.favoritedRecipeIds'
     }
   },
 
-  ingredientSplitsByRecipeId : {
-    fn            : require('./ingredientSplitsByRecipeId'),
-    stateSelector : {
-      recipes          : 'recipes.alphabeticalRecipes',
-      ingredientsByTag : 'ingredients.ingredientsByTag',
-      ingredientTags   : 'filters.selectedIngredientTags'
+  ingredientSplitsByRecipeId: {
+    fn: require('./ingredientSplitsByRecipeId'),
+    stateSelector: {
+      recipes: 'recipes.alphabeticalRecipes',
+      ingredientsByTag: 'ingredients.ingredientsByTag',
+      ingredientTags: 'filters.selectedIngredientTags'
     }
   },
 
-  filteredGroupedIngredients : {
-    fn            : require('./filteredGroupedIngredients'),
-    stateSelector : {
-      groupedIngredients : 'ingredients.groupedIngredients',
-      searchTerm         : 'filters.ingredientSearchTerm'
+  filteredGroupedIngredients: {
+    fn: require('./filteredGroupedIngredients'),
+    stateSelector: {
+      groupedIngredients: 'ingredients.groupedIngredients',
+      searchTerm: 'filters.ingredientSearchTerm'
     }
   }
 };

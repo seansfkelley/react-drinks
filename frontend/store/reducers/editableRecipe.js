@@ -5,33 +5,30 @@ const { parseIngredientFromText } = require('../../utils');
 const EditableRecipePageType = require('../../EditableRecipePageType');
 
 const _createEmptyStore = () => ({
-  originalRecipeId : null,
-  currentPage      : EditableRecipePageType.NAME,
-  name             : '',
-  ingredients      : [],
-  instructions     : '',
-  notes            : '',
-  base             : [],
-  saving           : false
-}) ;
+  originalRecipeId: null,
+  currentPage: EditableRecipePageType.NAME,
+  name: '',
+  ingredients: [],
+  instructions: '',
+  notes: '',
+  base: [],
+  saving: false
+});
 
-module.exports = require('./makeReducer')(_.extend(
-  _createEmptyStore(),
-  require('../persistence').load().editableRecipe
-), {
+module.exports = require('./makeReducer')(_.extend(_createEmptyStore(), require('../persistence').load().editableRecipe), {
   ['seed-recipe-editor'](state, { recipe }) {
     return _.defaults({
-      originalRecipeId : recipe.recipeId,
-      ingredients      : _.map(recipe.ingredients, i => ({
-        tag       : i.tag,
-        isEditing : false,
-        display   : _.pick(i, 'displayAmount', 'displayUnit', 'displayIngredient')
-      }) )
+      originalRecipeId: recipe.recipeId,
+      ingredients: _.map(recipe.ingredients, i => ({
+        tag: i.tag,
+        isEditing: false,
+        display: _.pick(i, 'displayAmount', 'displayUnit', 'displayIngredient')
+      }))
     }, _.pick(recipe, 'name', 'instructions', 'notes', 'base'));
   },
 
   ['set-editable-recipe-page'](state, { page }) {
-    return _.defaults({ currentPage : page }, state);
+    return _.defaults({ currentPage: page }, state);
   },
 
   ['set-name'](state, { name }) {
@@ -47,7 +44,7 @@ module.exports = require('./makeReducer')(_.extend(
 
   ['add-ingredient'](state) {
     return _.defaults({
-      ingredients : state.ingredients.concat([{ isEditing : true }])
+      ingredients: state.ingredients.concat([{ isEditing: true }])
     }, state);
   },
 
@@ -55,8 +52,8 @@ module.exports = require('./makeReducer')(_.extend(
     const ingredients = _.clone(state.ingredients);
     ingredients[index] = {
       tag,
-      isEditing : false,
-      display   : parseIngredientFromText(rawText, tag)
+      isEditing: false,
+      display: parseIngredientFromText(rawText, tag)
     };
     return _.defaults({ ingredients }, state);
   },
@@ -74,13 +71,13 @@ module.exports = require('./makeReducer')(_.extend(
     if (state.base.includes(tag)) {
       base = _.without(state.base, tag);
     } else {
-      base = state.base.concat([ tag ]);
+      base = state.base.concat([tag]);
     }
     return _.defaults({ base }, state);
   },
 
   ['saving-recipe'](state) {
-    return _.defaults({ saving : true }, state);
+    return _.defaults({ saving: true }, state);
   },
 
   ['saved-recipe'](state) {
