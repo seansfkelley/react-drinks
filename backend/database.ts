@@ -1,7 +1,5 @@
-import { once, size, pick, mapValues } from 'lodash';
-import * as log from 'loglevel';
+import { once, size, pick } from 'lodash';
 import * as PouchDBConstructor from 'pouchdb';
-import * as Promise from 'bluebird';
 
 import config from './config';
 import { Ingredient, DbRecipe } from '../shared/types';

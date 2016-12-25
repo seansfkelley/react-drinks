@@ -1,7 +1,6 @@
 import { isString, isArray, memoize, once } from 'lodash';
 import { readFileSync } from 'fs';
 import { safeLoad } from 'js-yaml';
-import * as revalidator from 'revalidator';
 import * as log from 'loglevel';
 
 import { Ingredient, IngredientGroupMeta, DbRecipe } from '../shared/types';
@@ -9,7 +8,7 @@ import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
 import { UNASSIGNED_BASE_LIQUOR, BASE_LIQUORS } from '../shared/definitions';
 import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
 
-const xor = (a, b) => (a || b) && !(a && b);
+const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
 
 const ALL_BASE_LIQUORS = [UNASSIGNED_BASE_LIQUOR].concat(BASE_LIQUORS);
 

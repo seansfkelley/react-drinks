@@ -3,7 +3,6 @@ import * as log from 'loglevel';
 
 import { Ingredient, Recipe, DisplayIngredient } from '../../../shared/types';
 import { memoize } from './memoize';
-import { assert } from '../../../shared/tinyassert';
 
 export interface IngredientSplit {
   missing: DisplayIngredient[];
@@ -75,7 +74,7 @@ export function _generateSearchResult({ recipe, substitutionMap, ingredientsByTa
           });
           break;
         }
-        const currentIngredient = ingredientsByTag[currentTag];
+        const currentIngredient: Ingredient = ingredientsByTag[currentTag];
         if (currentIngredient == null) {
           log.warn(`recipe '${recipe.name}' calls for or has a generic that calls for unknown tag '${currentTag}'`);
         }
@@ -111,20 +110,9 @@ export function ingredientSplitsByRecipeId({ recipes, ingredientsByTag, ingredie
     ingredients: exactlyAvailableIngredients,
     ingredientsByTag
   });
-  const allAvailableTagsWithGenerics = Object.keys(substitutionMap);
 
   return recipes
     .map(r => {
-      const indexableIngredients = r.ingredients
-        .filter(i => !!i.tag)
-        .map(i => ingredientsByTag[i.tag!]);
-      const presentIndexableIngredients = indexableIngredients.filter(i => !!i);
-      const unknownIngredientAdjustment = indexableIngredients.length - presentIndexableIngredients.length;
-      const mostGenericRecipeTags = _toMostGenericTags({
-        ingredients: presentIndexableIngredients,
-        ingredientsByTag
-      });
-      const missingCount = _countSubsetMissing(mostGenericRecipeTags, allAvailableTagsWithGenerics) + unknownIngredientAdjustment;
       return _generateSearchResult({
         recipe: r,
         substitutionMap,

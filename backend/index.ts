@@ -10,7 +10,6 @@ import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as expressPromise from 'express-promise';
 
-import { assert } from '../shared/tinyassert';
 import { ROUTES } from './routes';
 
 export function start() {

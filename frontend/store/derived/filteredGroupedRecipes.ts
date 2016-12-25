@@ -2,7 +2,6 @@ import { isString, isArray, sortBy, groupBy, map } from 'lodash';
 import * as log from 'loglevel';
 
 import { Ingredient, Recipe } from '../../../shared/types';
-import { assert } from '../../../shared/tinyassert';
 import { ANY_BASE_LIQUOR } from '../../../shared/definitions';
 import { memoize } from './memoize';
 
@@ -50,11 +49,11 @@ export function _recipeListFilter(listType: string, ingredientSplits: { [recipeI
     case 'all':
       return nofilter;
     case 'mixable':
-      return recipe => ingredientSplits[recipe.recipeId].missing.length === 0;
+      return (recipe: Recipe) => ingredientSplits[recipe.recipeId].missing.length === 0;
     case 'favorites':
-      return recipe => favoritedRecipeIds.includes(recipe.recipeId);
+      return (recipe: Recipe) => favoritedRecipeIds.includes(recipe.recipeId);
     case 'custom':
-      return recipe => !!recipe.isCustom;
+      return (recipe: Recipe) => !!recipe.isCustom;
     default:
       throw new Error(`unknown recipe list type '${listType}'`);
   }

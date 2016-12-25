@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mapValues, omit } from 'lodash';
+import { omit } from 'lodash';
 
 import { makePartialProxy } from './testUtils';
 import { Ingredient, Recipe, DisplayIngredient } from '../shared/types';
@@ -8,7 +8,6 @@ import {
   _includeAllGenerics,
   _toMostGenericTags,
   _computeSubstitutionMap,
-  _generateSearchResult,
   ingredientSplitsByRecipeId
 } from '../frontend/store/derived/ingredientSplitsByRecipeId';
 

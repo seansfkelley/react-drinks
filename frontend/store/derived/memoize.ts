@@ -5,7 +5,7 @@ export function memoize<I extends {}, O>(fn: (input: I) => O): (input: I) => O {
   let lastResult: O | undefined;
 
   return (arg: I) => {
-    if (every(arg, (value, key) => lastArg != null && lastArg![key!] === value)) {
+    if (every(arg, (value, key) => lastArg != null && (lastArg as any)![key!] === value)) {
       return lastResult!;
     } else {
       lastArg = arg;

@@ -3,7 +3,7 @@ import * as Bluebird from 'bluebird';
 export const PROXY_BLUEBIRD_PROMISE: ProxyHandler<any> = {
   get: (target, name) => {
     if (typeof target[name] === 'function') {
-      return (...args) => {
+      return (...args: any[]) => {
         const result = target[name](...args);
         if (result && typeof result.then === 'function') {
           return Bluebird.resolve(result);
@@ -20,9 +20,9 @@ export const PROXY_BLUEBIRD_PROMISE: ProxyHandler<any> = {
 export const PROXY_RETRY: ProxyHandler<any> = {
   get: (target, name) => {
     if (typeof target[name] === 'function') {
-      return (...args) => {
-        const retryHelper = (retries: number) => {
-          function retryOrThrow(error) {
+      return (...args: any[]) => {
+        const retryHelper = (retries: number): any => {
+          function retryOrThrow(error?: any) {
             if (retries > 0) {
               return retryHelper(retries - 1);
             } else {
@@ -38,7 +38,7 @@ export const PROXY_RETRY: ProxyHandler<any> = {
           }
 
           if (result && typeof result.then === 'function') {
-            return result.then(resolved => resolved, retryOrThrow);
+            return result.then((resolved: any) => resolved, retryOrThrow);
           } else {
             return result;
           }

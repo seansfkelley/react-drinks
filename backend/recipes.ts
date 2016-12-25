@@ -1,7 +1,7 @@
 import { assign, omit, keyBy, mapValues, keys, difference } from 'lodash';
 import * as log from 'loglevel';
 
-import { Recipe, DbRecipe } from '../shared/types';
+import { DbRecipe } from '../shared/types';
 import { get as getDatabase } from './database';
 
 const { recipeDb, configDb } = getDatabase();
@@ -13,7 +13,7 @@ export function getDefaultRecipeIds(): Promise<string[]> {
 
 export function save(recipe: DbRecipe): Promise<string> {
   return recipeDb.post(recipe)
-    .then(({ ok, id, rev }) => {
+    .then(({ id }) => {
       log.info(`saved new recipe with ID ${ id }`);
       return id;
     });
@@ -39,10 +39,10 @@ export function bulkLoad(recipeIds?: string[]): Promise<{ [recipeId: string]: Db
       keys: recipeIds,
       include_docs: true
     })
-      .then(({ total_rows, offset, rows }) => {
+      .then(({ rows }) => {
         const recipes = mapValues(
           keyBy(rows.map(r => r.doc).filter(d => !!d), '_id'),
-          d => omit(d, '_id', '_rev') as DbRecipe
+          d => omit(d as {}, '_id', '_rev') as DbRecipe
         );
 
         const loadedIds = keys(recipes);

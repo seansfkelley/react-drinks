@@ -9,8 +9,8 @@ export function getIngredients(): Promise<Ingredient[]> {
   return ingredientDb.allDocs({
     include_docs: true
   })
-    .then(({ total_rows, offset, rows }) => {
-      return rows.map(r => omit(r.doc, '_id', '_rev') as Ingredient);
+    .then(({ rows }) => {
+      return rows.map(r => omit(r.doc as {}, '_id', '_rev') as Ingredient);
     });
 }
 

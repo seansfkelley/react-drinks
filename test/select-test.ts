@@ -5,7 +5,7 @@ import select from '../frontend/store/derived/select';
 describe('select', () => {
   it('should shallowly select non-primitive items', () => {
     const obj = {};
-    const arr = [];
+    const arr: any[] = [];
     const result = select({
       one: obj,
       two: arr

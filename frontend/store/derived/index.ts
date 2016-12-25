@@ -1,37 +1,45 @@
 import {} from 'lodash';
 
-const select = require('./select');
+import { RootState } from '..';
+import select from './select';
 
-const DERIVED_FUNCTIONS = {
-  filteredGroupedRecipes: {
-    fn: require('./filteredGroupedRecipes'),
-    stateSelector: {
-      ingredientsByTag: 'ingredients.ingredientsByTag',
-      recipes: 'recipes.alphabeticalRecipes',
-      baseLiquorFilter: 'filters.baseLiquorFilter',
-      searchTerm: 'filters.recipeSearchTerm',
-      ingredientTags: 'filters.selectedIngredientTags',
-      selectedRecipeList: 'filters.selectedRecipeList',
-      favoritedRecipeIds: 'ui.favoritedRecipeIds'
-    }
-  },
+import { memoized as filteredGroupedRecipesFn } from './filteredGroupedRecipes';
+import { memoized as ingredientSplitsByRecipeIdFn } from './ingredientSplitsByRecipeId';
+import { memoized as filteredGroupedIngredientsFn } from './filteredGroupedIngredients';
 
-  ingredientSplitsByRecipeId: {
-    fn: require('./ingredientSplitsByRecipeId'),
-    stateSelector: {
-      recipes: 'recipes.alphabeticalRecipes',
-      ingredientsByTag: 'ingredients.ingredientsByTag',
-      ingredientTags: 'filters.selectedIngredientTags'
-    }
-  },
+function createSelector<T extends { [field: string]: any }, U>(fn: (args: T) => U, stateSelector: { [k in keyof T]: string }): (state: RootState) => U {
+  return function(state: RootState) {
+    // Trying to slam keyof and [key: string] together fucking sucks.
+    return fn(select(state, stateSelector as any) as any);
+  };
+}
 
-  filteredGroupedIngredients: {
-    fn: require('./filteredGroupedIngredients'),
-    stateSelector: {
-      groupedIngredients: 'ingredients.groupedIngredients',
-      searchTerm: 'filters.ingredientSearchTerm'
-    }
+export const filteredGroupedRecipes = createSelector(
+  filteredGroupedRecipesFn,
+  {
+    ingredientsByTag: 'ingredients.ingredientsByTag',
+    recipes: 'recipes.alphabeticalRecipes',
+    baseLiquorFilter: 'filters.baseLiquorFilter',
+    searchTerm: 'filters.recipeSearchTerm',
+    ingredientTags: 'filters.selectedIngredientTags',
+    selectedRecipeList: 'filters.selectedRecipeList',
+    favoritedRecipeIds: 'ui.favoritedRecipeIds'
   }
-};
+);
 
-module.exports = _.mapValues(DERIVED_FUNCTIONS, ({ fn, stateSelector }) => state => fn.memoized(select(state, stateSelector)));
+export const ingredientSplitsByRecipeId = createSelector(
+  ingredientSplitsByRecipeIdFn,
+  {
+    recipes: 'recipes.alphabeticalRecipes',
+    ingredientsByTag: 'ingredients.ingredientsByTag',
+    ingredientTags: 'filters.selectedIngredientTags'
+  }
+);
+
+export const filteredGroupedIngredients = createSelector(
+  filteredGroupedIngredientsFn,
+  {
+    groupedIngredients: 'ingredients.groupedIngredients',
+    searchTerm: 'filters.ingredientSearchTerm'
+  }
+)

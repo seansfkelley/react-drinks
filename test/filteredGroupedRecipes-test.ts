@@ -7,8 +7,7 @@ import {
   _baseLiquorFilter,
   _searchTermFilter,
   _recipeListFilter,
-  _sortAndGroupAlphabetical,
-  filteredGroupedRecipes
+  _sortAndGroupAlphabetical
 } from '../frontend/store/derived/filteredGroupedRecipes';
 import { IngredientSplit } from '../frontend/store/derived/ingredientSplitsByRecipeId';
 

@@ -1,5 +1,4 @@
 import { Recipe, Ingredient } from '../../../shared/types';
-import { assert } from '../../../shared/tinyassert';
 import { memoize } from './memoize';
 
 const WHITESPACE_REGEX = /\s+/g;

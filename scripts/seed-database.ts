@@ -44,7 +44,7 @@ const logAttemptedOverwriteResult = (result: ErrorResponse[], docType: string = 
   }
 };
 
-function ignoreNotFoundError(error) {
+function ignoreNotFoundError(error: any) {
   if (!error || error.name !== 'not_found') {
     throw error;
   }
@@ -58,7 +58,7 @@ function getRevision(result?: { _rev: any }) {
   }
 }
 
-function bestEffortLogError(error) {
+function bestEffortLogError(error: any) {
   let logline;
   if (error) {
     logline = error.stack ? error.stack : error.toString();

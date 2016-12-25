@@ -38,11 +38,11 @@ const PERSISTENCE_SPEC: { [k1 in keyof RootState]?: { [k2 in keyof RootState[k1]
   }
 };
 
-export function watch(store: Store) {
+export function watch(store: Store<RootState>) {
   store.subscribe(debounce(() => {
     const state = store.getState();
 
-    const data = mapValues(PERSISTENCE_SPEC, (spec, storeName) => pick(state[storeName], Object.keys(spec)));
+    const data = mapValues(PERSISTENCE_SPEC, (spec, storeName) => pick((state as any)[storeName!], Object.keys(spec)));
 
     const timestamp = Date.now();
     localStorage[LOCALSTORAGE_KEY] = JSON.stringify({ data, timestamp });

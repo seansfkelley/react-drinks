@@ -1,3 +1,5 @@
 import { mapValues, get } from 'lodash';
 
-export default (state, pathsByField) => mapValues(pathsByField, path => get(state, path));
+export default function<T>(state: T, pathsByField: { [field: string]: string }): { [field: string]: any } {
+  return mapValues(pathsByField, path => get(state, path));
+}

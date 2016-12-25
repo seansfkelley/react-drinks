@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { makePartialProxy } from './testUtils';
-import { Ingredient, Recipe, DisplayIngredient } from '../shared/types';
+import { Ingredient, Recipe } from '../shared/types';
 import { recipeMatchesSearchTerm } from '../frontend/store/derived/recipeMatchesSearchTerm';
 
 function searchableIngredient(tag: string, ...searchable: string[]): Ingredient {

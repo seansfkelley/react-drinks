@@ -13,9 +13,9 @@ export function filteredGroupedIngredients({ groupedIngredients, searchTerm }: {
   } else {
     searchTerm = searchTerm.toLowerCase();
 
-    const filterBySearchTerm = (i) => {
+    const filterBySearchTerm = (i: Ingredient) => {
       for (let term of i.searchable) {
-        if (term.indexOf(searchTerm) !== -1) {
+        if (term.indexOf(searchTerm!) !== -1) {
           return true;
         }
       }

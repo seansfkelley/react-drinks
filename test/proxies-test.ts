@@ -1,4 +1,4 @@
-import { assign, clone } from 'lodash';
+import { assign } from 'lodash';
 import { expect } from 'chai';
 import * as Bluebird from 'bluebird';
 
@@ -7,7 +7,7 @@ import { PROXY_BLUEBIRD_PROMISE, PROXY_RETRY } from '../backend/proxies';
 function makeCountingGetProxy<T>(proxyable: T, handler: ProxyHandler<T>): { proxy: T, getCount: () => number } {
   let getCount = 0;
   const countingHandler: ProxyHandler<T> = assign({}, handler, {
-    get: (target, name, receiver) => {
+    get: (target: any, name: any, receiver: any) => {
       getCount++;
       return handler.get!(target, name, receiver);
     }
@@ -23,7 +23,7 @@ describe('(proxies)', () => {
     it('should forward the arguments to the function', () => {
       let capturedArgs;
       const proxyable = {
-        fn: (...args) => {
+        fn: (...args: any[]) => {
           capturedArgs = args;
         }
       };
@@ -107,7 +107,7 @@ describe('(proxies)', () => {
     it('should forward the arguments to the function', () => {
       let capturedArgs;
       const proxyable = {
-        fn: (...args) => {
+        fn: (...args: any[]) => {
           capturedArgs = args;
         }
       };
@@ -122,7 +122,7 @@ describe('(proxies)', () => {
     it('should forward the same arguments repeatedly when retrying', () => {
       let capturedArgs: any[] = [];
       const proxyable = {
-        fn: (...args) => {
+        fn: (...args: any[]) => {
           capturedArgs.push(args);
           throw new Error();
         }
@@ -210,7 +210,7 @@ describe('(proxies)', () => {
       const { proxy, getCount } = makeCountingGetProxy(proxyable, PROXY_RETRY);
 
       return proxy.fn()
-        .then(result => {
+        .then((result: any) => {
           expect(result).to.equal('success');
           expect(callCount).to.equal(2);
           expect(getCount()).to.equal(1);
@@ -229,7 +229,7 @@ describe('(proxies)', () => {
       const { proxy, getCount } = makeCountingGetProxy(proxyable, PROXY_RETRY);
 
       return proxy.fn()
-        .then(result => {
+        .then((result: any) => {
           expect(result).to.equal('success');
           expect(callCount).to.equal(1);
           expect(getCount()).to.equal(1);
@@ -249,8 +249,8 @@ describe('(proxies)', () => {
 
       return proxy.fn()
         .then(
-          result => { throw new Error('promise should have rejected!') },
-          error => { /* do nothing, this is expected */ }
+          (_result: any) => { throw new Error('promise should have rejected!') },
+          (_error: any) => { /* do nothing, this is expected */ }
         )
         .then(() => {
           expect(callCount).to.equal(2);
@@ -275,8 +275,8 @@ describe('(proxies)', () => {
 
       return proxy.fn()
         .then(
-          result => { throw new Error('promise should have rejected!') },
-          error => { expect(error).to.equal('async') }
+          (_result: any) => { throw new Error('promise should have rejected!') },
+          (error: any) => { expect(error).to.equal('async') }
         )
         .then(() => {
           expect(callCount).to.equal(2);
@@ -301,8 +301,8 @@ describe('(proxies)', () => {
 
       return proxy.fn()
         .then(
-          result => { throw new Error('promise should have rejected!') },
-          error => { expect(error).to.equal('sync') }
+          (_result: any) => { throw new Error('promise should have rejected!') },
+          (error: any) => { expect(error).to.equal('sync') }
         )
         .then(() => {
           expect(callCount).to.equal(2);
@@ -326,7 +326,7 @@ describe('(proxies)', () => {
       const { proxy, getCount } = makeCountingGetProxy(proxyable, PROXY_RETRY);
 
       return proxy.fn()
-        .then(result => {
+        .then((result: any) => {
           expect(result).to.equal('success');
           expect(callCount).to.equal(2);
           expect(getCount()).to.equal(1);
