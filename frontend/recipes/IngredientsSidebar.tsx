@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const Isvg = require('react-inlinesvg');
 const PureRenderMixin = require('react-addons-pure-render-mixin');

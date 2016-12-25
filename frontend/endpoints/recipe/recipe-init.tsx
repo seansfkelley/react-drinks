@@ -1,6 +1,6 @@
 require('../common-init')();
 
-const React = require('react');
+import * as React from 'react';
 const ReactDOM = require('react-dom');
 
 const StandaloneRecipe = require('./StandaloneRecipe');

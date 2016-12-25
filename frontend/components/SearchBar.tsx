@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
@@ -20,7 +20,7 @@ const SearchBar = React.createClass({
   },
 
   render() {
-    return <div className={classnames('search-bar', this.props.className)} onTouchStart={this._stopTouchStart}><i className='fa fa-search' /><input type='text' className='search-input' placeholder={this.props.placeholder} value={this.state.value} onChange={this._onChange} onTouchTap={this.focus} ref='input' tabIndex={-1} autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' />{this.state.value.length ? <i className='fa fa-times-circle' onTouchTap={this.clearAndFocus} onTouchStart={this._stopTouchStart} /> : undefined}</div>;
+    return <div className={classnames('search-bar', this.props.className)} onTouchStart={this._stopTouchStart}><i className='fa fa-search' /><input type='text' className='search-input' placeholder={this.props.placeholder} value={this.state.value} onChange={this._onChange} onClick={this.focus} ref='input' tabIndex={-1} autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' />{this.state.value.length ? <i className='fa fa-times-circle' onClick={this.clearAndFocus} onTouchStart={this._stopTouchStart} /> : undefined}</div>;
   },
 
   clearAndFocus() {

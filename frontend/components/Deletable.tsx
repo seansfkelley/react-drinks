@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const Draggable = require('react-draggable');
 const classnames = require('classnames');
 
@@ -25,7 +25,7 @@ const Deletable = React.createClass({
   render() {
     const renderableProps = _.omit(this.props, 'onDelete');
     const left = DELETABLE_WIDTH - Math.abs(this.state.left);
-    return <Draggable axis='x' bounds={{ left: -DELETABLE_WIDTH, right: 0 }} onStart={this._onDragStart} onDrag={this._onDrag} onStop={this._onDragEnd} ref='draggable'><div className={classnames('deletable', this.props.className)}>{this.props.children}<div className='delete-button' style={{ width: Math.abs(this.state.deltaX), right: this.state.deltaX }} onTouchTap={this._onDelete}><span className='text' style={{ width: DELETABLE_WIDTH }}>Delete</span></div></div></Draggable>;
+    return <Draggable axis='x' bounds={{ left: -DELETABLE_WIDTH, right: 0 }} onStart={this._onDragStart} onDrag={this._onDrag} onStop={this._onDragEnd} ref='draggable'><div className={classnames('deletable', this.props.className)}>{this.props.children}<div className='delete-button' style={{ width: Math.abs(this.state.deltaX), right: this.state.deltaX }} onClick={this._onDelete}><span className='text' style={{ width: DELETABLE_WIDTH }}>Delete</span></div></div></Draggable>;
   },
 
   _onDelete(e) {

@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
@@ -19,7 +19,7 @@ const IngredientGroupHeader = React.createClass({
   mixins: [PureRenderMixin],
 
   render() {
-    return <List.Header onTouchTap={this.props.onToggle}><span className='text'>{this.props.title}</span>{this.props.selectedCount > 0 ? <span className='count'>{this.props.selectedCount}</span> : undefined}</List.Header>;
+    return <List.Header onClick={this.props.onToggle}><span className='text'>{this.props.title}</span>{this.props.selectedCount > 0 ? <span className='count'>{this.props.selectedCount}</span> : undefined}</List.Header>;
   }
 });
 
@@ -69,7 +69,7 @@ const IngredientListItem = React.createClass({
       className = 'is-selected';
     }
 
-    return <List.Item className={className} onTouchTap={this._toggleIngredient}><div className='name'>{this.props.ingredient.display}</div><i className='fa fa-check-circle has-ingredient-icon' /></List.Item>;
+    return <List.Item className={className} onClick={this._toggleIngredient}><div className='name'>{this.props.ingredient.display}</div><i className='fa fa-check-circle has-ingredient-icon' /></List.Item>;
   },
 
   _toggleIngredient() {

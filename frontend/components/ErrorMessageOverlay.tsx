@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 const classnames = require('classnames');
 

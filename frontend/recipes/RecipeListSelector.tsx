@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
@@ -21,7 +21,7 @@ const RecipeListSelector = React.createClass({
     const reorderedOptions = _.flatten([this.props.currentType, _.without(definitions.RECIPE_LIST_TYPES, this.props.currentType)]);
 
     const options = _.map(reorderedOptions, type => {
-      return <div key={type} className={classnames('option', { 'is-selected': type === this.props.currentType })} onTouchTap={this._onOptionSelect.bind(null, type)}><span className='label'>{definitions.RECIPE_LIST_NAMES[type]}</span></div>;
+      return <div key={type} className={classnames('option', { 'is-selected': type === this.props.currentType })} onClick={this._onOptionSelect.bind(null, type)}><span className='label'>{definitions.RECIPE_LIST_NAMES[type]}</span></div>;
     });
 
     return <div className='recipe-list-selector'>{options}</div>;

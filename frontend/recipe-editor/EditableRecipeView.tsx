@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 
 const ReduxMixin = require('../mixins/ReduxMixin');
 

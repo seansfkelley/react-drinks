@@ -11,7 +11,7 @@ const WebClipNotification = React.createClass({
 
   render() {
     return (
-      <div className='web-clip-notification arrow-box hidden' onTouchTap={this._dismiss}>
+      <div className='web-clip-notification arrow-box hidden' onClick={this._dismiss}>
         <span className='request'>
           <span className='lead-in'>Hey there first-timer!</span>
           Tap

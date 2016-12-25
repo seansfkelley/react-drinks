@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
 const ReduxMixin = require('../mixins/ReduxMixin');
@@ -61,7 +61,7 @@ const RecipeList = React.createClass({
     // TODO: This can cause needless rerenders, especially when text-searching.
     // PureRenderMixin is bypassed since .bind() returns a new function every time.
     // Is there a way to always pass the same function and infer the index from the event?
-    return <RecipeListItem difficulty={difficulty} isMixable={isMixable} recipeName={r.name} onTouchTap={this._showRecipeViewer.bind(this, absoluteIndex)} onDelete={r.isCustom ? this._deleteRecipe.bind(null, r.recipeId) : undefined} key={r.recipeId} />;
+    return <RecipeListItem difficulty={difficulty} isMixable={isMixable} recipeName={r.name} onClick={this._showRecipeViewer.bind(this, absoluteIndex)} onDelete={r.isCustom ? this._deleteRecipe.bind(null, r.recipeId) : undefined} key={r.recipeId} />;
   },
 
   _showRecipeViewer(index) {

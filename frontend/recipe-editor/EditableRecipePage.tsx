@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
@@ -16,7 +16,7 @@ const NavigationHeader = React.createClass({
   mixins: [PureRenderMixin],
 
   render() {
-    return <div className='navigation-header fixed-header'>{this.props.previousTitle && this.props.onPrevious ? <div className='back-button float-left' onTouchTap={this.props.onPrevious}><i className='fa fa-chevron-left' /><span className='back-button-label'>{this.props.previousTitle}</span></div> : undefined}<i className='fa fa-times float-right' onTouchTap={this._close} /></div>;
+    return <div className='navigation-header fixed-header'>{this.props.previousTitle && this.props.onPrevious ? <div className='back-button float-left' onClick={this.props.onPrevious}><i className='fa fa-chevron-left' /><span className='back-button-label'>{this.props.previousTitle}</span></div> : undefined}<i className='fa fa-times float-right' onClick={this._close} /></div>;
   },
 
   _close() {

@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
@@ -13,7 +13,7 @@ const RecipeListItem = React.createClass({
     recipeName: React.PropTypes.string.isRequired,
     difficulty: React.PropTypes.string,
     isMixable: React.PropTypes.bool,
-    onTouchTap: React.PropTypes.func,
+    onClick: React.PropTypes.func,
     onDelete: React.PropTypes.func
   },
 
@@ -33,7 +33,7 @@ const RecipeListItem = React.createClass({
 
     const ListItemClass = this.props.onDelete != null ? List.DeletableItem : List.Item;
 
-    return <ListItemClass className={classnames('recipe-list-item', { 'is-mixable': this.props.isMixable })} onTouchTap={this.props.onTouchTap} onDelete={this.props.onDelete}><span className='name'>{this.props.recipeName}</span>{difficultyNode}</ListItemClass>;
+    return <ListItemClass className={classnames('recipe-list-item', { 'is-mixable': this.props.isMixable })} onClick={this.props.onClick} onDelete={this.props.onDelete}><span className='name'>{this.props.recipeName}</span>{difficultyNode}</ListItemClass>;
   }
 });
 

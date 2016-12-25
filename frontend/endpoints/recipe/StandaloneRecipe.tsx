@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 
 const definitions = require('../../../shared/definitions');
 

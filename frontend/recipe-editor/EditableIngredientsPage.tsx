@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
@@ -36,10 +36,10 @@ const EditableIngredient = React.createClass({
   render() {
     let ingredientSelector;
     if (this.state.tag != null) {
-      ingredientSelector = <List.Item>{this.props.ingredientsByTag[this.state.tag].display}<i className='fa fa-times-circle' onTouchTap={this._unsetTag} /></List.Item>;
+      ingredientSelector = <List.Item>{this.props.ingredientsByTag[this.state.tag].display}<i className='fa fa-times-circle' onClick={this._unsetTag} /></List.Item>;
     } else {
       ingredientSelector = _.map(this.state.guessedTags, tag => {
-        return <List.Item onTouchTap={this._tagSetter(tag)} key={`tag-${ tag }`}>{this.props.ingredientsByTag[tag].display}</List.Item>;
+        return <List.Item onClick={this._tagSetter(tag)} key={`tag-${ tag }`}>{this.props.ingredientsByTag[tag].display}</List.Item>;
       });
 
       if (ingredientSelector.length) {
@@ -47,11 +47,11 @@ const EditableIngredient = React.createClass({
       }
 
       ingredientSelector = ingredientSelector.concat(_.chain(this.props.allAlphabeticalIngredients).filter(({ tag }) => !this.state.guessedTags.includes(tag)).map(({ display, tag }) => {
-        return <List.Item onTouchTap={this._tagSetter(tag)} key={`tag-${ tag }`}>{display}</List.Item>;
+        return <List.Item onClick={this._tagSetter(tag)} key={`tag-${ tag }`}>{display}</List.Item>;
       }).value());
     }
 
-    return <div className='editable-ingredient'><div className='input-line'><input type='text' placeholder='ex: 1 oz gin' autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' ref='input' value={this.state.value} onChange={this._onChange} onTouchTap={this._focus} /><div className={classnames('done-button', { 'disabled': !this._isCommittable() })} onTouchTap={this._commitIfAllowed}>Done<i className='fa fa-check-circle' /></div></div><div className='ingredient-list-header'>A Type Of</div><List className='ingredient-group-list' onTouchStart={this._dismissKeyboard}>{ingredientSelector}</List></div>;
+    return <div className='editable-ingredient'><div className='input-line'><input type='text' placeholder='ex: 1 oz gin' autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' ref='input' value={this.state.value} onChange={this._onChange} onClick={this._focus} /><div className={classnames('done-button', { 'disabled': !this._isCommittable() })} onClick={this._commitIfAllowed}>Done<i className='fa fa-check-circle' /></div></div><div className='ingredient-list-header'>A Type Of</div><List className='ingredient-group-list' onTouchStart={this._dismissKeyboard}>{ingredientSelector}</List></div>;
   },
 
   componentDidMount() {
@@ -137,7 +137,7 @@ const EditableIngredientsPage = React.createClass({
       return <Deletable onDelete={this._ingredientDeleter(index)} key={`tag-${ ingredient.tag != null ? ingredient.tag : __guard__(ingredient.display, x => x.displayIngredient) }-${ index }`}>{ingredientNode}</Deletable>;
     });
 
-    return <EditableRecipePage className='ingredients-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><div className='ingredients-list'>{ingredientNodes}</div><div className={classnames('new-ingredient-button', { 'disabled': this._anyAreEditing() })} onTouchTap={this._addEmptyIngredient}><i className='fa fa-plus-circle' /><span>New Ingredient</span></div><div className={classnames('next-button', { 'disabled': !this._isEnabled() })} onTouchTap={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
+    return <EditableRecipePage className='ingredients-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><div className='ingredients-list'>{ingredientNodes}</div><div className={classnames('new-ingredient-button', { 'disabled': this._anyAreEditing() })} onClick={this._addEmptyIngredient}><i className='fa fa-plus-circle' /><span>New Ingredient</span></div><div className={classnames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
   },
 
   _anyAreEditing() {

@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 const classnames = require('classnames');
 
@@ -20,12 +20,12 @@ const IngredientCategory = {
   AVAILABLE: 'available'
 };
 
-const IconButton = ({ icon, text, onTouchTap }) => <div className='icon-button' onTouchTap={onTouchTap}><i className={classnames('fa', icon)} /><div className='label'>{text}</div></div>;
+const IconButton = ({ icon, text, onClick }) => <div className='icon-button' onClick={onClick}><i className={classnames('fa', icon)} /><div className='label'>{text}</div></div>;
 
 IconButton.propTypes = {
   icon: React.PropTypes.string,
   text: React.PropTypes.string,
-  onTouchTap: React.PropTypes.func
+  onClick: React.PropTypes.func
 };
 
 const RecipeView = React.createClass({
@@ -82,13 +82,13 @@ const RecipeView = React.createClass({
     const footerButtons = [];
 
     if (this.props.onEdit) {
-      footerButtons.push(<IconButton key='edit' icon='fa-pencil-square-o' text='Edit' onTouchTap={this._edit} />);
+      footerButtons.push(<IconButton key='edit' icon='fa-pencil-square-o' text='Edit' onClick={this._edit} />);
     }
     if (this.props.isShareable) {
-      footerButtons.push(<IconButton key='share' icon='fa-share-square-o' text='Share' onTouchTap={this._share} />);
+      footerButtons.push(<IconButton key='share' icon='fa-share-square-o' text='Share' onClick={this._share} />);
     }
     if (this.props.onFavorite) {
-      footerButtons.push(<IconButton key='favorite' icon={classnames({ 'fa-star': this.props.isFavorited, 'fa-star-o': !this.props.isFavorited })} text='Favorite' onTouchTap={this._favorite} />);
+      footerButtons.push(<IconButton key='favorite' icon={classnames({ 'fa-star': this.props.isFavorited, 'fa-star-o': !this.props.isFavorited })} text='Favorite' onClick={this._favorite} />);
     }
 
     return <div className='recipe-view fixed-header-footer'>{header}<div className='recipe-description fixed-content-pane'><div className='recipe-ingredients'>{ingredientNodes}</div>{recipeInstructions}{recipeNotes}{recipeUrl}</div>{footerButtons.length ? <div className='fixed-footer'>{footerButtons}</div> : undefined}</div>;

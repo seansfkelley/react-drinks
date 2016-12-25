@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const Draggable = require('react-draggable');
 const classnames = require('classnames');
 
@@ -111,7 +111,7 @@ List.AddableItem = React.createClass({
   },
 
   render() {
-    return <List.Item className='addable-list-item'><input onFocus={this._setEditing} onBlur={this._clearEditing} onChange={this._setValue} value={this.state.value} placeholder={this.props.placeholder} type='text' autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' ref='input' /><i className={classnames('fa fa-plus', { 'enabled': this.state.isEditing || this.state.value })} onTouchTap={this._add} /></List.Item>;
+    return <List.Item className='addable-list-item'><input onFocus={this._setEditing} onBlur={this._clearEditing} onChange={this._setValue} value={this.state.value} placeholder={this.props.placeholder} type='text' autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' ref='input' /><i className={classnames('fa fa-plus', { 'enabled': this.state.isEditing || this.state.value })} onClick={this._add} /></List.Item>;
   },
 
   _setEditing() {

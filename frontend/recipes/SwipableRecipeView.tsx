@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
 const ReduxMixin = require('../mixins/ReduxMixin');

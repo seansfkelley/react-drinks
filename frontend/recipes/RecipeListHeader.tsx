@@ -1,5 +1,5 @@
 import {} from 'lodash';
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
@@ -27,7 +27,7 @@ const RecipeListHeader = React.createClass({
       initialBaseLiquorIndex = 0;
     }
 
-    return <div className='recipe-list-header fixed-header'><TitleBar leftIcon='/assets/img/ingredients.svg' leftIconOnTouchTap={this._showSidebar} rightIcon='fa-plus' rightIconOnTouchTap={this._newRecipe} className='recipe-list-header' onTouchTap={this._showListSelector}>{definitions.RECIPE_LIST_NAMES[this.state.selectedRecipeList]}<i className='fa fa-chevron-down' /></TitleBar><Swipable className='base-liquor-container' initialIndex={initialBaseLiquorIndex} onSlideChange={this._onBaseLiquorChange} friction={0.7}>{_.map(BASE_LIQUORS, base => {
+    return <div className='recipe-list-header fixed-header'><TitleBar leftIcon='/assets/img/ingredients.svg' leftIconOnTouchTap={this._showSidebar} rightIcon='fa-plus' rightIconOnTouchTap={this._newRecipe} className='recipe-list-header' onClick={this._showListSelector}>{definitions.RECIPE_LIST_NAMES[this.state.selectedRecipeList]}<i className='fa fa-chevron-down' /></TitleBar><Swipable className='base-liquor-container' initialIndex={initialBaseLiquorIndex} onSlideChange={this._onBaseLiquorChange} friction={0.7}>{_.map(BASE_LIQUORS, base => {
           return <div className={classnames('base-liquor-option', { 'selected': base === this.state.baseLiquorFilter })} key={base}>{base}</div>;
         })}</Swipable></div>;
   },

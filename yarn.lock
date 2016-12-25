@@ -202,10 +202,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-tap-event-plugin@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@types/react-tap-event-plugin/-/react-tap-event-plugin-0.0.30.tgz#123f35080412f489b6770c5a65c159ff96654cb5"
-
 "@types/react@*", "@types/react@^0.14.55":
   version "0.14.55"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-0.14.55.tgz#f7f7a6ad0c94780531e95632435b2798c5dad11b"
@@ -1661,14 +1657,6 @@ faye-websocket@~0.7.2:
   resolved "https://registry.yarnpkg.com/faye-websocket/-/faye-websocket-0.7.3.tgz#cc4074c7f4a4dfd03af54dd65c354b135132ce11"
   dependencies:
     websocket-driver ">=0.3.6"
-
-fbjs@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.2.1.tgz#622061630a43e11f845017b9044aaa648ed3f731"
-  dependencies:
-    core-js "^1.0.0"
-    promise "^7.0.3"
-    whatwg-fetch "^0.9.0"
 
 fbjs@^0.4.0:
   version "0.4.0"
@@ -4079,12 +4067,6 @@ react-inlinesvg@^0.4.1:
 react-swipeable@^3.0.2:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-3.7.0.tgz#c51f1a9c21e132d06bb95bf75554d23f89385162"
-
-react-tap-event-plugin@^0.2.1:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/react-tap-event-plugin/-/react-tap-event-plugin-0.2.2.tgz#4f6f257851654f6c2b1c213a1d3ff21b353ae4e1"
-  dependencies:
-    fbjs "^0.2.1"
 
 react@^0.14.2:
   version "0.14.8"

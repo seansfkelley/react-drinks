@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 const classnames = require('classnames');
 
 const store = require('../../store');
