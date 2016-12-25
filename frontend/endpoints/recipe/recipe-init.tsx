@@ -1,11 +1,12 @@
-require('../common-init')();
-
+import commonInit from '../common-init';
 import * as React from 'react';
-const ReactDOM = require('react-dom');
+import * as ReactDOM from 'react-dom';
 
-const StandaloneRecipe = require('./StandaloneRecipe');
+import StandaloneRecipe from './StandaloneRecipe';
+
+commonInit();
 
 const APP_ROOT = document.querySelector('#app-root');
 
 // TODO: Redirect to nonexistent error page if this is mangled.
-ReactDOM.render(<StandaloneRecipe recipe={window.recipeData} />, APP_ROOT);
+ReactDOM.render(<StandaloneRecipe recipe={(window as any).recipeData} />, APP_ROOT);

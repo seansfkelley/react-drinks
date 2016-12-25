@@ -1,5 +1,5 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
-import * as ReduxThunk from 'redux-thunk';
+import ReduxThunk from 'redux-thunk';
 
 import { reducer as reduceUi, UiState } from './reducers/ui';
 import { reducer as reduceFilters, FiltersState } from './reducers/filters';

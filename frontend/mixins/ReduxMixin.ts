@@ -1,12 +1,12 @@
 import { map, uniqueId, assign, pick } from 'lodash';
 import { store } from '../store';
 
-export default function(fieldsBySubstore: { [store: string]: string }) {
+export default function(fieldsBySubstore: { [store: string]: string | string[] }) {
   const fnName = uniqueId('_onStoreChange_');
-  const getFlattenedFields = function () {
+  function getFlattenedFields() {
     const state = store.getState();
     return assign({}, ...map(fieldsBySubstore, (fieldArrayOrString, storeName) => pick((state as any)[storeName!], fieldArrayOrString)));
-  };
+  }
 
   const mixin = {
     getInitialState: getFlattenedFields,

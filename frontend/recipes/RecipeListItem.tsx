@@ -1,40 +1,42 @@
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const List = require('../components/List');
+import List from '../components/List';
 
-const Difficulty = require('../Difficulty');
+import { Difficulty, CLASS_NAME, HUMAN_READABLE } from '../Difficulty';
 
-const RecipeListItem = React.createClass({
+interface Props {
+  recipeName: string;
+  difficulty?: Difficulty;
+  isMixable?: boolean;
+  onClick?: Function;
+  onDelete?: Function;
+}
+
+export default React.createClass<Props, void>({
   displayName: 'RecipeListItem',
-
-  propTypes: {
-    recipeName: React.PropTypes.string.isRequired,
-    difficulty: React.PropTypes.string,
-    isMixable: React.PropTypes.bool,
-    onClick: React.PropTypes.func,
-    onDelete: React.PropTypes.func
-  },
 
   mixins: [PureRenderMixin],
 
   getDefaultProps() {
     return {
       isMixable: true
-    };
+    } as any as Props;
   },
 
   render() {
-    let difficultyNode;
-    if (this.props.difficulty) {
-      difficultyNode = <span className={classnames('difficulty', Difficulty.CLASS_NAME[this.props.difficulty])}>{Difficulty.HUMAN_READABLE[this.props.difficulty]}</span>;
-    }
-
-    const ListItemClass = this.props.onDelete != null ? List.DeletableItem : List.Item;
-
-    return <ListItemClass className={classnames('recipe-list-item', { 'is-mixable': this.props.isMixable })} onClick={this.props.onClick} onDelete={this.props.onDelete}><span className='name'>{this.props.recipeName}</span>{difficultyNode}</ListItemClass>;
+    const difficulty = this.props.difficulty
+      ? <span className={classNames('difficulty', CLASS_NAME[this.props.difficulty])} key='difficulty'>
+          {HUMAN_READABLE[this.props.difficulty]}
+        </span>
+      : undefined;
+    const content = [ <span className='name' key='name'>{this.props.recipeName}</span>, difficulty ];
+    const className = classNames('recipe-list-item', { 'is-mixable': this.props.isMixable });
+    return this.props.onDelete
+      ? <List.DeletableItem className={className} onClick={this.props.onClick} onDelete={this.props.onDelete}>{content}</List.DeletableItem>
+      : <List.Item className={className} onClick={this.props.onClick}>{content}</List.Item>;
   }
 });
 
-module.exports = RecipeListItem;
+

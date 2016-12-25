@@ -1,8 +1,19 @@
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const SearchBar = React.createClass({
+interface Props {
+  onChange: Function;
+  initialValue?: string;
+  placeholder?: string;
+  className?: string;
+}
+
+interface State {
+  value: string;
+}
+
+export default React.createClass<Props, State>({
   displayName: 'SearchBar',
 
   propTypes: {
@@ -20,39 +31,60 @@ const SearchBar = React.createClass({
   },
 
   render() {
-    return <div className={classnames('search-bar', this.props.className)} onTouchStart={this._stopTouchStart}><i className='fa fa-search' /><input type='text' className='search-input' placeholder={this.props.placeholder} value={this.state.value} onChange={this._onChange} onClick={this.focus} ref='input' tabIndex={-1} autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' />{this.state.value.length ? <i className='fa fa-times-circle' onClick={this.clearAndFocus} onTouchStart={this._stopTouchStart} /> : undefined}</div>;
+    return (
+      <div className={classNames('search-bar', this.props.className)} onTouchStart={this._stopTouchStart}>
+        <i className='fa fa-search' />
+        <input
+          type='text'
+          className='search-input'
+          placeholder={this.props.placeholder}
+          value={this.state.value}
+          onChange={this._onChange}
+          onClick={this.focus}
+          ref='input'
+          tabIndex={-1}
+          autoCorrect='off'
+          autoCapitalize='off'
+          autoComplete='off'
+          spellCheck={false}
+        />
+        {this.state.value.length
+          ? <i className='fa fa-times-circle' onClick={this.clearAndFocus} onTouchStart={this._stopTouchStart} />
+          : null}
+      </div>
+    );
   },
 
   clearAndFocus() {
     this.clear();
-    return this.focus();
+    this.focus();
   },
 
   clear() {
     this.setState({ value: '' });
-    return this.props.onChange('');
+    this.props.onChange('');
   },
 
   focus() {
-    return this.refs.input.focus();
+    this.refs.input.focus();
   },
 
   isFocused() {
     return document.activeElement === this.refs.input;
   },
 
-  _onChange(e) {
-    this.setState({ value: e.target.value });
-    return this.props.onChange(e.target.value);
+  _onChange(e: React.FormEvent<HTMLInputElement>) {
+    this.setState({ value: e.currentTarget.value });
+    this.props.onChange(e.currentTarget.value);
   },
 
-  _stopTouchStart(e) {
+  _stopTouchStart(e: React.TouchEvent<void>) {
     // This is hacky, but both of these are independently necessary.
     // 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
     e.stopPropagation();
     // 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
-    return e.preventDefault();
+    e.preventDefault();
   }
 });
 
-module.exports = SearchBar;
+

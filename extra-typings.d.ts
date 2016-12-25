@@ -1,6 +1,5 @@
 declare module 'react-draggable';
 declare module 'reqwest';
-declare module 'react-inline-svg';
 declare module 'MD5';
 declare module 'express-promise';
 

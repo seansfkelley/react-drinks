@@ -1,39 +1,44 @@
-import {} from 'lodash';
+import { without, flatten } from 'lodash';
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const store = require('../store');
+import { store } from '../store';
 
-const definitions = require('../../shared/definitions');
+import { RECIPE_LIST_TYPES, RECIPE_LIST_NAMES } from '../../shared/definitions';
 
-const RecipeListSelector = React.createClass({
+interface Props {
+  currentType?: string;
+  onClose?: Function;
+}
+
+export default React.createClass<Props, void>({
   displayName: 'RecipeListSelector',
-
-  propTypes: {
-    currentType: React.PropTypes.string,
-    onClose: React.PropTypes.func
-  },
 
   mixins: [PureRenderMixin],
 
   render() {
-    const reorderedOptions = _.flatten([this.props.currentType, _.without(definitions.RECIPE_LIST_TYPES, this.props.currentType)]);
-
-    const options = _.map(reorderedOptions, type => {
-      return <div key={type} className={classnames('option', { 'is-selected': type === this.props.currentType })} onClick={this._onOptionSelect.bind(null, type)}><span className='label'>{definitions.RECIPE_LIST_NAMES[type]}</span></div>;
-    });
+    const reorderedOptions = flatten([this.props.currentType, without(RECIPE_LIST_TYPES, this.props.currentType)]);
+    const options = reorderedOptions.map(type => (
+      <div
+        key={type}
+        className={classNames('option', { 'is-selected': type === this.props.currentType })}
+        onClick={this._onOptionSelect.bind(null, type)}
+      >
+        <span className='label'>{(RECIPE_LIST_NAMES as any)[type]}</span>
+      </div>
+    ));
 
     return <div className='recipe-list-selector'>{options}</div>;
   },
 
-  _onOptionSelect(listType) {
+  _onOptionSelect(listType: string) {
     store.dispatch({
       type: 'set-selected-recipe-list',
       listType
     });
-    return this.props.onClose();
+    this.props.onClose();
   }
 });
 
-module.exports = RecipeListSelector;
+

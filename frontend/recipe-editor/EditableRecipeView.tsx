@@ -1,22 +1,22 @@
-import {} from 'lodash';
+
 import * as React from 'react';
 
-const ReduxMixin = require('../mixins/ReduxMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
 
-const normalization = require('../../shared/normalization');
+import normalization from '../../shared/normalization';
 
-const store = require('../store');
-const EditableRecipePageType = require('../EditableRecipePageType');
+import store from '../store';
+import EditableRecipePageType from '../EditableRecipePageType';
 
-const definitions = require('../../shared/definitions');
+import definitions from '../../shared/definitions';
 
-const EditableNamePage = require('./EditableNamePage');
-const EditableIngredientsPage = require('./EditableIngredientsPage');
-const EditableBaseLiquorPage = require('./EditableBaseLiquorPage');
-const EditableTextPage = require('./EditableTextPage');
-const PreviewPage = require('./PreviewPage');
+import EditableNamePage from './EditableNamePage';
+import EditableIngredientsPage from './EditableIngredientsPage';
+import EditableBaseLiquorPage from './EditableBaseLiquorPage';
+import EditableTextPage from './EditableTextPage';
+import PreviewPage from './PreviewPage';
 
-const editableRecipeActions = require('./editableRecipeActions');
+import editableRecipeActions from './editableRecipeActions';
 
 // TODO: make IconButton class?
 // TODO: clicking back into ingredients to edit them
@@ -25,7 +25,7 @@ const editableRecipeActions = require('./editableRecipeActions');
 // TODO: clicking on something to edit could be nice
 // TODO: "done" button is rather far away
 
-const EditableRecipeView = React.createClass({
+export default React.createClass({
   displayName: 'EditableRecipeView',
 
   propTypes: {
@@ -95,4 +95,4 @@ const EditableRecipeView = React.createClass({
   }
 });
 
-module.exports = EditableRecipeView;
+

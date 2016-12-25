@@ -1,169 +1,206 @@
-import {} from 'lodash';
+import { clone, flatten, sortBy, omit, partial } from 'lodash';
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const List = require('../components/List');
+import { GroupedIngredients } from '../types';
+import { Ingredient } from '../../shared/types';
+import List from '../components/List';
 
-const stylingConstants = require('../stylingConstants');
+import {INGREDIENTS_LIST_ITEM_HEIGHT, INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET } from '../stylingConstants';
 
-const IngredientGroupHeader = React.createClass({
+interface IngredientGroupHeaderProps {
+  title: string;
+  selectedCount: number;
+  onToggle?: () => void;
+}
+
+const IngredientGroupHeader = React.createClass<IngredientGroupHeaderProps, void>({
   displayName: 'IngredientGroupHeader',
-
-  propTypes: {
-    title: React.PropTypes.string.isRequired,
-    selectedCount: React.PropTypes.number.isRequired,
-    onToggle: React.PropTypes.func
-  },
 
   mixins: [PureRenderMixin],
 
   render() {
-    return <List.Header onClick={this.props.onToggle}><span className='text'>{this.props.title}</span>{this.props.selectedCount > 0 ? <span className='count'>{this.props.selectedCount}</span> : undefined}</List.Header>;
+    return (
+      <List.Header onClick={this.props.onToggle}>
+        <span className='text'>{this.props.title}</span>
+        {this.props.selectedCount > 0
+          ? <span className='count'>{this.props.selectedCount}</span>
+          : undefined}
+      </List.Header>
+    );
   }
 });
 
-const IngredientItemGroup = React.createClass({
-  displayName: 'IngredientItemGroup',
+interface IngredientItemGroupProps {
+  title: string;
+  isExpanded?: boolean;
+}
 
-  propTypes: {
-    title: React.PropTypes.string.isRequired,
-    isExpanded: React.PropTypes.bool
-  },
+const IngredientItemGroup = React.createClass<IngredientItemGroupProps, void>({
+  displayName: 'IngredientItemGroup',
 
   mixins: [PureRenderMixin],
 
   getDefaultProps() {
     return {
       isExpanded: true
-    };
+    } as any as IngredientItemGroupProps;
   },
 
   render() {
-    let style;
-    const groupSize = React.Children.count(this.props.children);
-    if (this.props.isExpanded) {
-      style = {
-        height: groupSize * stylingConstants.INGREDIENTS_LIST_ITEM_HEIGHT + stylingConstants.INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET
-      };
-    }
+    const style = this.props.isExpanded
+      ? { height: React.Children.count(this.props.children) * INGREDIENTS_LIST_ITEM_HEIGHT + INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET }
+      : undefined;
 
-    return <List.ItemGroup className={classnames({ 'collapsed': !this.props.isExpanded })} style={style}>{this.props.children}</List.ItemGroup>;
+    return (
+      <List.ItemGroup className={classNames({ 'collapsed': !this.props.isExpanded })} style={style}>
+        {this.props.children}
+      </List.ItemGroup>
+    );
   }
 });
 
-const IngredientListItem = React.createClass({
-  displayName: 'IngredientListItem',
+interface IngredientListItemProps {
+  isSelected: boolean;
+  ingredient: Ingredient;
+  toggleTag: (tag: string) => void;
+}
 
-  propTypes: {
-    isSelected: React.PropTypes.bool.isRequired,
-    ingredient: React.PropTypes.object.isRequired,
-    toggleTag: React.PropTypes.func.isRequired
-  },
+const IngredientListItem = React.createClass<IngredientListItemProps, void>({
+  displayName: 'IngredientListItem',
 
   mixins: [PureRenderMixin],
 
   render() {
-    let className;
-    if (this.props.isSelected) {
-      className = 'is-selected';
-    }
-
-    return <List.Item className={className} onClick={this._toggleIngredient}><div className='name'>{this.props.ingredient.display}</div><i className='fa fa-check-circle has-ingredient-icon' /></List.Item>;
+    return (
+      <List.Item className={classNames({ 'is-selected': this.props.isSelected })} onClick={this._toggleIngredient}>
+        <div className='name'>{this.props.ingredient.display}</div>
+        <i className='fa fa-check-circle has-ingredient-icon' />
+      </List.Item>
+    );
   },
 
   _toggleIngredient() {
-    return this.props.toggleTag(this.props.ingredient.tag);
+    this.props.toggleTag(this.props.ingredient.tag);
   }
 });
 
-const GroupedIngredientList = React.createClass({
-  displayName: 'GroupedIngredientList',
+interface Props {
+  groupedIngredients: GroupedIngredients[];
+  initialSelectedIngredientTags: { [tag: string]: any };
+  onSelectionChange?: (selectedIngredientTags: { [tag: string]: any }) => void;
+}
 
-  propTypes: {
-    groupedIngredients: React.PropTypes.array,
-    initialSelectedIngredientTags: React.PropTypes.object,
-    onSelectionChange: React.PropTypes.func
-  },
+interface State {
+  expandedGroupName?: string;
+  selectedIngredientTags: string[];
+}
+
+export default React.createClass<Props, State>({
+  displayName: 'GroupedIngredientList',
 
   mixins: [PureRenderMixin],
 
   getInitialState() {
     return {
-      expandedGroupName: null,
-      selectedIngredientTags: _.clone(this.props.initialSelectedIngredientTags)
+      expandedGroupName: undefined,
+      selectedIngredientTags: clone(this.props.initialSelectedIngredientTags)
     };
   },
 
   render() {
-    let ingredients, listNodes, selectedCount;
-    const ingredientCount = _.chain(this.props.groupedIngredients).pluck('ingredients').pluck('length').reduce((sum, n) => sum + n, 0).value();
+    const _makeListItem = (i: Ingredient) => (
+      <IngredientListItem
+        ingredient={i}
+        isSelected={this.state.selectedIngredientTags[i.tag] != null}
+        toggleTag={this._toggleIngredient}
+        key={i.tag}
+      />
+    );
 
-    const _makeListItem = i => {
-      return <IngredientListItem ingredient={i} isSelected={this.state.selectedIngredientTags[i.tag] != null} toggleTag={this._toggleIngredient} key={i.tag} />;
-    };
+    const ingredientCount = (this.props as Props).groupedIngredients
+      .map(group => group.ingredients.length)
+      .reduce((sum, n) => sum + n, 0);
+
+    let listItems: React.ReactNode[];
 
     if (ingredientCount === 0) {
-      listNodes = [];
+      listItems = [];
     } else if (ingredientCount < 10) {
-      ingredients = _.chain(this.props.groupedIngredients).pluck('ingredients').flatten().sortBy('displayName').value();
+      const ingredients = sortBy(flatten((this.props as Props).groupedIngredients.map(group => group.ingredients)), i => i.display);
+      const selectedCount = ingredients.filter(i => this.state.selectedIngredientTags[i.tag] != null).length;
 
-      selectedCount = _.filter(ingredients, i => this.state.selectedIngredientTags[i.tag] != null).length;
+      const header = <IngredientGroupHeader
+        title={`All Results (${ ingredientCount })`}
+        selectedCount={selectedCount}
+        key='header-all-results'
+      />;
 
-      const header = <IngredientGroupHeader title={`All Results (${ ingredientCount })`} selectedCount={selectedCount} key='header-all-results' />;
-
-      listNodes = [header, _.map(ingredients, _makeListItem)];
+      listItems = [header, ingredients.map(_makeListItem)];
     } else {
-      let name;
-      listNodes = [];
-      for ({ name, ingredients } of this.props.groupedIngredients) {
+      listItems = [];
+      for (let { name, ingredients } of this.props.groupedIngredients) {
         const ingredientNodes = [];
-        selectedCount = 0;
+        let selectedCount = 0;
         for (let i of ingredients) {
           ingredientNodes.push(_makeListItem(i));
           if (this.state.selectedIngredientTags[i.tag] != null) {
             selectedCount += 1;
           }
         }
-        listNodes.push([<IngredientGroupHeader title={name} selectedCount={selectedCount} onToggle={_.partial(this._toggleGroup, name)} key={`header-${ name }`} />, <IngredientItemGroup title={name} isExpanded={this.state.expandedGroupName === name} key={`group-${ name }`}>{ingredientNodes}</IngredientItemGroup>]);
+        listItems = listItems.concat([
+          <IngredientGroupHeader
+            title={name}
+            selectedCount={selectedCount}
+            onToggle={partial(this._toggleGroup, name)}
+            key={`header-${ name }`}
+          />
+        ,
+          <IngredientItemGroup
+            title={name}
+            isExpanded={this.state.expandedGroupName === name}
+            key={`group-${ name }`}
+          >
+            {ingredientNodes}
+          </IngredientItemGroup>
+        ]);
       }
     }
 
-    return <List className={classnames(List.ClassNames.HEADERED, List.ClassNames.COLLAPSIBLE, 'grouped-ingredient-list')} emptyText='Nothing matched your search.'>{listNodes}</List>;
+    return (
+      <List
+        className={classNames(List.ClassNames.HEADERED, List.ClassNames.COLLAPSIBLE, 'grouped-ingredient-list')}
+        emptyText='Nothing matched your search.'
+      >
+        {listItems}
+      </List>
+    );
   },
 
   getSelectedTags() {
     return this.state.selectedIngredientTags;
   },
 
-  _toggleGroup(expandedGroupName) {
+  _toggleGroup(expandedGroupName: string) {
     if (this.state.expandedGroupName === expandedGroupName) {
-      return this.setState({ expandedGroupName: null });
+      this.setState({ expandedGroupName: null });
     } else {
-      return this.setState({ expandedGroupName });
+      this.setState({ expandedGroupName });
     }
   },
 
-  _toggleIngredient(tag) {
-    // It is VERY IMPORTANT that these create a new instance: this is how PureRenderMixin guarantees correctness.
+  _toggleIngredient(tag: string) {
     let selectedIngredientTags;
     if (this.state.selectedIngredientTags[tag] != null) {
-      selectedIngredientTags = _.omit(this.state.selectedIngredientTags, tag);
+      selectedIngredientTags = omit(this.state.selectedIngredientTags, tag);
     } else {
-      selectedIngredientTags = _.clone(this.state.selectedIngredientTags);
+      selectedIngredientTags = clone(this.state.selectedIngredientTags);
       selectedIngredientTags[tag] = true;
     }
     this.setState({ selectedIngredientTags });
-    return __guardMethod__(this.props, 'onSelectionChange', o => o.onSelectionChange(selectedIngredientTags));
+    if (this.props.onSelectionChange) {
+      this.props.onSelectionChange(selectedIngredientTags);
+    }
   }
 });
-
-module.exports = GroupedIngredientList;
-
-function __guardMethod__(obj, methodName, transform) {
-  if (typeof obj !== 'undefined' && obj !== null && typeof obj[methodName] === 'function') {
-    return transform(obj, methodName);
-  } else {
-    return undefined;
-  }
-}

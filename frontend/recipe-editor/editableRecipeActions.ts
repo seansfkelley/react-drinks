@@ -1,38 +1,36 @@
 import * as Promise from 'bluebird';
-const reqwest = require('reqwest');
+import * as reqwest from 'reqwest';
 
-const saveRecipe = recipe => function (dispatch, getState) {
-  dispatch({
-    type: 'saving-recipe'
-  });
-
-  const recipeNoId = _.omit(recipe, 'originalRecipeId');
-  return Promise.resolve(reqwest({
-    url: '/recipe',
-    method: 'post',
-    type: 'json',
-    data: recipeNoId
-  })).then(function ({ ackRecipeId }) {
+export function saveRecipe(recipe) {
+  return (dispatch, getState) => {
     dispatch({
-      type: 'saved-recipe',
-      recipe: _.extend({ recipeId: ackRecipeId }, recipeNoId)
+      type: 'saving-recipe'
     });
 
-    if (recipe.originalRecipeId) {
+    const recipeNoId = _.omit(recipe, 'originalRecipeId');
+    return Promise.resolve(reqwest({
+      url: '/recipe',
+      method: 'post',
+      type: 'json',
+      data: recipeNoId
+    })).then(function ({ ackRecipeId }) {
       dispatch({
-        type: 'rewrite-recipe-id',
-        from: recipe.originalRecipeId,
-        to: ackRecipeId
+        type: 'saved-recipe',
+        recipe: _.extend({ recipeId: ackRecipeId }, recipeNoId)
       });
 
-      return dispatch({
-        type: 'delete-recipe',
-        recipeId: recipe.originalRecipeId
-      });
-    }
-  });
-};
+      if (recipe.originalRecipeId) {
+        dispatch({
+          type: 'rewrite-recipe-id',
+          from: recipe.originalRecipeId,
+          to: ackRecipeId
+        });
 
-module.exports = {
-  saveRecipe
-};
+        return dispatch({
+          type: 'delete-recipe',
+          recipeId: recipe.originalRecipeId
+        });
+      }
+    });
+  };
+}

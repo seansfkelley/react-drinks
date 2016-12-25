@@ -1,8 +1,8 @@
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const store = require('../store');
+import store from '../store';
 
 const NavigationHeader = React.createClass({
   displayName: 'NavigationHeader',
@@ -28,7 +28,7 @@ const NavigationHeader = React.createClass({
   }
 });
 
-const EditableRecipePage = React.createClass({
+export default React.createClass({
   displayName: 'EditableRecipePage',
 
   propTypes: {
@@ -39,8 +39,8 @@ const EditableRecipePage = React.createClass({
   },
 
   render() {
-    return <div className={classnames('editable-recipe-page fixed-header-footer', this.props.className)}><NavigationHeader onClose={this.props.onClose} previousTitle={this.props.previousTitle} onPrevious={this.props.onPrevious} />{this.props.children}</div>;
+    return <div className={classNames('editable-recipe-page fixed-header-footer', this.props.className)}><NavigationHeader onClose={this.props.onClose} previousTitle={this.props.previousTitle} onPrevious={this.props.onPrevious} />{this.props.children}</div>;
   }
 });
 
-module.exports = EditableRecipePage;
+

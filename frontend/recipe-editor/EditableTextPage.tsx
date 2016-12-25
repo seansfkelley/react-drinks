@@ -1,14 +1,14 @@
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const store = require('../store');
+import store from '../store';
 
-const ReduxMixin = require('../mixins/ReduxMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
 
-const EditableRecipePage = require('./EditableRecipePage');
+import EditableRecipePage from './EditableRecipePage';
 
-const EditableTextPage = React.createClass({
+export default React.createClass({
   displayName: 'EditableTextPage',
 
   mixins: [ReduxMixin({
@@ -23,7 +23,7 @@ const EditableTextPage = React.createClass({
   },
 
   render() {
-    return <EditableRecipePage className='text-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><textarea className='editable-text-area' placeholder='Instructions...' onChange={this._setInstructions} value={this.state.instructions} ref='instructions' /><textarea className='editable-text-area' placeholder='Notes (optional)...' onChange={this._setNotes} value={this.state.notes} ref='notes' /><div className={classnames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
+    return <EditableRecipePage className='text-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><textarea className='editable-text-area' placeholder='Instructions...' onChange={this._setInstructions} value={this.state.instructions} ref='instructions' /><textarea className='editable-text-area' placeholder='Notes (optional)...' onChange={this._setNotes} value={this.state.notes} ref='notes' /><div className={classNames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
   },
 
   _isEnabled() {
@@ -51,4 +51,4 @@ const EditableTextPage = React.createClass({
   }
 });
 
-module.exports = EditableTextPage;
+

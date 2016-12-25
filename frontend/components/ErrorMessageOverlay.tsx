@@ -1,28 +1,40 @@
 import * as React from 'react';
-const PureRenderMixin = require('react-addons-pure-render-mixin');
-const classnames = require('classnames');
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
+import * as classNames from 'classnames';
 
-const ReduxMixin = require('../mixins/ReduxMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
 
-const ErrorMessageOverlay = React.createClass({
+interface State {
+  errorMessage?: any;
+}
+
+export default React.createClass<void, State>({
   displayName: 'ErrorMessageOverlay',
 
-  propTypes: {},
-
-  mixins: [ReduxMixin({
-    ui: 'errorMessage'
-  }), PureRenderMixin],
+  mixins: [
+    ReduxMixin({
+      ui: 'errorMessage'
+    }),
+    PureRenderMixin
+  ],
 
   render() {
     let content;
     if (!this.state.errorMessage) {
       content = null;
     } else {
-      content = <div className='error-message'><i className='fa fa-exclamation-circle' /><div className='message-text'>{this.state.errorMessage}</div></div>;
+      content = (
+        <div className='error-message'>
+          <i className='fa fa-exclamation-circle' />
+          <div className='message-text'>{this.state.errorMessage}</div>
+        </div>
+      );
     }
 
-    return <div className={classnames('error-message-overlay', { 'visible': this.state.errorMessage })}>{content}</div>;
+    return (
+      <div className={classNames('error-message-overlay', { 'visible': this.state.errorMessage })}>
+        {content}
+      </div>
+    );
   }
 });
-
-module.exports = ErrorMessageOverlay;

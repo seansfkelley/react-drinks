@@ -1,21 +1,30 @@
 import * as React from 'react';
 
-const definitions = require('../../../shared/definitions');
+import { Recipe } from '../../../shared/types';
+import { BASE_URL } from '../../../shared/definitions';
+import TitleBar from '../../components/TitleBar';
+import RecipeView from '../../recipes/RecipeView';
 
-const TitleBar = require('../../components/TitleBar');
+interface Props {
+  recipe: Recipe;
+}
 
-const RecipeView = require('../../recipes/RecipeView');
-
-const StandaloneRecipeView = React.createClass({
+export default React.createClass<Props, void>({
   displayName: 'StandaloneRecipeView',
 
-  propTypes: {
-    recipe: React.PropTypes.object.isRequired
-  },
-
   render() {
-    return <div className='standalone-recipe'><a className='homepage-link' href={definitions.BASE_URL} target='_blank'><TitleBar>Spirit Guide<i className='fa fa-chevron-right' /></TitleBar></a><RecipeView recipe={this.props.recipe} /></div>;
+    return (
+      <div className='standalone-recipe'>
+        <a className='homepage-link' href={BASE_URL} target='_blank'>
+          <TitleBar>
+            Spirit Guide
+            <i className='fa fa-chevron-right' />
+          </TitleBar>
+        </a>
+        <RecipeView recipe={this.props.recipe} />
+      </div>
+    );
   }
 });
 
-module.exports = StandaloneRecipeView;
+

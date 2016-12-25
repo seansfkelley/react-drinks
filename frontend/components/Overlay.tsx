@@ -1,19 +1,19 @@
-import {} from 'lodash';
 import * as React from 'react';
-const classnames = require('classnames');
+import * as classNames from 'classnames';
 
-const Overlay = React.createClass({
+interface Props {
+  isVisible: boolean;
+  type: 'modal' | 'flyup' | 'pushover';
+}
+
+export default React.createClass<Props, void>({
   displayName: 'Overlay',
 
-  propTypes: {
-    isVisible: React.PropTypes.bool.isRequired,
-    type: React.PropTypes.oneOf(['modal', 'flyup', 'pushover']).isRequired,
-    children: React.PropTypes.element
-  },
-
   render() {
-    return <div className={classnames('overlay', { 'visible': this.props.isVisible }, this.props.type)}>{this.props.children}</div>;
+    return (
+      <div className={classNames('overlay', { 'visible': this.props.isVisible }, this.props.type)}>
+        {this.props.children}
+      </div>
+    );
   }
 });
-
-module.exports = Overlay;

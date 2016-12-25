@@ -4,10 +4,15 @@ import * as log from 'loglevel';
 import { Ingredient, Recipe, DisplayIngredient } from '../../../shared/types';
 import { memoize } from './memoize';
 
+export interface SubstituteDisplayIngredient {
+  need: DisplayIngredient;
+  have: string[];
+}
+
 export interface IngredientSplit {
   missing: DisplayIngredient[];
   available: DisplayIngredient[];
-  substitute: { need: DisplayIngredient, have: string[] }[];
+  substitute: SubstituteDisplayIngredient[];
 }
 
 export function _countSubsetMissing(small: any[], large: any[]) {

@@ -1,35 +1,52 @@
-import {} from 'lodash';
+
 import * as React from 'react';
-const classnames = require('classnames');
-const Isvg = require('react-inlinesvg');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const ReduxMixin = require('../mixins/ReduxMixin');
-const DerivedValueMixin = require('../mixins/DerivedValueMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
+import DerivedValueMixin from '../mixins/DerivedValueMixin';
 
-const store = require('../store');
-const stylingConstants = require('../stylingConstants');
+import { GroupedIngredients } from '../types';
+import { store } from '../store';
 
-const SearchBar = require('../components/SearchBar');
-const GroupedIngredientList = require('../ingredients/GroupedIngredientList');
+import SearchBar from '../components/SearchBar';
+import GroupedIngredientList from '../ingredients/GroupedIngredientList';
 
-const IngredientsSidebar = React.createClass({
+interface Props {
+  onClose: () => void;
+}
+
+interface State {
+  selectedIngredientTags: string[];
+  filteredGroupedIngredients: GroupedIngredients[];
+}
+
+export default React.createClass<Props, State>({
   displayName: 'IngredientsSidebar',
 
-  propTypes: {
-    onClose: React.PropTypes.func.isRequired
-  },
-
-  mixins: [ReduxMixin({
-    filters: 'selectedIngredientTags'
-  }), DerivedValueMixin('filteredGroupedIngredients'), PureRenderMixin],
+  mixins: [
+    ReduxMixin({
+      filters: 'selectedIngredientTags'
+    }),
+    DerivedValueMixin('filteredGroupedIngredients'),
+    PureRenderMixin
+  ],
 
   render() {
-    return <div className='ingredients-sidebar'><SearchBar placeholder='Ingredient name...' onChange={this._onSearch} /><GroupedIngredientList groupedIngredients={this.state.filteredGroupedIngredients} initialSelectedIngredientTags={this.state.selectedIngredientTags} onSelectionChange={this._onIngredientToggle} ref='ingredientList' /></div>;
+    return (
+      <div className='ingredients-sidebar'>
+        <SearchBar placeholder='Ingredient name...' onChange={this._onSearch} />
+        <GroupedIngredientList
+          groupedIngredients={this.state.filteredGroupedIngredients}
+          initialSelectedIngredientTags={this.state.selectedIngredientTags}
+          onSelectionChange={this._onIngredientToggle}
+          ref='ingredientList'
+        />
+      </div>
+    );
   },
 
-  _onSearch(searchTerm) {
-    return store.dispatch({
+  _onSearch(searchTerm: string) {
+    store.dispatch({
       type: 'set-ingredient-search-term',
       searchTerm
     });
@@ -40,8 +57,8 @@ const IngredientsSidebar = React.createClass({
       type: 'set-selected-ingredient-tags',
       tags: this.refs.ingredientList.getSelectedTags()
     });
-    return this.props.onClose();
+    this.props.onClose();
   }
 });
 
-module.exports = IngredientsSidebar;
+

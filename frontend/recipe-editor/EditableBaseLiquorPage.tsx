@@ -1,19 +1,19 @@
-import {} from 'lodash';
+
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const store = require('../store');
+import store from '../store';
 
-const ReduxMixin = require('../mixins/ReduxMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
 
-const definitions = require('../../shared/definitions');
+import definitions from '../../shared/definitions';
 
-const List = require('../components/List');
+import List from '../components/List';
 
-const EditableRecipePage = require('./EditableRecipePage');
+import EditableRecipePage from './EditableRecipePage';
 
-const EditableBaseLiquorPage = React.createClass({
+export default React.createClass({
   displayName: 'EditableBaseLiquorPage',
 
   mixins: [ReduxMixin({
@@ -29,8 +29,8 @@ const EditableBaseLiquorPage = React.createClass({
 
   render() {
     return <EditableRecipePage className='base-tag-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><div className='page-title'>Base ingredient(s)</div><List>{_.map(definitions.BASE_LIQUORS, tag => {
-            return <List.Item className={classnames('base-liquor-option', { 'is-selected': this.state.base.includes(tag) })} onClick={this._tagToggler(tag)} key={`tag-${ tag }`}>{definitions.BASE_TITLES_BY_TAG[tag]}<i className='fa fa-check-circle' /></List.Item>;
-          })}</List><div className={classnames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
+            return <List.Item className={classNames('base-liquor-option', { 'is-selected': this.state.base.includes(tag) })} onClick={this._tagToggler(tag)} key={`tag-${ tag }`}>{definitions.BASE_TITLES_BY_TAG[tag]}<i className='fa fa-check-circle' /></List.Item>;
+          })}</List><div className={classNames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
   },
 
   _isEnabled() {
@@ -53,4 +53,4 @@ const EditableBaseLiquorPage = React.createClass({
   }
 });
 
-module.exports = EditableBaseLiquorPage;
+

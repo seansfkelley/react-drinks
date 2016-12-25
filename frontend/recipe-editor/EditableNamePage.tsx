@@ -1,15 +1,15 @@
-import {} from 'lodash';
+
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const store = require('../store');
+import store from '../store';
 
-const ReduxMixin = require('../mixins/ReduxMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
 
-const EditableRecipePage = require('./EditableRecipePage');
+import EditableRecipePage from './EditableRecipePage';
 
-const EditableNamePage = React.createClass({
+export default React.createClass({
   displayName: 'EditableNamePage',
 
   mixins: [ReduxMixin({
@@ -24,7 +24,7 @@ const EditableNamePage = React.createClass({
   },
 
   render() {
-    return <EditableRecipePage className='name-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><div className='page-title'>Add a Recipe</div><input type='text' placeholder='Name...' autoCorrect='off' autoCapitalize='on' autoComplete='off' spellCheck='false' ref='input' value={this.state.name} onChange={this._onChange} onClick={this._focus} /><div className={classnames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
+    return <EditableRecipePage className='name-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><div className='page-title'>Add a Recipe</div><input type='text' placeholder='Name...' autoCorrect='off' autoCapitalize='on' autoComplete='off' spellCheck='false' ref='input' value={this.state.name} onChange={this._onChange} onClick={this._focus} /><div className={classNames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
   },
 
   _focus() {
@@ -54,4 +54,4 @@ const EditableNamePage = React.createClass({
   }
 });
 
-module.exports = EditableNamePage;
+

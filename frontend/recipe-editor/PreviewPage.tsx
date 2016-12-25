@@ -1,11 +1,11 @@
 import * as React from 'react';
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const EditableRecipePage = require('./EditableRecipePage');
+import EditableRecipePage from './EditableRecipePage';
 
-const RecipeView = require('../recipes/RecipeView');
+import RecipeView from '../recipes/RecipeView';
 
-const PreviewPage = React.createClass({
+export default React.createClass({
   displayName: 'PreviewPage',
 
   propTypes: {
@@ -31,4 +31,4 @@ const PreviewPage = React.createClass({
   }
 });
 
-module.exports = PreviewPage;
+

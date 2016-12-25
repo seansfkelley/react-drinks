@@ -1,20 +1,20 @@
-import {} from 'lodash';
-import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-const store = require('../store');
+import * as React from 'react';
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
+
+import store from '../store';
 
 const { parseIngredientFromText } = require('../utils');
 
-const ReduxMixin = require('../mixins/ReduxMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
 
-const EditableRecipePage = require('./EditableRecipePage');
+import EditableRecipePage from './EditableRecipePage';
 
-const Deletable = require('../components/Deletable');
-const List = require('../components/List');
+import Deletable from '../components/Deletable';
+import List from '../components/List';
 
-const MeasuredIngredient = require('../recipes/MeasuredIngredient');
+import MeasuredIngredient from '../recipes/MeasuredIngredient';
 
 const EditableIngredient = React.createClass({
   displayName: 'EditableIngredient',
@@ -51,7 +51,7 @@ const EditableIngredient = React.createClass({
       }).value());
     }
 
-    return <div className='editable-ingredient'><div className='input-line'><input type='text' placeholder='ex: 1 oz gin' autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' ref='input' value={this.state.value} onChange={this._onChange} onClick={this._focus} /><div className={classnames('done-button', { 'disabled': !this._isCommittable() })} onClick={this._commitIfAllowed}>Done<i className='fa fa-check-circle' /></div></div><div className='ingredient-list-header'>A Type Of</div><List className='ingredient-group-list' onTouchStart={this._dismissKeyboard}>{ingredientSelector}</List></div>;
+    return <div className='editable-ingredient'><div className='input-line'><input type='text' placeholder='ex: 1 oz gin' autoCorrect='off' autoCapitalize='off' autoComplete='off' spellCheck='false' ref='input' value={this.state.value} onChange={this._onChange} onClick={this._focus} /><div className={classNames('done-button', { 'disabled': !this._isCommittable() })} onClick={this._commitIfAllowed}>Done<i className='fa fa-check-circle' /></div></div><div className='ingredient-list-header'>A Type Of</div><List className='ingredient-group-list' onTouchStart={this._dismissKeyboard}>{ingredientSelector}</List></div>;
   },
 
   componentDidMount() {
@@ -110,7 +110,7 @@ const EditableIngredient = React.createClass({
 
 });
 
-const EditableIngredientsPage = React.createClass({
+export default React.createClass({
   displayName: 'EditableIngredientsPage',
 
   mixins: [ReduxMixin({
@@ -137,7 +137,7 @@ const EditableIngredientsPage = React.createClass({
       return <Deletable onDelete={this._ingredientDeleter(index)} key={`tag-${ ingredient.tag != null ? ingredient.tag : __guard__(ingredient.display, x => x.displayIngredient) }-${ index }`}>{ingredientNode}</Deletable>;
     });
 
-    return <EditableRecipePage className='ingredients-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><div className='ingredients-list'>{ingredientNodes}</div><div className={classnames('new-ingredient-button', { 'disabled': this._anyAreEditing() })} onClick={this._addEmptyIngredient}><i className='fa fa-plus-circle' /><span>New Ingredient</span></div><div className={classnames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
+    return <EditableRecipePage className='ingredients-page' onClose={this.props.onClose} onPrevious={this.props.onPrevious} previousTitle={this.props.previousTitle}><div className='fixed-content-pane'><div className='ingredients-list'>{ingredientNodes}</div><div className={classNames('new-ingredient-button', { 'disabled': this._anyAreEditing() })} onClick={this._addEmptyIngredient}><i className='fa fa-plus-circle' /><span>New Ingredient</span></div><div className={classNames('next-button', { 'disabled': !this._isEnabled() })} onClick={this._nextIfEnabled}><span className='next-text'>Next</span><i className='fa fa-arrow-right' /></div></div></EditableRecipePage>;
   },
 
   _anyAreEditing() {
@@ -185,7 +185,7 @@ const EditableIngredientsPage = React.createClass({
   }
 });
 
-module.exports = EditableIngredientsPage;
+
 
 function __guard__(value, transform) {
   return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;

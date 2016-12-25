@@ -8,6 +8,7 @@ debugInit();
 // Kick off requests ASAP.
 const initializationPromise = storeInit();
 
+import * as React from 'react';
 import { render } from 'react-dom';
 import * as Promise from 'bluebird';
 

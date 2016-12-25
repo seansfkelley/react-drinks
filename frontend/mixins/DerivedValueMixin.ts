@@ -1,15 +1,15 @@
-import { flatten, uniqueId } from 'lodash';
+import { flattenDeep, uniqueId } from 'lodash';
 
-const store = require('../store');
-const derived = require('../store/derived');
+import { store } from '../store';
+import * as derived from '../store/derived';
 
-export default function(...fieldNames: string[]) {
-  fieldNames = flatten(fieldNames);
+export default function(...fieldNames: (string | string[])[]) {
+  const flattenedFieldNames = flattenDeep(fieldNames) as string[];
   const fnName = uniqueId('_onStoreChange_');
   const getDerivedFields = function () {
     const state = store.getState();
-    return fieldNames.reduce((fields, fieldName) => {
-      (fields as any)[fieldName] = derived[fieldName](state);
+    return flattenedFieldNames.reduce((fields, fieldName) => {
+      (fields as any)[fieldName] = (derived as any)[fieldName](state);
       return fields;
     }, {});
   };
@@ -18,7 +18,7 @@ export default function(...fieldNames: string[]) {
     getInitialState: getDerivedFields,
 
     componentDidMount() {
-      return this._derivedValueMixin_unsubscribe = store.subscribe(this[fnName]);
+      this._derivedValueMixin_unsubscribe = store.subscribe(this[fnName]);
     },
 
     componentWillUnmount() {
@@ -29,7 +29,7 @@ export default function(...fieldNames: string[]) {
   };
 
   (mixin as any)[fnName] = function () {
-    return this.setState(getDerivedFields());
+    this.setState(getDerivedFields());
   };
 
   return mixin;

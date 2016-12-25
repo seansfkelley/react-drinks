@@ -1,4 +1,4 @@
-import { Ingredient } from '../shared/types';
+import { Ingredient, Recipe } from '../shared/types';
 
 export type EditableRecipePageType = string & { __editableRecipePageTypeBrand: any };
 export const EditableRecipePageType = {
@@ -12,4 +12,9 @@ export const EditableRecipePageType = {
 export interface GroupedIngredients {
   name: string;
   ingredients: Ingredient[];
+}
+
+export interface GroupedRecipes {
+  key: string;
+  recipes: Recipe[];
 }

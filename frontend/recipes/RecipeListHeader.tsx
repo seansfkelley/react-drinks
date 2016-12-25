@@ -1,61 +1,93 @@
-import {} from 'lodash';
 import * as React from 'react';
-const classnames = require('classnames');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import * as classNames from 'classnames';
+import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-const definitions = require('../../shared/definitions');
+import { ANY_BASE_LIQUOR, BASE_LIQUORS, RECIPE_LIST_NAMES } from '../../shared/definitions';
 
-const ReduxMixin = require('../mixins/ReduxMixin');
+import ReduxMixin from '../mixins/ReduxMixin';
 
-const TitleBar = require('../components/TitleBar');
-const Swipable = require('../components/Swipable');
+import TitleBar from '../components/TitleBar';
+import Swipable from '../components/Swipable';
 
-const store = require('../store');
+import { store } from '../store';
 
-const BASE_LIQUORS = [definitions.ANY_BASE_LIQUOR].concat(definitions.BASE_LIQUORS);
+const ALL_BASE_LIQUORS = [ANY_BASE_LIQUOR].concat(BASE_LIQUORS);
 
-const RecipeListHeader = React.createClass({
+interface State {
+  baseLiquorFilter: string;
+  selectedRecipeList: string;
+}
+
+export default React.createClass<void, State>({
   displayName: 'RecipeListHeader',
 
-  mixins: [ReduxMixin({
-    filters: ['baseLiquorFilter', 'selectedRecipeList']
-  }), PureRenderMixin],
+  mixins: [
+    ReduxMixin({
+      filters: ['baseLiquorFilter', 'selectedRecipeList']
+    }),
+     PureRenderMixin
+    ],
 
   render() {
-    let initialBaseLiquorIndex = _.indexOf(BASE_LIQUORS, this.state.baseLiquorFilter);
+    let initialBaseLiquorIndex = ALL_BASE_LIQUORS.indexOf(this.state.baseLiquorFilter);
     if (initialBaseLiquorIndex === -1) {
       initialBaseLiquorIndex = 0;
     }
 
-    return <div className='recipe-list-header fixed-header'><TitleBar leftIcon='/assets/img/ingredients.svg' leftIconOnTouchTap={this._showSidebar} rightIcon='fa-plus' rightIconOnTouchTap={this._newRecipe} className='recipe-list-header' onClick={this._showListSelector}>{definitions.RECIPE_LIST_NAMES[this.state.selectedRecipeList]}<i className='fa fa-chevron-down' /></TitleBar><Swipable className='base-liquor-container' initialIndex={initialBaseLiquorIndex} onSlideChange={this._onBaseLiquorChange} friction={0.7}>{_.map(BASE_LIQUORS, base => {
-          return <div className={classnames('base-liquor-option', { 'selected': base === this.state.baseLiquorFilter })} key={base}>{base}</div>;
-        })}</Swipable></div>;
+    return (
+      <div className='recipe-list-header fixed-header'>
+        <TitleBar
+          leftIcon='/assets/img/ingredients.svg'
+          leftIconOnClick={this._showSidebar}
+          rightIcon='fa-plus'
+          rightIconOnClick={this._newRecipe}
+          className='recipe-list-header'
+          onClick={this._showListSelector}
+        >
+          {(RECIPE_LIST_NAMES as any)[this.state.selectedRecipeList]}
+          <i className='fa fa-chevron-down' />
+        </TitleBar>
+        <Swipable
+          className='base-liquor-container'
+          initialIndex={initialBaseLiquorIndex}
+          onSlideChange={this._onBaseLiquorChange}
+          friction={0.7}
+        >
+          {ALL_BASE_LIQUORS.map(base => (
+            <div
+              className={classNames('base-liquor-option', { 'selected': base === this.state.baseLiquorFilter })}
+              key={base}
+            >
+                {base}
+            </div>
+          ))}
+        </Swipable>
+      </div>
+    );
   },
 
-  _onBaseLiquorChange(index) {
-    return store.dispatch({
+  _onBaseLiquorChange(index: number) {
+    store.dispatch({
       type: 'set-base-liquor-filter',
-      filter: BASE_LIQUORS[index]
+      filter: ALL_BASE_LIQUORS[index]
     });
   },
 
   _showSidebar() {
-    return store.dispatch({
+    store.dispatch({
       type: 'show-sidebar'
     });
   },
 
   _showListSelector() {
-    return store.dispatch({
+    store.dispatch({
       type: 'show-list-selector'
     });
   },
 
   _newRecipe() {
-    return store.dispatch({
+    store.dispatch({
       type: 'show-recipe-editor'
     });
   }
 });
-
-module.exports = RecipeListHeader;
