@@ -1,12 +1,11 @@
-import {} from 'lodash';
+import { map, uniqueId, assign, pick } from 'lodash';
+import { store } from '../store';
 
-const store = require('../store');
-
-const ReduxMixin = function (fieldsBySubstore) {
-  const fnName = _.uniqueId('_onStoreChange_');
+export default function(fieldsBySubstore: { [store: string]: string }) {
+  const fnName = uniqueId('_onStoreChange_');
   const getFlattenedFields = function () {
     const state = store.getState();
-    return _.extend({}, ..._.map(fieldsBySubstore, (fieldArrayOrString, storeName) => _.pick(state[storeName], fieldArrayOrString)));
+    return assign({}, ...map(fieldsBySubstore, (fieldArrayOrString, storeName) => pick((state as any)[storeName!], fieldArrayOrString)));
   };
 
   const mixin = {
@@ -17,23 +16,15 @@ const ReduxMixin = function (fieldsBySubstore) {
     },
 
     componentWillUnmount() {
-      return __guardMethod__(this, '_reduxMixin_unsubscribe', o => o._reduxMixin_unsubscribe());
+      if (this._reduxMixin_unsubscribe) {
+        this._reduxMixin_unsubscribe();
+      }
     }
   };
 
-  mixin[fnName] = function () {
+  (mixin as any)[fnName] = function () {
     return this.setState(getFlattenedFields());
   };
 
   return mixin;
 };
-
-module.exports = ReduxMixin;
-
-function __guardMethod__(obj, methodName, transform) {
-  if (typeof obj !== 'undefined' && obj !== null && typeof obj[methodName] === 'function') {
-    return transform(obj, methodName);
-  } else {
-    return undefined;
-  }
-}
