@@ -39,8 +39,8 @@ export default React.createClass<void, State>({
         <TitleBar
           leftIcon='/assets/img/ingredients.svg'
           leftIconOnClick={this._showSidebar}
-          rightIcon='fa-plus'
-          rightIconOnClick={this._newRecipe}
+          // rightIcon='fa-plus'
+          // rightIconOnClick={this._newRecipe}
           className='recipe-list-header'
           onClick={this._showListSelector}
         >

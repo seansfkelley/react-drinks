@@ -106,11 +106,11 @@ export default React.createClass<Props, void>({
 
     const footerButtons = [];
 
-    if (this.props.onEdit) {
-      footerButtons.push(
-        <IconButton key='edit' icon='fa-pencil-square-o' text='Edit' onClick={this._edit} />
-      );
-    }
+    // if (this.props.onEdit) {
+    //   footerButtons.push(
+    //     <IconButton key='edit' icon='fa-pencil-square-o' text='Edit' onClick={this._edit} />
+    //   );
+    // }
     if (this.props.isShareable) {
       footerButtons.push(
         <IconButton key='share' icon='fa-share-square-o' text='Share' onClick={this._share} />
