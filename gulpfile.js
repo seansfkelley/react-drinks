@@ -94,9 +94,9 @@ function buildSingleScript({ source, destination, watch, dieOnError }) {
 };
 
 function buildScripts(watch = false, dieOnError = false) {
-  return merge(...SRC_PATHS.scripts.map(({ source, destination }) => {
-    buildSingleScript({ source, destination, watch, dieOnError });
-  }));
+  return merge(...SRC_PATHS.scripts.map(({ source, destination }) =>
+    buildSingleScript({ source, destination, watch, dieOnError })
+  ));
 };
 
 function buildStyles() {
