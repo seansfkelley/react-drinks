@@ -1,8 +1,7 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
-import List from '../components/List';
+import { ListItem, DeletableListItem } from '../components/List';
 
 import { Difficulty, CLASS_NAME, HUMAN_READABLE } from '../Difficulty';
 
@@ -10,20 +9,14 @@ interface Props {
   recipeName: string;
   difficulty?: Difficulty;
   isMixable?: boolean;
-  onClick?: Function;
+  onClick?: React.MouseEventHandler<HTMLElement>;
   onDelete?: Function;
 }
 
-export default React.createClass<Props, void>({
-  displayName: 'RecipeListItem',
-
-  mixins: [PureRenderMixin],
-
-  getDefaultProps() {
-    return {
-      isMixable: true
-    } as any as Props;
-  },
+export default class extends React.PureComponent<Props, void> {
+  static defaultProps = {
+    isMixable: true
+  };
 
   render() {
     const difficulty = this.props.difficulty
@@ -34,9 +27,9 @@ export default React.createClass<Props, void>({
     const content = [ <span className='name' key='name'>{this.props.recipeName}</span>, difficulty ];
     const className = classNames('recipe-list-item', { 'is-mixable': this.props.isMixable });
     return this.props.onDelete
-      ? <List.DeletableItem className={className} onClick={this.props.onClick} onDelete={this.props.onDelete}>{content}</List.DeletableItem>
-      : <List.Item className={className} onClick={this.props.onClick}>{content}</List.Item>;
+      ? <DeletableListItem className={className} onClick={this.props.onClick} onDelete={this.props.onDelete}>{content}</DeletableListItem>
+      : <ListItem className={className} onClick={this.props.onClick}>{content}</ListItem>;
   }
-});
+}
 
 

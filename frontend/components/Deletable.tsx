@@ -16,17 +16,15 @@ interface State {
   ignoreDrag: boolean;
 }
 
-export default React.createClass<Props, State>({
-  displayName: 'Deletable',
+export default class extends React.PureComponent<Props, State> {
+  private _draggable: React.Component<any, any>;
 
-  getInitialState() {
-    return {
-      initialX: 0,
-      deltaX: 0,
-      checkFirstMove: true,
-      ignoreDrag: false
-    };
-  },
+  state: State = {
+    initialX: 0,
+    deltaX: 0,
+    checkFirstMove: true,
+    ignoreDrag: false
+  };
 
   render() {
     return (
@@ -36,7 +34,7 @@ export default React.createClass<Props, State>({
         onStart={this._onDragStart}
         onDrag={this._onDrag}
         onStop={this._onDragEnd}
-        ref='draggable'
+        ref={(e: React.Component<any, any>) => this._draggable = e}
       >
         <div className={classNames('deletable', this.props.className)}>
           {this.props.children}
@@ -52,42 +50,41 @@ export default React.createClass<Props, State>({
         </div>
       </Draggable>
     );
-  },
+  }
 
-  _onDelete(event: React.MouseEvent<any>) {
+  private _onDelete = (event: React.MouseEvent<any>) => {
     event.stopPropagation();
     this.props.onDelete();
-  },
+  };
 
-  _onDragStart(_event: React.MouseEvent<any>, { position }: { position: { left: number } }) {
+  private _onDragStart = (_event: React.MouseEvent<any>, { position }: { position: { left: number } }) => {
     // Do NOT reset deltaX -- it may be dragged open already.
-    this.setState({ initialX: position.left, checkFirstMove: true, ignoreDrag: false });
-  },
+    this.setState({ initialX: position.left, checkFirstMove: true, ignoreDrag: false } as any);
+  };
 
-  _onDrag(_event: React.MouseEvent<any>, { deltaX, deltaY }: { deltaX: number, deltaY: number }) {
+  private _onDrag = (_event: React.MouseEvent<any>, { deltaX, deltaY }: { deltaX: number, deltaY: number }) => {
     if (this.state.ignoreDrag) {
       return false;
     } else if (this.state.checkFirstMove && Math.abs(deltaY) > Math.abs(deltaX)) {
-      this.setState({ ignoreDrag: true });
+      this.setState({ ignoreDrag: true } as any);
       return false;
     } else {
       this.setState({
         deltaX: Math.min(Math.max(this.state.deltaX + deltaX, -DELETABLE_WIDTH), 0) ,
         checkFirstMove: true
-      });
+      } as any);
       return undefined;
     }
-  },
+  };
 
-  _onDragEnd(_event: React.MouseEvent<any>) {
+  // TODO: setState on a random other component here seems sketch.
+  private _onDragEnd = (_event: React.MouseEvent<any>) => {
     if (this.state.deltaX < -DELETABLE_WIDTH / 2) {
-      this.refs.draggable.setState({ clientX: -DELETABLE_WIDTH });
-      this.setState({ deltaX: -DELETABLE_WIDTH });
+      this._draggable.setState({ clientX: -DELETABLE_WIDTH });
+      this.setState({ deltaX: -DELETABLE_WIDTH } as any);
     } else {
-      this.refs.draggable.setState({ clientX: 0 });
-      this.setState({ deltaX: 0 });
+      this._draggable.setState({ clientX: 0 });
+      this.setState({ deltaX: 0 } as any);
     }
-  }
-});
-
-
+  };
+}

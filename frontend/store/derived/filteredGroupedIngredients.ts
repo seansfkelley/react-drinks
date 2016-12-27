@@ -1,6 +1,5 @@
 import { Ingredient } from '../../../shared/types';
 import { GroupedIngredients } from '../../types';
-import { memoize } from './memoize';
 
 export function filteredGroupedIngredients({ groupedIngredients, searchTerm }: { groupedIngredients: GroupedIngredients[], searchTerm?: string }) {
   if (searchTerm == null) {
@@ -30,5 +29,3 @@ export function filteredGroupedIngredients({ groupedIngredients, searchTerm }: {
       .filter(({ ingredients }) => ingredients.length > 0);
   }
 };
-
-export const memoized = memoize(filteredGroupedIngredients);

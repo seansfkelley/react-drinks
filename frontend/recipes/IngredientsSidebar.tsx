@@ -1,64 +1,76 @@
-
 import * as React from 'react';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
-
-import ReduxMixin from '../mixins/ReduxMixin';
-import DerivedValueMixin from '../mixins/DerivedValueMixin';
+import { connect } from 'react-redux';
+import { Dispatch, bindActionCreators } from 'redux';
 
 import { GroupedIngredients } from '../types';
-import { store } from '../store';
+import { RootState } from '../store';
+import { selectFilteredGroupedIngredients } from '../store/selectors';
+import { setIngredientSearchTerm } from '../store/atomicActions';
 
 import SearchBar from '../components/SearchBar';
 import GroupedIngredientList from '../ingredients/GroupedIngredientList';
 
-interface Props {
-  onClose: () => void;
+interface OwnProps {
+  onPendingTagsChange: (tags: { [tag: string]: any }) => void;
 }
 
-interface State {
-  selectedIngredientTags: string[];
+interface ConnectedProps {
+  selectedIngredientTags: { [tag: string]: any };
   filteredGroupedIngredients: GroupedIngredients[];
 }
 
-export default React.createClass<Props, State>({
-  displayName: 'IngredientsSidebar',
+interface DispatchProps {
+  setIngredientSearchTerm: typeof setIngredientSearchTerm;
+}
 
-  mixins: [
-    ReduxMixin({
-      filters: 'selectedIngredientTags'
-    }),
-    DerivedValueMixin('filteredGroupedIngredients'),
-    PureRenderMixin
-  ],
+interface State {
+  pendingSelectedIngredientTags: { [tag: string]: any };
+}
+
+class IngredientsSidebar extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps, State> {
+  state: State = {
+    pendingSelectedIngredientTags: this.props.selectedIngredientTags
+  };
 
   render() {
     return (
       <div className='ingredients-sidebar'>
-        <SearchBar placeholder='Ingredient name...' onChange={this._onSearch} />
+        <SearchBar placeholder='Ingredient name...' onChange={this.props.setIngredientSearchTerm} />
         <GroupedIngredientList
-          groupedIngredients={this.state.filteredGroupedIngredients}
-          initialSelectedIngredientTags={this.state.selectedIngredientTags}
-          onSelectionChange={this._onIngredientToggle}
-          ref='ingredientList'
+          groupedIngredients={this.props.filteredGroupedIngredients}
+          selectedIngredientTags={this.state.pendingSelectedIngredientTags}
+          onSelectionChange={this._updatePendingTags}
         />
       </div>
     );
-  },
+  };
 
-  _onSearch(searchTerm: string) {
-    store.dispatch({
-      type: 'set-ingredient-search-term',
-      searchTerm
-    });
-  },
-
-  forceClose() {
-    store.dispatch({
-      type: 'set-selected-ingredient-tags',
-      tags: this.refs.ingredientList.getSelectedTags()
-    });
-    this.props.onClose();
+  componentWillReceiveProps(nextProps: ConnectedProps) {
+    this.setState({ pendingSelectedIngredientTags: nextProps.selectedIngredientTags });
   }
-});
 
+  componentDidMount() {
+    this.props.onPendingTagsChange(this.state.pendingSelectedIngredientTags);
+  }
 
+  componentDidUpdate() {
+    this.props.onPendingTagsChange(this.state.pendingSelectedIngredientTags);
+  }
+
+  _updatePendingTags = (pendingSelectedIngredientTags: { [tag: string]: any }) => {
+    this.setState({ pendingSelectedIngredientTags });
+  };
+};
+
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    selectedIngredientTags: state.filters.selectedIngredientTags,
+    filteredGroupedIngredients: selectFilteredGroupedIngredients(state)
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+  return bindActionCreators({ setIngredientSearchTerm }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(IngredientsSidebar) as React.ComponentClass<OwnProps>;

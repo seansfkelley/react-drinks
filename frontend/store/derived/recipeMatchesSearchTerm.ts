@@ -1,5 +1,4 @@
 import { Recipe, Ingredient } from '../../../shared/types';
-import { memoize } from './memoize';
 
 const WHITESPACE_REGEX = /\s+/g;
 
@@ -23,5 +22,3 @@ export function recipeMatchesSearchTerm({ recipe, searchTerm, ingredientsByTag }
 
   return terms.every(t => searchable.some(s => s.indexOf(t) !== -1));
 };
-
-export const memoized = memoize(recipeMatchesSearchTerm);

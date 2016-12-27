@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import { fractionify } from '../utils';
 import { Difficulty, CLASS_NAME, HUMAN_READABLE } from '../Difficulty';
@@ -16,18 +15,12 @@ export interface Props {
   className?: string;
 }
 
-export default React.createClass<Props, void>({
-  displayName: 'MeasuredIngredient',
-
-  mixins: [PureRenderMixin],
-
-  getDefaultProps() {
-    return {
-      displayAmount: '',
-      displayUnit: '',
-      displaySubstitutes: []
-    } as any as Props;
-  },
+export default class extends React.PureComponent<Props, void> {
+  static defaultProps = {
+    displayAmount: '',
+    displayUnit: '',
+    displaySubstitutes: []
+  };
 
   render() {
     return (
@@ -62,6 +55,4 @@ export default React.createClass<Props, void>({
       </div>
     );
   }
-});
-
-
+}

@@ -1,17 +1,15 @@
-import { assign } from 'lodash';
 import * as React from 'react';
 import * as classNames from 'classnames';
 
 import Deletable from './Deletable';
 
-interface HeaderProps {
+interface ListHeaderProps {
   title?: string;
-  onClick?: React.MouseEventHandler<void>;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  className?: string;
 }
 
-const Header = React.createClass<HeaderProps, void>({
-  displayName: 'List.Header',
-
+export class ListHeader extends React.PureComponent<ListHeaderProps, void> {
   render() {
     let children;
     if (React.Children.count(this.props.children) === 0) {
@@ -21,21 +19,19 @@ const Header = React.createClass<HeaderProps, void>({
     }
 
     return (
-      <div className={classNames('list-header', this.props.className) }>
+      <div className={classNames('list-header', this.props.className) } onClick={this.props.onClick}>
         {children}
       </div>
     );
   }
-});
+};
 
-interface ItemGroupProps {
+interface ListItemGroupProps {
   className?: string;
   style?: Object;
 }
 
-const ItemGroup = React.createClass<ItemGroupProps, void>({
-  displayName: 'List.ItemGroup',
-
+export class ListItemGroup extends React.PureComponent<ListItemGroupProps, void> {
   render() {
     return (
       <div className={classNames('list-group', this.props.className)} style={this.props.style}>
@@ -43,16 +39,14 @@ const ItemGroup = React.createClass<ItemGroupProps, void>({
       </div>
     );
   }
-});
+};
 
-interface ItemProps {
+interface ListItemProps {
   className?: string;
-  onClick?: React.MouseEventHandler<void>;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
-const Item = React.createClass<ItemProps, void>({
-  displayName: 'List.Item',
-
+export class ListItem extends React.PureComponent<ListItemProps, void> {
   render() {
     return (
       <div className={classNames('list-item', this.props.className)} onClick={this.props.onClick}>
@@ -60,48 +54,42 @@ const Item = React.createClass<ItemProps, void>({
       </div>
     );
   }
-});
+};
 
-interface DeletableItemProps {
+interface DeletableListItemProps {
   className?: string;
-  onClick?: React.MouseEventHandler<void>;
+  onClick?: React.MouseEventHandler<HTMLElement>;
   onDelete: Function; // ?
 }
 
-const DeletableItem: React.ClassicComponentClass<DeletableItemProps> = React.createClass<DeletableItemProps, void>({
-  displayName: 'List.DeletableItem',
-
+export class DeletableListItem extends React.PureComponent<DeletableListItemProps, void> {
   render() {
     return (
-      <List.Item className={classNames('deletable-list-item', this.props.className) }>
+      <ListItem className={classNames('deletable-list-item', this.props.className)} onClick={this.props.onClick}>
         <Deletable onDelete={this.props.onDelete}>
           <div>{this.props.children}</div>
         </Deletable>
-      </List.Item>
+      </ListItem>
     );
   }
-});
+};
 
-const ClassNames = {
+export const ListClassNames = {
   HEADERED: 'headered-list',
   COLLAPSIBLE: 'collapsible-list'
 };
 
-interface Props {
+interface ListProps {
   emptyText?: string;
   emptyView?: React.ReactElement<any>;
   className?: string;
-  onTouchStart?: React.TouchEventHandler<void>;
+  onTouchStart?: React.TouchEventHandler<HTMLElement>;
 }
 
-const List = assign(React.createClass<Props, void>({
-  displayName: 'List',
-
-  getDefaultProps() {
-    return {
-      emptyText: 'Nothing to see here.'
-    };
-  },
+export class List extends React.PureComponent<ListProps, void> {
+  static defaultProps = {
+    emptyText: 'Nothing to see here.'
+  };
 
   render() {
     let children;
@@ -124,12 +112,4 @@ const List = assign(React.createClass<Props, void>({
       </div>
     );
   }
-}), {
-  Header,
-  ItemGroup,
-  Item,
-  DeletableItem,
-  ClassNames
-});
-
-export default List;
+}

@@ -1,23 +1,26 @@
 
 import * as React from 'react';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
-
-import ReduxMixin from '../mixins/ReduxMixin';
-import DerivedValueMixin from '../mixins/DerivedValueMixin';
+import { Dispatch, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import Swipable from '../components/Swipable';
 
 import { Ingredient, Recipe } from '../../shared/types';
 import { IngredientSplit } from '../store/derived/ingredientSplitsByRecipeId';
-import { store } from '../store';
+import { RootState } from '../store';
+import { selectIngredientSplitsByRecipeId } from '../store/selectors';
+import {
+  setRecipeViewingIndex,
+  seedRecipeEditor,
+  showRecipeEditor,
+  favoriteRecipe,
+  unfavoriteRecipe,
+  hideRecipeViewer
+} from '../store/atomicActions';
 
 import RecipeView from './RecipeView';
 
-interface Props {
-  onClose: Function;
-}
-
-interface State {
+interface ConnectedProps {
   recipesById: { [recipeId: string]: Recipe };
   ingredientsByTag: { [tag: string]: Ingredient };
   favoritedRecipeIds: string[];
@@ -26,32 +29,25 @@ interface State {
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
 }
 
-export default React.createClass<Props, State>({
-  displayName: 'SwipableRecipeView',
+interface DispatchProps {
+  setRecipeViewingIndex: typeof setRecipeViewingIndex;
+  seedRecipeEditor: typeof seedRecipeEditor;
+  showRecipeEditor: typeof showRecipeEditor;
+  favoriteRecipe: typeof favoriteRecipe;
+  unfavoriteRecipe: typeof unfavoriteRecipe;
+  hideRecipeViewer: typeof hideRecipeViewer;
+}
 
-  propTypes: {
-    onClose: React.PropTypes.func.isRequired
-  },
-
-  mixins: [
-    ReduxMixin({
-      recipes: 'recipesById',
-      ingredients: 'ingredientsByTag',
-      ui: ['favoritedRecipeIds', 'currentlyViewedRecipeIds', 'recipeViewingIndex']
-    }),
-    DerivedValueMixin(['ingredientSplitsByRecipeId']),
-    PureRenderMixin
-  ],
-
+class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchProps, void> {
   render() {
-    if (this.state.currentlyViewedRecipeIds.length === 0) {
+    if (this.props.currentlyViewedRecipeIds.length === 0) {
       return <div />;
     } else {
-      const recipePages = (this.state as State).currentlyViewedRecipeIds.map((recipeId, i) => {
+      const recipePages = this.props.currentlyViewedRecipeIds.map((recipeId, i) => {
         return (
           <div className='swipable-padding-wrapper' key={recipeId}>
-            {Math.abs(i - this.state.recipeViewingIndex) <= 1
-              ? this._renderRecipe(this.state.recipesById[recipeId])
+            {Math.abs(i - this.props.recipeViewingIndex) <= 1
+              ? this._renderRecipe(this.props.recipesById[recipeId])
               : undefined}
           </div>
         );
@@ -60,71 +56,72 @@ export default React.createClass<Props, State>({
       return (
         <Swipable
           className='swipable-recipe-container'
-          initialIndex={this.state.recipeViewingIndex}
-          onSlideChange={this._onSlideChange}
+          initialIndex={this.props.recipeViewingIndex}
+          onSlideChange={this.props.setRecipeViewingIndex}
           friction={0.9}
         >
           {recipePages}
         </Swipable>
       );
     }
-  },
+  }
 
   _renderRecipe(recipe: Recipe) {
     return (
       <div className='swipable-position-wrapper'>
         <RecipeView
           recipe={recipe}
-          ingredientsByTag={this.state.ingredientsByTag}
-          ingredientSplits={this.state.ingredientSplitsByRecipeId ? this.state.ingredientSplitsByRecipeId[recipe.recipeId] : undefined}
+          ingredientsByTag={this.props.ingredientsByTag}
+          ingredientSplits={this.props.ingredientSplitsByRecipeId ? this.props.ingredientSplitsByRecipeId[recipe.recipeId] : undefined}
           onClose={this._onClose}
           onFavorite={this._onFavorite}
           onEdit={recipe.isCustom ? this._onEdit : undefined}
-          isFavorited={this.state.favoritedRecipeIds.includes(recipe.recipeId)}
+          isFavorited={this.props.favoritedRecipeIds.includes(recipe.recipeId)}
           isShareable={true}
         />
       </div>
     );
-  },
-
-  _onSlideChange(index: number) {
-    store.dispatch({
-      type: 'set-recipe-viewing-index',
-      index
-    });
-  },
-
-  _onClose() {
-    store.dispatch({
-      type: 'set-recipe-viewing-index',
-      index: 0
-    });
-
-    this.props.onClose();
-  },
-
-  _onEdit(recipe: Recipe) {
-    store.dispatch({
-      type: 'seed-recipe-editor',
-      recipe
-    });
-
-    store.dispatch({
-      type: 'show-recipe-editor'
-    });
-  },
-
-  _onFavorite(recipe: Recipe, shouldFavorite: boolean) {
-    if (shouldFavorite) {
-      store.dispatch({
-        type: 'favorite-recipe',
-        recipeId: recipe.recipeId
-      });
-    } else {
-      store.dispatch({
-        type: 'unfavorite-recipe',
-        recipeId: recipe.recipeId
-      });
-    }
   }
-});
+
+  private _onClose = () => {
+    this.props.setRecipeViewingIndex(0);
+    this.props.hideRecipeViewer();
+  };
+
+  private _onEdit = (recipe: Recipe) => {
+    this.props.seedRecipeEditor(recipe);
+    this.props.showRecipeEditor();
+  };
+
+  private _onFavorite = (recipe: Recipe, shouldFavorite: boolean) => {
+    if (shouldFavorite) {
+      this.props.favoriteRecipe(recipe.recipeId);
+    } else {
+      this.props.unfavoriteRecipe(recipe.recipeId);
+    }
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+  return bindActionCreators({
+    setRecipeViewingIndex,
+    seedRecipeEditor,
+    showRecipeEditor,
+    favoriteRecipe,
+    unfavoriteRecipe,
+    hideRecipeViewer
+  }, dispatch);
+}
+
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    recipesById: state.recipes.recipesById,
+    ingredientsByTag: state.ingredients.ingredientsByTag,
+    favoritedRecipeIds: state.ui.favoritedRecipeIds,
+    currentlyViewedRecipeIds: state.ui.currentlyViewedRecipeIds,
+    recipeViewingIndex: state.ui.recipeViewingIndex,
+    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SwipableRecipeView) as React.ComponentClass<void>;

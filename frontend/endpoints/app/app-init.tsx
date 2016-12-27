@@ -11,6 +11,7 @@ const initializationPromise = storeInit();
 import * as React from 'react';
 import { render } from 'react-dom';
 import * as Promise from 'bluebird';
+import { Provider } from 'react-redux';
 
 import App from './App';
 import ErrorMessageOverlay from '../../components/ErrorMessageOverlay';
@@ -50,7 +51,7 @@ initializationPromise.then(function () {
     type: '--dummy-event-to-trigger-persistence--'
   });
 
-  render(<App />, APP_ROOT);
+  render(<Provider store={store}><App/></Provider>, APP_ROOT);
   renderWebClipNotificationIfAppropriate();
   LOADING_OVERLAY.classList.add('fade-out');
 
@@ -62,4 +63,4 @@ initializationPromise.then(function () {
   });
 });
 
-render(<ErrorMessageOverlay />, ERROR_MESSAGE_ROOT);
+render(<Provider store={store}><ErrorMessageOverlay /></Provider>, ERROR_MESSAGE_ROOT);

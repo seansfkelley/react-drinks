@@ -6,14 +6,10 @@ interface Props {
   type: 'modal' | 'flyup' | 'pushover';
 }
 
-export default React.createClass<Props, void>({
-  displayName: 'Overlay',
+const Overlay: React.StatelessComponent<Props> = (props) => (
+  <div className={classNames('overlay', { 'visible': props.isVisible }, props.type)}>
+    {props.children}
+  </div>
+);
 
-  render() {
-    return (
-      <div className={classNames('overlay', { 'visible': this.props.isVisible }, this.props.type)}>
-        {this.props.children}
-      </div>
-    );
-  }
-});
+export default Overlay;

@@ -1,40 +1,39 @@
 import * as React from 'react';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as classNames from 'classnames';
 
-import ReduxMixin from '../mixins/ReduxMixin';
+import { connect } from 'react-redux';
+import { RootState } from '../store';
 
-interface State {
-  errorMessage?: any;
+interface ConnectedProps {
+  errorMessage?: string;
 }
 
-export default React.createClass<void, State>({
-  displayName: 'ErrorMessageOverlay',
-
-  mixins: [
-    ReduxMixin({
-      ui: 'errorMessage'
-    }),
-    PureRenderMixin
-  ],
-
+class ErrorMessageOverlay extends React.PureComponent<ConnectedProps, void> {
   render() {
     let content;
-    if (!this.state.errorMessage) {
+    if (!this.props.errorMessage) {
       content = null;
     } else {
       content = (
         <div className='error-message'>
           <i className='fa fa-exclamation-circle' />
-          <div className='message-text'>{this.state.errorMessage}</div>
+          <div className='message-text'>{this.props.errorMessage}</div>
         </div>
       );
     }
 
     return (
-      <div className={classNames('error-message-overlay', { 'visible': this.state.errorMessage })}>
+      <div className={classNames('error-message-overlay', { 'visible': !!this.props.errorMessage })}>
         {content}
       </div>
     );
   }
-});
+}
+
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    errorMessage: state.ui.errorMessage
+  };
+}
+
+export default connect(mapStateToProps)(ErrorMessageOverlay) as React.ComponentClass<void>;

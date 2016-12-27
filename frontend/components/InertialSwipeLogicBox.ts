@@ -26,7 +26,7 @@ abstract class InertialLogicBoxMembers {
 export class InertialSwipeLogicBox extends InertialLogicBoxMembers {
   constructor(
     private itemOffsets: number[],
-    private getNearestIndex: (e: React.TouchEvent<void>) => number,
+    private getNearestIndex: (e: React.TouchEvent<HTMLElement>) => number,
     private onChangeDelta?: (delta: number) => void,
     private onFinish?: () => void,
     private amplitudeFactor: number = 0.5,
@@ -47,7 +47,7 @@ export class InertialSwipeLogicBox extends InertialLogicBoxMembers {
     });
   }
 
-  onTouchStart(e: React.TouchEvent<void>) {
+  onTouchStart(e: React.TouchEvent<HTMLElement>) {
     if (e.touches.length > 1) {
       return;
     }
@@ -69,7 +69,7 @@ export class InertialSwipeLogicBox extends InertialLogicBoxMembers {
     this.interval = setInterval(this._trackVelocity.bind(this), 50) as any as number;
   };
 
-  onTouchMove(e: React.TouchEvent<void>) {
+  onTouchMove(e: React.TouchEvent<HTMLElement>) {
     if (e.touches.length > 1 || this.captureType === CaptureType.NO) {
       return;
     }
@@ -103,7 +103,7 @@ export class InertialSwipeLogicBox extends InertialLogicBoxMembers {
     });
   }
 
-  onTouchEnd(e: React.TouchEvent<void>) {
+  onTouchEnd(e: React.TouchEvent<HTMLElement>) {
     if (e.touches.length > 1) {
       return;
     }

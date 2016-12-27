@@ -4,15 +4,13 @@ import * as classNames from 'classnames';
 interface Props {
   leftIcon?: string;
   rightIcon?: string;
-  leftIconOnClick?: React.MouseEventHandler<void>;
-  onClick?: React.MouseEventHandler<void>;
-  rightIconOnClick?: React.MouseEventHandler<void>;
+  leftIconOnClick?: React.MouseEventHandler<HTMLElement>;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  rightIconOnClick?: React.MouseEventHandler<HTMLElement>;
   className?: string;
 }
 
-export default React.createClass<Props, void>({
-  displayName: 'TitleBar',
-
+export default class extends React.PureComponent<Props, void> {
   render() {
     let leftIcon, rightIcon;
     if (this.props.leftIcon != null) {
@@ -57,4 +55,4 @@ export default React.createClass<Props, void>({
       </div>
     );
   }
-});
+}

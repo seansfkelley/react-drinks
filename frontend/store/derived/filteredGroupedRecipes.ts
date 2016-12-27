@@ -2,11 +2,11 @@ import { isString, isArray, sortBy, groupBy, map } from 'lodash';
 import * as log from 'loglevel';
 
 import { Ingredient, Recipe } from '../../../shared/types';
+import { RecipeListType } from '../../types';
 import { ANY_BASE_LIQUOR } from '../../../shared/definitions';
-import { memoize } from './memoize';
 
-import { IngredientSplit, memoized as ingredientSplitsByRecipeId }  from './ingredientSplitsByRecipeId';
-import { memoized as recipeMatchesSearchTerm } from './recipeMatchesSearchTerm';
+import { IngredientSplit }  from './ingredientSplitsByRecipeId';
+import { recipeMatchesSearchTerm } from './recipeMatchesSearchTerm';
 
 // hee hee
 export function nofilter() {
@@ -44,7 +44,7 @@ export function _searchTermFilter(searchTerm: string, ingredientsByTag: { [tag: 
   }
 };
 
-export function _recipeListFilter(listType: string, ingredientSplits: { [recipeId: string]: IngredientSplit }, favoritedRecipeIds: string[]) {
+export function _recipeListFilter(listType: RecipeListType, ingredientSplits: { [recipeId: string]: IngredientSplit }, favoritedRecipeIds: string[]) {
   switch (listType) {
     case 'all':
       return nofilter;
@@ -84,7 +84,7 @@ export function filteredGroupedRecipes({
   recipes,
   baseLiquorFilter,
   searchTerm,
-  ingredientTags,
+  ingredientSplitsByRecipeId,
   favoritedRecipeIds,
   selectedRecipeList
 }: {
@@ -92,9 +92,9 @@ export function filteredGroupedRecipes({
   recipes: Recipe[],
   baseLiquorFilter: string,
   searchTerm: string,
-  ingredientTags: string[],
+  ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit },
   favoritedRecipeIds: string[],
-  selectedRecipeList: string
+  selectedRecipeList: RecipeListType
 }) {
   if (searchTerm == null) {
     searchTerm = '';
@@ -103,14 +103,10 @@ export function filteredGroupedRecipes({
     baseLiquorFilter = ANY_BASE_LIQUOR;
   }
 
-  const ingredientSplits = ingredientSplitsByRecipeId({ ingredientsByTag, recipes, ingredientTags });
-
   const filteredRecipes = recipes
     .filter(_baseLiquorFilter(baseLiquorFilter))
-    .filter(_recipeListFilter(selectedRecipeList, ingredientSplits, favoritedRecipeIds))
+    .filter(_recipeListFilter(selectedRecipeList, ingredientSplitsByRecipeId, favoritedRecipeIds))
     .filter(_searchTermFilter(searchTerm, ingredientsByTag));
 
   return _sortAndGroupAlphabetical(filteredRecipes);
 };
-
-export const memoized = memoize(filteredGroupedRecipes);

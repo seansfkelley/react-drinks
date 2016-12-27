@@ -1,9 +1,8 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
 interface Props {
-  onChange: Function;
+  onChange: (value: string) => void;
   initialValue?: string;
   placeholder?: string;
   className?: string;
@@ -13,26 +12,19 @@ interface State {
   value: string;
 }
 
-export default React.createClass<Props, State>({
-  displayName: 'SearchBar',
+export default class extends React.PureComponent<Props, State> {
+  private _input: HTMLInputElement;
 
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired,
-    initialValue: React.PropTypes.string,
-    placeholder: React.PropTypes.string
-  },
-
-  mixins: [PureRenderMixin],
-
-  getInitialState() {
-    return {
-      value: this.props.initialValue != null ? this.props.initialValue : ''
-    };
-  },
+  state: State = {
+    value: this.props.initialValue != null ? this.props.initialValue : ''
+  };
 
   render() {
     return (
-      <div className={classNames('search-bar', this.props.className)} onTouchStart={this._stopTouchStart}>
+      <div
+        className={classNames('search-bar', this.props.className)}
+        // onTouchStart={this._stopTouchStart}
+      >
         <i className='fa fa-search' />
         <input
           type='text'
@@ -40,8 +32,8 @@ export default React.createClass<Props, State>({
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this._onChange}
-          onClick={this.focus}
-          ref='input'
+          onClick={this._focus}
+          ref={e => this._input = e}
           tabIndex={-1}
           autoCorrect='off'
           autoCapitalize='off'
@@ -49,42 +41,47 @@ export default React.createClass<Props, State>({
           spellCheck={false}
         />
         {this.state.value.length
-          ? <i className='fa fa-times-circle' onClick={this.clearAndFocus} onTouchStart={this._stopTouchStart} />
+          ? <i
+              className='fa fa-times-circle'
+              onClick={this._clearAndFocus}
+              // onTouchStart={this._stopTouchStart}
+            />
           : null}
       </div>
     );
-  },
+  }
 
-  clearAndFocus() {
-    this.clear();
-    this.focus();
-  },
+  private _clearAndFocus = () => {
+    this._clear();
+    this._focus();
+  };
 
-  clear() {
+  private _clear = () => {
     this.setState({ value: '' });
     this.props.onChange('');
-  },
+  };
 
-  focus() {
-    this.refs.input.focus();
-  },
+  private _focus = () => {
+    this._input.focus();
+  };
 
-  isFocused() {
-    return document.activeElement === this.refs.input;
-  },
+  public isFocused = () => {
+    return document.activeElement === this._input;
+  };
 
-  _onChange(e: React.FormEvent<HTMLInputElement>) {
+  private _onChange = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({ value: e.currentTarget.value });
     this.props.onChange(e.currentTarget.value);
-  },
+  };
 
-  _stopTouchStart(e: React.TouchEvent<void>) {
-    // This is hacky, but both of these are independently necessary.
-    // 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
-    e.stopPropagation();
-    // 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
-    e.preventDefault();
-  }
-});
-
-
+  // Commenting this out but leaving it around for now. I haven't done enough testing to determine if this is
+  // still necessary, but its presence breaks other interactions (not being able to select the search bar).
+  // I do not know if this a Chrome emulation bug, or the spec, or what.
+  // _stopTouchStart(e: React.TouchEvent<HTMLElement>) {
+  //   // This is hacky, but both of these are independently necessary.
+  //   // 1. Stop propagation so that the App-level handler doesn't deselect the input on clear.
+  //   e.stopPropagation();
+  //   // 2. Prevent default so that iOS doesn't reassign the active element and deselect the input.
+  //   e.preventDefault();
+  // }
+}

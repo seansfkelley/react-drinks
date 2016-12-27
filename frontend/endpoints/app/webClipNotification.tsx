@@ -1,17 +1,17 @@
 import { defer, delay } from 'lodash';
 import * as React from 'react';
-import { render, findDOMNode, unmountComponentAtNode } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 
 import { TRANSITION_DURATION } from '../../stylingConstants';
 
 const DOM_NODE = document.querySelector('#web-clip-notification')!;
 
-const WebClipNotification = React.createClass({
-  displayName: 'WebClipNotification',
+class WebClipNotification extends React.PureComponent<void, void> {
+  private _node: HTMLElement;
 
   render() {
     return (
-      <div className='web-clip-notification arrow-box hidden' onClick={this._dismiss}>
+      <div className='web-clip-notification arrow-box hidden' onClick={this._dismiss} ref={e => this._node = e}>
         <span className='request'>
           <span className='lead-in'>Hey there first-timer!</span>
           Tap
@@ -22,23 +22,22 @@ const WebClipNotification = React.createClass({
         <span className='dismiss'>Tap this note to dismiss it permanently.</span>
       </div>
     );
-  },
+  }
 
   componentDidMount() {
     defer(() => {
-      findDOMNode(this).classList.remove('hidden');
+      this._node.classList.remove('hidden');
     });
-  },
+  }
 
   _dismiss() {
-    findDOMNode(this).classList.add('hidden');
+    this._node.classList.add('hidden');
     DOM_NODE.classList.add('hidden');
     delay(() => {
       unmountComponentAtNode(DOM_NODE);
     }, TRANSITION_DURATION);
   }
-
-});
+}
 
 const IS_IPHONE = window.navigator.userAgent.indexOf('iPhone') !== -1;
 const LOCALSTORAGE_KEY = 'drinks-app-web-clip-notification';

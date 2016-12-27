@@ -1,35 +1,37 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
+import { Dispatch, bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import { ANY_BASE_LIQUOR, BASE_LIQUORS, RECIPE_LIST_NAMES } from '../../shared/definitions';
-
-import ReduxMixin from '../mixins/ReduxMixin';
+import { ANY_BASE_LIQUOR, BASE_LIQUORS } from '../../shared/definitions';
+import { RECIPE_LIST_NAMES } from '../constants';
 
 import TitleBar from '../components/TitleBar';
 import Swipable from '../components/Swipable';
 
-import { store } from '../store';
+import { RootState } from '../store';
+import {
+  showSidebar,
+  showListSelector,
+  setBaseLiquorFilter
+} from '../store/atomicActions';
 
 const ALL_BASE_LIQUORS = [ANY_BASE_LIQUOR].concat(BASE_LIQUORS);
 
-interface State {
+interface ConnectedProps {
   baseLiquorFilter: string;
   selectedRecipeList: string;
 }
 
-export default React.createClass<void, State>({
-  displayName: 'RecipeListHeader',
+interface DispatchProps {
+  showSidebar: typeof showSidebar;
+  showListSelector: typeof showListSelector;
+  setBaseLiquorFilter: typeof setBaseLiquorFilter;
+}
 
-  mixins: [
-    ReduxMixin({
-      filters: ['baseLiquorFilter', 'selectedRecipeList']
-    }),
-     PureRenderMixin
-    ],
-
+class RecipeListHeader extends React.PureComponent<ConnectedProps & DispatchProps, void> {
   render() {
-    let initialBaseLiquorIndex = ALL_BASE_LIQUORS.indexOf(this.state.baseLiquorFilter);
+    let initialBaseLiquorIndex = ALL_BASE_LIQUORS.indexOf(this.props.baseLiquorFilter);
     if (initialBaseLiquorIndex === -1) {
       initialBaseLiquorIndex = 0;
     }
@@ -38,13 +40,13 @@ export default React.createClass<void, State>({
       <div className='recipe-list-header fixed-header'>
         <TitleBar
           leftIcon='/assets/img/ingredients.svg'
-          leftIconOnClick={this._showSidebar}
+          leftIconOnClick={this.props.showSidebar}
           // rightIcon='fa-plus'
           // rightIconOnClick={this._newRecipe}
           className='recipe-list-header'
-          onClick={this._showListSelector}
+          onClick={this.props.showListSelector}
         >
-          {(RECIPE_LIST_NAMES as any)[this.state.selectedRecipeList]}
+          {(RECIPE_LIST_NAMES as any)[this.props.selectedRecipeList]}
           <i className='fa fa-chevron-down' />
         </TitleBar>
         <Swipable
@@ -55,7 +57,7 @@ export default React.createClass<void, State>({
         >
           {ALL_BASE_LIQUORS.map(base => (
             <div
-              className={classNames('base-liquor-option', { 'selected': base === this.state.baseLiquorFilter })}
+              className={classNames('base-liquor-option', { 'selected': base === this.props.baseLiquorFilter })}
               key={base}
             >
                 {base}
@@ -64,30 +66,26 @@ export default React.createClass<void, State>({
         </Swipable>
       </div>
     );
-  },
-
-  _onBaseLiquorChange(index: number) {
-    store.dispatch({
-      type: 'set-base-liquor-filter',
-      filter: ALL_BASE_LIQUORS[index]
-    });
-  },
-
-  _showSidebar() {
-    store.dispatch({
-      type: 'show-sidebar'
-    });
-  },
-
-  _showListSelector() {
-    store.dispatch({
-      type: 'show-list-selector'
-    });
-  },
-
-  _newRecipe() {
-    store.dispatch({
-      type: 'show-recipe-editor'
-    });
   }
-});
+
+  private _onBaseLiquorChange = (index: number) => {
+    this.props.setBaseLiquorFilter(ALL_BASE_LIQUORS[index]);
+  };
+}
+
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    baseLiquorFilter: state.filters.baseLiquorFilter,
+    selectedRecipeList: state.filters.selectedRecipeList
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+  return bindActionCreators({
+    showSidebar,
+    showListSelector,
+    setBaseLiquorFilter
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeListHeader) as React.ComponentClass<void>;

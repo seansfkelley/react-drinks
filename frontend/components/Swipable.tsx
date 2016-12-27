@@ -2,24 +2,21 @@ import { isEqual, range, sortedIndex, initial, last } from 'lodash';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as classNames from 'classnames';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import { InertialSwipeLogicBox } from './InertialSwipeLogicBox';
 
 interface InertialSwipableProps {
   itemOffsets: number[];
+  initialDelta: number;
+  getNearestIndex: (e: React.TouchEvent<HTMLElement>) => number;
   onSwiping?: (delta: number) => void;
   onSwiped?: () => void;
-  initialDelta?: number;
-  getNearestIndex?: (e: React.TouchEvent<void>) => number;
   friction?: number;
   className?: string;
 }
 
-const InertialSwipable = React.createClass<InertialSwipableProps, void>({
-  displayName: 'InertialSwipable',
-
-  mixins: [PureRenderMixin],
+class InertialSwipable extends React.PureComponent<InertialSwipableProps, void> {
+  private _logicBox: InertialSwipeLogicBox;
 
   render() {
     return (
@@ -32,19 +29,19 @@ const InertialSwipable = React.createClass<InertialSwipableProps, void>({
         {this.props.children}
       </div>
     );
-  },
+  }
 
-  _onTouchStart(e: React.TouchEvent<void>) {
+  _onTouchStart = (e: React.TouchEvent<HTMLElement>) => {
     this._logicBox.onTouchStart(e);
-  },
+  };
 
-  _onTouchMove(e: React.TouchEvent<void>) {
+  _onTouchMove = (e: React.TouchEvent<HTMLElement>) => {
     this._logicBox.onTouchMove(e);
-  },
+  };
 
-  _onTouchEnd(e: React.TouchEvent<void>) {
+  _onTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
     this._logicBox.onTouchEnd(e);
-  },
+  };
 
   componentDidMount() {
     this._logicBox = new InertialSwipeLogicBox(
@@ -55,7 +52,7 @@ const InertialSwipable = React.createClass<InertialSwipableProps, void>({
       this.props.friction ? 1 - this.props.friction : undefined,
       this.props.initialDelta
     );
-  },
+  }
 
   componentWillReceiveProps(nextProps: InertialSwipableProps) {
     if (!isEqual(nextProps.itemOffsets, this.props.itemOffsets)) {
@@ -75,18 +72,18 @@ const InertialSwipable = React.createClass<InertialSwipableProps, void>({
         this._logicBox.setDeltaInstantly(nextProps.initialDelta);
       }
     }
-  },
+  }
 
   componentWillUnmount() {
     if (this._logicBox) {
       this._logicBox.destroy();
     }
   }
-});
+}
 
 interface Props {
+  onSlideChange: (index: number) => void;
   initialIndex?: number;
-  onSlideChange?: Function;
   friction?: number;
   className?: string;
 }
@@ -99,12 +96,11 @@ interface State {
   initialDelta: number;
 }
 
-export default React.createClass<Props, State>({
-  displayName: 'Swipable',
+export default class extends React.PureComponent<Props, State> {
+  private _inertialSwipable: InertialSwipable;
+  private _slidingContainer: HTMLElement;
 
-  mixins: [PureRenderMixin],
-
-  getInitialState() {
+  state: State = (function(this: React.Component<any, any>) {
     const zeroes = range(React.Children.count(this.props.children)).map(() => 0);
     return {
       wrapperWidth: 0,
@@ -113,7 +109,7 @@ export default React.createClass<Props, State>({
       delta: 0,
       initialDelta: 0
     };
-  },
+  }).call(this);
 
   _getIndexForDelta(delta: number) {
     // return _.sortedIndex(@state.itemOffsets, delta)
@@ -121,7 +117,7 @@ export default React.createClass<Props, State>({
       .map(i => this.state.itemOffsets[i] - this.state.itemWidths[i] / 2);
     // Why is this -1 again?
     return Math.max(0, sortedIndex(shiftedOffsets, delta) - 1);
-  },
+  }
 
   render() {
     const offset = -this.state.delta + (this.state.wrapperWidth - this.state.itemWidths[0]) / 2;
@@ -135,11 +131,11 @@ export default React.createClass<Props, State>({
         getNearestIndex={this._getNearestIndex}
         friction={this.props.friction}
         className={classNames('viewport-container', this.props.className)}
-        ref='inertialSwipable'
+        ref={e => this._inertialSwipable = e}
       >
         <div
           className='sliding-container'
-          ref='slidingContainer'
+          ref={e => this._slidingContainer = e}
            style={{
             WebkitTransform: `translateX(${ offset }px) translateZ(0)`, // Hardware acceleration.
             transform: `translateX(${ offset }px)`
@@ -149,61 +145,61 @@ export default React.createClass<Props, State>({
         </div>
       </InertialSwipable>
     );
-  },
+  }
 
   componentDidMount() {
     this._computeCachedState();
 
     window.addEventListener('orientationchange', this._computeCachedState, false);
     window.addEventListener('resize', this._computeCachedState, false);
-  },
+  }
 
   componentWillUnmount() {
     window.removeEventListener('orientationchange', this._computeCachedState);
     window.removeEventListener('resize', this._computeCachedState);
-  },
+  }
 
   _computeCachedState() {
-    const wrapperWidth = this.refs.slidingContainer.offsetWidth;
-    const itemWidths: number[] = Array.prototype.slice.apply((this.refs.slidingContainer as HTMLElement).children).map((child: HTMLElement)=> child.offsetWidth);
+    const wrapperWidth = this._slidingContainer.offsetWidth;
+    const itemWidths: number[] = Array.prototype.slice.apply((this._slidingContainer as HTMLElement).children).map((child: HTMLElement)=> child.offsetWidth);
     const itemOffsets = initial(itemWidths
       .reduce((offsets, width) => { offsets.push(last(offsets) + width); return offsets; }, [ 0 ]));
 
     const initialDelta = itemOffsets[this.props.initialIndex != null ? this.props.initialIndex : 0];
-    this.setState({ wrapperWidth, itemWidths, itemOffsets, initialDelta });
-  },
+    this.setState({ wrapperWidth, itemWidths, itemOffsets, initialDelta } as any);
+  }
 
-  _getNearestIndex(e: React.TouchEvent<HTMLElement>) {
+  private _getNearestIndex = (e: React.TouchEvent<HTMLElement>) => {
     // Note that this MUST be `target`, NOT `currentTarget`, as we use event delegation and want the
     // actual element that wat touched, not the delegate listener.
     let target = e.target as HTMLElement;
-    while (target != null && target.parentNode !== this.refs.slidingContainer) {
+    while (target != null && target.parentNode !== this._slidingContainer) {
       target = target.parentNode as HTMLElement;
     }
     if (target) {
-      return Array.prototype.indexOf.call((this.refs.slidingContainer as HTMLElement).children, target);
+      return Array.prototype.indexOf.call((this._slidingContainer as HTMLElement).children, target);
     } else {
-      const { offsetLeft, offsetWidth } = ReactDOM.findDOMNode(this.refs.inertialSwipable) as HTMLElement;
+      const { offsetLeft, offsetWidth } = ReactDOM.findDOMNode(this._inertialSwipable) as HTMLElement;
       if (e.changedTouches[0].clientX - offsetLeft < offsetWidth / 2) {
         return 0;
       } else {
-        return this.refs.slidingContainer.children.length - 1;
+        return this._slidingContainer.children.length - 1;
       }
     }
-  },
+  };
 
-  _onSwiping(delta: number) {
+  private _onSwiping = (delta: number) => {
     const oldIndex = this._getIndexForDelta(this.state.delta);
     const newIndex = this._getIndexForDelta(delta);
-    this.setState({ delta });
+    this.setState({ delta } as any);
     if (oldIndex !== newIndex) {
       this.props.onSlideChange(newIndex);
     }
-  },
+  };
 
-  _onSwiped() {
+  private _onSwiped = () => {
     // Don't call onSlideChange; we assume the diff between the most recent call of it and now is negligible.
     const index = this._getIndexForDelta(this.state.delta);
-    this.setState({ initialDelta: this.state.itemOffsets[index] });
-  }
-});
+    this.setState({ initialDelta: this.state.itemOffsets[index] } as any);
+  };
+}

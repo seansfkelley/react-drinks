@@ -9,9 +9,7 @@ interface Props {
   recipe: Recipe;
 }
 
-export default React.createClass<Props, void>({
-  displayName: 'StandaloneRecipeView',
-
+export default class extends React.PureComponent<Props, void> {
   render() {
     return (
       <div className='standalone-recipe'>
@@ -25,6 +23,4 @@ export default React.createClass<Props, void>({
       </div>
     );
   }
-});
-
-
+}

@@ -1,9 +1,9 @@
 import { defaults, flatten } from 'lodash';
 import * as React from 'react';
-import * as PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as classNames from 'classnames';
 
 import { fractionify } from '../utils';
+import { assert } from '../../shared/tinyassert';
 import { Ingredient, Recipe, DisplayIngredient } from '../../shared/types';
 import { IngredientSplit, SubstituteDisplayIngredient } from '../store/derived/ingredientSplitsByRecipeId';
 import { BASE_URL } from '../../shared/definitions';
@@ -12,10 +12,11 @@ import TitleBar from '../components/TitleBar';
 
 import MeasuredIngredient, { Props as MeasuredIngredientProps } from './MeasuredIngredient';
 
+type IngredientCategory = 'missing' | 'substitute' | 'available';
 const IngredientCategory = {
-  MISSING: 'missing',
-  SUBSTITUTE: 'substitute',
-  AVAILABLE: 'available'
+  MISSING: 'missing' as IngredientCategory,
+  SUBSTITUTE: 'substitute' as IngredientCategory,
+  AVAILABLE: 'available' as IngredientCategory
 };
 
 const ORDERED_CATEGORIES = [IngredientCategory.MISSING, IngredientCategory.SUBSTITUTE, IngredientCategory.AVAILABLE];
@@ -33,28 +34,22 @@ interface Props {
   recipe: Recipe;
   ingredientSplits?: IngredientSplit;
   ingredientsByTag?: { [tag: string]: Ingredient };
-  onClose?: Function;
+  onClose?: () => void;
   onFavorite?: (recipe: Recipe, isFavorited: boolean) => void;
   onEdit?: (recipe: Recipe) => void;
   isFavorited?: boolean;
   isShareable?: boolean;
 }
 
-export default React.createClass<Props, void>({
-  displayName: 'RecipeView',
-
-  mixins: [PureRenderMixin],
-
-  getDefaultProps() {
-    return {
-      isShareable: false
-    } as any as Props;
-  },
+export default class extends React.PureComponent<Props, void> {
+  static defaultProps = {
+    isShareable: false
+  };
 
   render() {
     let ingredients;
-    if (this.props.ingredientSplits != null) {
-      ingredients = flatten(ORDERED_CATEGORIES.map(category => this._renderCategory(this.props.ingredientSplits[category], category)));
+    if (this.props.ingredientSplits != null && this.props.ingredientsByTag != null) {
+      ingredients = flatten(ORDERED_CATEGORIES.map(category => this._renderCategory(this.props.ingredientSplits![category], category)));
     } else {
       ingredients = this.props.recipe.ingredients.map((i: DisplayIngredient) =>
         // This fucked-up key is because sometimes, the same tag will appear twice (e.g. Penicillin's two scotches).
@@ -108,17 +103,27 @@ export default React.createClass<Props, void>({
 
     // if (this.props.onEdit) {
     //   footerButtons.push(
-    //     <IconButton key='edit' icon='fa-pencil-square-o' text='Edit' onClick={this._edit} />
+    //     <IconButton key='edit' icon='fa-pencil-square-o' text='Edit' onClick={() => this.props.onEdit(this.props.recipe)} />
     //   );
     // }
     if (this.props.isShareable) {
       footerButtons.push(
-        <IconButton key='share' icon='fa-share-square-o' text='Share' onClick={this._share} />
+        <IconButton
+          key='share'
+          icon='fa-share-square-o'
+          text='Share'
+          onClick={() => window.open(`sms:&body=${ this.props.recipe.name } ${ BASE_URL }/recipe/${ this.props.recipe.recipeId }`)}
+        />
       );
     }
     if (this.props.onFavorite) {
       footerButtons.push(
-        <IconButton key='favorite' icon={classNames({ 'fa-star': this.props.isFavorited, 'fa-star-o': !this.props.isFavorited })} text='Favorite' onClick={this._favorite} />
+        <IconButton
+          key='favorite'
+          icon={classNames({ 'fa-star': this.props.isFavorited, 'fa-star-o': !this.props.isFavorited })}
+          text='Favorite'
+          onClick={() => this.props.onFavorite!(this.props.recipe, !this.props.isFavorited)}
+        />
       );
     }
 
@@ -136,21 +141,11 @@ export default React.createClass<Props, void>({
         {footerButtons.length ? <div className='fixed-footer'>{footerButtons}</div> : undefined}
       </div>
     );
-  },
-
-  _edit() {
-    this.props.onEdit(this.props.recipe);
-  },
-
-  _share() {
-    window.open(`sms:&body=${ this.props.recipe.name } ${ BASE_URL }/recipe/${ this.props.recipe.recipeId }`);
-  },
-
-  _favorite() {
-    this.props.onFavorite(this.props.recipe, !this.props.isFavorited);
-  },
+  }
 
   _renderCategory(displayIngredients: (DisplayIngredient | SubstituteDisplayIngredient)[], category: string) {
+    assert(this.props.ingredientsByTag);
+
     if (displayIngredients.length === 0) {
       return [];
     } else {
@@ -164,7 +159,7 @@ export default React.createClass<Props, void>({
         formattedIngredients = displayIngredients.map((i: DisplayIngredient) => {
           return defaults({
             isMissing: true,
-            difficulty: this.props.ingredientsByTag[i.tag!].difficulty
+            difficulty: this.props.ingredientsByTag![i.tag!].difficulty
           }, i);
         });
       } else {
@@ -174,6 +169,4 @@ export default React.createClass<Props, void>({
       return formattedIngredients.map(i => <MeasuredIngredient {...i} key={`${ i.tag } ${ i.displayIngredient }`}/>);
     }
   }
-});
-
-
+}

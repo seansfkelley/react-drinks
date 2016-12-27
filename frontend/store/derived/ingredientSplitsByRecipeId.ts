@@ -2,7 +2,6 @@ import { assign, uniq, isPlainObject, omit } from 'lodash';
 import * as log from 'loglevel';
 
 import { Ingredient, Recipe, DisplayIngredient } from '../../../shared/types';
-import { memoize } from './memoize';
 
 export interface SubstituteDisplayIngredient {
   need: DisplayIngredient;
@@ -129,5 +128,3 @@ export function ingredientSplitsByRecipeId({ recipes, ingredientsByTag, ingredie
       return obj;
     }, {} as { [recipeId: string]: IngredientSplit });
 };
-
-export const memoized = memoize(ingredientSplitsByRecipeId);
