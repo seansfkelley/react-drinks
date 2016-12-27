@@ -73,7 +73,7 @@ class RecipeList extends React.PureComponent<OwnProps & DispatchProps, void> {
 
   _showRecipeViewer(index: number) {
     const recipeIds = flatten(this.props.recipes.map(group => group.recipes)).map(r => r.recipeId);
-    this.props.showRecipeViewer(recipeIds, index);
+    this.props.showRecipeViewer({ recipeIds, index });
   }
 }
 

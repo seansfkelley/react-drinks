@@ -1,160 +1,41 @@
 import { Ingredient, Recipe, IngredientGroupMeta } from '../../shared/types';
 import { RecipeListType } from '../types';
-import { Action } from './ActionType';
+import { Action, ActionType } from './ActionType';
 
-export function hideRecipeViewer(): Action<void> {
-  return {
-    type: 'hide-recipe-viewer'
-  };
-}
-
-export function hideSidebar(): Action<void> {
-  return {
-    type: 'hide-sidebar'
-  };
-}
-
-export function hideRecipeEditor(): Action<void> {
-  return {
-    type: 'hide-recipe-editor'
-  };
-}
-
-export function hideListSelector(): Action<void> {
-  return {
-    type: 'hide-list-selector'
-  };
-}
-
-export function showRecipeViewer(recipeIds: string[], index: number): Action<{ recipeIds: string[], index: number  }> {
-  return {
-    type: 'show-recipe-viewer',
-    payload: {
-      recipeIds,
-      index
-    }
+function createNullaryActionCreator(type: ActionType) {
+  return function(): Action<void> {
+    return { type };
   }
 }
 
-export function deleteRecipe(recipeId: string): Action<string> {
-  return {
-    type: 'delete-recipe',
-    payload: recipeId
-  };
+function createActionCreator<P>(type: ActionType) {
+  return function(payload: P): Action<P> {
+    return { type, payload };
+  }
 }
 
-export function setSelectedRecipeList(listType: RecipeListType): Action<RecipeListType> {
-  return {
-    type: 'set-selected-recipe-list',
-    payload: listType
-  };
-}
-
-export function setSelectedIngredientTags(tags: { [tag: string]: any }): Action<{ [tag: string]: any }> {
-  return {
-    type: 'set-selected-ingredient-tags',
-    payload: tags
-  };
-}
-
-export function setRecipeSearchTerm(searchTerm: string): Action<string> {
-  return {
-    type: 'set-recipe-search-term',
-    payload: searchTerm
-  };
-}
-
-export function setIngredientSearchTerm(searchTerm: string): Action<string> {
-  return {
-    type: 'set-ingredient-search-term',
-    payload: searchTerm
-  };
-}
-
-export function setRecipeViewingIndex(index: number): Action<number> {
-  return {
-    type: 'set-recipe-viewing-index',
-    payload: index
-  };
-}
-
-export function seedRecipeEditor(recipe: Recipe): Action<Recipe> {
-  return {
-    type: 'seed-recipe-editor',
-    payload: recipe
-  };
-}
-
-export function showRecipeEditor(): Action<void> {
-  return {
-    type: 'show-recipe-editor'
-  };
-}
-
-export function favoriteRecipe(recipeId: string): Action<string> {
-  return {
-    type: 'favorite-recipe',
-    payload: recipeId
-  };
-}
-
-export function unfavoriteRecipe(recipeId: string): Action<string> {
-  return {
-    type: 'unfavorite-recipe',
-    payload: recipeId
-  };
-}
-
-export function setBaseLiquorFilter(baseLiquorType: string): Action<string> {
-  return {
-    type: 'set-base-liquor-filter',
-    payload: baseLiquorType
-  };
-}
-
-export function showSidebar(): Action<void> {
-  return {
-    type: 'show-sidebar'
-  };
-}
-
-export function showListSelector(): Action<void> {
-  return {
-    type: 'show-list-selector'
-  };
-}
-
-export function initializeNewRecipe(): Action<void> {
-  return {
-    type: 'show-recipe-editor'
-  };
-}
-
-export function setErrorMessage(errorMessage?: string): Action<string> {
-  return {
-    type: 'error-message',
-    payload: errorMessage
-  };
-}
-
-export function setIngredients(ingredients: { ingredients: Ingredient[], groups: IngredientGroupMeta[] }): Action<{ ingredients: Ingredient[], groups: IngredientGroupMeta[] }> {
-  return {
-    type: 'set-ingredients',
-    payload: ingredients
-  };
-}
-
-export function setRecipesById(recipesById: { [recipeId: string]: Recipe }): Action<{ [recipeId: string]: Recipe }> {
-  return {
-    type: 'set-recipes-by-id',
-    payload: recipesById
-  };
-}
-
+export const hideRecipeViewer = createNullaryActionCreator('hide-recipe-viewer');
+export const hideSidebar = createNullaryActionCreator('hide-sidebar');
+export const hideRecipeEditor = createNullaryActionCreator('hide-recipe-editor');
+export const hideListSelector = createNullaryActionCreator('hide-list-selector');
+export const showRecipeViewer = createActionCreator<{ recipeIds: string[], index: number  }>('show-recipe-viewer');
+export const deleteRecipe = createActionCreator<string>('delete-recipe');
+export const setSelectedRecipeList = createActionCreator<RecipeListType>('set-selected-recipe-list');
+export const setSelectedIngredientTags = createActionCreator<{ [tag: string]: any }>('set-selected-ingredient-tags');
+export const setRecipeSearchTerm = createActionCreator<string>('set-recipe-search-term');
+export const setIngredientSearchTerm = createActionCreator<string>('set-ingredient-search-term');
+export const setRecipeViewingIndex = createActionCreator<number>('set-recipe-viewing-index');
+export const seedRecipeEditor = createActionCreator<Recipe>('seed-recipe-editor');
+export const showRecipeEditor = createNullaryActionCreator('show-recipe-editor');
+export const favoriteRecipe = createActionCreator<string>('favorite-recipe');
+export const unfavoriteRecipe = createActionCreator<string>('unfavorite-recipe');
+export const setBaseLiquorFilter = createActionCreator<string>('set-base-liquor-filter');
+export const showSidebar = createNullaryActionCreator('show-sidebar');
+export const showListSelector = createNullaryActionCreator('show-list-selector');
+export const initializeNewRecipe = createNullaryActionCreator('show-recipe-editor');
+export const setErrorMessage = createActionCreator<string>('error-message');
+export const setIngredients = createActionCreator<{ ingredients: Ingredient[], groups: IngredientGroupMeta[] }>('set-ingredients');
+export const setRecipesById = createActionCreator<{ [recipeId: string]: Recipe }>('set-recipes-by-id');
 // The idea is to refresh the timestamps, even if the user doesn't interact. Opening the app
 // should be sufficient interaction to reset the timers on all the expirable pieces of state.
-export function noopTriggerPersistence(): Action<void> {
-  return {
-    type: '--dummy-event-to-trigger-persistence--'
-  };
-}
+export const noopTriggerPersistence = createNullaryActionCreator('--dummy-event-to-trigger-persistence--');
