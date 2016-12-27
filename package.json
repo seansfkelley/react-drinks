@@ -1,19 +1,11 @@
 {
   "name": "react-drinks",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.0",
+  "description": "A mobile app for helping you find cocktails to make.",
   "scripts": {
     "start": "ts-node index.ts",
     "test": "multi=\"mocha-osx-reporter=- spec=-\" ./node_modules/.bin/mocha --reporter mocha-multi",
     "dev": "./node_modules/.bin/nodemon index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seansfkelley/react-drinks.git"
-  },
-  "author": "seansfkelley@gmail.com",
-  "bugs": {
-    "url": "https://github.com/seansfkelley/react-drinks/issues"
   },
   "license": "UNLICENSED",
   "private": true,
