@@ -1,5 +1,5 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux';
-import ReduxThunk from 'redux-thunk';
+import * as createLogger from 'redux-logger';
 
 import { reducer as reduceUi, UiState } from './reducers/ui';
 import { reducer as reduceFilters, FiltersState } from './reducers/filters';
@@ -23,4 +23,4 @@ const rootReducer = combineReducers({
   editableRecipe: reduceEditableRecipe
 });
 
-export const store = applyMiddleware(ReduxThunk)(createStore)(rootReducer);
+export const store = applyMiddleware(createLogger({ collapsed: true }))(createStore)(rootReducer);
