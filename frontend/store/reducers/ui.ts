@@ -1,6 +1,8 @@
 import { assign, defaults, union, without, indexOf, clone } from 'lodash';
+
 import makeReducer from './makeReducer';
 import { load } from '../persistence';
+import { Action } from '../ActionType';
 
 export interface UiState {
   errorMessage?: string;
@@ -24,7 +26,8 @@ export const reducer = makeReducer<UiState>(assign({
   showingSidebar: false,
   showingListSelector: false
 }, load().ui), {
-  'rewrite-recipe-id': (state, { from, to }) => {
+  'rewrite-recipe-id': (state, action: Action<{ from: string, to: string }>) => {
+    const { from, to } = action.payload!;
     let { currentlyViewedRecipeIds, favoritedRecipeIds } = state;
 
     let i = indexOf(currentlyViewedRecipeIds, from);
@@ -42,19 +45,23 @@ export const reducer = makeReducer<UiState>(assign({
     return defaults({ currentlyViewedRecipeIds, favoritedRecipeIds }, state);
   },
 
-  'set-recipe-viewing-index': (state, { index }) => {
+  'set-recipe-viewing-index': (state, action: Action<number>) => {
+    const index = action.payload;
     return defaults({ recipeViewingIndex: index }, state);
   },
 
-  'favorite-recipe': (state, { recipeId }) => {
+  'favorite-recipe': (state, action: Action<string>) => {
+    const recipeId = action.payload;
     return defaults({ favoritedRecipeIds: union(state.favoritedRecipeIds, [recipeId]) }, state);
   },
 
-  'unfavorite-recipe': (state, { recipeId }) => {
+  'unfavorite-recipe': (state, action: Action<string>) => {
+    const recipeId = action.payload;
     return defaults({ favoritedRecipeIds: without(state.favoritedRecipeIds, recipeId) }, state);
   },
 
-  'show-recipe-viewer': (state, { index, recipeIds }) => {
+  'show-recipe-viewer': (state, action: Action<{ index: number, recipeIds: string[] }>) => {
+    const { index, recipeIds } = action.payload!;
     return defaults({
       showingRecipeViewer: true,
       recipeViewingIndex: index,
@@ -94,7 +101,7 @@ export const reducer = makeReducer<UiState>(assign({
     return defaults({ showingListSelector: false }, state);
   },
 
-  'error-message': (state, { message }) => {
-    return defaults({ errorMessage: message }, state);
+  'error-message': (state, action: Action<string>) => {
+    return defaults({ errorMessage: action.payload }, state);
   }
 });

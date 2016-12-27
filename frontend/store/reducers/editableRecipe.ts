@@ -5,6 +5,7 @@ import { load } from '../persistence';
 import { parseIngredientFromText } from '../../utils';
 import { Recipe, DisplayIngredient } from '../../../shared/types';
 import { EditableRecipePageType } from '../../types';
+import { Action } from '../ActionType';
 
 export interface EditableRecipeState {
   originalRecipeId?: string;
@@ -33,7 +34,8 @@ const _createEmptyStore = (): EditableRecipeState => ({
 });
 
 export const reducer = makeReducer<EditableRecipeState>(assign(_createEmptyStore(), load().editableRecipe), {
-  'seed-recipe-editor': (_state, { recipe }: { recipe: Recipe }) => {
+  'seed-recipe-editor': (_state, action: Action<Recipe>) => {
+    const recipe = action.payload!;
     return defaults({
       originalRecipeId: recipe.recipeId,
       ingredients: recipe.ingredients.map(i => ({
@@ -44,18 +46,18 @@ export const reducer = makeReducer<EditableRecipeState>(assign(_createEmptyStore
     }, pick(recipe, 'name', 'instructions', 'notes', 'base')) as EditableRecipeState;
   },
 
-  'set-editable-recipe-page': (state, { page }) => {
-    return defaults({ currentPage: page }, state);
+  'set-editable-recipe-page': (state, action: Action<any>) => {
+    return defaults({ currentPage: action.payload }, state);
   },
 
-  'set-name': (state, { name }) => {
-    return defaults({ name }, state);
+  'set-name': (state, action: Action<any>) => {
+    return defaults({ name: action.payload }, state);
   },
 
-  'delete-ingredient': (state, { index }) => {
+  'delete-ingredient': (state, action: Action<any>) => {
     const ingredients = clone(state.ingredients);
     // Ugh side effects.
-    ingredients.splice(index, 1);
+    ingredients.splice(action.payload, 1);
     return defaults({ ingredients }, state);
   },
 
@@ -65,25 +67,27 @@ export const reducer = makeReducer<EditableRecipeState>(assign(_createEmptyStore
     }, state);
   },
 
-  'commit-ingredient': (state, { index, rawText, tag }) => {
+  'commit-ingredient': (state, action: Action<any>) => {
+    const { index, tag } = action.payload;
     const ingredients = clone(state.ingredients);
     ingredients[index] = {
       tag,
       isEditing: false,
-      display: parseIngredientFromText(rawText)
+      display: parseIngredientFromText(action.payload)
     };
     return defaults({ ingredients }, state);
   },
 
-  'set-instructions': (state, { instructions }) => {
-    return defaults({ instructions }, state);
+  'set-instructions': (state, action: Action<any>) => {
+    return defaults({ instructions: action.payload }, state);
   },
 
-  'set-notes': (state, { notes }) => {
-    return defaults({ notes }, state);
+  'set-notes': (state, action: Action<any>) => {
+    return defaults({ notes: action.payload }, state);
   },
 
-  'toggle-base-liquor-tag': (state, { tag }) => {
+  'toggle-base-liquor-tag': (state, action: Action<any>) => {
+    const tag = action.payload;
     let base;
     if (state.base.includes(tag)) {
       base = without(state.base, tag);
@@ -97,11 +101,11 @@ export const reducer = makeReducer<EditableRecipeState>(assign(_createEmptyStore
     return defaults({ saving: true }, state);
   },
 
-  'saved-recipe': (_state) => {
+  'saved-recipe': () => {
     return _createEmptyStore();
   },
 
-  'clear-editable-recipe': (_state) => {
+  'clear-editable-recipe': () => {
     return _createEmptyStore();
   }
 });

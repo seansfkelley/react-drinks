@@ -5,6 +5,7 @@ import * as log from 'loglevel';
 
 import { store } from '.';
 import recipeLoader from './recipeLoader';
+import { setIngredients, setRecipesById } from './atomicActions';
 
 export default once(() => {
   const { customRecipeIds } = store.getState().recipes;
@@ -20,17 +21,12 @@ export default once(() => {
       contentType: 'application/json'
     }))
       .then(ingredients => {
-        store.dispatch(assign({
-          type: 'set-ingredients'
-        }, ingredients));
+        store.dispatch(setIngredients(ingredients));
       })
   ,
     recipeLoader([].concat(customRecipeIds).concat(defaultRecipeIds))
       .then(recipesById => {
-        store.dispatch({
-          type: 'recipes-loaded',
-          recipesById: mapValues(recipesById, (recipe, recipeId) => assign({ recipeId }, recipe))
-        });
+        store.dispatch(setRecipesById(mapValues(recipesById, (recipe, recipeId) => assign({ recipeId }, recipe))));
       })
   ]);
 });

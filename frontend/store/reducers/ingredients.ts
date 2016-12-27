@@ -6,6 +6,7 @@ import { load } from '../persistence';
 import { Ingredient, IngredientGroupMeta } from '../../../shared/types';
 import { GroupedIngredients } from '../../types';
 import { normalizeIngredient } from '../../../shared/normalization';
+import { Action } from '../ActionType';
 
 function _displaySort(i: Ingredient) {
   return i.display.toLowerCase();
@@ -66,8 +67,9 @@ export const reducer = makeReducer<IngredientsState>(assign({
   groupedIngredients: [],
   ingredientsByTag: {}
 }, load().ingredients), {
-  'set-ingredients': (_state, { ingredients, groups }: { ingredients: Ingredient[], groups: IngredientGroupMeta[] }) => {
+  'set-ingredients': (_state, action: Action<{ ingredients: Ingredient[], groups: IngredientGroupMeta[] }>) => {
     // We don't use state, this is a set-once kind of deal.
+    const { ingredients, groups } = action.payload!;
     return {
       ingredientsByTag: _computeIngredientsByTag(ingredients, ingredients.filter(i => !i.tangible)),
       groupedIngredients: _computeGroupedIngredients(ingredients, groups)

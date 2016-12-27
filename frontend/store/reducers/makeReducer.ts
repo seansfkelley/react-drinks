@@ -1,10 +1,11 @@
-export default function<T>(defaultState: T, actionNameToFunctionMap: { [action: string]: (state: T, action: any) => T }) {
-  return function (state: T, action: any): T {
-    let fn: (state: T, action: any) => T;
+import { Action } from '../ActionType';
+
+export default function<S>(defaultState: S, actionNameToFunctionMap: { [action: string]: (state: S, action: Action<any>) => S }) {
+  return function (state: S, action: Action<any>): S {
     if (state == null) {
       return defaultState;
-    } else if (fn = actionNameToFunctionMap[action.type]) {
-      return fn(state, action);
+    } else if (actionNameToFunctionMap[action.type]) {
+      return actionNameToFunctionMap[action.type](state, action);
     } else {
       return state;
     }

@@ -2,6 +2,7 @@ import { assign, defaults, omit, without } from 'lodash';
 
 import { Recipe } from '../../../shared/types';
 import makeReducer from './makeReducer';
+import { Action } from '../ActionType';
 
 export interface RecipesState {
   recipesById: { [recipeId: string]: Recipe };
@@ -12,11 +13,12 @@ export const reducer = makeReducer<RecipesState>(assign({
   recipesById: {},
   customRecipeIds: []
 }, require('../persistence').load().recipes), {
-  'recipes-loaded': (state, { recipesById }) => {
-    return defaults({ recipesById }, state);
+  'set-recipes-by-id': (state, action: Action<{ [recipeId: string]: Recipe }>) => {
+    return defaults({ recipesById: action.payload }, state);
   },
 
-  'saved-recipe': (state, { recipe }) => {
+  'saved-recipe': (state, action: Action<Recipe>) => {
+    const recipe = action.payload!;
     return defaults({
       customRecipeIds: state.customRecipeIds.concat([recipe.recipeId]),
       recipesById: defaults({
@@ -25,7 +27,8 @@ export const reducer = makeReducer<RecipesState>(assign({
     }, state);
   },
 
-  'delete-recipe': (state, { recipeId }) => {
+  'delete-recipe': (state, action: Action<string>) => {
+    const recipeId = action.payload!;
     return defaults({
       customRecipeIds: without(state.customRecipeIds, recipeId),
       recipesById: omit(state.recipesById, recipeId)
