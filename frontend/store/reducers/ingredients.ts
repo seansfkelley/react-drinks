@@ -58,23 +58,17 @@ function _computeGroupedIngredients(ingredients: Ingredient[], groups: Ingredien
 }
 
 export interface IngredientsState {
-  alphabeticalIngredients: Ingredient[];
-  allAlphabeticalIngredients: Ingredient[];
   groupedIngredients: GroupedIngredients[];
   ingredientsByTag: { [tag: string]: Ingredient };
 }
 
 export const reducer = makeReducer<IngredientsState>(assign({
-  alphabeticalIngredients: [],
-  allAlphabeticalIngredients: [],
   groupedIngredients: [],
   ingredientsByTag: {}
 }, load().ingredients), {
   'set-ingredients': (_state, { ingredients, groups }: { ingredients: Ingredient[], groups: IngredientGroupMeta[] }) => {
     // We don't use state, this is a set-once kind of deal.
     return {
-      allAlphabeticalIngredients: sortBy(ingredients, _displaySort),
-      alphabeticalIngredients: sortBy(ingredients.filter(i => i.tangible), _displaySort),
       ingredientsByTag: _computeIngredientsByTag(ingredients, ingredients.filter(i => !i.tangible)),
       groupedIngredients: _computeGroupedIngredients(ingredients, groups)
     };

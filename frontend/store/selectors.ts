@@ -1,3 +1,4 @@
+import { sortBy } from 'lodash';
 import { createSelector } from 'reselect';
 
 import { RootState } from './index';
@@ -8,7 +9,7 @@ import { filteredGroupedIngredients } from './derived/filteredGroupedIngredients
 const selectIngredientsByTag = (state: RootState) => state.ingredients.ingredientsByTag;
 const selectGroupedIngredients = (state: RootState) => state.ingredients.groupedIngredients;
 
-const selectRecipes = (state: RootState) => state.recipes.alphabeticalRecipes;
+const selectRecipesById = (state: RootState) => state.recipes.recipesById;
 
 const selectBaseLiquorFilter = (state: RootState) => state.filters.baseLiquorFilter;
 const selectRecipeSearchTerm = (state: RootState) => state.filters.recipeSearchTerm;
@@ -18,7 +19,17 @@ const selectSelectedRecipeList = (state: RootState) => state.filters.selectedRec
 
 const selectFavoritedRecipeIds = (state: RootState) => state.ui.favoritedRecipeIds;
 
-// TODO: Selectors for alphabetical recipes and such.
+const selectAlphabeticalRecipes = createSelector(
+  selectRecipesById,
+  (recipesById) => {
+    const alphabeticalRecipeIds = sortBy(
+      Object.keys(recipesById),
+      recipeId => recipesById[recipeId].sortName
+    );
+
+    return alphabeticalRecipeIds.map(recipeId => recipesById[recipeId]);
+  }
+);
 
 export const selectFilteredGroupedIngredients = createSelector(
   selectGroupedIngredients,
@@ -33,7 +44,7 @@ export const selectFilteredGroupedIngredients = createSelector(
 )
 
 export const selectIngredientSplitsByRecipeId = createSelector(
-  selectRecipes,
+  selectAlphabeticalRecipes,
   selectIngredientsByTag,
   selectIngredientTags,
   (
@@ -49,7 +60,7 @@ export const selectIngredientSplitsByRecipeId = createSelector(
 
 export const selectFilteredGroupedRecipes = createSelector(
   selectIngredientsByTag,
-  selectRecipes,
+  selectAlphabeticalRecipes,
   selectBaseLiquorFilter,
   selectRecipeSearchTerm,
   selectFavoritedRecipeIds,
