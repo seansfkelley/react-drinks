@@ -1,7 +1,7 @@
 import { minBy, maxBy } from 'lodash';
 
 // TODO: Fat enums would be cool, but I don't want to deal with the required refactoring to enable them
-// right now (specifically, ).
+// right now (specifically, having to upconvert them from the server and split Ingredient into DbIngredient).
 // export type Difficulty = string & { __difficultyBrand: any, display: string, className: string };
 // export const Difficulty = {
 //   EASY: assign(new String('easy'), { display: 'Easy', className: 'easy' }),
