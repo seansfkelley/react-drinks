@@ -19,7 +19,7 @@ interface OwnProps {
   recipes: GroupedRecipes[];
   ingredientsByTag: { [tag: string]: Ingredient };
   favoritedRecipeIds: string[];
-  ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
+  ingredientSplitsByRecipeId?: { [recipeId: string]: IngredientSplit };
 }
 
 interface DispatchProps {
@@ -54,10 +54,12 @@ class RecipeList extends React.PureComponent<OwnProps & DispatchProps, void> {
 
   _makeItem(recipe: Recipe, absoluteIndex: number) {
     let difficulty, isMixable;
-    const missingIngredients = this.props.ingredientSplitsByRecipeId[recipe.recipeId].missing;
-    if (missingIngredients.length) {
-      isMixable = false;
-      difficulty = getHardest(missingIngredients.map(i => this.props.ingredientsByTag[i.tag!].difficulty));
+    if (this.props.ingredientSplitsByRecipeId) {
+      const missingIngredients = this.props.ingredientSplitsByRecipeId[recipe.recipeId].missing;
+      if (missingIngredients.length) {
+        isMixable = false;
+        difficulty = getHardest(missingIngredients.map(i => this.props.ingredientsByTag[i.tag!].difficulty));
+      }
     }
 
     return (

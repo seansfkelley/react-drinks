@@ -1,6 +1,16 @@
+@require '../shared/colors'
+
 .tabs
   display: flex
   flex-direction: column
+
+  &.dark
+    .tab-list
+      color: white
+      background-color: $header-background-color
+
+      .tab-button.is-current
+        background-color: #555
 
   .tab-list
     display: flex
@@ -11,6 +21,9 @@
       display: flex
       align-items: center
       justify-content: center
+
+      &.is-current
+        background-color: #ddd
 
   .current-tab
     flex: 1

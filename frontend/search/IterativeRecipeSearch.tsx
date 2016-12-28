@@ -6,8 +6,7 @@ import { RootState } from '../store';
 import { Ingredient } from '../../shared/types';
 import { GroupedRecipes } from '../types';
 import { setSelectedIngredientTags } from '../store/atomicActions';
-import { IngredientSplit } from '../store/derived/ingredientSplitsByRecipeId';
-import { selectFilteredGroupedRecipes, selectIngredientSplitsByRecipeId } from '../store/selectors';
+import { selectFilteredGroupedRecipes } from '../store/selectors';
 import TitleBar from '../components/TitleBar';
 import Tabs from '../components/Tabs';
 import IngredientsSidebar from '../recipes/IngredientsSidebar';
@@ -18,7 +17,6 @@ interface ConnectedProps {
   ingredientsByTag: { [tag: string]: Ingredient };
   filteredGroupedRecipes: GroupedRecipes[];
   favoritedRecipeIds: string[];
-  ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
 }
 
 interface DispatchProps {
@@ -33,6 +31,7 @@ class IterativeRecipeSearch extends React.PureComponent<ConnectedProps & Dispatc
         <TitleBar
           leftIcon='fa-chevron-left'
           leftIconOnClick={this._popStack}
+          className='dark'
         >
           <div className='lead-in'>Drinks with</div>
           <div className='ingredient-names'>
@@ -47,6 +46,8 @@ class IterativeRecipeSearch extends React.PureComponent<ConnectedProps & Dispatc
           }, {
             name: `Drinks (${drinkCount})`
           }]}
+          className='dark'
+          initialTabIndex={1}
         >
           <IngredientsSidebar
             onPendingTagsChange={this.props.setSelectedIngredientTags}
@@ -55,7 +56,6 @@ class IterativeRecipeSearch extends React.PureComponent<ConnectedProps & Dispatc
             recipes={this.props.filteredGroupedRecipes}
             ingredientsByTag={this.props.ingredientsByTag}
             favoritedRecipeIds={this.props.favoritedRecipeIds}
-            ingredientSplitsByRecipeId={this.props.ingredientSplitsByRecipeId}
           />
         </Tabs>
       </div>
@@ -72,8 +72,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
     selectedIngredientTags: state.filters.selectedIngredientTags,
     ingredientsByTag: state.ingredients.ingredientsByTag,
     filteredGroupedRecipes: selectFilteredGroupedRecipes(state),
-    favoritedRecipeIds: state.ui.favoritedRecipeIds,
-    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state)
+    favoritedRecipeIds: state.ui.favoritedRecipeIds
   };
 }
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 
 interface Props {
   tabs: {
@@ -6,6 +7,7 @@ interface Props {
     icon?: string;
   }[];
   initialTabIndex?: number;
+  className?: string;
 }
 
 interface State {
@@ -23,10 +25,14 @@ export default class Tabs extends React.PureComponent<Props, State> {
     }
 
     return (
-      <div className='tabs'>
+      <div className={classNames('tabs', this.props.className)}>
         <div className='tab-list'>
           {this.props.tabs.map((tab, i) => (
-            <div className='tab-button' key={i} onClick={() => { this.setState({ currentTabIndex: i })}}>
+            <div
+              onClick={() => { this.setState({ currentTabIndex: i })}}
+              className={classNames('tab-button', { 'is-current': i === this.state.currentTabIndex })}
+              key={i}
+            >
               {tab.name}
             </div>
           ))}
