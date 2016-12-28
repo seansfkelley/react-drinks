@@ -3,9 +3,16 @@
 .blur-overlay
   position: relative
 
-  .child-container
+  .dark-overlay, .child-container
     abs-full-screen()
 
+  .dark-overlay
+    opacity: 0
+    transition: opacity 500ms
+    pointer-events: none
+    background-color: black
+
+  .child-container
     &.foreground
       opacity: 0
       transition: opacity 500ms
@@ -14,10 +21,14 @@
     &.background
       transition: filter 500ms
 
-  &.with-foreground .child-container
-    &.foreground
-      opacity: 1
-      pointer-events: initial
+  &.with-foreground
+    .dark-overlay
+      opacity: 0.3
 
-    &.background
-      filter: blur(10px)
+    .child-container
+      &.foreground
+        opacity: 1
+        pointer-events: initial
+
+      &.background
+        filter: blur(10px)
