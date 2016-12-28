@@ -31,12 +31,15 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
   render() {
     return (
       <div className='landing'>
-        <TitleBar>Whaddaya want?</TitleBar>
+        <TitleBar className='dark'>
+          What can I get you?
+        </TitleBar>
         <SearchBar
           onChange={this.props.setIngredientSearchTerm}
           value={this.props.ingredientSearchTerm}
           // TODO: Search recipes, their ingredients, and maybe even similar drinks here too!
-          placeholder='Ingredient name...'
+          placeholder='Search for ingredients...'
+          className='dark'
         />
         <BlurOverlay
           foreground={this.props.ingredientSearchTerm
@@ -46,7 +49,11 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
                 onSelectionChange={this._selectIngredient}
               />
             : null}
-          background={<RecipeView recipe={sample(this.props.recipesById)}/>}
+          background={
+            <div className='random-cocktail'>
+              <div className='random-cocktail-header'>Cocktail of the Hour</div>
+              <RecipeView recipe={sample(this.props.recipesById)}/>
+            </div>}
         />
       </div>
     );

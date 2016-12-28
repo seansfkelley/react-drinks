@@ -1,6 +1,22 @@
+@require '../shared/colors';
+
 .search-bar
   display: flex
   flex-direction: row
+
+  &.dark
+    background-color: $header-background-color
+    color: white
+
+    .search-input
+      color: white
+
+      &::-webkit-input-placeholder
+        color: #bbb
+
+      &::selection
+        color: white
+        background: #bbb
 
   .fa
     line-height: 44px

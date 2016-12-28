@@ -3,13 +3,15 @@
 .grouped-ingredient-list
   .list-header
     position: relative
-    margin: 1px 0 0 0
     padding: 0 15px
     background: #393939
     color: #a8a8a8
     font-size: 14px
     font-weight: 600
     text-transform: uppercase
+
+    &.collapsed
+      border-bottom: 1px solid #676767
 
     .count
       position: absolute
@@ -28,10 +30,12 @@
     transition: height $transition-duration
 
   .list-item
-    margin: 0 0 1px 0
     padding: 0 15px
     background: #4a4a4a
     color: #eee
+
+    &:not(:last-child)
+      border-bottom: 1px solid #444
 
     .name // TODO: this should be a span (or removed, even)
       display: inline

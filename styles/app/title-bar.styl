@@ -1,7 +1,13 @@
+@require '../shared/colors';
+
 .title-bar
   display: flex
   flex-direction: row
   line-height: 44px
+
+  &.dark
+    background-color: $header-background-color
+    color: white
 
   .fa, img, .spacer // TODO: there must be a better way to center (w/o the spacer)
     width: 44px

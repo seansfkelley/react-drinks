@@ -11,11 +11,12 @@ import { INGREDIENTS_LIST_ITEM_HEIGHT, INGREDIENTS_LIST_GROUP_HEIGHT_OFFSET } fr
 interface IngredientGroupHeaderProps {
   title: string;
   selectedCount: number;
+  isExpanded?: boolean;
   onToggle?: () => void;
 }
 
 const IngredientGroupHeader: React.StatelessComponent<IngredientGroupHeaderProps> = (props) => (
-  <ListHeader onClick={props.onToggle}>
+  <ListHeader onClick={props.onToggle} className={classNames({ 'collapsed': !props.isExpanded })}>
     <span className='text'>{props.title}</span>
     {props.selectedCount > 0
       ? <span className='count'>{props.selectedCount}</span>
@@ -109,6 +110,7 @@ export default class GroupedIngredientList extends React.PureComponent<Props, St
             title={name}
             selectedCount={selectedCount}
             onToggle={() => this._toggleGroup(name)}
+            isExpanded={this.state.expandedGroupName === name}
             key={`header-${ name }`}
           />
         ,
