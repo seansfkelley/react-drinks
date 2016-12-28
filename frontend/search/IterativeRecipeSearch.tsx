@@ -34,13 +34,16 @@ class IterativeRecipeSearch extends React.PureComponent<ConnectedProps & Dispatc
           leftIcon='fa-chevron-left'
           leftIconOnClick={this._popStack}
         >
-          {this.props.selectedIngredientTags.length === 1
-            ? this.props.ingredientsByTag[this.props.selectedIngredientTags[0]].display
-            : `${this.props.selectedIngredientTags.length} Ingredients`}
+          <div className='lead-in'>Drinks with</div>
+          <div className='ingredient-names'>
+            {this.props.selectedIngredientTags.map(tag => (
+              <span className='ingredient-name' key={tag}>{this.props.ingredientsByTag[tag].display}</span>
+            ))}
+          </div>
         </TitleBar>
         <Tabs
           tabs={[{
-            name: 'Ingredients'
+            name: `Ingredients (${this.props.selectedIngredientTags.length})`
           }, {
             name: `Drinks (${drinkCount})`
           }]}

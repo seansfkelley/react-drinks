@@ -8,7 +8,20 @@
 
     .tab-button
       text-transform: uppercase
-      color: white
+
+  .title-bar
+    .title
+      display: flex
+      flex-direction: column
+      line-height: initial
+
+      .lead-in
+        font-weight: 400
+        font-size: 12px
+        padding-top: 4px
+
+      .ingredient-name:not(:last-child):after
+        content: ', '
 
   .recipe-list
     overflow-y: auto
