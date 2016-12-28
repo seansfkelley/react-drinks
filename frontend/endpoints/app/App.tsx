@@ -12,7 +12,7 @@ import {
   setSelectedIngredientTags
 } from '../../store/atomicActions';
 
-import RecipeListView from '../../recipes/RecipeListView';
+import MainSearchUiThing from '../../search/MainSearchUiThing';
 import SwipableRecipeView from '../../recipes/SwipableRecipeView';
 import IngredientsSidebar from '../../recipes/IngredientsSidebar';
 import RecipeListSelector from '../../recipes/RecipeListSelector';
@@ -37,12 +37,12 @@ interface DispatchProps {
 }
 
 interface State {
-  pendingIngredientTags: { [tag: string]: any };
+  pendingIngredientTags: string[];
 }
 
 class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   state: State = {
-    pendingIngredientTags: {}
+    pendingIngredientTags: []
   };
 
   render() {
@@ -55,7 +55,7 @@ class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
 
     return (
       <div className='app-event-wrapper' onTouchStart={this._deselectActiveElement}>
-        <RecipeListView />
+        <MainSearchUiThing />
         <div
           className={classNames('overlay-background', { 'visible': anyOverlayVisible })}
           onTouchStart={this._closeOverlays}
@@ -96,7 +96,7 @@ class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
     e.preventDefault();
   };
 
-  private _onPendingTagsChange = (pendingIngredientTags: { [tag: string]: any }) => {
+  private _onPendingTagsChange = (pendingIngredientTags: string[]) => {
     this.setState({ pendingIngredientTags });
   };
 }

@@ -3,12 +3,14 @@ import { assign, defaults, union, without } from 'lodash';
 import makeReducer from './makeReducer';
 import { load } from '../persistence';
 import { Action } from '../ActionType';
+import { SearchTabType } from '../../types';
 
 export interface UiState {
   errorMessage?: string;
   recipeViewingIndex: number;
   currentlyViewedRecipeIds: string[];
   favoritedRecipeIds: string[];
+  searchTabType: SearchTabType;
   showingRecipeViewer: boolean;
   showingRecipeEditor: boolean;
   showingSidebar: boolean;
@@ -20,7 +22,7 @@ export const reducer = makeReducer<UiState>(assign({
   recipeViewingIndex: 0,
   currentlyViewedRecipeIds: [],
   favoritedRecipeIds: [],
-
+  searchTabType: 'ingredients' as SearchTabType, // TODO: Why does this need a cast??
   showingRecipeViewer: false,
   showingRecipeEditor: false,
   showingSidebar: false,

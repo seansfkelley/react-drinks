@@ -17,6 +17,8 @@ export const RecipeListType = {
   CUSTOM: 'custom' as RecipeListType
 };
 
+export type SearchTabType = 'ingredients' | 'recipes';
+
 export interface GroupedIngredients {
   name: string;
   ingredients: Ingredient[];

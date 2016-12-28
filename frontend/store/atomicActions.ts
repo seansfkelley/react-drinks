@@ -4,7 +4,7 @@ import { Action, ActionType } from './ActionType';
 
 function createNullaryActionCreator(type: ActionType) {
   return function(): Action<void> {
-    return { type };
+    return { type, payload: undefined };
   }
 }
 
@@ -21,7 +21,7 @@ export const hideListSelector = createNullaryActionCreator('hide-list-selector')
 export const showRecipeViewer = createActionCreator<{ recipeIds: string[], index: number  }>('show-recipe-viewer');
 export const deleteRecipe = createActionCreator<string>('delete-recipe');
 export const setSelectedRecipeList = createActionCreator<RecipeListType>('set-selected-recipe-list');
-export const setSelectedIngredientTags = createActionCreator<{ [tag: string]: any }>('set-selected-ingredient-tags');
+export const setSelectedIngredientTags = createActionCreator<string[]>('set-selected-ingredient-tags');
 export const setRecipeSearchTerm = createActionCreator<string>('set-recipe-search-term');
 export const setIngredientSearchTerm = createActionCreator<string>('set-ingredient-search-term');
 export const setRecipeViewingIndex = createActionCreator<number>('set-recipe-viewing-index');

@@ -25,5 +25,5 @@ export type ActionType =
 
 export type Action<T> = {
   type: ActionType;
-  payload?: T;
+  payload: T;
 };

@@ -15,7 +15,7 @@ interface OwnProps {
 }
 
 interface ConnectedProps {
-  selectedIngredientTags: { [tag: string]: any };
+  selectedIngredientTags: string[];
   filteredGroupedIngredients: GroupedIngredients[];
 }
 
@@ -24,7 +24,7 @@ interface DispatchProps {
 }
 
 interface State {
-  pendingSelectedIngredientTags: { [tag: string]: any };
+  pendingSelectedIngredientTags: string[];
 }
 
 class IngredientsSidebar extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps, State> {
@@ -57,7 +57,7 @@ class IngredientsSidebar extends React.PureComponent<OwnProps & ConnectedProps &
     this.props.onPendingTagsChange(this.state.pendingSelectedIngredientTags);
   }
 
-  _updatePendingTags = (pendingSelectedIngredientTags: { [tag: string]: any }) => {
+  _updatePendingTags = (pendingSelectedIngredientTags: string[]) => {
     this.setState({ pendingSelectedIngredientTags });
   };
 };

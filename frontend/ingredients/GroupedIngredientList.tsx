@@ -1,4 +1,4 @@
-import { clone, flatten, sortBy, omit } from 'lodash';
+import { flatten, sortBy, without } from 'lodash';
 import * as React from 'react';
 import * as classNames from 'classnames';
 
@@ -60,8 +60,8 @@ const IngredientListItem: React.StatelessComponent<IngredientListItemProps> = (p
 
 interface Props {
   groupedIngredients: GroupedIngredients[];
-  selectedIngredientTags: { [tag: string]: any };
-  onSelectionChange: (selectedIngredientTags: { [tag: string]: any }) => void;
+  selectedIngredientTags: string[];
+  onSelectionChange: (selectedIngredientTags: string[]) => void;
 }
 
 interface State {
@@ -82,7 +82,7 @@ export default class GroupedIngredientList extends React.PureComponent<Props, St
       listItems = [];
     } else if (ingredientCount < 10) {
       const ingredients = sortBy(flatten(this.props.groupedIngredients.map(group => group.ingredients)), i => i.display);
-      const selectedCount = ingredients.filter(i => this.props.selectedIngredientTags[i.tag] != null).length;
+      const selectedCount = ingredients.filter(i => this.props.selectedIngredientTags.includes(i.tag)).length;
 
       const header = (
         <IngredientGroupHeader
@@ -100,7 +100,7 @@ export default class GroupedIngredientList extends React.PureComponent<Props, St
         let selectedCount = 0;
         for (let i of ingredients) {
           ingredientNodes.push(this._makeListItem(i));
-          if (this.props.selectedIngredientTags[i.tag] != null) {
+          if (this.props.selectedIngredientTags.includes(i.tag)) {
             selectedCount += 1;
           }
         }
@@ -137,7 +137,7 @@ export default class GroupedIngredientList extends React.PureComponent<Props, St
     return (
       <IngredientListItem
         ingredient={i}
-        isSelected={this.props.selectedIngredientTags[i.tag] != null}
+        isSelected={this.props.selectedIngredientTags.includes(i.tag)}
         toggleTag={this._toggleIngredient}
         key={i.tag}
       />
@@ -154,11 +154,10 @@ export default class GroupedIngredientList extends React.PureComponent<Props, St
 
   private _toggleIngredient = (tag: string) => {
     let selectedIngredientTags;
-    if (this.props.selectedIngredientTags[tag] != null) {
-      selectedIngredientTags = omit(this.props.selectedIngredientTags, tag);
+    if (this.props.selectedIngredientTags.includes(tag)) {
+      selectedIngredientTags = without(this.props.selectedIngredientTags, tag);
     } else {
-      selectedIngredientTags = clone(this.props.selectedIngredientTags);
-      selectedIngredientTags[tag] = true;
+      selectedIngredientTags = this.props.selectedIngredientTags.concat([ tag ]);
     }
     this.props.onSelectionChange(selectedIngredientTags);
   };

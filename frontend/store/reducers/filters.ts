@@ -10,7 +10,7 @@ import { Action } from '../ActionType';
 export interface FiltersState {
   recipeSearchTerm: string;
   ingredientSearchTerm: string;
-  selectedIngredientTags: { [tag: string]: any },
+  selectedIngredientTags: string[];
   baseLiquorFilter: string;
   selectedRecipeList: RecipeListType;
 }
@@ -18,7 +18,7 @@ export interface FiltersState {
 export const reducer = makeReducer<FiltersState>(assign({
   recipeSearchTerm: '',
   ingredientSearchTerm: '',
-  selectedIngredientTags: {},
+  selectedIngredientTags: [],
   baseLiquorFilter: ANY_BASE_LIQUOR,
   selectedRecipeList: ORDERED_RECIPE_LIST_TYPES[0]
 }, load().filters), {
