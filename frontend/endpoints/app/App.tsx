@@ -12,7 +12,8 @@ import {
   setSelectedIngredientTags
 } from '../../store/atomicActions';
 
-import MainSearchUiThing from '../../search/MainSearchUiThing';
+import Landing from '../../Landing';
+import IterativeRecipeSearch from '../../search/IterativeRecipeSearch';
 import SwipableRecipeView from '../../recipes/SwipableRecipeView';
 import IngredientsSidebar from '../../recipes/IngredientsSidebar';
 import RecipeListSelector from '../../recipes/RecipeListSelector';
@@ -22,6 +23,7 @@ import Overlay from '../../components/Overlay';
 interface ConnectedProps {
   selectedRecipeList: string;
   favoritedRecipeIds: string[];
+  selectedIngredientTags: string[];
   showingRecipeViewer: boolean;
   showingRecipeEditor: boolean;
   showingSidebar: boolean;
@@ -55,7 +57,9 @@ class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
 
     return (
       <div className='app-event-wrapper' onTouchStart={this._deselectActiveElement}>
-        <MainSearchUiThing />
+        {this.props.selectedIngredientTags.length === 0
+          ? <Landing />
+          : <IterativeRecipeSearch />}
         <div
           className={classNames('overlay-background', { 'visible': anyOverlayVisible })}
           onTouchStart={this._closeOverlays}
@@ -105,6 +109,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
   return {
     selectedRecipeList: state.filters.selectedRecipeList,
     favoritedRecipeIds: state.ui.favoritedRecipeIds,
+    selectedIngredientTags: state.filters.selectedIngredientTags,
     showingRecipeViewer: state.ui.showingRecipeViewer,
     showingRecipeEditor: state.ui.showingRecipeEditor,
     showingSidebar: state.ui.showingSidebar,

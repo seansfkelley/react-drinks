@@ -1,0 +1,23 @@
+@require '../shared/mixins'
+
+.blur-overlay
+  position: relative
+
+  .child-container
+    abs-full-screen()
+
+    &.foreground
+      opacity: 0
+      transition: opacity 500ms
+      pointer-events: none
+
+    &.background
+      transition: filter 500ms
+
+  &.with-foreground .child-container
+    &.foreground
+      opacity: 1
+      pointer-events: initial
+
+    &.background
+      filter: blur(10px)

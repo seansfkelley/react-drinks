@@ -2,8 +2,9 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 
 interface Props {
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   initialValue?: string;
+  value?: string;
   placeholder?: string;
   className?: string;
 }
@@ -16,7 +17,7 @@ export default class extends React.PureComponent<Props, State> {
   private _input: HTMLInputElement;
 
   state: State = {
-    value: this.props.initialValue != null ? this.props.initialValue : ''
+    value: this.props.value || this.props.initialValue || ''
   };
 
   render() {
@@ -43,7 +44,7 @@ export default class extends React.PureComponent<Props, State> {
         {this.state.value.length
           ? <i
               className='fa fa-times-circle'
-              onClick={this._clearAndFocus}
+              onClick={this._tryClearAndFocus}
               // onTouchStart={this._stopTouchStart}
             />
           : null}
@@ -51,14 +52,19 @@ export default class extends React.PureComponent<Props, State> {
     );
   }
 
-  private _clearAndFocus = () => {
-    this._clear();
-    this._focus();
-  };
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.value != null) {
+      this.setState({ value: nextProps.value });
+    }
+  }
 
-  private _clear = () => {
-    this.setState({ value: '' });
-    this.props.onChange('');
+  private _isControlled() {
+    return this.props.value != null;
+  }
+
+  private _tryClearAndFocus = () => {
+    this._trySetValue('');
+    this._focus();
   };
 
   private _focus = () => {
@@ -70,9 +76,17 @@ export default class extends React.PureComponent<Props, State> {
   };
 
   private _onChange = (e: React.FormEvent<HTMLInputElement>) => {
-    this.setState({ value: e.currentTarget.value });
-    this.props.onChange(e.currentTarget.value);
+    this._trySetValue(e.currentTarget.value);
   };
+
+  private _trySetValue(value: string) {
+    if (!this._isControlled()) {
+      this.setState({ value });
+    }
+    if (this.props.onChange) {
+      this.props.onChange(value);
+    }
+  }
 
   // Commenting this out but leaving it around for now. I haven't done enough testing to determine if this is
   // still necessary, but its presence breaks other interactions (not being able to select the search bar).

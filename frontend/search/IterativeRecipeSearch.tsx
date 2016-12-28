@@ -25,11 +25,11 @@ interface DispatchProps {
   setSelectedIngredientTags: typeof setSelectedIngredientTags;
 }
 
-class MainSearchUiThing extends React.PureComponent<ConnectedProps & DispatchProps, void> {
+class IterativeRecipeSearch extends React.PureComponent<ConnectedProps & DispatchProps, void> {
   render() {
     const drinkCount = this.props.filteredGroupedRecipes.reduce((acc, group) => acc + group.recipes.length, 0);
     return (
-      <div className='main-search-ui-thing'>
+      <div className='iterative-recipe-search'>
         <TitleBar
           leftIcon='fa-chevron-left'
           leftIconOnClick={this._popStack}
@@ -80,4 +80,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainSearchUiThing) as React.ComponentClass<void>;
+export default connect(mapStateToProps, mapDispatchToProps)(IterativeRecipeSearch) as React.ComponentClass<void>;
