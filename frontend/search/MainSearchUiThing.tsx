@@ -4,17 +4,21 @@ import { connect } from 'react-redux';
 
 import { RootState } from '../store';
 import { Ingredient } from '../../shared/types';
-import {
-  setSelectedIngredientTags
-} from '../store/atomicActions';
+import { GroupedRecipes } from '../types';
+import { setSelectedIngredientTags } from '../store/atomicActions';
+import { IngredientSplit } from '../store/derived/ingredientSplitsByRecipeId';
+import { selectFilteredGroupedRecipes, selectIngredientSplitsByRecipeId } from '../store/selectors';
 import TitleBar from '../components/TitleBar';
 import Tabs from '../components/Tabs';
 import IngredientsSidebar from '../recipes/IngredientsSidebar';
-import RecipeListView from '../recipes/RecipeListView';
+import RecipeList from '../recipes/RecipeList';
 
 interface ConnectedProps {
   selectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
+  filteredGroupedRecipes: GroupedRecipes[];
+  favoritedRecipeIds: string[];
+  ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
 }
 
 interface DispatchProps {
@@ -23,6 +27,7 @@ interface DispatchProps {
 
 class MainSearchUiThing extends React.PureComponent<ConnectedProps & DispatchProps, void> {
   render() {
+    const drinkCount = this.props.filteredGroupedRecipes.reduce((acc, group) => acc + group.recipes.length, 0);
     return (
       <div className='main-search-ui-thing'>
         <TitleBar
@@ -37,13 +42,18 @@ class MainSearchUiThing extends React.PureComponent<ConnectedProps & DispatchPro
           tabs={[{
             name: 'Ingredients'
           }, {
-            name: 'Drinks'
+            name: `Drinks (${drinkCount})`
           }]}
         >
           <IngredientsSidebar
             onPendingTagsChange={this.props.setSelectedIngredientTags}
           />
-          <RecipeListView />
+          <RecipeList
+            recipes={this.props.filteredGroupedRecipes}
+            ingredientsByTag={this.props.ingredientsByTag}
+            favoritedRecipeIds={this.props.favoritedRecipeIds}
+            ingredientSplitsByRecipeId={this.props.ingredientSplitsByRecipeId}
+          />
         </Tabs>
       </div>
     );
@@ -57,7 +67,10 @@ class MainSearchUiThing extends React.PureComponent<ConnectedProps & DispatchPro
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
     selectedIngredientTags: state.filters.selectedIngredientTags,
-    ingredientsByTag: state.ingredients.ingredientsByTag
+    ingredientsByTag: state.ingredients.ingredientsByTag,
+    filteredGroupedRecipes: selectFilteredGroupedRecipes(state),
+    favoritedRecipeIds: state.ui.favoritedRecipeIds,
+    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state)
   };
 }
 

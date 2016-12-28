@@ -2,6 +2,7 @@ import { flatten } from 'lodash';
 import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import * as classNames from 'classnames';
 
 import { List, ListHeader, ListClassNames } from '../components/List';
 
@@ -44,7 +45,7 @@ class RecipeList extends React.PureComponent<OwnProps & DispatchProps, void> {
       }
     }
 
-    return <List className={ListClassNames.HEADERED}>{listNodes}</List>;
+    return <List className={classNames(ListClassNames.HEADERED, 'recipe-list')}>{listNodes}</List>;
   }
 
   _makeHeader(groupKey: string) {

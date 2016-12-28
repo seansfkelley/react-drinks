@@ -63,6 +63,7 @@ export const selectFilteredGroupedRecipes = createSelector(
   selectAlphabeticalRecipes,
   selectBaseLiquorFilter,
   selectRecipeSearchTerm,
+  selectIngredientTags,
   selectFavoritedRecipeIds,
   selectSelectedRecipeList,
   selectIngredientSplitsByRecipeId,
@@ -71,14 +72,16 @@ export const selectFilteredGroupedRecipes = createSelector(
     recipes,
     baseLiquorFilter,
     searchTerm,
+    selectedIngredientTags,
     favoritedRecipeIds,
     selectedRecipeList,
-    ingredientSplitsByRecipeId
+    ingredientSplitsByRecipeId,
   ) => filteredGroupedRecipes({
     ingredientsByTag,
     recipes,
     baseLiquorFilter,
     searchTerm,
+    selectedIngredientTags,
     favoritedRecipeIds,
     selectedRecipeList,
     ingredientSplitsByRecipeId

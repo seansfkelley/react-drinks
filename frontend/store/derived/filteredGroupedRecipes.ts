@@ -2,7 +2,7 @@ import { isString, isArray, sortBy, groupBy, map } from 'lodash';
 import * as log from 'loglevel';
 
 import { Ingredient, Recipe } from '../../../shared/types';
-import { RecipeListType } from '../../types';
+import { RecipeListType, GroupedRecipes } from '../../types';
 import { ANY_BASE_LIQUOR } from '../../../shared/definitions';
 
 import { IngredientSplit }  from './ingredientSplitsByRecipeId';
@@ -59,7 +59,23 @@ export function _recipeListFilter(listType: RecipeListType, ingredientSplits: { 
   }
 }
 
-export function _sortAndGroupAlphabetical(recipes: Recipe[]) {
+export function _hasAllSelectedIngredientsFilter(selectedIngredientTags: string[], ingredientSplits: { [recipeId: string]: IngredientSplit }) {
+  if (selectedIngredientTags.length === 0) {
+    return () => false;
+  } else {
+    return (recipe: Recipe) => {
+      const splits = ingredientSplits[recipe.recipeId];
+      return selectedIngredientTags.every(tag =>
+        // TODO: This isn't the right logic for substitutes. I think to do it right we need to change the logic
+        // in the ingredient splits computation; we can't do it with what it currently compute without recalculating
+        // the generic parents of both ingredients or whatever.
+        splits.available.some(s => s.tag === tag) || splits.substitute.some(s => s.need.tag === tag)
+      );
+    };
+  }
+}
+
+export function _sortAndGroupAlphabetical(recipes: Recipe[]): GroupedRecipes[] {
   return sortBy(
     map(
       groupBy(
@@ -84,14 +100,16 @@ export function filteredGroupedRecipes({
   recipes,
   baseLiquorFilter,
   searchTerm,
+  selectedIngredientTags,
   ingredientSplitsByRecipeId,
-  favoritedRecipeIds,
-  selectedRecipeList
+  // favoritedRecipeIds,
+  // selectedRecipeList
 }: {
   ingredientsByTag: { [tag: string]: Ingredient },
   recipes: Recipe[],
   baseLiquorFilter: string,
   searchTerm: string,
+  selectedIngredientTags: string[],
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit },
   favoritedRecipeIds: string[],
   selectedRecipeList: RecipeListType
@@ -105,7 +123,8 @@ export function filteredGroupedRecipes({
 
   const filteredRecipes = recipes
     .filter(_baseLiquorFilter(baseLiquorFilter))
-    .filter(_recipeListFilter(selectedRecipeList, ingredientSplitsByRecipeId, favoritedRecipeIds))
+    .filter(_hasAllSelectedIngredientsFilter(selectedIngredientTags, ingredientSplitsByRecipeId))
+    // .filter(_recipeListFilter(selectedRecipeList, ingredientSplitsByRecipeId, favoritedRecipeIds))
     .filter(_searchTermFilter(searchTerm, ingredientsByTag));
 
   return _sortAndGroupAlphabetical(filteredRecipes);

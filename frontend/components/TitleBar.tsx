@@ -15,7 +15,7 @@ export default class extends React.PureComponent<Props, void> {
     let leftIcon, rightIcon;
     if (this.props.leftIcon != null) {
       if (this.props.leftIcon.slice(0, 2) === 'fa') {
-        leftIcon = <i className={`fa float-left ${ this.props.leftIcon }`} onClick={this.props.leftIconOnClick} />;
+        leftIcon = <i className={`fa ${ this.props.leftIcon }`} onClick={this.props.leftIconOnClick} />;
       } else {
         leftIcon = <img src={this.props.leftIcon} onClick={this.props.leftIconOnClick} />;
       }
@@ -23,7 +23,7 @@ export default class extends React.PureComponent<Props, void> {
 
     if (this.props.rightIcon != null) {
       if (this.props.rightIcon.slice(0, 2) === 'fa') {
-        rightIcon = <i className={`fa float-right ${ this.props.rightIcon }`} onClick={this.props.rightIconOnClick} />;
+        rightIcon = <i className={`fa ${ this.props.rightIcon }`} onClick={this.props.rightIconOnClick} />;
       } else {
         rightIcon = <img src={this.props.rightIcon} onClick={this.props.rightIconOnClick} />;
       }
@@ -33,10 +33,10 @@ export default class extends React.PureComponent<Props, void> {
 
     if (showingIcons) {
       if (leftIcon == null) {
-        leftIcon = <span className='spacer float-left'> </span>;
+        leftIcon = <span className='spacer'> </span>;
       }
       if (rightIcon == null) {
-        rightIcon = <span className='spacer float-right'> </span>;
+        rightIcon = <span className='spacer'> </span>;
       }
     }
 

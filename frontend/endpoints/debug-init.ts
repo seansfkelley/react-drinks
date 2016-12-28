@@ -6,6 +6,7 @@ import * as reqwest from 'reqwest';
 import * as log from 'loglevel';
 
 import { store } from '../store';
+import * as selectors from '../store/selectors';
 
 export default once(() => {
   (window as any).getJquery = () => {
@@ -18,6 +19,8 @@ export default once(() => {
 
   (window as any).debug = {
     log,
+    store,
+    selectors,
 
     localStorage() {
       return mapValues(localStorage, function (v) {
