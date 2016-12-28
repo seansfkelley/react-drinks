@@ -17,16 +17,6 @@ export const reducer = makeReducer<RecipesState>(assign({
     return defaults({ recipesById: action.payload }, state);
   },
 
-  'saved-recipe': (state, action: Action<Recipe>) => {
-    const recipe = action.payload!;
-    return defaults({
-      customRecipeIds: state.customRecipeIds.concat([recipe.recipeId]),
-      recipesById: defaults({
-        [recipe.recipeId]: recipe
-      }, state.recipesById)
-    }, state);
-  },
-
   'delete-recipe': (state, action: Action<string>) => {
     const recipeId = action.payload!;
     return defaults({

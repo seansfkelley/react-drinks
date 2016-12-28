@@ -5,22 +5,19 @@ import { reducer as reduceUi, UiState } from './reducers/ui';
 import { reducer as reduceFilters, FiltersState } from './reducers/filters';
 import { reducer as reduceIngredients, IngredientsState } from './reducers/ingredients';
 import { reducer as reduceRecipes, RecipesState } from './reducers/recipes';
-import { reducer as reduceEditableRecipe, EditableRecipeState } from './reducers/editableRecipe';
 
 export interface RootState {
   ui: UiState;
   filters: FiltersState;
   ingredients: IngredientsState;
   recipes: RecipesState;
-  editableRecipe: EditableRecipeState;
 }
 
 const rootReducer = combineReducers({
   ui: reduceUi,
   filters: reduceFilters,
   ingredients: reduceIngredients,
-  recipes: reduceRecipes,
-  editableRecipe: reduceEditableRecipe
+  recipes: reduceRecipes
 });
 
 export const store = applyMiddleware(createLogger({ collapsed: true }))(createStore)(rootReducer);

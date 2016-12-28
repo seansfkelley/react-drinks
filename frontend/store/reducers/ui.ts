@@ -1,4 +1,4 @@
-import { assign, defaults, union, without, indexOf, clone } from 'lodash';
+import { assign, defaults, union, without } from 'lodash';
 
 import makeReducer from './makeReducer';
 import { load } from '../persistence';
@@ -26,25 +26,6 @@ export const reducer = makeReducer<UiState>(assign({
   showingSidebar: false,
   showingListSelector: false
 }, load().ui), {
-  'rewrite-recipe-id': (state, action: Action<{ from: string, to: string }>) => {
-    const { from, to } = action.payload!;
-    let { currentlyViewedRecipeIds, favoritedRecipeIds } = state;
-
-    let i = indexOf(currentlyViewedRecipeIds, from);
-    if (i !== -1) {
-      currentlyViewedRecipeIds = clone(currentlyViewedRecipeIds);
-      currentlyViewedRecipeIds[i] = to;
-    }
-
-    i = indexOf(favoritedRecipeIds, from);
-    if (i !== -1) {
-      favoritedRecipeIds = clone(favoritedRecipeIds);
-      favoritedRecipeIds[i] = to;
-    }
-
-    return defaults({ currentlyViewedRecipeIds, favoritedRecipeIds }, state);
-  },
-
   'set-recipe-viewing-index': (state, action: Action<number>) => {
     const index = action.payload;
     return defaults({ recipeViewingIndex: index }, state);

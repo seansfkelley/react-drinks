@@ -1,13 +1,16 @@
-import { Action } from '../ActionType';
+import { Action, ActionType } from '../ActionType';
 
-export default function<S>(defaultState: S, actionNameToFunctionMap: { [action: string]: (state: S, action: Action<any>) => S }) {
+export default function<S>(defaultState: S, actionNameToFunctionMap: { [T in ActionType]?: (state: S, action: Action<any>) => S }) {
   return function (state: S, action: Action<any>): S {
     if (state == null) {
       return defaultState;
-    } else if (actionNameToFunctionMap[action.type]) {
-      return actionNameToFunctionMap[action.type](state, action);
     } else {
-      return state;
+      const fn = actionNameToFunctionMap[action.type];
+      if (typeof fn === 'function') {
+        return fn(state, action);
+      } else {
+        return state;
+      }
     }
   };
 }

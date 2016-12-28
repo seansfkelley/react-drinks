@@ -4,9 +4,20 @@ import * as log from 'loglevel';
 
 import { RootState } from '.';
 
+type PersistenceSpec = { [k1 in keyof RootState]?: { [k2 in keyof RootState[k1]]?: number } };
+type RootStateSubset = { [k1 in keyof RootState]?: { [k2 in keyof RootState[k1]]?: RootState[k1][k2] }};
+
+const PERSISTENCE_VERSION = 0;
+
+interface SerializedData {
+  data: RootStateSubset;
+  schemaVersion: number;
+  timestamp: number;
+}
+
 const ONE_MINUTE_MS = 1000 * 60;
 const LOCALSTORAGE_KEY = 'drinks-app-persistence';
-const PERSISTENCE_SPEC: { [k1 in keyof RootState]?: { [k2 in keyof RootState[k1]]?: number } } = {
+const PERSISTENCE_SPEC: PersistenceSpec = {
   filters: {
     recipeSearchTerm: ONE_MINUTE_MS * 5,
     baseLiquorFilter: ONE_MINUTE_MS * 15,
@@ -25,16 +36,6 @@ const PERSISTENCE_SPEC: { [k1 in keyof RootState]?: { [k2 in keyof RootState[k1]
     showingRecipeEditor: Infinity,
     showingSidebar: ONE_MINUTE_MS * 5,
     showingListSelector: ONE_MINUTE_MS
-  },
-  editableRecipe: {
-    originalRecipeId: Infinity,
-    currentPage: Infinity,
-    name: Infinity,
-    ingredients: Infinity,
-    instructions: Infinity,
-    notes: Infinity,
-    base: Infinity,
-    saving: 0
   }
 };
 
@@ -42,20 +43,25 @@ export function watch(store: Store<RootState>) {
   store.subscribe(debounce(() => {
     const state = store.getState();
 
-    const data = mapValues(PERSISTENCE_SPEC, (spec, storeName) => pick((state as any)[storeName!], Object.keys(spec)));
+    const serializedData: SerializedData = {
+      data: mapValues(PERSISTENCE_SPEC, (spec, storeName: keyof PersistenceSpec) => pick(state[storeName!], Object.keys(spec))),
+      schemaVersion: PERSISTENCE_VERSION,
+      timestamp: Date.now()
+    };
 
-    const timestamp = Date.now();
-    localStorage[LOCALSTORAGE_KEY] = JSON.stringify({ data, timestamp });
+    localStorage[LOCALSTORAGE_KEY] = JSON.stringify(serializedData);
 
-    return log.debug(`persisted data at t=${timestamp}`);
+    log.debug(`persisted data at t=${serializedData.timestamp} (${new Date(serializedData.timestamp).toString()})`);
   }, 1000));
 }
 
 export const load = once((): Partial<RootState> => {
-  const { data, timestamp } = JSON.parse(localStorage[LOCALSTORAGE_KEY] != null ? localStorage[LOCALSTORAGE_KEY] : '{}');
+  const { data, schemaVersion, timestamp } = JSON.parse(localStorage[LOCALSTORAGE_KEY] || '{}') as SerializedData;
 
   if (data == null) {
-    // Legacy version.
+    log.info('loading legacy-shaped data from localStorage...');
+
+    // Extra-legacy version.
     const ui = JSON.parse(localStorage['drinks-app-ui'] != null ? localStorage['drinks-app-ui'] : '{}');
     const recipes = JSON.parse(localStorage['drinks-app-recipes'] != null ? localStorage['drinks-app-recipes'] : '{}');
     const ingredients = JSON.parse(localStorage['drinks-app-ingredients'] != null ? localStorage['drinks-app-ingredients'] : '{}');
@@ -73,13 +79,15 @@ export const load = once((): Partial<RootState> => {
         recipeViewingIndex: ui.recipeViewingIndex
       }
     }, store => omitBy(store, isUndefined));
-  } else {
+  } else if (schemaVersion === 0 || schemaVersion == null) {
+    log.info(`will load data from localStorage with schema version ${schemaVersion}`);
+
     const elapsedTime = Date.now() - +(timestamp != null ? timestamp : 0);
-    return mapValues(PERSISTENCE_SPEC, (spec, storeName) => {
+    return mapValues(PERSISTENCE_SPEC, (spec, storeName: keyof PersistenceSpec) => {
       return omitBy(
         pickBy(
           pick(
-            data[storeName!],
+            data[storeName]!,
             Object.keys(spec)
           ),
           (_value, key) => elapsedTime < (spec as any)[key!]
@@ -87,5 +95,8 @@ export const load = once((): Partial<RootState> => {
         isUndefined
       );
     });
+  } else {
+    log.error(`loading from localStorage failed; unknown schema version ${schemaVersion}; will return empty object`);
+    return {};
   }
 });
