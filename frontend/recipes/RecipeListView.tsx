@@ -5,21 +5,22 @@ import { connect } from 'react-redux';
 
 import SearchBar from '../components/SearchBar';
 
-import { Ingredient } from '../../shared/types';
+import { Ingredient, Recipe } from '../../shared/types';
 import { GroupedRecipes } from '../types';
 import { IngredientSplit } from '../store/derived/ingredientSplitsByRecipeId';
 import { RootState } from '../store';
 import { selectFilteredGroupedRecipes, selectIngredientSplitsByRecipeId } from '../store/selectors';
 import { setRecipeSearchTerm } from '../store/atomicActions';
 import { RECIPE_LIST_ITEM_HEIGHT, RECIPE_LIST_HEADER_HEIGHT } from '../stylingConstants';
-
 import RecipeList from './RecipeList';
 import RecipeListHeader from './RecipeListHeader';
+import DefaultRecipeListItem from './DefaultRecipeListItem';
 
 interface ConnectedProps {
   recipeSearchTerm: string;
   baseLiquorFilter: string;
   ingredientsByTag: { [tag: string]: Ingredient };
+  selectedIngredientTags: string[];
   filteredGroupedRecipes: GroupedRecipes[];
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
 }
@@ -46,8 +47,7 @@ class RecipeListView extends React.PureComponent<ConnectedProps & DispatchProps,
           />
           <RecipeList
             recipes={this.props.filteredGroupedRecipes}
-            ingredientsByTag={this.props.ingredientsByTag}
-            ingredientSplitsByRecipeId={this.props.ingredientSplitsByRecipeId}
+            renderRecipe={this._renderRecipe}
           />
         </div>
       </div>
@@ -65,7 +65,15 @@ class RecipeListView extends React.PureComponent<ConnectedProps & DispatchProps,
     }
   }
 
-  _attemptScrollDown = () => {
+  private _renderRecipe = (recipe: Recipe) => {
+    return <DefaultRecipeListItem
+      recipe={recipe}
+      ingredientsByTag={this.props.ingredientsByTag}
+      ingredientSplitsByRecipeId={this.props.ingredientSplitsByRecipeId}
+    />;
+  };
+
+  private _attemptScrollDown = () => {
     this._content.scrollTop = RECIPE_LIST_ITEM_HEIGHT - RECIPE_LIST_HEADER_HEIGHT / 2;
   };
 };
@@ -76,7 +84,8 @@ function mapStateToProps(state: RootState): ConnectedProps {
     baseLiquorFilter: state.filters.baseLiquorFilter,
     ingredientsByTag: state.ingredients.ingredientsByTag,
     filteredGroupedRecipes: selectFilteredGroupedRecipes(state),
-    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state)
+    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state),
+    selectedIngredientTags: state.filters.selectedIngredientTags
   };
 }
 

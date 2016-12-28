@@ -1,0 +1,29 @@
+.preview-recipe-list-item
+  margin: 5px 0
+  line-height: initial
+  display: flex
+  flex-direction: column
+
+  .name
+    text-transform: uppercase
+    font-weight: 600
+    color: #333
+
+  .ingredient-list
+    margin: 5px 0
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    padding-right: 10px
+
+    .ingredient
+      &:not(:last-child):after
+        content: ', '
+        color: #aaa
+
+      &.missing
+        font-weight: 600
+        color: #666
+
+      &.available
+        color: #aaa

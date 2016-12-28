@@ -6,19 +6,14 @@ import * as classNames from 'classnames';
 
 import { List, ListHeader, ListClassNames } from '../components/List';
 
-import { Ingredient, Recipe } from '../../shared/types';
+import { Recipe } from '../../shared/types';
 import { GroupedRecipes } from '../types';
-import { IngredientSplit } from '../store/derived/ingredientSplitsByRecipeId';
 import { RootState } from '../store';
 import { showRecipeViewer, deleteRecipe } from '../store/atomicActions';
-import { getHardest } from '../Difficulty';
-
-import RecipeListItem from './RecipeListItem';
 
 interface OwnProps {
   recipes: GroupedRecipes[];
-  ingredientsByTag?: { [tag: string]: Ingredient };
-  ingredientSplitsByRecipeId?: { [recipeId: string]: IngredientSplit };
+  renderRecipe: (recipe: Recipe) => React.ReactElement<{ onClick: () => void, key: string }>;
 }
 
 interface DispatchProps {
@@ -52,25 +47,10 @@ class RecipeList extends React.PureComponent<OwnProps & DispatchProps, void> {
   }
 
   _makeItem(recipe: Recipe, absoluteIndex: number) {
-    let difficulty, isMixable;
-    if (this.props.ingredientSplitsByRecipeId && this.props.ingredientsByTag) {
-      const missingIngredients = this.props.ingredientSplitsByRecipeId[recipe.recipeId].missing;
-      if (missingIngredients.length) {
-        isMixable = false;
-        difficulty = getHardest(missingIngredients.map(i => this.props.ingredientsByTag![i.tag!].difficulty));
-      }
-    }
-
-    return (
-      <RecipeListItem
-        difficulty={difficulty}
-        isMixable={isMixable}
-        recipeName={recipe.name}
-        onClick={this._showRecipeViewer.bind(this, absoluteIndex)}
-        onDelete={recipe.isCustom ? this.props.deleteRecipe.bind(null, recipe.recipeId) : undefined}
-        key={recipe.recipeId}
-      />
-    );
+    return React.cloneElement(this.props.renderRecipe(recipe), {
+      key: recipe.recipeId,
+      onClick: () => this._showRecipeViewer(absoluteIndex)
+    })
   }
 
   _showRecipeViewer(index: number) {

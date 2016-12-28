@@ -15,6 +15,7 @@ import SearchBar from './components/SearchBar';
 import RecipeView from './recipes/RecipeView';
 import GroupedIngredientList from './ingredients/GroupedIngredientList';
 import RecipeList from './recipes/RecipeList';
+import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
 
 interface ConnectedProps {
   recipesById: { [recipeId: string]: Recipe };
@@ -91,10 +92,21 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
       );
     } else {
       return (
-        <RecipeList recipes={this.props.filteredGroupedRecipes}/>
+        <RecipeList
+          recipes={this.props.filteredGroupedRecipes}
+          renderRecipe={this._renderRecipe}
+        />
       );
     }
   }
+
+  private _renderRecipe = (recipe: Recipe) => {
+    return <PreviewRecipeListItem
+      recipe={recipe}
+      ingredientsByTag={this.props.ingredientsByTag}
+      selectedIngredientTags={this.props.selectedIngredientTags}
+    />;
+  };
 
   private _popStack = () => {
     this.props.setSelectedIngredientTags(this.props.selectedIngredientTags.slice(0, this.props.selectedIngredientTags.length - 1));
