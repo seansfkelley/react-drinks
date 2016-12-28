@@ -13,7 +13,6 @@ import {
 } from '../../store/atomicActions';
 
 import Landing from '../../Landing';
-import IterativeRecipeSearch from '../../search/IterativeRecipeSearch';
 import SwipableRecipeView from '../../recipes/SwipableRecipeView';
 import IngredientsSidebar from '../../recipes/IngredientsSidebar';
 import RecipeListSelector from '../../recipes/RecipeListSelector';
@@ -57,9 +56,7 @@ class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
 
     return (
       <div className='app-event-wrapper' onTouchStart={this._deselectActiveElement}>
-        {this.props.selectedIngredientTags.length === 0
-          ? <Landing />
-          : <IterativeRecipeSearch />}
+        <Landing />
         <div
           className={classNames('overlay-background', { 'visible': anyOverlayVisible })}
           onTouchStart={this._closeOverlays}

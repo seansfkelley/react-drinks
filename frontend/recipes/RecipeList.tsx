@@ -17,8 +17,7 @@ import RecipeListItem from './RecipeListItem';
 
 interface OwnProps {
   recipes: GroupedRecipes[];
-  ingredientsByTag: { [tag: string]: Ingredient };
-  favoritedRecipeIds: string[];
+  ingredientsByTag?: { [tag: string]: Ingredient };
   ingredientSplitsByRecipeId?: { [recipeId: string]: IngredientSplit };
 }
 
@@ -54,11 +53,11 @@ class RecipeList extends React.PureComponent<OwnProps & DispatchProps, void> {
 
   _makeItem(recipe: Recipe, absoluteIndex: number) {
     let difficulty, isMixable;
-    if (this.props.ingredientSplitsByRecipeId) {
+    if (this.props.ingredientSplitsByRecipeId && this.props.ingredientsByTag) {
       const missingIngredients = this.props.ingredientSplitsByRecipeId[recipe.recipeId].missing;
       if (missingIngredients.length) {
         isMixable = false;
-        difficulty = getHardest(missingIngredients.map(i => this.props.ingredientsByTag[i.tag!].difficulty));
+        difficulty = getHardest(missingIngredients.map(i => this.props.ingredientsByTag![i.tag!].difficulty));
       }
     }
 

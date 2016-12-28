@@ -20,7 +20,6 @@ interface ConnectedProps {
   recipeSearchTerm: string;
   baseLiquorFilter: string;
   ingredientsByTag: { [tag: string]: Ingredient };
-  favoritedRecipeIds: string[];
   filteredGroupedRecipes: GroupedRecipes[];
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
 }
@@ -49,7 +48,6 @@ class RecipeListView extends React.PureComponent<ConnectedProps & DispatchProps,
             recipes={this.props.filteredGroupedRecipes}
             ingredientsByTag={this.props.ingredientsByTag}
             ingredientSplitsByRecipeId={this.props.ingredientSplitsByRecipeId}
-            favoritedRecipeIds={this.props.favoritedRecipeIds}
           />
         </div>
       </div>
@@ -77,7 +75,6 @@ function mapStateToProps(state: RootState): ConnectedProps {
     recipeSearchTerm: state.filters.recipeSearchTerm,
     baseLiquorFilter: state.filters.baseLiquorFilter,
     ingredientsByTag: state.ingredients.ingredientsByTag,
-    favoritedRecipeIds: state.ui.favoritedRecipeIds,
     filteredGroupedRecipes: selectFilteredGroupedRecipes(state),
     ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state)
   };

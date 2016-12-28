@@ -16,7 +16,6 @@ interface ConnectedProps {
   selectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
   filteredGroupedRecipes: GroupedRecipes[];
-  favoritedRecipeIds: string[];
 }
 
 interface DispatchProps {
@@ -55,7 +54,6 @@ class IterativeRecipeSearch extends React.PureComponent<ConnectedProps & Dispatc
           <RecipeList
             recipes={this.props.filteredGroupedRecipes}
             ingredientsByTag={this.props.ingredientsByTag}
-            favoritedRecipeIds={this.props.favoritedRecipeIds}
           />
         </Tabs>
       </div>
@@ -71,8 +69,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
   return {
     selectedIngredientTags: state.filters.selectedIngredientTags,
     ingredientsByTag: state.ingredients.ingredientsByTag,
-    filteredGroupedRecipes: selectFilteredGroupedRecipes(state),
-    favoritedRecipeIds: state.ui.favoritedRecipeIds
+    filteredGroupedRecipes: selectFilteredGroupedRecipes(state)
   };
 }
 

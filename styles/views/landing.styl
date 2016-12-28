@@ -6,8 +6,22 @@
   .title-bar, .search-bar
     flex-shrink: 0
 
-  .search-bar
-    z-index: 2 // Above the blur-overlay.
+  .title-bar.with-ingredients
+    .title
+      display: flex
+      flex-direction: column
+      line-height: initial
+
+      .lead-in
+        font-weight: 400
+        font-size: 12px
+        padding-top: 4px
+
+      .ingredient-names
+        padding-bottom: 4px
+
+      .ingredient-name:not(:last-child):after
+        content: ', '
 
   .random-cocktail
     flex: 1
@@ -22,17 +36,17 @@
       color: #aaa
       border-bottom: 1px solid #ddd
 
+  .grouped-ingredient-list .empty-list-text
+    font-weight: 600
+    color: white
+
   .blur-overlay
     flex: 1
 
     .child-container
       display: flex
 
-    .grouped-ingredient-list
+    .grouped-ingredient-list, .recipe-list
       flex: 1
       overflow-y: auto
-
-      .empty-list-text
-        font-weight: 600
-        color: white
 

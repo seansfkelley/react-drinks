@@ -3,23 +3,26 @@ import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { assert } from '../shared/tinyassert';
 import { RootState } from './store';
+import { selectFilteredGroupedRecipes } from './store/selectors';
 import { selectFilteredGroupedIngredients } from './store/selectors';
 import { setIngredientSearchTerm, setSelectedIngredientTags } from './store/atomicActions';
-import { GroupedIngredients } from './types';
-import { Recipe } from '../shared/types';
+import { GroupedIngredients, GroupedRecipes } from './types';
+import { Ingredient, Recipe } from '../shared/types';
 import BlurOverlay from './components/BlurOverlay';
 import TitleBar from './components/TitleBar';
 import SearchBar from './components/SearchBar';
 import RecipeView from './recipes/RecipeView';
 import GroupedIngredientList from './ingredients/GroupedIngredientList';
+import RecipeList from './recipes/RecipeList';
 
 interface ConnectedProps {
   recipesById: { [recipeId: string]: Recipe };
   ingredientSearchTerm: string;
   selectedIngredientTags: string[];
+  ingredientsByTag: { [tag: string]: Ingredient };
   filteredGroupedIngredients: GroupedIngredients[];
+  filteredGroupedRecipes: GroupedRecipes[];
 }
 
 interface DispatchProps {
@@ -31,9 +34,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
   render() {
     return (
       <div className='landing'>
-        <TitleBar className='dark'>
-          What can I get you?
-        </TitleBar>
+        {this._renderTitle()}
         <SearchBar
           onChange={this.props.setIngredientSearchTerm}
           value={this.props.ingredientSearchTerm}
@@ -49,18 +50,57 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
                 onSelectionChange={this._selectIngredient}
               />
             : null}
-          background={
-            <div className='random-cocktail'>
-              <div className='random-cocktail-header'>Cocktail of the Hour</div>
-              <RecipeView recipe={sample(this.props.recipesById)}/>
-            </div>}
+          background={this._renderBackground()}
         />
       </div>
     );
   }
 
+  private _renderTitle() {
+    if (this.props.selectedIngredientTags.length === 0) {
+      return (
+        <TitleBar className='default dark'>
+          What can I get you?
+        </TitleBar>
+      );
+    } else {
+      return (
+        <TitleBar
+          leftIcon='fa-undo'
+          leftIconOnClick={this._popStack}
+          className='dark with-ingredients'
+        >
+          <div className='lead-in'>Drinks with</div>
+          <div className='ingredient-names'>
+            {this.props.selectedIngredientTags.map(tag => (
+              <span className='ingredient-name' key={tag}>{this.props.ingredientsByTag[tag].display}</span>
+            ))}
+          </div>
+        </TitleBar>
+      );
+    }
+  }
+
+  private _renderBackground() {
+    if (this.props.selectedIngredientTags.length === 0) {
+      return (
+        <div className='random-cocktail'>
+          <div className='random-cocktail-header'>Cocktail of the Hour</div>
+          <RecipeView recipe={sample(this.props.recipesById)}/>
+        </div>
+      );
+    } else {
+      return (
+        <RecipeList recipes={this.props.filteredGroupedRecipes}/>
+      );
+    }
+  }
+
+  private _popStack = () => {
+    this.props.setSelectedIngredientTags(this.props.selectedIngredientTags.slice(0, this.props.selectedIngredientTags.length - 1));
+  };
+
   private _selectIngredient = (tags: string[]) => {
-    assert(tags.length === 1); // There is no enforcement that this is the case in this component. We know the parent does this though.
     this.props.setIngredientSearchTerm('');
     this.props.setSelectedIngredientTags(tags);
   };
@@ -71,7 +111,9 @@ function mapStateToProps(state: RootState): ConnectedProps {
     recipesById: state.recipes.recipesById,
     ingredientSearchTerm: state.filters.ingredientSearchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
-    filteredGroupedIngredients: selectFilteredGroupedIngredients(state)
+    ingredientsByTag: state.ingredients.ingredientsByTag,
+    filteredGroupedIngredients: selectFilteredGroupedIngredients(state),
+    filteredGroupedRecipes: selectFilteredGroupedRecipes(state)
   };
 }
 
