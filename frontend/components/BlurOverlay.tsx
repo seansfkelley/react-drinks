@@ -5,6 +5,7 @@ interface Props {
   background: React.ReactNode;
   foreground?: React.ReactNode;
   isDark?: boolean;
+  onBackdropClick?: () => void;
 }
 
 export default class BlurOverlay extends React.PureComponent<Props, void> {
@@ -16,7 +17,7 @@ export default class BlurOverlay extends React.PureComponent<Props, void> {
     return (
       <div className={classNames('blur-overlay', { 'with-foreground': !!this.props.foreground })}>
         <div className='child-container background'>{this.props.background}</div>
-        {this.props.isDark ? <div className='dark-overlay'/> : null}
+        <div className='backdrop' onClick={this.props.onBackdropClick}/>
         <div className='child-container foreground'>{this.props.foreground}</div>
       </div>
     );

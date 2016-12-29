@@ -55,6 +55,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
               />
             : null}
           background={this._renderBackground()}
+          onBackdropClick={this._abortSearch}
         />
       </div>
     );
@@ -122,6 +123,10 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
   private _selectIngredient = (tags: string[]) => {
     this.props.setIngredientSearchTerm('');
     this.props.setSelectedIngredientTags(tags);
+  };
+
+  private _abortSearch = () => {
+    this.props.setIngredientSearchTerm('');
   };
 }
 
