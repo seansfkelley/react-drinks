@@ -31,6 +31,20 @@ const selectAlphabeticalRecipes = createSelector(
   }
 );
 
+const TODAY = new Date();
+
+export const selectRecipeOfTheHour = createSelector(
+  selectRecipesById,
+  (recipesById) => {
+    const recipes = sortBy(recipesById, r => r.recipeId);
+    return recipes[(
+      TODAY.getFullYear() * 1000000 +
+      TODAY.getMonth() * 10000 +
+      TODAY.getDate() * 100 +
+      TODAY.getHours()) % recipes.length];
+  }
+);
+
 export const selectFilteredGroupedIngredients = createSelector(
   selectGroupedIngredients,
   selectIngredientSearchTerm,

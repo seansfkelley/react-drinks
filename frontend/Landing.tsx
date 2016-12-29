@@ -1,11 +1,13 @@
-import { sample } from 'lodash';
 import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { RootState } from './store';
-import { selectFilteredGroupedRecipes } from './store/selectors';
-import { selectFilteredGroupedIngredients } from './store/selectors';
+import {
+  selectFilteredGroupedRecipes,
+  selectFilteredGroupedIngredients,
+  selectRecipeOfTheHour
+} from './store/selectors';
 import { setIngredientSearchTerm, setSelectedIngredientTags } from './store/atomicActions';
 import { GroupedIngredients, GroupedRecipes } from './types';
 import { Ingredient, Recipe } from '../shared/types';
@@ -19,6 +21,7 @@ import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
 
 interface ConnectedProps {
   recipesById: { [recipeId: string]: Recipe };
+  randomRecipe: Recipe;
   ingredientSearchTerm: string;
   selectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
@@ -88,7 +91,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
         <div className='random-cocktail'>
           <div className='random-cocktail-header'>Cocktail of the Hour</div>
           <RecipeView
-            recipe={sample(this.props.recipesById)}
+            recipe={this.props.randomRecipe}
             availableIngredientTags={this.props.selectedIngredientTags}
             onIngredientTagsChange={this.props.setSelectedIngredientTags}
           />
@@ -125,6 +128,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
     recipesById: state.recipes.recipesById,
+    randomRecipe: selectRecipeOfTheHour(state),
     ingredientSearchTerm: state.filters.ingredientSearchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
     ingredientsByTag: state.ingredients.ingredientsByTag,
