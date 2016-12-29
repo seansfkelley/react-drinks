@@ -37,7 +37,7 @@ export default class MeasuredIngredient extends React.PureComponent<Props, void>
           ? <span className='toggle-button'>
               <i className={classNames('fa', {
                 'fa-plus-circle': !this.props.isAvailable,
-                'fa-minus-circle': this.props.isAvailable
+                'fa-times-circle': this.props.isAvailable
               })}/>
             </span>
           : null}

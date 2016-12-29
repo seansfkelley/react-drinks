@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash';
+import { groupBy, uniq } from 'lodash';
 import * as React from 'react';
 
 import { Ingredient, Recipe } from '../../shared/types';
@@ -17,20 +17,27 @@ export default class extends React.PureComponent<Props, void> {
     const {
       true: includedIngredients,
       false: missingIngredients
-    } = groupBy(this.props.recipe.ingredients.filter(i => !!i.tag), i => this.props.selectedIngredientTags.includes(i.tag));
+    } = groupBy(
+      uniq(
+        this.props.recipe.ingredients
+          .map(i => i.tag)
+          .filter(t => !!t) as string[]
+      ),
+      t => this.props.selectedIngredientTags.includes(t)
+    );
 
     return (
       <ListItem className='preview-recipe-list-item recipe-list-item' onClick={this.props.onClick}>
         <div className='name'>{this.props.recipe.name}</div>
         <div className='ingredient-list'>
-          {missingIngredients.map(i => (
-            <span className='ingredient missing' key={i.tag}>
-              {this.props.ingredientsByTag[i.tag!].display}
+          {missingIngredients.map(t => (
+            <span className='ingredient missing' key={t}>
+              {this.props.ingredientsByTag[t].display}
             </span>
           ))}
-          {includedIngredients.map(i => (
-            <span className='ingredient available' key={i.tag}>
-              {this.props.ingredientsByTag[i.tag!].display}
+          {includedIngredients.map(t => (
+            <span className='ingredient available' key={t}>
+              {this.props.ingredientsByTag[t].display}
             </span>
           ))}
         </div>

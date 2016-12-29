@@ -9,28 +9,32 @@
   .backdrop
     opacity: 0
     transition: opacity 500ms
-    pointer-events: none
 
-  &.is-dark
-    background-color: black
+    &.is-dark
+      background-color: black
 
   .child-container
     &.foreground
       opacity: 0
       transition: opacity 500ms
-      pointer-events: none
 
     &.background
       transition: filter 500ms
 
+  .child-container.foreground, .backdrop
+    pointer-events: none
+
   &.with-foreground
+
+    .child-container.foreground > *, .backdrop
+      pointer-events: auto
+
     .backdrop
       opacity: 0.3
 
     .child-container
       &.foreground
         opacity: 1
-        pointer-events: initial
 
       &.background
         filter: blur(10px)
