@@ -87,7 +87,11 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
       return (
         <div className='random-cocktail'>
           <div className='random-cocktail-header'>Cocktail of the Hour</div>
-          <RecipeView recipe={sample(this.props.recipesById)}/>
+          <RecipeView
+            recipe={sample(this.props.recipesById)}
+            availableIngredientTags={this.props.selectedIngredientTags}
+            onIngredientTagsChange={this.props.setSelectedIngredientTags}
+          />
         </div>
       );
     } else {

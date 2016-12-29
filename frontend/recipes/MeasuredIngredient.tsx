@@ -1,58 +1,53 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 
+import { assert } from '../../shared/tinyassert';
+import { DisplayIngredient } from '../../shared/types';
 import { fractionify } from '../utils';
-import { Difficulty, CLASS_NAME, HUMAN_READABLE } from '../Difficulty';
 
 export interface Props {
-  displayIngredient: string;
-  displayAmount?: string;
-  displayUnit?: string;
-  displaySubstitutes?: string[];
-  isMissing?: boolean;
-  isSubstituted?: boolean;
-  difficulty?: Difficulty;
+  ingredient: DisplayIngredient;
   className?: string;
+  isAvailable?: boolean;
+  onAvailabilityToggle?: (tag: string, isAvailable: boolean) => void;
 }
 
-export default class extends React.PureComponent<Props, void> {
+export default class MeasuredIngredient extends React.PureComponent<Props, void> {
   static defaultProps = {
     displayAmount: '',
-    displayUnit: '',
-    displaySubstitutes: []
+    displayUnit: ''
   };
 
   render() {
+    const isToggleable = this.props.onAvailabilityToggle && this.props.ingredient.tag != null;
     return (
-      <div className={classNames('measured-ingredient', this.props.className, {
-          'missing': this.props.isMissing,
-          'substituted': this.props.isSubstituted
-        })}
+      <div
+        className={classNames('measured-ingredient', this.props.className)}
+        onClick={isToggleable ? this._onToggle : undefined}
       >
         <span className='measure'>
-          {/* The space is necessary to space out the spans from each other. Newlines are insufficient.
-              Include the keys only to keep React happy so that it warns us about significant uses of
-              arrays without key props. */}
-          <span className='amount'>{fractionify(this.props.displayAmount)}</span>{' '}
-          <span className='unit'>{this.props.displayUnit}</span>
+          <span className='amount'>{fractionify(this.props.ingredient.displayAmount)}</span>
+          {' '}
+          <span className='unit'>{this.props.ingredient.displayUnit}</span>
         </span>
         <span className='ingredient'>
-          <span className='name'>{this.props.displayIngredient}</span>
-          {this.props.displaySubstitutes && this.props.displaySubstitutes.length
-            ? [
-                <span className='substitute-label' key='label'>try:</span>,
-                <span className='substitute-content' key='content'>
-                  {(this.props as Props).displaySubstitutes!.map((sub, i) => <span key={i}>{sub}</span>)}
-                </span>
-              ]
-            : undefined}
-          {this.props.difficulty
-            ? <span className={classNames('difficulty', CLASS_NAME[this.props.difficulty])}>
-                {HUMAN_READABLE[this.props.difficulty]}
-              </span>
-            : undefined}
+          <span className='name'>{this.props.ingredient.displayIngredient}</span>
         </span>
+        {isToggleable
+          ? <span className='toggle-button'>
+              <i className={classNames('fa', {
+                'fa-plus-circle': !this.props.isAvailable,
+                'fa-minus-circle': this.props.isAvailable
+              })}/>
+            </span>
+          : null}
       </div>
     );
   }
+
+  private _onToggle = () => {
+    assert(this.props.onAvailabilityToggle);
+    assert(this.props.ingredient.tag);
+    this.props.onAvailabilityToggle!(this.props.ingredient.tag!, !this.props.isAvailable)
+  };
 }

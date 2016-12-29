@@ -15,7 +15,8 @@ import {
   showRecipeEditor,
   favoriteRecipe,
   unfavoriteRecipe,
-  hideRecipeViewer
+  hideRecipeViewer,
+  setSelectedIngredientTags
 } from '../store/atomicActions';
 
 import RecipeView from './RecipeView';
@@ -27,6 +28,7 @@ interface ConnectedProps {
   currentlyViewedRecipeIds: string[];
   recipeViewingIndex: number;
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
+  selectedIngredientTags: string[];
 }
 
 interface DispatchProps {
@@ -36,6 +38,7 @@ interface DispatchProps {
   favoriteRecipe: typeof favoriteRecipe;
   unfavoriteRecipe: typeof unfavoriteRecipe;
   hideRecipeViewer: typeof hideRecipeViewer;
+  setSelectedIngredientTags: typeof setSelectedIngredientTags;
 }
 
 class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchProps, void> {
@@ -71,8 +74,8 @@ class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchPr
       <div className='swipable-position-wrapper'>
         <RecipeView
           recipe={recipe}
-          ingredientsByTag={this.props.ingredientsByTag}
-          ingredientSplits={this.props.ingredientSplitsByRecipeId ? this.props.ingredientSplitsByRecipeId[recipe.recipeId] : undefined}
+          availableIngredientTags={this.props.selectedIngredientTags}
+          onIngredientTagsChange={this._onIngredientTagsChange}
           onClose={this._onClose}
           onFavorite={this._onFavorite}
           onEdit={recipe.isCustom ? this._onEdit : undefined}
@@ -100,6 +103,10 @@ class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchPr
       this.props.unfavoriteRecipe(recipe.recipeId);
     }
   };
+
+  private _onIngredientTagsChange = (tags: string[]) => {
+    this.props.setSelectedIngredientTags(tags);
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
@@ -109,7 +116,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
     showRecipeEditor,
     favoriteRecipe,
     unfavoriteRecipe,
-    hideRecipeViewer
+    hideRecipeViewer,
+    setSelectedIngredientTags
   }, dispatch);
 }
 
@@ -120,7 +128,8 @@ function mapStateToProps(state: RootState): ConnectedProps {
     favoritedRecipeIds: state.ui.favoritedRecipeIds,
     currentlyViewedRecipeIds: state.ui.currentlyViewedRecipeIds,
     recipeViewingIndex: state.ui.recipeViewingIndex,
-    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state)
+    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state),
+    selectedIngredientTags: state.filters.selectedIngredientTags
   };
 }
 

@@ -1,25 +1,15 @@
-import { defaults, flatten } from 'lodash';
+import { without } from 'lodash';
 import * as React from 'react';
 import * as classNames from 'classnames';
 
 import { fractionify } from '../utils';
 import { assert } from '../../shared/tinyassert';
-import { Ingredient, Recipe, DisplayIngredient } from '../../shared/types';
-import { IngredientSplit, SubstituteDisplayIngredient } from '../store/derived/ingredientSplitsByRecipeId';
+import { Recipe, DisplayIngredient } from '../../shared/types';
 import { BASE_URL } from '../../shared/definitions';
 
 import TitleBar from '../components/TitleBar';
 
-import MeasuredIngredient, { Props as MeasuredIngredientProps } from './MeasuredIngredient';
-
-type IngredientCategory = 'missing' | 'substitute' | 'available';
-const IngredientCategory = {
-  MISSING: 'missing' as IngredientCategory,
-  SUBSTITUTE: 'substitute' as IngredientCategory,
-  AVAILABLE: 'available' as IngredientCategory
-};
-
-const ORDERED_CATEGORIES = [IngredientCategory.MISSING, IngredientCategory.SUBSTITUTE, IngredientCategory.AVAILABLE];
+import MeasuredIngredient from './MeasuredIngredient';
 
 function IconButton(props: { icon: string, text: string, onClick?: React.MouseEventHandler<HTMLElement> }) {
   return (
@@ -32,8 +22,8 @@ function IconButton(props: { icon: string, text: string, onClick?: React.MouseEv
 
 interface Props {
   recipe: Recipe;
-  ingredientSplits?: IngredientSplit;
-  ingredientsByTag?: { [tag: string]: Ingredient };
+  availableIngredientTags?: string[];
+  onIngredientTagsChange?: (tags: string[]) => void;
   onClose?: () => void;
   onFavorite?: (recipe: Recipe, isFavorited: boolean) => void;
   onEdit?: (recipe: Recipe) => void;
@@ -48,12 +38,20 @@ export default class extends React.PureComponent<Props, void> {
 
   render() {
     let ingredients;
-    if (this.props.ingredientSplits != null && this.props.ingredientsByTag != null) {
-      ingredients = flatten(ORDERED_CATEGORIES.map(category => this._renderCategory(this.props.ingredientSplits![category], category)));
+    if (this.props.availableIngredientTags != null) {
+      ingredients = this.props.recipe.ingredients.map(i =>
+        <MeasuredIngredient
+          ingredient={i}
+          // TODO: This isn't quite right -- it doesn't do generics and all that jazz. But close enough for a demonstration.
+          isAvailable={i.tag != null && this.props.availableIngredientTags!.includes(i.tag)}
+          onAvailabilityToggle={this._onIngredientToggle}
+          key={`${i.tag}~~~${i.displayIngredient}`}
+        />
+      );
     } else {
       ingredients = this.props.recipe.ingredients.map((i: DisplayIngredient) =>
-        // This fucked-up key is because sometimes, the same tag will appear twice (e.g. Penicillin's two scotches).
-        <MeasuredIngredient {...i} key={`${ i.tag } ${ i.displayIngredient }`}/>
+        // This annoying key is because sometimes, the same tag will appear twice (e.g. Penicillin's two scotches).
+        <MeasuredIngredient ingredient={i} key={`${i.tag}~~~${i.displayIngredient}`}/>
       );
     }
 
@@ -143,30 +141,16 @@ export default class extends React.PureComponent<Props, void> {
     );
   }
 
-  _renderCategory(displayIngredients: (DisplayIngredient | SubstituteDisplayIngredient)[], category: string) {
-    assert(this.props.ingredientsByTag);
+  private _onIngredientToggle = (tag: string) => {
+    assert(this.props.availableIngredientTags);
+    assert(this.props.onIngredientTagsChange);
 
-    if (displayIngredients.length === 0) {
-      return [];
-    } else {
-      let formattedIngredients: (MeasuredIngredientProps & { tag?: string })[];
-      if (category === IngredientCategory.SUBSTITUTE) {
-        formattedIngredients = displayIngredients.map((i: SubstituteDisplayIngredient) => defaults({
-          isSubstituted: true,
-          displaySubstitutes: i.have
-        }, i.need));
-      } else if (category === IngredientCategory.MISSING) {
-        formattedIngredients = displayIngredients.map((i: DisplayIngredient) => {
-          return defaults({
-            isMissing: true,
-            difficulty: this.props.ingredientsByTag![i.tag!].difficulty
-          }, i);
-        });
+    if (this.props.onIngredientTagsChange) {
+      if (this.props.availableIngredientTags!.includes(tag)) {
+        this.props.onIngredientTagsChange(without(this.props.availableIngredientTags!, tag));
       } else {
-        formattedIngredients = displayIngredients as DisplayIngredient[];
+        this.props.onIngredientTagsChange(this.props.availableIngredientTags!.concat([ tag ]));
       }
-
-      return formattedIngredients.map(i => <MeasuredIngredient {...i} key={`${ i.tag } ${ i.displayIngredient }`}/>);
     }
-  }
+  };
 }
