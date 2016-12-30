@@ -11,6 +11,7 @@ export interface UiState {
   currentlyViewedRecipeIds: string[];
   favoritedRecipeIds: string[];
   searchTabType: SearchTabType;
+  currentIngredientInfo?: string;
   showingRecipeViewer: boolean;
   showingRecipeEditor: boolean;
   showingSidebar: boolean;
@@ -23,68 +24,69 @@ export const reducer = makeReducer<UiState>(assign({
   currentlyViewedRecipeIds: [],
   favoritedRecipeIds: [],
   searchTabType: 'ingredients' as SearchTabType, // TODO: Why does this need a cast??
+  currentIngredientInfo: undefined,
   showingRecipeViewer: false,
   showingRecipeEditor: false,
   showingSidebar: false,
   showingListSelector: false
 }, load().ui), {
-  'set-recipe-viewing-index': (state, action: Action<number>) => {
-    const index = action.payload;
-    return defaults({ recipeViewingIndex: index }, state);
-  },
+  'set-recipe-viewing-index': (state, action: Action<number>) => defaults({
+    recipeViewingIndex: action.payload
+  }, state),
 
-  'favorite-recipe': (state, action: Action<string>) => {
-    const recipeId = action.payload;
-    return defaults({ favoritedRecipeIds: union(state.favoritedRecipeIds, [recipeId]) }, state);
-  },
+  'favorite-recipe': (state, action: Action<string>) => defaults({
+    favoritedRecipeIds: union(state.favoritedRecipeIds, [ action.payload ])
+  }, state),
 
-  'unfavorite-recipe': (state, action: Action<string>) => {
-    const recipeId = action.payload;
-    return defaults({ favoritedRecipeIds: without(state.favoritedRecipeIds, recipeId) }, state);
-  },
+  'unfavorite-recipe': (state, action: Action<string>) => defaults({
+    favoritedRecipeIds: without(state.favoritedRecipeIds, action.payload)
+  }, state),
 
-  'show-recipe-viewer': (state, action: Action<{ index: number, recipeIds: string[] }>) => {
-    const { index, recipeIds } = action.payload!;
-    return defaults({
+  'show-recipe-viewer': (state, action: Action<{ index: number, recipeIds: string[] }>) => defaults({
       showingRecipeViewer: true,
-      recipeViewingIndex: index,
-      currentlyViewedRecipeIds: recipeIds
-    }, state);
-  },
+      recipeViewingIndex: action.payload.index,
+      currentlyViewedRecipeIds: action.payload.recipeIds
+    }, state),
 
-  'hide-recipe-viewer': (state) => {
-    return defaults({
+  'hide-recipe-viewer': (state) => defaults({
       showingRecipeViewer: false,
       recipeViewingIndex: 0,
       currentlyViewedRecipeIds: []
-    }, state);
-  },
+    }, state),
 
-  'show-recipe-editor': (state) => {
-    return defaults({ showingRecipeEditor: true }, state);
-  },
+  'show-recipe-editor': (state) => defaults({
+    showingRecipeEditor: true
+  }, state),
 
-  'hide-recipe-editor': (state) => {
-    return defaults({ showingRecipeEditor: false }, state);
-  },
+  'hide-recipe-editor': (state) => defaults({
+    showingRecipeEditor: false
+  }, state),
 
-  'show-sidebar': (state) => {
-    return defaults({ showingSidebar: true }, state);
-  },
+  'show-sidebar': (state) => defaults({
+    showingSidebar: true
+  }, state),
 
-  'hide-sidebar': (state) => {
-    return defaults({ showingSidebar: false }, state);
-  },
+  'hide-sidebar': (state) => defaults({
+    showingSidebar: false
+  }, state),
 
-  'show-list-selector': (state) => {
-    return defaults({ showingListSelector: true }, state);
-  },
+  'show-list-selector': (state) => defaults({
+    showingListSelector: true
+  }, state),
 
-  'hide-list-selector': (state) => {
-    return defaults({ showingListSelector: false }, state);
-  },
+  'hide-list-selector': (state) => defaults({
+    showingListSelector: false
+  }, state),
 
-  'error-message': (state, action: Action<string>) => {
-    return defaults({ errorMessage: action.payload }, state);
-  }
+  'error-message': (state, action: Action<string>) => defaults({
+    errorMessage: action.payload
+  }, state),
+
+  'show-ingredient-info': (state, action: Action<string>) => defaults({
+    currentIngredientInfo: action.payload
+  }, state),
+
+  'hide-ingredient-info': (state) => defaults({
+    currentIngredientInfo: null
+  }, state)
 });

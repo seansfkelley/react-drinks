@@ -5,6 +5,7 @@ export type ActionType =
   'hide-sidebar' |
   'hide-recipe-editor' |
   'hide-list-selector' |
+  'hide-ingredient-info' |
   'show-recipe-viewer' |
   'delete-recipe' |
   'set-selected-recipe-list' |
@@ -20,6 +21,7 @@ export type ActionType =
   'show-sidebar' |
   'show-list-selector' |
   'show-recipe-editor' |
+  'show-ingredient-info' |
   'error-message' |
   '--dummy-event-to-trigger-persistence--';
 

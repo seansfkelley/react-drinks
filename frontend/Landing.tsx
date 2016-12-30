@@ -8,7 +8,11 @@ import {
   selectFilteredGroupedIngredients,
   selectRecipeOfTheHour
 } from './store/selectors';
-import { setIngredientSearchTerm, setSelectedIngredientTags } from './store/atomicActions';
+import {
+  setIngredientSearchTerm,
+  setSelectedIngredientTags,
+  showIngredientInfo
+} from './store/atomicActions';
 import { GroupedIngredients, GroupedRecipes } from './types';
 import { Ingredient, Recipe } from '../shared/types';
 import BlurOverlay from './components/BlurOverlay';
@@ -32,6 +36,7 @@ interface ConnectedProps {
 interface DispatchProps {
   setIngredientSearchTerm: typeof setIngredientSearchTerm;
   setSelectedIngredientTags: typeof setSelectedIngredientTags;
+  showIngredientInfo: typeof showIngredientInfo;
 }
 
 class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> {
@@ -95,6 +100,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
             recipe={this.props.randomRecipe}
             availableIngredientTags={this.props.selectedIngredientTags}
             onIngredientTagsChange={this.props.setSelectedIngredientTags}
+            onIngredientClick={this.props.showIngredientInfo}
           />
         </div>
       );
@@ -145,7 +151,8 @@ function mapStateToProps(state: RootState): ConnectedProps {
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return bindActionCreators({
     setIngredientSearchTerm,
-    setSelectedIngredientTags
+    setSelectedIngredientTags,
+    showIngredientInfo
    }, dispatch);
 }
 

@@ -16,7 +16,8 @@ import {
   favoriteRecipe,
   unfavoriteRecipe,
   hideRecipeViewer,
-  setSelectedIngredientTags
+  setSelectedIngredientTags,
+  showIngredientInfo
 } from '../store/atomicActions';
 
 import RecipeView from './RecipeView';
@@ -39,6 +40,7 @@ interface DispatchProps {
   unfavoriteRecipe: typeof unfavoriteRecipe;
   hideRecipeViewer: typeof hideRecipeViewer;
   setSelectedIngredientTags: typeof setSelectedIngredientTags;
+  showIngredientInfo: typeof showIngredientInfo;
 }
 
 class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchProps, void> {
@@ -76,6 +78,7 @@ class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchPr
           recipe={recipe}
           availableIngredientTags={this.props.selectedIngredientTags}
           onIngredientTagsChange={this._onIngredientTagsChange}
+          onIngredientClick={this.props.showIngredientInfo}
           onClose={this._onClose}
           onFavorite={this._onFavorite}
           onEdit={recipe.isCustom ? this._onEdit : undefined}
@@ -117,7 +120,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
     favoriteRecipe,
     unfavoriteRecipe,
     hideRecipeViewer,
-    setSelectedIngredientTags
+    setSelectedIngredientTags,
+    showIngredientInfo
   }, dispatch);
 }
 

@@ -10,6 +10,7 @@ export interface Props {
   className?: string;
   isAvailable?: boolean;
   onAvailabilityToggle?: (tag: string, isAvailable: boolean) => void;
+  onClick?: (tag: string) => void;
 }
 
 export default class MeasuredIngredient extends React.PureComponent<Props, void> {
@@ -19,11 +20,11 @@ export default class MeasuredIngredient extends React.PureComponent<Props, void>
   };
 
   render() {
-    const isToggleable = this.props.onAvailabilityToggle && this.props.ingredient.tag != null;
+    const hasTag = this.props.ingredient.tag != null;
     return (
       <div
         className={classNames('measured-ingredient', this.props.className)}
-        onClick={isToggleable ? this._onToggle : undefined}
+        onClick={hasTag && this.props.onClick ? this._onClick : undefined}
       >
         <span className='measure'>
           <span className='amount'>{fractionify(this.props.ingredient.displayAmount)}</span>
@@ -33,21 +34,30 @@ export default class MeasuredIngredient extends React.PureComponent<Props, void>
         <span className='ingredient'>
           <span className='name'>{this.props.ingredient.displayIngredient}</span>
         </span>
-        {isToggleable
-          ? <span className='toggle-button'>
+        {hasTag && this.props.onAvailabilityToggle
+          ? <span className='toggle-button' onClick={this._onToggle}>
               <i className={classNames('fa', {
                 'fa-plus-circle': !this.props.isAvailable,
                 'fa-times-circle': this.props.isAvailable
               })}/>
             </span>
-          : null}
+          : this.props.onAvailabilityToggle
+            ? <span className='toggle-button placeholder'/>
+            : null}
       </div>
     );
   }
 
-  private _onToggle = () => {
+  private _onClick = () => {
+    assert(this.props.onClick);
+    assert(this.props.ingredient.tag);
+    this.props.onClick!(this.props.ingredient.tag!)
+  };
+
+  private _onToggle = (e: React.MouseEvent<HTMLElement>) => {
     assert(this.props.onAvailabilityToggle);
     assert(this.props.ingredient.tag);
+    e.stopPropagation();
     this.props.onAvailabilityToggle!(this.props.ingredient.tag!, !this.props.isAvailable)
   };
 }

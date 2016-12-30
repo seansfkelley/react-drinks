@@ -23,6 +23,7 @@ function IconButton(props: { icon: string, text: string, onClick?: React.MouseEv
 interface Props {
   recipe: Recipe;
   availableIngredientTags?: string[];
+  onIngredientClick?: (tag: string) => void;
   onIngredientTagsChange?: (tags: string[]) => void;
   onClose?: () => void;
   onFavorite?: (recipe: Recipe, isFavorited: boolean) => void;
@@ -45,6 +46,7 @@ export default class extends React.PureComponent<Props, void> {
           // TODO: This isn't quite right -- it doesn't do generics and all that jazz. But close enough for a demonstration.
           isAvailable={i.tag != null && this.props.availableIngredientTags!.includes(i.tag)}
           onAvailabilityToggle={this._onIngredientToggle}
+          onClick={this.props.onIngredientClick}
           key={`${i.tag}~~~${i.displayIngredient}`}
         />
       );

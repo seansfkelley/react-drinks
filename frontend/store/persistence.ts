@@ -31,6 +31,7 @@ const PERSISTENCE_SPEC: PersistenceSpec = {
     errorMessage: 0,
     recipeViewingIndex: ONE_MINUTE_MS * 5,
     currentlyViewedRecipeIds: ONE_MINUTE_MS * 5,
+    currentIngredientInfo: 0,
     favoritedRecipeIds: Infinity,
     showingRecipeViewer: ONE_MINUTE_MS * 5,
     showingRecipeEditor: Infinity,
