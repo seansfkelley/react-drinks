@@ -1,10 +1,11 @@
-import { sortBy } from 'lodash';
+import { sortBy, mapValues } from 'lodash';
 import { createSelector } from 'reselect';
 
 import { RootState } from './index';
 import { filteredGroupedRecipes } from './derived/filteredGroupedRecipes';
 import { ingredientSplitsByRecipeId } from './derived/ingredientSplitsByRecipeId';
 import { filteredGroupedIngredients } from './derived/filteredGroupedIngredients';
+import { computeRecipeSimilarity } from './derived/recipeSimilarity';
 
 const selectIngredientsByTag = (state: RootState) => state.ingredients.ingredientsByTag;
 const selectGroupedIngredients = (state: RootState) => state.ingredients.groupedIngredients;
@@ -44,6 +45,17 @@ export const selectRecipeOfTheHour = createSelector(
       TODAY.getHours()) % recipes.length];
   }
 );
+
+export const selectSimilarRecipesByRecipeId = createSelector(
+  selectRecipesById,
+  selectAlphabeticalRecipes,
+  (recipesById, alphabeticalRecipes) => mapValues(recipesById, recipe1 =>
+    sortBy(alphabeticalRecipes, recipe2 =>
+      recipe1.recipeId === recipe2.recipeId
+        ? Infinity
+        : -computeRecipeSimilarity(recipe1, recipe2)).slice(0, 5)
+  )
+)
 
 export const selectFilteredGroupedIngredients = createSelector(
   selectGroupedIngredients,

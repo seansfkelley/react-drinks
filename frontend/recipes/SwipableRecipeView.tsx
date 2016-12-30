@@ -8,7 +8,10 @@ import Swipable from '../components/Swipable';
 import { Ingredient, Recipe } from '../../shared/types';
 import { IngredientSplit } from '../store/derived/ingredientSplitsByRecipeId';
 import { RootState } from '../store';
-import { selectIngredientSplitsByRecipeId } from '../store/selectors';
+import {
+  selectIngredientSplitsByRecipeId,
+  selectSimilarRecipesByRecipeId
+} from '../store/selectors';
 import {
   setRecipeViewingIndex,
   seedRecipeEditor,
@@ -30,6 +33,7 @@ interface ConnectedProps {
   recipeViewingIndex: number;
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
   selectedIngredientTags: string[];
+  similarRecipesById: { [recipeId: string]: Recipe[] };
 }
 
 interface DispatchProps {
@@ -79,6 +83,7 @@ class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchPr
           availableIngredientTags={this.props.selectedIngredientTags}
           onIngredientTagsChange={this._onIngredientTagsChange}
           onIngredientClick={this.props.showIngredientInfo}
+          similarRecipes={this.props.similarRecipesById[recipe.recipeId]}
           onClose={this._onClose}
           onFavorite={this._onFavorite}
           onEdit={recipe.isCustom ? this._onEdit : undefined}
@@ -133,7 +138,8 @@ function mapStateToProps(state: RootState): ConnectedProps {
     currentlyViewedRecipeIds: state.ui.currentlyViewedRecipeIds,
     recipeViewingIndex: state.ui.recipeViewingIndex,
     ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state),
-    selectedIngredientTags: state.filters.selectedIngredientTags
+    selectedIngredientTags: state.filters.selectedIngredientTags,
+    similarRecipesById: selectSimilarRecipesByRecipeId(state)
   };
 }
 

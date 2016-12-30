@@ -25,6 +25,8 @@ interface Props {
   availableIngredientTags?: string[];
   onIngredientClick?: (tag: string) => void;
   onIngredientTagsChange?: (tags: string[]) => void;
+  onSimilarRecipeClick?: (recipeId: string) => void;
+  similarRecipes?: Recipe[];
   onClose?: () => void;
   onFavorite?: (recipe: Recipe, isFavorited: boolean) => void;
   onEdit?: (recipe: Recipe) => void;
@@ -99,6 +101,25 @@ export default class extends React.PureComponent<Props, void> {
       header = <TitleBar className='fixed-header'>{this.props.recipe.name}</TitleBar>;
     }
 
+    let similarRecipes;
+    if (this.props.similarRecipes && this.props.similarRecipes.length) {
+      similarRecipes = (
+        <div className='similar-recipes'>
+          <div className='header'>Similar Drinks</div>
+          <ul>
+            {this.props.similarRecipes.map(r =>
+              <li
+                className='recipe'
+                onClick={this.props.onSimilarRecipeClick ? () => this.props.onSimilarRecipeClick!(r.recipeId) : undefined}
+              >
+                {r.name}
+              </li>
+            )}
+          </ul>
+        </div>
+      );
+    }
+
     const footerButtons = [];
 
     // if (this.props.onEdit) {
@@ -137,6 +158,7 @@ export default class extends React.PureComponent<Props, void> {
           {instructions}
           {notes}
           {url}
+          {similarRecipes}
         </div>
         {footerButtons.length ? <div className='fixed-footer'>{footerButtons}</div> : undefined}
       </div>
