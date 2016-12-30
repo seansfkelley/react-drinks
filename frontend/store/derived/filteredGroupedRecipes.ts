@@ -61,7 +61,7 @@ export function _recipeListFilter(listType: RecipeListType, ingredientSplits: { 
 
 export function _hasAllSelectedIngredientsFilter(selectedIngredientTags: string[], ingredientSplits: { [recipeId: string]: IngredientSplit }) {
   if (selectedIngredientTags.length === 0) {
-    return () => false;
+    return nofilter;
   } else {
     return (recipe: Recipe) => {
       const splits = ingredientSplits[recipe.recipeId];

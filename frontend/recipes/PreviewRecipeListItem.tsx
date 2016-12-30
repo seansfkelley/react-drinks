@@ -14,7 +14,7 @@ interface Props {
 export default class extends React.PureComponent<Props, void> {
   render() {
     // TODO: This isn't quite right -- it doesn't do generics and all that jazz. But close enough for a demonstration.
-    const {
+    let {
       true: includedIngredients,
       false: missingIngredients
     } = groupBy(
@@ -25,6 +25,8 @@ export default class extends React.PureComponent<Props, void> {
       ),
       t => this.props.selectedIngredientTags.includes(t)
     );
+    includedIngredients = includedIngredients || [];
+    missingIngredients = missingIngredients || [];
 
     return (
       <ListItem className='preview-recipe-list-item recipe-list-item' onClick={this.props.onClick}>

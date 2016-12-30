@@ -1,4 +1,4 @@
-import { sortBy, mapValues } from 'lodash';
+import { sortBy, mapValues, flatten } from 'lodash';
 import { createSelector } from 'reselect';
 
 import { RootState } from './index';
@@ -68,6 +68,11 @@ export const selectFilteredGroupedIngredients = createSelector(
     searchTerm
   })
 )
+
+export const selectFilteredOrderedIngredients = createSelector(
+  selectFilteredGroupedIngredients,
+  (filteredGroupedIngredients) => flatten(filteredGroupedIngredients.map(g => g.ingredients))
+);
 
 export const selectIngredientSplitsByRecipeId = createSelector(
   selectAlphabeticalRecipes,

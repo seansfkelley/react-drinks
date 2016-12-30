@@ -81,7 +81,7 @@ export const ListClassNames = {
 
 interface ListProps {
   emptyText?: string;
-  emptyView?: React.ReactElement<any>;
+  emptyView?: React.ReactNode;
   className?: string;
   onTouchStart?: React.TouchEventHandler<HTMLElement>;
 }
@@ -93,7 +93,7 @@ export class List extends React.PureComponent<ListProps, void> {
 
   render() {
     let children;
-    if (React.Children.count(this.props.children) === 0) {
+    if (React.Children.toArray(this.props.children).filter(c => !!c).length === 0) {
       if (this.props.emptyView) {
         children = this.props.emptyView;
       } else {

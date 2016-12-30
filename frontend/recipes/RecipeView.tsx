@@ -109,6 +109,7 @@ export default class extends React.PureComponent<Props, void> {
           <ul>
             {this.props.similarRecipes.map(r =>
               <li
+                key={r.recipeId}
                 className='recipe'
                 onClick={this.props.onSimilarRecipeClick ? () => this.props.onSimilarRecipeClick!(r.recipeId) : undefined}
               >

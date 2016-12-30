@@ -1,3 +1,4 @@
+import { without, flatten } from 'lodash';
 import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -5,23 +6,28 @@ import { connect } from 'react-redux';
 import { RootState } from './store';
 import {
   selectFilteredGroupedRecipes,
-  selectFilteredGroupedIngredients,
+  selectFilteredOrderedIngredients,
   selectRecipeOfTheHour
 } from './store/selectors';
 import {
   setIngredientSearchTerm,
+  setRecipeSearchTerm,
   setSelectedIngredientTags,
   showIngredientInfo
 } from './store/atomicActions';
-import { GroupedIngredients, GroupedRecipes } from './types';
+import { GroupedRecipes } from './types';
 import { Ingredient, Recipe } from '../shared/types';
 import BlurOverlay from './components/BlurOverlay';
 import TitleBar from './components/TitleBar';
 import SearchBar from './components/SearchBar';
 import RecipeView from './recipes/RecipeView';
-import GroupedIngredientList from './ingredients/GroupedIngredientList';
+import PartialList from './components/PartialList';
 import RecipeList from './recipes/RecipeList';
 import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
+import { List, ListItem, ListHeader } from './components/List';
+
+class IngredientPartialList extends PartialList<Ingredient> {}
+class RecipePartialList extends PartialList<Recipe> {}
 
 interface ConnectedProps {
   recipesById: { [recipeId: string]: Recipe };
@@ -29,12 +35,13 @@ interface ConnectedProps {
   ingredientSearchTerm: string;
   selectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
-  filteredGroupedIngredients: GroupedIngredients[];
+  filteredIngredients: Ingredient[];
   filteredGroupedRecipes: GroupedRecipes[];
 }
 
 interface DispatchProps {
   setIngredientSearchTerm: typeof setIngredientSearchTerm;
+  setRecipeSearchTerm: typeof setRecipeSearchTerm;
   setSelectedIngredientTags: typeof setSelectedIngredientTags;
   showIngredientInfo: typeof showIngredientInfo;
 }
@@ -45,20 +52,16 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
       <div className='landing'>
         {this._renderTitle()}
         <SearchBar
-          onChange={this.props.setIngredientSearchTerm}
+          onChange={this._setAppropriateSearchTerms}
           value={this.props.ingredientSearchTerm}
           // TODO: Search recipes, their ingredients, and maybe even similar drinks here too!
-          placeholder='Search for ingredients...'
+          placeholder={this.props.selectedIngredientTags.length
+            ? 'Add ingredients...'
+            : 'Search recipes or ingredients...'}
           className='dark'
         />
         <BlurOverlay
-          foreground={this.props.ingredientSearchTerm
-            ? <GroupedIngredientList
-                groupedIngredients={this.props.filteredGroupedIngredients}
-                selectedIngredientTags={this.props.selectedIngredientTags}
-                onSelectionChange={this._selectIngredient}
-              />
-            : null}
+          foreground={this._renderForeground()}
           background={this._renderBackground()}
           onBackdropClick={this._abortSearch}
         />
@@ -91,6 +94,37 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     }
   }
 
+  private _renderForeground() {
+    if (this.props.ingredientSearchTerm) {
+      return (
+        <List className='all-search-results-list'>
+          {this.props.filteredIngredients.length
+            ? <div>
+                <ListHeader className='category-header'>Ingredients</ListHeader>
+                <IngredientPartialList
+                  className='ingredient-list'
+                  items={this.props.filteredIngredients}
+                  renderItem={this._renderIngredient}
+                />
+              </div>
+            : undefined}
+          {this.props.filteredGroupedRecipes.length
+            ? <div>
+                <ListHeader className='category-header'>Recipes</ListHeader>
+                <RecipePartialList
+                  className='recipe-list'
+                  items={flatten(this.props.filteredGroupedRecipes.map(g => g.recipes))}
+                  renderItem={this._renderRecipe}
+                />
+              </div>
+            : undefined}
+        </List>
+      );
+    } else {
+      return null;
+    }
+  }
+
   private _renderBackground() {
     if (this.props.selectedIngredientTags.length === 0) {
       return (
@@ -114,21 +148,45 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     }
   }
 
+  private _renderIngredient = (ingredient: Ingredient) => {
+    return (
+      <ListItem
+        key={ingredient.tag}
+        onClick={() => this._toggleIngredient(ingredient.tag)}
+        className='ingredient'
+      >
+        {ingredient.display}
+      </ListItem>
+    );
+  };
+
   private _renderRecipe = (recipe: Recipe) => {
-    return <PreviewRecipeListItem
-      recipe={recipe}
-      ingredientsByTag={this.props.ingredientsByTag}
-      selectedIngredientTags={this.props.selectedIngredientTags}
-    />;
+    return (
+      <PreviewRecipeListItem
+        key={recipe.recipeId}
+        recipe={recipe}
+        ingredientsByTag={this.props.ingredientsByTag}
+        selectedIngredientTags={this.props.selectedIngredientTags}
+      />
+    );
+  };
+
+  private _setAppropriateSearchTerms = (searchTerm: string) => {
+    this.props.setIngredientSearchTerm(searchTerm);
+    this.props.setRecipeSearchTerm(searchTerm);
   };
 
   private _popStack = () => {
     this.props.setSelectedIngredientTags(this.props.selectedIngredientTags.slice(0, this.props.selectedIngredientTags.length - 1));
   };
 
-  private _selectIngredient = (tags: string[]) => {
+  private _toggleIngredient = (tag: string) => {
     this.props.setIngredientSearchTerm('');
-    this.props.setSelectedIngredientTags(tags);
+    if (this.props.selectedIngredientTags.includes(tag)) {
+      this.props.setSelectedIngredientTags(without(this.props.selectedIngredientTags, tag));
+    } else {
+      this.props.setSelectedIngredientTags(this.props.selectedIngredientTags.concat([ tag ]));
+    }
   };
 
   private _abortSearch = () => {
@@ -143,7 +201,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
     ingredientSearchTerm: state.filters.ingredientSearchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
     ingredientsByTag: state.ingredients.ingredientsByTag,
-    filteredGroupedIngredients: selectFilteredGroupedIngredients(state),
+    filteredIngredients: selectFilteredOrderedIngredients(state),
     filteredGroupedRecipes: selectFilteredGroupedRecipes(state)
   };
 }
@@ -151,6 +209,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return bindActionCreators({
     setIngredientSearchTerm,
+    setRecipeSearchTerm,
     setSelectedIngredientTags,
     showIngredientInfo
    }, dispatch);
