@@ -1,4 +1,4 @@
-import { without } from 'lodash';
+import { without, flatten } from 'lodash';
 import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,7 +14,8 @@ import {
 import {
   setSearchTerm,
   setSelectedIngredientTags,
-  showIngredientInfo
+  showIngredientInfo,
+  showRecipeViewer
 } from './store/atomicActions';
 import { GroupedRecipes } from './types';
 import { Ingredient, Recipe } from '../shared/types';
@@ -44,6 +45,7 @@ interface DispatchProps {
   setSearchTerm: typeof setSearchTerm;
   setSelectedIngredientTags: typeof setSelectedIngredientTags;
   showIngredientInfo: typeof showIngredientInfo;
+  showRecipeViewer: typeof showRecipeViewer;
 }
 
 class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> {
@@ -124,7 +126,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
                 <RecipePartialList
                   className='recipe-list'
                   items={this.props.searchedRecipes.map(r => r.item)}
-                  renderItem={this._makeRenderRecipe(false)}
+                  renderItem={this._makeRenderRecipe(false, this.props.searchedRecipes.map(r => r.item.recipeId))}
                 />
               </div>
             : undefined}
@@ -152,7 +154,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
       return (
         <RecipeList
           recipes={this.props.ingredientMatchedRecipes}
-          renderRecipe={this._makeRenderRecipe(true)}
+          renderRecipe={this._makeRenderRecipe(true, flatten(this.props.ingredientMatchedRecipes.map(g => g.recipes)).map(r => r.recipeId))}
         />
       );
     }
@@ -170,13 +172,14 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     );
   };
 
-  private _makeRenderRecipe = (includeTags: boolean) => (recipe: Recipe) => {
+  private _makeRenderRecipe = (includeTags: boolean, allRecipeIds: string[]) => (recipe: Recipe) => {
     return (
       <PreviewRecipeListItem
         key={recipe.recipeId}
         recipe={recipe}
         ingredientsByTag={this.props.ingredientsByTag}
         selectedIngredientTags={includeTags ? this.props.selectedIngredientTags : undefined}
+        onClick={() => this.props.showRecipeViewer({ recipeIds: allRecipeIds, index: allRecipeIds.indexOf(recipe.recipeId) })}
       />
     );
   };
@@ -215,7 +218,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return bindActionCreators({
     setSearchTerm,
     setSelectedIngredientTags,
-    showIngredientInfo
+    showIngredientInfo,
+    showRecipeViewer
    }, dispatch);
 }
 
