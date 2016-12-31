@@ -1,3 +1,5 @@
+@require '../shared/size'
+
 .landing
   flex: 1
   display: flex
@@ -7,7 +9,10 @@
     flex-shrink: 0
 
   .title-bar.with-ingredients
-    padding-top: 6px
+    $top-padding = 6px
+
+    padding-top: $top-padding
+    line-height: $base-touch-size - $top-padding
 
     .title
       display: flex
@@ -24,7 +29,7 @@
         background-color: rgba(0, 0, 0, 0.2)
         text-transform: uppercase
         font-size: 18px
-        height: 44px
+        height: $base-touch-size - $top-padding
         margin-right: 6px
         white-space: nowrap
         overflow: hidden
