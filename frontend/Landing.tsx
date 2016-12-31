@@ -128,18 +128,8 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
           className='all-search-results-list'
           emptyText='Nothing matched your search!'
         >
-          {this.props.searchTerm.trim().length > 0
+          {this.props.searchTerm.trim().length === 0
             ? <div>
-                <ListHeader className='category-header'>Ingredients</ListHeader>
-                <FilteredIngredientPartialList
-                  className='ingredient-list'
-                  items={this.props.searchedIngredients}
-                  renderItem={this._renderFilteredIngredient}
-                  softLimit={8}
-                  hardLimit={12}
-                />
-              </div>
-            : <div>
                 <ListHeader className='category-header'>Common Ingredients</ListHeader>
                 <BasicIngredientTagPartialList
                   className='ingredient-list'
@@ -148,7 +138,19 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
                   softLimit={Infinity}
                   hardLimit={Infinity}
                 />
-              </div>}
+              </div>
+            : this.props.searchedIngredients.length > 0
+              ? <div>
+                  <ListHeader className='category-header'>Ingredients</ListHeader>
+                  <FilteredIngredientPartialList
+                    className='ingredient-list'
+                    items={this.props.searchedIngredients}
+                    renderItem={this._renderFilteredIngredient}
+                    softLimit={8}
+                    hardLimit={12}
+                  />
+                </div>
+              : null}
           {this.props.searchedRecipes.length
             ? <div>
                 <ListHeader className='category-header'>Recipes</ListHeader>

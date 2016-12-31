@@ -81,7 +81,7 @@ export default class extends React.PureComponent<Props, void> {
 
     const instructions = (
       <ol className='recipe-instructions'>
-        {(this.props as Props).recipe.instructions.split('\n')
+        {this.props.recipe.instructions.split('\n')
           .map(l => l.trim())
           .filter(l => l.length > 0)
           .map((l, i) => (
