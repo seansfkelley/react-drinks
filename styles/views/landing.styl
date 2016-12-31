@@ -7,21 +7,33 @@
     flex-shrink: 0
 
   .title-bar.with-ingredients
+    padding-top: 6px
+
     .title
       display: flex
-      flex-direction: column
-      line-height: initial
-
-      .lead-in
-        font-weight: 400
-        font-size: 12px
-        padding-top: 4px
 
       .ingredient-names
-        padding-bottom: 4px
+        display: flex
 
-      .ingredient-name:not(:last-child):after
-        content: ', '
+      .ingredient-name
+        display: flex
+        align-items: center
+        flex-grow: 0
+        padding: 0 12px
+        border-radius: 3px
+        background-color: rgba(0, 0, 0, 0.2)
+        text-transform: uppercase
+        font-size: 18px
+        height: 44px
+        margin-right: 6px
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+
+        i.fa
+          width: auto
+          color: white
+          margin-left: 6px
 
   .random-cocktail
     flex: 1

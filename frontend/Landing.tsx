@@ -73,14 +73,16 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     } else {
       return (
         <TitleBar
-          leftIcon='fa-undo'
-          leftIconOnClick={this._popStack}
+          leftIcon='fa-chevron-left'
+          leftIconOnClick={this._goHome}
           className='dark with-ingredients'
         >
-          <div className='lead-in'>Drinks with</div>
           <div className='ingredient-names'>
             {this.props.selectedIngredientTags.map(tag => (
-              <span className='ingredient-name' key={tag}>{this.props.ingredientsByTag[tag].display}</span>
+              <div className='ingredient-name' key={tag} onClick={() => this._removeTag(tag)}>
+                {this.props.ingredientsByTag[tag].display}
+                <i className='fa fa-times'/>
+              </div>
             ))}
           </div>
         </TitleBar>
@@ -194,8 +196,12 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     );
   };
 
-  private _popStack = () => {
-    this.props.setSelectedIngredientTags(this.props.selectedIngredientTags.slice(0, this.props.selectedIngredientTags.length - 1));
+  private _goHome = () => {
+    this.props.setSelectedIngredientTags([]);
+  };
+
+  private _removeTag = (tag: string) => {
+    this.props.setSelectedIngredientTags(without(this.props.selectedIngredientTags, tag));
   };
 
   private _toggleIngredient = (tag: string) => {
