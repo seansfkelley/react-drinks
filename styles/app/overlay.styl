@@ -11,8 +11,22 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
   z-index: 1
   pointer-events: none
 
-  &.visible > *
-    pointer-events: auto
+  .overlay-backdrop
+    abs-full-screen()
+    background: $fade-color
+    opacity: 0
+    transition: opacity $transition-duration
+
+  &.visible
+    > *
+      pointer-events: auto
+
+    > :not(.overlay-backdrop)
+      // Pop it over the backdrop.
+      position: relative
+
+    .overlay-backdrop
+      opacity: 1
 
 .overlay.modal
   opacity: 0
@@ -37,16 +51,3 @@ $pushover-width = 86% // Odd numbers can artifact b/c of rounding errors.
   &.visible
     transform: none
     shadow('top', 3px)
-
-.overlay-background
-  abs-full-screen()
-  background: $fade-color
-  opacity: 0
-  transition: opacity $transition-duration
-  pointer-events: none
-  z-index: 1
-
-  &.visible
-    pointer-events: auto
-    opacity: 1
-

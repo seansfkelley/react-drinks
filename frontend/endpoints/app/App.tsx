@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Dispatch, bindActionCreators } from 'redux';
 
@@ -35,22 +34,24 @@ class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   };
 
   render() {
-    const anyOverlayVisible = [
-      this.props.showingRecipeViewer,
-      this.props.showingIngredientInfo
-    ].some(x => x);
-
     return (
-      <div className='app-event-wrapper' onTouchStart={this._deselectActiveElement}>
+      <div
+        className='app-event-wrapper'
+        onTouchStart={this._deselectActiveElement}
+      >
         <Landing />
-        <div
-          className={classNames('overlay-background', { 'visible': anyOverlayVisible })}
-          onTouchStart={this._closeOverlays}
-        />
-        <Overlay type='modal' isVisible={this.props.showingRecipeViewer}>
+        <Overlay
+          type='modal'
+          isVisible={this.props.showingRecipeViewer}
+          onBackdropClick={this.props.hideRecipeViewer}
+        >
           <SwipableRecipeView />
         </Overlay>
-        <Overlay type='modal' isVisible={this.props.showingIngredientInfo}>
+        <Overlay
+          type='modal'
+          isVisible={this.props.showingIngredientInfo}
+          onBackdropClick={this.props.hideIngredientInfo}
+        >
           <IngredientInfo />
         </Overlay>
       </div>
@@ -62,14 +63,6 @@ class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
       (document.activeElement as HTMLElement).blur();
     }
   }
-
-  private _closeOverlays = (e: React.TouchEvent<HTMLElement>) => {
-    this.props.hideRecipeViewer();
-    this.props.hideIngredientInfo();
-
-    // This prevent events from leaking to elements behind the backdrop.
-    e.preventDefault();
-  };
 }
 
 function mapStateToProps(state: RootState): ConnectedProps {
