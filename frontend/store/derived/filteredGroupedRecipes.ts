@@ -2,7 +2,7 @@ import { isString, isArray, sortBy, groupBy, map } from 'lodash';
 import * as log from 'loglevel';
 
 import { Ingredient, Recipe } from '../../../shared/types';
-import { RecipeListType, GroupedRecipes } from '../../types';
+import { RecipeListType, GroupedItems } from '../../types';
 import { ANY_BASE_LIQUOR } from '../../../shared/definitions';
 
 import { IngredientSplit }  from './ingredientSplitsByRecipeId';
@@ -75,7 +75,7 @@ export function _hasAllSelectedIngredientsFilter(selectedIngredientTags: string[
   }
 }
 
-export function _sortAndGroupAlphabetical(recipes: Recipe[]): GroupedRecipes[] {
+export function _sortAndGroupAlphabetical(recipes: Recipe[]): GroupedItems<Recipe>[] {
   return sortBy(
     map(
       groupBy(
@@ -89,21 +89,21 @@ export function _sortAndGroupAlphabetical(recipes: Recipe[]): GroupedRecipes[] {
           }
         }
       ),
-      (recipes, key) => ({ recipes, key: key! })
+      (items, groupName) => ({ items, groupName: groupName! })
     ),
-    ({ key }) => key
+    ({ groupName }) => groupName
   );
 }
 
 export function filteredGroupedRecipes({
-  ingredientsByTag,
+  // ingredientsByTag,
   recipes,
   searchTerm,
   selectedIngredientTags,
   ingredientSplitsByRecipeId,
   // favoritedRecipeIds,
 }: {
-  ingredientsByTag: { [tag: string]: Ingredient },
+  // ingredientsByTag: { [tag: string]: Ingredient },
   recipes: Recipe[],
   searchTerm?: string,
   selectedIngredientTags: string[],
@@ -120,7 +120,7 @@ export function filteredGroupedRecipes({
   const filteredRecipes = recipes
     // .filter(_baseLiquorFilter(baseLiquorFilter))
     .filter(_hasAllSelectedIngredientsFilter(selectedIngredientTags, ingredientSplitsByRecipeId))
-    .filter(_searchTermFilter(searchTerm, ingredientsByTag));
+    // .filter(_searchTermFilter(searchTerm, ingredientsByTag));
 
   return _sortAndGroupAlphabetical(filteredRecipes);
 };

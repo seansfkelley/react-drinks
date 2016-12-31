@@ -4,7 +4,7 @@ import * as log from 'loglevel';
 import makeReducer from './makeReducer';
 import { load } from '../persistence';
 import { Ingredient, IngredientGroupMeta } from '../../../shared/types';
-import { GroupedIngredients } from '../../types';
+import { GroupedItems } from '../../types';
 import { normalizeIngredient } from '../../../shared/normalization';
 import { Action } from '../ActionType';
 
@@ -39,7 +39,7 @@ function _computeIngredientsByTag(ingredients: Ingredient[], intangibleIngredien
   return ingredientsByTag;
 };
 
-function _computeGroupedIngredients(ingredients: Ingredient[], groups: IngredientGroupMeta[]) {
+function _computeGroupedIngredients(ingredients: Ingredient[], groups: IngredientGroupMeta[]): GroupedItems<Ingredient>[] {
   return sortBy(
     map(
       groupBy(
@@ -50,16 +50,16 @@ function _computeGroupedIngredients(ingredients: Ingredient[], groups: Ingredien
         i => i.group
       ),
       (ingredients, groupTag) => ({
-        name: groups[findIndex(groups, g => g.type === groupTag)].display,
-        ingredients
+        groupName: groups[findIndex(groups, g => g.type === groupTag)].display,
+        items: ingredients
       })
     ),
-    ({ name }) => findIndex(groups, g => g.display === name)
+    ({ groupName }) => findIndex(groups, g => g.display === groupName)
   );
 }
 
 export interface IngredientsState {
-  groupedIngredients: GroupedIngredients[];
+  groupedIngredients: GroupedItems<Ingredient>[];
   ingredientsByTag: { [tag: string]: Ingredient };
 }
 

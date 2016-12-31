@@ -1,7 +1,7 @@
 import { Ingredient } from '../../../shared/types';
-import { GroupedIngredients } from '../../types';
+import { GroupedItems } from '../../types';
 
-export function filteredGroupedIngredients({ groupedIngredients, searchTerm }: { groupedIngredients: GroupedIngredients[], searchTerm?: string }) {
+export function filteredGroupedIngredients({ groupedIngredients, searchTerm }: { groupedIngredients: GroupedItems<Ingredient>[], searchTerm?: string }) {
   if (searchTerm == null) {
     searchTerm = '';
   }
@@ -22,10 +22,10 @@ export function filteredGroupedIngredients({ groupedIngredients, searchTerm }: {
     };
 
     return groupedIngredients
-      .map(({ name, ingredients }) => ({
-        name,
-        ingredients: ingredients.filter(filterBySearchTerm)
+      .map(({ groupName, items }) => ({
+        groupName,
+        items: items.filter(filterBySearchTerm)
       }))
-      .filter(({ ingredients }) => ingredients.length > 0);
+      .filter(({ items }) => items.length > 0);
   }
 };

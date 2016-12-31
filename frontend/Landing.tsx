@@ -17,19 +17,19 @@ import {
   showIngredientInfo,
   showRecipeViewer
 } from './store/atomicActions';
-import { GroupedRecipes } from './types';
+import { GroupedItems } from './types';
 import { Ingredient, Recipe } from '../shared/types';
 import BlurOverlay from './components/BlurOverlay';
 import TitleBar from './components/TitleBar';
 import SearchBar from './components/SearchBar';
 import RecipeView from './recipes/RecipeView';
 import PartialList from './components/PartialList';
-import RecipeList from './recipes/RecipeList';
 import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
-import { List, ListItem, ListHeader } from './components/List';
+import { List, ListItem, ListHeader, HeaderedList } from './components/List';
 
 class IngredientPartialList extends PartialList<FuzzyFilteredItem<Ingredient>> {}
 class RecipePartialList extends PartialList<Recipe> {}
+class RecipeHeaderedList extends HeaderedList<Recipe> {}
 
 interface ConnectedProps {
   randomRecipe: Recipe;
@@ -38,7 +38,7 @@ interface ConnectedProps {
   ingredientsByTag: { [tag: string]: Ingredient };
   searchedIngredients: FuzzyFilteredItem<Ingredient>[];
   searchedRecipes: FuzzyFilteredItem<Recipe>[];
-  ingredientMatchedRecipes: GroupedRecipes[];
+  ingredientMatchedRecipes: GroupedItems<Recipe>[];
 }
 
 interface DispatchProps {
@@ -152,13 +152,22 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
       );
     } else {
       return (
-        <RecipeList
-          recipes={this.props.ingredientMatchedRecipes}
-          renderRecipe={this._makeRenderRecipe(true, flatten(this.props.ingredientMatchedRecipes.map(g => g.recipes)).map(r => r.recipeId))}
+        <RecipeHeaderedList
+          groupedItems={this.props.ingredientMatchedRecipes}
+          renderItem={this._makeRenderRecipe(true, flatten(this.props.ingredientMatchedRecipes.map(g => g.items)).map(r => r.recipeId))}
+          renderHeader={this._renderListHeader}
         />
       );
     }
   }
+
+  private _renderListHeader = (text: string) => {
+    return <ListHeader
+      className='thin-header'
+      title={text.toUpperCase()}
+      key={`header-${text}`}
+    />;
+  };
 
   private _renderFilteredIngredient = (ingredient: FuzzyFilteredItem<Ingredient>) => {
     return (

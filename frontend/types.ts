@@ -1,5 +1,3 @@
-import { Ingredient, Recipe } from '../shared/types';
-
 export type EditableRecipePageType = 'name' | 'ingredients' | 'text' | 'base' | 'preview';
 export const EditableRecipePageType = {
   NAME: 'name' as EditableRecipePageType,
@@ -19,12 +17,7 @@ export const RecipeListType = {
 
 export type SearchTabType = 'ingredients' | 'recipes';
 
-export interface GroupedIngredients {
-  name: string;
-  ingredients: Ingredient[];
-}
-
-export interface GroupedRecipes {
-  key: string;
-  recipes: Recipe[];
+export interface GroupedItems<T> {
+  groupName: string;
+  items: T[];
 }

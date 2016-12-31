@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 
+import { GroupedItems } from '../types';
 import Deletable from './Deletable';
 
 interface ListHeaderProps {
@@ -114,17 +115,34 @@ export class List extends React.PureComponent<ListProps, void> {
   }
 }
 
-// interface HeaderedListProps extends ListProps {
-//   alwaysShowHeaders?: boolean;
+interface HeaderedListProps<T> extends ListProps {
+  alwaysShowHeaders?: boolean;
+  groupedItems: GroupedItems<T>[];
+  renderItem: (item: T) => React.ReactNode;
+  renderHeader: (groupName: string) => React.ReactNode;
+}
 
-// }
+export class HeaderedList<T> extends React.PureComponent<HeaderedListProps<T>, void> {
+  static defaultProps = {
+    alwaysShowHeaders: false
+  };
 
-// export class HeaderedList extends React.PureComponent<HeaderedListProps, void> {
-//   static defaultProps = {
-//     alwaysShowHeaders: false
-//   };
+  render() {
+    const listNodes: React.ReactNode[] = [];
 
-//   render() {
+    for (let { groupName, items } of this.props.groupedItems) {
+      listNodes.push(this.props.renderHeader(groupName));
+      listNodes.push(items.map(this.props.renderItem));
+    }
 
-//   }
-// }
+    const listItemCount = listNodes.length - this.props.groupedItems.length;
+
+    return (
+      <List className={classNames(ListClassNames.HEADERED, {
+        'show-headers': this.props.alwaysShowHeaders || listItemCount > 6
+      })}>
+        {listNodes}
+      </List>
+    );
+  }
+}

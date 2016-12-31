@@ -95,7 +95,7 @@ export const selectSearchedIngredients: Selector<RootState, FuzzyFilteredItem<In
   selectGroupedIngredients,
   selectSearchTerm,
   (groupedIngredients, searchTerm) =>
-    _cleanUpMatchResults(flatten(groupedIngredients.map(g => g.ingredients))
+    _cleanUpMatchResults(flatten(groupedIngredients.map(g => g.items))
       .map(ingredient => ({
         item: ingredient,
         matchResult: ingredient.searchable
@@ -142,19 +142,19 @@ export const selectSearchedRecipes: Selector<RootState, FuzzyFilteredItem<Recipe
 );
 
 export const selectIngredientMatchedRecipes = createSelector(
-  selectIngredientsByTag,
+  // selectIngredientsByTag,
   selectAlphabeticalRecipes,
   selectIngredientTags,
   // selectFavoritedRecipeIds,
   selectIngredientSplitsByRecipeId,
   (
-    ingredientsByTag,
+    // ingredientsByTag,
     recipes,
     selectedIngredientTags,
     // favoritedRecipeIds,
     ingredientSplitsByRecipeId,
   ) => filteredGroupedRecipes({
-    ingredientsByTag,
+    // ingredientsByTag,
     recipes,
     selectedIngredientTags,
     // favoritedRecipeIds,
