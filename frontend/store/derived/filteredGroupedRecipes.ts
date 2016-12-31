@@ -105,7 +105,7 @@ export function filteredGroupedRecipes({
 }: {
   ingredientsByTag: { [tag: string]: Ingredient },
   recipes: Recipe[],
-  searchTerm: string,
+  searchTerm?: string,
   selectedIngredientTags: string[],
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit },
   // favoritedRecipeIds: string[],

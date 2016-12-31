@@ -1,12 +1,14 @@
-import { without, flatten } from 'lodash';
+import { without } from 'lodash';
 import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { RootState } from './store';
 import {
-  selectFilteredGroupedRecipes,
-  selectFuzzyMatchedIngredients,
+  FuzzyFilteredItem,
+  selectSearchedRecipes,
+  selectIngredientMatchedRecipes,
+  selectSearchedIngredients,
   selectRecipeOfTheHour
 } from './store/selectors';
 import {
@@ -25,25 +27,17 @@ import RecipeList from './recipes/RecipeList';
 import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
 import { List, ListItem, ListHeader } from './components/List';
 
-interface FilteredIngredient {
-  ingredient: Ingredient;
-  bestMatch: {
-    rendered: string;
-    score: number;
-  };
-}
-
-class IngredientPartialList extends PartialList<FilteredIngredient> {}
+class IngredientPartialList extends PartialList<FuzzyFilteredItem<Ingredient>> {}
 class RecipePartialList extends PartialList<Recipe> {}
 
 interface ConnectedProps {
-  recipesById: { [recipeId: string]: Recipe };
   randomRecipe: Recipe;
   searchTerm: string;
   selectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
-  filteredIngredients: FilteredIngredient[];
-  filteredGroupedRecipes: GroupedRecipes[];
+  searchedIngredients: FuzzyFilteredItem<Ingredient>[];
+  searchedRecipes: FuzzyFilteredItem<Recipe>[];
+  ingredientMatchedRecipes: GroupedRecipes[];
 }
 
 interface DispatchProps {
@@ -112,24 +106,24 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
           className='all-search-results-list'
           emptyText='Nothing matched your search!'
         >
-          {this.props.filteredIngredients.length
+          {this.props.searchedIngredients.length
             ? <div>
                 <ListHeader className='category-header'>Ingredients</ListHeader>
                 <IngredientPartialList
                   className='ingredient-list'
-                  items={this.props.filteredIngredients}
+                  items={this.props.searchedIngredients}
                   renderItem={this._renderFilteredIngredient}
                   softLimit={8}
                   hardLimit={12}
                 />
               </div>
             : undefined}
-          {this.props.filteredGroupedRecipes.length
+          {this.props.searchedRecipes.length
             ? <div>
                 <ListHeader className='category-header'>Recipes</ListHeader>
                 <RecipePartialList
                   className='recipe-list'
-                  items={flatten(this.props.filteredGroupedRecipes.map(g => g.recipes))}
+                  items={this.props.searchedRecipes.map(r => r.item)}
                   renderItem={this._makeRenderRecipe(false)}
                 />
               </div>
@@ -157,21 +151,21 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     } else {
       return (
         <RecipeList
-          recipes={this.props.filteredGroupedRecipes}
+          recipes={this.props.ingredientMatchedRecipes}
           renderRecipe={this._makeRenderRecipe(true)}
         />
       );
     }
   }
 
-  private _renderFilteredIngredient = (ingredient: FilteredIngredient) => {
+  private _renderFilteredIngredient = (ingredient: FuzzyFilteredItem<Ingredient>) => {
     return (
       <ListItem
-        key={ingredient.ingredient.tag}
-        onClick={() => this._toggleIngredient(ingredient.ingredient.tag)}
+        key={ingredient.item.tag}
+        onClick={() => this._toggleIngredient(ingredient.item.tag)}
         className='ingredient'
       >
-        {ingredient.ingredient.display}
+        {ingredient.item.display}
       </ListItem>
     );
   };
@@ -207,13 +201,13 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
 
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
-    recipesById: state.recipes.recipesById,
     randomRecipe: selectRecipeOfTheHour(state),
     searchTerm: state.filters.searchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
     ingredientsByTag: state.ingredients.ingredientsByTag,
-    filteredIngredients: selectFuzzyMatchedIngredients(state),
-    filteredGroupedRecipes: selectFilteredGroupedRecipes(state)
+    searchedIngredients: selectSearchedIngredients(state),
+    searchedRecipes: selectSearchedRecipes(state),
+    ingredientMatchedRecipes: selectIngredientMatchedRecipes(state)
   };
 }
 
