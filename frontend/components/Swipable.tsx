@@ -82,8 +82,8 @@ class InertialSwipable extends React.PureComponent<InertialSwipableProps, void> 
 }
 
 interface Props {
-  onSlideChange: (index: number) => void;
   initialIndex?: number;
+  onIndexChange: (index: number) => void;
   friction?: number;
   className?: string;
 }
@@ -110,14 +110,6 @@ export default class extends React.PureComponent<Props, State> {
       initialDelta: 0
     };
   }).call(this);
-
-  _getIndexForDelta(delta: number) {
-    // return _.sortedIndex(@state.itemOffsets, delta)
-    const shiftedOffsets = range(this.state.itemOffsets.length)
-      .map(i => this.state.itemOffsets[i] - this.state.itemWidths[i] / 2);
-    // Why is this -1 again?
-    return Math.max(0, sortedIndex(shiftedOffsets, delta) - 1);
-  }
 
   render() {
     const offset = -this.state.delta + (this.state.wrapperWidth - this.state.itemWidths[0]) / 2;
@@ -154,9 +146,28 @@ export default class extends React.PureComponent<Props, State> {
     window.addEventListener('resize', this._computeCachedState, false);
   }
 
+  componentDidUpdate(prevProps: { children: any }) {
+    if (React.Children.count(prevProps.children) !== React.Children.count(this.props.children)) {
+      this._computeCachedState();
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('orientationchange', this._computeCachedState);
     window.removeEventListener('resize', this._computeCachedState);
+  }
+
+  setIndexToIfNecessary(index: number) {
+    if (this._getIndexForDelta(this.state.delta) !== index) {
+      this.setState({ initialDelta: this.state.itemOffsets[index] } as any);
+    }
+  }
+
+  _getIndexForDelta(delta: number) {
+    const shiftedOffsets = range(this.state.itemOffsets.length)
+      .map(i => this.state.itemOffsets[i] - this.state.itemWidths[i] / 2);
+    // Why is this -1 again?
+    return Math.max(0, sortedIndex(shiftedOffsets, delta) - 1);
   }
 
   _computeCachedState() {
@@ -193,7 +204,7 @@ export default class extends React.PureComponent<Props, State> {
     const newIndex = this._getIndexForDelta(delta);
     this.setState({ delta } as any);
     if (oldIndex !== newIndex) {
-      this.props.onSlideChange(newIndex);
+      this.props.onIndexChange(newIndex);
     }
   };
 

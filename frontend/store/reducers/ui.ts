@@ -39,16 +39,16 @@ export const reducer = makeReducer<UiState>(assign({
   }, state),
 
   'show-recipe-viewer': (state, action: Action<{ index: number, recipeIds: string[] }>) => defaults({
-      showingRecipeViewer: true,
-      recipeViewingIndex: action.payload.index,
-      currentlyViewedRecipeIds: action.payload.recipeIds
-    }, state),
+    showingRecipeViewer: true,
+    recipeViewingIndex: action.payload.index,
+    currentlyViewedRecipeIds: action.payload.recipeIds
+  }, state),
 
   'hide-recipe-viewer': (state) => defaults({
-      showingRecipeViewer: false,
-      recipeViewingIndex: 0,
-      currentlyViewedRecipeIds: []
-    }, state),
+    showingRecipeViewer: false,
+    recipeViewingIndex: 0,
+    currentlyViewedRecipeIds: []
+  }, state),
 
   'show-recipe-editor': (state) => defaults({
     showingRecipeEditor: true

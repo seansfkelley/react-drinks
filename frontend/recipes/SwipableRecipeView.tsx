@@ -20,7 +20,8 @@ import {
   unfavoriteRecipe,
   hideRecipeViewer,
   setSelectedIngredientTags,
-  showIngredientInfo
+  showIngredientInfo,
+  showRecipeViewer
 } from '../store/atomicActions';
 
 import RecipeView from './RecipeView';
@@ -45,9 +46,12 @@ interface DispatchProps {
   hideRecipeViewer: typeof hideRecipeViewer;
   setSelectedIngredientTags: typeof setSelectedIngredientTags;
   showIngredientInfo: typeof showIngredientInfo;
+  showRecipeViewer: typeof showRecipeViewer;
 }
 
 class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchProps, void> {
+  private _swipable: Swipable;
+
   render() {
     if (this.props.currentlyViewedRecipeIds.length === 0) {
       return <div />;
@@ -66,8 +70,9 @@ class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchPr
         <Swipable
           className='swipable-recipe-container'
           initialIndex={this.props.recipeViewingIndex}
-          onSlideChange={this.props.setRecipeViewingIndex}
+          onIndexChange={this.props.setRecipeViewingIndex}
           friction={0.9}
+          ref={e => this._swipable = e}
         >
           {recipePages}
         </Swipable>
@@ -84,6 +89,7 @@ class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchPr
           onIngredientTagsChange={this._onIngredientTagsChange}
           onIngredientClick={this.props.showIngredientInfo}
           similarRecipes={this.props.similarRecipesById[recipe.recipeId]}
+          onSimilarRecipeClick={this._replaceWithRecipeId}
           onClose={this._onClose}
           onFavorite={this._onFavorite}
           onEdit={recipe.isCustom ? this._onEdit : undefined}
@@ -93,6 +99,16 @@ class SwipableRecipeView extends React.PureComponent<ConnectedProps & DispatchPr
       </div>
     );
   }
+
+  componentWillReceiveProps(nextProps: ConnectedProps) {
+    if (this._swipable && nextProps.recipeViewingIndex !== this.props.recipeViewingIndex) {
+      this._swipable.setIndexToIfNecessary(nextProps.recipeViewingIndex);
+    }
+  }
+
+  private _replaceWithRecipeId = (recipeId: string) => {
+    this.props.showRecipeViewer({ recipeIds: [ recipeId ], index: 0 });
+  };
 
   private _onClose = () => {
     this.props.setRecipeViewingIndex(0);
@@ -126,7 +142,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
     unfavoriteRecipe,
     hideRecipeViewer,
     setSelectedIngredientTags,
-    showIngredientInfo
+    showIngredientInfo,
+    showRecipeViewer
   }, dispatch);
 }
 
