@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { RootState } from './store';
 import {
   selectFilteredGroupedRecipes,
-  selectFilteredOrderedIngredients,
+  selectFuzzyMatchedIngredients,
   selectRecipeOfTheHour
 } from './store/selectors';
 import {
@@ -26,7 +26,15 @@ import RecipeList from './recipes/RecipeList';
 import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
 import { List, ListItem, ListHeader } from './components/List';
 
-class IngredientPartialList extends PartialList<Ingredient> {}
+interface FilteredIngredient {
+  ingredient: Ingredient;
+  bestMatch: {
+    rendered: string;
+    score: number;
+  };
+}
+
+class IngredientPartialList extends PartialList<FilteredIngredient> {}
 class RecipePartialList extends PartialList<Recipe> {}
 
 interface ConnectedProps {
@@ -35,7 +43,7 @@ interface ConnectedProps {
   ingredientSearchTerm: string;
   selectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
-  filteredIngredients: Ingredient[];
+  filteredIngredients: FilteredIngredient[];
   filteredGroupedRecipes: GroupedRecipes[];
 }
 
@@ -104,7 +112,9 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
                 <IngredientPartialList
                   className='ingredient-list'
                   items={this.props.filteredIngredients}
-                  renderItem={this._renderIngredient}
+                  renderItem={this._renderFilteredIngredient}
+                  softLimit={8}
+                  hardLimit={12}
                 />
               </div>
             : undefined}
@@ -148,14 +158,14 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     }
   }
 
-  private _renderIngredient = (ingredient: Ingredient) => {
+  private _renderFilteredIngredient = (ingredient: FilteredIngredient) => {
     return (
       <ListItem
-        key={ingredient.tag}
-        onClick={() => this._toggleIngredient(ingredient.tag)}
+        key={ingredient.ingredient.tag}
+        onClick={() => this._toggleIngredient(ingredient.ingredient.tag)}
         className='ingredient'
       >
-        {ingredient.display}
+        {ingredient.ingredient.display}
       </ListItem>
     );
   };
@@ -201,7 +211,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
     ingredientSearchTerm: state.filters.ingredientSearchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
     ingredientsByTag: state.ingredients.ingredientsByTag,
-    filteredIngredients: selectFilteredOrderedIngredients(state),
+    filteredIngredients: selectFuzzyMatchedIngredients(state),
     filteredGroupedRecipes: selectFilteredGroupedRecipes(state)
   };
 }

@@ -1,5 +1,6 @@
 import { sortBy, mapValues, flatten } from 'lodash';
 import { createSelector } from 'reselect';
+import { match as fuzzyMatch } from 'fuzzy';
 
 import { RootState } from './index';
 import { filteredGroupedRecipes } from './derived/filteredGroupedRecipes';
@@ -69,9 +70,21 @@ export const selectFilteredGroupedIngredients = createSelector(
   })
 )
 
-export const selectFilteredOrderedIngredients = createSelector(
-  selectFilteredGroupedIngredients,
-  (filteredGroupedIngredients) => flatten(filteredGroupedIngredients.map(g => g.ingredients))
+export const selectFuzzyMatchedIngredients = createSelector(
+  selectGroupedIngredients,
+  selectIngredientSearchTerm,
+  (groupedIngredients, searchTerm) =>
+    flatten(groupedIngredients.map(g => g.ingredients))
+      .map(ingredient => ({
+        ingredient,
+        bestMatch: ingredient.searchable
+          .map(s => fuzzyMatch(searchTerm, s, { caseSensitive: false }))
+          .filter(match => !!match)
+          .sort((a, b) => b.score - a.score)
+          [0]
+      }))
+      .filter(({ bestMatch }) => !!bestMatch)
+      .sort((a, b) => b.bestMatch.score - a.bestMatch.score)
 );
 
 export const selectIngredientSplitsByRecipeId = createSelector(
