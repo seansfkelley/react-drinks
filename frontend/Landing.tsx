@@ -124,7 +124,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
             ? <div>
                 <ListHeader className='category-header'>Recipes</ListHeader>
                 <RecipePartialList
-                  className='recipe-list'
+                  className='foreground-recipe-list'
                   items={this.props.searchedRecipes.map(r => r.item)}
                   renderItem={this._makeRenderRecipe(false, this.props.searchedRecipes.map(r => r.item.recipeId))}
                 />
@@ -153,6 +153,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     } else {
       return (
         <RecipeHeaderedList
+          className='background-recipe-list'
           groupedItems={this.props.ingredientMatchedRecipes}
           renderItem={this._makeRenderRecipe(true, flatten(this.props.ingredientMatchedRecipes.map(g => g.items)).map(r => r.recipeId))}
           renderHeader={this._renderListHeader}

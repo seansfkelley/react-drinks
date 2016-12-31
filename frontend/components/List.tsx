@@ -138,7 +138,7 @@ export class HeaderedList<T> extends React.PureComponent<HeaderedListProps<T>, v
     const listItemCount = listNodes.length - this.props.groupedItems.length;
 
     return (
-      <List className={classNames(ListClassNames.HEADERED, {
+      <List {...this.props} className={classNames(ListClassNames.HEADERED, this.props.className, {
         'show-headers': this.props.alwaysShowHeaders || listItemCount > 6
       })}>
         {listNodes}
