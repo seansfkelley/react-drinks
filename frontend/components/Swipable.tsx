@@ -140,21 +140,21 @@ export default class extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    this._computeCachedState();
+    this._maybeRecomputeCachedState();
 
-    window.addEventListener('orientationchange', this._computeCachedState, false);
-    window.addEventListener('resize', this._computeCachedState, false);
+    window.addEventListener('orientationchange', this._maybeRecomputeCachedState, false);
+    window.addEventListener('resize', this._maybeRecomputeCachedState, false);
   }
 
   componentDidUpdate(prevProps: { children: any }) {
     if (React.Children.count(prevProps.children) !== React.Children.count(this.props.children)) {
-      this._computeCachedState();
+      this._maybeRecomputeCachedState();
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('orientationchange', this._computeCachedState);
-    window.removeEventListener('resize', this._computeCachedState);
+    window.removeEventListener('orientationchange', this._maybeRecomputeCachedState);
+    window.removeEventListener('resize', this._maybeRecomputeCachedState);
   }
 
   setIndexToIfNecessary(index: number) {
@@ -170,7 +170,11 @@ export default class extends React.PureComponent<Props, State> {
     return Math.max(0, sortedIndex(shiftedOffsets, delta) - 1);
   }
 
-  _computeCachedState() {
+  _maybeRecomputeCachedState() {
+    if (!this._slidingContainer) {
+      return;
+    }
+
     const wrapperWidth = this._slidingContainer.offsetWidth;
     const itemWidths: number[] = Array.prototype.slice.apply((this._slidingContainer as HTMLElement).children).map((child: HTMLElement)=> child.offsetWidth);
     const itemOffsets = initial(itemWidths
