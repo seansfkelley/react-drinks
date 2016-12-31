@@ -16,6 +16,8 @@ export const BASE_TITLES_BY_TAG = {
   liqueur: 'Liqueur/Other'
 };
 
+export const BASIC_LIQUOR_TAGS = ['gin', 'vodka', 'whiskey', 'rum', 'brandy', 'tequila', 'wine'];
+
 // TODO: Replace this silly assertion with a fat-enum type that does this automagically.
 assert(intersection(Object.keys(BASE_TITLES_BY_TAG), BASE_LIQUORS).length === BASE_LIQUORS.length);
 

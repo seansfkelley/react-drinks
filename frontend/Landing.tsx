@@ -17,6 +17,7 @@ import {
   showIngredientInfo,
   showRecipeViewer
 } from './store/atomicActions';
+import { BASIC_LIQUOR_TAGS } from '../shared/definitions';
 import { GroupedItems } from './types';
 import { Ingredient, Recipe } from '../shared/types';
 import BlurOverlay from './components/BlurOverlay';
@@ -25,9 +26,11 @@ import SearchBar from './components/SearchBar';
 import RecipeView from './recipes/RecipeView';
 import PartialList from './components/PartialList';
 import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
-import { List, ListItem, ListHeader, HeaderedList } from './components/List';
+import IngredientListItem from './recipes/IngredientListItem';
+import { List, ListHeader, HeaderedList } from './components/List';
 
-class IngredientPartialList extends PartialList<FuzzyFilteredItem<Ingredient>> {}
+class BasicIngredientTagPartialList extends PartialList<string> {}
+class FilteredIngredientPartialList extends PartialList<FuzzyFilteredItem<Ingredient>> {}
 class RecipePartialList extends PartialList<Recipe> {}
 class RecipeHeaderedList extends HeaderedList<Recipe> {}
 
@@ -48,7 +51,15 @@ interface DispatchProps {
   showRecipeViewer: typeof showRecipeViewer;
 }
 
-class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> {
+interface State {
+  forceDisplayResultList: boolean;
+}
+
+class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State> {
+  state: State = {
+    forceDisplayResultList: false
+  };
+
   render() {
     return (
       <div className='landing'>
@@ -57,7 +68,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
         <BlurOverlay
           foreground={this._renderForeground()}
           background={this._renderBackground()}
-          onBackdropClick={this._abortSearch}
+          onBackdropClick={this._clearSearch}
         />
       </div>
     );
@@ -99,21 +110,28 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
           ? 'Add another ingredient...'
           : 'Search recipes or ingredients...'}
         className='dark'
+        onFocusChange={this._setIsSearchBarFocused}
       />
     );
   }
 
+  private _setIsSearchBarFocused = (isFocused: boolean) => {
+    if (isFocused) {
+      this.setState({ forceDisplayResultList: true });
+    }
+  };
+
   private _renderForeground() {
-    if (this.props.searchTerm) {
+    if (this.props.searchTerm || this.state.forceDisplayResultList) {
       return (
         <List
           className='all-search-results-list'
           emptyText='Nothing matched your search!'
         >
-          {this.props.searchedIngredients.length
+          {this.props.searchTerm.trim().length > 0
             ? <div>
                 <ListHeader className='category-header'>Ingredients</ListHeader>
-                <IngredientPartialList
+                <FilteredIngredientPartialList
                   className='ingredient-list'
                   items={this.props.searchedIngredients}
                   renderItem={this._renderFilteredIngredient}
@@ -121,7 +139,16 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
                   hardLimit={12}
                 />
               </div>
-            : undefined}
+            : <div>
+                <ListHeader className='category-header'>Common Ingredients</ListHeader>
+                <BasicIngredientTagPartialList
+                  className='ingredient-list'
+                  items={BASIC_LIQUOR_TAGS}
+                  renderItem={this._renderIngredientTag}
+                  softLimit={Infinity}
+                  hardLimit={Infinity}
+                />
+              </div>}
           {this.props.searchedRecipes.length
             ? <div>
                 <ListHeader className='category-header'>Recipes</ListHeader>
@@ -173,15 +200,28 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
   };
 
   private _renderFilteredIngredient = (ingredient: FuzzyFilteredItem<Ingredient>) => {
-    return (
-      <ListItem
-        key={ingredient.item.tag}
-        onClick={() => this._toggleIngredient(ingredient.item.tag)}
-        className='ingredient'
-      >
-        {ingredient.item.display}
-      </ListItem>
-    );
+    return <IngredientListItem
+      key={ingredient.item.tag}
+      ingredient={ingredient.item}
+      onClick={() => this._toggleIngredient(ingredient.item.tag)}
+      selectedIngredientTags={this.props.selectedIngredientTags}
+    />;
+  };
+
+  private _renderIngredientTag = (tag: string) => {
+    const ingredient = this.props.ingredientsByTag[tag];
+
+    if (ingredient) {
+      // TODO: Display the ingredient name...
+      return <IngredientListItem
+        key={tag}
+        ingredient={ingredient}
+        onClick={() => this._toggleIngredient(tag)}
+        selectedIngredientTags={this.props.selectedIngredientTags}
+      />;
+    } else {
+      return null;
+    }
   };
 
   private _makeRenderRecipe = (includeTags: boolean, allRecipeIds: string[]) => (recipe: Recipe) => {
@@ -205,15 +245,16 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
   };
 
   private _toggleIngredient = (tag: string) => {
-    this.props.setSearchTerm('');
     if (this.props.selectedIngredientTags.includes(tag)) {
       this.props.setSelectedIngredientTags(without(this.props.selectedIngredientTags, tag));
     } else {
       this.props.setSelectedIngredientTags(this.props.selectedIngredientTags.concat([ tag ]));
     }
+    this._clearSearch();
   };
 
-  private _abortSearch = () => {
+  private _clearSearch = () => {
+    this.setState({ forceDisplayResultList: false });
     this.props.setSearchTerm('');
   };
 }

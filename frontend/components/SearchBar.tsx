@@ -3,6 +3,7 @@ import * as classNames from 'classnames';
 
 interface Props {
   onChange?: (value: string) => void;
+  onFocusChange?: (isFocused: boolean) => void;
   initialValue?: string;
   value?: string;
   placeholder?: string;
@@ -41,6 +42,8 @@ export default class extends React.PureComponent<Props, State> {
             autoCapitalize='off'
             autoComplete='off'
             spellCheck={false}
+            onFocus={this._makeOnFocusChange(true)}
+            onBlur={this._makeOnFocusChange(false)}
           />
           {this.state.value.length
             ? <i
@@ -60,6 +63,16 @@ export default class extends React.PureComponent<Props, State> {
     }
   }
 
+  private _makeOnFocusChange(isFocused: boolean) {
+    if (this.props.onFocusChange) {
+      return () => {
+        this.props.onFocusChange!(isFocused);
+      };
+    } else {
+      return undefined;
+    }
+  };
+
   private _isControlled() {
     return this.props.value != null;
   }
@@ -71,10 +84,6 @@ export default class extends React.PureComponent<Props, State> {
 
   private _focus = () => {
     this._input.focus();
-  };
-
-  public isFocused = () => {
-    return document.activeElement === this._input;
   };
 
   private _onChange = (e: React.FormEvent<HTMLInputElement>) => {
