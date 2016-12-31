@@ -26,28 +26,30 @@ export default class extends React.PureComponent<Props, State> {
         className={classNames('search-bar', this.props.className)}
         // onTouchStart={this._stopTouchStart}
       >
-        <i className='fa fa-search' />
-        <input
-          type='text'
-          className='search-input'
-          placeholder={this.props.placeholder}
-          value={this.state.value}
-          onChange={this._onChange}
-          onClick={this._focus}
-          ref={e => this._input = e}
-          tabIndex={-1}
-          autoCorrect='off'
-          autoCapitalize='off'
-          autoComplete='off'
-          spellCheck={false}
-        />
-        {this.state.value.length
-          ? <i
-              className='fa fa-times-circle'
-              onClick={this._tryClearAndFocus}
-              // onTouchStart={this._stopTouchStart}
-            />
-          : null}
+        <div className='rounded-border-wrapper'>
+          <i className='fa fa-search' />
+          <input
+            type='text'
+            className='search-input'
+            placeholder={this.props.placeholder}
+            value={this.state.value}
+            onChange={this._onChange}
+            onClick={this._focus}
+            ref={e => this._input = e}
+            tabIndex={-1}
+            autoCorrect='off'
+            autoCapitalize='off'
+            autoComplete='off'
+            spellCheck={false}
+          />
+          {this.state.value.length
+            ? <i
+                className='fa fa-times-circle'
+                onClick={this._tryClearAndFocus}
+                // onTouchStart={this._stopTouchStart}
+              />
+            : null}
+        </div>
       </div>
     );
   }

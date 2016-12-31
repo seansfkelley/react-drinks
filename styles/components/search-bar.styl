@@ -1,8 +1,12 @@
 @require '../shared/colors';
+@require '../shared/size'
+
+$search-bar-inset = 6px
 
 .search-bar
   display: flex
-  flex-direction: row
+  padding: $search-bar-inset
+  height: $base-touch-size
 
   &.dark
     background-color: $header-background-color
@@ -18,12 +22,15 @@
         color: white
         background: #bbb
 
-  .fa
-    line-height: 44px
-    width: 44px
+  .rounded-border-wrapper
+    border-radius: 6px
+    flex: 1
+    display: flex
+    background-color: rgba(0, 0, 0, 0.1)
 
-    &.fa-search
-      width: 30px
+  .fa
+    line-height: $base-touch-size - (2 * $search-bar-inset)
+    width: $base-touch-size - (2 * $search-bar-inset)
 
   .search-input
     flex-grow: 1
