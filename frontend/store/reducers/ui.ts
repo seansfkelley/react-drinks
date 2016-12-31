@@ -14,8 +14,6 @@ export interface UiState {
   currentIngredientInfo?: string;
   showingRecipeViewer: boolean;
   showingRecipeEditor: boolean;
-  showingSidebar: boolean;
-  showingListSelector: boolean;
 }
 
 export const reducer = makeReducer<UiState>(assign({
@@ -27,8 +25,6 @@ export const reducer = makeReducer<UiState>(assign({
   currentIngredientInfo: undefined,
   showingRecipeViewer: false,
   showingRecipeEditor: false,
-  showingSidebar: false,
-  showingListSelector: false
 }, load().ui), {
   'set-recipe-viewing-index': (state, action: Action<number>) => defaults({
     recipeViewingIndex: action.payload
@@ -60,22 +56,6 @@ export const reducer = makeReducer<UiState>(assign({
 
   'hide-recipe-editor': (state) => defaults({
     showingRecipeEditor: false
-  }, state),
-
-  'show-sidebar': (state) => defaults({
-    showingSidebar: true
-  }, state),
-
-  'hide-sidebar': (state) => defaults({
-    showingSidebar: false
-  }, state),
-
-  'show-list-selector': (state) => defaults({
-    showingListSelector: true
-  }, state),
-
-  'hide-list-selector': (state) => defaults({
-    showingListSelector: false
   }, state),
 
   'error-message': (state, action: Action<string>) => defaults({

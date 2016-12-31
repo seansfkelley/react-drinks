@@ -19,10 +19,9 @@ const ONE_MINUTE_MS = 1000 * 60;
 const LOCALSTORAGE_KEY = 'drinks-app-persistence';
 const PERSISTENCE_SPEC: PersistenceSpec = {
   filters: {
-    recipeSearchTerm: ONE_MINUTE_MS * 5,
-    baseLiquorFilter: ONE_MINUTE_MS * 15,
+    searchTerm: ONE_MINUTE_MS * 5,
+    // baseLiquorFilter: ONE_MINUTE_MS * 15,
     selectedIngredientTags: Infinity,
-    selectedRecipeList: ONE_MINUTE_MS * 60
   },
   recipes: {
     customRecipeIds: Infinity
@@ -34,9 +33,7 @@ const PERSISTENCE_SPEC: PersistenceSpec = {
     currentIngredientInfo: 0,
     favoritedRecipeIds: Infinity,
     showingRecipeViewer: ONE_MINUTE_MS * 5,
-    showingRecipeEditor: Infinity,
-    showingSidebar: ONE_MINUTE_MS * 5,
-    showingListSelector: ONE_MINUTE_MS
+    showingRecipeEditor: Infinity
   }
 };
 

@@ -7,7 +7,6 @@
   .name
     text-transform: uppercase
     font-weight: 600
-    color: #333
 
   .ingredient-list
     margin: 5px 0
@@ -19,11 +18,9 @@
     .ingredient
       &:not(:last-child):after
         content: ', '
-        color: #aaa
 
       &.missing
         font-weight: 600
-        color: #666
 
       &.available
-        color: #aaa
+        opacity: 0.7

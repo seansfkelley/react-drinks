@@ -1,5 +1,4 @@
 import { Ingredient, Recipe, IngredientGroupMeta } from '../../shared/types';
-import { RecipeListType } from '../types';
 import { Action, ActionType } from './ActionType';
 
 function createNullaryActionCreator(type: ActionType) {
@@ -14,25 +13,19 @@ function createActionCreator<P>(type: ActionType) {
   }
 }
 
+export const setSearchTerm = createActionCreator<string>('set-search-term');
 export const hideRecipeViewer = createNullaryActionCreator('hide-recipe-viewer');
-export const hideSidebar = createNullaryActionCreator('hide-sidebar');
 export const hideRecipeEditor = createNullaryActionCreator('hide-recipe-editor');
-export const hideListSelector = createNullaryActionCreator('hide-list-selector');
 export const hideIngredientInfo = createNullaryActionCreator('hide-ingredient-info');
 export const showRecipeViewer = createActionCreator<{ recipeIds: string[], index: number  }>('show-recipe-viewer');
 export const deleteRecipe = createActionCreator<string>('delete-recipe');
-export const setSelectedRecipeList = createActionCreator<RecipeListType>('set-selected-recipe-list');
 export const setSelectedIngredientTags = createActionCreator<string[]>('set-selected-ingredient-tags');
-export const setRecipeSearchTerm = createActionCreator<string>('set-recipe-search-term');
-export const setIngredientSearchTerm = createActionCreator<string>('set-ingredient-search-term');
 export const setRecipeViewingIndex = createActionCreator<number>('set-recipe-viewing-index');
 export const seedRecipeEditor = createActionCreator<Recipe>('seed-recipe-editor');
 export const showRecipeEditor = createNullaryActionCreator('show-recipe-editor');
 export const favoriteRecipe = createActionCreator<string>('favorite-recipe');
 export const unfavoriteRecipe = createActionCreator<string>('unfavorite-recipe');
 export const setBaseLiquorFilter = createActionCreator<string>('set-base-liquor-filter');
-export const showSidebar = createNullaryActionCreator('show-sidebar');
-export const showListSelector = createNullaryActionCreator('show-list-selector');
 export const showIngredientInfo = createActionCreator<string>('show-ingredient-info');
 export const initializeNewRecipe = createNullaryActionCreator('show-recipe-editor');
 export const setErrorMessage = createActionCreator<string>('error-message');

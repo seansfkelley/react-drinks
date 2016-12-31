@@ -42,17 +42,20 @@
     text-transform: uppercase
     padding-left: 10px
 
-  .list-item.ingredient
-    font-weight: 600
-    padding-left: 10px
+  .list
     color: white
 
-  .recipe-list-item
-    font-weight: 600
-    color: white
+    .list-item
+      font-weight: 600
+      margin-left: 5px
+      margin-right: 5px
+      padding: 0 5px
 
-  .empty-list-text, .centered-list-text
-    color: white
+      &:not(:last-child)
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+
+  .recipe-list .ingredient-list
+    color: rgba(255, 255, 255, 0.7)
 
   .blur-overlay
     flex: 1

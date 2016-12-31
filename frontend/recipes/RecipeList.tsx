@@ -9,7 +9,7 @@ import { List, ListHeader, ListClassNames } from '../components/List';
 import { Recipe } from '../../shared/types';
 import { GroupedRecipes } from '../types';
 import { RootState } from '../store';
-import { showRecipeViewer, deleteRecipe } from '../store/atomicActions';
+import { showRecipeViewer } from '../store/atomicActions';
 
 interface OwnProps {
   recipes: GroupedRecipes[];
@@ -18,7 +18,6 @@ interface OwnProps {
 
 interface DispatchProps {
   showRecipeViewer: typeof showRecipeViewer;
-  deleteRecipe: typeof deleteRecipe;
 }
 
 class RecipeList extends React.PureComponent<OwnProps & DispatchProps, void> {
@@ -61,8 +60,7 @@ class RecipeList extends React.PureComponent<OwnProps & DispatchProps, void> {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return bindActionCreators({
-    showRecipeViewer,
-    deleteRecipe
+    showRecipeViewer
   }, dispatch);
 }
 

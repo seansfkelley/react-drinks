@@ -98,33 +98,28 @@ export function _sortAndGroupAlphabetical(recipes: Recipe[]): GroupedRecipes[] {
 export function filteredGroupedRecipes({
   ingredientsByTag,
   recipes,
-  baseLiquorFilter,
   searchTerm,
   selectedIngredientTags,
   ingredientSplitsByRecipeId,
   // favoritedRecipeIds,
-  // selectedRecipeList
 }: {
   ingredientsByTag: { [tag: string]: Ingredient },
   recipes: Recipe[],
-  baseLiquorFilter: string,
   searchTerm: string,
   selectedIngredientTags: string[],
   ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit },
-  favoritedRecipeIds: string[],
-  selectedRecipeList: RecipeListType
+  // favoritedRecipeIds: string[],
 }) {
   if (searchTerm == null) {
     searchTerm = '';
   }
-  if (baseLiquorFilter == null) {
-    baseLiquorFilter = ANY_BASE_LIQUOR;
-  }
+  // if (baseLiquorFilter == null) {
+  //   baseLiquorFilter = ANY_BASE_LIQUOR;
+  // }
 
   const filteredRecipes = recipes
-    .filter(_baseLiquorFilter(baseLiquorFilter))
+    // .filter(_baseLiquorFilter(baseLiquorFilter))
     .filter(_hasAllSelectedIngredientsFilter(selectedIngredientTags, ingredientSplitsByRecipeId))
-    // .filter(_recipeListFilter(selectedRecipeList, ingredientSplitsByRecipeId, favoritedRecipeIds))
     .filter(_searchTermFilter(searchTerm, ingredientsByTag));
 
   return _sortAndGroupAlphabetical(filteredRecipes);

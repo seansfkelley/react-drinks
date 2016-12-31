@@ -10,8 +10,7 @@ import {
   selectRecipeOfTheHour
 } from './store/selectors';
 import {
-  setIngredientSearchTerm,
-  setRecipeSearchTerm,
+  setSearchTerm,
   setSelectedIngredientTags,
   showIngredientInfo
 } from './store/atomicActions';
@@ -40,7 +39,7 @@ class RecipePartialList extends PartialList<Recipe> {}
 interface ConnectedProps {
   recipesById: { [recipeId: string]: Recipe };
   randomRecipe: Recipe;
-  ingredientSearchTerm: string;
+  searchTerm: string;
   selectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
   filteredIngredients: FilteredIngredient[];
@@ -48,8 +47,7 @@ interface ConnectedProps {
 }
 
 interface DispatchProps {
-  setIngredientSearchTerm: typeof setIngredientSearchTerm;
-  setRecipeSearchTerm: typeof setRecipeSearchTerm;
+  setSearchTerm: typeof setSearchTerm;
   setSelectedIngredientTags: typeof setSelectedIngredientTags;
   showIngredientInfo: typeof showIngredientInfo;
 }
@@ -59,15 +57,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     return (
       <div className='landing'>
         {this._renderTitle()}
-        <SearchBar
-          onChange={this._setAppropriateSearchTerms}
-          value={this.props.ingredientSearchTerm}
-          // TODO: Search recipes, their ingredients, and maybe even similar drinks here too!
-          placeholder={this.props.selectedIngredientTags.length
-            ? 'Add ingredients...'
-            : 'Search recipes or ingredients...'}
-          className='dark'
-        />
+        {this._renderSearchBar()}
         <BlurOverlay
           foreground={this._renderForeground()}
           background={this._renderBackground()}
@@ -102,10 +92,26 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     }
   }
 
+  private _renderSearchBar() {
+    return (
+      <SearchBar
+        onChange={this.props.setSearchTerm}
+        value={this.props.searchTerm}
+        placeholder={this.props.selectedIngredientTags.length
+          ? 'Add another ingredient...'
+          : 'Search recipes or ingredients...'}
+        className='dark'
+      />
+    );
+  }
+
   private _renderForeground() {
-    if (this.props.ingredientSearchTerm) {
+    if (this.props.searchTerm) {
       return (
-        <List className='all-search-results-list'>
+        <List
+          className='all-search-results-list'
+          emptyText='Nothing matched your search!'
+        >
           {this.props.filteredIngredients.length
             ? <div>
                 <ListHeader className='category-header'>Ingredients</ListHeader>
@@ -124,7 +130,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
                 <RecipePartialList
                   className='recipe-list'
                   items={flatten(this.props.filteredGroupedRecipes.map(g => g.recipes))}
-                  renderItem={this._renderRecipe}
+                  renderItem={this._makeRenderRecipe(false)}
                 />
               </div>
             : undefined}
@@ -152,7 +158,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
       return (
         <RecipeList
           recipes={this.props.filteredGroupedRecipes}
-          renderRecipe={this._renderRecipe}
+          renderRecipe={this._makeRenderRecipe(true)}
         />
       );
     }
@@ -170,20 +176,15 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
     );
   };
 
-  private _renderRecipe = (recipe: Recipe) => {
+  private _makeRenderRecipe = (includeTags: boolean) => (recipe: Recipe) => {
     return (
       <PreviewRecipeListItem
         key={recipe.recipeId}
         recipe={recipe}
         ingredientsByTag={this.props.ingredientsByTag}
-        selectedIngredientTags={this.props.selectedIngredientTags}
+        selectedIngredientTags={includeTags ? this.props.selectedIngredientTags : undefined}
       />
     );
-  };
-
-  private _setAppropriateSearchTerms = (searchTerm: string) => {
-    this.props.setIngredientSearchTerm(searchTerm);
-    this.props.setRecipeSearchTerm(searchTerm);
   };
 
   private _popStack = () => {
@@ -191,7 +192,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
   };
 
   private _toggleIngredient = (tag: string) => {
-    this.props.setIngredientSearchTerm('');
+    this.props.setSearchTerm('');
     if (this.props.selectedIngredientTags.includes(tag)) {
       this.props.setSelectedIngredientTags(without(this.props.selectedIngredientTags, tag));
     } else {
@@ -200,7 +201,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, void> 
   };
 
   private _abortSearch = () => {
-    this.props.setIngredientSearchTerm('');
+    this.props.setSearchTerm('');
   };
 }
 
@@ -208,7 +209,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
   return {
     recipesById: state.recipes.recipesById,
     randomRecipe: selectRecipeOfTheHour(state),
-    ingredientSearchTerm: state.filters.ingredientSearchTerm,
+    searchTerm: state.filters.searchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
     ingredientsByTag: state.ingredients.ingredientsByTag,
     filteredIngredients: selectFuzzyMatchedIngredients(state),
@@ -218,8 +219,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return bindActionCreators({
-    setIngredientSearchTerm,
-    setRecipeSearchTerm,
+    setSearchTerm,
     setSelectedIngredientTags,
     showIngredientInfo
    }, dispatch);

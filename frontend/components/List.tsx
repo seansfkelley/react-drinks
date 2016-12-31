@@ -113,3 +113,18 @@ export class List extends React.PureComponent<ListProps, void> {
     );
   }
 }
+
+// interface HeaderedListProps extends ListProps {
+//   alwaysShowHeaders?: boolean;
+
+// }
+
+// export class HeaderedList extends React.PureComponent<HeaderedListProps, void> {
+//   static defaultProps = {
+//     alwaysShowHeaders: false
+//   };
+
+//   render() {
+
+//   }
+// }

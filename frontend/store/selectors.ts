@@ -13,13 +13,11 @@ const selectGroupedIngredients = (state: RootState) => state.ingredients.grouped
 
 const selectRecipesById = (state: RootState) => state.recipes.recipesById;
 
-const selectBaseLiquorFilter = (state: RootState) => state.filters.baseLiquorFilter;
-const selectRecipeSearchTerm = (state: RootState) => state.filters.recipeSearchTerm;
-const selectIngredientSearchTerm = (state: RootState) => state.filters.ingredientSearchTerm;
+// const selectBaseLiquorFilter = (state: RootState) => state.filters.baseLiquorFilter;
+const selectSearchTerm = (state: RootState) => state.filters.searchTerm;
 const selectIngredientTags = (state: RootState) => state.filters.selectedIngredientTags;
-const selectSelectedRecipeList = (state: RootState) => state.filters.selectedRecipeList;
 
-const selectFavoritedRecipeIds = (state: RootState) => state.ui.favoritedRecipeIds;
+// const selectFavoritedRecipeIds = (state: RootState) => state.ui.favoritedRecipeIds;
 
 const selectAlphabeticalRecipes = createSelector(
   selectRecipesById,
@@ -60,7 +58,7 @@ export const selectSimilarRecipesByRecipeId = createSelector(
 
 export const selectFilteredGroupedIngredients = createSelector(
   selectGroupedIngredients,
-  selectIngredientSearchTerm,
+  selectSearchTerm,
   (
     groupedIngredients,
     searchTerm
@@ -72,7 +70,7 @@ export const selectFilteredGroupedIngredients = createSelector(
 
 export const selectFuzzyMatchedIngredients = createSelector(
   selectGroupedIngredients,
-  selectIngredientSearchTerm,
+  selectSearchTerm,
   (groupedIngredients, searchTerm) =>
     flatten(groupedIngredients.map(g => g.ingredients))
       .map(ingredient => ({
@@ -105,29 +103,23 @@ export const selectIngredientSplitsByRecipeId = createSelector(
 export const selectFilteredGroupedRecipes = createSelector(
   selectIngredientsByTag,
   selectAlphabeticalRecipes,
-  selectBaseLiquorFilter,
-  selectRecipeSearchTerm,
+  selectSearchTerm,
   selectIngredientTags,
-  selectFavoritedRecipeIds,
-  selectSelectedRecipeList,
+  // selectFavoritedRecipeIds,
   selectIngredientSplitsByRecipeId,
   (
     ingredientsByTag,
     recipes,
-    baseLiquorFilter,
     searchTerm,
     selectedIngredientTags,
-    favoritedRecipeIds,
-    selectedRecipeList,
+    // favoritedRecipeIds,
     ingredientSplitsByRecipeId,
   ) => filteredGroupedRecipes({
     ingredientsByTag,
     recipes,
-    baseLiquorFilter,
     searchTerm,
     selectedIngredientTags,
-    favoritedRecipeIds,
-    selectedRecipeList,
+    // favoritedRecipeIds,
     ingredientSplitsByRecipeId
   })
 );
