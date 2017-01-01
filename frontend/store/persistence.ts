@@ -1,5 +1,5 @@
 import { Store } from 'redux';
-import { mapValues, debounce, pick, pickBy, once, omitBy, isUndefined } from 'lodash';
+import { mapValues, debounce, pick, pickBy, once, omitBy, isUndefined, isPlainObject } from 'lodash';
 import * as log from 'loglevel';
 
 import { RootState } from '.';
@@ -53,7 +53,7 @@ export function watch(store: Store<RootState>) {
   }, 1000));
 }
 
-export const load = once((): Partial<RootState> => {
+export const load = once((): RootStateSubset => {
   const { data, schemaVersion, timestamp } = JSON.parse(localStorage[LOCALSTORAGE_KEY] || '{}') as SerializedData;
 
   if (data == null) {
@@ -81,7 +81,7 @@ export const load = once((): Partial<RootState> => {
     log.info(`will load data from localStorage with schema version ${schemaVersion}`);
 
     const elapsedTime = Date.now() - +(timestamp != null ? timestamp : 0);
-    return mapValues(PERSISTENCE_SPEC, (spec, storeName: keyof PersistenceSpec) => {
+    const parsedState: RootStateSubset = mapValues(PERSISTENCE_SPEC, (spec, storeName: keyof PersistenceSpec) => {
       return omitBy(
         pickBy(
           pick(
@@ -93,6 +93,13 @@ export const load = once((): Partial<RootState> => {
         isUndefined
       );
     });
+
+    // This is an old format; ignore it.
+    if (parsedState.filters && isPlainObject(parsedState.filters.selectedIngredientTags)) {
+      parsedState.filters.selectedIngredientTags = [];
+    }
+
+    return parsedState;
   } else {
     log.error(`loading from localStorage failed; unknown schema version ${schemaVersion}; will return empty object`);
     return {};
