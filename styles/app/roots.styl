@@ -1,5 +1,6 @@
 @require '../shared/animation'
 @require '../shared/mixins'
+@require '../shared/size'
 
 .fade-in
   opacity: 1
@@ -12,6 +13,16 @@
 #app-root
   abs-full-screen()
   pad-top-for-iphone-status-bar()
+
+  /body[standalone] &:after
+    content: ' '
+    pointer-events: none
+    background-color: #676767
+    position: absolute
+    top: 0
+    height: $ios-top-bar-height
+    left: 0
+    right: 0
 
   .app-event-wrapper
     height: 100%
