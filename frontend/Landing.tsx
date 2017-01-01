@@ -2,6 +2,7 @@ import { without, flatten } from 'lodash';
 import * as React from 'react';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import * as classNames from 'classnames';
 
 import { RootState } from './store';
 import {
@@ -103,15 +104,23 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
 
   private _renderSearchBar() {
     return (
-      <SearchBar
-        onChange={this.props.setSearchTerm}
-        value={this.props.searchTerm}
-        placeholder={this.props.selectedIngredientTags.length
-          ? 'Add another ingredient...'
-          : 'Search recipes or ingredients...'}
-        className='dark'
-        onFocusChange={this._setIsSearchBarFocused}
-      />
+      <div className='search-bar-wrapper'>
+        <SearchBar
+          onChange={this.props.setSearchTerm}
+          value={this.props.searchTerm}
+          placeholder={this.props.selectedIngredientTags.length
+            ? 'Add another ingredient...'
+            : 'Search recipes or ingredients...'}
+          className='dark'
+          onFocusChange={this._setIsSearchBarFocused}
+        />
+        <div
+          className={classNames('close-button', { 'is-visible': this._isShowingSearchResults() })}
+          onClick={this._clearSearch}
+        >
+          Close
+        </div>
+      </div>
     );
   }
 
@@ -121,8 +130,12 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
     }
   };
 
+  private _isShowingSearchResults() {
+    return !!(this.props.searchTerm || this.state.forceDisplayResultList);
+  }
+
   private _renderForeground() {
-    if (this.props.searchTerm || this.state.forceDisplayResultList) {
+    if (this._isShowingSearchResults()) {
       return (
         <List
           className='all-search-results-list'

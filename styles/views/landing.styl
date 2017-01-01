@@ -5,7 +5,7 @@
   display: flex
   flex-direction: column
 
-  .title-bar, .search-bar
+  .title-bar, .search-bar-wrapper
     flex-shrink: 0
 
   .title-bar.with-ingredients
@@ -39,6 +39,27 @@
           width: auto
           color: white
           margin-left: 6px
+
+  .search-bar-wrapper
+    display: flex
+    background-color: #676767
+    align-items: center
+
+    .search-bar
+      flex: 1
+
+    .close-button
+      font-weight: 600
+      color: white
+      font-size: 16px
+      width: 44px
+      padding-right: 6px
+      transition: width 300ms, padding-right 300ms
+
+      &:not(.is-visible)
+        width: 0
+        padding-right: 0
+        pointer-events: none
 
   .random-cocktail
     flex: 1
