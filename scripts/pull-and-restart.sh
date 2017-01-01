@@ -7,7 +7,7 @@ then
 fi
 
 # This may fail.
-forever stop ./index.js
+forever stop ./index.ts
 
 # Anything else should not.
 set -e
@@ -15,9 +15,7 @@ set -e
 git fetch
 git checkout "$1"
 
-export NODE_ENV=production
+yarn install
+NODE_ENV=production gulp dist
 
-npm install
-gulp dist
-
-forever start -c ./index.js
+forever start -c ./node_modules/.bin/ts-node ./index.ts

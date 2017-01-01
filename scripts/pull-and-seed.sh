@@ -11,8 +11,6 @@ set -e
 git fetch
 git checkout "$1"
 
-export NODE_ENV=production
+yarn install
 
-npm install
-
-./scripts/seed-database.js --force --include-custom-recipes
+./node_modules/.bin/ts-node ./scripts/seed-database.ts --force --include-custom-recipes
