@@ -8,8 +8,8 @@ import { fractionify } from '../utils';
 export interface Props {
   ingredient: DisplayIngredient;
   className?: string;
-  isAvailable?: boolean;
-  onAvailabilityToggle?: (tag: string, isAvailable: boolean) => void;
+  isSelected?: boolean;
+  onSelectionChange?: (tag: string, isAvailable: boolean) => void;
   onClick?: (tag: string) => void;
 }
 
@@ -34,14 +34,14 @@ export default class MeasuredIngredient extends React.PureComponent<Props, void>
         <span className='ingredient'>
           <span className='name'>{this.props.ingredient.displayIngredient}</span>
         </span>
-        {hasTag && this.props.onAvailabilityToggle
+        {hasTag && this.props.onSelectionChange
           ? <span className='toggle-button' onClick={this._onToggle}>
               <i className={classNames('fa', {
-                'fa-plus-circle': !this.props.isAvailable,
-                'fa-times-circle': this.props.isAvailable
+                'fa-plus-circle': !this.props.isSelected,
+                'fa-times-circle': this.props.isSelected
               })}/>
             </span>
-          : this.props.onAvailabilityToggle
+          : this.props.onSelectionChange
             ? <span className='toggle-button placeholder'/>
             : null}
       </div>
@@ -55,9 +55,9 @@ export default class MeasuredIngredient extends React.PureComponent<Props, void>
   };
 
   private _onToggle = (e: React.MouseEvent<HTMLElement>) => {
-    assert(this.props.onAvailabilityToggle);
+    assert(this.props.onSelectionChange);
     assert(this.props.ingredient.tag);
     e.stopPropagation();
-    this.props.onAvailabilityToggle!(this.props.ingredient.tag!, !this.props.isAvailable)
+    this.props.onSelectionChange!(this.props.ingredient.tag!, !this.props.isSelected)
   };
 }

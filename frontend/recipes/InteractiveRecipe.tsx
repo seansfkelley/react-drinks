@@ -17,7 +17,8 @@ import {
   setSelectedIngredientTags
 } from '../store/atomicActions';
 import {
-  selectSimilarRecipesByRecipeId
+  selectSimilarRecipesByRecipeId,
+  selectSelectedIngredientTagsAndDescendants
 } from '../store/selectors';
 
 function IconButton(props: { icon: string, text: string, onClick?: React.MouseEventHandler<HTMLElement> }) {
@@ -40,6 +41,7 @@ interface OwnProps {
 
 interface ConnectedProps {
   selectedIngredientTags: string[];
+  selectedIngredientTagsAndDescendants: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
   similarRecipes: Recipe[];
   isFavorited: boolean;
@@ -126,9 +128,8 @@ class InteractiveRecipe extends React.PureComponent<OwnProps & ConnectedProps & 
     return (
       <MeasuredIngredient
         ingredient={ingredient}
-        // TODO: This isn't quite right -- it doesn't do generics and all that jazz. But close enough for a demonstration.
-        isAvailable={this.props.selectedIngredientTags.includes(ingredient.tag)}
-        onAvailabilityToggle={this._onIngredientToggle}
+        isSelected={this.props.selectedIngredientTags.includes(ingredient.tag)}
+        onSelectionChange={this._onIngredientToggle}
         onClick={this.props.showIngredientInfo}
       />
     );
@@ -157,6 +158,7 @@ class InteractiveRecipe extends React.PureComponent<OwnProps & ConnectedProps & 
 function mapStateToProps(state: RootState, ownProps: OwnProps): ConnectedProps {
   return {
     selectedIngredientTags: state.filters.selectedIngredientTags,
+    selectedIngredientTagsAndDescendants: selectSelectedIngredientTagsAndDescendants(state),
     ingredientsByTag: state.ingredients.ingredientsByTag,
     similarRecipes: selectSimilarRecipesByRecipeId(state)[ownProps.recipe.recipeId],
     isFavorited: state.ui.favoritedRecipeIds.includes(ownProps.recipe.recipeId)

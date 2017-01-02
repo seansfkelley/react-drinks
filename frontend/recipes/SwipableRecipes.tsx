@@ -5,13 +5,8 @@ import { connect } from 'react-redux';
 
 import Swipable from '../components/Swipable';
 
-import { Ingredient, Recipe } from '../../shared/types';
-import { IngredientSplit } from '../store/derived/ingredientSplitsByRecipeId';
+import { Recipe } from '../../shared/types';
 import { RootState } from '../store';
-import {
-  selectIngredientSplitsByRecipeId,
-  selectSimilarRecipesByRecipeId
-} from '../store/selectors';
 import {
   setRecipeViewingIndex,
   hideRecipeViewer,
@@ -21,13 +16,8 @@ import InteractiveRecipe from './InteractiveRecipe';
 
 interface ConnectedProps {
   recipesById: { [recipeId: string]: Recipe };
-  ingredientsByTag: { [tag: string]: Ingredient };
-  favoritedRecipeIds: string[];
   currentlyViewedRecipeIds: string[];
   recipeViewingIndex: number;
-  ingredientSplitsByRecipeId: { [recipeId: string]: IngredientSplit };
-  selectedIngredientTags: string[];
-  similarRecipesById: { [recipeId: string]: Recipe[] };
 }
 
 interface DispatchProps {
@@ -109,13 +99,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
     recipesById: state.recipes.recipesById,
-    ingredientsByTag: state.ingredients.ingredientsByTag,
-    favoritedRecipeIds: state.ui.favoritedRecipeIds,
     currentlyViewedRecipeIds: state.ui.currentlyViewedRecipeIds,
-    recipeViewingIndex: state.ui.recipeViewingIndex,
-    ingredientSplitsByRecipeId: selectIngredientSplitsByRecipeId(state),
-    selectedIngredientTags: state.filters.selectedIngredientTags,
-    similarRecipesById: selectSimilarRecipesByRecipeId(state)
+    recipeViewingIndex: state.ui.recipeViewingIndex
   };
 }
 

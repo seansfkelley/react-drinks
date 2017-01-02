@@ -1,4 +1,4 @@
-import { sortBy, mapValues, flatten } from 'lodash';
+import { sortBy, mapValues, flatten, chain } from 'lodash';
 import { createSelector, Selector } from 'reselect';
 import { match as fuzzyMatch, MatchResult } from 'fuzzy';
 
@@ -33,7 +33,7 @@ function _cleanUpMatchResults<T>(results: MatchResultWithItem<T>[]): FuzzyFilter
 
 const selectIngredientsByTag = (state: RootState) => state.ingredients.ingredientsByTag;
 const selectGroupedIngredients = (state: RootState) => state.ingredients.groupedIngredients;
-
+const selectSelectedIngredientTags = (state: RootState) => state.filters.selectedIngredientTags;
 const selectRecipesById = (state: RootState) => state.recipes.recipesById;
 
 // const selectBaseLiquorFilter = (state: RootState) => state.filters.baseLiquorFilter;
@@ -106,7 +106,37 @@ export const selectSearchedIngredients: Selector<RootState, FuzzyFilteredItem<In
       })))
 );
 
-export const selectIngredientSplitsByRecipeId = createSelector(
+const ROOT_INGREDIENT_CATEGORY = '__root__';
+
+const selectImmediateDescendantTagsByTag = createSelector(
+  selectIngredientsByTag,
+  (ingredientsByTag) => chain(ingredientsByTag)
+    .map((i: Ingredient) => [ i.generic || ROOT_INGREDIENT_CATEGORY, i.tag ])
+    .groupBy(([ generic, _tag ]) => generic)
+    .mapValues((pairs: [ string, string ][]) => pairs.map(p => p[1]))
+    .value()
+)
+
+export const selectSelectedIngredientTagsAndDescendants = createSelector(
+  selectSelectedIngredientTags,
+  selectImmediateDescendantTagsByTag,
+  (selectedIngredientTags, immediateDescendantTagsByTag) => {
+    const allSelectedTags: { [tag: string]: true } = {};
+    let queue = selectedIngredientTags.slice();
+    while (queue.length) {
+      const tag = queue.pop()!;
+      if (!allSelectedTags[tag]) {
+        allSelectedTags[tag] = true;
+        if (immediateDescendantTagsByTag[tag]) {
+          queue = queue.concat(immediateDescendantTagsByTag[tag]);
+        }
+      }
+    }
+    return Object.keys(allSelectedTags);
+  }
+);
+
+const selectIngredientSplitsByRecipeId = createSelector(
   selectAlphabeticalRecipes,
   selectIngredientsByTag,
   selectIngredientTags,
@@ -144,7 +174,9 @@ export const selectSearchedRecipes: Selector<RootState, FuzzyFilteredItem<Recipe
 export const selectIngredientMatchedRecipes = createSelector(
   // selectIngredientsByTag,
   selectAlphabeticalRecipes,
-  selectIngredientTags,
+  // TODO: This isn't right -- this selector assumes an AND, but we want to treat this block as an OR.
+  // Repro: selecting "whiskey" will yield nothing, as the drink in question must have all five kinds it resolves to.
+  selectSelectedIngredientTagsAndDescendants,
   // selectFavoritedRecipeIds,
   selectIngredientSplitsByRecipeId,
   (

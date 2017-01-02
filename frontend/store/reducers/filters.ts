@@ -18,7 +18,7 @@ export const reducer = makeReducer<FiltersState>(assign({
     return defaults({ searchTerm: action.payload }, state);
   },
 
-  'set-selected-ingredient-tags': (state, action: Action<{ [tag: string]: any }>) => {
+  'set-selected-ingredient-tags': (state, action: Action<string[]>) => {
     return defaults({ selectedIngredientTags: action.payload }, state);
   },
 

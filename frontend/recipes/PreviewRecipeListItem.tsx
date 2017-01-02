@@ -19,7 +19,6 @@ export default class extends React.PureComponent<Props, void> {
         .map(i => i.tag)
         .filter(t => !!t) as string[]
     );
-    // TODO: This isn't quite right -- it doesn't do generics and all that jazz. But close enough for a demonstration.
     let ingredients;
     if (this.props.selectedIngredientTags) {
       let {

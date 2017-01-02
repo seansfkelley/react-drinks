@@ -10,7 +10,8 @@ import {
   selectSearchedRecipes,
   selectIngredientMatchedRecipes,
   selectSearchedIngredients,
-  selectRecipeOfTheHour
+  selectRecipeOfTheHour,
+  selectSelectedIngredientTagsAndDescendants
 } from './store/selectors';
 import {
   setSearchTerm,
@@ -39,6 +40,7 @@ interface ConnectedProps {
   randomRecipe: Recipe;
   searchTerm: string;
   selectedIngredientTags: string[];
+  selectedIngredientTagsAndDescendants: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
   searchedIngredients: FuzzyFilteredItem<Ingredient>[];
   searchedRecipes: FuzzyFilteredItem<Recipe>[];
@@ -213,8 +215,8 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
     return <IngredientListItem
       key={ingredient.item.tag}
       ingredient={ingredient.item}
-      onClick={() => this._toggleIngredient(ingredient.item.tag)}
       selectedIngredientTags={this.props.selectedIngredientTags}
+      onClick={() => this._toggleIngredient(ingredient.item.tag)}
     />;
   };
 
@@ -222,12 +224,11 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
     const ingredient = this.props.ingredientsByTag[tag];
 
     if (ingredient) {
-      // TODO: Display the ingredient name...
       return <IngredientListItem
         key={tag}
         ingredient={ingredient}
-        onClick={() => this._toggleIngredient(tag)}
         selectedIngredientTags={this.props.selectedIngredientTags}
+        onClick={() => this._toggleIngredient(tag)}
       />;
     } else {
       return null;
@@ -240,7 +241,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
         key={recipe.recipeId}
         recipe={recipe}
         ingredientsByTag={this.props.ingredientsByTag}
-        selectedIngredientTags={includeTags ? this.props.selectedIngredientTags : undefined}
+        selectedIngredientTags={includeTags ? this.props.selectedIngredientTagsAndDescendants : undefined}
         onClick={() => this.props.showRecipeViewer({ recipeIds: allRecipeIds, index: allRecipeIds.indexOf(recipe.recipeId) })}
       />
     );
@@ -274,6 +275,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
     randomRecipe: selectRecipeOfTheHour(state),
     searchTerm: state.filters.searchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
+    selectedIngredientTagsAndDescendants: selectSelectedIngredientTagsAndDescendants(state),
     ingredientsByTag: state.ingredients.ingredientsByTag,
     searchedIngredients: selectSearchedIngredients(state),
     searchedRecipes: selectSearchedRecipes(state),
