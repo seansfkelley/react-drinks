@@ -23,14 +23,13 @@ export const setSelectedIngredientTags = createActionCreator<string[]>('set-sele
 export const setRecipeViewingIndex = createActionCreator<number>('set-recipe-viewing-index');
 export const seedRecipeEditor = createActionCreator<Recipe>('seed-recipe-editor');
 export const showRecipeEditor = createNullaryActionCreator('show-recipe-editor');
-export const favoriteRecipe = createActionCreator<string>('favorite-recipe');
-export const unfavoriteRecipe = createActionCreator<string>('unfavorite-recipe');
 export const setBaseLiquorFilter = createActionCreator<string>('set-base-liquor-filter');
 export const showIngredientInfo = createActionCreator<string>('show-ingredient-info');
 export const initializeNewRecipe = createNullaryActionCreator('show-recipe-editor');
 export const setErrorMessage = createActionCreator<string>('error-message');
 export const setIngredients = createActionCreator<{ ingredients: Ingredient[], groups: IngredientGroupMeta[] }>('set-ingredients');
 export const setRecipesById = createActionCreator<{ [recipeId: string]: Recipe }>('set-recipes-by-id');
+export const setRecipeFavorite = createActionCreator<{ recipeId: string, isFavorite: boolean }>('set-recipe-favorite');
 // The idea is to refresh the timestamps, even if the user doesn't interact. Opening the app
 // should be sufficient interaction to reset the timers on all the expirable pieces of state.
 export const noopTriggerPersistence = createNullaryActionCreator('--dummy-event-to-trigger-persistence--');

@@ -24,10 +24,10 @@ import { Ingredient, Recipe } from '../shared/types';
 import BlurOverlay from './components/BlurOverlay';
 import TitleBar from './components/TitleBar';
 import SearchBar from './components/SearchBar';
-import RecipeView from './recipes/RecipeView';
 import PartialList from './components/PartialList';
 import PreviewRecipeListItem from './recipes/PreviewRecipeListItem';
 import IngredientListItem from './recipes/IngredientListItem';
+import InteractiveRecipe from './recipes/InteractiveRecipe';
 import { List, ListHeader, HeaderedList } from './components/List';
 
 class BasicIngredientTagPartialList extends PartialList<string> {}
@@ -186,12 +186,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
       return (
         <div className='random-cocktail'>
           <div className='random-cocktail-header'>Cocktail of the Hour</div>
-          <RecipeView
-            recipe={this.props.randomRecipe}
-            availableIngredientTags={this.props.selectedIngredientTags}
-            onIngredientTagsChange={this.props.setSelectedIngredientTags}
-            onIngredientClick={this.props.showIngredientInfo}
-          />
+          <InteractiveRecipe recipe={this.props.randomRecipe}/>
         </div>
       );
     } else {

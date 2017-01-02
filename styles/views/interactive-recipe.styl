@@ -1,0 +1,51 @@
+$recipe-header-border = 1px solid #ddd
+
+.interactive-recipe .title-bar
+  border-bottom: $recipe-header-border
+
+  i.fa.fa-times
+    width: 44px
+    display: flex
+    justify-content: center
+    align-items: center
+    border-left: $recipe-header-border
+
+.interactive-recipe .footer-buttons
+  display: flex
+  height: 44px
+  border-top: $recipe-header-border
+
+  .icon-button
+    flex: 1
+    text-transform: uppercase
+
+    &:not(:last-child)
+      border-right: $recipe-header-border
+
+.interactive-recipe .similar-recipes
+  padding: 0 8px
+
+  .header
+    text-transform: uppercase
+    border-bottom: 1px solid #bbb
+    padding: 10px 5px
+
+  .recipe
+    font-size: 16px
+    font-weight: 600
+    line-height: 44px
+    padding: 0 5px
+
+    &:not(:last-child)
+      border-bottom: 1px solid #bbb
+
+.interactive-recipe .icon-button
+  display: flex
+  justify-content: center
+  align-items: center
+
+  .fa
+    margin-right: 6px
+
+  .label
+    font-size: 16px

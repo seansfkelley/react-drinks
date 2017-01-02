@@ -3,13 +3,13 @@ import * as React from 'react';
 import { Recipe } from '../../../shared/types';
 import { BASE_URL } from '../../../shared/definitions';
 import TitleBar from '../../components/TitleBar';
-import RecipeView from '../../recipes/RecipeView';
+import RecipeBody from '../../recipes/RecipeBody';
 
 interface Props {
   recipe: Recipe;
 }
 
-export default class extends React.PureComponent<Props, void> {
+export default class StandaloneRecipe extends React.PureComponent<Props, void> {
   render() {
     return (
       <div className='standalone-recipe'>
@@ -19,7 +19,8 @@ export default class extends React.PureComponent<Props, void> {
             <i className='fa fa-chevron-right' />
           </TitleBar>
         </a>
-        <RecipeView recipe={this.props.recipe} />
+        <TitleBar className='recipe-name'>{this.props.recipe.name}</TitleBar>
+        <RecipeBody recipe={this.props.recipe} />
       </div>
     );
   }

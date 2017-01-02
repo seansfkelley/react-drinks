@@ -9,8 +9,8 @@ import {
 } from '../../store/atomicActions';
 
 import Landing from '../../Landing';
-import SwipableRecipeView from '../../recipes/SwipableRecipeView';
 import IngredientInfo from '../../IngredientInfo';
+import SwipableRecipes from '../../recipes/SwipableRecipes';
 
 import Overlay from '../../components/Overlay';
 
@@ -45,7 +45,7 @@ class App extends React.PureComponent<ConnectedProps & DispatchProps, State> {
           isVisible={this.props.showingRecipeViewer}
           onBackdropClick={this.props.hideRecipeViewer}
         >
-          <SwipableRecipeView />
+          <SwipableRecipes />
         </Overlay>
         <Overlay
           type='modal'

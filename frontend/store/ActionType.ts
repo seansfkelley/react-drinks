@@ -1,23 +1,21 @@
 export type ActionType =
+  '--dummy-event-to-trigger-persistence--' |
+  'delete-recipe' |
+  'error-message' |
+  'hide-ingredient-info' |
+  'hide-recipe-editor' |
+  'hide-recipe-viewer' |
+  'seed-recipe-editor' |
+  'set-base-liquor-filter' |
+  'set-ingredients' |
+  'set-recipe-favorite' |
+  'set-recipe-viewing-index' |
+  'set-recipes-by-id' |
   'set-search-term' |
   'set-selected-ingredient-tags' |
-  'set-ingredients' |
-  'set-recipes-by-id' |
-  'hide-recipe-viewer' |
-  'hide-recipe-editor' |
-  'hide-ingredient-info' |
-  'show-recipe-viewer' |
-  'delete-recipe' |
-  'set-recipe-viewing-index' |
-  'seed-recipe-editor' |
-  'show-recipe-editor' |
-  'favorite-recipe' |
-  'unfavorite-recipe' |
-  'set-base-liquor-filter' |
-  'show-recipe-editor' |
   'show-ingredient-info' |
-  'error-message' |
-  '--dummy-event-to-trigger-persistence--';
+  'show-recipe-editor' |
+  'show-recipe-viewer';
 
 export type Action<T> = {
   type: ActionType;

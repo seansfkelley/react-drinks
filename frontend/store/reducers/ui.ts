@@ -1,4 +1,4 @@
-import { assign, defaults, union, without } from 'lodash';
+import { assign, defaults, union, difference } from 'lodash';
 
 import makeReducer from './makeReducer';
 import { load } from '../persistence';
@@ -30,12 +30,8 @@ export const reducer = makeReducer<UiState>(assign({
     recipeViewingIndex: action.payload
   }, state),
 
-  'favorite-recipe': (state, action: Action<string>) => defaults({
-    favoritedRecipeIds: union(state.favoritedRecipeIds, [ action.payload ])
-  }, state),
-
-  'unfavorite-recipe': (state, action: Action<string>) => defaults({
-    favoritedRecipeIds: without(state.favoritedRecipeIds, action.payload)
+  'set-recipe-favorite': (state, action: Action<{ recipeId: string, isFavorite: boolean }>) => defaults({
+    favoritedRecipeIds: (action.payload.isFavorite ? union : difference)(state.favoritedRecipeIds, [ action.payload.recipeId ])
   }, state),
 
   'show-recipe-viewer': (state, action: Action<{ index: number, recipeIds: string[] }>) => defaults({

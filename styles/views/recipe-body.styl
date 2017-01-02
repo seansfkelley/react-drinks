@@ -1,0 +1,51 @@
+.recipe-body
+  padding: 8px 8px 0 8px
+  line-height: 1.25
+  display: flex
+  flex-direction: column
+
+  .recipe-ingredients
+    display: table
+    width: 100%
+
+  .recipe-instructions
+    margin: 12px 0
+    padding: 0 18px 10px 2em
+    counter-reset: item
+    list-style: none
+
+    li // TODO: add hook for instructions that have only one step
+      margin: 0 0 10px 0
+
+      &:before // allows for colored numbers w/o extra element
+        margin-left: -1.25em
+        padding-right: 0.25em
+        content: counter(item) '. '
+        counter-increment: item
+        color: #999
+        font-weight: 600
+
+  .recipe-notes
+    margin: 5px
+    color: #444
+    font-style: italic
+
+  .recipe-url
+    align-self: flex-end
+    font-size: 1.1em
+    text-decoration: none
+    color: #333
+    margin-right: 8px
+    // Make it a nice big touch target.
+    height: 44px
+    line-height: 44px
+
+    .lead-in
+      color: #aaa
+      margin-right: 8px
+      font-size: 0.8em
+      text-transform: uppercase
+
+    i.fa
+      margin-left: 8px
+      font-size: 0.8em

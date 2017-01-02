@@ -27,9 +27,9 @@ const SRC_PATHS = {
   scripts: [{
     source: './frontend/endpoints/app/app-init.tsx',
     destination: 'app-init.js'
-  // }, {
-  //   source: './frontend/endpoints/recipe/recipe-init.tsx',
-  //   destination: 'recipe-init.js'
+  }, {
+    source: './frontend/endpoints/recipe/recipe-init.tsx',
+    destination: 'recipe-init.js'
   }],
   styles: ['./styles/index.styl'].concat(LIBRARY_CSS_PATHS.map(p => `./node_modules/${p}`)),
   styleWatch: ['./styles/**/*.styl'],
