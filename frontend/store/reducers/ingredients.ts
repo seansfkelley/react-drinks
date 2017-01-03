@@ -9,9 +9,8 @@ import { Action } from '../ActionType';
 
 function _computeIngredientsByTag(ingredients: Ingredient[]) {
   const ingredientsByTag = ingredients
-    .filter(i => i.tag != null)
     .reduce((obj, i) =>{
-      obj[i.tag!] = i;
+      obj[i.tag] = i;
       return obj;
     }, {} as { [tag: string]: Ingredient });
 

@@ -11,7 +11,6 @@ export interface Ingredient {
   // TODO: Replace tag with ingredientId.
   tag: string;
   generic?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
   searchable: string[];
 }
 

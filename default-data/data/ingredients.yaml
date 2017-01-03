@@ -1,72 +1,55 @@
 -
   display    : Absinthe
-  difficulty : medium
 -
   display    : Agave Nectar
-  difficulty : medium
 -
   display    : Amaretto
-  difficulty : medium
   searchable :
     - disaronno
 -
   display    : Bitters
-  difficulty : easy
 -
   display    : Angostura Bitters
   generic    : bitters
-  difficulty : easy
 -
   display    : Peychaud's Bitters
   tag        : peychauds bitters
   generic    : bitters
-  difficulty : easy
 -
   display    : Orange Bitters
   generic    : bitters
-  difficulty : easy
 -
   display    : Apple Brandy
   generic    : brandy
-  difficulty : medium
 -
   display    : Applejack
   generic    : apple brandy
-  difficulty : medium
 -
   display    : Calvados
   generic    : apple brandy
-  difficulty : hard
 -
   display    : Irish Cream
-  difficulty : easy
   searchable :
     - baileys
 -
   display    : Bénédictine
   tag        : benedictine
-  difficulty : hard
 -
   display    : Bourbon
   generic    : whiskey
-  difficulty : easy
 -
   display    : Cachaça
   tag        : cachaca
-  difficulty : medium
 -
   display    : Coffee Liqueur
-  difficulty : easy
   searchable :
     - kahlua
     - tia maria
 -
   display    : Cointreau
   generic    : triple sec
-  difficulty : easy
 -
   display    : Cola
-  difficulty : easy
   searchable :
     - coke
     - coca cola
@@ -74,114 +57,85 @@
 -
   display    : Cognac
   generic    : brandy
-  difficulty : medium
 -
   display    : Cynar
-  difficulty : hard
 -
   display    : Dark Rum
   generic    : rum
-  difficulty : easy
   searchable :
     - captain morgan
     - sailor jerry
 -
   display    : Vermouth
   generic    : wine
-  difficulty : easy
 -
   display    : Dry Vermouth
   generic    : vermouth
-  difficulty : medium
 -
   display    : Elderflower Liqueur
-  difficulty : medium
   searchable :
    - st germain
 -
   display    : Genever
-  difficulty : hard
 -
   display    : Gin
-  difficulty : easy
 -
   display    : Ginger Beer
-  difficulty : easy
 -
   display    : Ginger Liqueur
-  difficulty : medium
   searchable :
     - domaine de canton
     - kings ginger
 -
   display    : Grand Marnier
   generic    : triple sec
-  difficulty : medium
 -
   display    : Green Chartreuse
   generic    : chartreuse
-  difficulty : medium
 -
   display    : Yellow Chartreuse
   generic    : chartreuse
-  difficulty : medium
 -
   display    : Grenadine
-  difficulty : medium
 -
   display    : Honey Whiskey
-  difficulty : medium
 -
   display    : Lemon Juice
-  difficulty : easy
 -
   display    : Lillet
   generic    : wine
-  difficulty : medium
 -
   display    : Lime
-  difficulty : easy
 -
   display    : Lime Juice
-  difficulty : easy
 -
   display    : Maraschino Liqueur
-  difficulty : hard
 -
   display    : Mezcal
   generic    : agave spirits
-  difficulty : hard
 -
   display    : Milk
-  difficulty : easy
 -
   display    : Mint
-  difficulty : easy
 -
   display    : Hazelnut Liqueur
-  difficulty : medium
   searchable :
     - noisette
     - frangelico
 -
   display    : Rye Whiskey
   generic    : whiskey
-  difficulty : easy
 -
   display    : Sugar Syrup
-  difficulty : easy
 -
   display    : Simple Syrup
   generic    : sugar syrup
-  difficulty : easy
 -
   display    : Brown Sugar Simple Syrup
   generic    : sugar syrup
-  difficulty : easy
 -
   display    : Sparkling Wine
   generic    : wine
-  difficulty : medium
   searchable :
     - champagne
     - prosecco
@@ -189,320 +143,230 @@
 -
   display    : Spiced Rum
   generic    : rum
-  difficulty : easy
   searchable :
     - kraken
 -
   display    : Sugar
-  difficulty : easy
   searchable :
     - sugar cube
 -
   display    : Sweet Vermouth
   generic    : vermouth
-  difficulty : medium
 -
   display    : Tonic
-  difficulty : easy
 -
   display    : Triple Sec
-  difficulty : easy
 -
   display    : Vodka
-  difficulty : easy
 -
   display    : Irish Whiskey
   generic    : whiskey
-  difficulty : easy
 -
   display    : White Rum
   tag        : white rum
   generic    : rum
-  difficulty : easy
 -
   display    : White Vermouth
   generic    : vermouth
-  difficulty : medium
 -
   display    : Club Soda
-  difficulty : easy
   searchable :
     - seltzer
     - soda water
 -
   display    : Scotch
-  difficulty : medium
 -
   display    : Orange Juice
-  difficulty : easy
 -
   display    : Pimm's No. 1
   tag        : pimms
-  difficulty : hard
 -
   display    : Rosemary
-  difficulty : easy
 -
   display    : Basil
-  difficulty : easy
 -
   display    : Shiso
-  difficulty : hard
 -
   display    : Cucumber
-  difficulty : easy
 -
   display    : Thyme
-  difficulty : easy
 -
   display    : Lemon
-  difficulty : easy
 -
   display    : Drambuie
   generic    : honey whiskey
-  difficulty : medium
 -
   display    : Tennessee Whiskey
   generic    : whiskey
-  difficulty : easy
 -
   display    : Peach
-  difficulty : easy
 -
   display    : Crème de Cacao
   tag        : creme de cacao
-  difficulty : hard
 -
   display    : Cream
-  difficulty : easy
 -
   display    : Amaro
-  difficulty : medium
 -
   display    : Campari
   generic    : amaro
-  difficulty : hard
 -
   display    : Brandy
-  difficulty : medium
 -
   display    : Gomme Syrup
   generic    : sugar syrup
-  difficulty : hard
 -
   display    : Galliano
-  difficulty : hard
 -
   display    : Gold Rum
   generic    : rum
-  difficulty : medium
 -
   display    : Pineapple Juice
-  difficulty : easy
 -
   display    : Tomato Juice
-  difficulty : easy
 -
   display    : Worcestershire Sauce
   tag        : worcestershire
-  difficulty : easy
 -
   display    : Tabasco Sauce
   tag        : tabasco
-  difficulty : easy
 -
   display    : Cranberry Juice
-  difficulty : easy
 -
   display    : Olive Juice
-  difficulty : easy
 -
   display    : Pickle Juice
-  difficulty : easy
 -
   display    : Coffee
-  difficulty : easy
 -
   display    : Crème de Menthe
   tag        : creme de menthe
-  difficulty : hard
   searchable :
     - mint
 -
   display    : Grapefruit Juice
-  difficulty : easy
 -
   display    : Ginger Ale
-  difficulty : easy
 -
   display    : White Wine
   generic    : wine
-  difficulty : easy
 -
   display    : Red Wine
   generic    : wine
-  difficulty : easy
 -
   display    : Crème de Cassis
   tag        : creme de cassis
-  difficulty : hard
 -
   display    : Orgeat Syrup
-  difficulty : hard
 -
   display    : Pisco
   generic    : brandy
-  difficulty : medium
 -
   display    : Port
-  difficulty : hard
 -
   display    : Egg
-  difficulty : easy
 -
   display    : Aperol
   generic    : amaro
-  difficulty : hard
 -
   display    : Honey
-  difficulty : easy
 -
   display    : Onion
-  difficulty : easy
 -
   display    : Hot Pepper
-  difficulty : easy
   searchable :
     - jalapeno
     - habanero
     - chili
 -
   display    : Peach Schnapps
-  difficulty : medium
 -
   display    : Apricot Brandy
   generic    : brandy
-  difficulty : medium
 -
   display    : Bison Grass Vodka
-  difficulty : medium
   searchable :
     - zubrowka
 -
   display    : Chartreuse
   tag        : chartreuse
-  difficulty : medium
 -
   display    : Rum
   tag        : rum
-  difficulty : easy
 -
   display    : Whiskey
   tag        : whiskey
-  difficulty : easy
 -
   display    : Tequila/Agave Spirits
   tag        : agave spirits
-  difficulty : easy
 -
   display    : Tequila
   generic    : agave spirits
-  difficulty : easy
 -
   display    : Tea
-  difficulty : easy
 -
   display    : Vanilla
-  difficulty : easy
 -
   display    : Strawberry
-  difficulty : easy
 -
   display    : Raspberry
-  difficulty : easy
 -
   display    : Cherry
-  difficulty : easy
 -
   display    : Blackberry
-  difficulty : easy
 -
   display    : Coconut Milk
-  difficulty : easy
 -
   display    : Raspberry Liqueur
-  difficulty : hard
   searchable :
     - chambord
 -
   display    : Cherry Liqueur
-  difficulty : hard
 -
   display    : Blackberry Liqueur
-  difficulty : hard
 -
   display    : Orange Flower Water
-  difficulty : hard
 -
   display    : Rose Water
-  difficulty : hard
 -
   display    : Blueberry
-  difficulty : easy
 -
   display    : Dark Beer
-  difficulty : easy
 -
   display    : Light Beer
-  difficulty : easy
 -
   display    : Sake
   generic    : wine
-  difficulty : medium
 -
   display    : Plum Wine
   generic    : wine
-  difficulty : medium
 -
   display    : Molasses
-  difficulty : easy
 -
   display    : Ginger
-  difficulty : easy
 -
   display    : Sherry
   generic    : wine
-  difficulty : medium
 -
   display    : Orange
-  difficulty : easy
 -
   display    : Velvet Falernum
-  difficulty : hard
 -
   display    : Curaçao
   tag        : curacao
   generic    : triple sec
-  difficulty : medium
 -
   display    : Pear Liqueur
-  difficulty : hard
 -
   display    : Cinnamon
-  difficulty : easy
 -
   display    : Sage
-  difficulty : easy
 -
   display    : Grape
-  difficulty : easy
 -
   display    : Maple Syrup
-  difficulty : easy
 -
   display    : Apple Juice/Cider
   tag        : apple juice
-  difficulty : easy
 -
   display    : Wine
-  difficulty : easy

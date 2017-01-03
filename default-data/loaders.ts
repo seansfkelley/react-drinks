@@ -23,11 +23,6 @@ const INGREDIENT_SCHEMA: ActuallyUsefulRevalidatorType = {
     // The tag for the generic (substitutable) ingredient for this ingredient. If the target doesn't
     // exist, a new invisible ingredient is added.
     generic: OPTIONAL_STRING,
-    // An approximate rating for how difficult this ingredient is to buy.
-    difficulty: {
-      type: 'string',
-      enum: ['easy', 'medium', 'hard']
-    },
     // An array of searchable terms for the ingredient. Includes the display name of itself and its
     // generic (if it exists) by default.
     searchable: {
