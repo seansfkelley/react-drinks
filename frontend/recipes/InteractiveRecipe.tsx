@@ -8,6 +8,8 @@ import { Ingredient, Recipe, DisplayIngredient } from '../../shared/types';
 import { BASE_URL } from '../../shared/definitions';
 import { RootState } from '../store';
 import TitleBar from '../components/TitleBar';
+import { List, ListHeader } from '../components/List';
+import PreviewRecipeListItem from './PreviewRecipeListItem';
 import MeasuredIngredient from './MeasuredIngredient';
 import RecipeBody from './RecipeBody';
 
@@ -69,20 +71,17 @@ class InteractiveRecipe extends React.PureComponent<OwnProps & ConnectedProps & 
     let similarRecipes;
     if (this.props.showSimilarRecipes && this.props.similarRecipes && this.props.similarRecipes.length) {
       similarRecipes = (
-        <div className='similar-recipes'>
-          <div className='header'>Similar Drinks</div>
-          <div className='recipe-list'>
-            {this.props.similarRecipes.map(r =>
-              <div
-                key={r.recipeId}
-                className='recipe'
-                onClick={this.props.onSimilarRecipeClick ? () => this.props.onSimilarRecipeClick!(r.recipeId) : undefined}
-              >
-                {r.name}
-              </div>
-            )}
-          </div>
-        </div>
+        <List className='similar-recipes-list'>
+          <ListHeader>Similar Drinks</ListHeader>
+          {this.props.similarRecipes.map(recipe =>
+            <PreviewRecipeListItem
+              key={recipe.recipeId}
+              recipe={recipe}
+              ingredientsByTag={this.props.ingredientsByTag}
+              onClick={this.props.onSimilarRecipeClick ? () => this.props.onSimilarRecipeClick!(recipe.recipeId) : undefined}
+            />
+          )}
+        </List>
       );
     }
 
