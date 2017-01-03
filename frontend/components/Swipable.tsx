@@ -206,10 +206,22 @@ export default class extends React.PureComponent<Props, State> {
   private _onSwiping = (delta: number) => {
     const oldIndex = this._getIndexForDelta(this.state.delta);
     const newIndex = this._getIndexForDelta(delta);
-    this.setState({ delta } as any);
-    if (oldIndex !== newIndex) {
-      this.props.onIndexChange(newIndex);
-    }
+    // Hacks: bleargh, this deferred callback is the worst. Swipable exposes the already-pretty-hacky
+    // setIndexToIfNecessary method, which (as of this writing) is involved in the following process:
+    //   (touchmove -> _onSwiping -> setState) -> (onIndexChange -> setIndexToIfNecessary)
+    //     [ where the parens indicate groups of calls in the same js runtime tick ]
+    // The issue here is that if all five calls are performed in the same tick, React hasn't propagated
+    // the setState, so when the index changes, it will _always_ hit the branch in setIndexToIfNecessary
+    // which causes visual jitter as the swipable children are erroneously shoveled around.
+    // This solution is more generally solving the problem of "make sure the UI state and the computed
+    // internal state are in sync before calling back", which itself is a problem that stems from the
+    // very nature of this view being allowed to be in intermediate ("animated") states that don't
+    // interact with React very nicely.
+    this.setState({ delta } as any, () => {
+      if (oldIndex !== newIndex) {
+        this.props.onIndexChange(newIndex);
+      }
+    });
   };
 
   private _onSwiped = () => {
