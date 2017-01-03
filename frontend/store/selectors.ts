@@ -1,4 +1,4 @@
-import { sortBy, mapValues, flatten, chain, groupBy, map } from 'lodash';
+import { sortBy, mapValues, chain, groupBy, map } from 'lodash';
 import { createSelector, Selector } from 'reselect';
 import { match as fuzzyMatch, MatchResult } from 'fuzzy';
 
@@ -30,7 +30,6 @@ function _cleanUpMatchResults<T>(results: MatchResultWithItem<T>[]): FuzzyFilter
 }
 
 const selectIngredientsByTag = (state: RootState) => state.ingredients.ingredientsByTag;
-const selectGroupedIngredients = (state: RootState) => state.ingredients.groupedIngredients;
 const selectRecipesById = (state: RootState) => state.recipes.recipesById;
 
 // const selectBaseLiquorFilter = (state: RootState) => state.filters.baseLiquorFilter;
@@ -39,16 +38,25 @@ const selectSearchTerm = (state: RootState) => state.filters.searchTerm;
 
 // const selectFavoritedRecipeIds = (state: RootState) => state.ui.favoritedRecipeIds;
 
-const selectAlphabeticalRecipes = createSelector(
-  selectRecipesById,
-  (recipesById) => {
-    const alphabeticalRecipeIds = sortBy(
-      Object.keys(recipesById),
-      recipeId => recipesById[recipeId].sortName
+function _makeAlphabetizeFromMapById<T>(accessor: (item: T) => string) {
+  return (itemsById: { [itemId: string]: T }) => {
+    const alphabeticalIds = sortBy(
+      Object.keys(itemsById),
+      itemId => accessor(itemsById[itemId])
     );
 
-    return alphabeticalRecipeIds.map(recipeId => recipesById[recipeId]);
-  }
+    return alphabeticalIds.map(itemId => itemsById[itemId]);
+  };
+}
+
+const selectAlphabeticalRecipes = createSelector(
+  selectRecipesById,
+  _makeAlphabetizeFromMapById<Recipe>(r => r.sortName)
+);
+
+const selectAlphabeticalIngredients = createSelector(
+  selectIngredientsByTag,
+  _makeAlphabetizeFromMapById<Ingredient>(i => i.display)
 );
 
 const TODAY = new Date();
@@ -77,10 +85,10 @@ export const selectSimilarRecipesByRecipeId = createSelector(
 )
 
 export const selectSearchedIngredients: Selector<RootState, FuzzyFilteredItem<Ingredient>[]> = createSelector(
-  selectGroupedIngredients,
+  selectAlphabeticalIngredients,
   selectSearchTerm,
-  (groupedIngredients, searchTerm) =>
-    _cleanUpMatchResults(flatten(groupedIngredients.map(g => g.items))
+  (ingredients, searchTerm) =>
+    _cleanUpMatchResults(ingredients
       .map(ingredient => ({
         item: ingredient,
         matchResult: ingredient.searchable

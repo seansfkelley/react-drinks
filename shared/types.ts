@@ -15,11 +15,6 @@ export interface Ingredient {
   searchable: string[];
 }
 
-export interface IngredientGroupMeta {
-  type: string;
-  display: string;
-}
-
 export interface DbRecipe {
   name: string;
   ingredients: DisplayIngredient[];

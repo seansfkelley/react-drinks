@@ -1,9 +1,9 @@
 import { omit } from 'lodash';
 
-import { Ingredient, IngredientGroupMeta } from '../shared/types';
+import { Ingredient } from '../shared/types';
 import { get as getDatabase } from './database';
 
-const { ingredientDb, configDb } = getDatabase();
+const { ingredientDb } = getDatabase();
 
 export function getIngredients(): Promise<Ingredient[]> {
   return ingredientDb.allDocs({
@@ -12,9 +12,4 @@ export function getIngredients(): Promise<Ingredient[]> {
     .then(({ rows }) => {
       return rows.map(r => omit(r.doc as {}, '_id', '_rev') as Ingredient);
     });
-}
-
-export function getGroups(): Promise<IngredientGroupMeta[]> {
-  return configDb.get('ingredient-groups')
-    .then(({ orderedGroups }) => orderedGroups);
 }

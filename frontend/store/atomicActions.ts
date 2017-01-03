@@ -1,4 +1,4 @@
-import { Ingredient, Recipe, IngredientGroupMeta } from '../../shared/types';
+import { Ingredient, Recipe } from '../../shared/types';
 import { Action, ActionType } from './ActionType';
 
 function createNullaryActionCreator(type: ActionType) {
@@ -27,7 +27,7 @@ export const setBaseLiquorFilter = createActionCreator<string>('set-base-liquor-
 export const showIngredientInfo = createActionCreator<string>('show-ingredient-info');
 export const initializeNewRecipe = createNullaryActionCreator('show-recipe-editor');
 export const setErrorMessage = createActionCreator<string>('error-message');
-export const setIngredients = createActionCreator<{ ingredients: Ingredient[], groups: IngredientGroupMeta[] }>('set-ingredients');
+export const setIngredients = createActionCreator<Ingredient[]>('set-ingredients');
 export const setRecipesById = createActionCreator<{ [recipeId: string]: Recipe }>('set-recipes-by-id');
 export const setRecipeFavorite = createActionCreator<{ recipeId: string, isFavorite: boolean }>('set-recipe-favorite');
 // The idea is to refresh the timestamps, even if the user doesn't interact. Opening the app

@@ -15,10 +15,7 @@ export const ROUTES: { method: 'get' | 'post' | 'all', route: string, handler: R
   method: 'get',
   route: '/ingredients',
   handler: (_req: Request, res: Response, _next: NextFunction) => {
-    res.json({
-      ingredients: ingredients.getIngredients(),
-      groups: ingredients.getGroups()
-    });
+    res.json(ingredients.getIngredients());
   }
 }, {
   method: 'post',

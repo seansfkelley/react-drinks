@@ -15,13 +15,12 @@ import * as Promise from 'bluebird';
 import * as md5 from 'MD5';
 
 import config from '../backend/config';
-import { loadRecipeFile, loadIngredients, loadIngredientGroups } from '../default-data/loaders';
+import { loadRecipeFile, loadIngredients } from '../default-data/loaders';
 import { get as getDatabase } from '../backend/database';
 
 const { recipeDb, ingredientDb, configDb } = getDatabase();
 
 const DEFAULT_RECIPE_LIST_DOC_ID = 'default-recipe-list';
-const INGREDIENT_GROUP_DOC_ID = 'ingredient-groups';
 
 interface ErrorResponse extends PouchDB.Core.Response {
   name?: string;
@@ -118,23 +117,6 @@ Promise.resolve()
     return ingredientDb.bulkDocs(ingredientsWithId);
   })
   .then(result => logAttemptedOverwriteResult(result, 'ingredients'))
-  .then(() =>
-    configDb.get(INGREDIENT_GROUP_DOC_ID)
-      .then(
-        getRevision,
-        ignoreNotFoundError
-      )
-  )
-  .then((_rev) => {
-    const orderedGroups = loadIngredientGroups();
-
-    return configDb.put({
-      _id: INGREDIENT_GROUP_DOC_ID,
-      _rev,
-      orderedGroups
-    })
-    .then(() => log.info(`successfully updated list of ordered ingredient groups (new count: ${orderedGroups.length})`));
-  })
   .catch(bestEffortLogError)
   .finally(() => log.info(`seeding database finished in ${((Date.now() - startTime) / 1000).toFixed(2)}s`));
 

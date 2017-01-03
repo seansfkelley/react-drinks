@@ -4,7 +4,7 @@ import { safeLoad } from 'js-yaml';
 import * as log from 'loglevel';
 
 import { assert } from '../shared/tinyassert';
-import { Ingredient, IngredientGroupMeta, DbRecipe } from '../shared/types';
+import { Ingredient, DbRecipe } from '../shared/types';
 import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
 import { UNASSIGNED_BASE_LIQUOR, BASE_LIQUORS } from '../shared/definitions';
 import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
@@ -18,8 +18,6 @@ const INGREDIENT_SCHEMA: ActuallyUsefulRevalidatorType = {
   properties: {
     // The display name of the ingredient.
     display: REQUIRED_STRING,
-    // The category this ingredient is in (e.g., spirit, mixer, syrup...)
-    group: OPTIONAL_STRING,
     // The uniquely identifying tag for this ingredient. Defaults to the lowercase display name.
     tag: OPTIONAL_STRING,
     // The tag for the generic (substitutable) ingredient for this ingredient. If the target doesn't
@@ -89,14 +87,6 @@ const RECIPE_SCHEMA: ActuallyUsefulRevalidatorType  = {
   }
 };
 
-const INGREDIENT_GROUP_SCHEMA: ActuallyUsefulRevalidatorType = {
-  type: 'object',
-  properties: {
-    type: REQUIRED_STRING,
-    display: REQUIRED_STRING
-  }
-};
-
 export const loadRecipeFile = memoize((filename: string) => {
   log.debug(`loading recipes from ${filename}`);
   const recipes: Partial<DbRecipe>[] = safeLoad(readFileSync(`${__dirname}/data/${filename}.yaml`).toString());
@@ -113,19 +103,6 @@ export const loadRecipeFile = memoize((filename: string) => {
   });
 
   return recipes.map(normalizeRecipe);
-});
-
-export const loadIngredientGroups = once(() => {
-  log.debug("loading ingredient grouping");
-  const groups: IngredientGroupMeta[] = safeLoad(readFileSync(`${__dirname}/data/groups.yaml`).toString());
-  log.debug(`loaded ${groups.length} groups`);
-
-  validateOrThrow(groups, {
-    type: 'array',
-    items: INGREDIENT_GROUP_SCHEMA
-  });
-
-  return groups;
 });
 
 export const loadIngredients = once(() => {
