@@ -148,7 +148,9 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
                 <ListHeader className='category-header'>Common Ingredients</ListHeader>
                 <BasicIngredientTagPartialList
                   className='ingredient-list'
-                  items={BASIC_LIQUOR_TAGS}
+                  // HACKS: The render function uses state that isn't actually present on this
+                  // component, so it's not actually pure, so change the reference to force it...
+                  items={BASIC_LIQUOR_TAGS.slice()}
                   renderItem={this._renderIngredientTag}
                   softLimit={Infinity}
                   hardLimit={Infinity}
