@@ -8,10 +8,10 @@ import { RootState } from './store';
 import {
   FuzzyFilteredItem,
   selectSearchedRecipes,
-  selectIngredientMatchedRecipes,
+  selectGroupedIngredientMatchedRecipes,
   selectSearchedIngredients,
   selectRecipeOfTheHour,
-  selectSelectedIngredientTagsAndDescendants
+  selectAllTransitiveIngredientTags
 } from './store/selectors';
 import {
   setSearchTerm,
@@ -40,7 +40,7 @@ interface ConnectedProps {
   randomRecipe: Recipe;
   searchTerm: string;
   selectedIngredientTags: string[];
-  selectedIngredientTagsAndDescendants: string[];
+  transitiveSelectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
   searchedIngredients: FuzzyFilteredItem<Ingredient>[];
   searchedRecipes: FuzzyFilteredItem<Recipe>[];
@@ -241,7 +241,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
         key={recipe.recipeId}
         recipe={recipe}
         ingredientsByTag={this.props.ingredientsByTag}
-        selectedIngredientTags={includeTags ? this.props.selectedIngredientTagsAndDescendants : undefined}
+        selectedIngredientTags={includeTags ? this.props.transitiveSelectedIngredientTags : undefined}
         onClick={() => this.props.showRecipeViewer({ recipeIds: allRecipeIds, index: allRecipeIds.indexOf(recipe.recipeId) })}
       />
     );
@@ -275,11 +275,11 @@ function mapStateToProps(state: RootState): ConnectedProps {
     randomRecipe: selectRecipeOfTheHour(state),
     searchTerm: state.filters.searchTerm,
     selectedIngredientTags: state.filters.selectedIngredientTags,
-    selectedIngredientTagsAndDescendants: selectSelectedIngredientTagsAndDescendants(state),
+    transitiveSelectedIngredientTags: selectAllTransitiveIngredientTags(state),
     ingredientsByTag: state.ingredients.ingredientsByTag,
     searchedIngredients: selectSearchedIngredients(state),
     searchedRecipes: selectSearchedRecipes(state),
-    ingredientMatchedRecipes: selectIngredientMatchedRecipes(state)
+    ingredientMatchedRecipes: selectGroupedIngredientMatchedRecipes(state)
   };
 }
 

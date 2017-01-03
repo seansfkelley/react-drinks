@@ -18,7 +18,7 @@ import {
 } from '../store/atomicActions';
 import {
   selectSimilarRecipesByRecipeId,
-  selectSelectedIngredientTagsAndDescendants
+  selectAllTransitiveIngredientTags
 } from '../store/selectors';
 
 function IconButton(props: { icon: string, text: string, onClick?: React.MouseEventHandler<HTMLElement> }) {
@@ -41,7 +41,7 @@ interface OwnProps {
 
 interface ConnectedProps {
   selectedIngredientTags: string[];
-  selectedIngredientTagsAndDescendants: string[];
+  transitiveSelectedIngredientTags: string[];
   ingredientsByTag: { [tag: string]: Ingredient };
   similarRecipes: Recipe[];
   isFavorited: boolean;
@@ -158,7 +158,7 @@ class InteractiveRecipe extends React.PureComponent<OwnProps & ConnectedProps & 
 function mapStateToProps(state: RootState, ownProps: OwnProps): ConnectedProps {
   return {
     selectedIngredientTags: state.filters.selectedIngredientTags,
-    selectedIngredientTagsAndDescendants: selectSelectedIngredientTagsAndDescendants(state),
+    transitiveSelectedIngredientTags: selectAllTransitiveIngredientTags(state),
     ingredientsByTag: state.ingredients.ingredientsByTag,
     similarRecipes: selectSimilarRecipesByRecipeId(state)[ownProps.recipe.recipeId],
     isFavorited: state.ui.favoritedRecipeIds.includes(ownProps.recipe.recipeId)

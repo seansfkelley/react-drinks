@@ -1,12 +1,10 @@
-import { sortBy, mapValues, flatten, chain } from 'lodash';
+import { sortBy, mapValues, flatten, chain, groupBy, map } from 'lodash';
 import { createSelector, Selector } from 'reselect';
 import { match as fuzzyMatch, MatchResult } from 'fuzzy';
 
 import { Ingredient, Recipe } from '../../shared/types';
+import { GroupedItems } from '../types';
 import { RootState } from './index';
-import { filteredGroupedRecipes } from './derived/filteredGroupedRecipes';
-import { ingredientSplitsByRecipeId } from './derived/ingredientSplitsByRecipeId';
-import { filteredGroupedIngredients } from './derived/filteredGroupedIngredients';
 import { computeRecipeSimilarity } from './derived/recipeSimilarity';
 
 export interface FuzzyFilteredItem<T> {
@@ -33,12 +31,11 @@ function _cleanUpMatchResults<T>(results: MatchResultWithItem<T>[]): FuzzyFilter
 
 const selectIngredientsByTag = (state: RootState) => state.ingredients.ingredientsByTag;
 const selectGroupedIngredients = (state: RootState) => state.ingredients.groupedIngredients;
-const selectSelectedIngredientTags = (state: RootState) => state.filters.selectedIngredientTags;
 const selectRecipesById = (state: RootState) => state.recipes.recipesById;
 
 // const selectBaseLiquorFilter = (state: RootState) => state.filters.baseLiquorFilter;
+const selectSelectedIngredientTags = (state: RootState) => state.filters.selectedIngredientTags;
 const selectSearchTerm = (state: RootState) => state.filters.searchTerm;
-const selectIngredientTags = (state: RootState) => state.filters.selectedIngredientTags;
 
 // const selectFavoritedRecipeIds = (state: RootState) => state.ui.favoritedRecipeIds;
 
@@ -79,18 +76,6 @@ export const selectSimilarRecipesByRecipeId = createSelector(
   )
 )
 
-export const selectFilteredGroupedIngredients = createSelector(
-  selectGroupedIngredients,
-  selectSearchTerm,
-  (
-    groupedIngredients,
-    searchTerm
-  ) => filteredGroupedIngredients({
-    groupedIngredients,
-    searchTerm
-  })
-)
-
 export const selectSearchedIngredients: Selector<RootState, FuzzyFilteredItem<Ingredient>[]> = createSelector(
   selectGroupedIngredients,
   selectSearchTerm,
@@ -106,9 +91,22 @@ export const selectSearchedIngredients: Selector<RootState, FuzzyFilteredItem<In
       })))
 );
 
+function flattenTree(roots: string[], tree: { [id: string]: string[] }) {
+  const flattened: { [id: string]: true } = {};
+  let queue = roots.slice();
+  while (queue.length) {
+    const tag = queue.pop()!;
+    if (!flattened[tag]) {
+      flattened[tag] = true;
+      queue = queue.concat(tree[tag] || []);
+    }
+  }
+  return Object.keys(flattened);
+}
+
 const ROOT_INGREDIENT_CATEGORY = '__root__';
 
-const selectImmediateDescendantTagsByTag = createSelector(
+const selectIngrdientTree = createSelector(
   selectIngredientsByTag,
   (ingredientsByTag) => chain(ingredientsByTag)
     .map((i: Ingredient) => [ i.generic || ROOT_INGREDIENT_CATEGORY, i.tag ])
@@ -117,39 +115,17 @@ const selectImmediateDescendantTagsByTag = createSelector(
     .value()
 )
 
-export const selectSelectedIngredientTagsAndDescendants = createSelector(
+export const selectAllTransitiveIngredientTags = createSelector(
   selectSelectedIngredientTags,
-  selectImmediateDescendantTagsByTag,
-  (selectedIngredientTags, immediateDescendantTagsByTag) => {
-    const allSelectedTags: { [tag: string]: true } = {};
-    let queue = selectedIngredientTags.slice();
-    while (queue.length) {
-      const tag = queue.pop()!;
-      if (!allSelectedTags[tag]) {
-        allSelectedTags[tag] = true;
-        if (immediateDescendantTagsByTag[tag]) {
-          queue = queue.concat(immediateDescendantTagsByTag[tag]);
-        }
-      }
-    }
-    return Object.keys(allSelectedTags);
-  }
+  selectIngrdientTree,
+  flattenTree
 );
 
-const selectIngredientSplitsByRecipeId = createSelector(
-  selectAlphabeticalRecipes,
-  selectIngredientsByTag,
-  selectIngredientTags,
-  (
-    recipes,
-    ingredientsByTag,
-    ingredientTags
-  ) => ingredientSplitsByRecipeId({
-    recipes,
-    ingredientsByTag,
-    ingredientTags
-  })
-);
+const selectEachTransitiveIngredientTags = createSelector(
+  selectSelectedIngredientTags,
+  selectIngrdientTree,
+  (selectedIngredientTags, ingredientTree) => selectedIngredientTags.map(t => flattenTree([ t ], ingredientTree))
+)
 
 export const selectSearchedRecipes: Selector<RootState, FuzzyFilteredItem<Recipe>[]> = createSelector(
   selectAlphabeticalRecipes,
@@ -171,25 +147,36 @@ export const selectSearchedRecipes: Selector<RootState, FuzzyFilteredItem<Recipe
   }
 );
 
-export const selectIngredientMatchedRecipes = createSelector(
-  // selectIngredientsByTag,
+// TODO: This is probably slow as fuck.
+const selectIngredientMatchedRecipes = createSelector(
   selectAlphabeticalRecipes,
-  // TODO: This isn't right -- this selector assumes an AND, but we want to treat this block as an OR.
-  // Repro: selecting "whiskey" will yield nothing, as the drink in question must have all five kinds it resolves to.
-  selectSelectedIngredientTagsAndDescendants,
-  // selectFavoritedRecipeIds,
-  selectIngredientSplitsByRecipeId,
-  (
-    // ingredientsByTag,
-    recipes,
-    selectedIngredientTags,
-    // favoritedRecipeIds,
-    ingredientSplitsByRecipeId,
-  ) => filteredGroupedRecipes({
-    // ingredientsByTag,
-    recipes,
-    selectedIngredientTags,
-    // favoritedRecipeIds,
-    ingredientSplitsByRecipeId
-  })
-);
+  selectEachTransitiveIngredientTags,
+  (recipes, transitiveSelectedIngredientTags) => recipes.filter(r =>
+    transitiveSelectedIngredientTags.every(tags =>
+      tags.some(t =>
+        r.ingredients.some(i => i.tag === t)
+      )
+    )
+  )
+)
+
+export const selectGroupedIngredientMatchedRecipes: Selector<RootState, GroupedItems<Recipe>[]>  = createSelector(
+  selectIngredientMatchedRecipes,
+  (recipes) => sortBy(
+    map(
+      groupBy(
+        sortBy(recipes, r => r.sortName),
+        r => {
+          const key = r.sortName[0].toLowerCase();
+          if (/\d/.test(key)) {
+            return '#';
+          } else {
+            return key;
+          }
+        }
+      ),
+      (items, groupName) => ({ items, groupName: groupName! })
+    ),
+    ({ groupName }) => groupName
+  )
+)
