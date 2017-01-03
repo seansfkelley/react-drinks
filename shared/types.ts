@@ -7,7 +7,6 @@ export interface DisplayIngredient {
 
 export interface Ingredient {
   display: string;
-  group: string;
   // TODO: Replace tag with ingredientId.
   tag: string;
   generic?: string;

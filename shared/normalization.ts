@@ -1,40 +1,38 @@
-import { clone, deburr } from 'lodash';
+import { deburr, assign } from 'lodash';
 import { assert } from './tinyassert';
-import { Ingredient, Recipe } from './types';
+import { Ingredient, DbRecipe } from './types';
 
 export function normalizeIngredient(ingredient: Partial<Ingredient>): Ingredient {
   assert(ingredient.display);
+  assert(ingredient.display!.trim());
 
-  // TODO: this `as any` forces me to lie to the type system.
-  const normalized: Ingredient = clone(ingredient) as any;
-  if (normalized.tag == null) {
-    normalized.tag = normalized.display!.toLowerCase();
-  }
-  if (normalized.searchable == null) {
-    normalized.searchable = [];
-  }
-  normalized.searchable.push(deburr(normalized.display).toLowerCase());
-  normalized.searchable.push(normalized.tag);
-  // TODO: Add display for generic to here.
-  // if i.generic and not _.contains i.searchable, i.generic
-  //   i.searchable.push i.generic
-  return normalized;
+  const display = ingredient.display!.trim();
+  const tag = ingredient.tag || display.toLowerCase();
+  const ingredientAdditions = {
+    tag,
+    display,
+    searchable: (ingredient.searchable || []).concat([ deburr(display).toLowerCase(), tag ])
+  };
+
+  return assign(ingredientAdditions, ingredient);
 };
 
-export function normalizeRecipe(recipe: Partial<Recipe>): Recipe {
+export function normalizeRecipe(recipe: Partial<DbRecipe>): DbRecipe {
   assert(recipe.name);
+  assert(recipe.name!.trim());
 
-  // TODO: this `as any` forces me to lie to the type system.
-  const normalized: Recipe = clone(recipe) as any;
-  normalized.canonicalName = deburr(normalized.name).toLowerCase();
-  const nameWords = normalized.canonicalName.split(' ');
-  if (['a', 'the'].indexOf(nameWords[0]) !== -1) {
-    normalized.sortName = nameWords.slice(1).join(' ');
-  } else {
-    normalized.sortName = normalized.canonicalName;
-  }
-  if (normalized.base == null) {
-    normalized.base = [];
-  }
-  return normalized;
+  const name = recipe.name!.trim();
+  const canonicalName = deburr(name).toLowerCase();
+  const nameWords = canonicalName.split(' ')
+  const recipeAdditions = {
+    name,
+    canonicalName,
+    sortName: nameWords.slice([ 'a', 'the' ].includes(nameWords[0]) ? 1 : 0).join(' '),
+    base: recipe.base || [],
+    // Make the type system happy by reiterating these...
+    ingredients: recipe.ingredients!,
+    instructions: recipe.instructions!
+  };
+
+  return assign(recipeAdditions, recipe);
 };
