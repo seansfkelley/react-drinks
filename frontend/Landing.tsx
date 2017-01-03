@@ -138,38 +138,40 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
 
   private _renderForeground() {
     if (this._isShowingSearchResults()) {
-      return (
-        <List
-          className='all-search-results-list'
-          emptyText='Nothing matched your search!'
-        >
-          {this.props.searchTerm.trim().length === 0
-            ? <div>
-                <ListHeader className='category-header'>Common Ingredients</ListHeader>
-                <BasicIngredientTagPartialList
+      let content: React.ReactNode;
+
+      if (this.props.searchTerm.trim().length === 0) {
+        content = (
+          <div>
+              <ListHeader className='category-header'>Common Ingredients</ListHeader>
+              <BasicIngredientTagPartialList
+                className='ingredient-list'
+                // HACKS: The render function uses state that isn't actually present on this
+                // component, so it's not actually pure, so change the reference to force it...
+                items={BASIC_LIQUOR_TAGS.slice()}
+                renderItem={this._renderIngredientTag}
+                softLimit={Infinity}
+                hardLimit={Infinity}
+              />
+            </div>
+        );
+      } else {
+        content = [
+          this.props.searchedIngredients.length > 0
+            ? <div key='ingredients'>
+                <ListHeader className='category-header'>Ingredients</ListHeader>
+                <FilteredIngredientPartialList
                   className='ingredient-list'
-                  // HACKS: The render function uses state that isn't actually present on this
-                  // component, so it's not actually pure, so change the reference to force it...
-                  items={BASIC_LIQUOR_TAGS.slice()}
-                  renderItem={this._renderIngredientTag}
-                  softLimit={Infinity}
-                  hardLimit={Infinity}
+                  items={this.props.searchedIngredients}
+                  renderItem={this._renderFilteredIngredient}
+                  softLimit={8}
+                  hardLimit={12}
                 />
               </div>
-            : this.props.searchedIngredients.length > 0
-              ? <div>
-                  <ListHeader className='category-header'>Ingredients</ListHeader>
-                  <FilteredIngredientPartialList
-                    className='ingredient-list'
-                    items={this.props.searchedIngredients}
-                    renderItem={this._renderFilteredIngredient}
-                    softLimit={8}
-                    hardLimit={12}
-                  />
-                </div>
-              : null}
-          {this.props.searchedRecipes.length
-            ? <div>
+            : undefined
+        ,
+          this.props.searchedRecipes.length > 0
+            ? <div key='recipes'>
                 <ListHeader className='category-header'>Recipes</ListHeader>
                 <RecipePartialList
                   className='foreground-recipe-list'
@@ -177,7 +179,16 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
                   renderItem={this._makeRenderRecipe(false, this.props.searchedRecipes.map(r => r.item.recipeId))}
                 />
               </div>
-            : undefined}
+            : undefined
+        ];
+      }
+
+      return (
+        <List
+          className='all-search-results-list'
+          emptyText='Nothing matched your search!'
+        >
+          {content}
         </List>
       );
     } else {
@@ -273,14 +284,16 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
 }
 
 function mapStateToProps(state: RootState): ConnectedProps {
+  const { searchTerm, selectedIngredientTags } = state.filters;
+  const isNonEmptySearch = searchTerm.trim().length > 0;
   return {
+    searchTerm,
+    selectedIngredientTags,
     randomRecipe: selectRecipeOfTheHour(state),
-    searchTerm: state.filters.searchTerm,
-    selectedIngredientTags: state.filters.selectedIngredientTags,
     transitiveSelectedIngredientTags: selectAllTransitiveIngredientTags(state),
     ingredientsByTag: state.ingredients.ingredientsByTag,
-    searchedIngredients: selectSearchedIngredients(state),
-    searchedRecipes: selectSearchedRecipes(state),
+    searchedIngredients: isNonEmptySearch ? selectSearchedIngredients(state) : [],
+    searchedRecipes: isNonEmptySearch && selectedIngredientTags.length === 0 ? selectSearchedRecipes(state) : [],
     ingredientMatchedRecipes: selectGroupedIngredientMatchedRecipes(state)
   };
 }
