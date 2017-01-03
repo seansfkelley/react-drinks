@@ -15,9 +15,6 @@ export function normalizeIngredient(ingredient: Partial<Ingredient>): Ingredient
   }
   normalized.searchable.push(deburr(normalized.display).toLowerCase());
   normalized.searchable.push(normalized.tag);
-  if (normalized.tangible == null) {
-    normalized.tangible = true;
-  }
   // TODO: Add display for generic to here.
   // if i.generic and not _.contains i.searchable, i.generic
   //   i.searchable.push i.generic

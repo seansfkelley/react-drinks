@@ -133,7 +133,7 @@ Promise.resolve()
       _rev,
       orderedGroups
     })
-    .then(() => log.info(`successfully updated list of ordered groups (new count: ${orderedGroups.length})`));
+    .then(() => log.info(`successfully updated list of ordered ingredient groups (new count: ${orderedGroups.length})`));
   })
   .catch(bestEffortLogError)
   .finally(() => log.info(`seeding database finished in ${((Date.now() - startTime) / 1000).toFixed(2)}s`));

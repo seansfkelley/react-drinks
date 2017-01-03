@@ -13,6 +13,10 @@
   searchable :
     - disaronno
 -
+  display    : Bitters
+  group      : bitters
+  difficulty : easy
+-
   display    : Angostura Bitters
   generic    : bitters
   group      : bitters
@@ -29,13 +33,18 @@
   group      : bitters
   difficulty : easy
 -
+  display    : Apple Brandy
+  generic    : brandy
+  group      : brandy
+  difficulty : medium
+-
   display    : Applejack
-  generic    : apple-brandy
+  generic    : apple brandy
   group      : brandy
   difficulty : medium
 -
   display    : Calvados
-  generic    : apple-brandy
+  generic    : apple brandy
   group      : brandy
   difficulty : hard
 -
@@ -81,6 +90,7 @@
     - pepsi
 -
   display    : Cognac
+  generic    : brandy
   group      : brandy
   difficulty : medium
 -
@@ -88,8 +98,7 @@
   group      : liqueur-herbal
   difficulty : hard
 -
-  display    : Rum (dark)
-  tag        : dark rum
+  display    : Dark Rum
   generic    : rum
   group      : rum
   difficulty : easy
@@ -97,8 +106,13 @@
     - captain morgan
     - sailor jerry
 -
-  display    : Vermouth (dry)
-  tag        : dry vermouth
+  display    : Vermouth
+  group      : wine
+  generic    : wine
+  difficulty : easy
+-
+  display    : Dry Vermouth
+  generic    : vermouth
   group      : wine
   difficulty : medium
 -
@@ -132,14 +146,12 @@
   group      : liqueur-fruit
   difficulty : medium
 -
-  display    : Chartreuse (green)
-  tag        : green chartreuse
+  display    : Green Chartreuse
   generic    : chartreuse
   group      : liqueur-herbal
   difficulty : medium
 -
-  display    : Chartreuse (yellow)
-  tag        : yellow chartreuse
+  display    : Yellow Chartreuse
   generic    : chartreuse
   group      : liqueur-herbal
   difficulty : medium
@@ -158,6 +170,7 @@
 -
   display    : Lillet
   group      : wine
+  generic    : wine
   difficulty : medium
 -
   display    : Lime
@@ -173,7 +186,7 @@
   difficulty : hard
 -
   display    : Mezcal
-  generic    : tequila-like
+  generic    : agave spirits
   group      : tequila
   difficulty : hard
 -
@@ -197,21 +210,30 @@
   group      : whiskey
   difficulty : easy
 -
+  display    : Sugar Syrup
+  group      : syrup
+  difficulty : easy
+-
   display    : Simple Syrup
-  generic    : simple-syrup-like
+  generic    : sugar syrup
+  group      : syrup
+  difficulty : easy
+-
+  display    : Brown Sugar Simple Syrup
+  generic    : sugar syrup
   group      : syrup
   difficulty : easy
 -
   display    : Sparkling Wine
   group      : wine
+  generic    : wine
   difficulty : medium
   searchable :
     - champagne
     - prosecco
     - cava
 -
-  display    : Rum (spiced)
-  tag        : spiced rum
+  display    : Spiced Rum
   generic    : rum
   group      : rum
   difficulty : easy
@@ -224,8 +246,8 @@
   searchable :
     - sugar cube
 -
-  display    : Vermouth (sweet)
-  tag        : sweet vermouth
+  display    : Sweet Vermouth
+  generic    : vermouth
   group      : wine
   difficulty : medium
 -
@@ -246,14 +268,14 @@
   group      : whiskey
   difficulty : easy
 -
-  display    : Rum (white)
+  display    : White Rum
   tag        : white rum
   generic    : rum
   group      : rum
   difficulty : easy
 -
-  display    : Vermouth (white)
-  tag        : white vermouth
+  display    : White Vermouth
+  generic    : vermouth
   group      : wine
   difficulty : medium
 -
@@ -324,8 +346,12 @@
   group      : dairy
   difficulty : easy
 -
+  display    : Amaro
+  group      : liqueur-herbal
+  difficulty : medium
+-
   display    : Campari
-  generic    : campari-like
+  generic    : amaro
   group      : liqueur-herbal
   difficulty : hard
 -
@@ -334,7 +360,7 @@
   difficulty : medium
 -
   display    : Gomme Syrup
-  generic    : simple-syrup-like
+  generic    : sugar syrup
   group      : syrup
   difficulty : hard
 -
@@ -342,8 +368,7 @@
   group      : liqueur-herbal
   difficulty : hard
 -
-  display    : Rum (gold)
-  tag        : gold rum
+  display    : Gold Rum
   generic    : rum
   group      : rum
   difficulty : medium
@@ -399,6 +424,12 @@
 -
   display    : White Wine
   group      : wine
+  generic    : wine
+  difficulty : easy
+-
+  display    : Red Wine
+  group      : wine
+  generic    : wine
   difficulty : easy
 -
   display    : Crème de Cassis
@@ -407,11 +438,11 @@
   difficulty : hard
 -
   display    : Orgeat Syrup
-  generic    : simple-syrup-like
   group      : syrup
   difficulty : hard
 -
   display    : Pisco
+  generic    : brandy
   group      : brandy
   difficulty : medium
 -
@@ -424,7 +455,7 @@
   difficulty : easy
 -
   display    : Aperol
-  generic    : campari-like
+  generic    : amaro
   group      : liqueur-herbal
   difficulty : hard
 -
@@ -449,6 +480,7 @@
   difficulty : medium
 -
   display    : Apricot Brandy
+  generic    : brandy
   group      : brandy
   difficulty : medium
 -
@@ -458,23 +490,24 @@
   searchable :
     - zubrowka
 -
-  display    : Chartreuse (any)
+  display    : Chartreuse
   tag        : chartreuse
-  tangible   : false
   difficulty : medium
 -
-  display    : Rum (any)
+  display    : Rum
   tag        : rum
-  tangible   : false
   difficulty : easy
 -
-  display    : Whiskey (any)
+  display    : Whiskey
   tag        : whiskey
-  tangible   : false
+  difficulty : easy
+-
+  display    : Tequila/Agave Spirits
+  tag        : agave spirits
   difficulty : easy
 -
   display    : Tequila
-  generic    : tequila-like
+  generic    : agave spirits
   group      : tequila
   difficulty : easy
 -
@@ -542,10 +575,12 @@
 -
   display    : Sake
   group      : wine
+  generic    : wine
   difficulty : medium
 -
   display    : Plum Wine
   group      : wine
+  generic    : wine
   difficulty : medium
 -
   display    : Molasses
@@ -558,6 +593,7 @@
 -
   display    : Sherry
   group      : wine
+  generic    : wine
   difficulty : medium
 -
   display    : Orange
@@ -597,4 +633,8 @@
   display    : Apple Juice/Cider
   tag        : apple juice
   group      : mixer-juice
+  difficulty : easy
+-
+  display    : Wine
+  group      : wine
   difficulty : easy

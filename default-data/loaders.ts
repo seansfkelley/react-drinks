@@ -1,14 +1,13 @@
-import { isString, isArray, memoize, once } from 'lodash';
+import { isString, isArray, memoize, once, keyBy } from 'lodash';
 import { readFileSync } from 'fs';
 import { safeLoad } from 'js-yaml';
 import * as log from 'loglevel';
 
+import { assert } from '../shared/tinyassert';
 import { Ingredient, IngredientGroupMeta, DbRecipe } from '../shared/types';
 import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
 import { UNASSIGNED_BASE_LIQUOR, BASE_LIQUORS } from '../shared/definitions';
 import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
-
-const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
 
 const ALL_BASE_LIQUORS = [UNASSIGNED_BASE_LIQUOR].concat(BASE_LIQUORS);
 
@@ -20,21 +19,7 @@ const INGREDIENT_SCHEMA: ActuallyUsefulRevalidatorType = {
     // The display name of the ingredient.
     display: REQUIRED_STRING,
     // The category this ingredient is in (e.g., spirit, mixer, syrup...)
-    group: {
-      type: 'string',
-      conform: (v, object) => {
-        return xor(v != null, !(object.tangible != null ? object.tangible : true));
-      }
-    },
-    // Intangible ingredients are useful to index on or specify, but are not specific enough to
-    // warrant being something you can have in your cabinet. The canonical example is Chartreuse
-    // (either variety), but it's also useful for e.g whiskey as a generic.
-    tangible: {
-      type: 'boolean',
-      conform: (v, object) => {
-        return xor(!(v != null ? v : true), object.group != null);
-      }
-    },
+    group: OPTIONAL_STRING,
     // The uniquely identifying tag for this ingredient. Defaults to the lowercase display name.
     tag: OPTIONAL_STRING,
     // The tag for the generic (substitutable) ingredient for this ingredient. If the target doesn't
@@ -153,5 +138,14 @@ export const loadIngredients = once(() => {
     items: INGREDIENT_SCHEMA
   });
 
-  return ingredients.map(normalizeIngredient);
+  const normalizedIngredients = ingredients.map(normalizeIngredient);
+  const extantIngredientKeys = keyBy(normalizedIngredients, i => i.tag);
+
+  normalizedIngredients.forEach(i => {
+    if (i.generic) {
+      assert(extantIngredientKeys[i.generic], `ingredient with tag '${i.tag}' specifies unknown generic '${i.generic}'`);
+    }
+  });
+
+  return normalizedIngredients;
 });

@@ -44,7 +44,7 @@ function _computeGroupedIngredients(ingredients: Ingredient[], groups: Ingredien
     map(
       groupBy(
         sortBy(
-          ingredients.filter(i => i.tangible),
+          ingredients,
           _displaySort
         ),
         i => i.group
@@ -71,7 +71,7 @@ export const reducer = makeReducer<IngredientsState>(assign({
     // We don't use state, this is a set-once kind of deal.
     const { ingredients, groups } = action.payload!;
     return {
-      ingredientsByTag: _computeIngredientsByTag(ingredients, ingredients.filter(i => !i.tangible)),
+      ingredientsByTag: _computeIngredientsByTag(ingredients, ingredients),
       groupedIngredients: _computeGroupedIngredients(ingredients, groups)
     };
   }
