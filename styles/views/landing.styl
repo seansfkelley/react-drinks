@@ -84,7 +84,6 @@
     color: white
 
     .list-item
-      font-weight: 600
       margin-left: 5px
       margin-right: 5px
       padding: 0 5px
@@ -100,9 +99,12 @@
   .foreground-recipe-list .ingredient-list
     color: rgba(255, 255, 255, 0.7)
 
-  .ingredient-list
-    .ingredient-list-item.is-selected
-      pointer-events: none
+  .foreground-ingredient-list
+    .ingredient-list-item
+      font-weight: 600
+
+      &.is-selected
+        pointer-events: none
 
   .blur-overlay
     flex: 1

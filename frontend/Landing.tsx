@@ -145,7 +145,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
           <div>
               <ListHeader className='category-header'>Common Ingredients</ListHeader>
               <BasicIngredientTagPartialList
-                className='ingredient-list'
+                className='foreground-ingredient-list'
                 // HACKS: The render function uses state that isn't actually present on this
                 // component, so it's not actually pure, so change the reference to force it...
                 items={BASIC_LIQUOR_TAGS.slice()}
@@ -161,7 +161,7 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
             ? <div key='ingredients'>
                 <ListHeader className='category-header'>Ingredients</ListHeader>
                 <FilteredIngredientPartialList
-                  className='ingredient-list'
+                  className='foreground-ingredient-list'
                   items={this.props.searchedIngredients}
                   renderItem={this._renderFilteredIngredient}
                   softLimit={8}
