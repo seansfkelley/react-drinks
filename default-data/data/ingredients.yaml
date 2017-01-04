@@ -112,7 +112,7 @@
   display    : Maraschino Liqueur
 -
   display    : Mezcal
-  generic    : agave spirits
+  generic    : agave spirit
 -
   display    : Milk
 -
@@ -297,11 +297,11 @@
   display    : Whiskey
   tag        : whiskey
 -
-  display    : Tequila/Agave Spirits
-  tag        : agave spirits
+  display    : Tequila/Agave Spirit
+  tag        : agave spirit
 -
   display    : Tequila
-  generic    : agave spirits
+  generic    : agave spirit
 -
   display    : Tea
 -
