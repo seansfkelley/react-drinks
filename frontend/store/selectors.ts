@@ -18,10 +18,21 @@ interface MatchResultWithItem<T> {
   matchResult: MatchResult;
 }
 
+function _normalizeMatchScore(m: MatchResult): MatchResult {
+  return {
+    score: m.score / m.rendered.length,
+    rendered: m.rendered
+  };
+}
+
+function _sortMatchDescending(a: MatchResult, b: MatchResult) {
+  return b.score - a.score;
+}
+
 function _cleanUpMatchResults<T>(results: MatchResultWithItem<T>[]): FuzzyFilteredItem<T>[] {
   return results
     .filter(({ matchResult }) => !!matchResult)
-    .sort((a, b) => b.matchResult.score - a.matchResult.score)
+    .sort((a, b) => _sortMatchDescending(a.matchResult, b.matchResult))
     .map(r => ({
       item: r.item,
       score: r.matchResult.score,
@@ -94,7 +105,8 @@ export const selectSearchedIngredients: Selector<RootState, FuzzyFilteredItem<In
         matchResult: ingredient.searchable
           .map(s => fuzzyMatch(searchTerm, s, { caseSensitive: false }))
           .filter(match => !!match)
-          .sort((a, b) => b.score - a.score)
+          .map(_normalizeMatchScore)
+          .sort(_sortMatchDescending)
           [0]
       })))
 );
@@ -148,7 +160,8 @@ export const selectSearchedRecipes: Selector<RootState, FuzzyFilteredItem<Recipe
           matchResult: [ recipe.name, recipe.sortName, recipe.canonicalName ]
             .map(s => fuzzyMatch(searchTerm, s, { caseSensitive: false }))
             .filter(match => !!match)
-            .sort((a, b) => b.score - a.score)
+            .map(_normalizeMatchScore)
+            .sort(_sortMatchDescending)
             [0]
         })));
     }

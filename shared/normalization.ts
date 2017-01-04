@@ -11,7 +11,7 @@ export function normalizeIngredient(ingredient: Partial<Ingredient>): Ingredient
   const ingredientAdditions = {
     tag,
     display,
-    searchable: (ingredient.searchable || []).concat([ deburr(display).toLowerCase(), tag ])
+    searchable: (ingredient.searchable || []).concat([ deburr(display).toLowerCase() ])
   };
 
   return assign(ingredientAdditions, ingredient);
