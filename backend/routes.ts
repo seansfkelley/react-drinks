@@ -1,7 +1,6 @@
 import * as log from 'loglevel';
 import { RequestHandler, ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 
-import { DbRecipe } from '../shared/types';
 import * as Constants from '../shared/constants';
 import * as recipes from './recipes';
 import * as ingredients from './ingredients';
@@ -34,11 +33,7 @@ export const ROUTES: { method: 'get' | 'post' | 'all', route: string, handler: R
   method: 'post',
   route: '/recipe',
   handler: (req: Request, res: Response, _next: NextFunction) => {
-    const recipe: DbRecipe = req.body;
-    // This is actually already passed, but it's a string, and that seems bad,
-    // so we might as well just set it unconditionally here.
-    recipe.isCustom = true;
-    res.json({ ackRecipeId: recipes.save(recipe) });
+    res.json({ ackRecipeId: recipes.save(req.body) });
   }
 }, {
   method: 'all',

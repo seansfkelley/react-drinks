@@ -22,7 +22,6 @@ export interface DbRecipe {
   url?: string;
   canonicalName: string;
   sortName: string;
-  isCustom?: boolean;
 }
 
 export interface Recipe extends DbRecipe {
