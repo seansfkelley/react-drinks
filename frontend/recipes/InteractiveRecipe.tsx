@@ -60,12 +60,12 @@ class InteractiveRecipe extends React.PureComponent<OwnProps & ConnectedProps & 
     let header;
     if (this.props.onClose != null) {
       header = (
-        <TitleBar className='fixed-header' rightIcon='fa-times' rightIconOnClick={this.props.onClose}>
+        <TitleBar rightIcon='fa-times' rightIconOnClick={this.props.onClose}>
           {this.props.recipe.name}
         </TitleBar>
       );
     } else {
-      header = <TitleBar className='fixed-header'>{this.props.recipe.name}</TitleBar>;
+      header = <TitleBar>{this.props.recipe.name}</TitleBar>;
     }
 
     let similarRecipes;
