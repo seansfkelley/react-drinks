@@ -112,7 +112,7 @@ describe('(proxies)', () => {
         }
       };
 
-      const { proxy, getCount } = makeCountingGetProxy(proxyable, PROXY_BLUEBIRD_PROMISE);
+      const { proxy, getCount } = makeCountingGetProxy(proxyable, PROXY_RETRY);
 
       proxy.fn(1, 'a', {});
       expect(getCount()).to.equal(1);
@@ -338,7 +338,7 @@ describe('(proxies)', () => {
         foo: 'bar'
       };
 
-      const { proxy, getCount } = makeCountingGetProxy(proxyable, PROXY_BLUEBIRD_PROMISE);
+      const { proxy, getCount } = makeCountingGetProxy(proxyable, PROXY_RETRY);
 
       expect(proxy.foo).to.equal('bar');
       expect(getCount()).to.equal(1);
