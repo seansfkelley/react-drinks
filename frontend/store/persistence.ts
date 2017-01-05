@@ -56,25 +56,8 @@ export const load = once((): RootStateSubset => {
   const { data, schemaVersion, timestamp } = JSON.parse(localStorage[LOCALSTORAGE_KEY] || '{}') as SerializedData;
 
   if (data == null) {
-    log.info('loading legacy-shaped data from localStorage...');
-
-    // Extra-legacy version.
-    const ui = JSON.parse(localStorage['drinks-app-ui'] != null ? localStorage['drinks-app-ui'] : '{}');
-    const recipes = JSON.parse(localStorage['drinks-app-recipes'] != null ? localStorage['drinks-app-recipes'] : '{}');
-    const ingredients = JSON.parse(localStorage['drinks-app-ingredients'] != null ? localStorage['drinks-app-ingredients'] : '{}');
-
-    return mapValues({
-      filters: {
-        recipeSearchTerm: recipes.searchTerm,
-        selectedIngredientTags: ingredients.selectedIngredientTags
-      },
-      recipes: {
-        customRecipes: recipes.customRecipes
-      },
-      ui: {
-        recipeViewingIndex: ui.recipeViewingIndex
-      }
-    }, store => omitBy(store, isUndefined));
+    log.info('no existing localStorage data was found; will return empty object');
+    return {};
   } else if (schemaVersion === 0 || schemaVersion == null) {
     log.info(`will load data from localStorage with schema version ${schemaVersion}`);
 
