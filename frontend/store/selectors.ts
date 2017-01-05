@@ -43,7 +43,6 @@ function _cleanUpMatchResults<T>(results: MatchResultWithItem<T>[]): FuzzyFilter
 const selectIngredientsByTag = (state: RootState) => state.ingredients.ingredientsByTag;
 const selectRecipesById = (state: RootState) => state.recipes.recipesById;
 
-// const selectBaseLiquorFilter = (state: RootState) => state.filters.baseLiquorFilter;
 const selectSelectedIngredientTags = (state: RootState) => state.filters.selectedIngredientTags;
 const selectSearchTerm = (state: RootState) => state.filters.searchTerm;
 

@@ -20,7 +20,6 @@ const LOCALSTORAGE_KEY = 'drinks-app-persistence';
 const PERSISTENCE_SPEC: PersistenceSpec = {
   filters: {
     searchTerm: ONE_MINUTE_MS * 5,
-    // baseLiquorFilter: ONE_MINUTE_MS * 15,
     selectedIngredientTags: Infinity,
   },
   recipes: {
@@ -67,7 +66,6 @@ export const load = once((): RootStateSubset => {
     return mapValues({
       filters: {
         recipeSearchTerm: recipes.searchTerm,
-        baseLiquorFilter: ui.baseLiquorFilter,
         selectedIngredientTags: ingredients.selectedIngredientTags
       },
       recipes: {

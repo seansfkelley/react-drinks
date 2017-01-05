@@ -20,7 +20,6 @@ export interface DbRecipe {
   notes?: string;
   source?: string;
   url?: string;
-  base: string | string[];
   canonicalName: string;
   sortName: string;
   isCustom?: boolean;

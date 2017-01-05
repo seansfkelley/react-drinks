@@ -28,7 +28,6 @@
       displayIngredient: "Cynar"
   instructions: ""
   source: "The Clover Club, NY"
-  base: tequila
 -
   name: "?-1"
   ingredients:
@@ -43,7 +42,6 @@
       displayUnit: "parts"
       displayIngredient: "cucumber juice"
   instructions: "shaken"
-  base: wine
 -
   name: "?-2"
   ingredients:
@@ -63,4 +61,3 @@
       displayUnit: "oz"
       displayIngredient: "vanilla simple syrup"
   instructions: "shaken/stirred?"
-  base: wine

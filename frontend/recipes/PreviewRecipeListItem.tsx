@@ -12,7 +12,7 @@ interface Props {
   onClick?: () => void;
 }
 
-export default class extends React.PureComponent<Props, void> {
+export default class PreviewRecipeListItem extends React.PureComponent<Props, void> {
   render() {
     const uniqueIngredientTags = uniq(
       this.props.recipe.ingredients

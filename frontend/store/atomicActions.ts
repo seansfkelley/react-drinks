@@ -23,7 +23,6 @@ export const setSelectedIngredientTags = createActionCreator<string[]>('set-sele
 export const setRecipeViewingIndex = createActionCreator<number>('set-recipe-viewing-index');
 export const seedRecipeEditor = createActionCreator<Recipe>('seed-recipe-editor');
 export const showRecipeEditor = createNullaryActionCreator('show-recipe-editor');
-export const setBaseLiquorFilter = createActionCreator<string>('set-base-liquor-filter');
 export const showIngredientInfo = createActionCreator<string>('show-ingredient-info');
 export const initializeNewRecipe = createNullaryActionCreator('show-recipe-editor');
 export const setErrorMessage = createActionCreator<string>('error-message');

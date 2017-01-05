@@ -6,7 +6,6 @@ export type ActionType =
   'hide-recipe-editor' |
   'hide-recipe-viewer' |
   'seed-recipe-editor' |
-  'set-base-liquor-filter' |
   'set-ingredients' |
   'set-recipe-favorite' |
   'set-recipe-viewing-index' |

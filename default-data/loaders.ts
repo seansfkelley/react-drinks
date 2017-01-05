@@ -1,4 +1,4 @@
-import { isString, isArray, memoize, once, keyBy } from 'lodash';
+import { memoize, once, keyBy } from 'lodash';
 import { readFileSync } from 'fs';
 import { safeLoad } from 'js-yaml';
 import * as log from 'loglevel';
@@ -6,10 +6,7 @@ import * as log from 'loglevel';
 import { assert } from '../shared/tinyassert';
 import { Ingredient, DbRecipe } from '../shared/types';
 import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
-import { UNASSIGNED_BASE_LIQUOR, BASE_LIQUORS } from '../shared/definitions';
 import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
-
-const ALL_BASE_LIQUORS = [UNASSIGNED_BASE_LIQUOR].concat(BASE_LIQUORS);
 
 type ActuallyUsefulRevalidatorType = Revalidator.ISchema<any> & Revalidator.JSONSchema<any> ;
 
@@ -64,21 +61,7 @@ const RECIPE_SCHEMA: ActuallyUsefulRevalidatorType  = {
     // The display name for the source of this recipe.
     source: OPTIONAL_STRING,
     // The full URL to the source page for this recipe.
-    url: OPTIONAL_STRING,
-    // One of a few very broad ingredient categories that best describes the genre of this drink.
-    base: {
-      type: ['array', 'string'],
-      required: true,
-      conform: (strOrArray: string | string[]) => {
-        if (isString(strOrArray)) {
-          return ALL_BASE_LIQUORS.indexOf(strOrArray) !== -1;
-        } else if (isArray(strOrArray)) {
-          return strOrArray.every(base => ALL_BASE_LIQUORS.indexOf(base) !== -1);
-        } else {
-          return false;
-        }
-      }
-    }
+    url: OPTIONAL_STRING
   }
 };
 
@@ -86,11 +69,6 @@ export const loadRecipeFile = memoize((filename: string) => {
   log.debug(`loading recipes from ${filename}`);
   const recipes: Partial<DbRecipe>[] = safeLoad(readFileSync(`${__dirname}/data/${filename}.yaml`).toString());
   log.debug(`loaded ${recipes.length} recipe(s) from ${filename}`);
-
-  const unassignedBases = recipes.filter(r => r.base === UNASSIGNED_BASE_LIQUOR);
-  if (unassignedBases.length) {
-    log.warn(`${unassignedBases.length} recipe(s) in ${filename} have an unassigned base liquor: ${unassignedBases.map(r => r.name).join(', ') }`);
-  }
 
   validateOrThrow(recipes, {
     type: 'array',

@@ -26,7 +26,6 @@
     Strain into chilled martini glass.
     Garnish with cherry.
   source: "Two Sisters Bar & Books"
-  base: whiskey
 -
   name: "Chamomile Old Fashioned"
   ingredients:
@@ -56,7 +55,6 @@
   notes: |
     To make chamomile-infused bourbon, use either 1/4 cup or 3 tea bags chamomile per liter of bourbon. Steep 72 hours, then strain.
   source: "Two Sisters Bar & Books"
-  base: whiskey
 -
   name: "Apple 125"
   ingredients:
@@ -87,9 +85,6 @@
     Combine brandy, lime, simple syrup, bitters, and ice in pint glass/mixing tin.
     Shake & strain into glass, top with bubbly.
   source: "Two Sisters Bar & Books"
-  base:
-    - brandy
-    - wine
 -
   name: "The Slowest Buffalo"
   ingredients:
@@ -113,7 +108,6 @@
     Strain into a rocks glass, add ice and garnish with a lime wedge.
   notes: "To make the molasses simple syrup, use 2 parts molasses to 1 part water."
   source: "Two Sisters Bar & Books"
-  base: rum
 -
   name: "Grape Sazerac"
   ingredients:
@@ -145,7 +139,6 @@
     In mixing tin or pint glass muddle grapes and sugar until grapes are juiced and skins crushed.
     Add Peychaud's, absinthe, scotch and ice, shake & strain into chilled rocks glass.
   source: "Two Sisters Bar & Books"
-  base: whiskey
 -
   name: "The Back 40"
   ingredients:
@@ -172,4 +165,3 @@
   instructions: |
     Combine all ingredients and ice, shake & strain into rocks glass. Fill with fresh ice.
   source: "Two Sisters Bar & Books"
-  base: whiskey

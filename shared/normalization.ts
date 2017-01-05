@@ -28,7 +28,6 @@ export function normalizeRecipe(recipe: Partial<DbRecipe>): DbRecipe {
     name,
     canonicalName,
     sortName: nameWords.slice([ 'a', 'the' ].includes(nameWords[0]) ? 1 : 0).join(' '),
-    base: recipe.base || [],
     // Make the type system happy by reiterating these...
     ingredients: recipe.ingredients!,
     instructions: recipe.instructions!
