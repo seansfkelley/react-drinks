@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Recipe } from '../../../shared/types';
-import { BASE_URL } from '../../../shared/definitions';
+import { BASE_URL, APP_NAME } from '../../../shared/constants';
 import TitleBar from '../../components/TitleBar';
 import RecipeBody from '../../recipes/RecipeBody';
 
@@ -15,7 +15,7 @@ export default class StandaloneRecipe extends React.PureComponent<Props, void> {
       <div className='standalone-recipe'>
         <a className='homepage-link' href={BASE_URL} target='_blank'>
           <TitleBar>
-            Spirit Guide
+            {APP_NAME}
             <i className='fa fa-chevron-right' />
           </TitleBar>
         </a>

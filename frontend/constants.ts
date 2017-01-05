@@ -13,3 +13,5 @@ export const RECIPE_LIST_NAMES = {
   [RecipeListType.FAVORITES]: 'Favorites',
   [RecipeListType.CUSTOM]: 'Custom Drinks'
 };
+
+export const BASIC_LIQUOR_TAGS = ['gin', 'vodka', 'whiskey', 'rum', 'brandy', 'agave spirits', 'wine'];

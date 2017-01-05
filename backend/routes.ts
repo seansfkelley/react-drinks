@@ -2,6 +2,7 @@ import * as log from 'loglevel';
 import { RequestHandler, ErrorRequestHandler, Request, Response, NextFunction } from 'express';
 
 import { DbRecipe } from '../shared/types';
+import * as Constants from '../shared/constants';
 import * as recipes from './recipes';
 import * as ingredients from './ingredients';
 
@@ -9,7 +10,7 @@ export const ROUTES: { method: 'get' | 'post' | 'all', route: string, handler: R
   method: 'get',
   route: '/',
   handler: (_req: Request, res: Response, _next: NextFunction) => {
-    res.render('app', { defaultRecipeIds: recipes.getDefaultRecipeIds() });
+    res.render('app', { defaultRecipeIds: recipes.getDefaultRecipeIds(), Constants });
   }
 }, {
   method: 'get',
@@ -27,7 +28,7 @@ export const ROUTES: { method: 'get' | 'post' | 'all', route: string, handler: R
   method: 'get',
   route: '/recipe/:recipeId',
   handler: (req: Request, res: Response, _next: NextFunction) => {
-    res.render('recipe', { recipe: recipes.load(req.params.recipeId) });
+    res.render('recipe', { recipe: recipes.load(req.params.recipeId), Constants });
   }
 }, {
   method: 'post',
@@ -49,7 +50,7 @@ export const ROUTES: { method: 'get' | 'post' | 'all', route: string, handler: R
       if (req.get('Content-Type') === 'application/json') {
         res.send();
       } else {
-        res.render('fail-whale');
+        res.render('fail-whale', { Constants });
       }
     } else {
       next();
@@ -63,7 +64,7 @@ export const ROUTES: { method: 'get' | 'post' | 'all', route: string, handler: R
     if (req.get('Content-Type') === 'application/json') {
       res.send();
     } else {
-      res.render('fail-whale');
+      res.render('fail-whale', { Constants });
     }
   }
 }];

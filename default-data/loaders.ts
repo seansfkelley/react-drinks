@@ -5,7 +5,7 @@ import * as log from 'loglevel';
 
 import { assert } from '../shared/tinyassert';
 import { Ingredient, DbRecipe } from '../shared/types';
-import { normalizeIngredient, normalizeRecipe } from '../shared/normalization';
+import { normalizeIngredient, normalizeRecipe } from './normalization';
 import { validateOrThrow, REQUIRED_STRING, OPTIONAL_STRING } from './revalidator-utils';
 
 type ActuallyUsefulRevalidatorType = Revalidator.ISchema<any> & Revalidator.JSONSchema<any> ;

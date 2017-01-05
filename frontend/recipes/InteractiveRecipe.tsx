@@ -5,7 +5,7 @@ import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { Ingredient, Recipe, DisplayIngredient } from '../../shared/types';
-import { BASE_URL } from '../../shared/definitions';
+import { BASE_URL } from '../../shared/constants';
 import { RootState } from '../store';
 import TitleBar from '../components/TitleBar';
 import { List, ListHeader } from '../components/List';

@@ -1,6 +1,6 @@
 import { deburr, assign } from 'lodash';
-import { assert } from './tinyassert';
-import { Ingredient, DbRecipe } from './types';
+import { assert } from '../shared/tinyassert';
+import { Ingredient, DbRecipe } from '../shared/types';
 
 export function normalizeIngredient(ingredient: Partial<Ingredient>): Ingredient {
   assert(ingredient.display);

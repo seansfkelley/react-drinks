@@ -19,7 +19,7 @@ import {
   showIngredientInfo,
   showRecipeViewer
 } from './store/atomicActions';
-import { BASIC_LIQUOR_TAGS } from '../shared/definitions';
+import { BASIC_LIQUOR_TAGS } from './constants';
 import { GroupedItems } from './types';
 import { Ingredient, Recipe } from '../shared/types';
 import BlurOverlay from './components/BlurOverlay';

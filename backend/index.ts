@@ -2,7 +2,7 @@ import * as log from 'loglevel';
 
 // Logging before all.
 log.setLevel('debug');
-log.info(`starting spirit guide with PORT=${process.env.PORT} and NODE_ENV=${process.env.NODE_ENV}`);
+log.info(`starting server with PORT=${process.env.PORT} and NODE_ENV=${process.env.NODE_ENV}`);
 
 import * as express from 'express';
 import * as notifier from 'node-notifier';
