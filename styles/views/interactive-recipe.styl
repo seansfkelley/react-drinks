@@ -1,5 +1,9 @@
 $recipe-header-border = 1px solid #ddd
 
+.interactive-recipe
+  display: flex
+  flex-direction: column
+
 .interactive-recipe .title-bar
   border-bottom: $recipe-header-border
 
@@ -9,6 +13,12 @@ $recipe-header-border = 1px solid #ddd
     justify-content: center
     align-items: center
     border-left: $recipe-header-border
+
+.interactive-recipe .recipe-content
+  flex: 1
+  overflow-y: scroll
+  -webkit-overflow-scrolling: touch
+
 
 .interactive-recipe .footer-buttons
   display: flex

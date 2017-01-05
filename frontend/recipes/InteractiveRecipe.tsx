@@ -109,16 +109,16 @@ class InteractiveRecipe extends React.PureComponent<OwnProps & ConnectedProps & 
     }
 
     return (
-      <div className='interactive-recipe fixed-header-footer'>
+      <div className='interactive-recipe'>
         {header}
-        <div className='fixed-content-pane'>
+        <div className='recipe-content'>
           <RecipeBody
             recipe={this.props.recipe}
             renderIngredient={this._renderIngredient}
           />
-        {similarRecipes}
+          {similarRecipes}
         </div>
-        {footerButtons.length ? <div className='footer-buttons fixed-footer'>{footerButtons}</div> : undefined}
+        {footerButtons.length ? <div className='footer-buttons'>{footerButtons}</div> : undefined}
       </div>
     );
   }
