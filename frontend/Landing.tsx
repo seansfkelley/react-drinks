@@ -199,8 +199,8 @@ class Landing extends React.PureComponent<ConnectedProps & DispatchProps, State>
   private _renderBackground() {
     if (this.props.selectedIngredientTags.length === 0) {
       return (
-        <div className='random-cocktail'>
-          <div className='random-cocktail-header'>Cocktail of the Hour</div>
+        <div className='random-recipe'>
+          <div className='random-recipe-header'>Cocktail of the Hour</div>
           <InteractiveRecipe recipe={this.props.randomRecipe}/>
         </div>
       );
