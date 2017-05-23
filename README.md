@@ -24,30 +24,19 @@ If you've ever gotten that sneaking suspicion that you were one cheap mixer away
 
 No longer do you have to enter all three of "Kahlua", "Tia Maria" and "coffee liqueur" to make sure you got all the results you should. The search understands that these are freely interchangable and will bring up the single representative -- "coffee liqueur" -- when you look for any of them.
 
-## Setup
+## Building
 
-First:
+First, install `yarn`. Then install dependencies:
 
-    npm install
-    npm install -g gulp
+    yarn
 
-### Production:
+Build the frontend:
 
-    NODE_ENV=production gulp dist # Compile with minification.
-    npm start                     # This will not auto-restart: you may want to wrap this with `forever` or similar.
+    ./scripts/build-dist.sh
 
-### Development
+And run the server:
 
-Install the commit hooks:
-
-    ./hooks/install.sh
-
-Then run each in a separate terminal session:
-
-    gulp watch  # Recompile assets on change. Start the livereload server.
-    npm run dev # Restart server on backend code change.
-
-Install the LiveReload browser extension to get live reloading behavior.
+    npm start
 
 ## Configuration
 
