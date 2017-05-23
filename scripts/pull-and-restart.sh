@@ -15,9 +15,7 @@ set -e
 git fetch
 git checkout "$1"
 
-export NODE_ENV=production
-
 yarn
-gulp dist
+./scripts/build-dist.sh
 
 forever start -c ./node_modules/.bin/ts-node index.ts
