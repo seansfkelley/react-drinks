@@ -18,4 +18,4 @@ git checkout "$1"
 yarn
 ./scripts/build-dist.sh
 
-forever start -c ./node_modules/.bin/ts-node index.ts
+PORT=80 forever start -c ./node_modules/.bin/ts-node index.ts
