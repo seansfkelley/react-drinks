@@ -33,6 +33,7 @@ cat ./node_modules/font-awesome/css/font-awesome.css >> "$ALL_STYLES"
 echo "copying static assets..."
 
 cp -r fonts "$DIST"
+cp -r ./node_modules/font-awesome/fonts "$DIST"
 cp -r img "$DIST"
 
 echo "done!"
