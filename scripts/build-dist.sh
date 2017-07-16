@@ -34,7 +34,7 @@ else
   sed_inplace_option='-i'
 fi
 
-sed $sed_inplace_option -e 's/\.\.\/fonts\//\.\fonts\//g' "$ALL_STYLES"
+sed $sed_inplace_option -e 's/\.\.\/fonts\//\.\/fonts\//g' "$ALL_STYLES"
 
 # static
 
