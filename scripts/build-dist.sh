@@ -28,7 +28,8 @@ ALL_STYLES="$DIST/all-styles.css"
 
 touch "$ALL_STYLES"
 cat ./node_modules/font-awesome/css/font-awesome.css >> "$ALL_STYLES"
-./node_modules/stylus/bin/stylus styles/index.styl -p | sed -e 's/\.\.\/fonts\//\/assets\/fonts\//g' >> "$ALL_STYLES"
+./node_modules/stylus/bin/stylus styles/index.styl -p >> "$ALL_STYLES"
+cat "$ALL_STYLES" | sed -e 's/\.\.\/fonts\//\.\/fonts\//g' > "$ALL_STYLES"
 
 echo "copying static assets..."
 
