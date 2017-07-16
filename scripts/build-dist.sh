@@ -27,7 +27,14 @@ ALL_STYLES="$DIST/all-styles.css"
 touch "$ALL_STYLES"
 cat ./node_modules/font-awesome/css/font-awesome.css >> "$ALL_STYLES"
 ./node_modules/stylus/bin/stylus styles/index.styl -p >> "$ALL_STYLES"
-sed -i '' -e 's/\.\.\/fonts\//\.\fonts\//g' "$ALL_STYLES"
+
+if [ $(uname -s) = 'Darwin' ]; then
+  sed_inplace_option='-i ""'
+else
+  sed_inplace_option='-i'
+fi
+
+sed $sed_inplace_option -e 's/\.\.\/fonts\//\.\fonts\//g' "$ALL_STYLES"
 
 # static
 
