@@ -135,8 +135,8 @@ export default class extends React.PureComponent<Props, State> {
       >
         <div
           className='sliding-container'
-          ref={e => this._slidingContainer = e}
-           style={{
+          ref={e => { this._slidingContainer = e; }}
+          style={{
             WebkitTransform: `translateX(${ offset }px) translateZ(0)`, // Hardware acceleration.
             transform: `translateX(${ offset }px)`
           }}
@@ -159,7 +159,7 @@ export default class extends React.PureComponent<Props, State> {
     window.removeEventListener('resize', this._computeCachedState);
   }
 
-  _computeCachedState() {
+  private _computeCachedState = () => {
     const wrapperWidth = this._slidingContainer.offsetWidth;
     const itemWidths: number[] = Array.prototype.slice.apply((this._slidingContainer as HTMLElement).children).map((child: HTMLElement)=> child.offsetWidth);
     const itemOffsets = initial(itemWidths
@@ -167,7 +167,7 @@ export default class extends React.PureComponent<Props, State> {
 
     const initialDelta = itemOffsets[this.props.initialIndex != null ? this.props.initialIndex : 0];
     this.setState({ wrapperWidth, itemWidths, itemOffsets, initialDelta } as any);
-  }
+  };
 
   private _getNearestIndex = (e: React.TouchEvent<HTMLElement>) => {
     // Note that this MUST be `target`, NOT `currentTarget`, as we use event delegation and want the
