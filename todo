@@ -1,0 +1,5 @@
+- replace gulp by tsc and... rollup?
+- update deployment scripts to do the right compile steps and kick off local servers
+- update typescript version
+- get forever/tmux/screen/something to work for long-lived sessions
+- remove dev config and associated branching; everything is always on localhost now
